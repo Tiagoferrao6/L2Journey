@@ -5,7 +5,6 @@
 		<npc id="20956" x="105568" y="2290" z="-3236" heading="14309" respawnDelay="37" /> <!-- Past Knight -->
 		<npc id="20956" x="106380" y="821" z="-3393" heading="38448" respawnDelay="37" /> <!-- Past Knight -->
 		<npc id="20956" x="107579" y="3337" z="-3142" heading="34223" respawnDelay="37" /> <!-- Past Knight -->
-		<npc id="20956" x="108113" y="4976" z="-3237" heading="22341" respawnDelay="37" /> <!-- Past Knight -->
 		<npc id="20956" x="109109" y="2194" z="-3529" heading="61341" respawnDelay="37" /> <!-- Past Knight -->
 		<npc id="20956" x="110123" y="1487" z="-3684" heading="14974" respawnDelay="37" /> <!-- Past Knight -->
 		<npc id="20956" x="110590" y="274" z="-3701" heading="10861" respawnDelay="37" /> <!-- Past Knight -->
@@ -32,5 +31,7 @@
 		<npc id="30954" x="118600" y="16724" z="5984" heading="42000" respawnDelay="60" /> <!-- Dimensional Vortex 3 -->
 		<npc id="31646" x="120112" y="30912" z="-3616" heading="49000" respawnDelay="60" /> <!-- Tablet of Vision -->
 		<npc id="31862" x="112624" y="14032" z="10080" heading="0" respawnDelay="60" /> <!-- Angelic Vortex -->
+		<npc id="20956" x="108445" y="689" z="-3623" heading="29933" respawnDelay="37" /> <!-- Past Knight -->
+		<npc id="20956" x="109088" y="3726" z="-3314" heading="49840" respawnDelay="37" /> <!-- Past Knight -->
 	</spawn>
 </list>

@@ -86,8 +86,8 @@
 		<npc id="30498" x="-81913" y="153545" z="-3171" heading="49152" respawnDelay="60" /> <!-- Moke -->
 		<npc id="30499" x="-82954" y="155618" z="-3180" heading="47152" respawnDelay="60" /> <!-- Tapoy -->
 		<npc id="30500" x="-80386" y="153282" z="-3176" heading="32000" respawnDelay="60" /> <!-- Osborn -->
-		<npc id="30501" x="-80448" y="153408" z="-3176" heading="32000" respawnDelay="60" /> <!-- Kasman -->
-		<npc id="30502" x="-80448" y="153208" z="-3176" heading="32000" respawnDelay="60" /> <!-- Umos -->
+		<npc id="30501" x="-80448" y="153208" z="-3176" heading="32000" respawnDelay="60" /> <!-- Kasman -->
+		<npc id="30502" x="-80448" y="153408" z="-3176" heading="32000" respawnDelay="60" /> <!-- Umos -->
 		<npc id="30593" x="-85923" y="136496" z="-3170" heading="44485" respawnDelay="60" /> <!-- Duda-Mara Totem Spirit -->
 		<npc id="30611" x="-93523" y="152513" z="-3623" heading="28672" respawnDelay="60" /> <!-- Triff -->
 		<npc id="30634" x="-81199" y="151904" z="-3118" heading="27000" respawnDelay="60" /> <!-- Galatea -->

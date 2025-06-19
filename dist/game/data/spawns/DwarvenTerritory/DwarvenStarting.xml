@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <list enabled="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../xsd/spawns.xsd">
 	<spawn zone="schttgart07_2312_05">
 		<territory minZ="-788" maxZ="-438">
@@ -121,19 +121,6 @@
 		</territory>
 		<npc id="20318" count="1" respawnDelay="22" /> <!-- Black Timber Wolf -->
 		<npc id="20448" count="2" respawnDelay="22" /> <!-- Utuku Orc Grunt -->
-	</spawn>
-	<spawn zone="schttgart08_2312_12">
-		<territory minZ="-3668" maxZ="-3068">
-			<node x="119888" y="-194360" />
-			<node x="122312" y="-194224" />
-			<node x="122344" y="-192904" />
-			<node x="120552" y="-191348" />
-			<node x="118908" y="-191620" />
-			<node x="118088" y="-193356" />
-		</territory>
-		<npc id="20322" count="3" respawnDelay="20" /> <!-- Goblin Brigand -->
-		<npc id="20447" count="2" respawnDelay="20" /> <!-- Utuku Orc Archer -->
-		<npc id="20307" count="3" respawnDelay="20" /> <!-- Garum Werewolf -->
 	</spawn>
 	<spawn zone="schttgart08_2312_13">
 		<territory minZ="-3668" maxZ="-3268">

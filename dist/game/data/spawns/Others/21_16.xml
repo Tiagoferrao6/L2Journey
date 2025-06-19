@@ -719,9 +719,6 @@
 		<npc id="21599" x="58867" y="-47212" z="-3247" heading="0" respawnDelay="90" periodOfDay="night" /> <!-- Requiem Priest -->
 		<npc id="21599" x="58968" y="-47746" z="-3247" heading="0" respawnDelay="90" periodOfDay="night" /> <!-- Requiem Priest -->
 		<npc id="21599" x="59792" y="-48594" z="-2747" heading="33511" respawnDelay="90" periodOfDay="night" /> <!-- Requiem Priest -->
-		<npc id="22136" x="35390" y="-49898" z="-763" heading="59534" respawnDelay="60" /> <!-- Doorman Zombie -->
-		<npc id="22136" x="35417" y="-49638" z="-763" heading="61690" respawnDelay="60" /> <!-- Doorman Zombie -->
-		<npc id="22136" x="35694" y="-50042" z="-763" heading="28878" respawnDelay="60" /> <!-- Doorman Zombie -->
 		<npc id="27381" x="40278" y="-65322" z="-2392" heading="0" respawnDelay="60" /> <!-- Reckless Sprite of Air -->
 		<npc id="27381" x="40368" y="-65424" z="-2424" heading="0" respawnDelay="60" /> <!-- Reckless Sprite of Air -->
 		<npc id="27381" x="40368" y="-64914" z="-2408" heading="0" respawnDelay="60" /> <!-- Reckless Sprite of Air -->

@@ -67,5 +67,12 @@
 		<npc id="32478" x="115020" y="-179728" z="-880" heading="0" respawnDelay="60" /> <!-- Dimensional Merchant -->
 		<npc id="32486" x="117057" y="-183091" z="-1520" heading="28672" respawnDelay="60" /> <!-- Inventor Maru -->
 		<npc id="35644" x="116176" y="-181600" z="-1360" heading="0" respawnDelay="60" /> <!-- Manor Manager -->
+		<npc id="18342" x="108769" y="-174761" z="-526" heading="52043" respawnDelay="15" /> <!-- Gremlin -->
+		<npc id="18342" x="109364" y="-174067" z="-579" heading="9011" respawnDelay="15" /> <!-- Gremlin -->
+		<npc id="18342" x="108850" y="-173421" z="-579" heading="23523" respawnDelay="15" /> <!-- Gremlin -->
+		<npc id="18342" x="108797" y="-173314" z="-579" heading="21180" respawnDelay="15" /> <!-- Gremlin -->
+		<npc id="18342" x="109087" y="-173244" z="-579" heading="2470" respawnDelay="15" /> <!-- Gremlin -->
+		<npc id="18342" x="109283" y="-173609" z="-579" heading="3015" respawnDelay="15" /> <!-- Gremlin -->
+		<npc id="20307" x="119056" y="-193240" z="-3508" heading="49082" respawnDelay="20" /> <!-- Garum Werewolf -->
 	</spawn>
 </list>
