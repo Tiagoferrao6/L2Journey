@@ -1,42 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <list enabled="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../xsd/spawns.xsd">
 	<spawn name="19_16">
-		<npc id="22137" x="-23231" y="-38882" z="-10917" heading="16428" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22137" x="-23219" y="-42582" z="-10917" heading="48397" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22137" x="-23136" y="-42582" z="-10917" heading="48397" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22137" x="-23136" y="-38882" z="-10917" heading="16428" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22137" x="-23045" y="-42582" z="-10917" heading="48397" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22137" x="-23039" y="-38882" z="-10917" heading="16428" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22137" x="-22508" y="-40731" z="-10917" heading="53141" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22137" x="-22410" y="-40731" z="-10917" heading="53141" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22137" x="-22315" y="-40731" z="-10917" heading="53141" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22137" x="-20488" y="-42608" z="-10725" heading="17185" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22137" x="-20487" y="-38884" z="-10725" heading="16561" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22137" x="-20389" y="-38884" z="-10725" heading="16561" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22137" x="-20385" y="-42608" z="-10725" heading="17185" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22137" x="-20304" y="-38884" z="-10725" heading="16561" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22137" x="-20298" y="-42608" z="-10725" heading="17185" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22137" x="-19661" y="-40783" z="-10725" heading="47076" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22137" x="-19576" y="-40767" z="-10725" heading="49066" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22137" x="-19485" y="-40761" z="-10725" heading="49152" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22137" x="-13239" y="-40716" z="-10725" heading="15777" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22137" x="-13153" y="-40716" z="-10725" heading="15777" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22137" x="-13049" y="-40716" z="-10725" heading="15777" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22137" x="-12434" y="-42612" z="-10725" heading="48441" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22137" x="-12423" y="-38920" z="-10725" heading="48792" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22137" x="-12341" y="-42612" z="-10725" heading="48441" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22137" x="-12330" y="-38916" z="-10725" heading="48792" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22137" x="-12247" y="-42612" z="-10725" heading="48441" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22137" x="-12245" y="-38916" z="-10725" heading="48792" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22137" x="-10385" y="-40763" z="-10917" heading="48342" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22137" x="-10303" y="-40763" z="-10917" heading="48342" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22137" x="-10220" y="-40763" z="-10917" heading="48342" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22137" x="-9691" y="-42615" z="-10917" heading="16303" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22137" x="-9677" y="-38911" z="-10917" heading="48556" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22137" x="-9599" y="-42615" z="-10917" heading="16303" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22137" x="-9586" y="-38911" z="-10917" heading="48556" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22137" x="-9506" y="-42615" z="-10917" heading="16303" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22137" x="-9495" y="-38911" z="-10917" heading="48556" respawnDelay="60" /> <!-- Penance Guard -->
 		<npc id="22139" x="-20730" y="-39814" z="-10725" heading="33653" respawnDelay="60" /> <!-- Old Aristocrat's Soldier -->
 		<npc id="22139" x="-20672" y="-37716" z="-10725" heading="27807" respawnDelay="60" /> <!-- Old Aristocrat's Soldier -->
 		<npc id="22139" x="-20648" y="-41742" z="-10725" heading="63671" respawnDelay="60" /> <!-- Old Aristocrat's Soldier -->
@@ -45,8 +9,7 @@
 		<npc id="22139" x="-20105" y="-39783" z="-10783" heading="9483" respawnDelay="60" /> <!-- Old Aristocrat's Soldier -->
 		<npc id="22139" x="-19766" y="-43585" z="-10758" heading="33441" respawnDelay="60" /> <!-- Old Aristocrat's Soldier -->
 		<npc id="22139" x="-19345" y="-41780" z="-10725" heading="10251" respawnDelay="60" /> <!-- Old Aristocrat's Soldier -->
-		<npc id="22139" x="-17886" y="-42848" z="-10725" heading="17100" respawnDelay="60" /> <!-- Old Aristocrat's Soldier -->
-		<npc id="22139" x="-17809" y="-37901" z="-10725" heading="47429" respawnDelay="60" /> <!-- Old Aristocrat's Soldier -->
+		<npc id="22139" x="-19764" y="-37938" z="-10784" heading="32614" respawnDelay="60" /> <!-- Old Aristocrat's Soldier -->
 		<npc id="22139" x="-17619" y="-40821" z="-10725" heading="45039" respawnDelay="60" /> <!-- Old Aristocrat's Soldier -->
 		<npc id="22139" x="-13519" y="-43539" z="-10725" heading="817" respawnDelay="60" /> <!-- Old Aristocrat's Soldier -->
 		<npc id="22139" x="-12971" y="-39915" z="-10758" heading="35143" respawnDelay="60" /> <!-- Old Aristocrat's Soldier -->
@@ -78,7 +41,7 @@
 		<npc id="22140" x="-15171" y="-41568" z="-10725" heading="16535" respawnDelay="60" /> <!-- Zombie Worker -->
 		<npc id="22140" x="-15165" y="-40378" z="-10725" heading="57526" respawnDelay="60" /> <!-- Zombie Worker -->
 		<npc id="22140" x="-15135" y="-39452" z="-10725" heading="11376" respawnDelay="60" /> <!-- Zombie Worker -->
-		<npc id="22140" x="-14837" y="-37923" z="-10725" heading="15439" respawnDelay="60" /> <!-- Zombie Worker -->
+		<npc id="22140" x="-12868" y="-37854" z="-10774" heading="469" respawnDelay="60" /> <!-- Zombie Worker -->
 		<npc id="22140" x="-13164" y="-39841" z="-10736" heading="7405" respawnDelay="60" /> <!-- Zombie Worker -->
 		<npc id="22140" x="-13134" y="-37770" z="-10728" heading="6344" respawnDelay="60" /> <!-- Zombie Worker -->
 		<npc id="22140" x="-13098" y="-43422" z="-10784" heading="30495" respawnDelay="60" /> <!-- Zombie Worker -->
@@ -388,7 +351,6 @@
 		<npc id="22176" x="-16529" y="-46310" z="-10821" heading="17047" respawnDelay="60" /> <!-- Andreas' Royal Guards -->
 		<npc id="22176" x="-16513" y="-49019" z="-10917" heading="15756" respawnDelay="60" /> <!-- Andreas' Royal Guards -->
 		<npc id="22176" x="-16497" y="-48344" z="-10917" heading="16215" respawnDelay="60" /> <!-- Andreas' Royal Guards -->
-		<npc id="22176" x="-16198" y="-44753" z="-10725" heading="16583" respawnDelay="60" /> <!-- Andreas' Royal Guards -->
 		<npc id="22176" x="-16177" y="-49925" z="-10917" heading="16622" respawnDelay="60" /> <!-- Andreas' Royal Guards -->
 		<npc id="22176" x="-16166" y="-47732" z="-10821" heading="16430" respawnDelay="60" /> <!-- Andreas' Royal Guards -->
 		<npc id="22176" x="-16165" y="-49237" z="-10917" heading="16091" respawnDelay="60" /> <!-- Andreas' Royal Guards -->
@@ -402,44 +364,17 @@
 		<npc id="22190" x="-16712" y="-53438" z="-10449" heading="4083" respawnDelay="60" /> <!-- Ritual Sacrifice -->
 		<npc id="22190" x="-16297" y="-53086" z="-10449" heading="7806" respawnDelay="60" /> <!-- Ritual Sacrifice -->
 		<npc id="22190" x="-15847" y="-53336" z="-10449" heading="31957" respawnDelay="60" /> <!-- Ritual Sacrifice -->
-		<npc id="22194" x="-21531" y="-38032" z="-10835" heading="65271" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22194" x="-21531" y="-37951" z="-10845" heading="65271" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22194" x="-21531" y="-37854" z="-10831" heading="65271" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22194" x="-21529" y="-43642" z="-10814" heading="99" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22194" x="-21529" y="-43548" z="-10831" heading="99" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22194" x="-21529" y="-43460" z="-10825" heading="99" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22194" x="-21522" y="-39910" z="-10825" heading="2407" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22194" x="-21522" y="-39819" z="-10852" heading="2407" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22194" x="-21522" y="-39722" z="-10822" heading="2407" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22194" x="-21521" y="-41762" z="-10826" heading="703" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22194" x="-21521" y="-41675" z="-10838" heading="703" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22194" x="-21521" y="-41586" z="-10850" heading="703" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22194" x="-11234" y="-38039" z="-10821" heading="30762" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22194" x="-11234" y="-37951" z="-10835" heading="30762" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22194" x="-11234" y="-37857" z="-10835" heading="30762" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22194" x="-11206" y="-41690" z="-10841" heading="32668" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22194" x="-11206" y="-41597" z="-10827" heading="32668" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22194" x="-11204" y="-41782" z="-10829" heading="32668" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22194" x="-11192" y="-39905" z="-10832" heading="31528" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22194" x="-11192" y="-39813" z="-10832" heading="31528" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22194" x="-11192" y="-39726" z="-10831" heading="31528" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22194" x="-11166" y="-43638" z="-10841" heading="32364" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22194" x="-11166" y="-43552" z="-10838" heading="32364" respawnDelay="60" /> <!-- Penance Guard -->
-		<npc id="22194" x="-11166" y="-43464" z="-10833" heading="32364" respawnDelay="60" /> <!-- Penance Guard -->
 		<npc id="32034" x="-15934" y="-36605" z="-10693" heading="15439" respawnDelay="60" /> <!-- Temple Gatekeeper -->
 		<npc id="32035" x="-16722" y="-36928" z="-10725" heading="52401" respawnDelay="60" /> <!-- Temple Gatekeeper -->
 		<npc id="32036" x="-15853" y="-43811" z="-10685" heading="16384" respawnDelay="60" /> <!-- Temple Gatekeeper -->
 		<npc id="32037" x="-16629" y="-44290" z="-10725" heading="54566" respawnDelay="60" /> <!-- Temple Gatekeeper -->
 		<npc id="32040" x="-11986" y="-35903" z="-10857" heading="31655" respawnDelay="60" /> <!-- Triol's Mirror -->
 		<npc id="32068" x="-20229" y="-54359" z="-11114" heading="51269" respawnDelay="60" /> <!-- Triol's Revelation -->
-		<npc id="32068" x="-18161" y="-52778" z="-11013" heading="52976" respawnDelay="60" /> <!-- Triol's Revelation -->
-		<npc id="32068" x="-18079" y="-54816" z="-10603" heading="975" respawnDelay="60" /> <!-- Triol's Revelation -->
-		<npc id="32068" x="-17342" y="-54874" z="-10449" heading="12821" respawnDelay="60" /> <!-- Triol's Revelation -->
 		<npc id="32068" x="-16396" y="-56768" z="-10850" heading="12416" respawnDelay="60" /> <!-- Triol's Revelation -->
-		<npc id="32068" x="-15223" y="-54847" z="-10449" heading="11069" respawnDelay="60" /> <!-- Triol's Revelation -->
-		<npc id="32068" x="-14686" y="-54745" z="-10603" heading="19962" respawnDelay="60" /> <!-- Triol's Revelation -->
-		<npc id="32068" x="-14590" y="-52790" z="-11013" heading="54609" respawnDelay="60" /> <!-- Triol's Revelation -->
 		<npc id="32068" x="-12761" y="-52626" z="-10938" heading="58419" respawnDelay="60" /> <!-- Triol's Revelation -->
 		<npc id="32068" x="-12479" y="-54302" z="-11114" heading="20834" respawnDelay="60" /> <!-- Triol's Revelation -->
+		<npc id="32068" x="-20152" y="-52640" z="-10964" heading="64038" respawnDelay="60" /> <!-- Triol's Revelation -->
+		<npc id="22139" x="-19661" y="-43542" z="-10784" heading="32493" respawnDelay="60" /> <!-- Old Aristocrat's Soldier -->
+		<npc id="22176" x="-15260" y="-44953" z="-10751" heading="20555" respawnDelay="60" /> <!-- Andreas' Royal Guards -->
 	</spawn>
 </list>

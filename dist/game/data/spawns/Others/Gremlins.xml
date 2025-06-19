@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <list enabled="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../xsd/spawns.xsd">
 	<spawn zone="gludio32_qm1725_00">
 		<territory minZ="-3148" maxZ="-2948">
@@ -42,15 +42,6 @@
 			<node x="-55732" y="-113948" />
 			<node x="-55748" y="-113264" />
 			<node x="-56804" y="-113268" />
-		</territory>
-		<npc id="18342" count="15" respawnDelay="15" /> <!-- Gremlin -->
-	</spawn>
-	<spawn zone="schttgart07_qm2312_00">
-		<territory minZ="-604" maxZ="-304">
-			<node x="108756" y="-175200" />
-			<node x="109716" y="-174268" />
-			<node x="108768" y="-172744" />
-			<node x="107540" y="-173300" />
 		</territory>
 		<npc id="18342" count="15" respawnDelay="15" /> <!-- Gremlin -->
 	</spawn>

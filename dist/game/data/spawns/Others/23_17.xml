@@ -4,57 +4,21 @@
 		<npc id="20956" x="107424" y="-894" z="-3132" heading="58336" respawnDelay="37" /> <!-- Past Knight -->
 		<npc id="20956" x="107829" y="-2001" z="-3252" heading="55665" respawnDelay="37" /> <!-- Past Knight -->
 		<npc id="20956" x="109591" y="-2053" z="-3453" heading="43651" respawnDelay="37" /> <!-- Past Knight -->
-		<npc id="20956" x="109677" y="-3" z="-3610" heading="13159" respawnDelay="37" /> <!-- Past Knight -->
-		<npc id="20956" x="110692" y="-1224" z="-4008" heading="0" respawnDelay="37" /> <!-- Past Knight -->
 		<npc id="20956" x="112353" y="-1172" z="-3908" heading="24036" respawnDelay="37" /> <!-- Past Knight -->
-		<npc id="20956" x="113524" y="-5522" z="-3884" heading="0" respawnDelay="37" /> <!-- Past Knight -->
-		<npc id="20956" x="113524" y="-5166" z="-3884" heading="0" respawnDelay="37" /> <!-- Past Knight -->
 		<npc id="20956" x="114877" y="-367" z="-3615" heading="26346" respawnDelay="37" /> <!-- Past Knight -->
-		<npc id="20956" x="114966" y="-8048" z="-3536" heading="0" respawnDelay="37" /> <!-- Past Knight -->
-		<npc id="20956" x="115738" y="-862" z="-3568" heading="56275" respawnDelay="37" /> <!-- Past Knight -->
-		<npc id="20956" x="116529" y="-1337" z="-3637" heading="555" respawnDelay="37" /> <!-- Past Knight -->
 		<npc id="20956" x="117556" y="-370" z="-3607" heading="23902" respawnDelay="37" /> <!-- Past Knight -->
-		<npc id="20956" x="117984" y="-8164" z="-3664" heading="0" respawnDelay="37" /> <!-- Past Knight -->
-		<npc id="20956" x="118070" y="-10108" z="-3336" heading="0" respawnDelay="37" /> <!-- Past Knight -->
-		<npc id="20956" x="119084" y="-3540" z="-3892" heading="0" respawnDelay="37" /> <!-- Past Knight -->
-		<npc id="20956" x="119726" y="-1193" z="-3723" heading="1922" respawnDelay="37" /> <!-- Past Knight -->
-		<npc id="20956" x="119750" y="-9600" z="-3484" heading="0" respawnDelay="37" /> <!-- Past Knight -->
-		<npc id="20956" x="120112" y="-4774" z="-4100" heading="0" respawnDelay="37" /> <!-- Past Knight -->
-		<npc id="20956" x="120616" y="-4952" z="-4100" heading="0" respawnDelay="37" /> <!-- Past Knight -->
-		<npc id="20956" x="121916" y="-5392" z="-3876" heading="0" respawnDelay="37" /> <!-- Past Knight -->
-		<npc id="20956" x="123020" y="-6468" z="-3832" heading="0" respawnDelay="37" /> <!-- Past Knight -->
 		<npc id="20959" x="124862" y="-10414" z="-3908" heading="0" respawnDelay="37" /> <!-- Dark Guard -->
 		<npc id="20959" x="126163" y="-1353" z="-2376" heading="18529" respawnDelay="37" /> <!-- Dark Guard -->
-		<npc id="20959" x="126499" y="-7972" z="-3804" heading="24953" respawnDelay="37" /> <!-- Dark Guard -->
 		<npc id="20959" x="126711" y="-3499" z="-3013" heading="18124" respawnDelay="37" /> <!-- Dark Guard -->
 		<npc id="20959" x="127789" y="-5551" z="-3289" heading="6311" respawnDelay="37" /> <!-- Dark Guard -->
-		<npc id="20959" x="127914" y="-13326" z="-3852" heading="0" respawnDelay="37" /> <!-- Dark Guard -->
-		<npc id="20959" x="128015" y="-13504" z="-3852" heading="0" respawnDelay="37" /> <!-- Dark Guard -->
 		<npc id="20959" x="128440" y="-12456" z="-3792" heading="0" respawnDelay="37" /> <!-- Dark Guard -->
-		<npc id="20959" x="128839" y="-11180" z="-3772" heading="0" respawnDelay="37" /> <!-- Dark Guard -->
 		<npc id="20959" x="129041" y="-11536" z="-3772" heading="0" respawnDelay="37" /> <!-- Dark Guard -->
 		<npc id="20959" x="129734" y="-7742" z="-3872" heading="55835" respawnDelay="37" /> <!-- Dark Guard -->
-		<npc id="20963" x="113423" y="-5344" z="-3884" heading="0" respawnDelay="37" /> <!-- Bloody Lord -->
-		<npc id="20963" x="114865" y="-7514" z="-3536" heading="0" respawnDelay="37" /> <!-- Bloody Lord -->
-		<npc id="20963" x="115167" y="-8048" z="-3536" heading="0" respawnDelay="37" /> <!-- Bloody Lord -->
-		<npc id="20963" x="117984" y="-7808" z="-3664" heading="0" respawnDelay="37" /> <!-- Bloody Lord -->
 		<npc id="20963" x="118070" y="-9752" z="-3336" heading="0" respawnDelay="37" /> <!-- Bloody Lord -->
-		<npc id="20963" x="119084" y="-3184" z="-3892" heading="0" respawnDelay="37" /> <!-- Bloody Lord -->
-		<npc id="20963" x="119548" y="-9244" z="-3484" heading="0" respawnDelay="37" /> <!-- Bloody Lord -->
-		<npc id="20963" x="119587" y="-3362" z="-3892" heading="0" respawnDelay="37" /> <!-- Bloody Lord -->
-		<npc id="20963" x="119851" y="-9066" z="-3484" heading="0" respawnDelay="37" /> <!-- Bloody Lord -->
-		<npc id="20963" x="120717" y="-4774" z="-4100" heading="0" respawnDelay="37" /> <!-- Bloody Lord -->
-		<npc id="20963" x="121815" y="-4858" z="-3876" heading="0" respawnDelay="37" /> <!-- Bloody Lord -->
-		<npc id="20963" x="122017" y="-5214" z="-3876" heading="0" respawnDelay="37" /> <!-- Bloody Lord -->
-		<npc id="20963" x="122617" y="-6112" z="-3832" heading="0" respawnDelay="37" /> <!-- Bloody Lord -->
-		<npc id="20963" x="123174" y="-5018" z="-3404" heading="0" respawnDelay="37" /> <!-- Bloody Lord -->
 		<npc id="20963" x="124560" y="-10592" z="-3908" heading="0" respawnDelay="37" /> <!-- Bloody Lord -->
 		<npc id="20963" x="125609" y="-2492" z="-2772" heading="0" respawnDelay="37" /> <!-- Bloody Lord -->
 		<npc id="20963" x="126355" y="-4239" z="-3211" heading="28063" respawnDelay="37" /> <!-- Bloody Lord -->
-		<npc id="20963" x="127612" y="-13504" z="-3852" heading="0" respawnDelay="37" /> <!-- Bloody Lord -->
 		<npc id="20963" x="128203" y="-1678" z="-2178" heading="9310" respawnDelay="37" /> <!-- Bloody Lord -->
-		<npc id="20963" x="128638" y="-11180" z="-3772" heading="0" respawnDelay="37" /> <!-- Bloody Lord -->
-		<npc id="20963" x="129041" y="-10824" z="-3772" heading="0" respawnDelay="37" /> <!-- Bloody Lord -->
 		<npc id="20963" x="130917" y="-6675" z="-3547" heading="1535" respawnDelay="37" /> <!-- Bloody Lord -->
 		<npc id="30880" x="112816" y="-17856" z="-1797" heading="26000" respawnDelay="60" /> <!-- Viktor Van Dake -->
 		<npc id="30881" x="112740" y="-17944" z="-1797" heading="20480" respawnDelay="60" /> <!-- Sanders -->
@@ -90,5 +54,40 @@
 		<npc id="31681" x="118816" y="-19536" z="-2992" heading="50000" respawnDelay="60" /> <!-- Frontier Guard -->
 		<npc id="31681" x="118912" y="-19584" z="-3024" heading="50000" respawnDelay="60" /> <!-- Frontier Guard -->
 		<npc id="31681" x="119011" y="-19518" z="-2647" heading="60000" respawnDelay="60" /> <!-- Frontier Guard -->
+		<npc id="20956" x="117375" y="-9993" z="-3285" heading="63297" respawnDelay="37" /> <!-- Past Knight -->
+		<npc id="20956" x="118940" y="-7408" z="-3494" heading="22155" respawnDelay="37" /> <!-- Past Knight -->
+		<npc id="20963" x="119690" y="-8450" z="-3197" heading="15354" respawnDelay="37" /> <!-- Bloody Lord -->
+		<npc id="20963" x="116675" y="-7568" z="-3449" heading="34409" respawnDelay="37" /> <!-- Bloody Lord -->
+		<npc id="20956" x="117241" y="-9179" z="-3285" heading="58281" respawnDelay="37" /> <!-- Past Knight -->
+		<npc id="20963" x="116013" y="-6238" z="-3449" heading="30212" respawnDelay="37" /> <!-- Bloody Lord -->
+		<npc id="20956" x="115999" y="-5389" z="-3449" heading="19276" respawnDelay="37" /> <!-- Past Knight -->
+		<npc id="20963" x="114988" y="-5194" z="-3449" heading="28207" respawnDelay="37" /> <!-- Bloody Lord -->
+		<npc id="20963" x="117199" y="-6725" z="-3570" heading="52280" respawnDelay="37" /> <!-- Bloody Lord -->
+		<npc id="20956" x="115008" y="-5569" z="-3449" heading="45088" respawnDelay="37" /> <!-- Past Knight -->
+		<npc id="20956" x="115522" y="-5142" z="-3449" heading="57454" respawnDelay="37" /> <!-- Past Knight -->
+		<npc id="20963" x="121988" y="-2838" z="-3323" heading="24180" respawnDelay="37" /> <!-- Bloody Lord -->
+		<npc id="20956" x="122033" y="-2276" z="-3328" heading="60132" respawnDelay="37" /> <!-- Past Knight -->
+		<npc id="20963" x="122433" y="-3968" z="-3337" heading="50944" respawnDelay="37" /> <!-- Bloody Lord -->
+		<npc id="20963" x="121568" y="-1747" z="-3389" heading="63963" respawnDelay="37" /> <!-- Bloody Lord -->
+		<npc id="20963" x="122403" y="-3440" z="-3332" heading="54912" respawnDelay="37" /> <!-- Bloody Lord -->
+		<npc id="20963" x="120249" y="-7933" z="-3184" heading="3734" respawnDelay="37" /> <!-- Bloody Lord -->
+		<npc id="20963" x="120096" y="-5527" z="-3811" heading="37604" respawnDelay="37" /> <!-- Bloody Lord -->
+		<npc id="20956" x="121502" y="-5790" z="-3728" heading="26222" respawnDelay="37" /> <!-- Past Knight -->
+		<npc id="20956" x="118763" y="-4764" z="-4058" heading="30927" respawnDelay="37" /> <!-- Past Knight -->
+		<npc id="20956" x="117605" y="-3321" z="-3958" heading="23217" respawnDelay="37" /> <!-- Past Knight -->
+		<npc id="20956" x="117767" y="-2117" z="-3785" heading="6564" respawnDelay="37" /> <!-- Past Knight -->
+		<npc id="20956" x="116502" y="-2048" z="-3765" heading="19786" respawnDelay="37" /> <!-- Past Knight -->
+		<npc id="20956" x="114917" y="-2065" z="-3791" heading="33986" respawnDelay="37" /> <!-- Past Knight -->
+		<npc id="20956" x="111860" y="-1425" z="-3916" heading="800" respawnDelay="37" /> <!-- Past Knight -->
+		<npc id="20963" x="123499" y="-4486" z="-3363" heading="9411" respawnDelay="37" /> <!-- Bloody Lord -->
+		<npc id="20956" x="125400" y="-6999" z="-4027" heading="64030" respawnDelay="37" /> <!-- Past Knight -->
+		<npc id="20963" x="124846" y="-5231" z="-3626" heading="9457" respawnDelay="37" /> <!-- Bloody Lord -->
+		<npc id="20959" x="126581" y="-7310" z="-3949" heading="62943" respawnDelay="37" /> <!-- Dark Guard -->
+		<npc id="20963" x="126123" y="-12452" z="-3993" heading="24998" respawnDelay="37" /> <!-- Bloody Lord -->
+		<npc id="20959" x="130880" y="-11448" z="-3663" heading="5101" respawnDelay="37" /> <!-- Dark Guard -->
+		<npc id="20959" x="127694" y="-10224" z="-3745" heading="14182" respawnDelay="37" /> <!-- Dark Guard -->
+		<npc id="20963" x="129372" y="-10266" z="-3641" heading="18339" respawnDelay="37" /> <!-- Bloody Lord -->
+		<npc id="20963" x="128570" y="-11572" z="-3691" heading="25701" respawnDelay="37" /> <!-- Bloody Lord -->
+		<npc id="20959" x="126427" y="-12703" z="-3993" heading="24473" respawnDelay="37" /> <!-- Dark Guard -->
 	</spawn>
 </list>

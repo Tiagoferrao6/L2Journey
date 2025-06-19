@@ -8,13 +8,11 @@
 		<npc id="22838" x="142650" y="116701" z="-3912" heading="61235" respawnDelay="60" /> <!-- Maluk Leader -->
 		<npc id="22838" x="142691" y="117971" z="-3912" heading="9346" respawnDelay="60" /> <!-- Maluk Leader -->
 		<npc id="22838" x="142966" y="113731" z="-3720" heading="58330" respawnDelay="60" /> <!-- Maluk Leader -->
-		<npc id="22838" x="143347" y="114704" z="-3720" heading="45797" respawnDelay="60" /> <!-- Maluk Leader -->
 		<npc id="22838" x="143441" y="117592" z="-3912" heading="8809" respawnDelay="60" /> <!-- Maluk Leader -->
 		<npc id="22838" x="143454" y="112724" z="-3944" heading="25847" respawnDelay="60" /> <!-- Maluk Leader -->
 		<npc id="22838" x="143465" y="116617" z="-3912" heading="4417" respawnDelay="60" /> <!-- Maluk Leader -->
 		<npc id="22838" x="143544" y="110356" z="-3944" heading="5179" respawnDelay="60" /> <!-- Maluk Leader -->
 		<npc id="22838" x="143932" y="109922" z="-3944" heading="5251" respawnDelay="60" /> <!-- Maluk Leader -->
-		<npc id="22838" x="144360" y="112784" z="-3944" heading="29848" respawnDelay="60" /> <!-- Maluk Leader -->
 		<npc id="22838" x="148071" y="107208" z="-4112" heading="42395" respawnDelay="60" /> <!-- Maluk Leader -->
 		<npc id="22838" x="148305" y="107386" z="-4168" heading="50371" respawnDelay="60" /> <!-- Maluk Leader -->
 		<npc id="22838" x="149234" y="108441" z="-4408" heading="1643" respawnDelay="60" /> <!-- Maluk Leader -->
@@ -32,7 +30,6 @@
 		<npc id="22838" x="151778" y="120915" z="-3808" heading="41618" respawnDelay="60" /> <!-- Maluk Leader -->
 		<npc id="22838" x="151986" y="121226" z="-3808" heading="54087" respawnDelay="60" /> <!-- Maluk Leader -->
 		<npc id="22838" x="152012" y="119187" z="-3800" heading="34466" respawnDelay="60" /> <!-- Maluk Leader -->
-		<npc id="22838" x="152114" y="119387" z="-3800" heading="2400" respawnDelay="60" /> <!-- Maluk Leader -->
 		<npc id="22838" x="152183" y="120455" z="-3808" heading="4148" respawnDelay="60" /> <!-- Maluk Leader -->
 		<npc id="22838" x="152210" y="121576" z="-3808" heading="8042" respawnDelay="60" /> <!-- Maluk Leader -->
 		<npc id="22838" x="152222" y="119713" z="-3784" heading="57336" respawnDelay="60" /> <!-- Maluk Leader -->
@@ -44,23 +41,13 @@
 		<npc id="22838" x="153935" y="118590" z="-3808" heading="59598" respawnDelay="60" /> <!-- Maluk Leader -->
 		<npc id="22838" x="153958" y="118612" z="-3808" heading="32906" respawnDelay="60" /> <!-- Maluk Leader -->
 		<npc id="22838" x="154342" y="118701" z="-3808" heading="37416" respawnDelay="60" /> <!-- Maluk Leader -->
-		<npc id="22839" x="135387" y="114004" z="-3720" heading="31144" respawnDelay="60" /> <!-- Maluk Warlord -->
-		<npc id="22839" x="135493" y="113954" z="-3720" heading="42129" respawnDelay="60" /> <!-- Maluk Warlord -->
-		<npc id="22839" x="136501" y="113861" z="-3720" heading="11646" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="136505" y="114034" z="-3720" heading="30759" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="139678" y="114452" z="-3720" heading="24513" respawnDelay="60" /> <!-- Maluk Warlord -->
-		<npc id="22839" x="139822" y="114769" z="-3712" heading="53450" respawnDelay="60" /> <!-- Maluk Warlord -->
-		<npc id="22839" x="139896" y="118919" z="-3912" heading="41582" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="139969" y="118984" z="-3912" heading="45988" respawnDelay="60" /> <!-- Maluk Warlord -->
-		<npc id="22839" x="140049" y="119008" z="-3904" heading="43020" respawnDelay="60" /> <!-- Maluk Warlord -->
-		<npc id="22839" x="140136" y="119385" z="-3896" heading="18431" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="140241" y="121532" z="-3896" heading="9249" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="140280" y="119454" z="-3904" heading="8518" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="140326" y="110174" z="-3938" heading="30422" respawnDelay="60" /> <!-- Maluk Warlord -->
-		<npc id="22839" x="140383" y="118880" z="-3912" heading="36781" respawnDelay="60" /> <!-- Maluk Warlord -->
-		<npc id="22839" x="140389" y="118888" z="-3912" heading="36207" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="140463" y="120645" z="-3912" heading="1186" respawnDelay="60" /> <!-- Maluk Warlord -->
-		<npc id="22839" x="140554" y="108742" z="-3949" heading="34798" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="140607" y="113284" z="-3720" heading="35212" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="140719" y="118905" z="-3912" heading="17037" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="140755" y="109784" z="-3949" heading="16121" respawnDelay="60" /> <!-- Maluk Warlord -->
@@ -69,14 +56,12 @@
 		<npc id="22839" x="140852" y="120768" z="-3896" heading="12560" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="140938" y="114846" z="-3720" heading="190" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="141038" y="121856" z="-3912" heading="11105" respawnDelay="60" /> <!-- Maluk Warlord -->
-		<npc id="22839" x="141230" y="121589" z="-3912" heading="20790" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="141299" y="112325" z="-3712" heading="5110" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="141311" y="109118" z="-3949" heading="55435" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="141598" y="112653" z="-3720" heading="40716" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="141631" y="112838" z="-3720" heading="17648" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="141631" y="121424" z="-3912" heading="61519" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="141777" y="114368" z="-3720" heading="42395" respawnDelay="60" /> <!-- Maluk Warlord -->
-		<npc id="22839" x="141866" y="114705" z="-3720" heading="15991" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="141936" y="117367" z="-3912" heading="42476" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="142308" y="114055" z="-3720" heading="52692" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="142414" y="107540" z="-3949" heading="22307" respawnDelay="60" /> <!-- Maluk Warlord -->
@@ -87,7 +72,6 @@
 		<npc id="22839" x="142624" y="107120" z="-3949" heading="59434" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="142645" y="121117" z="-3912" heading="52591" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="142653" y="107433" z="-3949" heading="504" respawnDelay="60" /> <!-- Maluk Warlord -->
-		<npc id="22839" x="142801" y="121416" z="-3912" heading="59706" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="143043" y="121337" z="-3912" heading="37424" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="143275" y="108651" z="-3949" heading="39989" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="143283" y="108917" z="-3949" heading="29153" respawnDelay="60" /> <!-- Maluk Warlord -->
@@ -98,9 +82,6 @@
 		<npc id="22839" x="143472" y="116859" z="-3912" heading="1578" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="143491" y="117424" z="-3912" heading="5927" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="143491" y="120864" z="-3912" heading="26743" respawnDelay="60" /> <!-- Maluk Warlord -->
-		<npc id="22839" x="143623" y="112728" z="-3944" heading="31723" respawnDelay="60" /> <!-- Maluk Warlord -->
-		<npc id="22839" x="143709" y="117749" z="-3912" heading="14503" respawnDelay="60" /> <!-- Maluk Warlord -->
-		<npc id="22839" x="143742" y="112860" z="-3944" heading="48718" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="143945" y="112711" z="-3944" heading="15453" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="144013" y="109831" z="-3944" heading="40185" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="144107" y="121282" z="-3912" heading="16558" respawnDelay="60" /> <!-- Maluk Warlord -->
@@ -115,7 +96,6 @@
 		<npc id="22839" x="144735" y="107765" z="-3944" heading="7636" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="144738" y="118876" z="-3912" heading="25811" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="145029" y="109004" z="-3944" heading="33930" respawnDelay="60" /> <!-- Maluk Warlord -->
-		<npc id="22839" x="145084" y="107516" z="-3944" heading="41287" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="145101" y="118440" z="-3912" heading="16690" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="145164" y="109330" z="-3944" heading="10335" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="145215" y="109289" z="-3936" heading="62875" respawnDelay="60" /> <!-- Maluk Warlord -->
@@ -132,7 +112,6 @@
 		<npc id="22839" x="147351" y="107520" z="-3992" heading="37706" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="147536" y="109715" z="-3944" heading="54595" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="147734" y="109662" z="-3944" heading="40756" respawnDelay="60" /> <!-- Maluk Warlord -->
-		<npc id="22839" x="147772" y="110397" z="-3944" heading="31223" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="147803" y="107159" z="-4064" heading="34591" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="147891" y="107332" z="-4080" heading="62897" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="149502" y="110612" z="-5424" heading="13828" respawnDelay="60" /> <!-- Maluk Warlord -->
@@ -140,15 +119,12 @@
 		<npc id="22839" x="149790" y="108306" z="-4544" heading="44123" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="149817" y="110143" z="-5280" heading="25068" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="149846" y="107984" z="-4560" heading="26799" respawnDelay="60" /> <!-- Maluk Warlord -->
-		<npc id="22839" x="149962" y="117011" z="-3704" heading="29045" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="149972" y="111213" z="-5504" heading="26091" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="150128" y="112140" z="-5512" heading="46459" respawnDelay="60" /> <!-- Maluk Warlord -->
-		<npc id="22839" x="150299" y="116988" z="-3696" heading="56443" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="150372" y="107535" z="-4696" heading="47856" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="150494" y="107329" z="-4728" heading="2897" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="150518" y="110904" z="-5520" heading="35847" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="150518" y="111419" z="-5520" heading="7720" respawnDelay="60" /> <!-- Maluk Warlord -->
-		<npc id="22839" x="150580" y="117690" z="-3720" heading="19107" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="150674" y="111007" z="-5520" heading="17521" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="150674" y="111419" z="-5520" heading="60443" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="150688" y="117607" z="-3696" heading="14903" respawnDelay="60" /> <!-- Maluk Warlord -->
@@ -157,12 +133,7 @@
 		<npc id="22839" x="150830" y="112140" z="-5520" heading="2378" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="150854" y="111091" z="-5520" heading="48558" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="150977" y="109592" z="-5152" heading="20481" respawnDelay="60" /> <!-- Maluk Warlord -->
-		<npc id="22839" x="151336" y="118308" z="-3848" heading="16397" respawnDelay="60" /> <!-- Maluk Warlord -->
-		<npc id="22839" x="151581" y="118375" z="-3896" heading="1572" respawnDelay="60" /> <!-- Maluk Warlord -->
-		<npc id="22839" x="151666" y="118631" z="-3896" heading="15422" respawnDelay="60" /> <!-- Maluk Warlord -->
-		<npc id="22839" x="151675" y="118641" z="-3888" heading="52329" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="151733" y="120869" z="-3808" heading="44053" respawnDelay="60" /> <!-- Maluk Warlord -->
-		<npc id="22839" x="151958" y="120547" z="-3808" heading="41854" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="151986" y="121476" z="-3800" heading="38418" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="152014" y="119512" z="-3800" heading="23303" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="152179" y="119020" z="-3800" heading="9391" respawnDelay="60" /> <!-- Maluk Warlord -->
@@ -170,7 +141,6 @@
 		<npc id="22839" x="152273" y="120777" z="-3808" heading="59076" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="152282" y="119149" z="-3800" heading="15683" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="152322" y="121826" z="-3808" heading="56909" respawnDelay="60" /> <!-- Maluk Warlord -->
-		<npc id="22839" x="152475" y="119256" z="-3792" heading="50561" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="152488" y="107513" z="-5080" heading="27921" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="152490" y="121826" z="-3808" heading="41413" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="152658" y="122126" z="-3808" heading="41517" respawnDelay="60" /> <!-- Maluk Warlord -->
@@ -192,10 +162,8 @@
 		<npc id="22839" x="153697" y="109579" z="-5136" heading="4446" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="153752" y="109451" z="-5152" heading="63213" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="153765" y="107638" z="-5152" heading="14013" respawnDelay="60" /> <!-- Maluk Warlord -->
-		<npc id="22839" x="153775" y="118965" z="-3808" heading="21699" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="153891" y="112423" z="-5520" heading="51771" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="153954" y="111998" z="-5496" heading="44120" respawnDelay="60" /> <!-- Maluk Warlord -->
-		<npc id="22839" x="154018" y="118305" z="-3808" heading="12435" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="154057" y="112141" z="-5512" heading="2385" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="154099" y="118305" z="-3808" heading="45058" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="154116" y="111956" z="-5520" heading="48679" respawnDelay="60" /> <!-- Maluk Warlord -->
@@ -203,8 +171,6 @@
 		<npc id="22839" x="154240" y="112300" z="-5520" heading="1048" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="154647" y="108754" z="-5152" heading="14336" respawnDelay="60" /> <!-- Maluk Warlord -->
 		<npc id="22839" x="154664" y="108818" z="-5152" heading="11977" respawnDelay="60" /> <!-- Maluk Warlord -->
-		<npc id="22840" x="135404" y="114232" z="-3720" heading="14985" respawnDelay="60" /> <!-- Maluk Hunter -->
-		<npc id="22840" x="135597" y="114072" z="-3720" heading="48212" respawnDelay="60" /> <!-- Maluk Hunter -->
 		<npc id="22840" x="136503" y="114030" z="-3720" heading="44884" respawnDelay="60" /> <!-- Maluk Hunter -->
 		<npc id="22840" x="137026" y="114332" z="-3720" heading="56954" respawnDelay="60" /> <!-- Maluk Hunter -->
 		<npc id="22840" x="140101" y="114769" z="-3704" heading="46957" respawnDelay="60" /> <!-- Maluk Hunter -->
@@ -231,7 +197,6 @@
 		<npc id="22840" x="141697" y="112487" z="-3720" heading="11231" respawnDelay="60" /> <!-- Maluk Hunter -->
 		<npc id="22840" x="141827" y="117172" z="-3912" heading="33463" respawnDelay="60" /> <!-- Maluk Hunter -->
 		<npc id="22840" x="141966" y="107327" z="-3947" heading="33016" respawnDelay="60" /> <!-- Maluk Hunter -->
-		<npc id="22840" x="142071" y="114028" z="-3720" heading="52317" respawnDelay="60" /> <!-- Maluk Hunter -->
 		<npc id="22840" x="142137" y="107532" z="-3949" heading="9132" respawnDelay="60" /> <!-- Maluk Hunter -->
 		<npc id="22840" x="142175" y="119181" z="-3912" heading="60079" respawnDelay="60" /> <!-- Maluk Hunter -->
 		<npc id="22840" x="142475" y="107237" z="-3949" heading="58051" respawnDelay="60" /> <!-- Maluk Hunter -->
@@ -268,15 +233,12 @@
 		<npc id="22840" x="149938" y="116809" z="-3704" heading="55622" respawnDelay="60" /> <!-- Maluk Hunter -->
 		<npc id="22840" x="150128" y="112552" z="-5512" heading="17790" respawnDelay="60" /> <!-- Maluk Hunter -->
 		<npc id="22840" x="150362" y="112449" z="-5512" heading="52295" respawnDelay="60" /> <!-- Maluk Hunter -->
-		<npc id="22840" x="150686" y="117732" z="-3704" heading="40961" respawnDelay="60" /> <!-- Maluk Hunter -->
 		<npc id="22840" x="150908" y="111934" z="-5520" heading="56354" respawnDelay="60" /> <!-- Maluk Hunter -->
 		<npc id="22840" x="150986" y="112037" z="-5520" heading="60721" respawnDelay="60" /> <!-- Maluk Hunter -->
 		<npc id="22840" x="151362" y="109185" z="-5136" heading="54195" respawnDelay="60" /> <!-- Maluk Hunter -->
-		<npc id="22840" x="151447" y="118423" z="-3880" heading="33980" respawnDelay="60" /> <!-- Maluk Hunter -->
 		<npc id="22840" x="151714" y="109306" z="-5152" heading="13276" respawnDelay="60" /> <!-- Maluk Hunter -->
 		<npc id="22840" x="151890" y="119321" z="-3800" heading="35031" respawnDelay="60" /> <!-- Maluk Hunter -->
 		<npc id="22840" x="151913" y="120685" z="-3808" heading="45505" respawnDelay="60" /> <!-- Maluk Hunter -->
-		<npc id="22840" x="151928" y="118714" z="-3856" heading="60467" respawnDelay="60" /> <!-- Maluk Hunter -->
 		<npc id="22840" x="151930" y="121226" z="-3808" heading="44291" respawnDelay="60" /> <!-- Maluk Hunter -->
 		<npc id="22840" x="152042" y="121776" z="-3808" heading="13927" respawnDelay="60" /> <!-- Maluk Hunter -->
 		<npc id="22840" x="152179" y="119348" z="-3800" heading="47170" respawnDelay="60" /> <!-- Maluk Hunter -->
@@ -302,32 +264,25 @@
 		<npc id="22840" x="154338" y="112410" z="-5520" heading="44779" respawnDelay="60" /> <!-- Maluk Hunter -->
 		<npc id="22840" x="154504" y="118503" z="-3808" heading="31626" respawnDelay="60" /> <!-- Maluk Hunter -->
 		<npc id="22840" x="154788" y="108769" z="-5152" heading="6327" respawnDelay="60" /> <!-- Maluk Hunter -->
-		<npc id="22841" x="135212" y="114412" z="-3720" heading="47519" respawnDelay="60" /> <!-- Maluk Princess -->
-		<npc id="22841" x="135282" y="114004" z="-3720" heading="41104" respawnDelay="60" /> <!-- Maluk Princess -->
-		<npc id="22841" x="136585" y="114085" z="-3720" heading="46410" respawnDelay="60" /> <!-- Maluk Princess -->
 		<npc id="22841" x="136601" y="114640" z="-3720" heading="6089" respawnDelay="60" /> <!-- Maluk Princess -->
 		<npc id="22841" x="140161" y="114169" z="-3720" heading="51091" respawnDelay="60" /> <!-- Maluk Princess -->
 		<npc id="22841" x="140194" y="114769" z="-3720" heading="14184" respawnDelay="60" /> <!-- Maluk Princess -->
 		<npc id="22841" x="140668" y="113385" z="-3720" heading="37639" respawnDelay="60" /> <!-- Maluk Princess -->
 		<npc id="22841" x="140976" y="112819" z="-3720" heading="55649" respawnDelay="60" /> <!-- Maluk Princess -->
-		<npc id="22841" x="141386" y="114238" z="-3720" heading="35212" respawnDelay="60" /> <!-- Maluk Princess -->
 		<npc id="22841" x="141672" y="112802" z="-3720" heading="12414" respawnDelay="60" /> <!-- Maluk Princess -->
 		<npc id="22841" x="141973" y="112226" z="-3760" heading="51234" respawnDelay="60" /> <!-- Maluk Princess -->
 		<npc id="22841" x="142366" y="116797" z="-3912" heading="48844" respawnDelay="60" /> <!-- Maluk Princess -->
 		<npc id="22841" x="143015" y="120998" z="-3912" heading="17839" respawnDelay="60" /> <!-- Maluk Princess -->
 		<npc id="22841" x="143183" y="116245" z="-3904" heading="55900" respawnDelay="60" /> <!-- Maluk Princess -->
-		<npc id="22841" x="143311" y="112665" z="-3944" heading="4314" respawnDelay="60" /> <!-- Maluk Princess -->
 		<npc id="22841" x="143475" y="110424" z="-3944" heading="19126" respawnDelay="60" /> <!-- Maluk Princess -->
 		<npc id="22841" x="143595" y="117261" z="-3912" heading="15086" respawnDelay="60" /> <!-- Maluk Princess -->
 		<npc id="22841" x="144033" y="112728" z="-3944" heading="26055" respawnDelay="60" /> <!-- Maluk Princess -->
 		<npc id="22841" x="144281" y="119526" z="-3912" heading="51619" respawnDelay="60" /> <!-- Maluk Princess -->
 		<npc id="22841" x="144408" y="119480" z="-3912" heading="44269" respawnDelay="60" /> <!-- Maluk Princess -->
-		<npc id="22841" x="144442" y="112726" z="-3944" heading="13884" respawnDelay="60" /> <!-- Maluk Princess -->
 		<npc id="22841" x="144590" y="121150" z="-3912" heading="32767" respawnDelay="60" /> <!-- Maluk Princess -->
 		<npc id="22841" x="144773" y="107932" z="-3944" heading="50077" respawnDelay="60" /> <!-- Maluk Princess -->
 		<npc id="22841" x="144814" y="121729" z="-3912" heading="16383" respawnDelay="60" /> <!-- Maluk Princess -->
 		<npc id="22841" x="144930" y="121288" z="-3912" heading="43371" respawnDelay="60" /> <!-- Maluk Princess -->
-		<npc id="22841" x="145369" y="121640" z="-3912" heading="2166" respawnDelay="60" /> <!-- Maluk Princess -->
 		<npc id="22841" x="145377" y="108580" z="-3944" heading="41165" respawnDelay="60" /> <!-- Maluk Princess -->
 		<npc id="22841" x="145649" y="110266" z="-3904" heading="2860" respawnDelay="60" /> <!-- Maluk Princess -->
 		<npc id="22841" x="146910" y="107640" z="-3936" heading="64024" respawnDelay="60" /> <!-- Maluk Princess -->
@@ -339,14 +294,10 @@
 		<npc id="22841" x="150413" y="107445" z="-4704" heading="4835" respawnDelay="60" /> <!-- Maluk Princess -->
 		<npc id="22841" x="150596" y="111625" z="-5520" heading="16110" respawnDelay="60" /> <!-- Maluk Princess -->
 		<npc id="22841" x="150674" y="112140" z="-5520" heading="13340" respawnDelay="60" /> <!-- Maluk Princess -->
-		<npc id="22841" x="150705" y="117988" z="-3680" heading="42207" respawnDelay="60" /> <!-- Maluk Princess -->
 		<npc id="22841" x="150843" y="107400" z="-4792" heading="11833" respawnDelay="60" /> <!-- Maluk Princess -->
 		<npc id="22841" x="151064" y="111007" z="-5512" heading="65452" respawnDelay="60" /> <!-- Maluk Princess -->
 		<npc id="22841" x="151125" y="109589" z="-5152" heading="9182" respawnDelay="60" /> <!-- Maluk Princess -->
-		<npc id="22841" x="151449" y="118447" z="-3872" heading="60982" respawnDelay="60" /> <!-- Maluk Princess -->
-		<npc id="22841" x="151800" y="118717" z="-3880" heading="3925" respawnDelay="60" /> <!-- Maluk Princess -->
 		<npc id="22841" x="151823" y="120501" z="-3792" heading="39247" respawnDelay="60" /> <!-- Maluk Princess -->
-		<npc id="22841" x="151839" y="119348" z="-3800" heading="6197" respawnDelay="60" /> <!-- Maluk Princess -->
 		<npc id="22841" x="151866" y="119384" z="-3800" heading="36545" respawnDelay="60" /> <!-- Maluk Princess -->
 		<npc id="22841" x="152042" y="121476" z="-3800" heading="33705" respawnDelay="60" /> <!-- Maluk Princess -->
 		<npc id="22841" x="152138" y="120823" z="-3808" heading="4891" respawnDelay="60" /> <!-- Maluk Princess -->
@@ -363,9 +314,7 @@
 		<npc id="22841" x="153694" y="118899" z="-3808" heading="36822" respawnDelay="60" /> <!-- Maluk Princess -->
 		<npc id="22841" x="154342" y="118371" z="-3808" heading="11457" respawnDelay="60" /> <!-- Maluk Princess -->
 		<npc id="22841" x="154430" y="108448" z="-5152" heading="14109" respawnDelay="60" /> <!-- Maluk Princess -->
-		<npc id="22842" x="140380" y="119390" z="-3912" heading="40508" respawnDelay="60" /> <!-- Maluk Banshee -->
 		<npc id="22842" x="140407" y="118914" z="-3912" heading="26720" respawnDelay="60" /> <!-- Maluk Banshee -->
-		<npc id="22842" x="140433" y="119631" z="-3912" heading="59760" respawnDelay="60" /> <!-- Maluk Banshee -->
 		<npc id="22842" x="140761" y="110328" z="-3949" heading="15711" respawnDelay="60" /> <!-- Maluk Banshee -->
 		<npc id="22842" x="141360" y="109748" z="-3949" heading="57736" respawnDelay="60" /> <!-- Maluk Banshee -->
 		<npc id="22842" x="142719" y="107331" z="-3949" heading="57343" respawnDelay="60" /> <!-- Maluk Banshee -->
@@ -378,7 +327,6 @@
 		<npc id="22843" x="140192" y="119341" z="-3904" heading="9735" respawnDelay="60" /> <!-- Maluk Sniper -->
 		<npc id="22843" x="140231" y="119513" z="-3904" heading="5258" respawnDelay="60" /> <!-- Maluk Sniper -->
 		<npc id="22843" x="140260" y="119563" z="-3904" heading="21987" respawnDelay="60" /> <!-- Maluk Sniper -->
-		<npc id="22843" x="140512" y="119126" z="-3912" heading="29202" respawnDelay="60" /> <!-- Maluk Sniper -->
 		<npc id="22843" x="141118" y="108394" z="-3949" heading="15805" respawnDelay="60" /> <!-- Maluk Sniper -->
 		<npc id="22843" x="141937" y="118838" z="-3896" heading="6093" respawnDelay="60" /> <!-- Maluk Sniper -->
 		<npc id="22843" x="142385" y="120989" z="-3904" heading="50927" respawnDelay="60" /> <!-- Maluk Sniper -->
@@ -394,14 +342,10 @@
 		<npc id="22843" x="145295" y="109029" z="-3944" heading="30235" respawnDelay="60" /> <!-- Maluk Sniper -->
 		<npc id="22843" x="145321" y="107729" z="-3944" heading="47873" respawnDelay="60" /> <!-- Maluk Sniper -->
 		<npc id="22843" x="145405" y="108905" z="-3944" heading="20494" respawnDelay="60" /> <!-- Maluk Sniper -->
-		<npc id="22843" x="145476" y="121882" z="-3912" heading="12952" respawnDelay="60" /> <!-- Maluk Sniper -->
 		<npc id="22843" x="145563" y="117665" z="-3912" heading="62647" respawnDelay="60" /> <!-- Maluk Sniper -->
 		<npc id="22843" x="145649" y="110266" z="-3904" heading="12566" respawnDelay="60" /> <!-- Maluk Sniper -->
 		<npc id="22843" x="147514" y="110338" z="-3944" heading="10290" respawnDelay="60" /> <!-- Maluk Sniper -->
 		<npc id="22843" x="150299" y="117054" z="-3696" heading="20411" respawnDelay="60" /> <!-- Maluk Sniper -->
-		<npc id="22843" x="150576" y="117671" z="-3720" heading="43321" respawnDelay="60" /> <!-- Maluk Sniper -->
-		<npc id="22843" x="151375" y="118408" z="-3856" heading="24709" respawnDelay="60" /> <!-- Maluk Sniper -->
-		<npc id="22843" x="151778" y="118611" z="-3904" heading="43894" respawnDelay="60" /> <!-- Maluk Sniper -->
 		<npc id="22843" x="152717" y="107901" z="-5120" heading="928" respawnDelay="60" /> <!-- Maluk Sniper -->
 		<npc id="22843" x="153106" y="109051" z="-5152" heading="45594" respawnDelay="60" /> <!-- Maluk Sniper -->
 		<npc id="22843" x="153446" y="107739" z="-5152" heading="6834" respawnDelay="60" /> <!-- Maluk Sniper -->
@@ -417,10 +361,8 @@
 		<npc id="22844" x="142804" y="120412" z="-3912" heading="20330" respawnDelay="60" /> <!-- Dragon Knight -->
 		<npc id="22844" x="142893" y="116826" z="-3912" heading="24640" respawnDelay="60" /> <!-- Dragon Knight -->
 		<npc id="22844" x="142893" y="116916" z="-3912" heading="53240" respawnDelay="60" /> <!-- Dragon Knight -->
-		<npc id="22844" x="143698" y="112344" z="-3944" heading="37829" respawnDelay="60" /> <!-- Dragon Knight -->
 		<npc id="22844" x="144989" y="108873" z="-3944" heading="1216" respawnDelay="60" /> <!-- Dragon Knight -->
 		<npc id="22844" x="145079" y="108958" z="-3944" heading="59504" respawnDelay="60" /> <!-- Dragon Knight -->
-		<npc id="22844" x="145369" y="121640" z="-3912" heading="6937" respawnDelay="60" /> <!-- Dragon Knight -->
 		<npc id="22844" x="147406" y="110523" z="-3944" heading="64642" respawnDelay="60" /> <!-- Dragon Knight -->
 		<npc id="22844" x="153666" y="107483" z="-5152" heading="12882" respawnDelay="60" /> <!-- Dragon Knight -->
 		<npc id="22844" x="154072" y="111178" z="-5512" heading="45319" respawnDelay="60" /> <!-- Dragon Knight -->
@@ -442,8 +384,6 @@
 		<npc id="22848" x="148611" y="121436" z="-4864" heading="12777" respawnDelay="60" /> <!-- Drake Leader -->
 		<npc id="22848" x="149261" y="119685" z="-4864" heading="3742" respawnDelay="60" /> <!-- Drake Leader -->
 		<npc id="22848" x="151768" y="115130" z="-5472" heading="14565" respawnDelay="60" /> <!-- Drake Leader -->
-		<npc id="22848" x="152029" y="120592" z="-3808" heading="54603" respawnDelay="60" /> <!-- Drake Leader -->
-		<npc id="22848" x="152264" y="119512" z="-3784" heading="61701" respawnDelay="60" /> <!-- Drake Leader -->
 		<npc id="22848" x="152698" y="119086" z="-3792" heading="41723" respawnDelay="60" /> <!-- Drake Leader -->
 		<npc id="22849" x="145690" y="112729" z="-3727" heading="56649" respawnDelay="60" /> <!-- Drake Warrior -->
 		<npc id="22849" x="145781" y="112722" z="-3725" heading="36339" respawnDelay="60" /> <!-- Drake Warrior -->
@@ -490,7 +430,6 @@
 		<npc id="22849" x="151959" y="120555" z="-3808" heading="64333" respawnDelay="60" /> <!-- Drake Warrior -->
 		<npc id="22849" x="151980" y="120515" z="-3808" heading="4062" respawnDelay="60" /> <!-- Drake Warrior -->
 		<npc id="22849" x="152024" y="120560" z="-3808" heading="50400" respawnDelay="60" /> <!-- Drake Warrior -->
-		<npc id="22849" x="152264" y="119512" z="-3784" heading="0" respawnDelay="60" /> <!-- Drake Warrior -->
 		<npc id="22849" x="152698" y="119235" z="-3784" heading="41906" respawnDelay="60" /> <!-- Drake Warrior -->
 		<npc id="22849" x="152760" y="119216" z="-3784" heading="63099" respawnDelay="60" /> <!-- Drake Warrior -->
 		<npc id="22850" x="145999" y="112712" z="-3725" heading="56270" respawnDelay="60" /> <!-- Drake Scout -->
@@ -507,7 +446,6 @@
 		<npc id="22850" x="148504" y="121330" z="-4848" heading="0" respawnDelay="60" /> <!-- Drake Scout -->
 		<npc id="22850" x="148553" y="121424" z="-4864" heading="37148" respawnDelay="60" /> <!-- Drake Scout -->
 		<npc id="22850" x="148659" y="121381" z="-4864" heading="4063" respawnDelay="60" /> <!-- Drake Scout -->
-		<npc id="22850" x="152264" y="119512" z="-3784" heading="0" respawnDelay="60" /> <!-- Drake Scout -->
 		<npc id="22850" x="152605" y="119152" z="-3792" heading="16996" respawnDelay="60" /> <!-- Drake Scout -->
 		<npc id="22850" x="152648" y="119046" z="-3800" heading="0" respawnDelay="60" /> <!-- Drake Scout -->
 		<npc id="22851" x="145959" y="112794" z="-3725" heading="40142" respawnDelay="60" /> <!-- Drake Mage -->
@@ -521,8 +459,6 @@
 		<npc id="22851" x="149155" y="119791" z="-4864" heading="3814" respawnDelay="60" /> <!-- Drake Mage -->
 		<npc id="22851" x="151768" y="115279" z="-5472" heading="55966" respawnDelay="60" /> <!-- Drake Mage -->
 		<npc id="22851" x="151869" y="115209" z="-5472" heading="46973" respawnDelay="60" /> <!-- Drake Mage -->
-		<npc id="22851" x="152016" y="120566" z="-3808" heading="60212" respawnDelay="60" /> <!-- Drake Mage -->
-		<npc id="22851" x="152264" y="119512" z="-3784" heading="0" respawnDelay="60" /> <!-- Drake Mage -->
 		<npc id="22852" x="146472" y="118188" z="-3933" heading="39630" respawnDelay="60" /> <!-- Dragon Guard -->
 		<npc id="22852" x="146550" y="118149" z="-3932" heading="41760" respawnDelay="60" /> <!-- Dragon Guard -->
 		<npc id="22852" x="146603" y="118115" z="-3926" heading="41033" respawnDelay="60" /> <!-- Dragon Guard -->
@@ -720,5 +656,44 @@
 		<npc id="32869" x="131145" y="114182" z="-3704" heading="40960" respawnDelay="60" /> <!-- Separated Soul -->
 		<npc id="32870" x="146014" y="111226" z="-3560" heading="2366" respawnDelay="60" /> <!-- Separated Soul -->
 		<npc id="32891" x="148558" y="110541" z="-3944" heading="28938" respawnDelay="60" /> <!-- Separated Soul -->
+		<npc id="22841" x="135410" y="114618" z="-3751" heading="10756" respawnDelay="60" /> <!-- Maluk Princess -->
+		<npc id="22840" x="135578" y="114831" z="-3751" heading="11752" respawnDelay="60" /> <!-- Maluk Hunter -->
+		<npc id="22839" x="135254" y="114468" z="-3751" heading="41551" respawnDelay="60" /> <!-- Maluk Warlord -->
+		<npc id="22841" x="135386" y="114279" z="-3751" heading="61357" respawnDelay="60" /> <!-- Maluk Princess -->
+		<npc id="22839" x="135486" y="114237" z="-3751" heading="61388" respawnDelay="60" /> <!-- Maluk Warlord -->
+		<npc id="22840" x="135479" y="114466" z="-3751" heading="16702" respawnDelay="60" /> <!-- Maluk Hunter -->
+		<npc id="22841" x="136490" y="114670" z="-3751" heading="47163" respawnDelay="60" /> <!-- Maluk Princess -->
+		<npc id="22839" x="136632" y="114605" z="-3751" heading="61058" respawnDelay="60" /> <!-- Maluk Warlord -->
+		<npc id="22839" x="141079" y="109098" z="-3968" heading="13860" respawnDelay="60" /> <!-- Maluk Warlord -->
+		<npc id="22839" x="142637" y="113655" z="-3751" heading="57714" respawnDelay="60" /> <!-- Maluk Warlord -->
+		<npc id="22840" x="150673" y="117516" z="-3731" heading="13002" respawnDelay="60" /> <!-- Maluk Hunter -->
+		<npc id="22843" x="150331" y="117097" z="-3727" heading="8528" respawnDelay="60" /> <!-- Maluk Sniper -->
+		<npc id="22839" x="150177" y="117006" z="-3729" heading="38334" respawnDelay="60" /> <!-- Maluk Warlord -->
+		<npc id="22839" x="150077" y="116823" z="-3732" heading="59821" respawnDelay="60" /> <!-- Maluk Warlord -->
+		<npc id="22839" x="152045" y="121627" z="-3835" heading="34871" respawnDelay="60" /> <!-- Maluk Warlord -->
+		<npc id="22851" x="151862" y="121377" z="-3835" heading="42561" respawnDelay="60" /> <!-- Drake Mage -->
+		<npc id="22839" x="152177" y="120127" z="-3835" heading="52252" respawnDelay="60" /> <!-- Maluk Warlord -->
+		<npc id="22841" x="152218" y="119574" z="-3816" heading="49923" respawnDelay="60" /> <!-- Maluk Princess -->
+		<npc id="22838" x="152042" y="119772" z="-3819" heading="23963" respawnDelay="60" /> <!-- Maluk Leader -->
+		<npc id="22839" x="152472" y="119440" z="-3812" heading="5107" respawnDelay="60" /> <!-- Maluk Warlord -->
+		<npc id="22839" x="152573" y="120108" z="-3835" heading="24554" respawnDelay="60" /> <!-- Maluk Warlord -->
+		<npc id="22839" x="140518" y="118164" z="-3943" heading="39113" respawnDelay="60" /> <!-- Maluk Warlord -->
+		<npc id="22839" x="140907" y="118100" z="-3943" heading="2915" respawnDelay="60" /> <!-- Maluk Warlord -->
+		<npc id="22843" x="140391" y="117605" z="-3943" heading="40959" respawnDelay="60" /> <!-- Maluk Sniper -->
+		<npc id="22842" x="140155" y="117656" z="-3943" heading="30548" respawnDelay="60" /> <!-- Maluk Banshee -->
+		<npc id="22839" x="140542" y="117839" z="-3943" heading="63596" respawnDelay="60" /> <!-- Maluk Warlord -->
+		<npc id="22842" x="140636" y="117705" z="-3943" heading="55532" respawnDelay="60" /> <!-- Maluk Banshee -->
+		<npc id="22839" x="141617" y="121449" z="-3943" heading="60412" respawnDelay="60" /> <!-- Maluk Warlord -->
+		<npc id="22839" x="143383" y="120316" z="-3943" heading="31327" respawnDelay="60" /> <!-- Maluk Warlord -->
+		<npc id="22839" x="142612" y="117276" z="-3943" heading="46083" respawnDelay="60" /> <!-- Maluk Warlord -->
+		<npc id="22838" x="143402" y="112077" z="-3975" heading="38317" respawnDelay="60" /> <!-- Maluk Leader -->
+		<npc id="22841" x="143326" y="112269" z="-3975" heading="20315" respawnDelay="60" /> <!-- Maluk Princess -->
+		<npc id="22839" x="143153" y="111890" z="-3975" heading="47501" respawnDelay="60" /> <!-- Maluk Warlord -->
+		<npc id="22844" x="143260" y="112272" z="-3975" heading="9023" respawnDelay="60" /> <!-- Dragon Knight -->
+		<npc id="22839" x="144435" y="112365" z="-3965" heading="5517" respawnDelay="60" /> <!-- Maluk Warlord -->
+		<npc id="22839" x="144447" y="107527" z="-3975" heading="3225" respawnDelay="60" /> <!-- Maluk Warlord -->
+		<npc id="22839" x="147751" y="109924" z="-3975" heading="50007" respawnDelay="60" /> <!-- Maluk Warlord -->
+		<npc id="22841" x="140928" y="114445" z="-3738" heading="38873" respawnDelay="60" /> <!-- Maluk Princess -->
+		<npc id="22838" x="144209" y="114584" z="-3747" heading="1400" respawnDelay="60" /> <!-- Maluk Leader -->
 	</spawn>
 </list>
