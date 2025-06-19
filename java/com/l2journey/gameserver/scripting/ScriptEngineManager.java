@@ -68,7 +68,7 @@ public class ScriptEngineManager implements IXmlReader
 	public void load()
 	{
 		EXCLUSIONS.clear();
-		parseDatapackFile("config/Scripts.xml");
+		parseDatapackFile("config/admin/Scripts.xml");
 		LOGGER.info("Loaded " + EXCLUSIONS.size() + " files to exclude.");
 	}
 	

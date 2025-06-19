@@ -65,7 +65,7 @@ public class ConnectionConfig
 		resourcePool.addBufferPool(HEADER_SIZE, new BufferPool(100, HEADER_SIZE));
 		
 		// Read configuration properties.
-		final ConfigReader networkConfig = new ConfigReader("config/Network.ini");
+		final ConfigReader networkConfig = new ConfigReader("config/admin/Network.ini");
 		shutdownWaitTime = networkConfig.getInt("ShutdownWaitTime", 5) * 1000L;
 		
 		// Configure thread pool based on processor count.
