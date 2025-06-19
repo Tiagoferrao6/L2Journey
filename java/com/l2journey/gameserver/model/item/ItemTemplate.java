@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import com.l2journey.Config;
+import com.l2journey.EventsConfig;
 import com.l2journey.commons.util.StringUtil;
 import com.l2journey.gameserver.model.Elementals;
 import com.l2journey.gameserver.model.StatSet;
@@ -945,7 +946,7 @@ public abstract class ItemTemplate extends ListenersContainer
 	
 	public boolean isOlyRestrictedItem()
 	{
-		return _isOlyRestricted || Config.LIST_OLY_RESTRICTED_ITEMS.contains(_itemId);
+		return _isOlyRestricted || EventsConfig.LIST_OLY_RESTRICTED_ITEMS.contains(_itemId);
 	}
 	
 	public boolean isForNpc()

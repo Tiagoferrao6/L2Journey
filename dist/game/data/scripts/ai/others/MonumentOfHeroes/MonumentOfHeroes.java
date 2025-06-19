@@ -16,7 +16,7 @@
  */
 package ai.others.MonumentOfHeroes;
 
-import com.l2journey.Config;
+import com.l2journey.EventsConfig;
 import com.l2journey.gameserver.model.actor.Npc;
 import com.l2journey.gameserver.model.actor.Player;
 import com.l2journey.gameserver.util.ArrayUtil;
@@ -60,7 +60,7 @@ public class MonumentOfHeroes extends AbstractNpcAI
 	
 	private MonumentOfHeroes()
 	{
-		if (Config.OLYMPIAD_ENABLED)
+		if (EventsConfig.OLYMPIAD_ENABLED)
 		{
 			addStartNpc(MONUMENTS);
 			addTalkId(MONUMENTS);

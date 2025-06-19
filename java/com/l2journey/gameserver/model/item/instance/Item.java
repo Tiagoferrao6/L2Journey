@@ -35,6 +35,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.l2journey.Config;
+import com.l2journey.EventsConfig;
 import com.l2journey.commons.database.DatabaseFactory;
 import com.l2journey.commons.util.StringUtil;
 import com.l2journey.gameserver.data.xml.EnchantItemOptionsData;
@@ -1978,9 +1979,9 @@ public class Item extends WorldObject
 			return enchant;
 		}
 		
-		if (player.isInOlympiadMode() && (Config.OLYMPIAD_ENCHANT_LIMIT >= 0) && (enchant > Config.OLYMPIAD_ENCHANT_LIMIT))
+		if (player.isInOlympiadMode() && (EventsConfig.OLYMPIAD_ENCHANT_LIMIT >= 0) && (enchant > EventsConfig.OLYMPIAD_ENCHANT_LIMIT))
 		{
-			enchant = Config.OLYMPIAD_ENCHANT_LIMIT;
+			enchant = EventsConfig.OLYMPIAD_ENCHANT_LIMIT;
 		}
 		
 		return enchant;

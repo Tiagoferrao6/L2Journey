@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 L2jMobius
+ * Copyright (c) 2025 L2Journey Project
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -8,15 +8,23 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  * 
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
- * IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * 
+ * ---
+ * 
+ * Portions of this software are derived from the L2JMobius Project, 
+ * shared under the MIT License. The original license terms are preserved where 
+ * applicable..
+ * 
  */
 package com.l2journey.gameserver.managers.games;
 
@@ -37,7 +45,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
-import com.l2journey.Config;
+import com.l2journey.EventsConfig;
 import com.l2journey.commons.database.DatabaseFactory;
 import com.l2journey.commons.threads.ThreadPool;
 import com.l2journey.commons.time.SchedulingPattern;
@@ -272,9 +280,9 @@ public class UndergroundColiseumManager implements IXmlReader
 	
 	private void generateNewDate()
 	{
-		final SchedulingPattern timePattern = new SchedulingPattern(Config.UC_START_TIME);
+		final SchedulingPattern timePattern = new SchedulingPattern(EventsConfig.UC_START_TIME);
 		_periodStartTime = timePattern.next(System.currentTimeMillis());
-		_periodEndTime = _periodStartTime + (Config.UC_TIME_PERIOD * 3600000);
+		_periodEndTime = _periodStartTime + (EventsConfig.UC_TIME_PERIOD * 3600000);
 		GlobalVariablesManager.getInstance().set("UC_START_TIME", _periodStartTime);
 		GlobalVariablesManager.getInstance().set("UC_STOP_TIME", _periodEndTime);
 	}
@@ -292,7 +300,7 @@ public class UndergroundColiseumManager implements IXmlReader
 			arena.switchStatus(started);
 		}
 		
-		if (Config.UC_ALLOW_ANNOUNCE)
+		if (EventsConfig.UC_ALLOW_ANNOUNCE)
 		{
 			if (_isStarted)
 			{

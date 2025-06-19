@@ -22,7 +22,7 @@ package com.l2journey.gameserver.model.actor.instance;
 
 import java.util.StringTokenizer;
 
-import com.l2journey.Config;
+import com.l2journey.EventsConfig;
 import com.l2journey.gameserver.managers.games.UndergroundColiseumManager;
 import com.l2journey.gameserver.model.actor.Player;
 import com.l2journey.gameserver.model.actor.enums.creature.InstanceType;
@@ -140,7 +140,7 @@ public class UCManager extends Folk
 					realCount++;
 				}
 				
-				if (realCount < Config.UC_PARTY_SIZE)
+				if (realCount < EventsConfig.UC_PARTY_SIZE)
 				{
 					final NpcHtmlMessage packet = new NpcHtmlMessage(getObjectId());
 					packet.setFile(player, "data/html/undergroundColiseum/notEnoughMembers.htm");

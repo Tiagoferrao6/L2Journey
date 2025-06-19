@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 L2jMobius
+ * Copyright (c) 2025 L2Journey Project
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -8,15 +8,23 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  * 
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
- * IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * 
+ * ---
+ * 
+ * Portions of this software are derived from the L2JMobius Project, 
+ * shared under the MIT License. The original license terms are preserved where 
+ * applicable..
+ * 
  */
 package com.l2journey.gameserver.network.clientpackets;
 
@@ -24,6 +32,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.l2journey.Config;
+import com.l2journey.EventsConfig;
 import com.l2journey.commons.threads.ThreadPool;
 import com.l2journey.gameserver.LoginServerThread;
 import com.l2journey.gameserver.cache.HtmCache;
@@ -418,23 +427,23 @@ public class EnterWorld extends ClientPacket
 		Quest.playerEnter(player);
 		
 		// Faction System
-		if (Config.FACTION_SYSTEM_ENABLED)
+		if (EventsConfig.FACTION_SYSTEM_ENABLED)
 		{
 			final PlayerAppearance appearance = player.getAppearance();
 			if (player.isGood())
 			{
-				appearance.setNameColor(Config.FACTION_GOOD_NAME_COLOR);
-				appearance.setTitleColor(Config.FACTION_GOOD_NAME_COLOR);
-				player.sendMessage("Welcome " + player.getName() + ", you are fighting for the " + Config.FACTION_GOOD_TEAM_NAME + " faction.");
-				player.sendPacket(new ExShowScreenMessage("Welcome " + player.getName() + ", you are fighting for the " + Config.FACTION_GOOD_TEAM_NAME + " faction.", 10000));
+				appearance.setNameColor(EventsConfig.FACTION_GOOD_NAME_COLOR);
+				appearance.setTitleColor(EventsConfig.FACTION_GOOD_NAME_COLOR);
+				player.sendMessage("Welcome " + player.getName() + ", you are fighting for the " + EventsConfig.FACTION_GOOD_TEAM_NAME + " faction.");
+				player.sendPacket(new ExShowScreenMessage("Welcome " + player.getName() + ", you are fighting for the " + EventsConfig.FACTION_GOOD_TEAM_NAME + " faction.", 10000));
 				player.updateUserInfo(); // for seeing self name color
 			}
 			else if (player.isEvil())
 			{
-				appearance.setNameColor(Config.FACTION_EVIL_NAME_COLOR);
-				appearance.setTitleColor(Config.FACTION_EVIL_NAME_COLOR);
-				player.sendMessage("Welcome " + player.getName() + ", you are fighting for the " + Config.FACTION_EVIL_TEAM_NAME + " faction.");
-				player.sendPacket(new ExShowScreenMessage("Welcome " + player.getName() + ", you are fighting for the " + Config.FACTION_EVIL_TEAM_NAME + " faction.", 10000));
+				appearance.setNameColor(EventsConfig.FACTION_EVIL_NAME_COLOR);
+				appearance.setTitleColor(EventsConfig.FACTION_EVIL_NAME_COLOR);
+				player.sendMessage("Welcome " + player.getName() + ", you are fighting for the " + EventsConfig.FACTION_EVIL_TEAM_NAME + " faction.");
+				player.sendPacket(new ExShowScreenMessage("Welcome " + player.getName() + ", you are fighting for the " + EventsConfig.FACTION_EVIL_TEAM_NAME + " faction.", 10000));
 				player.updateUserInfo(); // for seeing self name color
 			}
 		}
@@ -449,7 +458,7 @@ public class EnterWorld extends ClientPacket
 		player.sendPacket(new ExRotation(player.getObjectId(), player.getHeading()));
 		
 		// Wedding Checks
-		if (Config.ALLOW_WEDDING)
+		if (EventsConfig.ALLOW_WEDDING)
 		{
 			engage(player);
 			notifyPartner(player);
@@ -772,7 +781,7 @@ public class EnterWorld extends ClientPacket
 		// EnterWorld has finished.
 		player.setEnteredWorld();
 		
-		if ((player.hasPremiumStatus() || !Config.PC_CAFE_ONLY_PREMIUM) && Config.PC_CAFE_RETAIL_LIKE)
+		if ((player.hasPremiumStatus() || !EventsConfig.PC_CAFE_ONLY_PREMIUM) && EventsConfig.PC_CAFE_RETAIL_LIKE)
 		{
 			PcCafePointsManager.getInstance().run(player);
 		}

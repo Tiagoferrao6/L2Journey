@@ -31,6 +31,7 @@ import java.util.function.Predicate;
 import java.util.logging.Logger;
 
 import com.l2journey.Config;
+import com.l2journey.EventsConfig;
 import com.l2journey.gameserver.ai.Action;
 import com.l2journey.gameserver.ai.CreatureAI;
 import com.l2journey.gameserver.ai.Intention;
@@ -169,7 +170,7 @@ public class World
 				Disconnection.of(newPlayer).defaultSequence(LeaveWorld.STATIC_PACKET);
 				LOGGER.warning(getClass().getSimpleName() + ": Duplicate character!? Disconnected both characters (" + newPlayer.getName() + ")");
 			}
-			else if (Config.FACTION_SYSTEM_ENABLED)
+			else if (EventsConfig.FACTION_SYSTEM_ENABLED)
 			{
 				addFactionPlayerToWorld(newPlayer);
 			}
@@ -199,7 +200,7 @@ public class World
 			}
 			_allPlayers.remove(object.getObjectId());
 			
-			if (Config.FACTION_SYSTEM_ENABLED)
+			if (EventsConfig.FACTION_SYSTEM_ENABLED)
 			{
 				if (player.isGood())
 				{

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 L2jMobius
+ * Copyright (c) 2025 L2Journey Project
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -8,22 +8,30 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  * 
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
- * IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * 
+ * ---
+ * 
+ * Portions of this software are derived from the L2JMobius Project, 
+ * shared under the MIT License. The original license terms are preserved where 
+ * applicable..
+ * 
  */
 package handlers.admincommandhandlers;
 
 import java.util.Collection;
 import java.util.StringTokenizer;
 
-import com.l2journey.Config;
+import com.l2journey.EventsConfig;
 import com.l2journey.gameserver.cache.HtmCache;
 import com.l2journey.gameserver.handler.IAdminCommandHandler;
 import com.l2journey.gameserver.model.World;
@@ -75,10 +83,10 @@ public class AdminPcCafePoints implements IAdminCommandHandler
 				{
 					case "set":
 					{
-						if (value > Config.PC_CAFE_MAX_POINTS)
+						if (value > EventsConfig.PC_CAFE_MAX_POINTS)
 						{
 							showMenuHtml(activeChar);
-							activeChar.sendSysMessage("You cannot set more than " + Config.PC_CAFE_MAX_POINTS + " PC points!");
+							activeChar.sendSysMessage("You cannot set more than " + EventsConfig.PC_CAFE_MAX_POINTS + " PC points!");
 							return false;
 						}
 						if (value < 0)
@@ -94,17 +102,17 @@ public class AdminPcCafePoints implements IAdminCommandHandler
 					}
 					case "increase":
 					{
-						if (target.getPcCafePoints() == Config.PC_CAFE_MAX_POINTS)
+						if (target.getPcCafePoints() == EventsConfig.PC_CAFE_MAX_POINTS)
 						{
 							showMenuHtml(activeChar);
 							activeChar.sendMessage(target.getName() + " already have max count of PC points!");
 							return false;
 						}
 						
-						int pcCafeCount = Math.min(target.getPcCafePoints() + value, Config.PC_CAFE_MAX_POINTS);
+						int pcCafeCount = Math.min(target.getPcCafePoints() + value, EventsConfig.PC_CAFE_MAX_POINTS);
 						if (pcCafeCount < 0)
 						{
-							pcCafeCount = Config.PC_CAFE_MAX_POINTS;
+							pcCafeCount = EventsConfig.PC_CAFE_MAX_POINTS;
 						}
 						target.setPcCafePoints(pcCafeCount);
 						target.sendMessage("Admin increased your PC Cafe point(s) by " + value + "!");

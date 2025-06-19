@@ -1,18 +1,30 @@
 /*
- * This file is part of the L2J Mobius project.
+ * Copyright (c) 2025 L2Journey Project
  * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  * 
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * 
+ * ---
+ * 
+ * Portions of this software are derived from the L2JMobius Project, 
+ * shared under the MIT License. The original license terms are preserved where 
+ * applicable..
+ * 
  */
 package handlers.bypasshandlers;
 
@@ -20,7 +32,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 
-import com.l2journey.Config;
+import com.l2journey.EventsConfig;
 import com.l2journey.commons.util.StringUtil;
 import com.l2journey.gameserver.data.xml.MultisellData;
 import com.l2journey.gameserver.handler.IBypassHandler;
@@ -51,9 +63,9 @@ public class OlympiadManagerLink implements IBypassHandler
 		"olympiad"
 	};
 	
-	private static final String FEWER_THAN = "Fewer than " + Config.OLYMPIAD_REG_DISPLAY;
-	private static final String MORE_THAN = "More than " + Config.OLYMPIAD_REG_DISPLAY;
-	private static final int GATE_PASS = Config.OLYMPIAD_COMP_RITEM;
+	private static final String FEWER_THAN = "Fewer than " + EventsConfig.OLYMPIAD_REG_DISPLAY;
+	private static final String MORE_THAN = "More than " + EventsConfig.OLYMPIAD_REG_DISPLAY;
+	private static final int GATE_PASS = EventsConfig.OLYMPIAD_COMP_RITEM;
 	
 	private static final SkillHolder[] ALLOWED_BUFFS =
 	{
@@ -153,11 +165,11 @@ public class OlympiadManagerLink implements IBypassHandler
 							}
 						}
 						html.setFile(player, Olympiad.OLYMPIAD_HTML_PATH + "noble_registered.htm");
-						if (Config.OLYMPIAD_REG_DISPLAY > 0)
+						if (EventsConfig.OLYMPIAD_REG_DISPLAY > 0)
 						{
-							html.replace("%listClassed%", classed < Config.OLYMPIAD_REG_DISPLAY ? FEWER_THAN : MORE_THAN);
-							html.replace("%listNonClassedTeam%", teams < Config.OLYMPIAD_REG_DISPLAY ? FEWER_THAN : MORE_THAN);
-							html.replace("%listNonClassed%", nonClassed < Config.OLYMPIAD_REG_DISPLAY ? FEWER_THAN : MORE_THAN);
+							html.replace("%listClassed%", classed < EventsConfig.OLYMPIAD_REG_DISPLAY ? FEWER_THAN : MORE_THAN);
+							html.replace("%listNonClassedTeam%", teams < EventsConfig.OLYMPIAD_REG_DISPLAY ? FEWER_THAN : MORE_THAN);
+							html.replace("%listNonClassed%", nonClassed < EventsConfig.OLYMPIAD_REG_DISPLAY ? FEWER_THAN : MORE_THAN);
 						}
 						else
 						{
@@ -229,7 +241,7 @@ public class OlympiadManagerLink implements IBypassHandler
 						if (passes > 0)
 						{
 							player.getVariables().remove(Olympiad.UNCLAIMED_OLYMPIAD_PASSES_VAR);
-							player.addItem(ItemProcessType.REWARD, GATE_PASS, passes * Config.OLYMPIAD_GP_PER_POINT, player, true);
+							player.addItem(ItemProcessType.REWARD, GATE_PASS, passes * EventsConfig.OLYMPIAD_GP_PER_POINT, player, true);
 						}
 						break;
 					}
@@ -290,7 +302,7 @@ public class OlympiadManagerLink implements IBypassHandler
 				
 				if (buffCount > 0)
 				{
-					html.setFile(player, buffCount == Config.OLYMPIAD_MAX_BUFFS ? Olympiad.OLYMPIAD_HTML_PATH + "olympiad_buffs.htm" : Olympiad.OLYMPIAD_HTML_PATH + "olympiad_5buffs.htm");
+					html.setFile(player, buffCount == EventsConfig.OLYMPIAD_MAX_BUFFS ? Olympiad.OLYMPIAD_HTML_PATH + "olympiad_buffs.htm" : Olympiad.OLYMPIAD_HTML_PATH + "olympiad_5buffs.htm");
 					html.replace("%objectId%", String.valueOf(target.getObjectId()));
 					player.sendPacket(html);
 				}

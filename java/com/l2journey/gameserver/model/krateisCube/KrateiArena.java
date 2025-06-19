@@ -33,7 +33,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
 import java.util.stream.Collectors;
 
-import com.l2journey.Config;
+import com.l2journey.EventsConfig;
 import com.l2journey.commons.threads.ThreadPool;
 import com.l2journey.commons.util.Rnd;
 import com.l2journey.gameserver.data.SpawnTable;
@@ -678,9 +678,9 @@ public class KrateiArena
 									long amount = reward.isAllowMidifier() ? count : reward.getAmount();
 									if (reward.getId() == -100)
 									{
-										if ((pl.getPlayer().getPcCafePoints() + amount) > Config.PC_CAFE_MAX_POINTS)
+										if ((pl.getPlayer().getPcCafePoints() + amount) > EventsConfig.PC_CAFE_MAX_POINTS)
 										{
-											amount = Config.PC_CAFE_MAX_POINTS - pl.getPlayer().getPcCafePoints();
+											amount = EventsConfig.PC_CAFE_MAX_POINTS - pl.getPlayer().getPcCafePoints();
 										}
 										final SystemMessage sm = new SystemMessage(SystemMessageId.YOU_HAVE_ACQUIRED_S1_PC_CAFE_POINTS);
 										sm.addInt((int) amount);

@@ -20,7 +20,7 @@
  */
 package com.l2journey.gameserver.model.actor.instance;
 
-import com.l2journey.Config;
+import com.l2journey.EventsConfig;
 import com.l2journey.gameserver.ai.Intention;
 import com.l2journey.gameserver.model.World;
 import com.l2journey.gameserver.model.actor.Attackable;
@@ -56,10 +56,10 @@ public class Guard extends Attackable
 		{
 			return true;
 		}
-		if (Config.FACTION_SYSTEM_ENABLED && Config.FACTION_GUARDS_ENABLED && attacker.isPlayable())
+		if (EventsConfig.FACTION_SYSTEM_ENABLED && EventsConfig.FACTION_GUARDS_ENABLED && attacker.isPlayable())
 		{
 			final Player player = attacker.asPlayer();
-			if ((player.isGood() && getTemplate().isClan(Config.FACTION_EVIL_TEAM_NAME)) || (player.isEvil() && getTemplate().isClan(Config.FACTION_GOOD_TEAM_NAME)))
+			if ((player.isGood() && getTemplate().isClan(EventsConfig.FACTION_EVIL_TEAM_NAME)) || (player.isEvil() && getTemplate().isClan(EventsConfig.FACTION_GOOD_TEAM_NAME)))
 			{
 				return true;
 			}
@@ -156,7 +156,7 @@ public class Guard extends Attackable
 		}
 		
 		boolean interact = interactValue;
-		if (Config.FACTION_SYSTEM_ENABLED && Config.FACTION_GUARDS_ENABLED && ((player.isGood() && getTemplate().isClan(Config.FACTION_EVIL_TEAM_NAME)) || (player.isEvil() && getTemplate().isClan(Config.FACTION_GOOD_TEAM_NAME))))
+		if (EventsConfig.FACTION_SYSTEM_ENABLED && EventsConfig.FACTION_GUARDS_ENABLED && ((player.isGood() && getTemplate().isClan(EventsConfig.FACTION_EVIL_TEAM_NAME)) || (player.isEvil() && getTemplate().isClan(EventsConfig.FACTION_GOOD_TEAM_NAME))))
 		{
 			interact = false;
 			// TODO: Fix normal targeting

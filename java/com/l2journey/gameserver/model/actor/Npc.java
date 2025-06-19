@@ -31,6 +31,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
 import com.l2journey.Config;
+import com.l2journey.EventsConfig;
 import com.l2journey.commons.threads.ThreadPool;
 import com.l2journey.commons.util.Rnd;
 import com.l2journey.gameserver.cache.HtmCache;
@@ -1058,7 +1059,7 @@ public class Npc extends Creature
 			{
 				if (player.getOlympiadBuffCount() > 0)
 				{
-					filename = (player.getOlympiadBuffCount() == Config.OLYMPIAD_MAX_BUFFS ? Olympiad.OLYMPIAD_HTML_PATH + "olympiad_buffs.htm" : Olympiad.OLYMPIAD_HTML_PATH + "olympiad_5buffs.htm");
+					filename = (player.getOlympiadBuffCount() == EventsConfig.OLYMPIAD_MAX_BUFFS ? Olympiad.OLYMPIAD_HTML_PATH + "olympiad_buffs.htm" : Olympiad.OLYMPIAD_HTML_PATH + "olympiad_5buffs.htm");
 				}
 				else
 				{

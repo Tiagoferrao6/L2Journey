@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 L2jMobius
+ * Copyright (c) 2025 L2Journey Project
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -8,21 +8,29 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  * 
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
- * IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * 
+ * ---
+ * 
+ * Portions of this software are derived from the L2JMobius Project, 
+ * shared under the MIT License. The original license terms are preserved where 
+ * applicable..
+ * 
  */
 package com.l2journey.gameserver.model.undergroundColiseum;
 
 import java.util.List;
 
-import com.l2journey.Config;
+import com.l2journey.EventsConfig;
 import com.l2journey.commons.threads.ThreadPool;
 import com.l2journey.commons.util.Rnd;
 import com.l2journey.gameserver.data.xml.NpcData;
@@ -200,7 +208,7 @@ public class UCTeam
 					}
 				}
 			}
-		}, Config.UC_RESS_TIME * 1000);
+		}, EventsConfig.UC_RESS_TIME * 1000);
 	}
 	
 	public void increaseKillCount()
@@ -327,9 +335,9 @@ public class UCTeam
 						if (reward.getId() == -100)
 						{
 							long amount = reward.isAllowMidifier() ? (long) (reward.getAmount() * modifier) : reward.getAmount();
-							if ((member.getPcCafePoints() + amount) > Config.PC_CAFE_MAX_POINTS)
+							if ((member.getPcCafePoints() + amount) > EventsConfig.PC_CAFE_MAX_POINTS)
 							{
-								amount = Config.PC_CAFE_MAX_POINTS - member.getPcCafePoints();
+								amount = EventsConfig.PC_CAFE_MAX_POINTS - member.getPcCafePoints();
 							}
 							final SystemMessage sm = new SystemMessage(SystemMessageId.YOU_HAVE_ACQUIRED_S1_PC_CAFE_POINTS);
 							sm.addInt((int) amount);

@@ -1,18 +1,30 @@
 /*
- * This file is part of the L2J Mobius project.
+ * Copyright (c) 2025 L2Journey Project
  * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  * 
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * 
+ * ---
+ * 
+ * Portions of this software are derived from the L2JMobius Project, 
+ * shared under the MIT License. The original license terms are preserved where 
+ * applicable..
+ * 
  */
 package com.l2journey.gameserver.model.olympiad;
 
@@ -20,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
-import com.l2journey.Config;
+import com.l2journey.EventsConfig;
 import com.l2journey.commons.util.Rnd;
 import com.l2journey.gameserver.managers.IdManager;
 import com.l2journey.gameserver.model.Location;
@@ -199,7 +211,7 @@ public class OlympiadGameTeams extends AbstractOlympiadGame
 	@Override
 	protected int[][] getReward()
 	{
-		return Config.OLYMPIAD_TEAM_REWARD;
+		return EventsConfig.OLYMPIAD_TEAM_REWARD;
 	}
 	
 	@Override
@@ -558,7 +570,7 @@ public class OlympiadGameTeams extends AbstractOlympiadGame
 					{
 						par = _teamOne[i];
 						points = par.getStats().getInt(POINTS) / getDivider();
-						final int val = Math.min(par.getStats().getInt(POINTS) / 3, Config.OLYMPIAD_MAX_POINTS);
+						final int val = Math.min(par.getStats().getInt(POINTS) / 3, EventsConfig.OLYMPIAD_MAX_POINTS);
 						removePointsFromParticipant(par, val);
 						list1.add(new OlympiadInfo(par.getName(), par.getClanName(), par.getClanId(), par.getBaseClass(), _damageT1, points - val, -val));
 					}
@@ -570,7 +582,7 @@ public class OlympiadGameTeams extends AbstractOlympiadGame
 					{
 						par = _teamTwo[i];
 						points = par.getStats().getInt(POINTS) / getDivider();
-						final int val = Math.min(par.getStats().getInt(POINTS) / 3, Config.OLYMPIAD_MAX_POINTS);
+						final int val = Math.min(par.getStats().getInt(POINTS) / 3, EventsConfig.OLYMPIAD_MAX_POINTS);
 						removePointsFromParticipant(par, val);
 						list2.add(new OlympiadInfo(par.getName(), par.getClanName(), par.getClanId(), par.getBaseClass(), _damageT2, points - val, -val));
 					}
@@ -614,9 +626,9 @@ public class OlympiadGameTeams extends AbstractOlympiadGame
 			{
 				points = 1;
 			}
-			else if (points > Config.OLYMPIAD_MAX_POINTS)
+			else if (points > EventsConfig.OLYMPIAD_MAX_POINTS)
 			{
-				points = Config.OLYMPIAD_MAX_POINTS;
+				points = EventsConfig.OLYMPIAD_MAX_POINTS;
 			}
 			
 			totalPointsTeamOne += points;
@@ -631,9 +643,9 @@ public class OlympiadGameTeams extends AbstractOlympiadGame
 			{
 				points = 1;
 			}
-			else if (points > Config.OLYMPIAD_MAX_POINTS)
+			else if (points > EventsConfig.OLYMPIAD_MAX_POINTS)
 			{
-				points = Config.OLYMPIAD_MAX_POINTS;
+				points = EventsConfig.OLYMPIAD_MAX_POINTS;
 			}
 			
 			totalPointsTeamTwo += points;
@@ -911,7 +923,7 @@ public class OlympiadGameTeams extends AbstractOlympiadGame
 				{
 					par = _teamOne[i];
 					par.updateStat(COMP_DRAWN, 1);
-					points = Math.min(par.getStats().getInt(POINTS) / getDivider(), Config.OLYMPIAD_MAX_POINTS);
+					points = Math.min(par.getStats().getInt(POINTS) / getDivider(), EventsConfig.OLYMPIAD_MAX_POINTS);
 					removePointsFromParticipant(par, points);
 					list1.add(new OlympiadInfo(par.getName(), par.getClanName(), par.getClanId(), par.getBaseClass(), _damageT1, par.getStats().getInt(POINTS) - points, -points));
 				}
@@ -920,7 +932,7 @@ public class OlympiadGameTeams extends AbstractOlympiadGame
 				{
 					par = _teamTwo[i];
 					par.updateStat(COMP_DRAWN, 1);
-					points = Math.min(par.getStats().getInt(POINTS) / getDivider(), Config.OLYMPIAD_MAX_POINTS);
+					points = Math.min(par.getStats().getInt(POINTS) / getDivider(), EventsConfig.OLYMPIAD_MAX_POINTS);
 					removePointsFromParticipant(par, points);
 					list2.add(new OlympiadInfo(par.getName(), par.getClanName(), par.getClanId(), par.getBaseClass(), _damageT2, par.getStats().getInt(POINTS) - points, -points));
 				}

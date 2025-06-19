@@ -48,6 +48,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 
 import com.l2journey.Config;
+import com.l2journey.EventsConfig;
 import com.l2journey.commons.database.DatabaseFactory;
 import com.l2journey.commons.threads.ThreadPool;
 import com.l2journey.commons.util.Rnd;
@@ -5514,7 +5515,7 @@ public class Player extends Playable
 			}
 			else if (killedPlayer.getPvpFlag() == 0) // Target player doesn't have karma
 			{
-				if (Config.FACTION_SYSTEM_ENABLED)
+				if (EventsConfig.FACTION_SYSTEM_ENABLED)
 				{
 					if ((_isGood && killedPlayer.isGood()) || (_isEvil && killedPlayer.isEvil()))
 					{
@@ -5573,7 +5574,7 @@ public class Player extends Playable
 	
 	public void updatePvpTitleAndColor(boolean broadcastInfo)
 	{
-		if (Config.PVP_COLOR_SYSTEM_ENABLED && !Config.FACTION_SYSTEM_ENABLED) // Faction system uses title colors.
+		if (Config.PVP_COLOR_SYSTEM_ENABLED && !EventsConfig.FACTION_SYSTEM_ENABLED) // Faction system uses title colors.
 		{
 			if ((_pvpKills >= (Config.PVP_AMOUNT1)) && (_pvpKills < (Config.PVP_AMOUNT2)))
 			{
@@ -5635,7 +5636,7 @@ public class Player extends Playable
 			return;
 		}
 		
-		if (Config.FACTION_SYSTEM_ENABLED && target.isPlayer() && ((isGood() && targetPlayer.isEvil()) || (isEvil() && targetPlayer.isGood())))
+		if (EventsConfig.FACTION_SYSTEM_ENABLED && target.isPlayer() && ((isGood() && targetPlayer.isEvil()) || (isEvil() && targetPlayer.isGood())))
 		{
 			return;
 		}
@@ -8606,7 +8607,7 @@ public class Player extends Playable
 				return true;
 			}
 			
-			if (Config.FACTION_SYSTEM_ENABLED && ((isGood() && attackerPlayer.isEvil()) || (isEvil() && attackerPlayer.isGood())))
+			if (EventsConfig.FACTION_SYSTEM_ENABLED && ((isGood() && attackerPlayer.isEvil()) || (isEvil() && attackerPlayer.isGood())))
 			{
 				return true;
 			}
@@ -8620,7 +8621,7 @@ public class Player extends Playable
 		
 		if (attacker instanceof Guard)
 		{
-			if (Config.FACTION_SYSTEM_ENABLED && Config.FACTION_GUARDS_ENABLED && ((_isGood && attacker.asNpc().getTemplate().isClan(Config.FACTION_EVIL_TEAM_NAME)) || (_isEvil && attacker.asNpc().getTemplate().isClan(Config.FACTION_GOOD_TEAM_NAME))))
+			if (EventsConfig.FACTION_SYSTEM_ENABLED && EventsConfig.FACTION_GUARDS_ENABLED && ((_isGood && attacker.asNpc().getTemplate().isClan(EventsConfig.FACTION_EVIL_TEAM_NAME)) || (_isEvil && attacker.asNpc().getTemplate().isClan(EventsConfig.FACTION_GOOD_TEAM_NAME))))
 			{
 				return true;
 			}
@@ -13859,7 +13860,7 @@ public class Player extends Playable
 	
 	public void setPcCafePoints(int count)
 	{
-		_pcCafePoints = count < Config.PC_CAFE_MAX_POINTS ? count : Config.PC_CAFE_MAX_POINTS;
+		_pcCafePoints = count < EventsConfig.PC_CAFE_MAX_POINTS ? count : EventsConfig.PC_CAFE_MAX_POINTS;
 	}
 	
 	/**
