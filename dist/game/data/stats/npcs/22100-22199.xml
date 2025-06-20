@@ -3162,14 +3162,6 @@
 		</collision>
 	</npc>
 	<npc id="22136" level="78" type="Monster" name="Doorman Zombie">
-		<!-- Confirmed CT2.5 -->
-		<parameters>
-			<param name="pass1" value="8064" /> <!-- Visitor's Mark -->
-			<param name="pass2" value="8065" /> <!-- Faded Visitor's Mark -->
-			<param name="pass3" value="8067" /> <!-- Pagan's Mark -->
-			<param name="SkillRange" value="700" />
-			<skill name="DDMagic" id="5043" level="10" /> <!-- NPC Super Sonic Blaster -->
-		</parameters>
 		<race>UNDEAD</race>
 		<sex>MALE</sex>
 		<equipment rhand="8217" /> <!-- rhand: Monster Only (Zombie Gateguard Spear) -->
