@@ -631,7 +631,7 @@ public class Olympiad extends ListenersContainer
 		}, getMillisToCompBegin());
 	}
 	
-	private long getMillisToOlympiadEnd()
+	public long getMillisToOlympiadEnd()
 	{
 		// if (_olympiadEnd > System.currentTimeMillis())
 		return _olympiadEnd - System.currentTimeMillis();
@@ -830,7 +830,7 @@ public class Olympiad extends ListenersContainer
 		// return 10;
 	}
 	
-	private long getMillisToWeekChange()
+	public long getMillisToWeekChange()
 	{
 		final long currentTime = System.currentTimeMillis();
 		if (_nextWeeklyChange > currentTime)

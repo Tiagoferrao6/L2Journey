@@ -125,6 +125,9 @@
 									<xs:enumeration value="EffectZone" />
 									<xs:enumeration value="FishingZone" />
 									<xs:enumeration value="FortZone" />
+									<xs:enumeration value="HotSpringGreenSpa" />
+									<xs:enumeration value="HotSpringRedSpa" />
+									<xs:enumeration value="HotSpringYellowSpa" />
 									<xs:enumeration value="HqZone" />
 									<xs:enumeration value="JailZone" />
 									<xs:enumeration value="LandingZone" />
@@ -134,6 +137,7 @@
 									<xs:enumeration value="NoRestartZone" />
 									<xs:enumeration value="NoStoreZone" />
 									<xs:enumeration value="NoSummonFriendZone" />
+									<xs:enumeration value="NoPvPZone" />
 									<xs:enumeration value="NpcSpawnTerritory" />
 									<xs:enumeration value="OlympiadStadiumZone" />
 									<xs:enumeration value="PeaceZone" />

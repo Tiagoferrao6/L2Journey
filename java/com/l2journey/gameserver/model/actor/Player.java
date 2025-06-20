@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 L2jMobius
+ * Copyright (c) 2025 L2Journey Project
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -8,15 +8,23 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  * 
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
- * IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * 
+ * ---
+ * 
+ * Portions of this software are derived from the L2JMobius Project, 
+ * shared under the MIT License. The original license terms are preserved where 
+ * applicable..
+ * 
  */
 package com.l2journey.gameserver.model.actor;
 
@@ -1831,6 +1839,15 @@ public class Player extends Playable
 			sendPacket(new ExSetCompassZoneCode(ExSetCompassZoneCode.SEVENSIGNSZONE));
 		}
 		else if (isInsideZone(ZoneId.PEACE))
+		{
+			if (_lastCompassZone == ExSetCompassZoneCode.PEACEZONE)
+			{
+				return;
+			}
+			_lastCompassZone = ExSetCompassZoneCode.PEACEZONE;
+			sendPacket(new ExSetCompassZoneCode(ExSetCompassZoneCode.PEACEZONE));
+		}
+		else if (isInsideZone(ZoneId.NO_PVP))
 		{
 			if (_lastCompassZone == ExSetCompassZoneCode.PEACEZONE)
 			{
@@ -8544,7 +8561,7 @@ public class Player extends Playable
 		// Check if the attacker is a Playable
 		if (attacker.isPlayable())
 		{
-			if (isInsideZone(ZoneId.PEACE))
+			if (isInsideZone(ZoneId.PEACE) || isInsideZone(ZoneId.NO_PVP))
 			{
 				return false;
 			}
@@ -10078,7 +10095,7 @@ public class Player extends Playable
 			_noDuelReason = SystemMessageId.C1_CANNOT_DUEL_BECAUSE_C1_IS_CURRENTLY_FISHING;
 			return false;
 		}
-		if (isInsideZone(ZoneId.PVP) || isInsideZone(ZoneId.PEACE) || isInsideZone(ZoneId.SIEGE))
+		if (isInsideZone(ZoneId.PVP) || isInsideZone(ZoneId.PEACE) || isInsideZone(ZoneId.SIEGE) || isInsideZone(ZoneId.NO_PVP))
 		{
 			_noDuelReason = SystemMessageId.C1_CANNOT_MAKE_A_CHALLENGE_TO_A_DUEL_BECAUSE_C1_IS_CURRENTLY_IN_A_DUEL_PROHIBITED_AREA_PEACEFUL_ZONE_SEVEN_SIGNS_ZONE_NEAR_WATER_RESTART_PROHIBITED_AREA;
 			return false;
@@ -10677,9 +10694,22 @@ public class Player extends Playable
 		{
 			return;
 		}
-		final int timeinwater = (int) calcStat(Stat.BREATH, 60000, this, null);
-		sendPacket(new SetupGauge(getObjectId(), 2, timeinwater));
-		_taskWater = ThreadPool.scheduleAtFixedRate(new WaterTask(this), timeinwater, 1000);
+		
+		// Base time in water is 60 seconds (60000 milliseconds).
+		final int baseTimeInWater = 60000;
+		
+		// Calculate the total stat as a percentage of the base time.
+		final double breathPercentage = calcStat(Stat.BREATH, getBaseTemplate().getBaseBreath()) / 100d;
+		
+		// Apply the percentage to the base time.
+		final int timeInWater = (int) (baseTimeInWater * breathPercentage);
+		
+		// Send the setup gauge packet with the calculated time.
+		sendPacket(new SetupGauge(getObjectId(), 2, timeInWater));
+		
+		// Schedule the water task.
+		_taskWater = ThreadPool.scheduleAtFixedRate(new WaterTask(this), timeInWater, 1000);
+		
 	}
 	
 	public boolean isInWater()

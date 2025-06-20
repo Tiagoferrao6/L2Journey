@@ -40,6 +40,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 import javax.crypto.Cipher;
 
@@ -81,6 +82,9 @@ public class LoginController
 	private final Map<String, Long> _bannedIps = new ConcurrentHashMap<>();
 	
 	private static LoginController INSTANCE;
+	
+	/** Permite letras, números e alguns símbolos. */
+	private static final Pattern VALID_LOGIN_PATTERN = Pattern.compile("^[a-zA-Z0-9!@\\-_\\.]{3,16}$");
 	
 	private LoginController() throws GeneralSecurityException
 	{
@@ -210,6 +214,12 @@ public class LoginController
 	{
 		try
 		{
+			if (!isValidLogin(login))
+			{
+				LOGGER.warning("Tentativa de login com nome inválido: " + login);
+				return null;
+			}
+			
 			final MessageDigest md = MessageDigest.getInstance("SHA");
 			final byte[] raw = password.getBytes(StandardCharsets.UTF_8);
 			final String hashBase64 = Base64.getEncoder().encodeToString(md.digest(raw));
@@ -272,6 +282,11 @@ public class LoginController
 	
 	public LoginResult tryCheckinAccount(LoginClient client, String address, AccountInfo info)
 	{
+		if (!isValidLogin(info.getLogin()))
+		{
+			return LoginResult.INVALID_PASSWORD;
+		}
+		
 		if (info.getAccessLevel() < 0)
 		{
 			return LoginResult.ACCOUNT_BANNED;
@@ -623,6 +638,16 @@ public class LoginController
 				throw new IllegalStateException("LoginController can only be loaded a single time.");
 			}
 		}
+	}
+	
+	public boolean isValidLogin(String login)
+	{
+		if (login == null)
+		{
+			return false;
+		}
+		
+		return VALID_LOGIN_PATTERN.matcher(login).matches();
 	}
 	
 	public static LoginController getInstance()
