@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <list xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../xsd/npcs.xsd">
 	<npc id="27400" level="51" type="Monster" name="Shilen's Evil Thoughts">
 		<!-- Confirmed CT2.5 -->
@@ -134,67 +134,99 @@
 			<height normal="27.5" />
 		</collision>
 	</npc>
-	<npc id="27403" level="80" type="Folk" name="Trainee of Rest">
-		<!-- TODO: Must be confirmed -->
+	<npc id="27403" level="80" type="Monster" name="Trainee of Rest">
+		<race>DIVINE</race>
 		<sex>MALE</sex>
-		<stats str="10" int="10" dex="10" wit="10" con="10" men="10">
-			<vitals hp="2444" mp="2444.0" />
-			<attack physical="500" magical="500" attackSpeed="278" range="40" />
-			<defence physical="500" magical="500" />
+		<stats str="40" int="21" dex="30" wit="20" con="43" men="20">
+			<vitals hp="3290.11306877694" hpRegen="8.5" mp="1674.8" mpRegen="3" />
+			<attack physical="970.537548504614" magical="662.751329129412" random="50" critical="4" accuracy="5" attackSpeed="253" type="SWORD" range="40" distance="80" width="120" />
+			<defence physical="341.375" magical="249.80341" />
 			<attribute>
-				<defence fire="20" water="20" wind="20" earth="20" holy="20" dark="20" />
+				<attack type="HOLY" value="130" />
+				<defence fire="130" water="130" wind="130" earth="130" holy="150" dark="90" default="100" />
 			</attribute>
 			<speed>
-				<walk ground="60" />
-				<run ground="160" />
+				<walk ground="53" />
+				<run ground="180" />
+			</speed>
+		</stats>
+		<skillList>
+			<skill id="4416" level="8" /> <!--Angels -->
+			<skill id="5466" level="1" /> <!--Holy Attacks -->
+			<skill id="4408" level="8" /> <!--HP Increase (1/4x) -->
+			<skill id="4409" level="1" /> <!--MP Increase (1x)-->
+			<skill id="4410" level="9" /> <!--Slightly Weak P. Atk. -->
+			<skill id="4411" level="8" /> <!--Weak M. Atk. -->
+			<skill id="4412" level="9" /> <!--Slightly Weak P. Def. -->
+			<skill id="4413" level="8" /> <!--Weak M. Def. -->
+			<skill id="4414" level="2" /> <!--Standard Type -->
+			<skill id="4415" level="3" /> <!--One-handed Sword -->
+		</skillList>
+		<exCrtEffect>true</exCrtEffect>
+		<ai type="FIGHTER" aggroRange="300" clanHelpRange="300" />
+		<collision>
+			<radius normal="12" />
+			<height normal="28.4" />
+		</collision>
+	</npc>
+	<npc id="27404" level="80" type="Monster" name="Supplicant of Rest">
+		<race>DIVINE</race>
+		<sex>MALE</sex>
+		<stats str="40" int="21" dex="30" wit="20" con="43" men="20">
+			<vitals hp="3290.11306877694" hpRegen="8.5" mp="1674.8" mpRegen="3" />
+			<attack physical="970.537548504614" magical="662.751329129412" random="50" critical="4" accuracy="5" attackSpeed="253" type="SWORD" range="40" distance="80" width="120" />
+			<defence physical="341.375" magical="249.80341" />
+			<attribute>
+				<attack type="HOLY" value="130" />
+				<defence fire="130" water="130" wind="130" earth="130" holy="150" dark="90" default="100" />
+			</attribute>
+			<speed>
+				<walk ground="40" />
+				<run ground="150" />
+			</speed>
+		</stats>
+		<skillList>
+			<skill id="4416" level="8" /> <!--Angels -->
+			<skill id="5466" level="1" /> <!--Holy Attacks -->
+			<skill id="4408" level="8" /> <!--HP Increase (1/4x) -->
+			<skill id="4409" level="1" /> <!--MP Increase (1x)-->
+			<skill id="4410" level="9" /> <!--Slightly Weak P. Atk. -->
+			<skill id="4411" level="8" /> <!--Weak M. Atk. -->
+			<skill id="4412" level="9" /> <!--Slightly Weak P. Def. -->
+			<skill id="4413" level="8" /> <!--Weak M. Def. -->
+			<skill id="4414" level="2" /> <!--Standard Type -->
+			<skill id="4415" level="3" /> <!--One-handed Sword -->
+		</skillList>
+		<exCrtEffect>true</exCrtEffect>
+		<ai type="FIGHTER" aggroRange="300" clanHelpRange="300" />
+		<collision>
+			<radius normal="18" />
+			<height normal="44" />
+		</collision>
+	</npc>
+	<npc id="27405" level="80" type="Monster" name="Monastic Pilgrim">
+		<race>DIVINE</race>
+		<sex>MALE</sex>
+		<equipment rhand="148" /> <!-- rhand: Sword of Valhalla -->
+		<stats str="40" int="21" dex="30" wit="20" con="43" men="20">
+			<vitals hp="3290.11306877694" hpRegen="8.5" mp="1674.8" mpRegen="3" />
+			<attack physical="970.537548504614" magical="662.751329129412" random="30" critical="4" accuracy="5" attackSpeed="253" type="SWORD" range="40" distance="80" width="120" />
+			<defence physical="341.375" magical="249.80341" />
+			<attribute>
+				<attack type="HOLY" value="100" />
+				<defence fire="110" water="110" wind="110" earth="110" holy="130" dark="70" default="80" />
+			</attribute>
+			<speed>
+				<walk ground="30" />
+				<run ground="170" />
 			</speed>
 		</stats>
 		<collision>
-			<radius normal="25" />
-			<height normal="35" />
+			<radius normal="12" />
+			<height normal="27.8" />
 		</collision>
 	</npc>
-	<npc id="27404" level="80" type="Folk" name="Supplicant of Rest">
-		<!-- TODO: Must be confirmed -->
-		<sex>MALE</sex>
-		<stats str="10" int="10" dex="10" wit="10" con="10" men="10">
-			<vitals hp="2444" mp="2444.0" />
-			<attack physical="500" magical="500" attackSpeed="278" range="40" />
-			<defence physical="500" magical="500" />
-			<attribute>
-				<defence fire="20" water="20" wind="20" earth="20" holy="20" dark="20" />
-			</attribute>
-			<speed>
-				<walk ground="60" />
-				<run ground="160" />
-			</speed>
-		</stats>
-		<collision>
-			<radius normal="25" />
-			<height normal="35" />
-		</collision>
-	</npc>
-	<npc id="27405" level="80" type="Folk" name="Monastic Pilgrim">
-		<!-- TODO: Must be confirmed -->
-		<sex>MALE</sex>
-		<stats str="10" int="10" dex="10" wit="10" con="10" men="10">
-			<vitals hp="2444" mp="2444.0" />
-			<attack physical="500" magical="500" attackSpeed="278" range="40" />
-			<defence physical="500" magical="500" />
-			<attribute>
-				<defence fire="20" water="20" wind="20" earth="20" holy="20" dark="20" />
-			</attribute>
-			<speed>
-				<walk ground="60" />
-				<run ground="160" />
-			</speed>
-		</stats>
-		<collision>
-			<radius normal="25" />
-			<height normal="35" />
-		</collision>
-	</npc>
-	<npc id="27406" level="80" type="Folk" name="Monastic Crusader">
+	<npc id="27406" level="80" type="Monster" name="Monastic Crusader">
 		<!-- TODO: Must be confirmed -->
 		<sex>MALE</sex>
 		<stats str="10" int="10" dex="10" wit="10" con="10" men="10">
@@ -255,7 +287,7 @@
 			<height normal="25" />
 		</collision>
 	</npc>
-	<npc id="27408" level="80" type="Folk" name="Savior Solina">
+	<npc id="27408" level="80" type="Monster" name="Savior Solina">
 		<!-- TODO: Must be confirmed -->
 		<sex>MALE</sex>
 		<stats str="10" int="10" dex="10" wit="10" con="10" men="10">
@@ -326,7 +358,7 @@
 			<height normal="28" />
 		</collision>
 	</npc>
-	<npc id="27411" level="80" type="Folk" name="Divinity Manager">
+	<npc id="27411" level="80" type="Monster" name="Divinity Manager">
 		<!-- TODO: Must be confirmed -->
 		<sex>MALE</sex>
 		<stats str="10" int="10" dex="10" wit="10" con="10" men="10">
@@ -448,7 +480,7 @@
 			<height normal="23.4" />
 		</collision>
 	</npc>
-	<npc id="27416" level="80" type="Folk" name="Relic Manager Golem">
+	<npc id="27416" level="80" type="Monster" name="Relic Manager Golem">
 		<!-- TODO: Must be confirmed -->
 		<sex>MALE</sex>
 		<stats str="10" int="10" dex="10" wit="10" con="10" men="10">
@@ -528,7 +560,7 @@
 			<height normal="25" />
 		</collision>
 	</npc>
-	<npc id="27419" level="80" type="Folk" name="Divinity Watcher">
+	<npc id="27419" level="80" type="Monster" name="Divinity Watcher">
 		<!-- TODO: Must be confirmed -->
 		<sex>MALE</sex>
 		<stats str="10" int="10" dex="10" wit="10" con="10" men="10">
@@ -548,7 +580,7 @@
 			<height normal="35" />
 		</collision>
 	</npc>
-	<npc id="27420" level="80" type="Folk" name="Instructor Solina">
+	<npc id="27420" level="80" type="Monster" name="Instructor Solina">
 		<!-- TODO: Must be confirmed -->
 		<sex>MALE</sex>
 		<stats str="10" int="10" dex="10" wit="10" con="10" men="10">

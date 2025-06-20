@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <list xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../xsd/npcs.xsd">
 	<npc id="22100" level="58" type="Monster" name="Freya's Gardener">
 		<!-- Confirmed CT2.5 -->
@@ -7178,6 +7178,9 @@
 	<npc id="22194" level="78" type="Monster" name="Penance Guard">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
+			<param name="MoveAroundSocial" value="80" />
+			<param name="MoveAroundSocial1" value="80" />
+			<param name="MoveAroundSocial2" value="119" />
 			<skill name="PhysicalSpecial" id="4032" level="9" /> <!-- NPC Strike -->
 			<skill name="DDMagic" id="4253" level="9" /> <!-- NPC Blaze - Slow -->
 		</parameters>
@@ -7224,7 +7227,7 @@
 		</ai>
 		<collision>
 			<radius normal="40" />
-			<height normal="22" />
+			<height normal="30.5" />
 		</collision>
 	</npc>
 	<npc id="22195" level="78" type="Monster" name="Ritual Sacrifice">
