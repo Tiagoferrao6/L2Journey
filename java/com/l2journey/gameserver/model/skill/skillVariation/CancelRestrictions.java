@@ -26,62 +26,27 @@
  * applicable..
  * 
  */
-package handlers.effecthandlers;
+package com.l2journey.gameserver.model.skill.skillVariation;
 
-import java.util.Random;
-
-import com.l2journey.gameserver.model.StatSet;
 import com.l2journey.gameserver.model.actor.Creature;
-import com.l2journey.gameserver.model.conditions.Condition;
-import com.l2journey.gameserver.model.effects.AbstractEffect;
-import com.l2journey.gameserver.model.effects.EffectType;
-import com.l2journey.gameserver.model.skill.Skill;
-import com.l2journey.gameserver.model.skill.skillVariation.CancelRestrictions;
 
 /**
- * Dispel All effect implementation.
- * @author UnAfraid, KingHanker
+ * @author KingHanker, Zoinha.
  */
-public class DispelAll extends AbstractEffect
+public class CancelRestrictions
 {
-	public DispelAll(Condition attachCond, Condition applyCond, StatSet set, StatSet params)
-	{
-		super(attachCond, applyCond, set, params);
-	}
+	private static final int TOUCH_OF_LIFE = 341;
+	private static final int TOUCH_OF_EVA = 787;
 	
-	@Override
-	public EffectType getEffectType()
+	/**
+	 * Filtro para as skills que dao imunidade ao cancel ou protecao 100%.<br>
+	 * [341] Touch of Life.<br>
+	 * [787] Touch of Eva
+	 * @param effected
+	 * @return
+	 */
+	public static boolean canTakeCancel(Creature effected)
 	{
-		return EffectType.DISPEL;
-	}
-	
-	@Override
-	public boolean isInstant()
-	{
-		return true;
-	}
-	
-	@Override
-	public void onStart(Creature effector, Creature effected, Skill skill)
-	{
-		/**
-		 * chance: Define a chance de ocorrer o efeito (25%)<br>
-		 * random: gera um numero aleatorio entre 0 e 1
-		 */
-		double chance = 0.25;
-		double random = new Random().nextDouble();
-		
-		if ((random < chance) && CancelRestrictions.canTakeCancel(effected))
-		{
-			effected.stopAllEffects();
-		}
-		else
-		{
-			if (effected.isPlayer())
-			{
-				effected.sendMessage("You resisted the Cancel");
-			}
-		}
-		effected.stopAllEffects();
+		return !effected.isAffectedBySkill(TOUCH_OF_LIFE) && !effected.isAffectedBySkill(TOUCH_OF_EVA);
 	}
 }

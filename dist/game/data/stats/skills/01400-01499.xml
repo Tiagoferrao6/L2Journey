@@ -2505,7 +2505,7 @@
 		<set name="reuseDelay" val="15000" />
 		<effects>
 			<effect name="StealAbnormal">
-				<param slot="buff" chance="90" rate="25" max="#maxNegated" />
+				<param slot="buff" chance="70" rate="25" max="#maxNegated" />
 			</effect>
 		</effects>
 	</skill>

@@ -1055,7 +1055,7 @@
 		<set name="reuseDelay" val="60000" />
 		<effects>
 			<effect name="DispelByCategory">
-				<param slot="buff" chance="90" rate="25" max="2" />
+				<param slot="buff" chance="70" rate="25" max="2" />
 			</effect>
 		</effects>
 	</skill>

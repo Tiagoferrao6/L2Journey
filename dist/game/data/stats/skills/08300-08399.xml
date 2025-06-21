@@ -553,7 +553,7 @@
 		<set name="reuseDelay" val="360000" />
 		<effects>
 			<effect name="DispelByCategory">
-				<param slot="buff" chance="90" rate="25" max="5" />
+				<param slot="buff" chance="70" rate="25" max="5" />
 			</effect>
 		</effects>
 	</skill>
@@ -573,7 +573,7 @@
 		<set name="reuseDelay" val="360000" />
 		<effects>
 			<effect name="StealAbnormal">
-				<param slot="buff" chance="90" rate="25" max="3" />
+				<param slot="buff" chance="60" rate="25" max="3" />
 			</effect>
 		</effects>
 	</skill>

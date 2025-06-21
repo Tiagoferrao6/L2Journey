@@ -1804,7 +1804,7 @@
 		<set name="staticReuse" val="true" />
 		<effects>
 			<effect name="DispelByCategory">
-				<param slot="buff" chance="70" rate="25" max="3" />
+				<param slot="buff" chance="60" rate="25" max="3" />
 			</effect>
 		</effects>
 	</skill>

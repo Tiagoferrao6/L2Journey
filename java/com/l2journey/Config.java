@@ -150,6 +150,7 @@ public class Config
 	private static final String OFFLINE_PLAY_CONFIG_FILE = "./config/player/OfflinePlay.ini";
 	private static final String OFFLINE_TRADE_CONFIG_FILE = "./config/player/OfflineTrade.ini";
 	private static final String ONLINE_INFO_CONFIG_FILE = "./config/player/OnlineInfo.ini";
+	private static final String PLAYER_CONTROL = "./config/Player/PlayerControl.ini";
 	private static final String PREMIUM_SYSTEM_CONFIG_FILE = "./config/player/PremiumSystem.ini";
 	private static final String PVP_CONFIG_FILE = "./config/player/PVP.ini";
 	private static final String PVP_ANNOUNCE_CONFIG_FILE = "./config/player/PvpAnnounce.ini";
@@ -1660,6 +1661,7 @@ public class Config
 			loadOfflinePlayConfig();
 			loadOfflineTradeConfig();
 			loadOnlineInfoConfig();
+			loadPlayerControl();
 			loadPremiumSystemConfig();
 			loadPvpConfig();
 			loadPvpAnnounceConfig();
@@ -3267,6 +3269,20 @@ public class Config
 	{
 		final ConfigReader onlineInfoConfig = new ConfigReader(ONLINE_INFO_CONFIG_FILE);
 		ENABLE_ONLINE_COMMAND = onlineInfoConfig.getBoolean("EnableOnlineCommand", false);
+	}
+	
+	/**
+	 * Load playerControl file (if exists).
+	 */
+	private static void loadPlayerControl()
+	{
+		final ConfigReader playerControl = new ConfigReader(PLAYER_CONTROL);
+		DISARM_RETURNS_WEAPON = playerControl.getBoolean("DisarmReturnsWeapon", false);
+		BLOCK_AUGMENT_IN_OLY = playerControl.getBoolean("BlockAugmentSkillsInOly", false);
+		BLOCK_TELEPORT_IN_COMBAT_MODE = playerControl.getBoolean("BlockTeleportInCombatMode", false);
+		BLOCK_CHAT_FOR_DEAD_PLAYERS = playerControl.getBoolean("BlockChatForDeadPlayers", false);
+		TELEPORT_EFFECT = playerControl.getBoolean("TeleportEffect", false);
+		BLOCK_MANA_IN_SIEGE_ZONE = playerControl.getBoolean("BlockManaInSiegeZone", false);
 	}
 	
 	/**

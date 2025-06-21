@@ -34,7 +34,7 @@ import com.l2journey.gameserver.model.skill.enums.SkillFinishType;
 
 /**
  * Dispel By Slot effect implementation.
- * @author Gnacik, Zoey76, Adry_85
+ * @author Gnacik, Zoey76, Adry_85, kinghanker
  */
 public class DispelBySlot extends AbstractEffect
 {

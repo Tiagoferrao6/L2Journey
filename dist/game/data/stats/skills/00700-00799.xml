@@ -671,7 +671,7 @@
 		<set name="reuseDelay" val="8000" />
 		<effects>
 			<effect name="DispelByCategory">
-				<param slot="debuff" chance="90" rate="100" max="10" />
+				<param slot="debuff" chance="100" rate="100" max="10" />
 			</effect>
 		</effects>
 	</skill>
@@ -1639,7 +1639,7 @@
 				<mul stat="healEffect" val="0.7" />
 			</effect>
 			<effect name="DispelByCategory">
-				<param slot="buff" chance="90" rate="25" max="5" />
+				<param slot="buff" chance="70" rate="25" max="5" />
 			</effect>
 			<effect name="CpDamPercent">
 				<param power="90" />
