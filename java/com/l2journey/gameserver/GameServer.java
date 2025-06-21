@@ -163,6 +163,7 @@ import com.l2journey.gameserver.model.olympiad.Hero;
 import com.l2journey.gameserver.model.olympiad.Olympiad;
 import com.l2journey.gameserver.model.sevensigns.SevenSigns;
 import com.l2journey.gameserver.model.sevensigns.SevenSignsFestival;
+import com.l2journey.gameserver.model.visualSystem.DressMeLoader;
 import com.l2journey.gameserver.network.GameClient;
 import com.l2journey.gameserver.network.GamePacketHandler;
 import com.l2journey.gameserver.network.NpcStringId;
@@ -408,6 +409,8 @@ public class GameServer
 			EventDispatcher.getInstance().notifyEventAsync(new OnServerStart());
 		}
 		PunishmentManager.getInstance();
+		
+		DressMeLoader.load();
 		
 		Runtime.getRuntime().addShutdownHook(Shutdown.getInstance());
 		LOGGER.info("IdManager: Free ObjectID's remaining: " + IdManager.getInstance().getAvailableIdCount());

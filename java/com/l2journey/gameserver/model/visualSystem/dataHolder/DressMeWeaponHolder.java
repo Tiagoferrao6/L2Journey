@@ -26,46 +26,56 @@
  * applicable..
  * 
  */
-package com.l2journey.gameserver.model.item.type;
+package com.l2journey.gameserver.model.visualSystem.dataHolder;
 
-/**
- * Armor Type enumerated.
- */
-public enum ArmorType implements ItemType
+import java.util.ArrayList;
+import java.util.List;
+
+import com.l2journey.gameserver.model.visualSystem.data.DressMeWeaponData;
+
+public final class DressMeWeaponHolder extends AbstractHolder
 {
-	NONE("NONE"),
-	LIGHT("LIGHT"),
-	HEAVY("HEAVY"),
-	MAGIC("ROBE"),
-	SIGIL("SIGIL"),
+	private static final DressMeWeaponHolder _instance = new DressMeWeaponHolder();
 	
-	// L2J CUSTOM
-	SHIELD("SHIELD");
-	
-	final int _mask;
-	private final String _descr;
-	
-	/**
-	 * Constructor of the ArmorType.
-	 * @param descr
-	 */
-	private ArmorType(String descr)
+	public static DressMeWeaponHolder getInstance()
 	{
-		_mask = 1 << (ordinal() + WeaponType.values().length);
-		_descr = descr;
+		return _instance;
 	}
 	
-	/**
-	 * @return the ID of the ArmorType after applying a mask.
-	 */
+	private final List<DressMeWeaponData> _weapons = new ArrayList<>();
+	
+	public void addWeapon(DressMeWeaponData weapon)
+	{
+		_weapons.add(weapon);
+	}
+	
+	public List<DressMeWeaponData> getAllWeapons()
+	{
+		return _weapons;
+	}
+	
+	public DressMeWeaponData getWeapon(int id)
+	{
+		for (DressMeWeaponData weapon : _weapons)
+		{
+			if (weapon.getId() == id)
+			{
+				return weapon;
+			}
+		}
+		
+		return null;
+	}
+	
 	@Override
-	public int mask()
+	public int size()
 	{
-		return _mask;
+		return _weapons.size();
 	}
 	
-	public String getDescription()
+	@Override
+	public void clear()
 	{
-		return _descr;
+		_weapons.clear();
 	}
 }
