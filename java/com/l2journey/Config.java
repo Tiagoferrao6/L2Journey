@@ -161,6 +161,7 @@ public class Config
 	private static final String SERVER_TIME_CONFIG_FILE = "./config/player/ServerTime.ini";
 	private static final String STARTING_LOCATION_CONFIG_FILE = "./config/player/StartingLocation.ini";
 	private static final String STARTING_TITLE_CONFIG_FILE = "./config/player/StartingTitle.ini";
+	private static final String USER_PANEL_COMMANDS = "./config/Player/UserPanel.ini";
 	private static final String WAREHOUSE_SORTING_CONFIG_FILE = "./config/player/WarehouseSorting.ini";
 	
 	// --------------------------------------------------
@@ -1672,6 +1673,7 @@ public class Config
 			loadServerTimeConfig();
 			loadStartingLocationConfig();
 			loadStartingTitleConfig();
+			loadUserPanel();
 			loadWarehouseSortingConfig();
 			
 			// Security Folder -
@@ -3497,6 +3499,15 @@ public class Config
 		final ConfigReader startingTitleConfig = new ConfigReader(STARTING_TITLE_CONFIG_FILE);
 		ENABLE_CUSTOM_STARTING_TITLE = startingTitleConfig.getBoolean("EnableStartingTitle", false);
 		CUSTOM_STARTING_TITLE = startingTitleConfig.getString("StartingTitle", "Newbie");
+	}
+	
+	/**
+	 * Load UserPanel file (if exists).
+	 */
+	private static void loadUserPanel()
+	{
+		final ConfigReader UserPanel = new ConfigReader(USER_PANEL_COMMANDS);
+		DRESSME_ENABLE = UserPanel.getBoolean("DressMeSystem", false);
 	}
 	
 	/**

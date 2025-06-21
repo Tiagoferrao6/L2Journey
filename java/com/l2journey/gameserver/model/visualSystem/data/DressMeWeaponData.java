@@ -26,46 +26,54 @@
  * applicable..
  * 
  */
-package com.l2journey.gameserver.model.item.type;
+package com.l2journey.gameserver.model.visualSystem.data;
 
-/**
- * Armor Type enumerated.
- */
-public enum ArmorType implements ItemType
+public class DressMeWeaponData
 {
-	NONE("NONE"),
-	LIGHT("LIGHT"),
-	HEAVY("HEAVY"),
-	MAGIC("ROBE"),
-	SIGIL("SIGIL"),
+	private final int _id;
+	private final String _name;
+	private final String _type;
+	private final boolean _isBig;
+	private final int _priceId;
+	private final long _priceCount;
 	
-	// L2J CUSTOM
-	SHIELD("SHIELD");
-	
-	final int _mask;
-	private final String _descr;
-	
-	/**
-	 * Constructor of the ArmorType.
-	 * @param descr
-	 */
-	private ArmorType(String descr)
+	public DressMeWeaponData(int id, String name, String type, boolean isBig, int priceId, long priceCount)
 	{
-		_mask = 1 << (ordinal() + WeaponType.values().length);
-		_descr = descr;
+		_id = id;
+		_name = name;
+		_type = type;
+		_isBig = isBig;
+		_priceId = priceId;
+		_priceCount = priceCount;
 	}
 	
-	/**
-	 * @return the ID of the ArmorType after applying a mask.
-	 */
-	@Override
-	public int mask()
+	public int getId()
 	{
-		return _mask;
+		return _id;
 	}
 	
-	public String getDescription()
+	public String getName()
 	{
-		return _descr;
+		return _name;
+	}
+	
+	public String getType()
+	{
+		return _type;
+	}
+	
+	public boolean isBig()
+	{
+		return _isBig;
+	}
+	
+	public int getPriceId()
+	{
+		return _priceId;
+	}
+	
+	public long getPriceCount()
+	{
+		return _priceCount;
 	}
 }

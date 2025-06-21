@@ -74,6 +74,7 @@ import com.l2journey.gameserver.data.sql.CharInfoTable;
 import com.l2journey.gameserver.data.sql.CharSummonTable;
 import com.l2journey.gameserver.data.sql.ClanTable;
 import com.l2journey.gameserver.data.sql.OfflineTraderTable;
+import com.l2journey.gameserver.data.sql.UserVariables;
 import com.l2journey.gameserver.data.xml.AdminData;
 import com.l2journey.gameserver.data.xml.CategoryData;
 import com.l2journey.gameserver.data.xml.ClassListData;
@@ -6973,6 +6974,7 @@ public class Player extends Playable
 					player.setOnlineTime(rset.getLong("onlinetime"));
 					player.setNewbie(rset.getInt("newbie"));
 					player.setNoble(rset.getInt("nobless") == 1);
+					player.loadVariables();
 					
 					final int factionId = rset.getInt("faction");
 					if (factionId == 1)
@@ -14972,5 +14974,49 @@ public class Player extends Playable
 	public boolean isAutoPlaying()
 	{
 		return _autoPlaying.get();
+	}
+	
+	// ======================================================================= //
+	// Variaveis Adicionadas para testar o funcionamento do painel de usuarios
+	private final UserVariables _UserVariables = new UserVariables(this);
+	
+	public UserVariables getUserVariables()
+	{
+		return _UserVariables;
+	}
+	
+	public void setVar(String name, String value)
+	{
+		_UserVariables.setVar(name, value);
+	}
+	
+	public void unsetVar(String name)
+	{
+		_UserVariables.unsetVar(name);
+	}
+	
+	public String getVar(String name, String defaultVal)
+	{
+		return _UserVariables.getVar(name, defaultVal);
+	}
+	
+	public boolean getVarB(String name, boolean defaultVal)
+	{
+		return _UserVariables.getVarB(name, defaultVal);
+	}
+	
+	public boolean getVarB(String name)
+	{
+		return _UserVariables.getVarB(name);
+	}
+	
+	public Map<String, String> getVars()
+	{
+		return _UserVariables.getVars();
+	}
+	
+	private void loadVariables()
+	{
+		_UserVariables.loadVariables();
 	}
 }

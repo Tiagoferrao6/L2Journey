@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 L2jMobius
+ * Copyright (c) 2025 L2Journey Project
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -8,15 +8,23 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  * 
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
- * IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * 
+ * ---
+ * 
+ * Portions of this software are derived from the L2JMobius Project, 
+ * shared under the MIT License. The original license terms are preserved where 
+ * applicable..
+ * 
  */
 package com.l2journey.gameserver.model.item.instance;
 
@@ -154,7 +162,7 @@ public class Item extends WorldObject
 	public static final int MODIFIED = 2;
 	
 	//@formatter:off
-	public static final int[] DEFAULT_ENCHANT_OPTIONS = new int[] { 0, 0, 0 };
+	public static final int[] DEFAULT_ENCHANT_OPTIONS = { 0, 0, 0 };
 	//@formatter:on
 	
 	private int _lastChange = 2; // 1 ??, 2 modified, 3 removed
@@ -1063,31 +1071,31 @@ public class Item extends WorldObject
 	
 	private void updateItemElements(Connection con)
 	{
-		try (PreparedStatement ps = con.prepareStatement("DELETE FROM item_elementals WHERE itemId = ?"))
+		try (final PreparedStatement psUpdate = con.prepareStatement("INSERT INTO item_elementals (itemId, elemType, elemValue) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE elemValue = ?");
+			final PreparedStatement psDelete = con.prepareStatement("DELETE FROM item_elementals WHERE itemId = ?"))
 		{
-			ps.setInt(1, getObjectId());
-			ps.executeUpdate();
-		}
-		catch (SQLException e)
-		{
-			LOGGER.log(Level.SEVERE, "Could not update elementals for item: " + this + " from DB:", e);
-		}
-		
-		if (_elementals == null)
-		{
-			return;
-		}
-		
-		try (PreparedStatement ps = con.prepareStatement("INSERT INTO item_elementals VALUES(?,?,?)"))
-		{
-			for (Elementals elm : _elementals)
+			final Integer objectId = getObjectId();
+			
+			if ((_elementals == null) || (_elementals.length <= 0))
 			{
-				ps.setInt(1, getObjectId());
-				ps.setByte(2, elm.getElement());
-				ps.setInt(3, elm.getValue());
-				ps.executeUpdate();
-				ps.clearParameters();
+				psDelete.setInt(1, objectId);
+				psDelete.executeUpdate();
+				return;
 			}
+			
+			for (final Elementals element : _elementals)
+			{
+				psUpdate.setInt(1, objectId);
+				psUpdate.setByte(2, element.getElement());
+				psUpdate.setInt(3, element.getValue());
+				psUpdate.setInt(4, element.getValue());
+				psUpdate.addBatch();
+			}
+			
+			psDelete.setInt(1, objectId);
+			psDelete.executeUpdate();
+			psUpdate.executeBatch();
+			
 		}
 		catch (SQLException e)
 		{
@@ -1502,6 +1510,7 @@ public class Item extends WorldObject
 		long time;
 		long count;
 		ItemLocation loc;
+		int visualItemId;
 		try
 		{
 			objectId = rs.getInt(1);
@@ -1514,6 +1523,7 @@ public class Item extends WorldObject
 			customType2 = rs.getInt("custom_type2");
 			manaLeft = rs.getInt("mana_left");
 			time = rs.getLong("time");
+			visualItemId = rs.getInt("visual_item_id");
 		}
 		catch (Exception e)
 		{
@@ -1527,19 +1537,21 @@ public class Item extends WorldObject
 			return null;
 		}
 		inst = new Item(objectId, item);
-		inst._ownerId = ownerId;
+		inst.setOwnerId(ownerId);
 		inst.setCount(count);
-		inst._enchantLevel = enchantLevel;
-		inst._type1 = customType1;
-		inst._type2 = customType2;
-		inst._loc = loc;
-		inst._locData = locData;
+		inst.setEnchantLevel(enchantLevel);
+		inst.setCustomType1(customType1);
+		inst.setCustomType2(customType2);
+		inst.setItemLocation(loc, locData);
 		inst._existsInDb = true;
 		inst._storedInDb = true;
 		
 		// Setup life time for shadow weapons
-		inst._mana = manaLeft;
+		inst.setMana(manaLeft);
 		inst._time = time;
+		
+		// Set visual item id for dress me
+		inst.setVisualItemId(visualItemId);
 		
 		// load augmentation and elemental enchant
 		if (inst.isEquipable())
@@ -1630,7 +1642,7 @@ public class Item extends WorldObject
 		}
 		
 		try (Connection con = DatabaseFactory.getConnection();
-			PreparedStatement ps = con.prepareStatement("UPDATE items SET owner_id=?,count=?,loc=?,loc_data=?,enchant_level=?,custom_type1=?,custom_type2=?,mana_left=?,time=? WHERE object_id = ?"))
+			PreparedStatement ps = con.prepareStatement("UPDATE items SET owner_id=?,count=?,loc=?,loc_data=?,enchant_level=?,custom_type1=?,custom_type2=?,mana_left=?,time=?,visual_item_id=? WHERE object_id = ?"))
 		{
 			ps.setInt(1, _ownerId);
 			ps.setLong(2, _count);
@@ -1641,7 +1653,8 @@ public class Item extends WorldObject
 			ps.setInt(7, _type2);
 			ps.setInt(8, _mana);
 			ps.setLong(9, _time);
-			ps.setInt(10, getObjectId());
+			ps.setInt(10, getVisualItemId());
+			ps.setInt(11, getObjectId());
 			ps.executeUpdate();
 			_existsInDb = true;
 			_storedInDb = true;
@@ -1663,7 +1676,7 @@ public class Item extends WorldObject
 		}
 		
 		try (Connection con = DatabaseFactory.getConnection();
-			PreparedStatement ps = con.prepareStatement("INSERT INTO items (owner_id,item_id,count,loc,loc_data,enchant_level,object_id,custom_type1,custom_type2,mana_left,time) VALUES (?,?,?,?,?,?,?,?,?,?,?)"))
+			PreparedStatement ps = con.prepareStatement("INSERT INTO items (owner_id,item_id,count,loc,loc_data,enchant_level,object_id,custom_type1,custom_type2,mana_left,time,visual_item_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"))
 		{
 			ps.setInt(1, _ownerId);
 			ps.setInt(2, _itemId);
@@ -1676,6 +1689,7 @@ public class Item extends WorldObject
 			ps.setInt(9, _type2);
 			ps.setInt(10, _mana);
 			ps.setLong(11, _time);
+			ps.setInt(12, getVisualItemId());
 			
 			ps.executeUpdate();
 			_existsInDb = true;
@@ -2193,6 +2207,15 @@ public class Item extends WorldObject
 		ItemLifeTimeTaskManager.getInstance().remove(this);
 	}
 	
+	/**
+	 * Method used by .combinetalismans.
+	 * @param value
+	 */
+	public void setMana(int value)
+	{
+		_mana = value;
+	}
+	
 	public ItemVariables getVariables()
 	{
 		final ItemVariables vars = getScript(ItemVariables.class);
@@ -2234,5 +2257,18 @@ public class Item extends WorldObject
 		sb.append(getObjectId());
 		sb.append("]");
 		return sb.toString();
+	}
+	
+	// Used for dress me engine
+	private int visualItemId = 0;
+	
+	public int getVisualItemId()
+	{
+		return visualItemId;
+	}
+	
+	public void setVisualItemId(int visualItemId)
+	{
+		this.visualItemId = visualItemId;
 	}
 }

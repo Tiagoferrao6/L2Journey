@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 L2jMobius
+ * Copyright (c) 2025 L2Journey Project
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -8,15 +8,23 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  * 
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
- * IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * 
+ * ---
+ * 
+ * Portions of this software are derived from the L2JMobius Project, 
+ * shared under the MIT License. The original license terms are preserved where 
+ * applicable..
+ * 
  */
 package com.l2journey.gameserver.model.itemcontainer;
 
@@ -42,7 +50,6 @@ import com.l2journey.gameserver.model.ArmorSet;
 import com.l2journey.gameserver.model.World;
 import com.l2journey.gameserver.model.actor.Creature;
 import com.l2journey.gameserver.model.actor.Player;
-import com.l2journey.gameserver.model.actor.enums.player.PlayerCondOverride;
 import com.l2journey.gameserver.model.events.EventDispatcher;
 import com.l2journey.gameserver.model.events.EventType;
 import com.l2journey.gameserver.model.events.holders.actor.player.OnPlayerItemUnequip;
@@ -74,6 +81,9 @@ public abstract class Inventory extends ItemContainer
 	// Common Items
 	public static final int ADENA_ID = 57;
 	public static final int ANCIENT_ADENA_ID = 5575;
+	public static final int ITEM_ID_PC_BANG_POINTS = -100;
+	public static final int ITEM_ID_CLAN_REPUTATION_SCORE = -200;
+	public static final int ITEM_ID_FAME = -300;
 	
 	public static final long MAX_ADENA = Config.MAX_ADENA;
 	
@@ -1034,6 +1044,25 @@ public abstract class Inventory extends ItemContainer
 	}
 	
 	/**
+	 * Returns the ID of the item in the paperdoll slot
+	 * @param slot : int designating the slot
+	 * @return int designating the ID of the item
+	 */
+	public int getPaperdollItemVisualDisplayId(int slot)
+	{
+		final Item item = _paperdoll[slot];
+		if (item != null)
+		{
+			if (item.getVisualItemId() > 0)
+			{
+				return item.getVisualItemId();
+			}
+			return item.getDisplayId();
+		}
+		return 0;
+	}
+	
+	/**
 	 * Returns the first paperdoll item with the specific id
 	 * @param itemId the item id
 	 * @return Item
@@ -1537,7 +1566,7 @@ public abstract class Inventory extends ItemContainer
 			}
 			
 			final Player player = getOwner().asPlayer();
-			if (!player.canOverrideCond(PlayerCondOverride.ITEM_CONDITIONS) && !player.isHero() && item.isHeroItem())
+			if (!player.isGM() && !player.isHero() && item.isHeroItem())
 			{
 				return;
 			}
@@ -1829,7 +1858,7 @@ public abstract class Inventory extends ItemContainer
 	public void restore()
 	{
 		try (Connection con = DatabaseFactory.getConnection();
-			PreparedStatement statement = con.prepareStatement("SELECT object_id, item_id, count, enchant_level, loc, loc_data, custom_type1, custom_type2, mana_left, time FROM items WHERE owner_id=? AND (loc=? OR loc=?) ORDER BY loc_data"))
+			PreparedStatement statement = con.prepareStatement("SELECT object_id, item_id, count, enchant_level, loc, loc_data, custom_type1, custom_type2, mana_left, time, visual_item_id FROM items WHERE owner_id=? AND (loc=? OR loc=?) ORDER BY loc_data"))
 		{
 			statement.setInt(1, getOwnerId());
 			statement.setString(2, getBaseLocation().name());
@@ -1848,7 +1877,7 @@ public abstract class Inventory extends ItemContainer
 					if (getOwner().isPlayer())
 					{
 						final Player player = getOwner().asPlayer();
-						if (!player.canOverrideCond(PlayerCondOverride.ITEM_CONDITIONS) && !player.isHero() && item.isHeroItem())
+						if (!player.isGM() && !player.isHero() && item.isHeroItem())
 						{
 							item.setItemLocation(ItemLocation.INVENTORY);
 						}

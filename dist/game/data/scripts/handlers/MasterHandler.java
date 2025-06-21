@@ -289,6 +289,7 @@ import handlers.voicedcommandhandlers.AutoPotion;
 import handlers.voicedcommandhandlers.Banking;
 import handlers.voicedcommandhandlers.ChangePassword;
 import handlers.voicedcommandhandlers.ChatAdmin;
+import handlers.voicedcommandhandlers.DressMeVCmd;
 import handlers.voicedcommandhandlers.Lang;
 import handlers.voicedcommandhandlers.Offline;
 import handlers.voicedcommandhandlers.OfflinePlay;
@@ -556,6 +557,7 @@ public class MasterHandler
 			Config.ENABLE_AUTO_PLAY ? AutoPlay.class : null,
 			Config.BANKING_SYSTEM_ENABLED ? Banking.class : null,
 			Config.CHAT_ADMIN ? ChatAdmin.class : null,
+			Config.DRESSME_ENABLE ? DressMeVCmd.class : null,
 			Config.MULTILANG_ENABLE && Config.MULTILANG_VOICED_ALLOW ? Lang.class : null,
 			Config.ALLOW_CHANGE_PASSWORD ? ChangePassword.class : null,
 			Config.ENABLE_OFFLINE_PLAY_COMMAND ? OfflinePlay.class : null,

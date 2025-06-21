@@ -26,46 +26,54 @@
  * applicable..
  * 
  */
-package com.l2journey.gameserver.model.item.type;
+package com.l2journey.gameserver.model.visualSystem.data;
 
-/**
- * Armor Type enumerated.
- */
-public enum ArmorType implements ItemType
+public class DressMeHatData
 {
-	NONE("NONE"),
-	LIGHT("LIGHT"),
-	HEAVY("HEAVY"),
-	MAGIC("ROBE"),
-	SIGIL("SIGIL"),
+	private final int _id;
+	private final int _hat;
+	private final String _name;
+	private final int _slot;
+	private final int _priceId;
+	private final long _priceCount;
 	
-	// L2J CUSTOM
-	SHIELD("SHIELD");
-	
-	final int _mask;
-	private final String _descr;
-	
-	/**
-	 * Constructor of the ArmorType.
-	 * @param descr
-	 */
-	private ArmorType(String descr)
+	public DressMeHatData(int id, int hat, String name, int slot, int priceId, long priceCount)
 	{
-		_mask = 1 << (ordinal() + WeaponType.values().length);
-		_descr = descr;
+		_id = id;
+		_hat = hat;
+		_name = name;
+		_slot = slot;
+		_priceId = priceId;
+		_priceCount = priceCount;
 	}
 	
-	/**
-	 * @return the ID of the ArmorType after applying a mask.
-	 */
-	@Override
-	public int mask()
+	public int getId()
 	{
-		return _mask;
+		return _id;
 	}
 	
-	public String getDescription()
+	public int getHatId()
 	{
-		return _descr;
+		return _hat;
+	}
+	
+	public String getName()
+	{
+		return _name;
+	}
+	
+	public int getSlot()
+	{
+		return _slot;
+	}
+	
+	public int getPriceId()
+	{
+		return _priceId;
+	}
+	
+	public long getPriceCount()
+	{
+		return _priceCount;
 	}
 }

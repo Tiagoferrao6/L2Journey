@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 L2jMobius
+ * Copyright (c) 2025 L2Journey Project
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -8,15 +8,23 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  * 
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
- * IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * 
+ * ---
+ * 
+ * Portions of this software are derived from the L2JMobius Project, 
+ * shared under the MIT License. The original license terms are preserved where 
+ * applicable..
+ * 
  */
 package com.l2journey.gameserver.model.itemcontainer;
 
@@ -821,7 +829,7 @@ public class PlayerInventory extends Inventory
 	{
 		final int[][] paperdoll = new int[31][3];
 		try (Connection con = DatabaseFactory.getConnection();
-			PreparedStatement ps = con.prepareStatement("SELECT object_id,item_id,loc_data,enchant_level FROM items WHERE owner_id=? AND loc='PAPERDOLL'"))
+			PreparedStatement ps = con.prepareStatement("SELECT object_id,item_id,loc_data,enchant_level,visual_item_id FROM items WHERE owner_id=? AND loc='PAPERDOLL'"))
 		{
 			ps.setInt(1, objectId);
 			try (ResultSet invdata = ps.executeQuery())
@@ -830,17 +838,28 @@ public class PlayerInventory extends Inventory
 				{
 					final int slot = invdata.getInt("loc_data");
 					paperdoll[slot][0] = invdata.getInt("object_id");
+					final int itemId = invdata.getInt("item_id");
+					int visualItemId;
 					if (Config.ENABLE_TRANSMOG)
 					{
 						final ItemVariables vars = new ItemVariables(paperdoll[slot][0]);
-						paperdoll[slot][1] = vars.getInt(ItemVariables.TRANSMOG_ID, invdata.getInt("item_id"));
+						visualItemId = vars.getInt(ItemVariables.TRANSMOG_ID, itemId);
 					}
 					else
 					{
-						final int itemId = invdata.getInt("item_id");
+						visualItemId = invdata.getInt("visual_item_id");
+					}
+					
+					if (visualItemId > 0)
+					{
+						paperdoll[slot][1] = visualItemId;
+					}
+					else
+					{
 						final ItemTemplate template = ItemData.getInstance().getTemplate(itemId);
 						paperdoll[slot][1] = template == null ? itemId : template.getDisplayId();
 					}
+					
 					paperdoll[slot][2] = invdata.getInt("enchant_level");
 				}
 			}
