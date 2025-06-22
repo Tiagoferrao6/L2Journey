@@ -809,6 +809,15 @@ public class World
 		}
 	}
 	
+	/**
+	 * Return how many players are online.
+	 * @return number of online players.
+	 */
+	public int getAllPlayersCount()
+	{
+		return _allPlayers.size();
+	}
+	
 	public static World getInstance()
 	{
 		return SingletonHolder.INSTANCE;

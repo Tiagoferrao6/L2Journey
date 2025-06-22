@@ -289,11 +289,14 @@ import handlers.voicedcommandhandlers.AutoPotion;
 import handlers.voicedcommandhandlers.Banking;
 import handlers.voicedcommandhandlers.ChangePassword;
 import handlers.voicedcommandhandlers.ChatAdmin;
+import handlers.voicedcommandhandlers.CombineTalismans;
 import handlers.voicedcommandhandlers.DressMeVCmd;
+import handlers.voicedcommandhandlers.Epic;
 import handlers.voicedcommandhandlers.Lang;
 import handlers.voicedcommandhandlers.Offline;
 import handlers.voicedcommandhandlers.OfflinePlay;
 import handlers.voicedcommandhandlers.Online;
+import handlers.voicedcommandhandlers.Panel;
 import handlers.voicedcommandhandlers.Premium;
 import handlers.voicedcommandhandlers.Wedding;
 
@@ -550,17 +553,20 @@ public class MasterHandler
 			SiegeStatus.class,
 		},
 		{
-			// TODO: Add configuration options for this voiced commands.
+			// TODO: Add configuration options for this voiced commands:
 			// CastleHandler.class,
 			// ClanHandler.class,
 			EventsConfig.ALLOW_WEDDING ? Wedding.class : null,
 			Config.ENABLE_AUTO_PLAY ? AutoPlay.class : null,
 			Config.BANKING_SYSTEM_ENABLED ? Banking.class : null,
 			Config.CHAT_ADMIN ? ChatAdmin.class : null,
+			Config.COMBINETALISMANS_COMMAND ? CombineTalismans.class : null,
 			Config.DRESSME_ENABLE ? DressMeVCmd.class : null,
+			Config.EPIC_COMMAND ? Epic.class : null,
 			Config.MULTILANG_ENABLE && Config.MULTILANG_VOICED_ALLOW ? Lang.class : null,
 			Config.ALLOW_CHANGE_PASSWORD ? ChangePassword.class : null,
 			Config.ENABLE_OFFLINE_PLAY_COMMAND ? OfflinePlay.class : null,
+			Config.ENABLE_USER_PANEL ? Panel.class : null,
 			Config.ENABLE_OFFLINE_COMMAND && (Config.OFFLINE_TRADE_ENABLE || Config.OFFLINE_CRAFT_ENABLE) ? Offline.class : null,
 			Config.ENABLE_ONLINE_COMMAND ? Online.class : null,
 			Config.PREMIUM_SYSTEM_ENABLED ? Premium.class : null,
