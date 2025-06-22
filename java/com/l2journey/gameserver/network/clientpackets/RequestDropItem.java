@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 L2jMobius
+ * Copyright (c) 2025 L2Journey Project
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -8,15 +8,23 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  * 
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
- * IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * 
+ * ---
+ * 
+ * Portions of this software are derived from the L2JMobius Project, 
+ * shared under the MIT License. The original license terms are preserved where 
+ * applicable..
+ * 
  */
 package com.l2journey.gameserver.network.clientpackets;
 
@@ -24,7 +32,6 @@ import com.l2journey.Config;
 import com.l2journey.gameserver.data.xml.AdminData;
 import com.l2journey.gameserver.managers.PunishmentManager;
 import com.l2journey.gameserver.model.actor.Player;
-import com.l2journey.gameserver.model.actor.enums.player.PlayerCondOverride;
 import com.l2journey.gameserver.model.item.ItemTemplate;
 import com.l2journey.gameserver.model.item.enums.ItemProcessType;
 import com.l2journey.gameserver.model.item.instance.Item;
@@ -75,7 +82,7 @@ public class RequestDropItem extends ClientPacket
 		}
 		
 		final Item item = player.getInventory().getItemByObjectId(_objectId);
-		if ((item == null) || (_count == 0) || !player.validateItemManipulation(_objectId, "drop") || (!Config.ALLOW_DISCARDITEM && !player.canOverrideCond(PlayerCondOverride.DROP_ALL_ITEMS)) || (!item.isDropable() && !(player.canOverrideCond(PlayerCondOverride.DROP_ALL_ITEMS) && Config.GM_TRADE_RESTRICTED_ITEMS)) || ((item.getItemType() == EtcItemType.PET_COLLAR) && player.havePetInvItems()) || player.isInsideZone(ZoneId.NO_ITEM_DROP))
+		if ((item == null) || (_count == 0) || !player.validateItemManipulation(_objectId, ItemProcessType.DROP) || (!Config.ALLOW_DISCARDITEM && !player.isGM()) || (!item.isDropable() && !(player.isGM() && Config.GM_TRADE_RESTRICTED_ITEMS)) || ((item.getItemType() == EtcItemType.PET_COLLAR) && player.havePetInvItems()) || player.isInsideZone(ZoneId.NO_ITEM_DROP))
 		{
 			if ((item != null) && item.isAugmented())
 			{
@@ -88,7 +95,7 @@ public class RequestDropItem extends ClientPacket
 			return;
 		}
 		
-		if (item.isQuestItem() && !(player.canOverrideCond(PlayerCondOverride.DROP_ALL_ITEMS) && Config.GM_TRADE_RESTRICTED_ITEMS))
+		if (item.isQuestItem() && !(player.isGM() && Config.GM_TRADE_RESTRICTED_ITEMS))
 		{
 			return;
 		}
@@ -190,7 +197,7 @@ public class RequestDropItem extends ClientPacket
 			}
 		}
 		
-		if ((ItemTemplate.TYPE2_QUEST == item.getTemplate().getType2()) && !player.canOverrideCond(PlayerCondOverride.DROP_ALL_ITEMS))
+		if ((ItemTemplate.TYPE2_QUEST == item.getTemplate().getType2()) && !player.isGM())
 		{
 			player.sendPacket(SystemMessageId.THAT_ITEM_CANNOT_BE_DISCARDED_OR_EXCHANGED);
 			return;

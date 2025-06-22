@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 L2jMobius
+ * Copyright (c) 2025 L2Journey Project
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -8,15 +8,23 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  * 
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
- * IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * 
+ * ---
+ * 
+ * Portions of this software are derived from the L2JMobius Project, 
+ * shared under the MIT License. The original license terms are preserved where 
+ * applicable..
+ * 
  */
 package com.l2journey.gameserver.network.serverpackets;
 
@@ -29,7 +37,6 @@ import com.l2journey.gameserver.model.actor.Creature;
 import com.l2journey.gameserver.model.actor.Npc;
 import com.l2journey.gameserver.model.actor.Player;
 import com.l2journey.gameserver.model.actor.Summon;
-import com.l2journey.gameserver.model.actor.enums.player.PlayerCondOverride;
 import com.l2journey.gameserver.model.actor.instance.Monster;
 import com.l2journey.gameserver.model.actor.instance.Trap;
 import com.l2journey.gameserver.model.clan.Clan;
@@ -100,7 +107,7 @@ public abstract class AbstractNpcInfo extends ServerPacket
 		
 		public NpcInfo(Npc cha, Creature attacker)
 		{
-			super(cha, attacker.canOverrideCond(PlayerCondOverride.SEE_ALL_PLAYERS));
+			super(cha, attacker.isGM());
 			_npc = cha;
 			_displayId = cha.getTemplate().getDisplayId(); // On every subclass
 			_rhand = cha.getRightHandItem(); // On every subclass
@@ -276,7 +283,7 @@ public abstract class AbstractNpcInfo extends ServerPacket
 		
 		public TrapInfo(Trap cha, Creature attacker)
 		{
-			super(cha, (attacker != null) && attacker.canOverrideCond(PlayerCondOverride.SEE_ALL_PLAYERS));
+			super(cha, (attacker != null) && attacker.isGM());
 			_trap = cha;
 			_displayId = cha.getTemplate().getDisplayId();
 			_isAttackable = cha.isAutoAttackable(attacker);
@@ -362,7 +369,7 @@ public abstract class AbstractNpcInfo extends ServerPacket
 		
 		public SummonInfo(Summon cha, Creature attacker, int value)
 		{
-			super(cha, attacker.canOverrideCond(PlayerCondOverride.SEE_ALL_PLAYERS));
+			super(cha, attacker.isGM());
 			_summon = cha;
 			_value = value;
 			_form = cha.getFormId();
