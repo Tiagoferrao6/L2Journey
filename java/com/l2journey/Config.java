@@ -3165,6 +3165,10 @@ public class Config
 		ALT_MEMBERS_CAN_WITHDRAW_FROM_CLANWH = clanDefinitions.getBoolean("AltMembersCanWithdrawFromClanWH", false);
 		REMOVE_CASTLE_CIRCLETS = clanDefinitions.getBoolean("RemoveCastleCirclets", true);
 		ALT_CLAN_MEMBERS_FOR_WAR = clanDefinitions.getInt("AltClanMembersForWar", 15);
+		ANNOUNCE_CASTLE_LORD = clanDefinitions.getBoolean("AnnounceCastleLord", false);
+		ENABLE_ACADEMY_REWARD = clanDefinitions.getBoolean("EnableAcademyReward", false);
+		ACADEMY_REWARD_ID = clanDefinitions.getInt("AcademyRewardID", 57);
+		ACADEMY_REWARD_COUNT = clanDefinitions.getInt("AcademyRewardCount", 10000);
 	}
 	
 	/**
@@ -3507,7 +3511,12 @@ public class Config
 	private static void loadUserPanel()
 	{
 		final ConfigReader UserPanel = new ConfigReader(USER_PANEL_COMMANDS);
+		ENABLE_USER_PANEL = UserPanel.getBoolean("EnableUserPanel", false);
+		COMBINETALISMANS_COMMAND = UserPanel.getBoolean("CombineTalismansCommand", false);
+		EPIC_COMMAND = UserPanel.getBoolean("EpicCommand", false);
+		STATISTIC_PANEL = UserPanel.getBoolean("ServerStatistics", false);
 		DRESSME_ENABLE = UserPanel.getBoolean("DressMeSystem", false);
+		ALLOW_CHANGE_PASSWORD = UserPanel.getBoolean("AllowChangePassword", false);
 	}
 	
 	/**

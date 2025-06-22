@@ -2405,6 +2405,12 @@ public class Player extends Playable
 				
 				// receive graduation gift
 				_inventory.addItem(ItemProcessType.REWARD, 8181, 1, this, null); // give academy circlet
+				
+				// Academy Reward System
+				if (Config.ENABLE_ACADEMY_REWARD)
+				{
+					_inventory.addItem(ItemProcessType.REWARD, Config.ACADEMY_REWARD_ID, Config.ACADEMY_REWARD_COUNT, this, null);
+				}
 			}
 			if (isSubClassActive())
 			{

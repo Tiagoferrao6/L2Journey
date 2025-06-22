@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 L2Journey Project
+ * Copyright (c) 2013 L2jMobius
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -8,26 +8,19 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  * 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
  * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- * 
- * ---
- * 
- * Portions of this software are derived from the L2JMobius Project, 
- * shared under the MIT License. The original license terms are preserved where 
- * applicable..
- * 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
+ * IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.l2journey.gameserver.network.clientpackets;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -65,7 +58,6 @@ import com.l2journey.gameserver.model.actor.Player;
 import com.l2journey.gameserver.model.actor.appearance.PlayerAppearance;
 import com.l2journey.gameserver.model.actor.enums.creature.Race;
 import com.l2journey.gameserver.model.actor.enums.player.IllegalActionPunishmentType;
-import com.l2journey.gameserver.model.actor.enums.player.PlayerCondOverride;
 import com.l2journey.gameserver.model.actor.enums.player.TeleportWhereType;
 import com.l2journey.gameserver.model.actor.instance.ClassMaster;
 import com.l2journey.gameserver.model.clan.Clan;
@@ -122,6 +114,7 @@ import com.l2journey.gameserver.network.serverpackets.SystemMessage;
 import com.l2journey.gameserver.network.serverpackets.UserInfo;
 import com.l2journey.gameserver.network.serverpackets.ValidateLocation;
 import com.l2journey.gameserver.taskmanagers.GameTimeTaskManager;
+import com.l2journey.gameserver.util.Broadcast;
 
 /**
  * Enter World Packet Handler
@@ -204,39 +197,33 @@ public class EnterWorld extends ClientPacket
 		// Apply special GM properties to the GM when entering
 		else
 		{
-			gmStartupProcess:
+			if (Config.GM_STARTUP_BUILDER_HIDE && AdminData.getInstance().hasAccess("admin_hide", player.getAccessLevel()))
 			{
-				if (Config.GM_STARTUP_BUILDER_HIDE && AdminData.getInstance().hasAccess("admin_hide", player.getAccessLevel()))
-				{
-					player.setHiding(true);
-					player.sendSysMessage("hide is default for builder.");
-					player.sendSysMessage("FriendAddOff is default for builder.");
-					player.sendSysMessage("whisperoff is default for builder.");
-					
-					// It isn't recommend to use the below custom L2J GMStartup functions together with retail-like GMStartupBuilderHide, so breaking the process at that stage.
-					break gmStartupProcess;
-				}
-				
-				if (Config.GM_STARTUP_INVULNERABLE && AdminData.getInstance().hasAccess("admin_invul", player.getAccessLevel()))
-				{
-					player.setInvul(true);
-				}
-				
-				if (Config.GM_STARTUP_INVISIBLE && AdminData.getInstance().hasAccess("admin_invisible", player.getAccessLevel()))
-				{
-					player.setInvisible(true);
-				}
-				
-				if (Config.GM_STARTUP_SILENCE && AdminData.getInstance().hasAccess("admin_silence", player.getAccessLevel()))
-				{
-					player.setSilenceMode(true);
-				}
-				
-				if (Config.GM_STARTUP_DIET_MODE && AdminData.getInstance().hasAccess("admin_diet", player.getAccessLevel()))
-				{
-					player.setDietMode(true);
-					player.refreshOverloaded();
-				}
+				player.setHiding(true);
+				player.sendSysMessage("hide is default for builder.");
+				player.sendSysMessage("FriendAddOff is default for builder.");
+				player.sendSysMessage("whisperoff is default for builder.");
+			}
+			
+			if (Config.GM_STARTUP_INVULNERABLE && AdminData.getInstance().hasAccess("admin_invul", player.getAccessLevel()))
+			{
+				player.setInvul(true);
+			}
+			
+			if (Config.GM_STARTUP_INVISIBLE && AdminData.getInstance().hasAccess("admin_invisible", player.getAccessLevel()))
+			{
+				player.setInvisible(true);
+			}
+			
+			if (Config.GM_STARTUP_SILENCE && AdminData.getInstance().hasAccess("admin_silence", player.getAccessLevel()))
+			{
+				player.setSilenceMode(true);
+			}
+			
+			if (Config.GM_STARTUP_DIET_MODE && AdminData.getInstance().hasAccess("admin_diet", player.getAccessLevel()))
+			{
+				player.setDietMode(true);
+				player.refreshOverloaded();
 			}
 			
 			if (Config.GM_STARTUP_AUTO_LIST && AdminData.getInstance().hasAccess("admin_gmliston", player.getAccessLevel()))
@@ -275,6 +262,28 @@ public class EnterWorld extends ClientPacket
 			notifyClanMembers(player);
 			
 			notifySponsorOrApprentice(player);
+			
+			if (player.getClan().getLeaderName().equals(player.getName()) && (player.getClan().getCastleId() > 0) && Config.ANNOUNCE_CASTLE_LORD && !player.isGM())
+			{
+				Map<Integer, String> castleNames = new HashMap<>();
+				castleNames.put(1, "Gludio");
+				castleNames.put(2, "Dion");
+				castleNames.put(3, "Giran");
+				castleNames.put(4, "Oren");
+				castleNames.put(5, "Aden");
+				castleNames.put(6, "Innadril");
+				castleNames.put(7, "Goddard");
+				castleNames.put(8, "Rune");
+				castleNames.put(9, "Schuttgart");
+				
+				int castleId = player.getClan().getCastleId();
+				String castlename = castleNames.get(castleId);
+				
+				if (castlename != null)
+				{
+					Broadcast.toAllOnlinePlayers(player.getName() + ", the lord of " + castlename + " castle, has logged into the game.");
+				}
+			}
 			
 			final AuctionableHall clanHall = ClanHallTable.getInstance().getClanHallByOwner(clan);
 			if ((clanHall != null) && !clanHall.getPaid())
@@ -588,7 +597,7 @@ public class EnterWorld extends ClientPacket
 		
 		// Attacker or spectator logging in to a siege zone.
 		// Actually should be checked for inside castle only?
-		if (!player.canOverrideCond(PlayerCondOverride.ZONE_CONDITIONS) && player.isInsideZone(ZoneId.SIEGE) && (!player.isInSiege() || (player.getSiegeState() < 2)))
+		if (!player.isGM() && player.isInsideZone(ZoneId.SIEGE) && (!player.isInSiege() || (player.getSiegeState() < 2)))
 		{
 			player.teleToLocation(TeleportWhereType.TOWN);
 		}
