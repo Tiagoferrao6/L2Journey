@@ -410,7 +410,10 @@ public class GameServer
 		}
 		PunishmentManager.getInstance();
 		
-		DressMeLoader.load();
+		if (Config.DRESSME_ENABLE)
+		{
+			DressMeLoader.load();
+		}
 		
 		Runtime.getRuntime().addShutdownHook(Shutdown.getInstance());
 		LOGGER.info("IdManager: Free ObjectID's remaining: " + IdManager.getInstance().getAvailableIdCount());
