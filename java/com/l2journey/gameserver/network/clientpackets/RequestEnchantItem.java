@@ -185,6 +185,8 @@ public class RequestEnchantItem extends ClientPacket
 						item.updateDatabase();
 					}
 					player.sendPacket(new EnchantResult(0, 0, 0));
+					showEnchantAnimation(player, item.getEnchantLevel());
+					
 					if (Config.LOG_ITEM_ENCHANTS)
 					{
 						final StringBuilder sb = new StringBuilder();
@@ -242,6 +244,7 @@ public class RequestEnchantItem extends ClientPacket
 				}
 				case FAILURE:
 				{
+					showEnchantAnimation(player, 0);
 					if (scrollTemplate.isSafe())
 					{
 						// safe enchant - remain old value
@@ -416,6 +419,16 @@ public class RequestEnchantItem extends ClientPacket
 			}
 			player.broadcastUserInfo();
 			player.setActiveEnchantItemId(Player.ID_NONE);
+		}
+	}
+	
+	public static void showEnchantAnimation(Player player, int enchantLevel)
+	{
+		if (player.getVarB("showEnchantAnime") && (enchantLevel <= 20))
+		{
+			final int skillId = 23096 + enchantLevel;
+			final MagicSkillUse msu = new MagicSkillUse(player, player, skillId, 1, 1, 1);
+			player.broadcastPacket(msu);
 		}
 	}
 }

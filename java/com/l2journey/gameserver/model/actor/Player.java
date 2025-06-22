@@ -11149,12 +11149,26 @@ public class Player extends Playable
 	@Override
 	public synchronized void addExpAndSp(double addToExp, double addToSp)
 	{
-		getStat().addExpAndSp(addToExp, addToSp, false);
+		if (!getVarB("noExp"))
+		{
+			getStat().addExpAndSp(addToExp, addToSp, false);
+		}
+		else
+		{
+			getStat().addExpAndSp(0, addToSp, false);
+		}
 	}
 	
 	public synchronized void addExpAndSp(double addToExp, double addToSp, boolean useVitality)
 	{
-		getStat().addExpAndSp(addToExp, addToSp, useVitality);
+		if (!getVarB("noExp"))
+		{
+			getStat().addExpAndSp(addToExp, addToSp, useVitality);
+		}
+		else
+		{
+			getStat().addExpAndSp(0, addToSp, useVitality);
+		}
 	}
 	
 	public void removeExpAndSp(long removeExp, long removeSp)

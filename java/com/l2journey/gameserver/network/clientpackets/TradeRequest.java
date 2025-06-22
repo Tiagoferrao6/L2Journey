@@ -163,7 +163,7 @@ public class TradeRequest extends ClientPacket
 			return;
 		}
 		
-		if (partner.getTradeRefusal())
+		if (partner.getTradeRefusal() || partner.getVarB("noTrade"))
 		{
 			player.sendMessage("That person is in trade refusal mode.");
 			return;
