@@ -50,6 +50,7 @@ public class EventsConfig
 	private static final Logger LOGGER = Logger.getLogger(EventsConfig.class.getName());
 	
 	private static final String FACTION_SYSTEM_CONFIG_FILE = "./config/Events/FactionSystem.ini";
+	private static final String LUCKY_PIG_EVENT_CONFIG_FILE = "./config/Events/LuckyPig.ini";
 	private static final String OLYMPIAD_CONFIG_FILE = "./config/Events/Olympiad.ini";
 	private static final String PC_BANG_EVENT_CONFIG_FILE = "./config/Events/PcBangPoints.ini";
 	private static final String TOWN_WAR_EVENT_CONFIG_FILE = "./config/Events/TownWar.ini";
@@ -74,6 +75,15 @@ public class EventsConfig
 	public static boolean FACTION_SPECIFIC_CHAT;
 	public static boolean FACTION_BALANCE_ONLINE_PLAYERS;
 	public static int FACTION_BALANCE_PLAYER_EXCEED_LIMIT;
+	
+	// --------------------------------------------------
+	// Lucky Pig [Event]
+	// --------------------------------------------------
+	public static boolean LUCKY_PID_SPAWN_ENABLED;
+	public static int LUCKY_PID_LOW_ADENA;
+	public static int LUCKY_PID_MEDIUM_ADENA;
+	public static int LUCKY_PID_TOP_ADENA;
+	public static int LUCKY_PID_CHANCE;
 	
 	// --------------------------------------------------
 	// Olympiad
@@ -181,6 +191,7 @@ public class EventsConfig
 	public static void load()
 	{
 		loadFactionSystem();
+		loadLuckyPig();
 		loadOlympiadConfig();
 		loadPcBangPoints();
 		loadTownWarEvent();
@@ -214,6 +225,19 @@ public class EventsConfig
 		FACTION_SPECIFIC_CHAT = factionSystemConfig.getBoolean("EnableFactionChat", true);
 		FACTION_BALANCE_ONLINE_PLAYERS = factionSystemConfig.getBoolean("BalanceOnlinePlayers", true);
 		FACTION_BALANCE_PLAYER_EXCEED_LIMIT = factionSystemConfig.getInt("BalancePlayerExceedLimit", 20);
+	}
+	
+	/**
+	 * Load luckyPig file (if exists).
+	 */
+	private static void loadLuckyPig()
+	{
+		final ConfigReader luckyPig = new ConfigReader(LUCKY_PIG_EVENT_CONFIG_FILE);
+		LUCKY_PID_SPAWN_ENABLED = luckyPig.getBoolean("EventLuckyPigEnabled", false);
+		LUCKY_PID_LOW_ADENA = luckyPig.getInt("LuckyPigLowAdena", 500);
+		LUCKY_PID_MEDIUM_ADENA = luckyPig.getInt("LuckyPigMediumAdena", 1000);
+		LUCKY_PID_TOP_ADENA = luckyPig.getInt("LuckyPigTopAdena", 2000);
+		LUCKY_PID_CHANCE = luckyPig.getInt("LuckyPigChance", 3);
 	}
 	
 	/**
