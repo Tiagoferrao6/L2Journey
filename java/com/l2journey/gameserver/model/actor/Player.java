@@ -1499,7 +1499,7 @@ public class Player extends Playable
 		final List<Quest> quests = new LinkedList<>();
 		for (QuestState qs : _quests.values())
 		{
-			if ((qs == null) || (qs.getQuest() == null) || (!qs.isStarted() && !Config.DEVELOPER))
+			if ((qs == null) || (qs.getQuest() == null) || !qs.isStarted())
 			{
 				continue;
 			}
@@ -2647,7 +2647,7 @@ public class Player extends Playable
 			giveAvailableAutoGetSkills();
 		}
 		
-		if (Config.DECREASE_SKILL_LEVEL && !canOverrideCond(PlayerCondOverride.SKILL_CONDITIONS))
+		if (Config.DECREASE_SKILL_LEVEL && !isGM())
 		{
 			checkPlayerSkills();
 		}
@@ -3322,7 +3322,7 @@ public class Player extends Playable
 			sendPacket(su);
 			
 			// If over capacity, drop the item
-			if (!canOverrideCond(PlayerCondOverride.ITEM_CONDITIONS) && !_inventory.validateCapacity(0, item.isQuestItem()) && newitem.isDropable() && (!newitem.isStackable() || (newitem.getLastChange() != Item.MODIFIED)))
+			if (!isGM() && !_inventory.validateCapacity(0, item.isQuestItem()) && newitem.isDropable() && (!newitem.isStackable() || (newitem.getLastChange() != Item.MODIFIED)))
 			{
 				dropItem(ItemProcessType.DROP, newitem, null, true, true);
 			}
@@ -3440,7 +3440,7 @@ public class Player extends Playable
 				}
 				
 				// If over capacity, drop the item
-				if (!canOverrideCond(PlayerCondOverride.ITEM_CONDITIONS) && !_inventory.validateCapacity(0, item.isQuestItem()) && createdItem.isDropable() && (!createdItem.isStackable() || (createdItem.getLastChange() != Item.MODIFIED)))
+				if (!isGM() && !_inventory.validateCapacity(0, item.isQuestItem()) && createdItem.isDropable() && (!createdItem.isStackable() || (createdItem.getLastChange() != Item.MODIFIED)))
 				{
 					dropItem(ItemProcessType.DROP, createdItem, null, true);
 				}
@@ -4483,7 +4483,7 @@ public class Player extends Playable
 				return;
 			}
 			
-			if (isInvisible() && !canOverrideCond(PlayerCondOverride.ITEM_CONDITIONS))
+			if (isInvisible() && !isGM())
 			{
 				return;
 			}
@@ -4656,6 +4656,12 @@ public class Player extends Playable
 	
 	public void tryOpenPrivateBuyStore()
 	{
+		if (isInTownWarEvent())
+		{
+			sendPacket(SystemMessageId.YOU_CANNOT_OPEN_A_PRIVATE_STORE_HERE);
+			return;
+		}
+		
 		// Player shouldn't be able to set stores if he/she is alike dead (dead or fake death)
 		if (canOpenPrivateStore())
 		{
@@ -4685,6 +4691,12 @@ public class Player extends Playable
 	
 	public void tryOpenPrivateSellStore(boolean isPackageSale)
 	{
+		if (isInTownWarEvent())
+		{
+			sendPacket(SystemMessageId.YOU_CANNOT_OPEN_A_PRIVATE_STORE_HERE);
+			return;
+		}
+		
 		// Player shouldn't be able to set stores if he/she is alike dead (dead or fake death)
 		if (canOpenPrivateStore())
 		{
@@ -5490,6 +5502,16 @@ public class Player extends Playable
 		if (isInDuel() && killedPlayer.isInDuel())
 		{
 			return;
+		}
+		
+		if (isInTownWarEvent() && target.isInTownWarEvent())
+		{
+			getInventory().addItem(ItemProcessType.REWARD, EventsConfig.TW_ITEM_ID, EventsConfig.TW_ITEM_AMOUNT, this, this);
+			SystemMessage sm = new SystemMessage(SystemMessageId.YOU_HAVE_EARNED_S2_S1_S);
+			sm.addItemName(EventsConfig.TW_ITEM_ID);
+			sm.addInt(EventsConfig.TW_ITEM_AMOUNT);
+			sendPacket(sm);
+			sendMessage("You received your prize for a Town War kill!");
 		}
 		
 		// If both players are in SIEGE zone just increase siege kills/deaths.
@@ -8011,7 +8033,7 @@ public class Player extends Playable
 					// Add the Skill object to the Creature _skills and its Func objects to the calculator set of the Creature
 					addSkill(skill);
 					
-					if (Config.SKILL_CHECK_ENABLE && (!canOverrideCond(PlayerCondOverride.SKILL_CONDITIONS) || Config.SKILL_CHECK_GM) && !SkillTreeData.getInstance().isSkillAllowed(this, skill))
+					if (Config.SKILL_CHECK_ENABLE && (!isGM() || Config.SKILL_CHECK_GM) && !SkillTreeData.getInstance().isSkillAllowed(this, skill))
 					{
 						PunishmentManager.handleIllegalPlayerAction(this, "Player " + getName() + " has invalid skill " + skill.getName() + " (" + skill.getId() + "/" + skill.getLevel() + "), class:" + ClassListData.getInstance().getClass(getPlayerClass()).getClassName(), IllegalActionPunishmentType.BROADCAST);
 						if (Config.SKILL_CHECK_REMOVE)
@@ -8523,6 +8545,11 @@ public class Player extends Playable
 			return false;
 		}
 		
+		if (attacker.isInTownWarEvent())
+		{
+			return true;
+		}
+		
 		// Check if the attacker isn't the Player Pet
 		if ((attacker == this) || (attacker == _summon))
 		{
@@ -8569,7 +8596,7 @@ public class Player extends Playable
 		// Check if the attacker is a Playable
 		if (attacker.isPlayable())
 		{
-			if (isInsideZone(ZoneId.PEACE) || isInsideZone(ZoneId.NO_PVP))
+			if (((isInsideZone(ZoneId.PEACE) || isInsideZone(ZoneId.NO_PVP))) && !isInTownWarEvent())
 			{
 				return false;
 			}
@@ -8974,7 +9001,7 @@ public class Player extends Playable
 		// Check if this is bad magic skill
 		if (skill.isBad())
 		{
-			if (isInsidePeaceZone(this, target) && !getAccessLevel().allowPeaceAttack())
+			if (isInsidePeaceZone(this, target) && !getAccessLevel().allowPeaceAttack() && !isInTownWarEvent())
 			{
 				// If Creature or target is in a peace zone, send a system message TARGET_IN_PEACEZONE a Server->Client packet ActionFailed
 				sendPacket(SystemMessageId.YOU_MAY_NOT_ATTACK_THIS_TARGET_IN_A_PEACEFUL_ZONE);
@@ -9003,7 +9030,7 @@ public class Player extends Playable
 				return false;
 			}
 			
-			if (!target.canBeAttacked() && !getAccessLevel().allowPeaceAttack() && !target.isDoor())
+			if (!target.canBeAttacked() && !getAccessLevel().allowPeaceAttack() && !target.isDoor() && !isInTownWarEvent())
 			{
 				// If target is not attackable, send a Server->Client packet ActionFailed
 				sendPacket(ActionFailed.STATIC_PACKET);
@@ -9165,6 +9192,11 @@ public class Player extends Playable
 		}
 		
 		if (!target.isPlayable())
+		{
+			return true;
+		}
+		
+		if (isInTownWarEvent())
 		{
 			return true;
 		}
@@ -10717,7 +10749,6 @@ public class Player extends Playable
 		
 		// Schedule the water task.
 		_taskWater = ThreadPool.scheduleAtFixedRate(new WaterTask(this), timeInWater, 1000);
-		
 	}
 	
 	public boolean isInWater()
@@ -10786,7 +10817,7 @@ public class Player extends Playable
 		revalidateZone(true);
 		
 		notifyFriends();
-		if (!canOverrideCond(PlayerCondOverride.SKILL_CONDITIONS) && Config.DECREASE_SKILL_LEVEL)
+		if (!isGM() && Config.DECREASE_SKILL_LEVEL)
 		{
 			checkPlayerSkills();
 		}
@@ -11209,6 +11240,7 @@ public class Player extends Playable
 		{
 			return;
 		}
+		
 		final Snoop sn = new Snoop(getObjectId(), getName(), type, name, text);
 		for (Player pci : _snoopListener)
 		{
@@ -11324,7 +11356,7 @@ public class Player extends Playable
 		final Item item = _inventory.getItemByObjectId(objectId);
 		if ((item == null) || (item.getOwnerId() != getObjectId()))
 		{
-			LOGGER.finest(getObjectId() + ": player tried to " + action + " item he is not owner of");
+			LOGGER.finest(getObjectId() + ": player tried to " + action + " item he is not owner of.");
 			return false;
 		}
 		

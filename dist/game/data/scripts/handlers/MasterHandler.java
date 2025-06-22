@@ -144,6 +144,7 @@ import handlers.admincommandhandlers.AdminTargetSay;
 import handlers.admincommandhandlers.AdminTeleport;
 import handlers.admincommandhandlers.AdminTerritoryWar;
 import handlers.admincommandhandlers.AdminTest;
+import handlers.admincommandhandlers.AdminTownWar;
 import handlers.admincommandhandlers.AdminTransform;
 import handlers.admincommandhandlers.AdminVitality;
 import handlers.admincommandhandlers.AdminZone;
@@ -428,6 +429,7 @@ public class MasterHandler
 			AdminTeleport.class,
 			AdminTerritoryWar.class,
 			AdminTest.class,
+			AdminTownWar.class,
 			AdminTransform.class,
 			AdminVitality.class,
 			AdminZone.class,

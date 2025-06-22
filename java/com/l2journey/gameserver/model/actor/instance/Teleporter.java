@@ -33,6 +33,7 @@ import java.util.Calendar;
 import java.util.StringTokenizer;
 
 import com.l2journey.Config;
+import com.l2journey.EventsConfig;
 import com.l2journey.gameserver.data.sql.TeleportLocationTable;
 import com.l2journey.gameserver.managers.CastleManager;
 import com.l2journey.gameserver.managers.SiegeManager;
@@ -260,6 +261,12 @@ public class Teleporter extends Npc
 		final TeleportLocation list = TeleportLocationTable.getInstance().getTemplate(value);
 		if (list != null)
 		{
+			if (EventsConfig.TW_DISABLE_GK && isInTownWarEvent())
+			{
+				player.sendMessage("You can't teleport during Town War Event.");
+				return;
+			}
+			
 			// you cannot teleport to village that is in siege
 			if (SiegeManager.getInstance().getSiege(list.getLocX(), list.getLocY(), list.getLocZ()) != null)
 			{

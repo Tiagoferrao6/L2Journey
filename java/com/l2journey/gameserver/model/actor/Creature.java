@@ -44,6 +44,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.l2journey.Config;
+import com.l2journey.EventsConfig;
 import com.l2journey.commons.threads.ThreadPool;
 import com.l2journey.commons.util.Rnd;
 import com.l2journey.gameserver.ai.Action;
@@ -248,6 +249,8 @@ public abstract class Creature extends WorldObject
 	
 	private final byte[] _zones = new byte[ZoneId.getZoneCount()];
 	protected final Location _lastZoneValidateLocation = new Location(getX(), getY(), getZ());
+	
+	private boolean _isInTownWar;
 	
 	private final StampedLock _attackLock = new StampedLock();
 	
@@ -895,6 +898,12 @@ public abstract class Creature extends WorldObject
 	
 	public void teleToLocation(int x, int y, int z, int heading, boolean randomOffset)
 	{
+		if (EventsConfig.TW_DISABLE_GK && isInTownWarEvent() && !isPendingRevive())
+		{
+			sendMessage("You can't teleport during Town War Event.");
+			return;
+		}
+		
 		teleToLocation(x, y, z, heading, -1, (randomOffset) ? Config.MAX_OFFSET_ON_TELEPORT : 0);
 	}
 	
@@ -1140,14 +1149,14 @@ public abstract class Creature extends WorldObject
 					return;
 				}
 				// Checking if target has moved to peace zone
-				else if (target.isInsidePeaceZone(player))
+				else if (target.isInsidePeaceZone(player) && !isInTownWarEvent())
 				{
 					getAI().setIntention(Intention.ACTIVE);
 					sendPacket(ActionFailed.STATIC_PACKET);
 					return;
 				}
 			}
-			else if (isInsidePeaceZone(this, target))
+			else if (isInsidePeaceZone(this, target) && !isInTownWarEvent())
 			{
 				getAI().setIntention(Intention.ACTIVE);
 				sendPacket(ActionFailed.STATIC_PACKET);
@@ -2220,7 +2229,7 @@ public abstract class Creature extends WorldObject
 		}
 		
 		// prevent casting signets to peace zone
-		if (skill.isChanneling() && (skill.getChannelingSkillId() > 0) && (getInstanceId() == 0))
+		if (skill.isChanneling() && (skill.getChannelingSkillId() > 0) && (getInstanceId() == 0) && !isInTownWarEvent())
 		{
 			final ZoneRegion zoneRegion = ZoneManager.getInstance().getRegion(this);
 			boolean canCast = true;
@@ -5382,7 +5391,7 @@ public abstract class Creature extends WorldObject
 	@Override
 	public void onForcedAttack(Player player)
 	{
-		if (isInsidePeaceZone(player))
+		if (isInsidePeaceZone(player) && !isInTownWarEvent())
 		{
 			// If Creature or target is in a peace zone, send a system message TARGET_IN_PEACEZONE a Server->Client packet ActionFailed
 			player.sendPacket(SystemMessageId.YOU_MAY_NOT_ATTACK_THIS_TARGET_IN_A_PEACEFUL_ZONE);
@@ -5405,7 +5414,7 @@ public abstract class Creature extends WorldObject
 				return;
 			}
 		}
-		if ((player.getTarget() != null) && !player.getTarget().canBeAttacked() && !player.getAccessLevel().allowPeaceAttack())
+		if ((player.getTarget() != null) && !player.getTarget().canBeAttacked() && !player.getAccessLevel().allowPeaceAttack() && !player.isInTownWarEvent())
 		{
 			// If target is not attackable, send a Server->Client packet ActionFailed
 			player.sendPacket(ActionFailed.STATIC_PACKET);
@@ -5441,17 +5450,31 @@ public abstract class Creature extends WorldObject
 	 */
 	public boolean isInsidePeaceZone(Player attacker)
 	{
+		if (attacker.isPlayer() && attacker.isInTownWarEvent())
+		{
+			return false;
+		}
+		
 		return isInsidePeaceZone(attacker, this);
 	}
 	
 	public boolean isInsidePeaceZone(Player attacker, WorldObject target)
 	{
+		if (isInTownWarEvent())
+		{
+			return false;
+		}
+		
 		return (!attacker.getAccessLevel().allowPeaceAttack() && isInsidePeaceZone((WorldObject) attacker, target));
 	}
 	
 	public boolean isInsidePeaceZone(WorldObject attacker, WorldObject target)
 	{
 		if ((target == null) || !((target.isPlayable() || target.isFakePlayer()) && attacker.isPlayable()))
+		{
+			return false;
+		}
+		if (isInTownWarEvent())
 		{
 			return false;
 		}
@@ -7305,5 +7328,15 @@ public abstract class Creature extends WorldObject
 	public void removeBuffInfoTime(BuffInfo info)
 	{
 		_buffFinishTask.removeBuffInfo(info);
+	}
+	
+	public boolean isInTownWarEvent()
+	{
+		return _isInTownWar;
+	}
+	
+	public void setInTownWarEvent(boolean value)
+	{
+		_isInTownWar = value;
 	}
 }

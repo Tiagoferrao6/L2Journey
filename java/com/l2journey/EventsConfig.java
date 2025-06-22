@@ -52,6 +52,7 @@ public class EventsConfig
 	private static final String FACTION_SYSTEM_CONFIG_FILE = "./config/Events/FactionSystem.ini";
 	private static final String OLYMPIAD_CONFIG_FILE = "./config/Events/Olympiad.ini";
 	private static final String PC_BANG_EVENT_CONFIG_FILE = "./config/Events/PcBangPoints.ini";
+	private static final String TOWN_WAR_EVENT_CONFIG_FILE = "./config/Events/TownWar.ini";
 	private static final String UNDERGROUND_COLISEUM_CONFIG_FILE = "./config/Events/UndergroundColiseum.ini";
 	private static final String WEDDING_CONFIG_FILE = "./config/Events/Wedding.ini";
 	
@@ -139,6 +140,20 @@ public class EventsConfig
 	public static int PC_CAFE_LOW_EXP_KILLS_CHANCE;
 	
 	// --------------------------------------------------
+	// TownWar [Event]
+	// --------------------------------------------------
+	public static boolean TW_AUTO_EVENT;
+	public static String[] TW_INTERVAL;
+	public static int TW_TIME_BEFORE_START;
+	public static boolean TW_ALL_TOWNS;
+	public static int TW_TOWN_ID;
+	public static String TW_TOWN_NAME;
+	public static int TW_RUNNING_TIME;
+	public static int TW_ITEM_ID;
+	public static int TW_ITEM_AMOUNT;
+	public static boolean TW_DISABLE_GK;
+	
+	// --------------------------------------------------
 	// Underground Coliseum
 	// --------------------------------------------------
 	public static String UC_START_TIME;
@@ -168,6 +183,7 @@ public class EventsConfig
 		loadFactionSystem();
 		loadOlympiadConfig();
 		loadPcBangPoints();
+		loadTownWarEvent();
 		loadUndergroundColiseum();
 		loadWeddingConfig();
 	}
@@ -295,6 +311,24 @@ public class EventsConfig
 		}
 		PC_CAFE_REWARD_LOW_EXP_KILLS = pcBangPoints.getBoolean("RewardLowExpKills", true);
 		PC_CAFE_LOW_EXP_KILLS_CHANCE = Math.min(Math.max(0, pcBangPoints.getInt("RewardLowExpKillsChance", 50)), 100);
+	}
+	
+	/**
+	 * Load TownWarEvent file (if exists).
+	 */
+	private static void loadTownWarEvent()
+	{
+		final ConfigReader TownWarEvent = new ConfigReader(TOWN_WAR_EVENT_CONFIG_FILE);
+		TW_AUTO_EVENT = TownWarEvent.getBoolean("TownWarAutoEvent", false);
+		TW_INTERVAL = TownWarEvent.getString("TownWarInterval", "20:00").split(",");
+		TW_TIME_BEFORE_START = TownWarEvent.getInt("TownWarTimeBeforeStart", 5);
+		TW_ALL_TOWNS = TownWarEvent.getBoolean("TownWarAllTowns", false);
+		TW_TOWN_ID = TownWarEvent.getInt("TownWarTownId", 9);
+		TW_TOWN_NAME = TownWarEvent.getString("TownWarTownName", "Giran Town");
+		TW_RUNNING_TIME = TownWarEvent.getInt("TownWarRunningTime", 10);
+		TW_ITEM_ID = TownWarEvent.getInt("TownWarItemId", 57);
+		TW_ITEM_AMOUNT = TownWarEvent.getInt("TownWarItemAmount", 5000);
+		TW_DISABLE_GK = TownWarEvent.getBoolean("TownWarDisableGK", false);
 	}
 	
 	/**
