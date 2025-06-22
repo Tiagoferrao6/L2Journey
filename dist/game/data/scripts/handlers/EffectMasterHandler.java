@@ -211,7 +211,6 @@ public class EffectMasterHandler
 		TriggerSkillBySkill.class,
 		Unsummon.class,
 		UnsummonAgathion.class,
-		Veil.class,
 		VitalityPointUp.class,
 	};
 	

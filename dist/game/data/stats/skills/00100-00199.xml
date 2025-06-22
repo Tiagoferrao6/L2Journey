@@ -752,9 +752,7 @@
 		<set name="reuseDelay" val="5000" />
 		<set name="trait" val="DERANGEMENT" />
 		<effects>
-			<effect name="Veil">
-				<param chance="20" />
-			</effect>
+			<effect name="Passive" />
 		</effects>
 	</skill>
 	<skill id="107" levels="9" name="Divine Aura" enchantGroup1="1" enchantGroup2="1" enchantGroup3="1">
