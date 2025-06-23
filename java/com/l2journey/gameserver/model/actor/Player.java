@@ -10345,6 +10345,12 @@ public class Player extends Playable
 	 */
 	public boolean modifySubClass(int classIndex, int newClassId)
 	{
+		final SubClassHolder subClass = getSubClasses().get(classIndex);
+		if (subClass == null)
+		{
+			return false;
+		}
+		
 		try (Connection con = DatabaseFactory.getConnection();
 			PreparedStatement deleteHennas = con.prepareStatement(DELETE_CHAR_HENNA);
 			PreparedStatement deleteShortcuts = con.prepareStatement(DELETE_CHAR_SHORTCUTS);
@@ -10395,9 +10401,9 @@ public class Player extends Playable
 		}
 		
 		// Notify to scripts before class is removed.
-		if (!getSubClasses().isEmpty() && EventDispatcher.getInstance().hasListener(EventType.ON_PLAYER_PROFESSION_CANCEL, this))
+		if (EventDispatcher.getInstance().hasListener(EventType.ON_PLAYER_PROFESSION_CANCEL, this))
 		{
-			final int classId = getSubClasses().get(classIndex).getId();
+			final int classId = subClass.getId();
 			EventDispatcher.getInstance().notifyEventAsync(new OnPlayerProfessionCancel(this, classId), this);
 		}
 		
