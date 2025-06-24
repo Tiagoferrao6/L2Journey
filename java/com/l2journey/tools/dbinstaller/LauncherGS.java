@@ -33,11 +33,17 @@ public class LauncherGS extends AbstractDBLauncher
 	public static void main(String[] args) throws Exception
 	{
 		final File file = new File(LauncherGS.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
-		final String dir = file.getParent() + "/" + "sql/game/";
-		final String defDatabase = "l2jmobiush5";
+		final String defDir = file.getParent() + "/sql/game/";
+		final String defDatabase = "l2journey";
 		
 		if ((args != null) && (args.length > 0))
 		{
+			String dir = getArg("-dir", args);
+			if (dir == null)
+			{
+				dir = defDir;
+			}
+			
 			new DBInstallerConsole(defDatabase, dir, getArg("-h", args), getArg("-p", args), getArg("-u", args), getArg("-pw", args), getArg("-d", args), getArg("-m", args));
 			return;
 		}
@@ -54,11 +60,11 @@ public class LauncherGS extends AbstractDBLauncher
 		
 		try
 		{
-			new DBConfigGUI(defDatabase, dir);
+			new DBConfigGUI(defDatabase, defDir);
 		}
 		catch (HeadlessException e)
 		{
-			new DBInstallerConsole(defDatabase, dir);
+			new DBInstallerConsole(defDatabase, defDir);
 		}
 	}
 }

@@ -27,7 +27,7 @@
 		applicable..
 	</description>
 
-	<property name="build" location="../build" />
+	<property name="build" location="./build" />
 	<property name="build.bin" location="${build}/bin" />
 	<property name="build.dist" location="${build}/dist" />
 	<property name="build.dist.libs" location="${build.dist}/libs" />
@@ -154,6 +154,7 @@
 	</target>
 
 	<target name="cleanup" depends="adding-readme" description="Cleaning the build folder.">
+		<delete dir="${build.bin}" />
 		<delete dir="${build.dist}" />
 	</target>
 </project>
