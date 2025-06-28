@@ -332,19 +332,6 @@
 		<npc id="21109" count="2" respawnDelay="45" /> <!-- Hames Orc Scout -->
 		<npc id="21110" count="3" respawnDelay="45" /> <!-- Marsh Predator -->
 	</spawn>
-	<spawn zone="aden03_2417_81">
-		<territory minZ="-3876" maxZ="-2676">
-			<node x="157004" y="-11916" />
-			<node x="160032" y="-10972" />
-			<node x="160580" y="-9332" />
-			<node x="160412" y="-7464" />
-			<node x="157916" y="-7320" />
-			<node x="156548" y="-9512" />
-		</territory>
-		<npc id="21108" count="7" respawnDelay="45" /> <!-- Glow Wisp -->
-		<npc id="21109" count="3" respawnDelay="45" /> <!-- Hames Orc Scout -->
-		<npc id="21110" count="8" respawnDelay="45" /> <!-- Marsh Predator -->
-	</spawn>
 	<spawn zone="aden03_2417_82">
 		<territory minZ="-3080" maxZ="-2080">
 			<node x="155516" y="-15604" />
