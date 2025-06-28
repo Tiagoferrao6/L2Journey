@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 L2jMobius
+ * Copyright (c) 2025 L2Journey Project
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -8,15 +8,23 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  * 
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
- * IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * 
+ * ---
+ * 
+ * Portions of this software are derived from the L2JMobius Project, 
+ * shared under the MIT License. The original license terms are preserved where 
+ * applicable..
+ * 
  */
 package com.l2journey.gameserver.managers.games;
 
@@ -480,31 +488,31 @@ public class KrateisCubeManager implements IXmlReader
 			}
 			case REGISTRATION_5:
 			{
-				_manager.broadcastPacket(new CreatureSay(_manager, ChatType.NPC_SHOUT, NpcStringId.THERE_ARE_5_MINUTES_REMAINING_TO_REGISTER_FOR_KRATEI_S_CUBE_MATCH), 1500);
+				_manager.broadcastPacket(new CreatureSay(_manager, ChatType.NPC_SHOUT, NpcStringId.THERE_ARE_5_MINUTES_REMAINING_TO_REGISTER_FOR_KRATEI_S_CUBE_MATCH));
 				_msgTask = ThreadPool.schedule(() -> getManagerMessage(KrateiMsgType.REGISTRATION_3), lastTime - 180000);
 				break;
 			}
 			case REGISTRATION_3:
 			{
-				_manager.broadcastPacket(new CreatureSay(_manager, ChatType.NPC_SHOUT, NpcStringId.THERE_ARE_3_MINUTES_REMAINING_TO_REGISTER_FOR_KRATEI_S_CUBE_MATCH), 1500);
+				_manager.broadcastPacket(new CreatureSay(_manager, ChatType.NPC_SHOUT, NpcStringId.THERE_ARE_3_MINUTES_REMAINING_TO_REGISTER_FOR_KRATEI_S_CUBE_MATCH));
 				_msgTask = ThreadPool.schedule(() -> getManagerMessage(KrateiMsgType.REGISTRATION_1), lastTime - 60000);
 				break;
 			}
 			case REGISTRATION_1:
 			{
-				_manager.broadcastPacket(new CreatureSay(_manager, ChatType.NPC_SHOUT, NpcStringId.THERE_ARE_1_MINUTES_REMAINING_TO_REGISTER_FOR_KRATEI_S_CUBE_MATCH), 1500);
+				_manager.broadcastPacket(new CreatureSay(_manager, ChatType.NPC_SHOUT, NpcStringId.THERE_ARE_1_MINUTES_REMAINING_TO_REGISTER_FOR_KRATEI_S_CUBE_MATCH));
 				break;
 			}
 			case PREPATING:
 			{
 				final CreatureSay msg3 = new CreatureSay(_manager, ChatType.NPC_SHOUT, NpcStringId.THE_MATCH_WILL_BEGIN_IN_S1_MINUTE_S);
 				msg3.addStringParameter(String.valueOf(3));
-				_manager.broadcastPacket(msg3, 1500);
+				_manager.broadcastPacket(msg3);
 				break;
 			}
 			case STARTED:
 			{
-				_manager.broadcastPacket(new CreatureSay(_manager, ChatType.NPC_SHOUT, NpcStringId.THE_MATCH_WILL_BEGIN_SHORTLY), 1500);
+				_manager.broadcastPacket(new CreatureSay(_manager, ChatType.NPC_SHOUT, NpcStringId.THE_MATCH_WILL_BEGIN_SHORTLY));
 				break;
 			}
 		}
