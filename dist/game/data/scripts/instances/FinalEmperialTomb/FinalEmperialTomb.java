@@ -1,18 +1,30 @@
 /*
- * This file is part of the L2J Mobius project.
+ * Copyright (c) 2025 L2Journey Project
  * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  * 
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * 
+ * ---
+ * 
+ * Portions of this software are derived from the L2JMobius Project, 
+ * shared under the MIT License. The original license terms are preserved where 
+ * applicable..
+ * 
  */
 package instances.FinalEmperialTomb;
 
@@ -40,7 +52,6 @@ import com.l2journey.gameserver.model.WorldObject;
 import com.l2journey.gameserver.model.actor.Npc;
 import com.l2journey.gameserver.model.actor.Player;
 import com.l2journey.gameserver.model.actor.enums.creature.InstanceType;
-import com.l2journey.gameserver.model.actor.enums.player.PlayerCondOverride;
 import com.l2journey.gameserver.model.actor.instance.Monster;
 import com.l2journey.gameserver.model.effects.EffectType;
 import com.l2journey.gameserver.model.groups.CommandChannel;
@@ -69,7 +80,7 @@ import instances.AbstractInstance;
  * Test when Frintezza song use 5008 effect skill.<br>
  * Test deeply Scarlet van Halisha's AI.<br>
  * Use proper zone spawn system.
- * @author Gigiikun
+ * @author Gigiikun, KingHanker
  */
 public class FinalEmperialTomb extends AbstractInstance implements IXmlReader
 {
@@ -103,6 +114,8 @@ public class FinalEmperialTomb extends AbstractInstance implements IXmlReader
 			chance = ch;
 		}
 	}
+	
+	private static final int FRINTEZZAS_SCROLL = 8073;
 	
 	// NPCs
 	private static final int GUIDE = 32011;
@@ -431,11 +444,6 @@ public class FinalEmperialTomb extends AbstractInstance implements IXmlReader
 	@Override
 	protected boolean checkConditions(Player player)
 	{
-		if (DEBUG || player.canOverrideCond(PlayerCondOverride.INSTANCE_CONDITIONS))
-		{
-			return true;
-		}
-		
 		final Party party = player.getParty();
 		if (party == null)
 		{
@@ -454,7 +462,7 @@ public class FinalEmperialTomb extends AbstractInstance implements IXmlReader
 			player.sendPacket(SystemMessageId.ONLY_A_PARTY_LEADER_CAN_MAKE_THE_REQUEST_TO_ENTER);
 			return false;
 		}
-		else if (player.getInventory().getItemByItemId(8073) == null)
+		else if (player.getInventory().getItemByItemId(FRINTEZZAS_SCROLL) == null)
 		{
 			final SystemMessage sm = new SystemMessage(SystemMessageId.C1_S_ITEM_REQUIREMENT_IS_NOT_SUFFICIENT_AND_CANNOT_BE_ENTERED);
 			sm.addPcName(player);
@@ -493,6 +501,7 @@ public class FinalEmperialTomb extends AbstractInstance implements IXmlReader
 	{
 		if (firstEntrance)
 		{
+			takeItems(player, FRINTEZZAS_SCROLL, 1);
 			controlStatus(world);
 			
 			final Party party = player.getParty();
@@ -1530,7 +1539,7 @@ public class FinalEmperialTomb extends AbstractInstance implements IXmlReader
 	public String onTalk(Npc npc, Player player)
 	{
 		getQuestState(player, true);
-		if (npc.getId() == GUIDE)
+		if ((npc.getId() == GUIDE) && (checkConditions(player)))
 		{
 			enterInstance(player, TEMPLATE_ID);
 		}
