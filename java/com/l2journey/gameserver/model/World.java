@@ -30,7 +30,6 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
-import com.l2journey.Config;
 import com.l2journey.EventsConfig;
 import com.l2journey.gameserver.ai.Action;
 import com.l2journey.gameserver.ai.CreatureAI;
@@ -128,12 +127,6 @@ public class World
 				regionArray = surroundingRegions.toArray(regionArray);
 				_worldRegions[rx][ry].setSurroundingRegions(regionArray);
 			}
-		}
-		
-		// When GUI is enabled World is called early. So we need to skip this log.
-		if (!Config.ENABLE_GUI)
-		{
-			LOGGER.info(getClass().getSimpleName() + ": (" + REGIONS_X + " by " + REGIONS_Y + ") World Region Grid set up.");
 		}
 	}
 	
@@ -809,15 +802,6 @@ public class World
 		}
 	}
 	
-	/**
-	 * Return how many players are online.
-	 * @return number of online players.
-	 */
-	public int getAllPlayersCount()
-	{
-		return _allPlayers.size();
-	}
-	
 	public static World getInstance()
 	{
 		return SingletonHolder.INSTANCE;
@@ -826,5 +810,14 @@ public class World
 	private static class SingletonHolder
 	{
 		protected static final World INSTANCE = new World();
+	}
+	
+	/**
+	 * Return how many players are online.
+	 * @return number of online players.
+	 */
+	public int getAllPlayersCount()
+	{
+		return _allPlayers.size();
 	}
 }

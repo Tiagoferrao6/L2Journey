@@ -36,7 +36,6 @@ import com.l2journey.gameserver.model.actor.Playable;
 import com.l2journey.gameserver.model.actor.Player;
 import com.l2journey.gameserver.model.actor.Summon;
 import com.l2journey.gameserver.model.actor.enums.creature.InstanceType;
-import com.l2journey.gameserver.model.actor.enums.player.PlayerCondOverride;
 import com.l2journey.gameserver.model.actor.instance.Door;
 import com.l2journey.gameserver.model.actor.instance.Monster;
 import com.l2journey.gameserver.model.actor.instance.Pet;
@@ -892,6 +891,11 @@ public abstract class WorldObject extends ListenersContainer implements IPositio
 	 */
 	public double calculateDistance2D(ILocational loc)
 	{
+		if (loc == null)
+		{
+			return Double.MAX_VALUE;
+		}
+		
 		return calculateDistance2D(loc.getX(), loc.getY(), loc.getZ());
 	}
 	
@@ -914,6 +918,11 @@ public abstract class WorldObject extends ListenersContainer implements IPositio
 	 */
 	public double calculateDistance3D(ILocational loc)
 	{
+		if (loc == null)
+		{
+			return Double.MAX_VALUE;
+		}
+		
 		return calculateDistance3D(loc.getX(), loc.getY(), loc.getZ());
 	}
 	
@@ -967,7 +976,7 @@ public abstract class WorldObject extends ListenersContainer implements IPositio
 	 */
 	public boolean isVisibleFor(Player player)
 	{
-		return !_isInvisible || player.canOverrideCond(PlayerCondOverride.SEE_ALL_PLAYERS);
+		return !_isInvisible || player.isGM();
 	}
 	
 	/**
