@@ -44,7 +44,6 @@ import com.l2journey.gameserver.managers.PunishmentManager;
 import com.l2journey.gameserver.model.actor.Player;
 import com.l2journey.gameserver.model.actor.enums.creature.Race;
 import com.l2journey.gameserver.model.actor.enums.player.IllegalActionPunishmentType;
-import com.l2journey.gameserver.model.actor.enums.player.PlayerCondOverride;
 import com.l2journey.gameserver.model.effects.EffectType;
 import com.l2journey.gameserver.model.item.EtcItem;
 import com.l2journey.gameserver.model.item.ItemTemplate;
@@ -257,7 +256,7 @@ public class UseItem extends ClientPacket
 					}
 					
 					// Don't allow other Race to Wear Kamael exclusive Weapons.
-					if (!item.isEquipped() && item.isWeapon() && !player.canOverrideCond(PlayerCondOverride.ITEM_CONDITIONS))
+					if (!item.isEquipped() && item.isWeapon() && !player.isGM())
 					{
 						final Weapon wpn = (Weapon) item.getTemplate();
 						

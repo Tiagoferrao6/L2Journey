@@ -23,7 +23,6 @@ package com.l2journey.gameserver.network.clientpackets;
 import java.util.List;
 
 import com.l2journey.gameserver.model.actor.Player;
-import com.l2journey.gameserver.model.actor.enums.player.PlayerCondOverride;
 import com.l2journey.gameserver.model.item.EtcItem;
 import com.l2journey.gameserver.model.item.ItemTemplate;
 import com.l2journey.gameserver.model.item.instance.Item;
@@ -94,7 +93,7 @@ public class RequestUnEquipItem extends ClientPacket
 			return;
 		}
 		
-		if (item.isWeapon() && item.getWeaponItem().isForceEquip() && !player.canOverrideCond(PlayerCondOverride.ITEM_CONDITIONS))
+		if (item.isWeapon() && item.getWeaponItem().isForceEquip() && !player.isGM())
 		{
 			player.sendPacket(SystemMessageId.THAT_ITEM_CANNOT_BE_TAKEN_OFF);
 			return;

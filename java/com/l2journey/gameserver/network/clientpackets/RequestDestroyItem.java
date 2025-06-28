@@ -29,7 +29,6 @@ import com.l2journey.gameserver.managers.CursedWeaponsManager;
 import com.l2journey.gameserver.managers.PunishmentManager;
 import com.l2journey.gameserver.model.actor.Player;
 import com.l2journey.gameserver.model.actor.Summon;
-import com.l2journey.gameserver.model.actor.enums.player.PlayerCondOverride;
 import com.l2journey.gameserver.model.item.enums.ItemProcessType;
 import com.l2journey.gameserver.model.item.instance.Item;
 import com.l2journey.gameserver.network.PacketLogger;
@@ -109,7 +108,7 @@ public class RequestDestroyItem extends ClientPacket
 		}
 		
 		final int itemId = itemToRemove.getId();
-		if (!Config.DESTROY_ALL_ITEMS && ((!player.canOverrideCond(PlayerCondOverride.DESTROY_ALL_ITEMS) && !itemToRemove.isDestroyable()) || CursedWeaponsManager.getInstance().isCursed(itemId)))
+		if (!Config.DESTROY_ALL_ITEMS && ((!player.isGM() && !itemToRemove.isDestroyable()) || CursedWeaponsManager.getInstance().isCursed(itemId)))
 		{
 			if (itemToRemove.isHeroItem())
 			{

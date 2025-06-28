@@ -41,7 +41,6 @@ import com.l2journey.gameserver.data.xml.InitialShortcutData;
 import com.l2journey.gameserver.data.xml.PlayerTemplateData;
 import com.l2journey.gameserver.data.xml.SkillData;
 import com.l2journey.gameserver.data.xml.SkillTreeData;
-import com.l2journey.gameserver.managers.QuestManager;
 import com.l2journey.gameserver.model.Location;
 import com.l2journey.gameserver.model.SkillLearn;
 import com.l2journey.gameserver.model.World;
@@ -57,9 +56,6 @@ import com.l2journey.gameserver.model.events.holders.actor.player.OnPlayerCreate
 import com.l2journey.gameserver.model.item.PlayerItemTemplate;
 import com.l2journey.gameserver.model.item.enums.ItemProcessType;
 import com.l2journey.gameserver.model.item.instance.Item;
-import com.l2journey.gameserver.model.quest.Quest;
-import com.l2journey.gameserver.model.quest.QuestState;
-import com.l2journey.gameserver.model.quest.State;
 import com.l2journey.gameserver.network.Disconnection;
 import com.l2journey.gameserver.network.GameClient;
 import com.l2journey.gameserver.network.PacketLogger;
@@ -286,7 +282,8 @@ public class CharacterCreate extends ClientPacket
 			final Location createLoc = template.getCreationPoint();
 			newChar.setXYZInvisible(createLoc.getX(), createLoc.getY(), createLoc.getZ());
 		}
-		newChar.setTitle("");
+		
+		newChar.setTitle(Config.ENABLE_CUSTOM_STARTING_TITLE ? Config.CUSTOM_STARTING_TITLE : "");
 		
 		if (Config.ENABLE_VITALITY)
 		{
@@ -328,11 +325,6 @@ public class CharacterCreate extends ClientPacket
 		// Register all shortcuts for actions, skills and items for this new character.
 		InitialShortcutData.getInstance().registerAllShortcuts(newChar);
 		
-		if (!Config.DISABLE_TUTORIAL)
-		{
-			startTutorialQuest(newChar);
-		}
-		
 		if (EventDispatcher.getInstance().hasListener(EventType.ON_PLAYER_CREATE, Containers.Players()))
 		{
 			EventDispatcher.getInstance().notifyEvent(new OnPlayerCreate(newChar, newChar.getObjectId(), newChar.getName(), client), Containers.Players());
@@ -343,23 +335,5 @@ public class CharacterCreate extends ClientPacket
 		
 		final CharSelectionInfo cl = new CharSelectionInfo(client.getAccountName(), client.getSessionId().playOkID1);
 		client.setCharSelection(cl.getCharInfo());
-	}
-	
-	/**
-	 * TODO: Unhardcode it using the new listeners.
-	 * @param player
-	 */
-	public void startTutorialQuest(Player player)
-	{
-		final QuestState qs = player.getQuestState("Q00255_Tutorial");
-		Quest q = null;
-		if (qs == null)
-		{
-			q = QuestManager.getInstance().getQuest("Q00255_Tutorial");
-		}
-		if (q != null)
-		{
-			q.newQuestState(player).setState(State.STARTED);
-		}
 	}
 }

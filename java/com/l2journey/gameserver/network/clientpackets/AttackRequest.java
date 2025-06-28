@@ -23,7 +23,6 @@ package com.l2journey.gameserver.network.clientpackets;
 import com.l2journey.gameserver.model.World;
 import com.l2journey.gameserver.model.WorldObject;
 import com.l2journey.gameserver.model.actor.Player;
-import com.l2journey.gameserver.model.actor.enums.player.PlayerCondOverride;
 import com.l2journey.gameserver.model.effects.AbstractEffect;
 import com.l2journey.gameserver.model.skill.AbnormalType;
 import com.l2journey.gameserver.model.skill.BuffInfo;
@@ -106,7 +105,7 @@ public class AttackRequest extends ClientPacket
 			return;
 		}
 		
-		if (!target.isTargetable() && !player.canOverrideCond(PlayerCondOverride.TARGET_ALL))
+		if (!target.isTargetable() && !player.isGM())
 		{
 			player.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
