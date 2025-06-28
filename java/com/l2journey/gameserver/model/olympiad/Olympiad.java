@@ -545,7 +545,7 @@ public class Olympiad extends ListenersContainer
 		return NOBLES.size();
 	}
 	
-	protected static StatSet getNobleStats(int playerId)
+	public static StatSet getNobleStats(int playerId)
 	{
 		return NOBLES.get(playerId);
 	}
