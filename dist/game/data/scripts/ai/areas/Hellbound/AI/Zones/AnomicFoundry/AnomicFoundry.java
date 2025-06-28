@@ -240,13 +240,34 @@ public class AnomicFoundry extends AbstractNpcAI
 		return -1;
 	}
 	
-	// Zoey76: TODO: This should be done with onFactionCall(..)
 	private void requestHelp(Npc requester, Player agressor, int range, int helperId)
 	{
-		for (Spawn spawn : SpawnTable.getInstance().getSpawns(helperId))
+		if ((agressor == null) || agressor.isDead())
 		{
-			final Monster monster = spawn.getLastSpawn().asMonster();
-			if ((monster != null) && (agressor != null) && !monster.isDead() && monster.isInsideRadius3D(requester, range) && !agressor.isDead())
+			return;
+		}
+		
+		var spawns = SpawnTable.getInstance().getSpawns(helperId);
+		if ((spawns == null) || spawns.isEmpty())
+		{
+			return;
+		}
+		
+		for (Spawn spawn : spawns)
+		{
+			final Npc lastSpawn = spawn.getLastSpawn();
+			if (lastSpawn == null)
+			{
+				continue;
+			}
+			
+			if (!lastSpawn.isMonster())
+			{
+				continue;
+			}
+			
+			final Monster monster = (Monster) lastSpawn;
+			if (!monster.isDead() && monster.isInsideRadius3D(requester, range))
 			{
 				monster.addDamageHate(agressor, 0, 1000);
 			}
