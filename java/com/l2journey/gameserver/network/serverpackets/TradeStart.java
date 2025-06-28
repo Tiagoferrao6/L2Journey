@@ -25,7 +25,6 @@ import java.util.Collection;
 import com.l2journey.Config;
 import com.l2journey.commons.network.WritableBuffer;
 import com.l2journey.gameserver.model.actor.Player;
-import com.l2journey.gameserver.model.actor.enums.player.PlayerCondOverride;
 import com.l2journey.gameserver.model.item.instance.Item;
 import com.l2journey.gameserver.network.GameClient;
 import com.l2journey.gameserver.network.ServerPackets;
@@ -38,7 +37,7 @@ public class TradeStart extends AbstractItemPacket
 	public TradeStart(Player player)
 	{
 		_player = player;
-		_itemList = _player.getInventory().getAvailableItems(true, (_player.canOverrideCond(PlayerCondOverride.ITEM_CONDITIONS) && Config.GM_TRADE_RESTRICTED_ITEMS), false);
+		_itemList = _player.getInventory().getAvailableItems(true, (_player.isGM() && Config.GM_TRADE_RESTRICTED_ITEMS), false);
 	}
 	
 	@Override
