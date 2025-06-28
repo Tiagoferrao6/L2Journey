@@ -16,6 +16,7 @@
  */
 package ai.areas.Hellbound.AI.Zones.AnomicFoundry;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -247,7 +248,7 @@ public class AnomicFoundry extends AbstractNpcAI
 			return;
 		}
 		
-		var spawns = SpawnTable.getInstance().getSpawns(helperId);
+		Collection<Spawn> spawns = SpawnTable.getInstance().getSpawns(helperId);
 		if ((spawns == null) || spawns.isEmpty())
 		{
 			return;
