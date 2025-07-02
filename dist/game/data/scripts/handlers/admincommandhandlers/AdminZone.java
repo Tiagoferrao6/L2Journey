@@ -82,6 +82,12 @@ public class AdminZone implements IAdminCommandHandler
 		}
 		else if (actualCommand.equalsIgnoreCase("admin_zone_visual"))
 		{
+			if (!st.hasMoreTokens())
+			{
+				activeChar.sendSysMessage("Uso correto: //zone_visual <zoneId>");
+				return false;
+			}
+			
 			final String next = st.nextToken();
 			if (next.equalsIgnoreCase("all"))
 			{
@@ -97,8 +103,22 @@ public class AdminZone implements IAdminCommandHandler
 			}
 			else
 			{
+				if (!next.matches("\\d+"))
+				{
+					activeChar.sendSysMessage("ID da zona invalido: " + next + " ( ).");
+					return false;
+				}
+				
 				final int zoneId = Integer.parseInt(next);
-				ZoneManager.getInstance().getZoneById(zoneId).visualizeZone(activeChar.getZ());
+				final ZoneType zone = ZoneManager.getInstance().getZoneById(zoneId);
+				
+				if (zone == null)
+				{
+					activeChar.sendSysMessage("Zona com ID " + zoneId + " nao encontrada.");
+					return false;
+				}
+				
+				zone.visualizeZone(activeChar.getZ());
 			}
 		}
 		else if (actualCommand.equalsIgnoreCase("admin_zone_visual_clear"))
