@@ -603,7 +603,7 @@ public class SkillTreeData implements IXmlReader
 		}
 		
 		Collection<SkillLearn> learnable;
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < 56; i++) // Uma verificacao a mais que o level Maximo das skills
 		{
 			learnable = getAvailableSkills(player, classId, includeByFs, includeAutoGet, includeRequiredItems, result);
 			if (learnable.isEmpty())
