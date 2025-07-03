@@ -26,50 +26,34 @@
  * applicable..
  * 
  */
-package handlers.effecthandlers;
+package com.l2journey.gameserver.model.skill.skillVariation;
 
-import com.l2journey.gameserver.model.StatSet;
 import com.l2journey.gameserver.model.actor.Creature;
-import com.l2journey.gameserver.model.conditions.Condition;
-import com.l2journey.gameserver.model.effects.AbstractEffect;
-import com.l2journey.gameserver.model.skill.Skill;
-import com.l2journey.gameserver.model.skill.skillVariation.ServitorShareConditions;
+import com.l2journey.gameserver.model.effects.EffectFlag;
 
 /**
- * Mana Heal Over Time effect implementation.
+ * tility class for Servitor Share effect conditions
  * @author KingHanker
  */
-public class ManaHealOverTime extends AbstractEffect
+public final class ServitorShareConditions
 {
-	private final double _power;
-	
-	public ManaHealOverTime(Condition attachCond, Condition applyCond, StatSet set, StatSet params)
+	/**
+	 * Gets max recoverable MP considering Servitor Share effect
+	 * @param creature the target creature
+	 * @return max MP if Servitor Share is active, max recoverable MP otherwise
+	 */
+	public static double getMaxServitorRecoverableMp(Creature creature)
 	{
-		super(attachCond, applyCond, set, params);
-		
-		_power = params.getDouble("power", 0);
+		return creature.isSummon() && creature.isAffected(EffectFlag.SERVITOR_SHARE) ? creature.getMaxMp() : creature.getMaxRecoverableMp();
 	}
 	
-	@Override
-	public boolean onActionTime(Creature effector, Creature effected, Skill skill)
+	/**
+	 * Gets max recoverable HP considering Servitor Share effect
+	 * @param creature the target creature
+	 * @return max HP if Servitor Share is active, max recoverable HP otherwise
+	 */
+	public static double getMaxServitorRecoverableHp(Creature creature)
 	{
-		if (effected.isDead())
-		{
-			return false;
-		}
-		
-		double mp = effected.getCurrentMp();
-		final double maxmp = ServitorShareConditions.getMaxServitorRecoverableMp(effected);
-		
-		// Not needed to set the MP and send update packet if player is already at max MP
-		if (mp >= maxmp)
-		{
-			return true;
-		}
-		
-		mp += _power * getTicksMultiplier();
-		mp = Math.min(mp, maxmp);
-		effected.setCurrentMp(mp);
-		return skill.isToggle();
+		return creature.isSummon() && creature.isAffected(EffectFlag.SERVITOR_SHARE) ? creature.getMaxHp() : creature.getMaxRecoverableHp();
 	}
 }

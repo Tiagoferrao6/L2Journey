@@ -458,108 +458,108 @@ public class Servitor extends Summon implements Runnable
 	@Override
 	public double getMAtk(Creature target, Skill skill)
 	{
-		final Player player = asPlayer();
-		if (player == null)
+		final Player owner = getOwner();
+		if (owner == null)
 		{
 			return super.getMAtk(target, skill);
 		}
 		
-		return super.getMAtk(target, skill) + (player.getMAtk(target, skill) * (player.getServitorShareBonus(Stat.MAGIC_ATTACK) - 1.0));
+		return super.getMAtk(target, skill) + (owner.getMAtk(target, skill) * (owner.getServitorShareBonus(Stat.MAGIC_ATTACK) - 1.0));
 	}
 	
 	@Override
 	public double getMDef(Creature target, Skill skill)
 	{
-		final Player player = asPlayer();
-		if (player == null)
+		final Player owner = getOwner();
+		if (owner == null)
 		{
 			return super.getMDef(target, skill);
 		}
 		
-		return super.getMDef(target, skill) + (player.getMDef(target, skill) * (player.getServitorShareBonus(Stat.MAGIC_DEFENCE) - 1.0));
+		return super.getMDef(target, skill) + (owner.getMDef(target, skill) * (owner.getServitorShareBonus(Stat.MAGIC_DEFENCE) - 1.0));
 	}
 	
 	@Override
 	public double getPAtk(Creature target)
 	{
-		final Player player = asPlayer();
-		if (player == null)
+		final Player owner = getOwner();
+		if (owner == null)
 		{
 			return super.getPAtk(target);
 		}
 		
-		return super.getPAtk(target) + (player.getPAtk(target) * (player.getServitorShareBonus(Stat.POWER_ATTACK) - 1.0));
+		return super.getPAtk(target) + (owner.getPAtk(target) * (owner.getServitorShareBonus(Stat.POWER_ATTACK) - 1.0));
 	}
 	
 	@Override
 	public double getPDef(Creature target)
 	{
-		final Player player = asPlayer();
-		if (player == null)
+		final Player owner = getOwner();
+		if (owner == null)
 		{
 			return super.getPDef(target);
 		}
 		
-		return super.getPDef(target) + (player.getPDef(target) * (player.getServitorShareBonus(Stat.POWER_DEFENCE) - 1.0));
+		return super.getPDef(target) + (owner.getPDef(target) * (owner.getServitorShareBonus(Stat.POWER_DEFENCE) - 1.0));
 	}
 	
 	@Override
 	public int getMAtkSpd()
 	{
-		final Player player = asPlayer();
-		if (player == null)
+		final Player owner = getOwner();
+		if (owner == null)
 		{
 			return super.getMAtkSpd();
 		}
 		
-		return (int) (super.getMAtkSpd() + (player.getMAtkSpd() * (player.getServitorShareBonus(Stat.MAGIC_ATTACK_SPEED) - 1.0)));
+		return (int) (super.getMAtkSpd() + (owner.getMAtkSpd() * (owner.getServitorShareBonus(Stat.MAGIC_ATTACK_SPEED) - 1.0)));
 	}
 	
 	@Override
 	public int getMaxHp()
 	{
-		final Player player = asPlayer();
-		if (player == null)
+		final Player owner = getOwner();
+		if (owner == null)
 		{
 			return super.getMaxHp();
 		}
 		
-		return (int) (super.getMaxHp() + (player.getMaxHp() * (player.getServitorShareBonus(Stat.MAX_HP) - 1.0)));
+		return (int) (super.getMaxHp() + (owner.getMaxHp() * (owner.getServitorShareBonus(Stat.MAX_HP) - 1.0)));
 	}
 	
 	@Override
 	public int getMaxMp()
 	{
-		final Player player = asPlayer();
-		if (player == null)
+		final Player owner = getOwner();
+		if (owner == null)
 		{
 			return super.getMaxMp();
 		}
 		
-		return (int) (super.getMaxMp() + (player.getMaxMp() * (player.getServitorShareBonus(Stat.MAX_MP) - 1.0)));
+		return (int) (super.getMaxMp() + (owner.getMaxMp() * (owner.getServitorShareBonus(Stat.MAX_MP) - 1.0)));
 	}
 	
 	@Override
 	public int getCriticalHit(Creature target, Skill skill)
 	{
-		final Player player = asPlayer();
-		if (player == null)
+		final Player owner = getOwner();
+		if (owner == null)
 		{
 			return super.getCriticalHit(target, skill);
 		}
 		
-		return (int) (super.getCriticalHit(target, skill) + ((player.getCriticalHit(target, skill)) * (player.getServitorShareBonus(Stat.CRITICAL_RATE) - 1.0)));
+		return (int) (super.getCriticalHit(target, skill) + ((owner.getCriticalHit(target, skill)) * (owner.getServitorShareBonus(Stat.CRITICAL_RATE) - 1.0)));
 	}
 	
 	@Override
 	public double getPAtkSpd()
 	{
-		final Player player = asPlayer();
-		if (player == null)
+		final Player owner = getOwner();
+		if (owner == null)
 		{
 			return super.getPAtkSpd();
 		}
 		
-		return super.getPAtkSpd() + (player.getPAtkSpd() * (player.getServitorShareBonus(Stat.POWER_ATTACK_SPEED) - 1.0));
+		return super.getPAtkSpd() + (owner.getPAtkSpd() * (owner.getServitorShareBonus(Stat.POWER_ATTACK_SPEED) - 1.0));
 	}
 }

@@ -50,14 +50,13 @@ import com.l2journey.gameserver.model.actor.instance.Cubic;
 import com.l2journey.gameserver.model.actor.instance.Pet;
 import com.l2journey.gameserver.model.actor.instance.Servitor;
 import com.l2journey.gameserver.model.actor.stat.PlayerStat;
-import com.l2journey.gameserver.model.actor.stat.SummonStat;
 import com.l2journey.gameserver.model.actor.status.PlayerStatus;
-import com.l2journey.gameserver.model.actor.status.SummonStatus;
 import com.l2journey.gameserver.model.effects.EffectType;
 import com.l2journey.gameserver.model.olympiad.OlympiadManager;
 import com.l2journey.gameserver.model.quest.Quest;
 import com.l2journey.gameserver.model.quest.QuestState;
 import com.l2journey.gameserver.model.skill.Skill;
+import com.l2journey.gameserver.model.skill.skillVariation.ServitorShareConditions;
 import com.l2journey.gameserver.network.SystemMessageId;
 import com.l2journey.gameserver.network.serverpackets.ActionFailed;
 import com.l2journey.gameserver.network.serverpackets.MagicSkillUse;
@@ -65,6 +64,9 @@ import com.l2journey.gameserver.network.serverpackets.NpcHtmlMessage;
 import com.l2journey.gameserver.network.serverpackets.SetSummonRemainTime;
 import com.l2journey.gameserver.network.serverpackets.SetupGauge;
 
+/**
+ * @author KingHanker
+ */
 public class NpcBuffer extends Quest
 {
 	private static final boolean DEBUG = false;
@@ -1128,10 +1130,12 @@ public class NpcBuffer extends Quest
 		}
 		else if (target != null)
 		{
-			final SummonStatus petStatus = target.getStatus();
-			final SummonStat petStat = target.getStat();
-			petStatus.setCurrentHp(petStat.getMaxHp());
-			petStatus.setCurrentMp(petStat.getMaxMp());
+			final double maxHp = ServitorShareConditions.getMaxServitorRecoverableHp(target);
+			final double maxMp = ServitorShareConditions.getMaxServitorRecoverableMp(target);
+			
+			target.setCurrentHp(maxHp);
+			target.setCurrentMp(maxMp);
+			
 			if (target instanceof Pet)
 			{
 				final Pet pet = (Pet) target;
@@ -1146,8 +1150,9 @@ public class NpcBuffer extends Quest
 			}
 			else if (DEBUG)
 			{
-				throw new RuntimeException();
+				throw new RuntimeException("Tipo de summon não reconhecido");
 			}
+			
 			target.setTarget(target);
 			target.broadcastPacket(new MagicSkillUse(target, SKILL_HEAL, 1, 1000, 0));
 		}

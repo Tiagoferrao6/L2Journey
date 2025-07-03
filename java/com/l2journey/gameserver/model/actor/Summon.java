@@ -730,7 +730,7 @@ public abstract class Summon extends Playable
 			else
 			{
 				// Summons can cast skills on NPCs inside peace zones.
-				if (!target.canBeAttacked() && !_owner.getAccessLevel().allowPeaceAttack())
+				if (!target.canBeAttacked() && !_owner.getAccessLevel().allowPeaceAttack() && !_owner.isInTownWarEvent())
 				{
 					return false;
 				}
@@ -1068,10 +1068,17 @@ public abstract class Summon extends Playable
 			return false;
 		}
 		
-		if ((_owner.calculateDistance3D(target) > 3000) || !GeoEngine.getInstance().canMoveToTarget(this, target))
+		if (_owner.calculateDistance3D(target) > 3000)
 		{
 			getAI().setIntention(Intention.FOLLOW, _owner);
-			sendPacket(SystemMessageId.INVALID_TARGET);
+			sendPacket(SystemMessageId.YOUR_TARGET_IS_OUT_OF_RANGE);
+			return false;
+		}
+		
+		if (!GeoEngine.getInstance().canMoveToTarget(this, target))
+		{
+			getAI().setIntention(Intention.FOLLOW, _owner);
+			sendPacket(SystemMessageId.CANNOT_SEE_TARGET);
 			return false;
 		}
 		
