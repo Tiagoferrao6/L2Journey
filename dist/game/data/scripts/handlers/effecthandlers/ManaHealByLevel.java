@@ -1,18 +1,30 @@
 /*
- * This file is part of the L2J Mobius project.
+ * Copyright (c) 2025 L2Journey Project
  * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  * 
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * 
+ * ---
+ * 
+ * Portions of this software are derived from the L2JMobius Project, 
+ * shared under the MIT License. The original license terms are preserved where 
+ * applicable..
+ * 
  */
 package handlers.effecthandlers;
 
@@ -22,13 +34,14 @@ import com.l2journey.gameserver.model.conditions.Condition;
 import com.l2journey.gameserver.model.effects.AbstractEffect;
 import com.l2journey.gameserver.model.effects.EffectType;
 import com.l2journey.gameserver.model.skill.Skill;
+import com.l2journey.gameserver.model.skill.skillVariation.ServitorShareConditions;
 import com.l2journey.gameserver.model.stats.Stat;
 import com.l2journey.gameserver.network.SystemMessageId;
 import com.l2journey.gameserver.network.serverpackets.SystemMessage;
 
 /**
  * Mana Heal By Level effect implementation.
- * @author UnAfraid
+ * @author UnAfraid, KingHanker
  */
 public class ManaHealByLevel extends AbstractEffect
 {
@@ -63,62 +76,60 @@ public class ManaHealByLevel extends AbstractEffect
 		
 		double amount = _power;
 		
-		// Recharged MP influenced by difference between target level and skill level.
-		// If target is within 5 levels or lower then skill level there's no penalty.
+		// Recharged MP influenced by difference between target level and skill level
 		amount = effected.calcStat(Stat.MANA_CHARGE, amount, null, null);
 		if (effected.getLevel() > skill.getMagicLevel())
 		{
 			final int levelDiff = effected.getLevel() - skill.getMagicLevel();
-			// If target is too high compared to skill level, the amount of recharged mp gradually decreases.
-			if (levelDiff == 6)
+			// Apply level difference penalty
+			switch (levelDiff)
 			{
-				amount *= 0.9; // only 90% effective
-			}
-			else if (levelDiff == 7)
-			{
-				amount *= 0.8; // 80%
-			}
-			else if (levelDiff == 8)
-			{
-				amount *= 0.7; // 70%
-			}
-			else if (levelDiff == 9)
-			{
-				amount *= 0.6; // 60%
-			}
-			else if (levelDiff == 10)
-			{
-				amount *= 0.5; // 50%
-			}
-			else if (levelDiff == 11)
-			{
-				amount *= 0.4; // 40%
-			}
-			else if (levelDiff == 12)
-			{
-				amount *= 0.3; // 30%
-			}
-			else if (levelDiff == 13)
-			{
-				amount *= 0.2; // 20%
-			}
-			else if (levelDiff == 14)
-			{
-				amount *= 0.1; // 10%
-			}
-			else if (levelDiff >= 15)
-			{
-				amount = 0; // 0mp recharged
+				case 6:
+					amount *= 0.9;
+					break;
+				case 7:
+					amount *= 0.8;
+					break;
+				case 8:
+					amount *= 0.7;
+					break;
+				case 9:
+					amount *= 0.6;
+					break;
+				case 10:
+					amount *= 0.5;
+					break;
+				case 11:
+					amount *= 0.4;
+					break;
+				case 12:
+					amount *= 0.3;
+					break;
+				case 13:
+					amount *= 0.2;
+					break;
+				case 14:
+					amount *= 0.1;
+					break;
+				default:
+					if (levelDiff >= 15)
+					{
+						amount = 0;
+					}
+					break;
 			}
 		}
 		
-		// Prevents overheal and negative amount.
-		amount = Math.max(Math.min(amount, effected.getMaxRecoverableMp() - effected.getCurrentMp()), 0);
+		final double maxRecoverableMp = ServitorShareConditions.getMaxServitorRecoverableMp(effected);
+		
+		amount = Math.max(Math.min(amount, maxRecoverableMp - effected.getCurrentMp()), 0);
+		
 		if (amount != 0)
 		{
 			effected.setCurrentMp(amount + effected.getCurrentMp());
 		}
 		
+		// System message
 		final SystemMessage sm = new SystemMessage(effector.getObjectId() != effected.getObjectId() ? SystemMessageId.S2_MP_HAS_BEEN_RESTORED_BY_C1 : SystemMessageId.S1_MP_HAS_BEEN_RESTORED);
 		if (effector.getObjectId() != effected.getObjectId())
 		{

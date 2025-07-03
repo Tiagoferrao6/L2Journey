@@ -203,14 +203,20 @@ public class EnterWorld extends ClientPacket
 		}
 		
 		// Apply special GM properties to the GM when entering
-		else
+		if (player.isGM())
 		{
-			if (Config.GM_STARTUP_BUILDER_HIDE && AdminData.getInstance().hasAccess("admin_hide", player.getAccessLevel()))
+			gmStartupProcess:
 			{
-				player.setHiding(true);
-				player.sendSysMessage("hide is default for builder.");
-				player.sendSysMessage("FriendAddOff is default for builder.");
-				player.sendSysMessage("whisperoff is default for builder.");
+				if (Config.GM_STARTUP_BUILDER_HIDE && AdminData.getInstance().hasAccess("admin_hide", player.getAccessLevel()))
+				{
+					player.setHiding(true);
+					player.sendSysMessage("hide is default for builder.");
+					player.sendSysMessage("FriendAddOff is default for builder.");
+					player.sendSysMessage("whisperoff is default for builder.");
+				}
+				
+				// It isn't recommend to use the below custom L2J GMStartup functions together with retail-like GMStartupBuilderHide, so breaking the process at that stage.
+				break gmStartupProcess;
 			}
 			
 			if (Config.GM_STARTUP_INVULNERABLE && AdminData.getInstance().hasAccess("admin_invul", player.getAccessLevel()))
