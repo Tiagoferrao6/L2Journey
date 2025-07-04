@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 L2jMobius
+ * Copyright (c) 2025 L2Journey Project
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -8,15 +8,23 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  * 
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
- * IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * 
+ * ---
+ * 
+ * Portions of this software are derived from the L2JMobius Project, 
+ * shared under the MIT License. The original license terms are preserved where 
+ * applicable..
+ * 
  */
 package com.l2journey.gameserver.model.stats;
 
@@ -1902,7 +1910,7 @@ public class Formulas
 			case "buff":
 			{
 				// Resist Modifier.
-				final int cancelMagicLvl = skill.getMagicLevel();
+				final int cancelMagicLvl = skill == null ? creature.getLevel() : skill.getMagicLevel();
 				final double vuln = target.calcStat(Stat.CANCEL_VULN, 0, target, null);
 				final double prof = creature.calcStat(Stat.CANCEL_PROF, 0, target, null);
 				final double resMod = 1 + (((vuln + prof) * -1) / 100);
@@ -1957,8 +1965,22 @@ public class Formulas
 	public static boolean calcCancelSuccess(BuffInfo info, int cancelMagicLvl, int rate, Skill skill)
 	{
 		// Lvl Bonus Modifier.
-		final int chance = (int) (rate * (info.getSkill().getMagicLevel() > 0 ? 1 + ((cancelMagicLvl - info.getSkill().getMagicLevel()) / 100.) : 1));
-		return Rnd.get(100) < MathUtil.clamp(chance, skill.getMinChance(), skill.getMaxChance());
+		int chance;
+		if (info.getSkill().getMagicLevel() > 0)
+		{
+			double levelDifference = cancelMagicLvl - info.getSkill().getMagicLevel();
+			double levelBonus = 1 + (levelDifference / 100.);
+			chance = (int) (rate * levelBonus);
+		}
+		else
+		{
+			chance = rate; // Multiplicado por 1(na ausencia de um lvl magico positivo, nenhum bonus e aplicado a taxa base.)
+		}
+		
+		// Garante que a chance esteja entre os valores minimo e maximo da skill
+		int clampedChance = Math.min(Math.max(chance, skill.getMinChance()), skill.getMaxChance());
+		// Verifica se o número aleatorio e menor que a chance calculada
+		return Rnd.get(100) < clampedChance;
 	}
 	
 	/**
