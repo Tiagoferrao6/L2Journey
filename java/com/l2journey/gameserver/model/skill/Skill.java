@@ -53,7 +53,6 @@ import com.l2journey.gameserver.model.StatSet;
 import com.l2journey.gameserver.model.WorldObject;
 import com.l2journey.gameserver.model.actor.Creature;
 import com.l2journey.gameserver.model.actor.Player;
-import com.l2journey.gameserver.model.actor.enums.player.PlayerCondOverride;
 import com.l2journey.gameserver.model.actor.instance.Cubic;
 import com.l2journey.gameserver.model.conditions.Condition;
 import com.l2journey.gameserver.model.effects.AbstractEffect;
@@ -962,7 +961,7 @@ public class Skill
 	
 	public boolean checkCondition(Creature creature, WorldObject object, boolean itemOrWeapon)
 	{
-		if (creature.isFakePlayer() || (creature.canOverrideCond(PlayerCondOverride.SKILL_CONDITIONS) && !Config.GM_SKILL_RESTRICTION))
+		if (creature.isFakePlayer() || (creature.isGM() && !Config.GM_SKILL_RESTRICTION))
 		{
 			return true;
 		}

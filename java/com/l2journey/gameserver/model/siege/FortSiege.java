@@ -47,7 +47,6 @@ import com.l2journey.gameserver.model.Spawn;
 import com.l2journey.gameserver.model.WorldObject;
 import com.l2journey.gameserver.model.actor.Npc;
 import com.l2journey.gameserver.model.actor.Player;
-import com.l2journey.gameserver.model.actor.enums.player.PlayerCondOverride;
 import com.l2journey.gameserver.model.actor.enums.player.TeleportWhereType;
 import com.l2journey.gameserver.model.actor.instance.Door;
 import com.l2journey.gameserver.model.actor.instance.FortCommander;
@@ -927,7 +926,7 @@ public class FortSiege implements Siegable
 		
 		for (Player player : players)
 		{
-			if (player.canOverrideCond(PlayerCondOverride.FORTRESS_CONDITIONS) || player.isJailed())
+			if (player.isGM() || player.isJailed())
 			{
 				continue;
 			}
