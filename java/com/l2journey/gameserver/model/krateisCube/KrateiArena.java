@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 L2jMobius
+ * Copyright (c) 2025 L2Journey Project
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -8,15 +8,23 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  * 
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
- * IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * 
+ * ---
+ * 
+ * Portions of this software are derived from the L2JMobius Project, 
+ * shared under the MIT License. The original license terms are preserved where 
+ * applicable..
+ * 
  */
 package com.l2journey.gameserver.model.krateisCube;
 
@@ -45,8 +53,8 @@ import com.l2journey.gameserver.model.actor.Npc;
 import com.l2journey.gameserver.model.actor.Player;
 import com.l2journey.gameserver.model.actor.instance.Door;
 import com.l2journey.gameserver.model.actor.instance.KrateisMatchManager;
-import com.l2journey.gameserver.model.events.AbstractScript;
 import com.l2journey.gameserver.model.item.enums.ItemProcessType;
+import com.l2journey.gameserver.model.quest.Quest;
 import com.l2journey.gameserver.model.skill.Skill;
 import com.l2journey.gameserver.network.SystemMessageId;
 import com.l2journey.gameserver.network.serverpackets.ExPCCafePointInfo;
@@ -297,7 +305,7 @@ public class KrateiArena
 			{
 				if (loc != null)
 				{
-					final Npc npc = AbstractScript.addSpawn(18601, loc, false, 0);
+					final Npc npc = Quest.addSpawn(18601, loc, false, 0);
 					npc.disableCoreAI(true);
 					npc.setImmobilized(true);
 					_watchers.add(npc);
@@ -395,7 +403,7 @@ public class KrateiArena
 			{
 				if (loc != null)
 				{
-					final Npc npc = AbstractScript.addSpawn(_watcherRotation ? 18602 : 18601, loc, false, 0);
+					final Npc npc = Quest.addSpawn(_watcherRotation ? 18602 : 18601, loc, false, 0);
 					npc.disableCoreAI(true);
 					npc.setImmobilized(true);
 					_watchers.add(npc);
@@ -419,7 +427,7 @@ public class KrateiArena
 		if (_watchers.contains(npc))
 		{
 			npc.deleteMe();
-			final Npc newNpc = AbstractScript.addSpawn(npc.getId() == 18602 ? 18601 : 18602, npc.getLocation(), false, 0);
+			final Npc newNpc = Quest.addSpawn(npc.getId() == 18602 ? 18601 : 18602, npc.getLocation(), false, 0);
 			newNpc.disableCoreAI(true);
 			newNpc.setImmobilized(true);
 			_watchers.add(newNpc);
