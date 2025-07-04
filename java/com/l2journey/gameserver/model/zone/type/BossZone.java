@@ -28,7 +28,6 @@ import com.l2journey.gameserver.model.Location;
 import com.l2journey.gameserver.model.actor.Attackable;
 import com.l2journey.gameserver.model.actor.Creature;
 import com.l2journey.gameserver.model.actor.Player;
-import com.l2journey.gameserver.model.actor.enums.player.PlayerCondOverride;
 import com.l2journey.gameserver.model.actor.enums.player.TeleportWhereType;
 import com.l2journey.gameserver.model.zone.AbstractZoneSettings;
 import com.l2journey.gameserver.model.zone.ZoneType;
@@ -147,10 +146,11 @@ public class BossZone extends ZoneType
 		if (creature.isPlayer())
 		{
 			final Player player = creature.asPlayer();
-			if (player.canOverrideCond(PlayerCondOverride.ZONE_CONDITIONS))
+			if (player.isGM())
 			{
 				return;
 			}
+			
 			// if player has been (previously) cleared by npc/ai for entry and the zone is
 			// set to receive players (aka not waiting for boss to respawn)
 			if (getSettings().getPlayersAllowed().contains(player.getObjectId()))
@@ -178,6 +178,7 @@ public class BossZone extends ZoneType
 				}
 				getSettings().getPlayersAllowed().remove(getSettings().getPlayersAllowed().indexOf(player.getObjectId()));
 			}
+			
 			// teleport out all players who attempt "illegal" (re-)entry
 			if ((_oustLoc[0] != 0) && (_oustLoc[1] != 0) && (_oustLoc[2] != 0))
 			{
@@ -193,7 +194,7 @@ public class BossZone extends ZoneType
 			final Player player = creature.asPlayer();
 			if (player != null)
 			{
-				if (getSettings().getPlayersAllowed().contains(player.getObjectId()) || player.canOverrideCond(PlayerCondOverride.ZONE_CONDITIONS))
+				if (getSettings().getPlayersAllowed().contains(player.getObjectId()) || player.isGM())
 				{
 					return;
 				}
@@ -219,7 +220,7 @@ public class BossZone extends ZoneType
 		if (creature.isPlayer())
 		{
 			final Player player = creature.asPlayer();
-			if (player.canOverrideCond(PlayerCondOverride.ZONE_CONDITIONS))
+			if (player.isGM())
 			{
 				return;
 			}
@@ -316,7 +317,7 @@ public class BossZone extends ZoneType
 	
 	public boolean isPlayerAllowed(Player player)
 	{
-		if (player.canOverrideCond(PlayerCondOverride.ZONE_CONDITIONS) || getSettings().getPlayersAllowed().contains(player.getObjectId()))
+		if (player.isGM() || getSettings().getPlayersAllowed().contains(player.getObjectId()))
 		{
 			return true;
 		}
@@ -391,7 +392,7 @@ public class BossZone extends ZoneType
 	 */
 	public void allowPlayerEntry(Player player, int durationInSec)
 	{
-		if (player.canOverrideCond(PlayerCondOverride.ZONE_CONDITIONS))
+		if (player.isGM())
 		{
 			return;
 		}
@@ -404,7 +405,7 @@ public class BossZone extends ZoneType
 	
 	public void removePlayer(Player player)
 	{
-		if (player.canOverrideCond(PlayerCondOverride.ZONE_CONDITIONS))
+		if (player.isGM())
 		{
 			return;
 		}
