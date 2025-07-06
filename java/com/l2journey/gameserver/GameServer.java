@@ -426,6 +426,7 @@ public class GameServer
 		
 		LOGGER.info("-------------------------------------------=[ Events Engine ]");
 		TownWarManager.getInstance();
+		LOGGER.info("-------------------------------------------------------------");
 		
 		if ((Config.OFFLINE_TRADE_ENABLE || Config.OFFLINE_CRAFT_ENABLE) && Config.RESTORE_OFFLINERS)
 		{

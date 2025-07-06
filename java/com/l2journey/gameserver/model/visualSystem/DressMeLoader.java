@@ -263,7 +263,7 @@ public class DressMeLoader
 		LOGGER.info("DressMe: " + (hairCount - 1) + " Hair(s).");
 		LOGGER.info("DressMe: " + (hair2Count - 1) + " Hair2(s).");
 		LOGGER.info("DressMe: " + (fullHairCount - 1) + " Full Hair(s).");
-		LOGGER.info("-------------------------------------------------------------");
+		// LOGGER.info("-------------------------------------------------------------");
 		
 		return 0;
 	}
