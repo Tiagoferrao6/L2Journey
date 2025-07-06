@@ -22,7 +22,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.l2journey.gameserver.managers.PunishmentManager;
-import com.l2journey.gameserver.model.actor.enums.player.PlayerCondOverride;
 import com.l2journey.gameserver.model.punishment.PunishmentAffect;
 import com.l2journey.gameserver.model.punishment.PunishmentTask;
 import com.l2journey.gameserver.model.punishment.PunishmentType;
@@ -85,7 +84,7 @@ public class FloodProtectorAction
 	 */
 	public boolean canPerformAction()
 	{
-		if ((_client.getPlayer() != null) && _client.getPlayer().canOverrideCond(PlayerCondOverride.FLOOD_CONDITIONS))
+		if ((_client.getPlayer() != null) && _client.getPlayer().isGM())
 		{
 			return true;
 		}

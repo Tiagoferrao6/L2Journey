@@ -146,6 +146,7 @@ import com.l2journey.gameserver.managers.SiegeManager;
 import com.l2journey.gameserver.managers.SoDManager;
 import com.l2journey.gameserver.managers.SoIManager;
 import com.l2journey.gameserver.managers.TerritoryWarManager;
+import com.l2journey.gameserver.managers.TownWarManager;
 import com.l2journey.gameserver.managers.WalkingManager;
 import com.l2journey.gameserver.managers.ZoneManager;
 import com.l2journey.gameserver.managers.games.KrateisCubeManager;
@@ -170,6 +171,7 @@ import com.l2journey.gameserver.network.NpcStringId;
 import com.l2journey.gameserver.network.SystemMessageId;
 import com.l2journey.gameserver.scripting.ScriptEngineManager;
 import com.l2journey.gameserver.taskmanagers.GameTimeTaskManager;
+import com.l2journey.gameserver.taskmanagers.ItemLifeTimeTaskManager;
 import com.l2journey.gameserver.taskmanagers.ItemsAutoDestroyTaskManager;
 import com.l2journey.gameserver.taskmanagers.PersistentTaskManager;
 import com.l2journey.gameserver.util.Broadcast;
@@ -250,6 +252,7 @@ public class GameServer
 		HennaData.getInstance();
 		PrimeShopData.getInstance();
 		PcCafePointsManager.getInstance();
+		ItemLifeTimeTaskManager.getInstance();
 		
 		printSection("Characters");
 		ClassListData.getInstance();
@@ -408,6 +411,7 @@ public class GameServer
 		{
 			EventDispatcher.getInstance().notifyEventAsync(new OnServerStart());
 		}
+		
 		PunishmentManager.getInstance();
 		
 		if (Config.DRESSME_ENABLE)
@@ -416,7 +420,12 @@ public class GameServer
 		}
 		
 		Runtime.getRuntime().addShutdownHook(Shutdown.getInstance());
+		
+		LOGGER.info("-----------------------------------------------=[ IdManager ]");
 		LOGGER.info("IdManager: Free ObjectID's remaining: " + IdManager.getInstance().getAvailableIdCount());
+		
+		LOGGER.info("-------------------------------------------=[ Events Engine ]");
+		TownWarManager.getInstance();
 		
 		if ((Config.OFFLINE_TRADE_ENABLE || Config.OFFLINE_CRAFT_ENABLE) && Config.RESTORE_OFFLINERS)
 		{
