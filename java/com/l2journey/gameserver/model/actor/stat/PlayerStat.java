@@ -27,7 +27,6 @@ import com.l2journey.gameserver.data.xml.ExperienceData;
 import com.l2journey.gameserver.data.xml.PetDataTable;
 import com.l2journey.gameserver.model.PetLevelData;
 import com.l2journey.gameserver.model.actor.Player;
-import com.l2journey.gameserver.model.actor.enums.player.PlayerCondOverride;
 import com.l2journey.gameserver.model.actor.holders.player.SubClassHolder;
 import com.l2journey.gameserver.model.actor.instance.ClassMaster;
 import com.l2journey.gameserver.model.actor.instance.Pet;
@@ -645,7 +644,7 @@ public class PlayerStat extends PlayableStat
 		
 		// Apply max run speed cap.
 		final Player player = getActiveChar();
-		if ((val > Config.MAX_RUN_SPEED) && !player.canOverrideCond(PlayerCondOverride.MAX_STATS_VALUE))
+		if ((val > Config.MAX_RUN_SPEED) && !player.isGM())
 		{
 			return Config.MAX_RUN_SPEED;
 		}
@@ -675,7 +674,7 @@ public class PlayerStat extends PlayableStat
 		
 		// Apply max run speed cap.
 		final Player player = getActiveChar();
-		if ((val > Config.MAX_RUN_SPEED) && !player.canOverrideCond(PlayerCondOverride.MAX_STATS_VALUE))
+		if ((val > Config.MAX_RUN_SPEED) && !player.isGM())
 		{
 			return Config.MAX_RUN_SPEED;
 		}
@@ -701,7 +700,7 @@ public class PlayerStat extends PlayableStat
 	public double getPAtkSpd()
 	{
 		final double val = super.getPAtkSpd();
-		if ((val > Config.MAX_PATK_SPEED) && !getActiveChar().canOverrideCond(PlayerCondOverride.MAX_STATS_VALUE))
+		if ((val > Config.MAX_PATK_SPEED) && !getActiveChar().isGM())
 		{
 			return Config.MAX_PATK_SPEED;
 		}

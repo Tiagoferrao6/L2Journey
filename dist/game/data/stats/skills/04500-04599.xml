@@ -879,6 +879,7 @@
 	</skill>
 	<skill id="4559" levels="1" name="Hot Spring Illusion">
 		<!-- Temporary optical illusion caused by the Hot Spring. -->
+		<set name="icon" val="icon.skill2513" />
 		<set name="operateType" val="A2" />
 		<set name="targetType" val="ONE" />
 		<set name="abnormalLevel" val="1" />
@@ -886,6 +887,7 @@
 		<set name="abnormalType" val="BIG_HEAD" />
 		<set name="abnormalVisualEffect" val="BIG_HEAD" />
 		<set name="activateRate" val="0" />
+		<set name="isDebuff" val="true" />
 		<set name="castRange" val="600" />
 		<set name="effectRange" val="1100" />
 		<set name="magicLevel" val="75" />
