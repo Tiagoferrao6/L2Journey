@@ -57,6 +57,9 @@ public enum ZoneId
 	ALTERED,
 	NO_BOOKMARK,
 	NO_ITEM_DROP,
+	HOTSPRING_GREEN_SPA,
+	HOTSPRING_RED_SPA,
+	HOTSPRING_YELLOW_SPA,
 	NO_RESTART;
 	
 	public static int getZoneCount()
