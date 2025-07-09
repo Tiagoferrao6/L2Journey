@@ -433,7 +433,7 @@
 	</zone>
 	<!-- Hall of Flames -->
 	<zone name="godad_fire_zone1" type="EffectZone" shape="NPoly" minZ="-1896" maxZ="-1696"> <!-- [25_14] -->
-		<stat name="skillIdLvl" val="4150-5;" /> <!-- s_area_fire5 -->
+		<stat name="skillIdLvl" val="4150-12;" /> <!-- s_area_fire5 -->
 		<stat name="chance" val="100" />
 		<!-- stat name="unitTick" val="5" / -->
 		<stat name="initialDelay" val="1000" />
@@ -446,7 +446,7 @@
 		<node X="190997" Y="-118195" />
 	</zone>
 	<zone name="godad_fire_zone2" type="EffectZone" shape="NPoly" minZ="-3384" maxZ="-3184"> <!-- [25_14] -->
-		<stat name="skillIdLvl" val="4150-5;" /> <!-- s_area_fire5 -->
+		<stat name="skillIdLvl" val="4150-12;" /> <!-- s_area_fire5 -->
 		<stat name="chance" val="100" />
 		<!-- stat name="unitTick" val="5" / -->
 		<stat name="initialDelay" val="1000" />
@@ -459,7 +459,7 @@
 		<node X="183768" Y="-114912" />
 	</zone>
 	<zone name="godad_fire_zone3" type="EffectZone" shape="NPoly" minZ="-4728" maxZ="-4028"> <!-- [25_14] -->
-		<stat name="skillIdLvl" val="4150-5;" /> <!-- s_area_fire5 -->
+		<stat name="skillIdLvl" val="4150-12;" /> <!-- s_area_fire5 -->
 		<stat name="chance" val="100" />
 		<!-- stat name="unitTick" val="5" / -->
 		<stat name="initialDelay" val="1000" />
@@ -471,7 +471,7 @@
 		<node X="170896" Y="-113924" />
 	</zone>
 	<zone name="godad_fire_zone4" type="EffectZone" shape="NPoly" minZ="-6160" maxZ="-5260"> <!-- [25_14] -->
-		<stat name="skillIdLvl" val="4150-5;" /> <!-- s_area_fire5 -->
+		<stat name="skillIdLvl" val="4150-12;" /> <!-- s_area_fire5 -->
 		<stat name="chance" val="100" />
 		<!-- stat name="unitTick" val="5" / -->
 		<stat name="initialDelay" val="1000" />
