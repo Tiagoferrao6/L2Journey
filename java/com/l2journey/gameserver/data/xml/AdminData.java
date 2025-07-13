@@ -32,6 +32,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -59,7 +60,7 @@ public class AdminData implements IXmlReader
 	private static final Logger LOGGER = Logger.getLogger(AdminData.class.getName());
 	
 	private final Map<Integer, AccessLevel> _accessLevels = new HashMap<>();
-	private final Map<String, AdminCommandAccessRight> _adminCommandAccessRights = new HashMap<>();
+	private final Map<String, AdminCommandAccessRight> _adminCommandAccessRights = new LinkedHashMap<>();
 	private final Map<Player, Boolean> _gmList = new ConcurrentHashMap<>();
 	private int _highestLevel = 0;
 	
