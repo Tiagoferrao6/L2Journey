@@ -98,12 +98,12 @@ public class GeoLocation
 	
 	public int getX()
 	{
-		return GeoEngine.getInstance().getWorldX(_x);
+		return GeoEngine.getWorldX(_x);
 	}
 	
 	public int getY()
 	{
-		return GeoEngine.getInstance().getWorldY(_y);
+		return GeoEngine.getWorldY(_y);
 	}
 	
 	public int getZ()

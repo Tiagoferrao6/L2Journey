@@ -45,6 +45,11 @@ public class Region implements IRegion
 	
 	public Region(ByteBuffer bb)
 	{
+		load(bb);
+	}
+	
+	public void load(ByteBuffer bb)
+	{
 		for (int blockOffset = 0; blockOffset < IRegion.REGION_BLOCKS; blockOffset++)
 		{
 			final int blockType = bb.get();

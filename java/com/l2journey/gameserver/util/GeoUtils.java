@@ -53,19 +53,19 @@ public class GeoUtils
 	 */
 	public static void debug2DLine(Player player, int x, int y, int tx, int ty, int z)
 	{
-		final int gx = GeoEngine.getInstance().getGeoX(x);
-		final int gy = GeoEngine.getInstance().getGeoY(y);
-		final int tgx = GeoEngine.getInstance().getGeoX(tx);
-		final int tgy = GeoEngine.getInstance().getGeoY(ty);
+		final int gx = GeoEngine.getGeoX(x);
+		final int gy = GeoEngine.getGeoY(y);
+		final int tgx = GeoEngine.getGeoX(tx);
+		final int tgy = GeoEngine.getGeoY(ty);
 		
 		final ExServerPrimitive prim = new ExServerPrimitive("Debug2DLine", x, y, z);
-		prim.addLine(Color.BLUE, GeoEngine.getInstance().getWorldX(gx), GeoEngine.getInstance().getWorldY(gy), z, GeoEngine.getInstance().getWorldX(tgx), GeoEngine.getInstance().getWorldY(tgy), z);
+		prim.addLine(Color.BLUE, GeoEngine.getWorldX(gx), GeoEngine.getWorldY(gy), z, GeoEngine.getWorldX(tgx), GeoEngine.getWorldY(tgy), z);
 		
 		final GridLineIterator2D iter = new GridLineIterator2D(gx, gy, tgx, tgy);
 		while (iter.next())
 		{
-			final int wx = GeoEngine.getInstance().getWorldX(iter.x());
-			final int wy = GeoEngine.getInstance().getWorldY(iter.y());
+			final int wx = GeoEngine.getWorldX(iter.x());
+			final int wy = GeoEngine.getWorldY(iter.y());
 			prim.addPoint(Color.RED, wx, wy, z);
 		}
 		
@@ -84,20 +84,20 @@ public class GeoUtils
 	 */
 	public static void debug3DLine(Player player, int x, int y, int z, int tx, int ty, int tz)
 	{
-		final int gx = GeoEngine.getInstance().getGeoX(x);
-		final int gy = GeoEngine.getInstance().getGeoY(y);
-		final int tgx = GeoEngine.getInstance().getGeoX(tx);
-		final int tgy = GeoEngine.getInstance().getGeoY(ty);
+		final int gx = GeoEngine.getGeoX(x);
+		final int gy = GeoEngine.getGeoY(y);
+		final int tgx = GeoEngine.getGeoX(tx);
+		final int tgy = GeoEngine.getGeoY(ty);
 		
 		final ExServerPrimitive prim = new ExServerPrimitive("Debug3DLine", x, y, z);
-		prim.addLine(Color.BLUE, GeoEngine.getInstance().getWorldX(gx), GeoEngine.getInstance().getWorldY(gy), z, GeoEngine.getInstance().getWorldX(tgx), GeoEngine.getInstance().getWorldY(tgy), tz);
+		prim.addLine(Color.BLUE, GeoEngine.getWorldX(gx), GeoEngine.getWorldY(gy), z, GeoEngine.getWorldX(tgx), GeoEngine.getWorldY(tgy), tz);
 		
 		final GridLineIterator3D iter = new GridLineIterator3D(gx, gy, z, tgx, tgy, tz);
 		iter.next();
 		int prevX = iter.x();
 		int prevY = iter.y();
-		int wx = GeoEngine.getInstance().getWorldX(prevX);
-		int wy = GeoEngine.getInstance().getWorldY(prevY);
+		int wx = GeoEngine.getWorldX(prevX);
+		int wy = GeoEngine.getWorldY(prevY);
 		int wz = iter.z();
 		prim.addPoint(Color.RED, wx, wy, wz);
 		
@@ -108,8 +108,8 @@ public class GeoUtils
 			
 			if ((curX != prevX) || (curY != prevY))
 			{
-				wx = GeoEngine.getInstance().getWorldX(curX);
-				wy = GeoEngine.getInstance().getWorldY(curY);
+				wx = GeoEngine.getWorldX(curX);
+				wy = GeoEngine.getWorldY(curY);
 				wz = iter.z();
 				
 				prim.addPoint(Color.RED, wx, wy, wz);
@@ -153,9 +153,8 @@ public class GeoUtils
 		int iPacket = 0;
 		
 		ExServerPrimitive exsp = null;
-		final GeoEngine ge = GeoEngine.getInstance();
-		final int playerGx = ge.getGeoX(player.getX());
-		final int playerGy = ge.getGeoY(player.getY());
+		final int playerGx = GeoEngine.getGeoX(player.getX());
+		final int playerGy = GeoEngine.getGeoY(player.getY());
 		for (int dx = -geoRadius; dx <= geoRadius; ++dx)
 		{
 			for (int dy = -geoRadius; dy <= geoRadius; ++dy)
@@ -179,9 +178,9 @@ public class GeoUtils
 				final int gx = playerGx + dx;
 				final int gy = playerGy + dy;
 				
-				final int x = ge.getWorldX(gx);
-				final int y = ge.getWorldY(gy);
-				final int z = ge.getNearestZ(gx, gy, player.getZ());
+				final int x = GeoEngine.getWorldX(gx);
+				final int y = GeoEngine.getWorldY(gy);
+				final int z = GeoEngine.getInstance().getNearestZ(gx, gy, player.getZ());
 				
 				// north arrow
 				Color col = getDirectionColor(gx, gy, z, Cell.NSWE_NORTH);
@@ -230,9 +229,8 @@ public class GeoUtils
 		int iPacket = 0;
 		
 		ExServerPrimitive exsp = null;
-		final GeoEngine ge = GeoEngine.getInstance();
-		final int playerGx = ge.getGeoX(player.getX());
-		final int playerGy = ge.getGeoY(player.getY());
+		final int playerGx = GeoEngine.getGeoX(player.getX());
+		final int playerGy = GeoEngine.getGeoY(player.getY());
 		for (int dx = -geoRadius; dx <= geoRadius; ++dx)
 		{
 			for (int dy = -geoRadius; dy <= geoRadius; ++dy)
@@ -256,8 +254,8 @@ public class GeoUtils
 				final int gx = playerGx + dx;
 				final int gy = playerGy + dy;
 				
-				final int x = ge.getWorldX(gx);
-				final int y = ge.getWorldY(gy);
+				final int x = GeoEngine.getWorldX(gx);
+				final int y = GeoEngine.getWorldY(gy);
 				
 				// Nothing.
 				exsp.addLine(Color.BLACK, x, y, -16000, x, y, -16000);

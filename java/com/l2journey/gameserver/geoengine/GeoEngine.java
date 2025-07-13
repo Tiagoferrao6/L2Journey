@@ -30,6 +30,7 @@ package com.l2journey.gameserver.geoengine;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel.MapMode;
 import java.nio.file.Files;
@@ -145,6 +146,46 @@ public class GeoEngine
 		try (RandomAccessFile raf = new RandomAccessFile(filePath.toFile(), "r"))
 		{
 			REGIONS.set(regionOffset, new Region(raf.getChannel().map(MapMode.READ_ONLY, 0, raf.length()).order(ByteOrder.LITTLE_ENDIAN)));
+		}
+	}
+	
+	/**
+	 * Reloads a specific geodata region from file.
+	 * @param regionX the X coordinate of the region
+	 * @param regionY the Y coordinate of the region
+	 * @return true if reloaded successfully, false otherwise
+	 */
+	public boolean reloadRegion(int regionX, int regionY)
+	{
+		final int regionOffset = (regionX * GEO_REGIONS_Y) + regionY;
+		final Path geoFilePath = Config.GEODATA_PATH.resolve(String.format(FILE_NAME_FORMAT, regionX, regionY));
+		if (!Files.exists(geoFilePath))
+		{
+			LOGGER.warning(getClass().getSimpleName() + ": Cannot reload, file not found for region " + regionX + "_" + regionY);
+			return false;
+		}
+		
+		try
+		{
+			final IRegion region = REGIONS.get(regionOffset);
+			if (region instanceof Region)
+			{
+				final byte[] bytes = Files.readAllBytes(geoFilePath);
+				final ByteBuffer buffer = ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN);
+				((Region) region).load(buffer);
+				LOGGER.info(getClass().getSimpleName() + ": Reloaded region " + regionX + "_" + regionY + " from bytes.");
+				return true;
+			}
+			
+			// Not a real region? fallback load.
+			loadRegion(geoFilePath, regionX, regionY);
+			LOGGER.info(getClass().getSimpleName() + ": Replaced NullRegion with new region " + regionX + "_" + regionY);
+			return true;
+		}
+		catch (Exception e)
+		{
+			LOGGER.log(Level.WARNING, getClass().getSimpleName() + ": Failed to reload region " + regionX + "_" + regionY + "!", e);
+			return false;
 		}
 	}
 	
@@ -296,7 +337,7 @@ public class GeoEngine
 	 * @param worldX the world X coordinate.
 	 * @return the corresponding geodata X coordinate.
 	 */
-	public int getGeoX(int worldX)
+	public static int getGeoX(int worldX)
 	{
 		return (worldX - WORLD_MIN_X) / 16;
 	}
@@ -306,7 +347,7 @@ public class GeoEngine
 	 * @param worldY the world Y coordinate.
 	 * @return the corresponding geodata Y coordinate.
 	 */
-	public int getGeoY(int worldY)
+	public static int getGeoY(int worldY)
 	{
 		return (worldY - WORLD_MIN_Y) / 16;
 	}
@@ -316,7 +357,7 @@ public class GeoEngine
 	 * @param geoX the geodata X coordinate.
 	 * @return the corresponding world X coordinate.
 	 */
-	public int getWorldX(int geoX)
+	public static int getWorldX(int geoX)
 	{
 		return (geoX * 16) + WORLD_MIN_X + 8;
 	}
@@ -326,7 +367,7 @@ public class GeoEngine
 	 * @param geoY the geodata Y coordinate.
 	 * @return the corresponding world Y coordinate.
 	 */
-	public int getWorldY(int geoY)
+	public static int getWorldY(int geoY)
 	{
 		return (geoY * 16) + WORLD_MIN_Y + 8;
 	}
@@ -641,7 +682,7 @@ public class GeoEngine
 			
 			if (hasGeoPos(prevX, prevY))
 			{
-				if (Config.AVOID_OBSTRUCTED_PATH_NODES && !checkNearestNswe(curX, curY, curZ, Cell.NSWE_ALL))
+				if (isCompletelyBlocked(curX, curY, curZ))
 				{
 					// Can't move, return previous location.
 					return new Location(getWorldX(prevX), getWorldY(prevY), prevZ);
@@ -763,6 +804,29 @@ public class GeoEngine
 	public boolean hasGeo(int x, int y)
 	{
 		return hasGeoPos(getGeoX(x), getGeoY(y));
+	}
+	
+	/**
+	 * Checks if all directions (North, South, East, West) are blocked at the specified geo coordinates.
+	 * @param geoX The geo X coordinate to check
+	 * @param geoY The geo Y coordinate to check
+	 * @param geoZ The geo Z coordinate to check
+	 * @return {@code true} if all four directions (North, South, East, West) are blocked, {@code false} otherwise.
+	 */
+	public boolean isCompletelyBlocked(int geoX, int geoY, int geoZ)
+	{
+		if (Config.PATHFINDING < 1)
+		{
+			return false;
+		}
+		
+		final IRegion region = getRegion(geoX, geoY);
+		if (region != null)
+		{
+			return region.hasGeo() && !region.checkNearestNswe(geoX, geoY, geoZ, Cell.NSWE_NORTH) && !region.checkNearestNswe(geoX, geoY, geoZ, Cell.NSWE_SOUTH) && !region.checkNearestNswe(geoX, geoY, geoZ, Cell.NSWE_EAST) && !region.checkNearestNswe(geoX, geoY, geoZ, Cell.NSWE_WEST);
+		}
+		
+		return true;
 	}
 	
 	public static GeoEngine getInstance()
