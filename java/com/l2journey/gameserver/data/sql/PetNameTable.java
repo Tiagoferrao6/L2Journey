@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 L2jMobius
+ * Copyright (c) 2025 L2Journey Project
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -8,15 +8,23 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  * 
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
- * IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * 
+ * ---
+ * 
+ * Portions of this software are derived from the L2JMobius Project, 
+ * shared under the MIT License. The original license terms are preserved where 
+ * applicable..
+ * 
  */
 package com.l2journey.gameserver.data.sql;
 
@@ -26,7 +34,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -72,10 +79,14 @@ public class PetNameTable
 	
 	public boolean isValidPetName(String name)
 	{
-		boolean result = true;
+		if (Config.PET_NAME_TEMPLATE.equals(".*"))
+		{
+			return true;
+		}
+		
 		if (!isAlphaNumeric(name))
 		{
-			return result;
+			return false;
 		}
 		
 		Pattern pattern;
@@ -83,32 +94,30 @@ public class PetNameTable
 		{
 			pattern = Pattern.compile(Config.PET_NAME_TEMPLATE);
 		}
-		catch (PatternSyntaxException e) // case of illegal pattern
+		catch (PatternSyntaxException e)
 		{
-			LOGGER.warning(getClass().getSimpleName() + ": Pet name pattern of config is wrong!");
-			pattern = Pattern.compile(".*");
+			LOGGER.warning(getClass().getSimpleName() + ": Pet name pattern in config is invalid!");
+			return false;
 		}
-		final Matcher regexp = pattern.matcher(name);
-		if (!regexp.matches())
-		{
-			result = false;
-		}
-		return result;
+		
+		return pattern.matcher(name).matches();
 	}
 	
 	private boolean isAlphaNumeric(String text)
 	{
-		boolean result = true;
-		final char[] chars = text.toCharArray();
-		for (char aChar : chars)
+		if ((text == null) || text.isEmpty())
+		{
+			return false;
+		}
+		
+		for (char aChar : text.toCharArray())
 		{
 			if (!Character.isLetterOrDigit(aChar))
 			{
-				result = false;
-				break;
+				return false;
 			}
 		}
-		return result;
+		return true;
 	}
 	
 	private static class SingletonHolder
