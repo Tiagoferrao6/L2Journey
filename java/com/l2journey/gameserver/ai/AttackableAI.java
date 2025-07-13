@@ -115,6 +115,7 @@ public class AttackableAI extends CreatureAI
 	protected static final int FEAR_TICKS = 5;
 	private static final int RANDOM_WALK_RATE = 30; // confirmed
 	private static final int MAX_ATTACK_TIMEOUT = 1200; // int ticks, i.e. 2min
+	
 	/** The delay after which the attacked is stopped. */
 	private int _attackTimeout;
 	/** The Attackable aggro counter. */
