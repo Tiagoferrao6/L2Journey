@@ -77,7 +77,6 @@ import com.l2journey.gameserver.model.events.holders.actor.npc.OnNpcSkillFinishe
 import com.l2journey.gameserver.model.events.holders.actor.npc.OnNpcSpawn;
 import com.l2journey.gameserver.model.events.holders.actor.npc.OnNpcTeleport;
 import com.l2journey.gameserver.model.events.returns.TerminateReturn;
-import com.l2journey.gameserver.model.events.timers.TimerHolder;
 import com.l2journey.gameserver.model.item.ItemTemplate;
 import com.l2journey.gameserver.model.item.Weapon;
 import com.l2journey.gameserver.model.item.enums.ItemProcessType;
@@ -86,6 +85,7 @@ import com.l2journey.gameserver.model.item.holders.ItemHolder;
 import com.l2journey.gameserver.model.item.instance.Item;
 import com.l2journey.gameserver.model.olympiad.Olympiad;
 import com.l2journey.gameserver.model.quest.QuestTimer;
+import com.l2journey.gameserver.model.quest.timers.TimerHolder;
 import com.l2journey.gameserver.model.sevensigns.SevenSigns;
 import com.l2journey.gameserver.model.sevensigns.SevenSignsFestival;
 import com.l2journey.gameserver.model.siege.Castle;

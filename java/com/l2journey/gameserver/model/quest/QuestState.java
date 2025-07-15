@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 L2jMobius
+ * Copyright (c) 2025 L2Journey Project
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -8,15 +8,23 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  * 
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
- * IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * 
+ * ---
+ * 
+ * Portions of this software are derived from the L2JMobius Project, 
+ * shared under the MIT License. The original license terms are preserved where 
+ * applicable..
+ * 
  */
 package com.l2journey.gameserver.model.quest;
 
@@ -46,6 +54,8 @@ public class QuestState
 	private static final String RESTART_VAR = "restartTime";
 	private static final String MEMO_VAR = "memoState";
 	private static final String MEMO_EX_VAR = "memoStateEx";
+	private static final int RESET_HOUR = 6;
+	private static final int RESET_MINUTES = 30;
 	
 	/** The name of the quest of this QuestState */
 	private final String _questName;
@@ -720,19 +730,17 @@ public class QuestState
 	}
 	
 	/**
-	 * Set the restart time for the daily quests.<br>
-	 * The time is hardcoded at {@link Quest#getResetHour()} hours, {@link Quest#getResetMinutes()} minutes of the following day.<br>
-	 * It can be overridden in scripts (quests).
+	 * Set the restart time for the daily quests.
 	 */
 	public void setRestartTime()
 	{
 		final Calendar reDo = Calendar.getInstance();
-		if (reDo.get(Calendar.HOUR_OF_DAY) >= getQuest().getResetHour())
+		if (reDo.get(Calendar.HOUR_OF_DAY) >= RESET_HOUR)
 		{
 			reDo.add(Calendar.DATE, 1);
 		}
-		reDo.set(Calendar.HOUR_OF_DAY, getQuest().getResetHour());
-		reDo.set(Calendar.MINUTE, getQuest().getResetMinutes());
+		reDo.set(Calendar.HOUR_OF_DAY, RESET_HOUR);
+		reDo.set(Calendar.MINUTE, RESET_MINUTES);
 		set(RESTART_VAR, String.valueOf(reDo.getTimeInMillis()));
 	}
 	
