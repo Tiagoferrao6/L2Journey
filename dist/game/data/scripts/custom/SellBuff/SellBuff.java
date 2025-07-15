@@ -1,18 +1,30 @@
 /*
- * This file is part of the L2J Mobius project.
+ * Copyright (c) 2025 L2Journey Project
  * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  * 
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * 
+ * ---
+ * 
+ * Portions of this software are derived from the L2JMobius Project, 
+ * shared under the MIT License. The original license terms are preserved where 
+ * applicable..
+ * 
  */
 package custom.SellBuff;
 
@@ -32,8 +44,9 @@ import com.l2journey.gameserver.model.World;
 import com.l2journey.gameserver.model.actor.Creature;
 import com.l2journey.gameserver.model.actor.Npc;
 import com.l2journey.gameserver.model.actor.Player;
-import com.l2journey.gameserver.model.events.AbstractScript;
 import com.l2journey.gameserver.model.item.ItemTemplate;
+import com.l2journey.gameserver.model.item.enums.ItemProcessType;
+import com.l2journey.gameserver.model.quest.Quest;
 import com.l2journey.gameserver.model.skill.Skill;
 import com.l2journey.gameserver.util.LocationUtil;
 
@@ -58,6 +71,7 @@ public class SellBuff implements IVoicedCommandHandler, IBypassHandler
 		"sellbuffremove",
 		"sellbuffbuymenu",
 		"sellbuffbuyskill",
+		"sellbuffbuyskillPet",
 		"sellbuffstart",
 		"sellbuffstop",
 	};
@@ -396,20 +410,162 @@ public class SellBuff implements IVoicedCommandHandler, IBypassHandler
 					
 					if (seller.getCurrentMp() < (skillToBuy.getMpConsume() * Config.SELLBUFF_MP_MULTIPLER))
 					{
-						player.sendMessage(seller.getName() + " has no enough mana for " + skillToBuy.getName() + "!");
+						player.sendMessage(seller.getName() + " has not enough mana for " + skillToBuy.getName() + "!");
 						SellBuffsManager.getInstance().sendBuffMenu(player, seller, index);
 						return false;
+					}
+					
+					// Check if buff requires item to cast and seller has enough.
+					final int itemConsumeId = skillToBuy.getItemConsumeId();
+					final int itemConsumeCount = skillToBuy.getItemConsumeCount();
+					if ((itemConsumeId > 0) && (itemConsumeCount > 0))
+					{
+						final long available = seller.getInventory().getInventoryItemCount(itemConsumeId, -1);
+						if (available < itemConsumeCount)
+						{
+							final ItemTemplate requiredItem = ItemData.getInstance().getTemplate(itemConsumeId);
+							final String itemName = (requiredItem != null) ? requiredItem.getName() : "required item";
+							
+							// Check if the seller is online before sending them the message.
+							if (seller.isOnline())
+							{
+								seller.sendMessage(player.getName() + " tried to buy " + skillToBuy.getName() + " but you do not have enough " + itemName + "!");
+							}
+							player.sendMessage(seller.getName() + " doesn't have enough " + itemName + " to cast " + skillToBuy.getName() + "!");
+							SellBuffsManager.getInstance().sendBuffMenu(player, seller, index);
+							return false;
+						}
 					}
 					
 					final SellBuffHolder holder = seller.getSellingBuffs().stream().filter(h -> (h.getSkillId() == skillToBuy.getId())).findFirst().orElse(null);
 					if (holder != null)
 					{
-						if (AbstractScript.getQuestItemsCount(player, Config.SELLBUFF_PAYMENT_ID) >= holder.getPrice())
+						if (Quest.getQuestItemsCount(player, Config.SELLBUFF_PAYMENT_ID) >= holder.getPrice())
 						{
-							AbstractScript.takeItems(player, Config.SELLBUFF_PAYMENT_ID, holder.getPrice());
-							AbstractScript.giveItems(seller, Config.SELLBUFF_PAYMENT_ID, holder.getPrice());
+							Quest.takeItems(player, Config.SELLBUFF_PAYMENT_ID, holder.getPrice());
+							Quest.giveItems(seller, Config.SELLBUFF_PAYMENT_ID, holder.getPrice());
 							seller.reduceCurrentMp(skillToBuy.getMpConsume() * Config.SELLBUFF_MP_MULTIPLER);
+							
+							// Consume item(s) required by the buff.
+							if ((itemConsumeId > 0) && (itemConsumeCount > 0))
+							{
+								seller.destroyItemByItemId(ItemProcessType.FEE, itemConsumeId, itemConsumeCount, player, true);
+							}
+							
+							// Cast buff.
 							skillToBuy.activateSkill(seller, Collections.singletonList(player));
+						}
+						else
+						{
+							final ItemTemplate item = ItemData.getInstance().getTemplate(Config.SELLBUFF_PAYMENT_ID);
+							if (item != null)
+							{
+								player.sendMessage("Not enough " + item.getName() + "!");
+							}
+							else
+							{
+								player.sendMessage("Not enough items!");
+							}
+						}
+					}
+					SellBuffsManager.getInstance().sendBuffMenu(player, seller, index);
+				}
+				break;
+			}
+			case "sellbuffbuyskillPet":
+			{
+				if ((params != null) && !params.isEmpty())
+				{
+					final StringTokenizer st = new StringTokenizer(params, " ");
+					int objId = -1;
+					int skillId = -1;
+					int index = 0;
+					
+					if (st.hasMoreTokens())
+					{
+						objId = Integer.parseInt(st.nextToken());
+					}
+					
+					if (st.hasMoreTokens())
+					{
+						skillId = Integer.parseInt(st.nextToken());
+					}
+					
+					if (st.hasMoreTokens())
+					{
+						index = Integer.parseInt(st.nextToken());
+					}
+					
+					if ((skillId == -1) || (objId == -1))
+					{
+						return false;
+					}
+					
+					final Player seller = World.getInstance().getPlayer(objId);
+					if (seller == null)
+					{
+						return false;
+					}
+					
+					final Skill skillToBuy = seller.getKnownSkill(skillId);
+					if (!seller.isSellingBuffs() || !LocationUtil.checkIfInRange(Npc.INTERACTION_DISTANCE, player, seller, true) || (skillToBuy == null))
+					{
+						return false;
+					}
+					
+					if (seller.getCurrentMp() < (skillToBuy.getMpConsume() * Config.SELLBUFF_MP_MULTIPLER))
+					{
+						player.sendMessage(seller.getName() + " has not enough mana for " + skillToBuy.getName() + "!");
+						SellBuffsManager.getInstance().sendBuffMenu(player, seller, index);
+						return false;
+					}
+					
+					// Check if buff requires item to cast and seller has enough.
+					final int itemConsumeId = skillToBuy.getItemConsumeId();
+					final int itemConsumeCount = skillToBuy.getItemConsumeCount();
+					if ((itemConsumeId > 0) && (itemConsumeCount > 0))
+					{
+						final long available = seller.getInventory().getInventoryItemCount(itemConsumeId, -1);
+						if (available < itemConsumeCount)
+						{
+							final ItemTemplate requiredItem = ItemData.getInstance().getTemplate(itemConsumeId);
+							final String itemName = (requiredItem != null) ? requiredItem.getName() : "required item";
+							
+							// Check if the seller is online before sending them the message.
+							if (seller.isOnline())
+							{
+								seller.sendMessage(player.getName() + " tried to buy " + skillToBuy.getName() + " but you do not have enough " + itemName + "!");
+							}
+							player.sendMessage(seller.getName() + " doesn't have enough " + itemName + " to cast " + skillToBuy.getName() + "!");
+							SellBuffsManager.getInstance().sendBuffMenu(player, seller, index);
+							return false;
+						}
+					}
+					
+					final SellBuffHolder holder = seller.getSellingBuffs().stream().filter(h -> (h.getSkillId() == skillToBuy.getId())).findFirst().orElse(null);
+					if (holder != null)
+					{
+						if (Quest.getQuestItemsCount(player, Config.SELLBUFF_PAYMENT_ID) >= holder.getPrice())
+						{
+							if ((player.getSummon() == null) || player.getSummon().isDead())
+							{
+								player.sendMessage("Your pet must be summoned and alive to receive buffs.");
+							}
+							else
+							{
+								Quest.takeItems(player, Config.SELLBUFF_PAYMENT_ID, holder.getPrice());
+								Quest.giveItems(seller, Config.SELLBUFF_PAYMENT_ID, holder.getPrice());
+								seller.reduceCurrentMp(skillToBuy.getMpConsume() * Config.SELLBUFF_MP_MULTIPLER);
+								
+								// Consume item(s) required by the buff.
+								if ((itemConsumeId > 0) && (itemConsumeCount > 0))
+								{
+									seller.destroyItemByItemId(ItemProcessType.FEE, itemConsumeId, itemConsumeCount, player, true);
+								}
+								
+								// Cast buff.
+								skillToBuy.activateSkill(seller, Collections.singletonList(player.getSummon()));
+							}
 						}
 						else
 						{

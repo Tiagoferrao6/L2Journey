@@ -26,40 +26,18 @@
  * applicable..
  * 
  */
-package com.l2journey.gameserver.model.events.holders.actor.player;
-
-import com.l2journey.gameserver.model.actor.Player;
-import com.l2journey.gameserver.model.events.EventType;
-import com.l2journey.gameserver.model.events.holders.IBaseEvent;
+package com.l2journey.gameserver.model.quest.timers;
 
 /**
- * @author Krunchy
- * @since 2.6.0.0
+ * @author UnAfraid
+ * @param <T>
  */
-public class OnPlayerProfessionCancel implements IBaseEvent
+@FunctionalInterface
+public interface IEventTimerEvent<T>
 {
-	private final Player _player;
-	private final int _classId;
-	
-	public OnPlayerProfessionCancel(Player player, int classId)
-	{
-		_player = player;
-		_classId = classId;
-	}
-	
-	public Player getPlayer()
-	{
-		return _player;
-	}
-	
-	public int getClassId()
-	{
-		return _classId;
-	}
-	
-	@Override
-	public EventType getType()
-	{
-		return EventType.ON_PLAYER_PROFESSION_CANCEL;
-	}
+	/**
+	 * notified upon timer execution method.
+	 * @param holder
+	 */
+	void onTimerEvent(TimerHolder<T> holder);
 }

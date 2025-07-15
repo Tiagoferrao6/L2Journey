@@ -38,11 +38,11 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.logging.Level;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import org.w3c.dom.Document;
@@ -64,7 +64,7 @@ public class ScriptEngineManager implements IXmlReader
 	public static final Path EFFECT_MASTER_HANDLER_FILE = Paths.get(SCRIPT_FOLDER.toString(), "handlers", "EffectMasterHandler.java");
 	
 	private static final JavaExecutionContext JAVA_EXECUTION_CONTEXT = new JavaExecutionContext();
-	private static final List<String> EXCLUSIONS = new ArrayList<>();
+	private static final Set<String> EXCLUSIONS = new HashSet<>();
 	
 	protected ScriptEngineManager()
 	{
@@ -85,11 +85,11 @@ public class ScriptEngineManager implements IXmlReader
 	{
 		try
 		{
-			final Map<String, List<String>> excludePaths = new HashMap<>();
+			final Map<String, Set<String>> excludePaths = new HashMap<>();
 			forEach(document, "list", listNode -> forEach(listNode, "exclude", excludeNode ->
 			{
 				final String excludeFile = parseString(excludeNode.getAttributes(), "file");
-				excludePaths.putIfAbsent(excludeFile, new ArrayList<>());
+				excludePaths.putIfAbsent(excludeFile, new HashSet<>());
 				
 				forEach(excludeNode, "include", includeNode -> excludePaths.get(excludeFile).add(parseString(includeNode.getAttributes(), "file")));
 			}));
@@ -98,46 +98,48 @@ public class ScriptEngineManager implements IXmlReader
 			Files.walkFileTree(SCRIPT_FOLDER, new SimpleFileVisitor<Path>()
 			{
 				@Override
-				public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException
+				public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
 				{
 					final String fileName = file.getFileName().toString();
-					if (fileName.endsWith(".java"))
+					if (!fileName.endsWith(".java"))
 					{
-						final Iterator<Path> relativePath = file.subpath(nameCount, file.getNameCount()).iterator();
-						while (relativePath.hasNext())
+						return FileVisitResult.CONTINUE;
+					}
+					
+					final List<String> relativePathParts = new ArrayList<>();
+					file.subpath(nameCount, file.getNameCount()).forEach(p -> relativePathParts.add(p.toString()));
+					for (int i = 0; i < relativePathParts.size(); i++)
+					{
+						final String currentPart = relativePathParts.get(i);
+						if (excludePaths.containsKey(currentPart))
 						{
-							final String nextPart = relativePath.next().toString();
-							if (excludePaths.containsKey(nextPart))
+							boolean excludeScript = true;
+							
+							final Set<String> includePath = excludePaths.get(currentPart);
+							for (int j = i + 1; j < relativePathParts.size(); j++)
 							{
-								boolean excludeScript = true;
-								
-								final List<String> includePath = excludePaths.get(nextPart);
-								if (includePath != null)
+								if (includePath.contains(relativePathParts.get(j)))
 								{
-									while (relativePath.hasNext())
-									{
-										if (includePath.contains(relativePath.next().toString()))
-										{
-											excludeScript = false;
-											break;
-										}
-									}
-								}
-								if (excludeScript)
-								{
-									EXCLUSIONS.add(file.toUri().getPath());
+									excludeScript = false;
 									break;
 								}
 							}
+							
+							if (excludeScript)
+							{
+								EXCLUSIONS.add(file.toUri().getPath());
+								break;
+							}
 						}
 					}
-					return super.visitFile(file, attrs);
+					
+					return FileVisitResult.CONTINUE;
 				}
 			});
 		}
 		catch (IOException e)
 		{
-			LOGGER.log(Level.WARNING, "Couldn't load script exclusions.", e);
+			LOGGER.warning(getClass().getSimpleName() + ": Could not initialize. " + e.getMessage());
 		}
 	}
 	
@@ -203,7 +205,7 @@ public class ScriptEngineManager implements IXmlReader
 		final Map<Path, Throwable> invokationErrors = JAVA_EXECUTION_CONTEXT.executeScripts(files);
 		for (Entry<Path, Throwable> entry : invokationErrors.entrySet())
 		{
-			LOGGER.log(Level.WARNING, "ScriptEngine: " + entry.getKey() + " failed execution!", entry.getValue());
+			LOGGER.warning(getClass().getSimpleName() + ": " + entry.getKey() + " failed execution! " + entry.getValue().getMessage());
 		}
 	}
 	

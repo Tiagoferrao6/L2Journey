@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 L2jMobius
+ * Copyright (c) 2025 L2Journey Project
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -8,15 +8,23 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  * 
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
- * IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * 
+ * ---
+ * 
+ * Portions of this software are derived from the L2JMobius Project, 
+ * shared under the MIT License. The original license terms are preserved where 
+ * applicable..
+ * 
  */
 package com.l2journey.gameserver.model.quest;
 
@@ -33,16 +41,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.function.Consumer;
-import java.util.logging.Level;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 import com.l2journey.commons.database.DatabaseFactory;
 import com.l2journey.commons.threads.ThreadPool;
+import com.l2journey.commons.util.IXmlReader;
 import com.l2journey.gameserver.data.sql.AnnouncementsTable;
 import com.l2journey.gameserver.data.xml.ItemData;
 import com.l2journey.gameserver.data.xml.NpcData;
@@ -59,7 +64,6 @@ import com.l2journey.gameserver.model.events.EventType;
 import com.l2journey.gameserver.model.events.holders.OnServerStart;
 import com.l2journey.gameserver.model.events.listeners.ConsumerEventListener;
 import com.l2journey.gameserver.model.item.enums.ItemProcessType;
-import com.l2journey.gameserver.script.DateRange;
 import com.l2journey.gameserver.util.Broadcast;
 
 /**
@@ -70,7 +74,8 @@ import com.l2journey.gameserver.util.Broadcast;
 public class LongTimeEvent extends Quest
 {
 	protected String _eventName;
-	protected DateRange _eventPeriod = null;
+	protected Date _startDate = null;
+	protected Date _endDate = null;
 	protected boolean _initialized = false;
 	protected boolean _active = false;
 	
@@ -107,18 +112,19 @@ public class LongTimeEvent extends Quest
 		super(-1);
 		loadConfig();
 		
-		if (_eventPeriod != null)
+		if ((_startDate != null) && (_endDate != null))
 		{
-			if (_eventPeriod.isWithinRange(new Date()))
+			final Date now = new Date();
+			if (isWithinRange(now))
 			{
 				startEvent();
-				LOGGER.info("Event " + _eventName + " active till " + _eventPeriod.getEndDate());
+				LOGGER.info("Event " + _eventName + " active till " + _endDate);
 			}
-			else if (_eventPeriod.getStartDate().after(new Date()))
+			else if (_startDate.after(now))
 			{
-				final long delay = _eventPeriod.getStartDate().getTime() - System.currentTimeMillis();
+				final long delay = _startDate.getTime() - System.currentTimeMillis();
 				ThreadPool.schedule(new ScheduleStart(), delay);
-				LOGGER.info("Event " + _eventName + " will be started at " + _eventPeriod.getStartDate());
+				LOGGER.info("Event " + _eventName + " will be started at " + _startDate);
 			}
 			else
 			{
@@ -132,196 +138,242 @@ public class LongTimeEvent extends Quest
 	}
 	
 	/**
+	 * Checks if the given date is within the event period.
+	 * @param date the date to check
+	 * @return {@code true} if the date is within range
+	 */
+	private boolean isWithinRange(Date date)
+	{
+		return (date.equals(_startDate) || date.after(_startDate)) && (date.equals(_endDate) || date.before(_endDate));
+	}
+	
+	/**
+	 * Checks if the event period is valid (start before end).
+	 * @return {@code true} if the period is valid
+	 */
+	private boolean isValidPeriod()
+	{
+		return (_startDate != null) && (_endDate != null) && _startDate.before(_endDate);
+	}
+	
+	/**
+	 * Parses a date range string into start and end dates.
+	 * @param dateRange the date range string
+	 * @param format the date format to use
+	 */
+	private void parseDateRange(String dateRange, SimpleDateFormat format)
+	{
+		final String[] dates = dateRange.split("-");
+		if (dates.length == 2)
+		{
+			try
+			{
+				_startDate = format.parse(dates[0]);
+				_endDate = format.parse(dates[1]);
+			}
+			catch (Exception e)
+			{
+				LOGGER.warning("Invalid Date Format: " + e.getMessage());
+				_startDate = null;
+				_endDate = null;
+			}
+		}
+	}
+	
+	/**
 	 * Load event configuration file
 	 */
 	private void loadConfig()
 	{
-		final File configFile = new File("data/scripts/events/" + getName() + "/config.xml");
-		try
+		new IXmlReader()
 		{
-			final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			final DocumentBuilder builder = factory.newDocumentBuilder();
-			final Document document = builder.parse(configFile);
-			if (!document.getDocumentElement().getNodeName().equalsIgnoreCase("event"))
+			@Override
+			public void load()
 			{
-				throw new NullPointerException("WARNING!!! " + getScriptName() + " event: bad config file!");
-			}
-			_eventName = document.getDocumentElement().getAttributes().getNamedItem("name").getNodeValue();
-			final String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
-			final String period = document.getDocumentElement().getAttributes().getNamedItem("active").getNodeValue();
-			if (period.length() == 21)
-			{
-				// dd MM yyyy-dd MM yyyy
-				_eventPeriod = DateRange.parse(period, new SimpleDateFormat("dd MM yyyy", Locale.US));
-			}
-			else if (period.length() == 11)
-			{
-				// dd MM-dd MM
-				final String start = period.split("-")[0].concat(" ").concat(currentYear);
-				final String end = period.split("-")[1].concat(" ").concat(currentYear);
-				final String activePeriod = start.concat("-").concat(end);
-				_eventPeriod = DateRange.parse(activePeriod, new SimpleDateFormat("dd MM yyyy", Locale.US));
+				parseDatapackFile("data/scripts/events/" + getName() + "/config.xml");
 			}
 			
-			if (_eventPeriod == null)
+			@Override
+			public void parseDocument(Document document, File file)
 			{
-				throw new NullPointerException("WARNING!!! " + getName() + " event: illegal event period");
-			}
-			
-			final Date today = new Date();
-			
-			if (_eventPeriod.getStartDate().after(today) || _eventPeriod.isWithinRange(today))
-			{
-				for (Node n = document.getDocumentElement().getFirstChild(); n != null; n = n.getNextSibling())
+				if (!document.getDocumentElement().getNodeName().equalsIgnoreCase("event"))
 				{
-					// Loading droplist
-					if (n.getNodeName().equalsIgnoreCase("droplist"))
+					throw new NullPointerException("WARNING!!! " + getName() + " event: bad config file!");
+				}
+				_eventName = document.getDocumentElement().getAttributes().getNamedItem("name").getNodeValue();
+				final String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+				final String period = document.getDocumentElement().getAttributes().getNamedItem("active").getNodeValue();
+				final SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yyyy", Locale.US);
+				if (period.length() == 21)
+				{
+					// dd MM yyyy-dd MM yyyy
+					parseDateRange(period, dateFormat);
+				}
+				else if (period.length() == 11)
+				{
+					// dd MM-dd MM
+					final String start = period.split("-")[0].concat(" ").concat(currentYear);
+					final String end = period.split("-")[1].concat(" ").concat(currentYear);
+					final String activePeriod = start.concat("-").concat(end);
+					parseDateRange(activePeriod, dateFormat);
+				}
+				
+				if (!isValidPeriod())
+				{
+					throw new NullPointerException("WARNING!!! " + getName() + " event: illegal event period");
+				}
+				
+				final Date today = new Date();
+				
+				if (_startDate.after(today) || isWithinRange(today))
+				{
+					for (Node n = document.getDocumentElement().getFirstChild(); n != null; n = n.getNextSibling())
 					{
-						for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling())
+						// Loading droplist
+						if (n.getNodeName().equalsIgnoreCase("droplist"))
 						{
-							if (d.getNodeName().equalsIgnoreCase("add"))
+							for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling())
 							{
-								try
+								if (d.getNodeName().equalsIgnoreCase("add"))
 								{
-									final int itemId = Integer.parseInt(d.getAttributes().getNamedItem("item").getNodeValue());
-									final int minCount = Integer.parseInt(d.getAttributes().getNamedItem("min").getNodeValue());
-									final int maxCount = Integer.parseInt(d.getAttributes().getNamedItem("max").getNodeValue());
-									final String chance = d.getAttributes().getNamedItem("chance").getNodeValue();
-									final double finalChance = !chance.isEmpty() && chance.endsWith("%") ? Double.parseDouble(chance.substring(0, chance.length() - 1)) : 0;
-									final Node minLevelNode = d.getAttributes().getNamedItem("minLevel");
-									final int minLevel = minLevelNode == null ? 1 : Integer.parseInt(minLevelNode.getNodeValue());
-									final Node maxLevelNode = d.getAttributes().getNamedItem("maxLevel");
-									final int maxLevel = maxLevelNode == null ? Integer.MAX_VALUE : Integer.parseInt(maxLevelNode.getNodeValue());
-									final Node monsterIdsNode = d.getAttributes().getNamedItem("monsterIds");
-									final Set<Integer> monsterIds = new HashSet<>();
-									if (monsterIdsNode != null)
+									try
 									{
-										for (String id : monsterIdsNode.getNodeValue().split(","))
+										final int itemId = Integer.parseInt(d.getAttributes().getNamedItem("item").getNodeValue());
+										final int minCount = Integer.parseInt(d.getAttributes().getNamedItem("min").getNodeValue());
+										final int maxCount = Integer.parseInt(d.getAttributes().getNamedItem("max").getNodeValue());
+										final String chance = d.getAttributes().getNamedItem("chance").getNodeValue();
+										final double finalChance = !chance.isEmpty() && chance.endsWith("%") ? Double.parseDouble(chance.substring(0, chance.length() - 1)) : 0;
+										final Node minLevelNode = d.getAttributes().getNamedItem("minLevel");
+										final int minLevel = minLevelNode == null ? 1 : Integer.parseInt(minLevelNode.getNodeValue());
+										final Node maxLevelNode = d.getAttributes().getNamedItem("maxLevel");
+										final int maxLevel = maxLevelNode == null ? Integer.MAX_VALUE : Integer.parseInt(maxLevelNode.getNodeValue());
+										final Node monsterIdsNode = d.getAttributes().getNamedItem("monsterIds");
+										final Set<Integer> monsterIds = new HashSet<>();
+										if (monsterIdsNode != null)
 										{
-											monsterIds.add(Integer.parseInt(id));
+											for (String id : monsterIdsNode.getNodeValue().split(","))
+											{
+												monsterIds.add(Integer.parseInt(id));
+											}
+										}
+										
+										if (ItemData.getInstance().getTemplate(itemId) == null)
+										{
+											LOGGER.warning(getName() + " event: " + itemId + " is wrong item id, item was not added in droplist");
+											continue;
+										}
+										
+										if (minCount > maxCount)
+										{
+											LOGGER.warning(getName() + " event: item " + itemId + " - min greater than max, item was not added in droplist");
+											continue;
+										}
+										
+										if ((finalChance < 0) || (finalChance > 100))
+										{
+											LOGGER.warning(getName() + " event: item " + itemId + " - incorrect drop chance, item was not added in droplist");
+											continue;
+										}
+										
+										_dropList.add(new EventDropHolder(itemId, minCount, maxCount, finalChance, minLevel, maxLevel, monsterIds));
+									}
+									catch (NumberFormatException nfe)
+									{
+										LOGGER.warning("Wrong number format in config.xml droplist block for " + getName() + " event");
+									}
+								}
+							}
+						}
+						else if (n.getNodeName().equalsIgnoreCase("spawnlist"))
+						{
+							// Loading spawnlist
+							for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling())
+							{
+								if (d.getNodeName().equalsIgnoreCase("add"))
+								{
+									try
+									{
+										final int npcId = Integer.parseInt(d.getAttributes().getNamedItem("npc").getNodeValue());
+										final int xPos = Integer.parseInt(d.getAttributes().getNamedItem("x").getNodeValue());
+										final int yPos = Integer.parseInt(d.getAttributes().getNamedItem("y").getNodeValue());
+										final int zPos = Integer.parseInt(d.getAttributes().getNamedItem("z").getNodeValue());
+										final Node headingNode = d.getAttributes().getNamedItem("heading");
+										final String headingValue = headingNode == null ? null : headingNode.getNodeValue();
+										final int heading = headingValue != null ? Integer.parseInt(headingValue) : 0;
+										final Node respawnTimeNode = d.getAttributes().getNamedItem("respawnTime");
+										final String respawnTimeValue = respawnTimeNode == null ? null : respawnTimeNode.getNodeValue();
+										final int respawnTime = respawnTimeValue != null ? Integer.parseInt(respawnTimeValue) : 0;
+										
+										if (NpcData.getInstance().getTemplate(npcId) == null)
+										{
+											LOGGER.warning(getName() + " event: " + npcId + " is wrong NPC id, NPC was not added in spawnlist");
+											continue;
+										}
+										
+										_spawnList.add(new NpcSpawn(npcId, new Location(xPos, yPos, zPos, heading), respawnTime * 1000));
+									}
+									catch (NumberFormatException nfe)
+									{
+										LOGGER.warning("Wrong number format in config.xml spawnlist block for " + getName() + " event");
+									}
+								}
+							}
+						}
+						else if (n.getNodeName().equalsIgnoreCase("messages"))
+						{
+							// Loading Messages
+							for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling())
+							{
+								if (d.getNodeName().equalsIgnoreCase("add"))
+								{
+									final String msgType = d.getAttributes().getNamedItem("type").getNodeValue();
+									final String msgText = d.getAttributes().getNamedItem("text").getNodeValue();
+									if ((msgType != null) && (msgText != null))
+									{
+										if (msgType.equalsIgnoreCase("onEnd"))
+										{
+											_endMsg = msgText;
+										}
+										else if (msgType.equalsIgnoreCase("onEnter"))
+										{
+											_onEnterMsg = msgText;
 										}
 									}
-									
-									if (ItemData.getInstance().getTemplate(itemId) == null)
-									{
-										LOGGER.warning(getName() + " event: " + itemId + " is wrong item id, item was not added in droplist");
-										continue;
-									}
-									
-									if (minCount > maxCount)
-									{
-										LOGGER.warning(getName() + " event: item " + itemId + " - min greater than max, item was not added in droplist");
-										continue;
-									}
-									
-									if ((finalChance < 0) || (finalChance > 100))
-									{
-										LOGGER.warning(getName() + " event: item " + itemId + " - incorrect drop chance, item was not added in droplist");
-										continue;
-									}
-									
-									_dropList.add(new EventDropHolder(itemId, minCount, maxCount, finalChance, minLevel, maxLevel, monsterIds));
-								}
-								catch (NumberFormatException nfe)
-								{
-									LOGGER.warning("Wrong number format in config.xml droplist block for " + getName() + " event");
 								}
 							}
 						}
 					}
-					else if (n.getNodeName().equalsIgnoreCase("spawnlist"))
+				}
+				
+				// Load destroy item list at all times.
+				for (Node n = document.getDocumentElement().getFirstChild(); n != null; n = n.getNextSibling())
+				{
+					if (n.getNodeName().equalsIgnoreCase("destroyItemsOnEnd"))
 					{
-						// Loading spawnlist
 						for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling())
 						{
-							if (d.getNodeName().equalsIgnoreCase("add"))
+							if (d.getNodeName().equalsIgnoreCase("item"))
 							{
 								try
 								{
-									final int npcId = Integer.parseInt(d.getAttributes().getNamedItem("npc").getNodeValue());
-									final int xPos = Integer.parseInt(d.getAttributes().getNamedItem("x").getNodeValue());
-									final int yPos = Integer.parseInt(d.getAttributes().getNamedItem("y").getNodeValue());
-									final int zPos = Integer.parseInt(d.getAttributes().getNamedItem("z").getNodeValue());
-									final Node headingNode = d.getAttributes().getNamedItem("heading");
-									final String headingValue = headingNode == null ? null : headingNode.getNodeValue();
-									final int heading = headingValue != null ? Integer.parseInt(headingValue) : 0;
-									final Node respawnTimeNode = d.getAttributes().getNamedItem("respawnTime");
-									final String respawnTimeValue = respawnTimeNode == null ? null : respawnTimeNode.getNodeValue();
-									final int respawnTime = respawnTimeValue != null ? Integer.parseInt(respawnTimeValue) : 0;
-									
-									if (NpcData.getInstance().getTemplate(npcId) == null)
+									final int itemId = Integer.parseInt(d.getAttributes().getNamedItem("id").getNodeValue());
+									if (ItemData.getInstance().getTemplate(itemId) == null)
 									{
-										LOGGER.warning(getName() + " event: " + npcId + " is wrong NPC id, NPC was not added in spawnlist");
+										LOGGER.warning(getName() + " event: Item " + itemId + " does not exist.");
 										continue;
 									}
-									
-									_spawnList.add(new NpcSpawn(npcId, new Location(xPos, yPos, zPos, heading), respawnTime * 1000));
+									_destroyItemsOnEnd.add(itemId);
 								}
 								catch (NumberFormatException nfe)
 								{
-									LOGGER.warning("Wrong number format in config.xml spawnlist block for " + getName() + " event");
-								}
-							}
-						}
-					}
-					else if (n.getNodeName().equalsIgnoreCase("messages"))
-					{
-						// Loading Messages
-						for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling())
-						{
-							if (d.getNodeName().equalsIgnoreCase("add"))
-							{
-								final String msgType = d.getAttributes().getNamedItem("type").getNodeValue();
-								final String msgText = d.getAttributes().getNamedItem("text").getNodeValue();
-								if ((msgType != null) && (msgText != null))
-								{
-									if (msgType.equalsIgnoreCase("onEnd"))
-									{
-										_endMsg = msgText;
-									}
-									else if (msgType.equalsIgnoreCase("onEnter"))
-									{
-										_onEnterMsg = msgText;
-									}
+									LOGGER.warning("Wrong number format in config.xml destroyItemsOnEnd block for " + getName() + " event");
 								}
 							}
 						}
 					}
 				}
 			}
-			
-			// Load destroy item list at all times.
-			for (Node n = document.getDocumentElement().getFirstChild(); n != null; n = n.getNextSibling())
-			{
-				if (n.getNodeName().equalsIgnoreCase("destroyItemsOnEnd"))
-				{
-					for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling())
-					{
-						if (d.getNodeName().equalsIgnoreCase("item"))
-						{
-							try
-							{
-								final int itemId = Integer.parseInt(d.getAttributes().getNamedItem("id").getNodeValue());
-								if (ItemData.getInstance().getTemplate(itemId) == null)
-								{
-									LOGGER.warning(getScriptName() + " event: Item " + itemId + " does not exist.");
-									continue;
-								}
-								_destroyItemsOnEnd.add(itemId);
-							}
-							catch (NumberFormatException nfe)
-							{
-								LOGGER.warning("Wrong number format in config.xml destroyItemsOnEnd block for " + getScriptName() + " event");
-							}
-						}
-					}
-				}
-			}
-		}
-		catch (Exception e)
-		{
-			LOGGER.log(Level.WARNING, getName() + " event: error reading " + configFile.getAbsolutePath() + " ! " + e.getMessage(), e);
-		}
+		}.load();
 	}
 	
 	protected class ScheduleStart implements Runnable
@@ -361,13 +413,13 @@ public class LongTimeEvent extends Quest
 			Broadcast.toAllOnlinePlayers(_onEnterMsg);
 			
 			// Add announce for entering players.
-			final EventAnnouncement announce = new EventAnnouncement(_eventPeriod, _onEnterMsg);
+			final EventAnnouncement announce = new EventAnnouncement(_startDate, _endDate, _onEnterMsg);
 			AnnouncementsTable.getInstance().addAnnouncement(announce);
 			_enterAnnounceId = announce.getId();
 		}
 		
 		// Schedule event end.
-		final Long millisToEventEnd = _eventPeriod.getEndDate().getTime() - System.currentTimeMillis();
+		final Long millisToEventEnd = _endDate.getTime() - System.currentTimeMillis();
 		ThreadPool.schedule(new ScheduleEnd(), millisToEventEnd);
 	}
 	
@@ -382,7 +434,7 @@ public class LongTimeEvent extends Quest
 	
 	protected void spawnNpcs()
 	{
-		final Long millisToEventEnd = _eventPeriod.getEndDate().getTime() - System.currentTimeMillis();
+		final Long millisToEventEnd = _endDate.getTime() - System.currentTimeMillis();
 		for (NpcSpawn npcSpawn : _spawnList)
 		{
 			final Npc npc = addSpawn(npcSpawn.npcId, npcSpawn.loc.getX(), npcSpawn.loc.getY(), npcSpawn.loc.getZ(), npcSpawn.loc.getHeading(), false, millisToEventEnd, false);
@@ -458,9 +510,20 @@ public class LongTimeEvent extends Quest
 		}
 	}
 	
-	public DateRange getEventPeriod()
+	/**
+	 * @return the event start date
+	 */
+	public Date getStartDate()
 	{
-		return _eventPeriod;
+		return _startDate;
+	}
+	
+	/**
+	 * @return the event end date
+	 */
+	public Date getEndDate()
+	{
+		return _endDate;
 	}
 	
 	/**

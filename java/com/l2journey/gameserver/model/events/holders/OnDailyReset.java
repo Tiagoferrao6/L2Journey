@@ -26,40 +26,22 @@
  * applicable..
  * 
  */
-package com.l2journey.gameserver.model.events.holders.actor.player;
+package com.l2journey.gameserver.model.events.holders;
 
-import com.l2journey.gameserver.model.actor.Player;
 import com.l2journey.gameserver.model.events.EventType;
-import com.l2journey.gameserver.model.events.holders.IBaseEvent;
 
 /**
- * @author Krunchy
- * @since 2.6.0.0
+ * @author Mobius
  */
-public class OnPlayerProfessionCancel implements IBaseEvent
+public class OnDailyReset implements IBaseEvent
 {
-	private final Player _player;
-	private final int _classId;
-	
-	public OnPlayerProfessionCancel(Player player, int classId)
+	public OnDailyReset()
 	{
-		_player = player;
-		_classId = classId;
-	}
-	
-	public Player getPlayer()
-	{
-		return _player;
-	}
-	
-	public int getClassId()
-	{
-		return _classId;
 	}
 	
 	@Override
 	public EventType getType()
 	{
-		return EventType.ON_PLAYER_PROFESSION_CANCEL;
+		return EventType.ON_DAILY_RESET;
 	}
 }

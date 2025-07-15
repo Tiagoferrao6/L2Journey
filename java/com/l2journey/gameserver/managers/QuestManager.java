@@ -51,29 +51,26 @@ public class QuestManager
 	{
 	}
 	
-	public boolean reload(String questFolder)
+	public void reload(String questFolder)
 	{
 		final Quest q = getQuest(questFolder);
-		if (q == null)
+		if (q != null)
 		{
-			return false;
+			q.reload();
 		}
-		return q.reload();
 	}
 	
 	/**
 	 * Reloads a the quest by ID.
 	 * @param questId the ID of the quest to be reloaded
-	 * @return {@code true} if reload was successful, {@code false} otherwise
 	 */
-	public boolean reload(int questId)
+	public void reload(int questId)
 	{
 		final Quest q = getQuest(questId);
-		if (q == null)
+		if (q != null)
 		{
-			return false;
+			q.reload();
 		}
-		return q.reload();
 	}
 	
 	/**

@@ -21,6 +21,7 @@
 package com.l2journey.gameserver.model.events;
 
 import com.l2journey.gameserver.model.events.holders.IBaseEvent;
+import com.l2journey.gameserver.model.events.holders.OnDailyReset;
 import com.l2journey.gameserver.model.events.holders.OnDayNightChange;
 import com.l2journey.gameserver.model.events.holders.OnServerStart;
 import com.l2journey.gameserver.model.events.holders.actor.creature.OnCreatureAttack;
@@ -229,7 +230,8 @@ public enum EventType
 	
 	// Server events
 	ON_SERVER_START(OnServerStart.class, void.class),
-	ON_DAY_NIGHT_CHANGE(OnDayNightChange.class, void.class);
+	ON_DAY_NIGHT_CHANGE(OnDayNightChange.class, void.class),
+	ON_DAILY_RESET(OnDailyReset.class, void.class);
 	
 	private final Class<? extends IBaseEvent> _eventClass;
 	private final Class<?>[] _returnClass;
