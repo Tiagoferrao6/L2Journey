@@ -20,7 +20,6 @@ import java.util.StringTokenizer;
 
 import com.l2journey.gameserver.model.actor.Npc;
 import com.l2journey.gameserver.model.actor.Player;
-import com.l2journey.gameserver.model.actor.enums.player.PlayerCondOverride;
 import com.l2journey.gameserver.model.actor.instance.Merchant;
 import com.l2journey.gameserver.model.clan.ClanAccess;
 import com.l2journey.gameserver.model.sevensigns.SevenSigns;
@@ -114,7 +113,7 @@ public class CastleMercenaryManager extends AbstractNpcAI
 	public String onFirstTalk(Npc npc, Player player)
 	{
 		final String htmltext;
-		if (player.canOverrideCond(PlayerCondOverride.CASTLE_CONDITIONS) || ((player.getClanId() == npc.getCastle().getOwnerId()) && player.hasAccess(ClanAccess.CASTLE_MERCENARIES)))
+		if (player.isGM() || ((player.getClanId() == npc.getCastle().getOwnerId()) && player.hasAccess(ClanAccess.CASTLE_MERCENARIES)))
 		{
 			if (npc.getCastle().getSiege().isInProgress())
 			{

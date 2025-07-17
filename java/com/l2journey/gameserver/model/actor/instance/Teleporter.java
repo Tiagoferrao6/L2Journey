@@ -331,6 +331,7 @@ public class Teleporter extends Npc
 			{
 				player.broadcastPacket(new MagicSkillUse(player, player, 2036, 1, 0, 0));
 			}
+			
 		}
 		else
 		{

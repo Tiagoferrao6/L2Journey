@@ -38,7 +38,6 @@ import com.l2journey.gameserver.handler.VoicedCommandHandler;
 import com.l2journey.gameserver.model.BlockList;
 import com.l2journey.gameserver.model.World;
 import com.l2journey.gameserver.model.actor.Player;
-import com.l2journey.gameserver.model.actor.enums.player.PlayerCondOverride;
 import com.l2journey.gameserver.network.SystemMessageId;
 import com.l2journey.gameserver.network.enums.ChatType;
 import com.l2journey.gameserver.network.serverpackets.CreatureSay;
@@ -93,7 +92,7 @@ public class ChatGeneral implements IChatHandler
 				return;
 			}
 			
-			if ((activeChar.getLevel() < Config.MINIMUM_CHAT_LEVEL) && !activeChar.canOverrideCond(PlayerCondOverride.CHAT_CONDITIONS))
+			if ((activeChar.getLevel() < Config.MINIMUM_CHAT_LEVEL) && !activeChar.isGM())
 			{
 				activeChar.sendMessage("Players can use general chat after Lv. " + Config.MINIMUM_CHAT_LEVEL + ".");
 				return;

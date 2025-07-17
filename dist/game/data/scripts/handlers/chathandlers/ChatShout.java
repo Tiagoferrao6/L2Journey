@@ -35,7 +35,7 @@ import com.l2journey.gameserver.managers.MapRegionManager;
 import com.l2journey.gameserver.model.BlockList;
 import com.l2journey.gameserver.model.World;
 import com.l2journey.gameserver.model.actor.Player;
-import com.l2journey.gameserver.model.actor.enums.player.PlayerCondOverride;
+import com.l2journey.gameserver.model.actor.enums.player.ChatBroadcastType;
 import com.l2journey.gameserver.network.SystemMessageId;
 import com.l2journey.gameserver.network.enums.ChatType;
 import com.l2journey.gameserver.network.serverpackets.CreatureSay;
@@ -59,19 +59,19 @@ public class ChatShout implements IChatHandler
 			activeChar.sendPacket(SystemMessageId.CHATTING_IS_CURRENTLY_PROHIBITED_IF_YOU_TRY_TO_CHAT_BEFORE_THE_PROHIBITION_IS_REMOVED_THE_PROHIBITION_TIME_WILL_INCREASE_EVEN_FURTHER);
 			return;
 		}
-		if (Config.JAIL_DISABLE_CHAT && activeChar.isJailed() && !activeChar.canOverrideCond(PlayerCondOverride.CHAT_CONDITIONS))
+		if (Config.JAIL_DISABLE_CHAT && activeChar.isJailed() && !activeChar.isGM())
 		{
 			activeChar.sendPacket(SystemMessageId.CHATTING_IS_CURRENTLY_PROHIBITED);
 			return;
 		}
-		if ((activeChar.getLevel() < Config.MINIMUM_CHAT_LEVEL) && !activeChar.canOverrideCond(PlayerCondOverride.CHAT_CONDITIONS))
+		if ((activeChar.getLevel() < Config.MINIMUM_CHAT_LEVEL) && !activeChar.isGM())
 		{
 			activeChar.sendMessage("Players can Shout after Lv. " + Config.MINIMUM_CHAT_LEVEL + ".");
 			return;
 		}
 		
 		final CreatureSay cs = new CreatureSay(activeChar, type, activeChar.getName(), text);
-		if (Config.DEFAULT_GLOBAL_CHAT.equalsIgnoreCase("on") || (Config.DEFAULT_GLOBAL_CHAT.equalsIgnoreCase("gm") && activeChar.canOverrideCond(PlayerCondOverride.CHAT_CONDITIONS)))
+		if ((Config.DEFAULT_TRADE_CHAT == ChatBroadcastType.ON) || ((Config.DEFAULT_TRADE_CHAT == ChatBroadcastType.GM) && activeChar.isGM()))
 		{
 			final int region = MapRegionManager.getInstance().getMapRegionLocId(activeChar);
 			for (Player player : World.getInstance().getPlayers())
@@ -99,9 +99,9 @@ public class ChatShout implements IChatHandler
 				}
 			}
 		}
-		else if (Config.DEFAULT_GLOBAL_CHAT.equalsIgnoreCase("global"))
+		else if (Config.DEFAULT_GLOBAL_CHAT == ChatBroadcastType.GLOBAL)
 		{
-			if (!activeChar.canOverrideCond(PlayerCondOverride.CHAT_CONDITIONS) && !activeChar.getClient().getFloodProtectors().canUseGlobalChat())
+			if (!activeChar.isGM() && !activeChar.getClient().getFloodProtectors().canUseGlobalChat())
 			{
 				activeChar.sendMessage("Do not spam shout channel.");
 				return;

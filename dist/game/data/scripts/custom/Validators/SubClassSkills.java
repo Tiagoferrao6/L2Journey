@@ -25,7 +25,6 @@ import com.l2journey.gameserver.data.xml.ClassListData;
 import com.l2journey.gameserver.managers.PunishmentManager;
 import com.l2journey.gameserver.model.actor.Player;
 import com.l2journey.gameserver.model.actor.enums.player.IllegalActionPunishmentType;
-import com.l2journey.gameserver.model.actor.enums.player.PlayerCondOverride;
 import com.l2journey.gameserver.model.item.instance.Item;
 import com.l2journey.gameserver.model.quest.QuestState;
 import com.l2journey.gameserver.model.skill.Skill;
@@ -101,7 +100,7 @@ public class SubClassSkills extends AbstractNpcAI
 			return;
 		}
 		
-		if (player.canOverrideCond(PlayerCondOverride.SKILL_CONDITIONS) && !Config.SKILL_CHECK_GM)
+		if (player.isGM() && !Config.SKILL_CHECK_GM)
 		{
 			return;
 		}

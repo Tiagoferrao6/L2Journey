@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 L2jMobius
+ * Copyright (c) 2025 L2Journey Project
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -8,15 +8,23 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  * 
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
- * IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * 
+ * ---
+ * 
+ * Portions of this software are derived from the L2JMobius Project, 
+ * shared under the MIT License. The original license terms are preserved where 
+ * applicable..
+ * 
  */
 package com.l2journey.gameserver.model.actor.stat;
 
@@ -25,7 +33,6 @@ import java.util.Arrays;
 import com.l2journey.Config;
 import com.l2journey.gameserver.model.Elementals;
 import com.l2journey.gameserver.model.actor.Creature;
-import com.l2journey.gameserver.model.actor.enums.player.PlayerCondOverride;
 import com.l2journey.gameserver.model.actor.transform.Transform;
 import com.l2journey.gameserver.model.item.Weapon;
 import com.l2journey.gameserver.model.item.instance.Item;
@@ -181,10 +188,11 @@ public class CreatureStat
 	public int getCriticalHit(Creature target, Skill skill)
 	{
 		double val = calcStat(Stat.CRITICAL_RATE, _creature.getTemplate().getBaseCritRate(), target, skill);
-		if (!_creature.canOverrideCond(PlayerCondOverride.MAX_STATS_VALUE))
-		{
-			val = Math.min(val, Config.MAX_PCRIT_RATE);
-		}
+		// if (!_creature.isGM())
+		// {
+		val = Math.min(val, Config.MAX_PCRIT_RATE);
+		// }
+		
 		return (int) (val + .5);
 	}
 	
@@ -204,10 +212,11 @@ public class CreatureStat
 	public int getEvasionRate(Creature target)
 	{
 		int val = (int) Math.round(calcStat(Stat.EVASION_RATE, 0, target, null));
-		if (!_creature.canOverrideCond(PlayerCondOverride.MAX_STATS_VALUE))
-		{
-			val = Math.min(val, Config.MAX_EVASION);
-		}
+		// if (!_creature.isGM())
+		// {
+		val = Math.min(val, Config.MAX_EVASION);
+		// }
+		
 		return val;
 	}
 	
@@ -310,10 +319,10 @@ public class CreatureStat
 		}
 		
 		double val = calcStat(Stat.MAGIC_ATTACK_SPEED, _creature.getTemplate().getBaseMAtkSpd() * bonusSpdAtk);
-		if (!_creature.canOverrideCond(PlayerCondOverride.MAX_STATS_VALUE))
-		{
-			val = Math.min(val, Config.MAX_MATK_SPEED);
-		}
+		// if (!_creature.isGM())
+		// {
+		val = Math.min(val, Config.MAX_MATK_SPEED);
+		// }
 		
 		return (int) val;
 	}
@@ -326,10 +335,11 @@ public class CreatureStat
 	public int getMCriticalHit(Creature target, Skill skill)
 	{
 		int val = (int) calcStat(Stat.MCRITICAL_RATE, 1, target, skill) * 10;
-		if (!_creature.canOverrideCond(PlayerCondOverride.MAX_STATS_VALUE))
-		{
-			val = Math.min(val, Config.MAX_MCRIT_RATE);
-		}
+		// if (!_creature.isGM())
+		// {
+		val = Math.min(val, Config.MAX_MCRIT_RATE);
+		// }
+		
 		return val;
 	}
 	

@@ -36,7 +36,6 @@ import com.l2journey.gameserver.managers.FakePlayerChatManager;
 import com.l2journey.gameserver.model.BlockList;
 import com.l2journey.gameserver.model.World;
 import com.l2journey.gameserver.model.actor.Player;
-import com.l2journey.gameserver.model.actor.enums.player.PlayerCondOverride;
 import com.l2journey.gameserver.network.SystemMessageId;
 import com.l2journey.gameserver.network.enums.ChatType;
 import com.l2journey.gameserver.network.serverpackets.CreatureSay;
@@ -61,7 +60,7 @@ public class ChatWhisper implements IChatHandler
 			return;
 		}
 		
-		if (Config.JAIL_DISABLE_CHAT && activeChar.isJailed() && !activeChar.canOverrideCond(PlayerCondOverride.CHAT_CONDITIONS))
+		if (Config.JAIL_DISABLE_CHAT && activeChar.isJailed() && !activeChar.isGM())
 		{
 			activeChar.sendPacket(SystemMessageId.CHATTING_IS_CURRENTLY_PROHIBITED);
 			return;
@@ -98,7 +97,7 @@ public class ChatWhisper implements IChatHandler
 		final Player receiver = World.getInstance().getPlayer(target);
 		if ((receiver != null) && !receiver.isSilenceMode(activeChar.getObjectId()))
 		{
-			if (Config.JAIL_DISABLE_CHAT && receiver.isJailed() && !activeChar.canOverrideCond(PlayerCondOverride.CHAT_CONDITIONS))
+			if (Config.JAIL_DISABLE_CHAT && receiver.isJailed() && !activeChar.isGM())
 			{
 				activeChar.sendMessage("Player is in jail.");
 				return;

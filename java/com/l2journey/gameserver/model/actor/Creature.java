@@ -81,7 +81,6 @@ import com.l2journey.gameserver.model.WorldRegion;
 import com.l2journey.gameserver.model.actor.enums.creature.InstanceType;
 import com.l2journey.gameserver.model.actor.enums.creature.Race;
 import com.l2journey.gameserver.model.actor.enums.creature.Team;
-import com.l2journey.gameserver.model.actor.enums.player.PlayerCondOverride;
 import com.l2journey.gameserver.model.actor.enums.player.TeleportWhereType;
 import com.l2journey.gameserver.model.actor.holders.creature.InvulSkillHolder;
 import com.l2journey.gameserver.model.actor.instance.GrandBoss;
@@ -255,8 +254,6 @@ public abstract class Creature extends WorldObject
 	private final StampedLock _attackLock = new StampedLock();
 	
 	private Team _team = Team.NONE;
-	
-	protected long _exceptions = 0;
 	
 	private boolean _lethalable = true;
 	
@@ -538,7 +535,6 @@ public abstract class Creature extends WorldObject
 			{
 				Disconnection.of(player).defaultSequence(new SystemMessage(SendMessageLocalisationData.getLocalisation(player, "60 min. have passed after the death of your character, so you were disconnected from the game.")));
 			}
-			
 		}
 		else
 		{
@@ -4377,12 +4373,6 @@ public abstract class Creature extends WorldObject
 			delta = Math.sqrt(delta + (dz * dz));
 		}
 		
-		// Prevent non playables teleporting to another ground layer while moving.
-		if (!isPlayer() && !isFloating && (Math.abs(move.zDestination - zPrev) > 300))
-		{
-			move.zDestination = zPrev;
-		}
-		
 		// Target collision should be subtracted from current distance.
 		final double collision;
 		final WorldObject target = _target;
@@ -4718,7 +4708,7 @@ public abstract class Creature extends WorldObject
 				
 				// Support for player attack with direct movement. Tested at retail on May 11th 2023.
 				boolean directMove = false;
-				if (isPlayer() && hasAI() && (asPlayer().getAI().getIntention() == Intention.ATTACK))
+				if (isPlayer() && hasAI() && (getAI().getIntention() == Intention.ATTACK))
 				{
 					directMove = true;
 				}
@@ -6771,32 +6761,6 @@ public abstract class Creature extends WorldObject
 	public void setTeam(Team team)
 	{
 		_team = team;
-	}
-	
-	public void addOverrideCond(PlayerCondOverride... excs)
-	{
-		for (PlayerCondOverride exc : excs)
-		{
-			_exceptions |= exc.getMask();
-		}
-	}
-	
-	public void removeOverridedCond(PlayerCondOverride... excs)
-	{
-		for (PlayerCondOverride exc : excs)
-		{
-			_exceptions &= ~exc.getMask();
-		}
-	}
-	
-	public boolean canOverrideCond(PlayerCondOverride excs)
-	{
-		return (_exceptions & excs.getMask()) == excs.getMask();
-	}
-	
-	public void setOverrideCond(long masks)
-	{
-		_exceptions = masks;
 	}
 	
 	public void setLethalable(boolean value)

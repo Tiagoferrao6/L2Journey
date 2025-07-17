@@ -21,7 +21,6 @@ import com.l2journey.gameserver.model.Location;
 import com.l2journey.gameserver.model.actor.Creature;
 import com.l2journey.gameserver.model.actor.Npc;
 import com.l2journey.gameserver.model.actor.Player;
-import com.l2journey.gameserver.model.actor.enums.player.PlayerCondOverride;
 import com.l2journey.gameserver.model.quest.QuestState;
 import com.l2journey.gameserver.model.zone.ZoneType;
 
@@ -95,7 +94,7 @@ public class Warpgate extends AbstractNpcAI
 		if (creature.isPlayer())
 		{
 			final Player player = creature.asPlayer();
-			if (!canEnter(player) && !player.canOverrideCond(PlayerCondOverride.ZONE_CONDITIONS) && !player.isOnEvent())
+			if (!canEnter(player) && !player.isGM() && !player.isOnEvent())
 			{
 				startQuestTimer("TELEPORT", 1000, null, player);
 			}

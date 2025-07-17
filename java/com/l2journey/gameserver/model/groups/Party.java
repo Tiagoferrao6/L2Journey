@@ -1,18 +1,30 @@
 /*
- * This file is part of the L2J Mobius project.
+ * Copyright (c) 2025 L2Journey Project
  * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  * 
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * 
+ * ---
+ * 
+ * Portions of this software are derived from the L2JMobius Project, 
+ * shared under the MIT License. The original license terms are preserved where 
+ * applicable..
+ * 
  */
 package com.l2journey.gameserver.model.groups;
 
@@ -611,23 +623,26 @@ public class Party extends AbstractPlayerGroup
 		
 		final Player target = getActualLooter(player, item.getId(), false, player);
 		target.addItem(ItemProcessType.LOOT, item, player, true);
+		if (item.getCount() <= 0)
+		{
+			return;
+		}
 		
-		// Send messages to other party members about reward
+		final SystemMessage msg;
 		if (item.getCount() > 1)
 		{
-			final SystemMessage msg = new SystemMessage(SystemMessageId.C1_HAS_OBTAINED_S3_S2);
+			msg = new SystemMessage(SystemMessageId.C1_HAS_OBTAINED_S3_S2);
 			msg.addString(target.getName());
 			msg.addItemName(item);
 			msg.addLong(item.getCount());
-			broadcastToPartyMembers(target, msg);
 		}
 		else
 		{
-			final SystemMessage msg = new SystemMessage(SystemMessageId.C1_HAS_OBTAINED_S2);
+			msg = new SystemMessage(SystemMessageId.C1_HAS_OBTAINED_S2);
 			msg.addString(target.getName());
 			msg.addItemName(item);
-			broadcastToPartyMembers(target, msg);
 		}
+		broadcastToPartyMembers(target, msg);
 	}
 	
 	/**
@@ -648,23 +663,26 @@ public class Party extends AbstractPlayerGroup
 		
 		final Player looter = getActualLooter(player, itemId, spoil, target);
 		looter.addItem(spoil ? ItemProcessType.SWEEP : ItemProcessType.LOOT, itemId, itemCount, target, true);
+		if (itemCount <= 0)
+		{
+			return;
+		}
 		
-		// Send messages to other party members about reward
+		final SystemMessage msg;
 		if (itemCount > 1)
 		{
-			final SystemMessage msg = spoil ? new SystemMessage(SystemMessageId.C1_HAS_OBTAINED_S3_S2_BY_USING_SWEEPER) : new SystemMessage(SystemMessageId.C1_HAS_OBTAINED_S3_S2);
+			msg = spoil ? new SystemMessage(SystemMessageId.C1_HAS_OBTAINED_S3_S2_BY_USING_SWEEPER) : new SystemMessage(SystemMessageId.C1_HAS_OBTAINED_S3_S2);
 			msg.addString(looter.getName());
 			msg.addItemName(itemId);
 			msg.addLong(itemCount);
-			broadcastToPartyMembers(looter, msg);
 		}
 		else
 		{
-			final SystemMessage msg = spoil ? new SystemMessage(SystemMessageId.C1_HAS_OBTAINED_S2_BY_USING_SWEEPER) : new SystemMessage(SystemMessageId.C1_HAS_OBTAINED_S2);
+			msg = spoil ? new SystemMessage(SystemMessageId.C1_HAS_OBTAINED_S2_BY_USING_SWEEPER) : new SystemMessage(SystemMessageId.C1_HAS_OBTAINED_S2);
 			msg.addString(looter.getName());
 			msg.addItemName(itemId);
-			broadcastToPartyMembers(looter, msg);
 		}
+		broadcastToPartyMembers(looter, msg);
 	}
 	
 	/**
@@ -726,7 +744,7 @@ public class Party extends AbstractPlayerGroup
 	 */
 	public void distributeXpAndSp(double xpRewardValue, double spRewardValue, List<Player> rewardedMembers, int topLvl, long partyDmg, Attackable target)
 	{
-		final List<Player> validMembers = getValidMembers(rewardedMembers, topLvl);
+		final List<Player> validMembers = getValidMembers(rewardedMembers, topLvl, target);
 		double xpReward = xpRewardValue * getExpBonus(validMembers.size());
 		double spReward = spRewardValue * getSpBonus(validMembers.size());
 		int sqLevelSum = 0;
@@ -831,7 +849,7 @@ public class Party extends AbstractPlayerGroup
 		_partyLvl = newLevel;
 	}
 	
-	private List<Player> getValidMembers(List<Player> members, int topLvl)
+	private List<Player> getValidMembers(List<Player> members, int topLvl, Attackable target)
 	{
 		final List<Player> validMembers = new ArrayList<>();
 		switch (Config.PARTY_XP_CUTOFF_METHOD)
@@ -840,7 +858,7 @@ public class Party extends AbstractPlayerGroup
 			{
 				for (Player member : members)
 				{
-					if ((topLvl - member.getLevel()) <= Config.PARTY_XP_CUTOFF_LEVEL)
+					if ((target.getInstanceId() == member.getInstanceId()) && ((topLvl - member.getLevel()) <= Config.PARTY_XP_CUTOFF_LEVEL))
 					{
 						validMembers.add(member);
 					}
@@ -852,12 +870,15 @@ public class Party extends AbstractPlayerGroup
 				int sqLevelSum = 0;
 				for (Player member : members)
 				{
-					sqLevelSum += (member.getLevel() * member.getLevel());
+					if (target.getInstanceId() == member.getInstanceId())
+					{
+						sqLevelSum += (member.getLevel() * member.getLevel());
+					}
 				}
 				for (Player member : members)
 				{
 					final int sqLevel = member.getLevel() * member.getLevel();
-					if ((sqLevel * 100) >= (sqLevelSum * Config.PARTY_XP_CUTOFF_PERCENT))
+					if ((target.getInstanceId() == member.getInstanceId()) && ((sqLevel * 100) >= (sqLevelSum * Config.PARTY_XP_CUTOFF_PERCENT)))
 					{
 						validMembers.add(member);
 					}
@@ -883,7 +904,7 @@ public class Party extends AbstractPlayerGroup
 				for (Player member : members)
 				{
 					final int sqLevel = member.getLevel() * member.getLevel();
-					if (sqLevel >= (sqLevelSum / (members.size() * members.size())))
+					if ((target.getInstanceId() == member.getInstanceId()) && (sqLevel >= (sqLevelSum / (members.size() * members.size()))))
 					{
 						validMembers.add(member);
 					}
@@ -892,12 +913,24 @@ public class Party extends AbstractPlayerGroup
 			}
 			case HIGHFIVE:
 			{
-				validMembers.addAll(members);
+				for (Player member : members)
+				{
+					if (target.getInstanceId() == member.getInstanceId())
+					{
+						validMembers.add(member);
+					}
+				}
 				break;
 			}
 			case NONE:
 			{
-				validMembers.addAll(members);
+				for (Player member : members)
+				{
+					if (target.getInstanceId() == member.getInstanceId())
+					{
+						validMembers.add(member);
+					}
+				}
 				break;
 			}
 		}

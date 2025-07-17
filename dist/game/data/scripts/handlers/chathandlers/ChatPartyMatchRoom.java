@@ -32,7 +32,6 @@ import com.l2journey.Config;
 import com.l2journey.EventsConfig;
 import com.l2journey.gameserver.handler.IChatHandler;
 import com.l2journey.gameserver.model.actor.Player;
-import com.l2journey.gameserver.model.actor.enums.player.PlayerCondOverride;
 import com.l2journey.gameserver.model.groups.matching.PartyMatchRoom;
 import com.l2journey.gameserver.model.groups.matching.PartyMatchRoomList;
 import com.l2journey.gameserver.network.SystemMessageId;
@@ -67,7 +66,7 @@ public class ChatPartyMatchRoom implements IChatHandler
 			activeChar.sendPacket(SystemMessageId.CHATTING_IS_CURRENTLY_PROHIBITED_IF_YOU_TRY_TO_CHAT_BEFORE_THE_PROHIBITION_IS_REMOVED_THE_PROHIBITION_TIME_WILL_INCREASE_EVEN_FURTHER);
 			return;
 		}
-		if (Config.JAIL_DISABLE_CHAT && activeChar.isJailed() && !activeChar.canOverrideCond(PlayerCondOverride.CHAT_CONDITIONS))
+		if (Config.JAIL_DISABLE_CHAT && activeChar.isJailed() && !activeChar.isGM())
 		{
 			activeChar.sendPacket(SystemMessageId.CHATTING_IS_CURRENTLY_PROHIBITED);
 			return;

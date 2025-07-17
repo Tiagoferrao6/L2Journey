@@ -30,7 +30,6 @@ import com.l2journey.gameserver.model.actor.Creature;
 import com.l2journey.gameserver.model.actor.Npc;
 import com.l2journey.gameserver.model.actor.Player;
 import com.l2journey.gameserver.model.actor.enums.player.MountType;
-import com.l2journey.gameserver.model.actor.enums.player.PlayerCondOverride;
 import com.l2journey.gameserver.model.actor.instance.GrandBoss;
 import com.l2journey.gameserver.model.actor.instance.Monster;
 import com.l2journey.gameserver.model.actor.instance.QuestGuard;
@@ -1265,7 +1264,7 @@ public class IceQueensCastleBattle extends AbstractInstance
 	{
 		final Party party = player.getParty();
 		final CommandChannel channel = party != null ? party.getCommandChannel() : null;
-		if (player.canOverrideCond(PlayerCondOverride.INSTANCE_CONDITIONS))
+		if (player.isGM())
 		{
 			return true;
 		}

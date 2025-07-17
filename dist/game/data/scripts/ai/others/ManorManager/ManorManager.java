@@ -20,7 +20,6 @@ import com.l2journey.Config;
 import com.l2journey.gameserver.managers.CastleManorManager;
 import com.l2journey.gameserver.model.actor.Npc;
 import com.l2journey.gameserver.model.actor.Player;
-import com.l2journey.gameserver.model.actor.enums.player.PlayerCondOverride;
 import com.l2journey.gameserver.model.actor.instance.Merchant;
 import com.l2journey.gameserver.model.events.EventType;
 import com.l2journey.gameserver.model.events.ListenerRegisterType;
@@ -93,12 +92,14 @@ public class ManorManager extends AbstractNpcAI
 		if (Config.ALLOW_MANOR)
 		{
 			final int castleId = npc.getTemplate().getParameters().getInt("manor_id", -1);
-			if (!player.canOverrideCond(PlayerCondOverride.CASTLE_CONDITIONS) && player.isClanLeader() && (castleId == player.getClan().getCastleId()))
+			if (!player.isGM() && player.isClanLeader() && (castleId == player.getClan().getCastleId()))
 			{
 				return "manager-lord.htm";
 			}
+			
 			return "manager.htm";
 		}
+		
 		return getHtm(player, "data/html/npcdefault.htm");
 	}
 	

@@ -24,7 +24,6 @@ import com.l2journey.gameserver.model.SkillLearn;
 import com.l2journey.gameserver.model.actor.Player;
 import com.l2journey.gameserver.model.actor.enums.player.IllegalActionPunishmentType;
 import com.l2journey.gameserver.model.actor.enums.player.PlayerClass;
-import com.l2journey.gameserver.model.actor.enums.player.PlayerCondOverride;
 import com.l2journey.gameserver.model.events.holders.actor.player.OnPlayerProfessionCancel;
 import com.l2journey.gameserver.model.events.holders.actor.player.OnPlayerProfessionChange;
 import com.l2journey.gameserver.model.item.enums.ItemProcessType;
@@ -103,7 +102,7 @@ public class SkillTransfer extends AbstractNpcAI
 	@Override
 	public void onEnterWorld(Player player)
 	{
-		if (!player.canOverrideCond(PlayerCondOverride.SKILL_CONDITIONS) || Config.SKILL_CHECK_GM)
+		if (!player.isGM() || Config.SKILL_CHECK_GM)
 		{
 			final int index = getTransferClassIndex(player);
 			if (index < 0)

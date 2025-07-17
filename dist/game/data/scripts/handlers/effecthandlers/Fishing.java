@@ -24,7 +24,6 @@ import com.l2journey.gameserver.model.Location;
 import com.l2journey.gameserver.model.StatSet;
 import com.l2journey.gameserver.model.actor.Creature;
 import com.l2journey.gameserver.model.actor.Player;
-import com.l2journey.gameserver.model.actor.enums.player.PlayerCondOverride;
 import com.l2journey.gameserver.model.conditions.Condition;
 import com.l2journey.gameserver.model.effects.AbstractEffect;
 import com.l2journey.gameserver.model.effects.EffectType;
@@ -77,7 +76,7 @@ public class Fishing extends AbstractEffect
 		}
 		
 		final Player player = effector.asPlayer();
-		if (!Config.ALLOW_FISHING && !player.canOverrideCond(PlayerCondOverride.SKILL_CONDITIONS))
+		if (!Config.ALLOW_FISHING && !player.isGM())
 		{
 			player.sendMessage("Fishing is disabled!");
 			return;

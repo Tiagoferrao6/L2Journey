@@ -213,7 +213,7 @@ public enum Stat
 	
 	public static final int NUM_STATS = values().length;
 	
-	private final String _value;
+	private String _value;
 	
 	public String getValue()
 	{

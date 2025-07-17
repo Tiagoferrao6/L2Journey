@@ -1088,13 +1088,13 @@ public class Item extends WorldObject
 				psUpdate.setInt(1, objectId);
 				psUpdate.setByte(2, element.getElement());
 				psUpdate.setInt(3, element.getValue());
-				psUpdate.setInt(4, element.getValue());
+				psUpdate.setInt(4, element.getValue()); // Valor para o UPDATE
 				psUpdate.addBatch();
 			}
 			
 			psDelete.setInt(1, objectId);
-			psDelete.executeUpdate();
-			psUpdate.executeBatch();
+			psDelete.executeUpdate(); // Limpa os registros antigos
+			psUpdate.executeBatch(); // Insere/atualiza os registros
 			
 		}
 		catch (SQLException e)

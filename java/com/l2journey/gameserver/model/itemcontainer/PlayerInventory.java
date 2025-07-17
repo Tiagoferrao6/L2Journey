@@ -63,14 +63,14 @@ import com.l2journey.gameserver.util.ArrayUtil;
 public class PlayerInventory extends Inventory
 {
 	private static final Logger LOGGER = Logger.getLogger(PlayerInventory.class.getName());
-	
+
 	private final Player _owner;
 	private Item _adena;
 	private Item _ancientAdena;
 	private final AtomicInteger _questItemSize = new AtomicInteger();
-	
+
 	private int[] _blockItems = null;
-	
+
 	/**
 	 * Block modes:
 	 * <ul>
@@ -80,51 +80,51 @@ public class PlayerInventory extends Inventory
 	 * </ul>
 	 */
 	private int _blockMode = -1;
-	
+
 	public PlayerInventory(Player owner)
 	{
 		_owner = owner;
 	}
-	
+
 	@Override
 	public Player getOwner()
 	{
 		return _owner;
 	}
-	
+
 	@Override
 	protected ItemLocation getBaseLocation()
 	{
 		return ItemLocation.INVENTORY;
 	}
-	
+
 	@Override
 	protected ItemLocation getEquipLocation()
 	{
 		return ItemLocation.PAPERDOLL;
 	}
-	
+
 	public Item getAdenaInstance()
 	{
 		return _adena;
 	}
-	
+
 	@Override
 	public long getAdena()
 	{
 		return _adena != null ? _adena.getCount() : 0;
 	}
-	
+
 	public Item getAncientAdenaInstance()
 	{
 		return _ancientAdena;
 	}
-	
+
 	public long getAncientAdena()
 	{
 		return (_ancientAdena != null) ? _ancientAdena.getCount() : 0;
 	}
-	
+
 	/**
 	 * Retrieves a collection of unique buyable items based on the specified conditions.
 	 * @param allowAdena {@code true} to include Adena in the results, {@code false} to exclude it.
@@ -142,12 +142,12 @@ public class PlayerInventory extends Inventory
 			{
 				continue;
 			}
-			
+
 			if (!allowAncientAdena && (item.getId() == ANCIENT_ADENA_ID))
 			{
 				continue;
 			}
-			
+
 			boolean isDuplicate = false;
 			for (Item addedItem : result)
 			{
@@ -157,7 +157,7 @@ public class PlayerInventory extends Inventory
 					break;
 				}
 			}
-			
+
 			if (!isDuplicate && (!onlyAvailable || ((!checkSellable || item.isSellable()) && item.isAvailable(_owner, false, false))))
 			{
 				result.add(item);
@@ -165,7 +165,7 @@ public class PlayerInventory extends Inventory
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Retrieves a collection of unique items based on their enchant level and the specified conditions.
 	 * @param allowAdena {@code true} to include Adena in the results, {@code false} to exclude it.
@@ -182,7 +182,7 @@ public class PlayerInventory extends Inventory
 			{
 				continue;
 			}
-			
+
 			boolean isDuplicate = false;
 			for (Item addedItem : result)
 			{
@@ -192,7 +192,7 @@ public class PlayerInventory extends Inventory
 					break;
 				}
 			}
-			
+
 			if (!isDuplicate && (!onlyAvailable || (item.isSellable() && item.isAvailable(_owner, false, false))))
 			{
 				result.add(item);
@@ -200,7 +200,7 @@ public class PlayerInventory extends Inventory
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Returns the list of all items in inventory that have a given item id.
 	 * @param itemId : ID of item
@@ -219,7 +219,7 @@ public class PlayerInventory extends Inventory
 		}
 		return result;
 	}
-	
+
 	/**
 	 * @param itemId
 	 * @param enchantment
@@ -229,7 +229,7 @@ public class PlayerInventory extends Inventory
 	{
 		return getAllItemsByItemId(itemId, enchantment, true);
 	}
-	
+
 	/**
 	 * Returns the list of all items in inventory that have a given item id AND a given enchantment level.
 	 * @param itemId : ID of item
@@ -249,7 +249,7 @@ public class PlayerInventory extends Inventory
 		}
 		return result;
 	}
-	
+
 	/**
 	 * @param allowAdena
 	 * @param allowNonTradeable
@@ -277,7 +277,7 @@ public class PlayerInventory extends Inventory
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Get all augmented items
 	 * @return
@@ -294,7 +294,7 @@ public class PlayerInventory extends Inventory
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Get all element items
 	 * @return
@@ -311,7 +311,7 @@ public class PlayerInventory extends Inventory
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Returns the list of items in inventory available for transaction adjusted by tradeList
 	 * @param tradeList
@@ -333,7 +333,7 @@ public class PlayerInventory extends Inventory
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Adjust TradeItem according his status in inventory
 	 * @param item : Item to be adjusted
@@ -361,18 +361,18 @@ public class PlayerInventory extends Inventory
 			final Item adjItem = getItemByItemId(item.getItem().getId());
 			item.setObjectId(adjItem.getObjectId());
 			item.setEnchant(adjItem.getEnchantLevel());
-			
+
 			if (adjItem.getCount() < item.getCount())
 			{
 				item.setCount(adjItem.getCount());
 			}
-			
+
 			return;
 		}
-		
+
 		item.setCount(0);
 	}
-	
+
 	/**
 	 * Adds adena to PcInventory
 	 * @param process : ItemProcessType identifier of process triggering this action
@@ -387,7 +387,7 @@ public class PlayerInventory extends Inventory
 			addItem(process, ADENA_ID, count, actor, reference);
 		}
 	}
-	
+
 	/**
 	 * Removes adena to PcInventory
 	 * @param process : ItemProcessType identifier of process triggering this action
@@ -404,7 +404,7 @@ public class PlayerInventory extends Inventory
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Adds specified amount of ancient adena to player inventory.
 	 * @param process : ItemProcessType identifier of process triggering this action
@@ -419,7 +419,7 @@ public class PlayerInventory extends Inventory
 			addItem(process, ANCIENT_ADENA_ID, count, actor, reference);
 		}
 	}
-	
+
 	/**
 	 * Removes specified amount of ancient adena from player inventory.
 	 * @param process : ItemProcessType identifier of process triggering this action
@@ -432,7 +432,7 @@ public class PlayerInventory extends Inventory
 	{
 		return (count > 0) && (destroyItemByItemId(process, ANCIENT_ADENA_ID, count, actor, reference) != null);
 	}
-	
+
 	/**
 	 * Adds item in inventory and checks _adena and _ancientAdena
 	 * @param process : ItemProcessType identifier of process triggering this action
@@ -455,7 +455,7 @@ public class PlayerInventory extends Inventory
 			{
 				_ancientAdena = addedItem;
 			}
-			
+
 			// Notify to scripts
 			if ((actor != null) && EventDispatcher.getInstance().hasListener(EventType.ON_PLAYER_ITEM_ADD, actor))
 			{
@@ -464,7 +464,7 @@ public class PlayerInventory extends Inventory
 		}
 		return addedItem;
 	}
-	
+
 	/**
 	 * Adds item in inventory and checks _adena and _ancientAdena
 	 * @param process : ItemProcessType identifier of process triggering this action
@@ -488,7 +488,7 @@ public class PlayerInventory extends Inventory
 			{
 				_ancientAdena = item;
 			}
-			
+
 			if (actor != null)
 			{
 				// Send inventory update packet
@@ -502,12 +502,12 @@ public class PlayerInventory extends Inventory
 					playerIU.addNewItem(item);
 				}
 				actor.sendInventoryUpdate(playerIU);
-				
+
 				// Update current load as well
 				final StatusUpdate su = new StatusUpdate(actor);
 				su.addAttribute(StatusUpdate.CUR_LOAD, actor.getCurrentLoad());
 				actor.sendPacket(su);
-				
+
 				// Notify to scripts
 				if (EventDispatcher.getInstance().hasListener(EventType.ON_PLAYER_ITEM_ADD, actor))
 				{
@@ -517,7 +517,7 @@ public class PlayerInventory extends Inventory
 		}
 		return item;
 	}
-	
+
 	/**
 	 * Transfers item to another inventory and checks _adena and _ancientAdena
 	 * @param process ItemProcessType identifier of process triggering this action
@@ -532,26 +532,26 @@ public class PlayerInventory extends Inventory
 	public Item transferItem(ItemProcessType process, int objectId, long count, ItemContainer target, Player actor, Object reference)
 	{
 		final Item item = super.transferItem(process, objectId, count, target, actor, reference);
-		
+
 		if ((_adena != null) && ((_adena.getCount() <= 0) || (_adena.getOwnerId() != getOwnerId())))
 		{
 			_adena = null;
 		}
-		
+
 		if ((_ancientAdena != null) && ((_ancientAdena.getCount() <= 0) || (_ancientAdena.getOwnerId() != getOwnerId())))
 		{
 			_ancientAdena = null;
 		}
-		
+
 		// Notify to scripts
 		if (EventDispatcher.getInstance().hasListener(EventType.ON_PLAYER_ITEM_TRANSFER, item.getTemplate()))
 		{
 			EventDispatcher.getInstance().notifyEventAsync(new OnPlayerItemTransfer(actor, item, target), item.getTemplate());
 		}
-		
+
 		return item;
 	}
-	
+
 	/**
 	 * Destroy item from inventory and checks _adena and _ancientAdena
 	 * @param process : ItemProcessType identifier of process triggering this action
@@ -565,7 +565,7 @@ public class PlayerInventory extends Inventory
 	{
 		return destroyItem(process, item, item.getCount(), actor, reference);
 	}
-	
+
 	/**
 	 * Destroy item from inventory and checks _adena and _ancientAdena
 	 * @param process : ItemProcessType identifier of process triggering this action
@@ -578,26 +578,26 @@ public class PlayerInventory extends Inventory
 	public Item destroyItem(ItemProcessType process, Item item, long count, Player actor, Object reference)
 	{
 		final Item destroyedItem = super.destroyItem(process, item, count, actor, reference);
-		
+
 		if ((_adena != null) && (_adena.getCount() <= 0))
 		{
 			_adena = null;
 		}
-		
+
 		if ((_ancientAdena != null) && (_ancientAdena.getCount() <= 0))
 		{
 			_ancientAdena = null;
 		}
-		
+
 		// Notify to scripts
 		if ((destroyedItem != null) && EventDispatcher.getInstance().hasListener(EventType.ON_PLAYER_ITEM_DESTROY, destroyedItem.getTemplate()))
 		{
 			EventDispatcher.getInstance().notifyEventAsync(new OnPlayerItemDestroy(actor, destroyedItem), destroyedItem.getTemplate());
 		}
-		
+
 		return destroyedItem;
 	}
-	
+
 	/**
 	 * Destroys item from inventory and checks _adena and _ancientAdena
 	 * @param process : ItemProcessType identifier of process triggering this action
@@ -613,7 +613,7 @@ public class PlayerInventory extends Inventory
 		final Item item = getItemByObjectId(objectId);
 		return item == null ? null : destroyItem(process, item, count, actor, reference);
 	}
-	
+
 	/**
 	 * Destroy item from inventory by using its <b>itemId</b> and checks _adena and _ancientAdena
 	 * @param process : ItemProcessType identifier of process triggering this action
@@ -637,13 +637,13 @@ public class PlayerInventory extends Inventory
 				break;
 			}
 		}
-		
+
 		// No item found.
 		if (destroyItem == null)
 		{
 			return null;
 		}
-		
+
 		// Support destroying multiple non stackable items.
 		if (!destroyItem.isStackable() && (count > 1))
 		{
@@ -670,11 +670,11 @@ public class PlayerInventory extends Inventory
 				return null;
 			}
 		}
-		
+
 		// Single item or stackable.
 		return destroyItem(process, destroyItem, count, actor, reference);
 	}
-	
+
 	/**
 	 * Drop item from inventory and checks _adena and _ancientAdena
 	 * @param process : ItemProcessType identifier of process triggering this action
@@ -687,26 +687,26 @@ public class PlayerInventory extends Inventory
 	public Item dropItem(ItemProcessType process, Item item, Player actor, Object reference)
 	{
 		final Item droppedItem = super.dropItem(process, item, actor, reference);
-		
+
 		if ((_adena != null) && ((_adena.getCount() <= 0) || (_adena.getOwnerId() != getOwnerId())))
 		{
 			_adena = null;
 		}
-		
+
 		if ((_ancientAdena != null) && ((_ancientAdena.getCount() <= 0) || (_ancientAdena.getOwnerId() != getOwnerId())))
 		{
 			_ancientAdena = null;
 		}
-		
+
 		// Notify to scripts
 		if ((droppedItem != null) && EventDispatcher.getInstance().hasListener(EventType.ON_PLAYER_ITEM_DROP, droppedItem.getTemplate()))
 		{
 			EventDispatcher.getInstance().notifyEventAsync(new OnPlayerItemDrop(actor, droppedItem, droppedItem.getLocation()), droppedItem.getTemplate());
 		}
-		
+
 		return droppedItem;
 	}
-	
+
 	/**
 	 * Drop item from inventory by using its <b>objectID</b> and checks _adena and _ancientAdena
 	 * @param process : ItemProcessType identifier of process triggering this action
@@ -720,26 +720,26 @@ public class PlayerInventory extends Inventory
 	public Item dropItem(ItemProcessType process, int objectId, long count, Player actor, Object reference)
 	{
 		final Item item = super.dropItem(process, objectId, count, actor, reference);
-		
+
 		if ((_adena != null) && ((_adena.getCount() <= 0) || (_adena.getOwnerId() != getOwnerId())))
 		{
 			_adena = null;
 		}
-		
+
 		if ((_ancientAdena != null) && ((_ancientAdena.getCount() <= 0) || (_ancientAdena.getOwnerId() != getOwnerId())))
 		{
 			_ancientAdena = null;
 		}
-		
+
 		// Notify to scripts
 		if ((item != null) && EventDispatcher.getInstance().hasListener(EventType.ON_PLAYER_ITEM_DROP, item.getTemplate()))
 		{
 			EventDispatcher.getInstance().notifyEventAsync(new OnPlayerItemDrop(actor, item, item.getLocation()), item.getTemplate());
 		}
-		
+
 		return item;
 	}
-	
+
 	/**
 	 * Adds item to inventory for further adjustments.
 	 * @param item : Item to be added from inventory
@@ -751,10 +751,10 @@ public class PlayerInventory extends Inventory
 		{
 			_questItemSize.incrementAndGet();
 		}
-		
+
 		super.addItem(item);
 	}
-	
+
 	/**
 	 * <b>Overloaded</b>, when removes item from inventory, remove also owner shortcuts.
 	 * @param item : Item to be removed from inventory
@@ -764,13 +764,13 @@ public class PlayerInventory extends Inventory
 	{
 		// Removes any reference to the item from Shortcut bar
 		_owner.removeItemFromShortcut(item.getObjectId());
-		
+
 		// Removes active Enchant Scroll
 		if (item.getObjectId() == _owner.getActiveEnchantItemId())
 		{
 			_owner.setActiveEnchantItemId(Player.ID_NONE);
 		}
-		
+
 		if (item.getId() == ADENA_ID)
 		{
 			_adena = null;
@@ -779,15 +779,15 @@ public class PlayerInventory extends Inventory
 		{
 			_ancientAdena = null;
 		}
-		
+
 		if (item.isQuestItem())
 		{
 			_questItemSize.decrementAndGet();
 		}
-		
+
 		return super.removeItem(item);
 	}
-	
+
 	/**
 	 * @return the quantity of quest items in the inventory
 	 */
@@ -795,7 +795,7 @@ public class PlayerInventory extends Inventory
 	{
 		return _questItemSize.get();
 	}
-	
+
 	/**
 	 * @return the quantity of items in the inventory
 	 */
@@ -803,7 +803,7 @@ public class PlayerInventory extends Inventory
 	{
 		return _items.size() - _questItemSize.get();
 	}
-	
+
 	/**
 	 * Refresh the weight of equipment loaded
 	 */
@@ -813,7 +813,7 @@ public class PlayerInventory extends Inventory
 		super.refreshWeight();
 		_owner.refreshOverloaded();
 	}
-	
+
 	/**
 	 * Get back items in inventory from database
 	 */
@@ -824,7 +824,7 @@ public class PlayerInventory extends Inventory
 		_adena = getItemByItemId(ADENA_ID);
 		_ancientAdena = getItemByItemId(ANCIENT_ADENA_ID);
 	}
-	
+
 	public static int[][] restoreVisibleInventory(int objectId)
 	{
 		final int[][] paperdoll = new int[31][3];
@@ -849,7 +849,7 @@ public class PlayerInventory extends Inventory
 					{
 						visualItemId = invdata.getInt("visual_item_id");
 					}
-					
+
 					if (visualItemId > 0)
 					{
 						paperdoll[slot][1] = visualItemId;
@@ -859,7 +859,7 @@ public class PlayerInventory extends Inventory
 						final ItemTemplate template = ItemData.getInstance().getTemplate(itemId);
 						paperdoll[slot][1] = template == null ? itemId : template.getDisplayId();
 					}
-					
+
 					paperdoll[slot][2] = invdata.getInt("enchant_level");
 				}
 			}
@@ -870,7 +870,7 @@ public class PlayerInventory extends Inventory
 		}
 		return paperdoll;
 	}
-	
+
 	/**
 	 * @param itemList the items that needs to be validated.
 	 * @param sendMessage if {@code true} will send a message of inventory full.
@@ -893,7 +893,7 @@ public class PlayerInventory extends Inventory
 				lootWeight += item.getWeight();
 			}
 		}
-		
+
 		final boolean inventoryStatusOK = validateCapacity(requiredSlots) && validateWeight(lootWeight);
 		if (!inventoryStatusOK && sendMessage)
 		{
@@ -905,7 +905,7 @@ public class PlayerInventory extends Inventory
 		}
 		return inventoryStatusOK;
 	}
-	
+
 	/**
 	 * If the item is not stackable or is stackable and not present in inventory, will need a slot.
 	 * @param item the item to validate.
@@ -920,7 +920,7 @@ public class PlayerInventory extends Inventory
 		}
 		return validateCapacity(slots, item.isQuestItem());
 	}
-	
+
 	/**
 	 * If the item is not stackable or is stackable and not present in inventory, will need a slot.
 	 * @param itemId the item Id for the item to validate.
@@ -936,18 +936,18 @@ public class PlayerInventory extends Inventory
 		}
 		return validateCapacity(slots, ItemData.getInstance().getTemplate(itemId).isQuestItem());
 	}
-	
+
 	@Override
 	public boolean validateCapacity(long slots)
 	{
 		return validateCapacity(slots, false);
 	}
-	
+
 	public boolean validateCapacity(long slots, boolean questItem)
 	{
 		return ((slots == 0) && !Config.AUTO_LOOT_SLOT_LIMIT) || questItem ? (getQuestSize() + slots) <= _owner.getQuestInventoryLimit() : (getNonQuestSize() + slots) <= _owner.getInventoryLimit();
 	}
-	
+
 	@Override
 	public boolean validateWeight(long weight)
 	{
@@ -958,7 +958,7 @@ public class PlayerInventory extends Inventory
 		}
 		return ((_totalWeight + weight) <= _owner.getMaxLoad());
 	}
-	
+
 	/**
 	 * Set inventory block for specified IDs<br>
 	 * array reference is used for {@link PlayerInventory#_blockItems}
@@ -969,10 +969,10 @@ public class PlayerInventory extends Inventory
 	{
 		_blockMode = mode;
 		_blockItems = items;
-		
+
 		_owner.sendItemList(false);
 	}
-	
+
 	/**
 	 * Unblock blocked itemIds
 	 */
@@ -980,10 +980,10 @@ public class PlayerInventory extends Inventory
 	{
 		_blockMode = -1;
 		_blockItems = null;
-		
+
 		_owner.sendItemList(false);
 	}
-	
+
 	/**
 	 * Check if player inventory is in block mode.
 	 * @return true if some itemIds blocked
@@ -992,7 +992,7 @@ public class PlayerInventory extends Inventory
 	{
 		return (_blockMode > -1) && (_blockItems != null) && (_blockItems.length > 0);
 	}
-	
+
 	/**
 	 * Block all player items
 	 */
@@ -1004,7 +1004,7 @@ public class PlayerInventory extends Inventory
 			(ItemData.getInstance().getArraySize() + 2)
 		}, 1);
 	}
-	
+
 	/**
 	 * Return block mode
 	 * @return int {@link PlayerInventory#_blockMode}
@@ -1013,7 +1013,7 @@ public class PlayerInventory extends Inventory
 	{
 		return _blockMode;
 	}
-	
+
 	/**
 	 * Return int[] array with blocked item ids
 	 * @return int[] array
@@ -1022,7 +1022,7 @@ public class PlayerInventory extends Inventory
 	{
 		return _blockItems;
 	}
-	
+
 	/**
 	 * Check if player can use item by itemid
 	 * @param itemId int
@@ -1032,13 +1032,13 @@ public class PlayerInventory extends Inventory
 	{
 		return ((_blockMode != 0) || !ArrayUtil.contains(_blockItems, itemId)) && ((_blockMode != 1) || ArrayUtil.contains(_blockItems, itemId));
 	}
-	
+
 	@Override
 	public String toString()
 	{
 		return getClass().getSimpleName() + "[" + _owner + "]";
 	}
-	
+
 	/**
 	 * Apply skills of inventory items
 	 */

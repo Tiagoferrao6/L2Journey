@@ -1338,7 +1338,7 @@ public class Skill
 			return;
 		}
 		
-		// Check bad skills against target.
+		// Check bad (negative) effect skills against target.
 		if ((effector != effected) && isBad() && (effected.isInvul() || (effector.isGM() && !effector.getAccessLevel().canGiveDamage())))
 		{
 			return;

@@ -39,7 +39,6 @@ import com.l2journey.gameserver.model.actor.Npc;
 import com.l2journey.gameserver.model.actor.Player;
 import com.l2journey.gameserver.model.actor.Summon;
 import com.l2journey.gameserver.model.actor.enums.creature.TrapAction;
-import com.l2journey.gameserver.model.actor.enums.player.PlayerCondOverride;
 import com.l2journey.gameserver.model.actor.instance.Door;
 import com.l2journey.gameserver.model.actor.instance.Trap;
 import com.l2journey.gameserver.model.groups.Party;
@@ -514,7 +513,7 @@ public class CrystalCaverns extends AbstractInstance
 	@Override
 	protected boolean checkConditions(Player player)
 	{
-		if (player.canOverrideCond(PlayerCondOverride.INSTANCE_CONDITIONS))
+		if (player.isGM())
 		{
 			return true;
 		}
@@ -525,11 +524,13 @@ public class CrystalCaverns extends AbstractInstance
 			player.sendPacket(SystemMessageId.YOU_ARE_NOT_CURRENTLY_IN_A_PARTY_SO_YOU_CANNOT_ENTER);
 			return false;
 		}
+		
 		if (party.getLeader() != player)
 		{
 			player.sendPacket(SystemMessageId.ONLY_A_PARTY_LEADER_CAN_MAKE_THE_REQUEST_TO_ENTER);
 			return false;
 		}
+		
 		for (Player partyMember : party.getMembers())
 		{
 			if (partyMember.getLevel() < MIN_LEVEL)
@@ -539,6 +540,7 @@ public class CrystalCaverns extends AbstractInstance
 				party.broadcastPacket(sm);
 				return false;
 			}
+			
 			final Item item = partyMember.getInventory().getItemByItemId(CONTAMINATED_CRYSTAL);
 			if (item == null)
 			{
@@ -547,6 +549,7 @@ public class CrystalCaverns extends AbstractInstance
 				party.broadcastPacket(sm);
 				return false;
 			}
+			
 			if (!LocationUtil.checkIfInRange(1000, player, partyMember, true))
 			{
 				final SystemMessage sm = new SystemMessage(SystemMessageId.C1_IS_IN_A_LOCATION_WHICH_CANNOT_BE_ENTERED_THEREFORE_IT_CANNOT_BE_PROCESSED);
@@ -554,6 +557,7 @@ public class CrystalCaverns extends AbstractInstance
 				party.broadcastPacket(sm);
 				return false;
 			}
+			
 			if (System.currentTimeMillis() < InstanceManager.getInstance().getInstanceTime(partyMember.getObjectId(), TEMPLATE_ID))
 			{
 				final SystemMessage sm = new SystemMessage(SystemMessageId.C1_MAY_NOT_RE_ENTER_YET);
@@ -562,26 +566,30 @@ public class CrystalCaverns extends AbstractInstance
 				return false;
 			}
 		}
+		
 		return true;
 	}
 	
 	private boolean checkOracleConditions(Player player)
 	{
-		if (player.canOverrideCond(PlayerCondOverride.INSTANCE_CONDITIONS))
+		if (player.isGM())
 		{
 			return true;
 		}
+		
 		final Party party = player.getParty();
 		if (party == null)
 		{
 			player.sendPacket(SystemMessageId.YOU_ARE_NOT_CURRENTLY_IN_A_PARTY_SO_YOU_CANNOT_ENTER);
 			return false;
 		}
+		
 		if (party.getLeader() != player)
 		{
 			player.sendPacket(SystemMessageId.ONLY_A_PARTY_LEADER_CAN_MAKE_THE_REQUEST_TO_ENTER);
 			return false;
 		}
+		
 		for (Player partyMember : party.getMembers())
 		{
 			final Item item = partyMember.getInventory().getItemByItemId(RED_CORAL);
@@ -592,6 +600,7 @@ public class CrystalCaverns extends AbstractInstance
 				party.broadcastPacket(sm);
 				return false;
 			}
+			
 			if (!LocationUtil.checkIfInRange(1000, player, partyMember, true))
 			{
 				final SystemMessage sm = new SystemMessage(SystemMessageId.C1_IS_IN_A_LOCATION_WHICH_CANNOT_BE_ENTERED_THEREFORE_IT_CANNOT_BE_PROCESSED);
@@ -600,12 +609,13 @@ public class CrystalCaverns extends AbstractInstance
 				return false;
 			}
 		}
+		
 		return true;
 	}
 	
 	private boolean checkBaylorConditions(Player player)
 	{
-		if (player.canOverrideCond(PlayerCondOverride.INSTANCE_CONDITIONS))
+		if (player.isGM())
 		{
 			return true;
 		}
@@ -616,11 +626,13 @@ public class CrystalCaverns extends AbstractInstance
 			player.sendPacket(SystemMessageId.YOU_ARE_NOT_CURRENTLY_IN_A_PARTY_SO_YOU_CANNOT_ENTER);
 			return false;
 		}
+		
 		if (party.getLeader() != player)
 		{
 			player.sendPacket(SystemMessageId.ONLY_A_PARTY_LEADER_CAN_MAKE_THE_REQUEST_TO_ENTER);
 			return false;
 		}
+		
 		for (Player partyMember : party.getMembers())
 		{
 			final Item item1 = partyMember.getInventory().getItemByItemId(BLUE_CRYSTAL);
@@ -633,6 +645,7 @@ public class CrystalCaverns extends AbstractInstance
 				party.broadcastPacket(sm);
 				return false;
 			}
+			
 			if (!LocationUtil.checkIfInRange(1000, player, partyMember, true))
 			{
 				final SystemMessage sm = new SystemMessage(SystemMessageId.C1_IS_IN_A_LOCATION_WHICH_CANNOT_BE_ENTERED_THEREFORE_IT_CANNOT_BE_PROCESSED);
@@ -641,6 +654,7 @@ public class CrystalCaverns extends AbstractInstance
 				return false;
 			}
 		}
+		
 		return true;
 	}
 	

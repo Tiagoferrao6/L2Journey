@@ -32,7 +32,6 @@ import com.l2journey.gameserver.model.SeedProduction;
 import com.l2journey.gameserver.model.TeleportLocation;
 import com.l2journey.gameserver.model.actor.Npc;
 import com.l2journey.gameserver.model.actor.Player;
-import com.l2journey.gameserver.model.actor.enums.player.PlayerCondOverride;
 import com.l2journey.gameserver.model.actor.instance.Door;
 import com.l2journey.gameserver.model.actor.instance.Merchant;
 import com.l2journey.gameserver.model.clan.Clan;
@@ -458,7 +457,7 @@ public class CastleChamberlain extends AbstractNpcAI
 	
 	private final boolean isOwner(Player player, Npc npc)
 	{
-		return player.canOverrideCond(PlayerCondOverride.CASTLE_CONDITIONS) || ((player.getClan() != null) && (player.getClanId() == npc.getCastle().getOwnerId()));
+		return player.isGM() || ((player.getClan() != null) && (player.getClanId() == npc.getCastle().getOwnerId()));
 	}
 	
 	@Override

@@ -23,7 +23,6 @@ import com.l2journey.gameserver.managers.InstanceManager;
 import com.l2journey.gameserver.model.Location;
 import com.l2journey.gameserver.model.actor.Npc;
 import com.l2journey.gameserver.model.actor.Player;
-import com.l2journey.gameserver.model.actor.enums.player.PlayerCondOverride;
 import com.l2journey.gameserver.model.actor.instance.QuestGuard;
 import com.l2journey.gameserver.model.groups.Party;
 import com.l2journey.gameserver.model.instancezone.Instance;
@@ -108,7 +107,7 @@ public class UrbanArea extends AbstractInstance
 		String htmltext = null;
 		if (npc.getId() == KANAF)
 		{
-			if (!player.canOverrideCond(PlayerCondOverride.INSTANCE_CONDITIONS))
+			if (!player.isGM())
 			{
 				if (HellboundEngine.getInstance().getLevel() < 10)
 				{
@@ -316,7 +315,7 @@ public class UrbanArea extends AbstractInstance
 	@Override
 	protected boolean checkConditions(Player player)
 	{
-		if (player.canOverrideCond(PlayerCondOverride.INSTANCE_CONDITIONS))
+		if (player.isGM())
 		{
 			return true;
 		}

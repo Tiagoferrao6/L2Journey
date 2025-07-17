@@ -24,7 +24,6 @@ import com.l2journey.gameserver.model.Location;
 import com.l2journey.gameserver.model.actor.Attackable;
 import com.l2journey.gameserver.model.actor.Npc;
 import com.l2journey.gameserver.model.actor.Player;
-import com.l2journey.gameserver.model.actor.enums.player.PlayerCondOverride;
 import com.l2journey.gameserver.model.groups.Party;
 import com.l2journey.gameserver.model.instancezone.InstanceWorld;
 import com.l2journey.gameserver.network.NpcStringId;
@@ -201,7 +200,7 @@ public class CavernOfThePirateCaptain extends AbstractInstance
 	
 	private boolean checkConditions(Player player, int templateId)
 	{
-		if (player.canOverrideCond(PlayerCondOverride.INSTANCE_CONDITIONS))
+		if (player.isGM())
 		{
 			return true;
 		}

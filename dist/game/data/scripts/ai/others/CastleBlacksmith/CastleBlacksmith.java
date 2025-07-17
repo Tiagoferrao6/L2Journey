@@ -18,7 +18,6 @@ package ai.others.CastleBlacksmith;
 
 import com.l2journey.gameserver.model.actor.Npc;
 import com.l2journey.gameserver.model.actor.Player;
-import com.l2journey.gameserver.model.actor.enums.player.PlayerCondOverride;
 import com.l2journey.gameserver.model.clan.ClanAccess;
 
 import ai.AbstractNpcAI;
@@ -52,7 +51,7 @@ public class CastleBlacksmith extends AbstractNpcAI
 	
 	private boolean hasRights(Player player, Npc npc)
 	{
-		return player.canOverrideCond(PlayerCondOverride.CASTLE_CONDITIONS) || npc.isMyLord(player) || ((player.getClanId() == npc.getCastle().getOwnerId()) && player.hasAccess(ClanAccess.CASTLE_MANOR));
+		return player.isGM() || npc.isMyLord(player) || ((player.getClanId() == npc.getCastle().getOwnerId()) && player.hasAccess(ClanAccess.CASTLE_MANOR));
 	}
 	
 	@Override

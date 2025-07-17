@@ -34,7 +34,6 @@ import com.l2journey.gameserver.handler.IChatHandler;
 import com.l2journey.gameserver.model.BlockList;
 import com.l2journey.gameserver.model.World;
 import com.l2journey.gameserver.model.actor.Player;
-import com.l2journey.gameserver.model.actor.enums.player.PlayerCondOverride;
 import com.l2journey.gameserver.network.SystemMessageId;
 import com.l2journey.gameserver.network.enums.ChatType;
 import com.l2journey.gameserver.network.serverpackets.CreatureSay;
@@ -53,7 +52,7 @@ public class ChatHeroVoice implements IChatHandler
 	@Override
 	public void handleChat(ChatType type, Player activeChar, String target, String text)
 	{
-		if (!activeChar.isHero() && !activeChar.canOverrideCond(PlayerCondOverride.CHAT_CONDITIONS))
+		if (!activeChar.isHero() && !activeChar.isGM())
 		{
 			activeChar.sendMessage("Only Heroes can enter the Hero channel.");
 			return;
@@ -64,7 +63,7 @@ public class ChatHeroVoice implements IChatHandler
 			activeChar.sendPacket(SystemMessageId.CHATTING_IS_CURRENTLY_PROHIBITED_IF_YOU_TRY_TO_CHAT_BEFORE_THE_PROHIBITION_IS_REMOVED_THE_PROHIBITION_TIME_WILL_INCREASE_EVEN_FURTHER);
 			return;
 		}
-		if (Config.JAIL_DISABLE_CHAT && activeChar.isJailed() && !activeChar.canOverrideCond(PlayerCondOverride.CHAT_CONDITIONS))
+		if (Config.JAIL_DISABLE_CHAT && activeChar.isJailed() && !activeChar.isGM())
 		{
 			activeChar.sendPacket(SystemMessageId.CHATTING_IS_CURRENTLY_PROHIBITED);
 			return;
