@@ -45,27 +45,7 @@ import com.l2journey.gameserver.util.Broadcast;
 public class TownWarManager
 {
 	private static final Logger LOGGER = Logger.getLogger(TownWarManager.class.getName());
-	private static final int[] TOWNS =
-	{
-		1,
-		2,
-		3,
-		4,
-		5,
-		6,
-		7,
-		8,
-		9,
-		10,
-		11,
-		12,
-		13,
-		14,
-		15,
-		16,
-		17,
-		20
-	};
+	private static final int[] TOWNS = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,20};
 	private TownWarStartTask _task;
 	private boolean isInactive = true;
 	private boolean isStarting = false;
@@ -160,7 +140,7 @@ public class TownWarManager
 			{
 				return;
 			}
-			
+
 			defaultTown.setIsTWZone(isWarZone);
 			defaultTown.updateForCharactersInside();
 			return;
@@ -177,7 +157,7 @@ public class TownWarManager
 			town.updateForCharactersInside();
 		}
 	}
-	
+
 	class TownWarStartTask implements Runnable
 	{
 		private long _startTime;

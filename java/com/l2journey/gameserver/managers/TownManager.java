@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 L2jMobius
+ * Copyright (c) 2025 L2Journey Project
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -8,71 +8,58 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  * 
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
- * IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * 
+ * ---
+ * 
+ * Portions of this software are derived from the L2JMobius Project, 
+ * shared under the MIT License. The original license terms are preserved where 
+ * applicable..
+ * 
  */
 package com.l2journey.gameserver.managers;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.l2journey.gameserver.model.siege.Castle;
 import com.l2journey.gameserver.model.zone.ZoneType;
 import com.l2journey.gameserver.model.zone.type.TownZone;
 
+/**
+ * @author Zoinha
+ */
 public class TownManager
 {
+	private static final Map<Integer, Integer> CASTLES = new ConcurrentHashMap<>();
+
+	private TownManager()
+	{
+		CASTLES.put(912, 1);
+		CASTLES.put(916, 2);
+		CASTLES.put(918, 3);
+		CASTLES.put(922, 4);
+		CASTLES.put(924, 5);
+		CASTLES.put(926, 6);
+		CASTLES.put(1538, 7);
+		CASTLES.put(1537, 8);
+		CASTLES.put(1714, 9);
+	}
+
 	public static int getTownCastle(int townId)
 	{
-		switch (townId)
-		{
-			case 912:
-			{
-				return 1;
-			}
-			case 916:
-			{
-				return 2;
-			}
-			case 918:
-			{
-				return 3;
-			}
-			case 922:
-			{
-				return 4;
-			}
-			case 924:
-			{
-				return 5;
-			}
-			case 926:
-			{
-				return 6;
-			}
-			case 1538:
-			{
-				return 7;
-			}
-			case 1537:
-			{
-				return 8;
-			}
-			case 1714:
-			{
-				return 9;
-			}
-			default:
-			{
-				return 0;
-			}
-		}
+		return CASTLES.containsKey(townId) ? CASTLES.get(townId) : 0;
 	}
-	
+
 	public static boolean townHasCastleInSiege(int townId)
 	{
 		final int castleIndex = getTownCastle(townId);
