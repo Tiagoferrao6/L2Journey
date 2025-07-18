@@ -38,6 +38,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.l2journey.Config;
 import com.l2journey.commons.database.DatabaseFactory;
@@ -1637,24 +1641,16 @@ public class NpcBuffer extends Quest
 						}
 					}
 					
-					for (int i = 0; i < buffs.size(); ++i)
+					List<int[]> buffsToApply = new ArrayList<>();
+					for (int i = 0; i < buffs.size(); i++)
 					{
-						if (!getSummonbuff)
+						buffsToApply.add(new int[]
 						{
-							SkillData.getInstance().getSkill(buffs.get(i), levels.get(i)).applyEffects(player, player);
-						}
-						else
-						{
-							if (player.getSummon() != null)
-							{
-								SkillData.getInstance().getSkill(buffs.get(i), levels.get(i)).applyEffects(player.getSummon(), player.getSummon());
-							}
-							else
-							{
-								return showText(st, "Info", "You can't use the Pet's options.<br>Summon your pet first!", false, "Return", "main");
-							}
-						}
+							buffs.get(i),
+							levels.get(i)
+						});
 					}
+					applyBuffsWithDelay(player, buffsToApply, getSummonbuff);
 					
 					takeItems(player, Config.CONSUMABLE_ID, Config.SCHEME_BUFF_PRICE);
 					if (Config.TIME_OUT)
@@ -1820,10 +1816,7 @@ public class NpcBuffer extends Quest
 						player.setTarget(player);
 						player.broadcastPacket(new MagicSkillUse(player, SKILL_BUFF_1, 1, 1000, 0));
 						player.broadcastPacket(new MagicSkillUse(player, SKILL_BUFF_2, 1, 1000, 0));
-						for (final int[] i : buff_sets)
-						{
-							SkillData.getInstance().getSkill(i[0], i[1]).applyEffects(player, player);
-						}
+						applyBuffsWithDelay(player, buff_sets, getSummonbuff);
 					}
 					else
 					{
@@ -1856,10 +1849,7 @@ public class NpcBuffer extends Quest
 							player.getSummon().setTarget(player.getSummon());
 							player.getSummon().broadcastPacket(new MagicSkillUse(player.getSummon(), SKILL_BUFF_1, 1, 1000, 0));
 							player.getSummon().broadcastPacket(new MagicSkillUse(player.getSummon(), SKILL_BUFF_2, 1, 1000, 0));
-							for (final int[] i : buff_sets)
-							{
-								SkillData.getInstance().getSkill(i[0], i[1]).applyEffects(player.getSummon(), player.getSummon());
-							}
+							applyBuffsWithDelay(player, buff_sets, getSummonbuff);
 						}
 						else
 						{
@@ -2003,6 +1993,33 @@ public class NpcBuffer extends Quest
 			formatted = String.valueOf(id);
 		}
 		return formatted;
+	}
+	
+	private void applyBuffsWithDelay(Player player, List<int[]> buffs, boolean isPet)
+	{
+		final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+		final AtomicInteger index = new AtomicInteger(0);
+		
+		scheduler.scheduleAtFixedRate(() ->
+		{
+			if (index.get() >= buffs.size())
+			{
+				scheduler.shutdown();
+				return;
+			}
+			
+			int[] buff = buffs.get(index.getAndIncrement());
+			Skill skill = SkillData.getInstance().getSkill(buff[0], buff[1]);
+			
+			if (!isPet)
+			{
+				skill.applyEffects(player, player);
+			}
+			else if (player.getSummon() != null)
+			{
+				skill.applyEffects(player.getSummon(), player.getSummon());
+			}
+		}, 0, 100, TimeUnit.MILLISECONDS); // 100ms de delay entre buffs
 	}
 	
 	static public void main(String[] args)
