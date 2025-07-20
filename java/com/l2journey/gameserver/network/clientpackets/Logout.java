@@ -109,7 +109,7 @@ public class Logout extends ClientPacket
 		}
 		else
 		{
-			Disconnection.of(client, player).defaultSequence(LeaveWorld.STATIC_PACKET);
+			Disconnection.of(client, player).storeAndDeleteWith(LeaveWorld.STATIC_PACKET);
 		}
 	}
 }

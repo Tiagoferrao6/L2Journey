@@ -118,7 +118,7 @@ public class SecondaryPasswordAuth
 		if (passwordExist())
 		{
 			LOGGER.warning("[SecondaryPasswordAuth]" + _activeClient.getAccountName() + " forced savePassword");
-			Disconnection.of(_activeClient).defaultSequence(LeaveWorld.STATIC_PACKET);
+			Disconnection.of(_activeClient).storeAndDeleteWith(LeaveWorld.STATIC_PACKET);
 			return false;
 		}
 		
@@ -170,7 +170,7 @@ public class SecondaryPasswordAuth
 		if (!passwordExist())
 		{
 			LOGGER.warning("[SecondaryPasswordAuth]" + _activeClient.getAccountName() + " forced changePassword");
-			Disconnection.of(_activeClient).defaultSequence(LeaveWorld.STATIC_PACKET);
+			Disconnection.of(_activeClient).storeAndDeleteWith(LeaveWorld.STATIC_PACKET);
 			return false;
 		}
 		

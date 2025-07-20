@@ -403,7 +403,7 @@ public class AutoUseTaskManager
 				return false;
 			}
 			
-			if (playable.isPlayer() && (playable.asPlayer().getCharges() < skill.getChargeConsume()))
+			if (playable.isPlayer() && (playable.asPlayer().getCharges() < skill.getChargeConsumeCount()))
 			{
 				return false;
 			}

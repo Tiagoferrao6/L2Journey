@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 L2jMobius
+ * Copyright (c) 2025 L2Journey Project
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -8,21 +8,33 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  * 
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
- * IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * 
+ * ---
+ * 
+ * Portions of this software are derived from the L2JMobius Project, 
+ * shared under the MIT License. The original license terms are preserved where 
+ * applicable..
+ * 
  */
 package com.l2journey.gameserver.network.clientpackets;
+
+import java.nio.BufferUnderflowException;
 
 import com.l2journey.Config;
 import com.l2journey.gameserver.ai.Intention;
 import com.l2journey.gameserver.data.xml.DoorData;
+import com.l2journey.gameserver.geoengine.GeoEngine;
+import com.l2journey.gameserver.managers.PunishmentManager;
 import com.l2journey.gameserver.model.Location;
 import com.l2journey.gameserver.model.actor.Player;
 import com.l2journey.gameserver.model.events.EventDispatcher;
@@ -52,7 +64,19 @@ public class MoveBackwardToLocation extends ClientPacket
 		_originX = readInt();
 		_originY = readInt();
 		_originZ = readInt();
-		_movementMode = readInt(); // is 0 if cursor keys are used 1 if mouse is used
+		// _movementMode = readInt(); // is 0 if cursor keys are used 1 if mouse is used
+		try
+		{
+			_movementMode = readInt(); // is 0 if cursor keys are used 1 if mouse is used
+		}
+		catch (BufferUnderflowException e)
+		{
+			if (Config.L2WALKER_PROTECTION)
+			{
+				Player player = getPlayer();
+				PunishmentManager.handleIllegalPlayerAction(player, "Player " + player.getName() + " is trying to use L2Walker and got kicked.", Config.DEFAULT_PUNISH);
+			}
+		}
 	}
 	
 	@Override
@@ -81,6 +105,13 @@ public class MoveBackwardToLocation extends ClientPacket
 		if ((_targetX == _originX) && (_targetY == _originY) && (_targetZ == _originZ))
 		{
 			player.stopMove(player.getLocation());
+			player.sendPacket(ActionFailed.STATIC_PACKET);
+			return;
+		}
+		
+		// Check if target location is obstructed.
+		if (GeoEngine.getInstance().isCompletelyBlocked(GeoEngine.getGeoX(_targetX), GeoEngine.getGeoY(_targetY), _targetZ))
+		{
 			player.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
@@ -147,13 +178,21 @@ public class MoveBackwardToLocation extends ClientPacket
 		}
 		
 		// Prevent moving to same location. Geodata cell size is 16.
-		if (player.isMoving() && (LocationUtil.calculateDistance(player.getXdestination(), player.getYdestination(), player.getZdestination(), _targetX, _targetY, _targetZ, true, false) < 17))
+		final Location targetLocation = new Location(_targetX, _targetY, _targetZ);
+		if (LocationUtil.calculateDistance(player.getLastMoveToPosition(), targetLocation, true, false) < 17)
 		{
 			player.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
 		
-		player.getAI().setIntention(Intention.MOVE_TO, new Location(_targetX, _targetY, _targetZ));
+		// When player is not attacking or casting set last "move to" position.
+		if (!player.isAttackingOrCastingNow())
+		{
+			player.setLastMoveToPosition(targetLocation);
+		}
+		
+		// Finally move to the target location.
+		player.getAI().setIntention(Intention.MOVE_TO, targetLocation);
 		
 		// Mobius: Check spawn protections.
 		player.onActionRequest();

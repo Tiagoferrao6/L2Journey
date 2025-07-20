@@ -191,7 +191,7 @@ public class TownZone extends ZoneType
 	
 	private void disconnectPlayerWithShop(Player player)
 	{
-		Disconnection.of(player).defaultSequence(LeaveWorld.STATIC_PACKET);
+		Disconnection.of(player).storeAndDeleteWith(LeaveWorld.STATIC_PACKET);
 		player.broadcastUserInfo();
 	}
 	

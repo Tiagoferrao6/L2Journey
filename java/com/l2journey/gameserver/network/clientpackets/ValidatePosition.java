@@ -23,6 +23,7 @@ package com.l2journey.gameserver.network.clientpackets;
 import com.l2journey.commons.threads.ThreadPool;
 import com.l2journey.gameserver.data.xml.DoorData;
 import com.l2journey.gameserver.geoengine.GeoEngine;
+import com.l2journey.gameserver.model.Location;
 import com.l2journey.gameserver.model.World;
 import com.l2journey.gameserver.model.actor.Player;
 import com.l2journey.gameserver.model.zone.ZoneId;
@@ -72,6 +73,17 @@ public class ValidatePosition extends ClientPacket
 			return; // Disable validations during fall to avoid "jumping".
 		}
 		
+		// Abnormal z read from client.
+		if ((_z < -20000) || (_z > 20000))
+		{
+			final Location lastServerPosition = player.getLastServerPosition();
+			if (lastServerPosition != null)
+			{
+				player.teleToLocation(lastServerPosition);
+			}
+			return;
+		}
+		
 		// Don't allow flying transformations outside gracia area!
 		if (player.isFlyingMounted() && (_x > World.GRACIA_MAX_X))
 		{
@@ -115,7 +127,7 @@ public class ValidatePosition extends ClientPacket
 			}
 			else
 			{
-				player.setXYZ(_x, _y, player.getZ() > _z ? GeoEngine.getInstance().getHeight(_x, _y, player.getZ()) : _z);
+				player.setXYZ(_x, _y, realZ > _z ? GeoEngine.getInstance().getHeight(_x, _y, realZ) : _z);
 			}
 		}
 		

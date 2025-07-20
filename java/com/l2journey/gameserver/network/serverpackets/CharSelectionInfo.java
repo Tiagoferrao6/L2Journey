@@ -204,7 +204,7 @@ public class CharSelectionInfo extends ServerPacket
 							final Player player = World.getInstance().getPlayer(charInfopackage.getObjectId());
 							if ((player != null) && player.isInStoreMode())
 							{
-								Disconnection.of(player).storeMe().deleteMe();
+								Disconnection.of(player).storeAndDelete();
 								continue;
 							}
 						}
@@ -215,7 +215,7 @@ public class CharSelectionInfo extends ServerPacket
 							final Player player = World.getInstance().getPlayer(charInfopackage.getObjectId());
 							if ((player != null) && player.isOfflinePlay())
 							{
-								Disconnection.of(player).storeMe().deleteMe();
+								Disconnection.of(player).storeAndDelete();
 							}
 						}
 					}

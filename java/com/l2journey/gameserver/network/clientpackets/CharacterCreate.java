@@ -331,7 +331,7 @@ public class CharacterCreate extends ClientPacket
 		}
 		
 		newChar.setOnlineStatus(true, false);
-		Disconnection.of(client, newChar).storeMe().deleteMe();
+		Disconnection.of(client, newChar).storeAndDelete();
 		
 		final CharSelectionInfo cl = new CharSelectionInfo(client.getAccountName(), client.getSessionId().playOkID1);
 		client.setCharSelection(cl.getCharInfo());

@@ -187,7 +187,7 @@ public class AdminMenu implements IAdminCommandHandler
 				String text;
 				if (plyr != null)
 				{
-					Disconnection.of(plyr).defaultSequence(LeaveWorld.STATIC_PACKET);
+					Disconnection.of(plyr).storeAndDeleteWith(LeaveWorld.STATIC_PACKET);
 					text = "You kicked " + plyr.getName() + " from the game.";
 				}
 				else

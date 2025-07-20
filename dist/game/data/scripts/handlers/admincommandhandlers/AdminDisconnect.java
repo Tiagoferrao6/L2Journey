@@ -73,7 +73,7 @@ public class AdminDisconnect implements IAdminCommandHandler
 		else
 		{
 			activeChar.sendSysMessage("Character " + player.getName() + " disconnected from server.");
-			Disconnection.of(player).defaultSequence(LeaveWorld.STATIC_PACKET);
+			Disconnection.of(player).storeAndDeleteWith(LeaveWorld.STATIC_PACKET);
 		}
 	}
 }

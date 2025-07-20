@@ -165,7 +165,7 @@ public class RequestRestart extends ClientPacket
 		}
 		else
 		{
-			Disconnection.of(client, player).storeMe().deleteMe();
+			Disconnection.of(client, player).storeAndDelete();
 		}
 		
 		// Return the client to the authenticated status.

@@ -137,7 +137,7 @@ public class AdminChangeAccessLevel implements IAdminCommandHandler
 		{
 			player.setAccessLevel(lvl);
 			player.sendMessage("Your character has been banned. Bye.");
-			Disconnection.of(player).defaultSequence(LeaveWorld.STATIC_PACKET);
+			Disconnection.of(player).storeAndDeleteWith(LeaveWorld.STATIC_PACKET);
 		}
 	}
 }

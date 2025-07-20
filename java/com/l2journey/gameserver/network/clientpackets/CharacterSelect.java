@@ -121,7 +121,7 @@ public class CharacterSelect extends ClientPacket
 					final Player player = World.getInstance().getPlayer(info.getObjectId());
 					if (player != null)
 					{
-						Disconnection.of(player).storeMe().deleteMe();
+						Disconnection.of(player).storeAndDelete();
 					}
 					
 					// Banned?
@@ -216,7 +216,7 @@ public class CharacterSelect extends ClientPacket
 						final TerminateReturn terminate = EventDispatcher.getInstance().notifyEvent(new OnPlayerSelect(cha, cha.getObjectId(), cha.getName(), client), Containers.Players(), TerminateReturn.class);
 						if ((terminate != null) && terminate.terminate())
 						{
-							Disconnection.of(cha).defaultSequence(LeaveWorld.STATIC_PACKET);
+							Disconnection.of(cha).storeAndDeleteWith(LeaveWorld.STATIC_PACKET);
 							return;
 						}
 					}

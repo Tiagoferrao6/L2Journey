@@ -122,7 +122,7 @@ public class Say2 extends ClientPacket
 		{
 			PacketLogger.warning("Say2: Invalid type: " + _type + " Player : " + player.getName() + " text: " + _text);
 			player.sendPacket(ActionFailed.STATIC_PACKET);
-			Disconnection.of(player).defaultSequence(LeaveWorld.STATIC_PACKET);
+			Disconnection.of(player).storeAndDeleteWith(LeaveWorld.STATIC_PACKET);
 			return;
 		}
 		
@@ -130,7 +130,7 @@ public class Say2 extends ClientPacket
 		{
 			PacketLogger.warning(player.getName() + ": sending empty text. Possible packet hack!");
 			player.sendPacket(ActionFailed.STATIC_PACKET);
-			Disconnection.of(player).defaultSequence(LeaveWorld.STATIC_PACKET);
+			Disconnection.of(player).storeAndDeleteWith(LeaveWorld.STATIC_PACKET);
 			return;
 		}
 		

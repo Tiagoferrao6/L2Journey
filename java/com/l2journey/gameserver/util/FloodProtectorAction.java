@@ -137,7 +137,7 @@ public class FloodProtectorAction
 	 */
 	private void kickPlayer()
 	{
-		Disconnection.of(_client).defaultSequence(LeaveWorld.STATIC_PACKET);
+		Disconnection.of(_client).storeAndDeleteWith(LeaveWorld.STATIC_PACKET);
 		
 		if (LOGGER.isLoggable(Level.WARNING))
 		{
