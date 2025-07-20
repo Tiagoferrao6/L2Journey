@@ -159,6 +159,11 @@ public class AutoPlayTaskManager
 						// Check if actually attacking.
 						if (player.hasAI() && !player.isAttackingNow() && !player.isCastingNow() && !player.isMoving() && !player.isDisabled())
 						{
+							if (player.isTransformed() && (player.getTransformation() != null))
+							{
+								player.untransform();
+							}
+							
 							if (player.getAI().getIntention() != Intention.ATTACK)
 							{
 								if (creature.isAutoAttackable(player))
@@ -353,6 +358,11 @@ public class AutoPlayTaskManager
 	
 	public synchronized void startAutoPlay(Player player)
 	{
+		if (player.isTransformed() && (player.getTransformation() != null))
+		{
+			player.untransform();
+		}
+		
 		for (Set<Player> pool : POOLS)
 		{
 			if (pool.contains(player))

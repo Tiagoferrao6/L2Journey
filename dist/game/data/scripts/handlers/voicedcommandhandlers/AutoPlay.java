@@ -180,6 +180,11 @@ public class AutoPlay implements IVoicedCommandHandler
 		{
 			case "play":
 			{
+				if (player.isTransformed() && (player.getTransformation() != null))
+				{
+					player.untransform();
+				}
+				
 				if (params != null)
 				{
 					final String[] paramArray = params.toLowerCase().split(" ");
@@ -288,6 +293,11 @@ public class AutoPlay implements IVoicedCommandHandler
 			}
 			case "playskills":
 			{
+				if (player.isTransformed() && (player.getTransformation() != null))
+				{
+					player.untransform();
+				}
+				
 				final NpcHtmlMessage html = new NpcHtmlMessage();
 				final String content = HtmCache.getInstance().getHtm(player, "data/html/mods/AutoPlay/Skills.htm");
 				

@@ -84,7 +84,7 @@ public class AutoUseTaskManager
 			
 			for (Player player : _players)
 			{
-				if (!player.isOnline() || (player.isInOfflineMode() && !player.isOfflinePlay()))
+				if (!player.isOnline() || (player.isInOfflineMode() && !player.isOfflinePlay()) || player.isTransformed())
 				{
 					stopAutoUseTask(player);
 					continue;
