@@ -28,6 +28,7 @@
  */
 package com.l2journey.gameserver.model.actor.instance;
 
+import com.l2journey.EventsConfig;
 import com.l2journey.gameserver.model.actor.enums.creature.InstanceType;
 import com.l2journey.gameserver.model.actor.templates.NpcTemplate;
 
@@ -54,6 +55,11 @@ public class Adventurer extends Folk
 		else
 		{
 			pom = npcId + "-" + value;
+		}
+		
+		if (EventsConfig.PC_CAFE_ENABLED)
+		{
+			return "data/html/adventurer_guildsman/" + pom + "-pcbangpoint.htm";
 		}
 		return "data/html/adventurer_guildsman/" + pom + ".htm";
 	}
