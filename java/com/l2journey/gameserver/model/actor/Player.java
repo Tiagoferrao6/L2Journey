@@ -10814,6 +10814,17 @@ public class Player extends Playable
 		}
 	}
 	
+	/**
+	 * Fully restores the player's HP, MP, and CP to their maximum values.
+	 */
+	@Override
+	public void fullRestore()
+	{
+		setCurrentHp(getMaxHp());
+		setCurrentMp(getMaxMp());
+		setCurrentCp(getMaxCp());
+	}
+	
 	public long getLastAccess()
 	{
 		return _lastAccess;

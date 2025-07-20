@@ -88,8 +88,7 @@ public class TamedBeast extends FeedableBeast
 		super(NpcData.getInstance().getTemplate(npcTemplateId));
 		_isFreyaBeast = false;
 		setInstanceType(InstanceType.TamedBeast);
-		setCurrentHp(getMaxHp());
-		setCurrentMp(getMaxMp());
+		fullRestore();
 		setOwner(owner);
 		setFoodType(foodSkillId);
 		setHome(x, y, z);
@@ -101,8 +100,7 @@ public class TamedBeast extends FeedableBeast
 		super(NpcData.getInstance().getTemplate(npcTemplateId));
 		_isFreyaBeast = isFreyaBeast;
 		setInstanceType(InstanceType.TamedBeast);
-		setCurrentHp(getMaxHp());
-		setCurrentMp(getMaxMp());
+		fullRestore();
 		setFoodType(food);
 		setHome(x, y, z);
 		spawnMe(x, y, z);

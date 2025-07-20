@@ -6640,6 +6640,15 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
+	 * Fully restores the creature's HP and MP to their maximum values.
+	 */
+	public void fullRestore()
+	{
+		_status.setCurrentHp(getMaxHp());
+		_status.setCurrentMp(getMaxMp(), isPlayable());
+	}
+	
+	/**
 	 * @return the max weight that the Creature can load.
 	 */
 	public int getMaxLoad()

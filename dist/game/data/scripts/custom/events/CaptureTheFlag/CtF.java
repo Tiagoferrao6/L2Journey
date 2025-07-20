@@ -344,9 +344,8 @@ public class CtF extends Event
 								// skill.getSkill().applyEffects(npc, player);
 							}
 						}
-						player.setCurrentHp(player.getMaxHp());
-						player.setCurrentMp(player.getMaxMp());
-						player.setCurrentCp(player.getMaxCp());
+						
+						player.fullRestore();
 					}
 				}
 				break;
