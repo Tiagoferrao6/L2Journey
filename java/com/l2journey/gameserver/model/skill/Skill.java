@@ -909,7 +909,7 @@ public class Skill
 		return _abnormalType == AbnormalType.HP_RECOVER;
 	}
 	
-	public int getChargeConsume()
+	public int getChargeConsumeCount()
 	{
 		return _chargeConsume;
 	}

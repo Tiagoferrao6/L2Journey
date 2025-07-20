@@ -524,7 +524,7 @@ public class GameClient extends Client<com.l2journey.commons.network.Connection<
 			
 			if (player.getClient() != null)
 			{
-				Disconnection.of(player).defaultSequence(LeaveWorld.STATIC_PACKET);
+				Disconnection.of(player).storeAndDeleteWith(LeaveWorld.STATIC_PACKET);
 			}
 			else
 			{

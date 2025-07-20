@@ -4030,7 +4030,7 @@ public class Player extends Playable
 		}
 		
 		// Check if the spell using charges or not in AirShip
-		if ((_charges.get() < skill.getChargeConsume()) || (isInAirShip() && !skill.hasEffectType(EffectType.REFUEL_AIRSHIP)))
+		if ((_charges.get() < skill.getChargeConsumeCount()) || (isInAirShip() && !skill.hasEffectType(EffectType.REFUEL_AIRSHIP)))
 		{
 			final SystemMessage sm = new SystemMessage(SystemMessageId.S1_CANNOT_BE_USED_DUE_TO_UNSUITABLE_TERMS);
 			sm.addSkillName(skill);
@@ -6147,7 +6147,7 @@ public class Player extends Playable
 		if (Config.OFFLINE_DISCONNECT_FINISHED && (privateStoreType == PrivateStoreType.NONE) && ((_client == null) || _client.isDetached()))
 		{
 			OfflineTraderTable.getInstance().removeTrader(getObjectId());
-			Disconnection.of(this).storeMe().deleteMe();
+			Disconnection.of(this).storeAndDelete();
 		}
 	}
 	

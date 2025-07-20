@@ -319,7 +319,7 @@ public class OfflineTraderTable
 					LOGGER.log(Level.WARNING, getClass().getSimpleName() + ": Error loading trader: " + player, e);
 					if (player != null)
 					{
-						Disconnection.of(player).defaultSequence(LeaveWorld.STATIC_PACKET);
+						Disconnection.of(player).storeAndDeleteWith(LeaveWorld.STATIC_PACKET);
 					}
 				}
 			}

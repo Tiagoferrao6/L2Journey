@@ -126,18 +126,6 @@ public class Trap extends Npc
 		});
 	}
 	
-	@Override
-	public void broadcastPacket(ServerPacket packet, int radiusInKnownlist)
-	{
-		World.getInstance().forEachVisibleObjectInRange(this, Player.class, radiusInKnownlist, player ->
-		{
-			if (_isTriggered || canBeSeen(player))
-			{
-				player.sendPacket(packet);
-			}
-		});
-	}
-	
 	/**
 	 * Verify if the character can see the trap.
 	 * @param creature The creature to verify

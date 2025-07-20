@@ -167,8 +167,8 @@ public class World
 			final Player existingPlayer = _allPlayers.putIfAbsent(object.getObjectId(), newPlayer);
 			if (existingPlayer != null)
 			{
-				Disconnection.of(existingPlayer).defaultSequence(LeaveWorld.STATIC_PACKET);
-				Disconnection.of(newPlayer).defaultSequence(LeaveWorld.STATIC_PACKET);
+				Disconnection.of(existingPlayer).storeAndDeleteWith(LeaveWorld.STATIC_PACKET);
+				Disconnection.of(newPlayer).storeAndDeleteWith(LeaveWorld.STATIC_PACKET);
 				LOGGER.warning(getClass().getSimpleName() + ": Duplicate character!? Disconnected both characters (" + newPlayer.getName() + ")");
 			}
 			else if (EventsConfig.FACTION_SYSTEM_ENABLED)

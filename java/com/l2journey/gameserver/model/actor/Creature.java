@@ -533,7 +533,7 @@ public abstract class Creature extends WorldObject
 			final Player player = asPlayer();
 			if (player.isOnline())
 			{
-				Disconnection.of(player).defaultSequence(new SystemMessage(SendMessageLocalisationData.getLocalisation(player, "60 min. have passed after the death of your character, so you were disconnected from the game.")));
+				Disconnection.of(player).storeAndDeleteWith(new SystemMessage(SendMessageLocalisationData.getLocalisation(player, "60 min. have passed after the death of your character, so you were disconnected from the game.")));
 			}
 		}
 		else
@@ -637,7 +637,7 @@ public abstract class Creature extends WorldObject
 	 * In order to inform other players of state modification on the Creature, server just need to go through _knownPlayers to send Server->Client Packet
 	 * @param packet
 	 * @param radiusInKnownlist
-	 */
+	 *
 	public void broadcastPacket(ServerPacket packet, int radiusInKnownlist)
 	{
 		packet.sendInBroadcast();
@@ -649,7 +649,7 @@ public abstract class Creature extends WorldObject
 				player.sendPacket(packet);
 			}
 		});
-	}
+	}*/
 	
 	public void broadcastMoveToLocation()
 	{
@@ -4139,12 +4139,29 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
+	 * Verifies if the creature is attacking or casting now.
+	 * @return {@code true} if the creature is attacking or casting now, {@code false} otherwise
+	 */
+	public boolean isAttackingOrCastingNow()
+	{
+		return isAttackingNow() || isRangeAttackingNow() || isCastingNow() || isCastingSimultaneouslyNow();
+	}
+	
+	/**
 	 * Verifies if the creature is attacking now.
 	 * @return {@code true} if the creature is attacking now, {@code false} otherwise
 	 */
 	public boolean isAttackingNow()
 	{
 		return _attackEndTime > System.nanoTime();
+	}
+	
+	/**
+	 * @return True if the Creature is attacking with a ranged weapon.
+	 */
+	public final boolean isRangeAttackingNow()
+	{
+		return _disableBowAttackEndTime > GameTimeTaskManager.getInstance().getGameTicks();
 	}
 	
 	/**
@@ -4819,7 +4836,13 @@ public abstract class Creature extends WorldObject
 				}
 				
 				// Verify destination when using mouse movement and no path is found.
-				if (isPlayable() && !_cursorKeyMovement && (move.geoPath == null))
+				final boolean canMoveToDestination = isPlayable() && !_cursorKeyMovement // Is using mouse movement.
+					&& (move.geoPath == null // No path found.
+					) && !isInVehicle // Is not in a vehicle.
+					&& (distance < 3000) // Should be able to click far away and more.
+					&& !(((curZ - z) > 300) && (distance < 300)); // Forbid destination correction if character wants to fall.
+					
+				if (canMoveToDestination)
 				{
 					final Location destiny = GeoEngine.getInstance().getValidLocation(curX, curY, curZ, x, y, z, getInstanceId());
 					x = destiny.getX();
@@ -5929,9 +5952,9 @@ public abstract class Creature extends WorldObject
 			{
 				// Consume Charges.
 				final Player player = asPlayer();
-				if (skill.getChargeConsume() > 0)
+				if (skill.getChargeConsumeCount() > 0)
 				{
-					player.decreaseCharges(skill.getChargeConsume());
+					player.decreaseCharges(skill.getChargeConsumeCount());
 				}
 				
 				// Consume Souls if necessary.
@@ -6000,7 +6023,7 @@ public abstract class Creature extends WorldObject
 		final Skill skill = mut.getSkill();
 		final WorldObject target = !mut.getTargets().isEmpty() ? mut.getTargets().get(0) : null;
 		
-		// Attack target after skill use
+		// Attack target after skill use.
 		if (skill.nextActionIsAttack() && (_target != this) && (target != null) && (_target == target) && _target.isCreature() && target.canBeAttacked() && (!isPlayer() || !asPlayer().isAutoPlaying()))
 		{
 			final IntentionCommand nextIntention = getAI().getNextIntention();
@@ -6008,11 +6031,16 @@ public abstract class Creature extends WorldObject
 			{
 				if (isPlayer())
 				{
-					final Player currPlayer = asPlayer();
-					final SkillUseHolder currSkill = currPlayer.getCurrentSkill();
+					final SkillUseHolder currSkill = asPlayer().getCurrentSkill();
 					if ((currSkill == null) || !currSkill.isShiftPressed())
 					{
-						getAI().setIntention(Intention.ATTACK, target);
+						ThreadPool.schedule(() ->
+						{
+							if (!isDisabled() && !isAttackingOrCastingNow())
+							{
+								getAI().setIntention(Intention.ATTACK, target);
+							}
+						}, 333); // Wait for skill land animation.
 					}
 				}
 				else
@@ -6020,8 +6048,17 @@ public abstract class Creature extends WorldObject
 					getAI().setIntention(Intention.ATTACK, target);
 				}
 			}
+			else if (isPlayer()) // Player is moving.
+			{
+				ThreadPool.schedule(() -> completeMagicFinalizer(skill, target), 333); // Wait for skill land animation.
+				return;
+			}
 		}
-		
+		completeMagicFinalizer(skill, target);
+	}
+	
+	private void completeMagicFinalizer(Skill skill, WorldObject target)
+	{
 		if (skill.isBad() && (skill.getTargetType() != TargetType.UNLOCKABLE))
 		{
 			getAI().clientStartAutoAttack();
@@ -6037,16 +6074,16 @@ public abstract class Creature extends WorldObject
 		// If there is a queued skill, launch it and wipe the queue.
 		if (isPlayer())
 		{
-			final Player currPlayer = asPlayer();
-			final SkillUseHolder queuedSkill = currPlayer.getQueuedSkill();
-			currPlayer.setCurrentSkill(null, false, false);
+			final Player player = asPlayer();
+			final SkillUseHolder queuedSkill = player.getQueuedSkill();
+			player.setCurrentSkill(null, false, false);
 			if (queuedSkill != null)
 			{
-				currPlayer.setQueuedSkill(null, false, false);
+				player.setQueuedSkill(null, false, false);
 				
-				// DON'T USE : Recursive call to useMagic() method
-				// currPlayer.useMagic(queuedSkill.getSkill(), queuedSkill.isCtrlPressed(), queuedSkill.isShiftPressed());
-				ThreadPool.execute(new QueuedMagicUseTask(currPlayer, queuedSkill.getSkill(), queuedSkill.isCtrlPressed(), queuedSkill.isShiftPressed()));
+				// DO NOT USE: Recursive call to useMagic() method.
+				// player.useMagic(queuedSkill.getSkill(), queuedSkill.isCtrlPressed(), queuedSkill.isShiftPressed());
+				ThreadPool.execute(new QueuedMagicUseTask(player, queuedSkill.getSkill(), queuedSkill.isCtrlPressed(), queuedSkill.isShiftPressed()));
 			}
 		}
 		

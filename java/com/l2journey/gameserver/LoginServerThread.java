@@ -528,7 +528,7 @@ public class LoginServerThread extends Thread
 			}
 			else
 			{
-				Disconnection.of(client).defaultSequence(new SystemMessage(SystemMessageId.ANOTHER_PERSON_HAS_LOGGED_IN_WITH_THE_SAME_ACCOUNT));
+				Disconnection.of(client).storeAndDeleteWith(new SystemMessage(SystemMessageId.ANOTHER_PERSON_HAS_LOGGED_IN_WITH_THE_SAME_ACCOUNT));
 				ACCOUNTING_LOGGER.info("Kicked by login, " + client);
 			}
 		}

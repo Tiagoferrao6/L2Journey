@@ -260,7 +260,7 @@ public class CaptchaManager
 			{
 				if (player.isOnline())
 				{
-					Disconnection.of(null, player).defaultSequence(LeaveWorld.STATIC_PACKET);
+					Disconnection.of(player).storeAndDeleteWith(LeaveWorld.STATIC_PACKET);
 					AdminData.getInstance().broadcastToGMs(new CreatureSay(null, ChatType.ALLIANCE, "Punishment", player.getName() + " has been kicked."));
 					PacketLogger.warning(player + "[KICK] Wrong Captcha maybe boting?");
 					return;

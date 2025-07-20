@@ -107,7 +107,7 @@ public class IllegalPlayerActionTask implements Runnable
 				}
 				case KICK:
 				{
-					Disconnection.of(_actor).defaultSequence(LeaveWorld.STATIC_PACKET);
+					Disconnection.of(_actor).storeAndDeleteWith(LeaveWorld.STATIC_PACKET);
 					break;
 				}
 				case KICKBAN:
