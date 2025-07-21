@@ -48,6 +48,19 @@ public class AndreasVanHalter extends AbstractNpcAI
 	private static final int TRIOLS_REVELATIONS4 = 32061;
 	private static final int TRIOLS_REVELATIONS5 = 32062;
 	private static final int TRIOLS_REVELATIONS6 = 32063;
+	// private static final int TRIOLS_REVELATIONS7 = 32064; //TODO
+	// private static final int TRIOLS_REVELATIONS8 = 32065;
+	// private static final int TRIOLS_REVELATIONS9 = 32066;
+	// private static final int TRIOLS_REVELATIONS10 = 32067;
+	// private static final int TRIOLS_REVELATIONS11 = 32068;
+	// private static final int RITUAL_OFFERING = 32038;
+	// private static final int ALTAR_GATEKEEPER = 32051;
+	// private static final int ANDREAS_CAPTAIN_ROYAL_GUARD1 = 22175;
+	// private static final int ANDREAS_CAPTAIN_ROYAL_GUARD2 = 22188;
+	// private static final int ANDREAS_CAPTAIN_ROYAL_GUARD3 = 22191;
+	// private static final int ANDREAS_ROYAL_GUARD1 = 22192;
+	// private static final int ANDREAS_ROYAL_GUARD2 = 22193;
+	// private static final int ANDREAS_ROYAL_GUARD3 = 22176;
 	
 	private static final int ALTAR_SECRET_DOOR_1 = 19160013;
 	private static final int ALTAR_SECRET_DOOR_2 = 19160012;
@@ -73,6 +86,11 @@ public class AndreasVanHalter extends AbstractNpcAI
 		TRIOLS_REVELATIONS4,
 		TRIOLS_REVELATIONS5,
 		TRIOLS_REVELATIONS6,
+		// TRIOLS_REVELATIONS7,
+		// TRIOLS_REVELATIONS8,
+		// TRIOLS_REVELATIONS9,
+		// TRIOLS_REVELATIONS10,
+		// TRIOLS_REVELATIONS11,
 	};
 	
 	private AndreasVanHalter()
@@ -185,14 +203,14 @@ public class AndreasVanHalter extends AbstractNpcAI
 	
 	private void SpawnNpcs()
 	{
-		addSpawn(TRIOLS_REVELATIONS1, new Location(-18161, -52778, -11013));
-		addSpawn(TRIOLS_REVELATIONS2, new Location(-14590, -52790, -11013));
+		addSpawn(TRIOLS_REVELATIONS1, new Location(-18161, -52778, -11013)); // Primeira porta a esquerda
+		addSpawn(TRIOLS_REVELATIONS2, new Location(-14590, -52790, -11013)); // Primeira porta a direita
 		
-		addSpawn(TRIOLS_REVELATIONS3, new Location(-18079, -54816, -10603));
-		addSpawn(TRIOLS_REVELATIONS4, new Location(-14686, -54745, -10603));
+		addSpawn(TRIOLS_REVELATIONS3, new Location(-18079, -54816, -10603)); // Primeira porta a esquerda da varanda
+		addSpawn(TRIOLS_REVELATIONS4, new Location(-14686, -54745, -10603)); // Primeira porta a direita da varanda
 		
-		addSpawn(TRIOLS_REVELATIONS5, new Location(-17547, -54920, -10474));
-		addSpawn(TRIOLS_REVELATIONS6, new Location(-15256, -54924, -10474));
+		addSpawn(TRIOLS_REVELATIONS5, new Location(-17547, -54920, -10474)); // Primeira porta a esquerda do boss
+		addSpawn(TRIOLS_REVELATIONS6, new Location(-15256, -54924, -10474)); // Primeira porta a direita ddo boss
 	}
 	
 	public static void main(String[] args)

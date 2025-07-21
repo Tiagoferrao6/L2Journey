@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 L2jMobius
+ * Copyright (c) 2025 L2Journey Project
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -8,15 +8,23 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  * 
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
- * IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * 
+ * ---
+ * 
+ * Portions of this software are derived from the L2JMobius Project, 
+ * shared under the MIT License. The original license terms are preserved where 
+ * applicable..
+ * 
  */
 package ai.areas.Gracia.instances.HeartInfinityAttack;
 
@@ -40,6 +48,7 @@ import com.l2journey.gameserver.model.instancezone.InstanceWorld;
 import com.l2journey.gameserver.model.item.enums.ItemProcessType;
 import com.l2journey.gameserver.model.quest.QuestState;
 import com.l2journey.gameserver.model.skill.Skill;
+import com.l2journey.gameserver.model.zone.ZoneType;
 import com.l2journey.gameserver.network.NpcStringId;
 import com.l2journey.gameserver.network.SystemMessageId;
 import com.l2journey.gameserver.network.enums.ChatType;
@@ -79,10 +88,13 @@ public class HeartInfinityAttack extends AbstractNpcAI
 	}
 	
 	private static final String qn = "HeartInfinityAttack";
+	
 	private static final int INSTANCEID = 121;
 	private static final int INSTANCEPENALTY = 24;
 	
-	private static final int ABYSSGAZE = 32540;
+	private static final ZoneType ZONE = ZoneManager.getInstance().getZoneByName("Heart of Infinity Attack");
+	
+	private static final int ABYSSGAZE = 32539;
 	private static final int ALIVETUMOR = 18708;
 	private static final int DEADTUMOR = 32535;
 	private static final int EKIMUS = 29150;
@@ -109,7 +121,7 @@ public class HeartInfinityAttack extends AbstractNpcAI
 		DEADTUMOR
 	};
 	
-	private static final int[] mobs =
+	private static final int[] MONSTERS =
 	{
 		22516,
 		22520,
@@ -500,7 +512,7 @@ public class HeartInfinityAttack extends AbstractNpcAI
 			{
 				for (int i = 0; i < getRandom(1, 4); i++)
 				{
-					addSpawn(mobs[getRandom(mobs.length)], npc.getLocation(), world.getInstanceId());
+					addSpawn(MONSTERS[getRandom(MONSTERS.length)], npc.getLocation(), world.getInstanceId());
 				}
 				npc.doDie(npc);
 			}
@@ -618,6 +630,7 @@ public class HeartInfinityAttack extends AbstractNpcAI
 			{
 				conquestConclusion(world);
 				SoIManager.notifyEkimusKill();
+				playMovie(world, Movie.SC_ECHMUS_SUCCESS);
 			}
 			
 			if (npc.getId() == 18711)
@@ -820,11 +833,11 @@ public class HeartInfinityAttack extends AbstractNpcAI
 	
 	public void notifyEkimusRoomEntrance(HIAWorld world)
 	{
-		for (Player ch : ZoneManager.getInstance().getZoneById(200032).getPlayersInside())
+		for (Player player : ZONE.getPlayersInside())
 		{
-			if (ch != null)
+			if (player != null)
 			{
-				ch.teleToLocation(-179537, 211233, -15472, true);
+				player.teleToLocation(-179537, 211233, -15472, true);
 			}
 		}
 		
