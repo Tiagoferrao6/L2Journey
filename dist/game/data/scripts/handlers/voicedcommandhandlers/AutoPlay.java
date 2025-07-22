@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 L2jMobius
+ * Copyright (c) 2025 L2Journey Project
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -8,15 +8,23 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  * 
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
- * IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * 
+ * ---
+ * 
+ * Portions of this software are derived from the L2JMobius Project, 
+ * shared under the MIT License. The original license terms are preserved where 
+ * applicable..
+ * 
  */
 package handlers.voicedcommandhandlers;
 
@@ -180,11 +188,6 @@ public class AutoPlay implements IVoicedCommandHandler
 		{
 			case "play":
 			{
-				if (player.isTransformed() && (player.getTransformation() != null))
-				{
-					player.untransform();
-				}
-				
 				if (params != null)
 				{
 					final String[] paramArray = params.toLowerCase().split(" ");
@@ -273,9 +276,9 @@ public class AutoPlay implements IVoicedCommandHandler
 				content = content.replace("%mode2%", player.getAutoPlaySettings().getNextTargetMode() == 2 ? "L2UI_CH3.radiobutton2" : "L2UI_CH3.radiobutton1");
 				content = content.replace("%mode3%", player.getAutoPlaySettings().getNextTargetMode() == 3 ? "L2UI_CH3.radiobutton2" : "L2UI_CH3.radiobutton1");
 				
-				content = content.replace("%skill_button%", Config.ENABLE_AUTO_SKILL ? "<br><table width=295><tr><td height=31><center><button action=\"bypass voice .playskills\" value=\"Select Skills\" width=200 height=31 back=\"L2UI_CT1.Button_DF_Down\" fore=\"L2UI_CT1.Button_DF\"></center></td></tr></table>" : "");
-				content = content.replace("%item_button%", Config.ENABLE_AUTO_ITEM ? "<br><table width=295><tr><td height=31><center><button action=\"bypass voice .playitems\" value=\"Select Supply Items\" width=200 height=31 back=\"L2UI_CT1.Button_DF_Down\" fore=\"L2UI_CT1.Button_DF\"></center></td></tr></table>" : "");
-				content = content.replace("%potion_button%", Config.ENABLE_AUTO_POTION ? "<br><table width=295><tr><td height=31><center><button action=\"bypass voice .playpotion\" value=\"Select Healing Potion\" width=200 height=31 back=\"L2UI_CT1.Button_DF_Down\" fore=\"L2UI_CT1.Button_DF\"></center></td></tr><tr><td height=31><center><table width=150><tr><td width=120><font color=\"CDB67F\">HP Percent (%percent%)</font></td><td><edit var=\"percentbox\" width=30 height=15></td><td><button value=\"Apply\" action=\"bypass voice .play percent $percentbox\" width=45 height=21 back=\"L2UI_CT1.Button_DF_Down\" fore=\"L2UI_CT1.Button_DF\"></td></tr></table></center></td></tr></table>" : "");
+				content = content.replace("%skill_button%", Config.ENABLE_AUTO_SKILL ? "<br1><table width=295><tr><td height=31><center><button action=\"bypass voice .playskills\" value=\"Select Skills\" width=200 height=31 back=\"L2UI_CT1.Button_DF_Down\" fore=\"L2UI_CT1.Button_DF\"></center></td></tr></table>" : "");
+				content = content.replace("%item_button%", Config.ENABLE_AUTO_ITEM ? "<br1><table width=295><tr><td height=31><center><button action=\"bypass voice .playitems\" value=\"Select Supply Items\" width=200 height=31 back=\"L2UI_CT1.Button_DF_Down\" fore=\"L2UI_CT1.Button_DF\"></center></td></tr></table>" : "");
+				content = content.replace("%potion_button%", Config.ENABLE_AUTO_POTION ? "<br1><table width=295><tr><td height=31><center><button action=\"bypass voice .playpotion\" value=\"Select Healing Potion\" width=200 height=31 back=\"L2UI_CT1.Button_DF_Down\" fore=\"L2UI_CT1.Button_DF\"></center></td></tr><tr><td height=31><center><table width=150><tr><td width=120><font color=\"CDB67F\">HP Percent (%percent%)</font></td><td><edit var=\"percentbox\" width=30 height=15></td><td><button value=\"Apply\" action=\"bypass voice .play percent $percentbox\" width=45 height=22 back=\"L2UI_CT1.Button_DF_Down\" fore=\"L2UI_CT1.Button_DF\"></td></tr></table></center></td></tr></table>" : "");
 				content = content.replace("%percent%", String.valueOf(player.getAutoPlaySettings().getAutoPotionPercent()));
 				
 				if (player.isAutoPlaying())
@@ -293,11 +296,6 @@ public class AutoPlay implements IVoicedCommandHandler
 			}
 			case "playskills":
 			{
-				if (player.isTransformed() && (player.getTransformation() != null))
-				{
-					player.untransform();
-				}
-				
 				final NpcHtmlMessage html = new NpcHtmlMessage();
 				final String content = HtmCache.getInstance().getHtm(player, "data/html/mods/AutoPlay/Skills.htm");
 				

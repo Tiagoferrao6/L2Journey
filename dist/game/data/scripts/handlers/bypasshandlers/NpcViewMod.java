@@ -143,6 +143,62 @@ public class NpcViewMod implements IBypassHandler
 				}
 				break;
 			}
+			case "skills":
+			{
+				final WorldObject target;
+				if (st.hasMoreElements())
+				{
+					try
+					{
+						target = World.getInstance().findObject(Integer.parseInt(st.nextToken()));
+					}
+					catch (NumberFormatException e)
+					{
+						return false;
+					}
+				}
+				else
+				{
+					target = player.getTarget();
+				}
+				
+				final Npc npc = target instanceof Npc ? target.asNpc() : null;
+				if (npc == null)
+				{
+					return false;
+				}
+				
+				sendNpcSkillView(player, npc);
+				break;
+			}
+			case "aggrolist":
+			{
+				final WorldObject target;
+				if (st.hasMoreElements())
+				{
+					try
+					{
+						target = World.getInstance().findObject(Integer.parseInt(st.nextToken()));
+					}
+					catch (NumberFormatException e)
+					{
+						return false;
+					}
+				}
+				else
+				{
+					target = player.getTarget();
+				}
+				
+				final Npc npc = target instanceof Npc ? target.asNpc() : null;
+				if (npc == null)
+				{
+					return false;
+				}
+				
+				sendAggroListView(player, npc);
+				break;
+			}
 		}
 		
 		return true;
@@ -184,9 +240,8 @@ public class NpcViewMod implements IBypassHandler
 					timeUnit = tu;
 				}
 			}
-			
-			minRespawnDelay = timeUnit.convert(minRespawnDelay, TimeUnit.MILLISECONDS);
-			maxRespawnDelay = timeUnit.convert(maxRespawnDelay, TimeUnit.MILLISECONDS);
+			minRespawnDelay = timeUnit.convert(npcSpawn.getRespawnMinDelay(), TimeUnit.MILLISECONDS);
+			maxRespawnDelay = timeUnit.convert(npcSpawn.getRespawnMaxDelay(), TimeUnit.MILLISECONDS);
 			
 			final String timeUnitName = timeUnit.name().charAt(0) + timeUnit.name().toLowerCase().substring(1);
 			if (npcSpawn.hasRespawnRandom())
@@ -220,6 +275,66 @@ public class NpcViewMod implements IBypassHandler
 		html.replace("%attributedark%", npc.getStat().getDefenseElementValue(Elementals.DARK));
 		html.replace("%attributeholy%", npc.getStat().getDefenseElementValue(Elementals.HOLY));
 		html.replace("%dropListButtons%", getDropListButtons(npc));
+		player.sendPacket(html);
+	}
+	
+	private void sendNpcSkillView(Player player, Npc npc)
+	{
+		final NpcHtmlMessage html = new NpcHtmlMessage();
+		html.setFile(player, "data/html/mods/NpcView/Skills.htm");
+		
+		final StringBuilder sb = new StringBuilder();
+		npc.getSkills().values().forEach(s ->
+		{
+			sb.append("<table width=277 height=32 cellspacing=0 background=\"L2UI_CT1.Windows.Windows_DF_TooltipBG\">");
+			sb.append("<tr><td width=32>");
+			sb.append("<img src=\"");
+			sb.append(s.getIcon());
+			sb.append("\" width=32 height=32>");
+			sb.append("</td><td width=110>");
+			sb.append(s.getName());
+			sb.append("</td>");
+			sb.append("<td width=45 align=center>");
+			sb.append(s.getId());
+			sb.append("</td>");
+			sb.append("<td width=35 align=center>");
+			sb.append(s.getLevel());
+			sb.append("</td></tr></table>");
+		});
+		
+		html.replace("%skills%", sb.toString());
+		html.replace("%npc_name%", npc.getName());
+		html.replace("%npcId%", npc.getId());
+		player.sendPacket(html);
+	}
+	
+	private void sendAggroListView(Player player, Npc npc)
+	{
+		final NpcHtmlMessage html = new NpcHtmlMessage();
+		html.setFile(player, "data/html/mods/NpcView/AggroList.htm");
+		
+		final StringBuilder sb = new StringBuilder();
+		if (npc.isAttackable())
+		{
+			npc.asAttackable().getAggroList().values().forEach(a ->
+			{
+				sb.append("<table width=277 height=32 cellspacing=0 background=\"L2UI_CT1.Windows.Windows_DF_TooltipBG\">");
+				sb.append("<tr><td width=110>");
+				sb.append(a.getAttacker() != null ? a.getAttacker().getName() : "NULL");
+				sb.append("</td>");
+				sb.append("<td width=60 align=center>");
+				sb.append(a.getHate());
+				sb.append("</td>");
+				sb.append("<td width=60 align=center>");
+				sb.append(a.getDamage());
+				sb.append("</td></tr></table>");
+			});
+		}
+		
+		html.replace("%aggrolist%", sb.toString());
+		html.replace("%npc_name%", npc.getName());
+		html.replace("%npcId%", npc.getId());
+		html.replace("%objid%", npc.getObjectId());
 		player.sendPacket(html);
 	}
 	
