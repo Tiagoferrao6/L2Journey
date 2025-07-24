@@ -147,7 +147,6 @@ public class Config
 	private static final String CLAN_DEFINITIONS = "./config/player/ClanDefinitions.ini";
 	private static final String FIND_PVP_CONFIG_FILE = "./config/player/FindPvP.ini";
 	private static final String HELLBOUND_STATUS_CONFIG_FILE = "./config/player/HellboundStatus.ini";
-	private static final String MULTILANGUAL_SUPPORT_CONFIG_FILE = "./config/player/MultilingualSupport.ini";
 	private static final String OFFLINE_PLAY_CONFIG_FILE = "./config/player/OfflinePlay.ini";
 	private static final String OFFLINE_TRADE_CONFIG_FILE = "./config/player/OfflineTrade.ini";
 	private static final String ONLINE_INFO_CONFIG_FILE = "./config/player/OnlineInfo.ini";
@@ -1145,14 +1144,6 @@ public class Config
 	public static boolean HELLBOUND_STATUS;
 	
 	// --------------------------------------------------
-	// Multilingual Support
-	// --------------------------------------------------
-	public static String MULTILANG_DEFAULT;
-	public static boolean MULTILANG_ENABLE;
-	public static List<String> MULTILANG_ALLOWED = new ArrayList<>();
-	public static boolean MULTILANG_VOICED_ALLOW;
-	
-	// --------------------------------------------------
 	// Offline Play
 	// --------------------------------------------------
 	public static boolean ENABLE_OFFLINE_PLAY_COMMAND;
@@ -1311,11 +1302,15 @@ public class Config
 	// User Panel [Comando]
 	// ----------------------------------------------
 	public static boolean ENABLE_USER_PANEL;
-	public static boolean COMBINETALISMANS_COMMAND;
 	public static boolean EPIC_COMMAND;
-	public static boolean STATISTIC_PANEL;
+	public static boolean COMBINETALISMANS_COMMAND;
 	public static boolean DRESSME_ENABLE;
 	public static boolean ALLOW_CHANGE_PASSWORD;
+	public static String MULTILANG_DEFAULT;
+	public static boolean MULTILANG_ENABLE;
+	public static List<String> MULTILANG_ALLOWED = new ArrayList<>();
+	public static boolean MULTILANG_VOICED_ALLOW;
+	public static boolean STATISTIC_PANEL;
 	
 	// --------------------------------------------------
 	// Warehouse Sorting
@@ -1659,7 +1654,6 @@ public class Config
 			loadClanDefinitions();
 			loadFindPvpConfig();
 			loadHellboundStatusConfig();
-			loadMultilingualSupportConfig();
 			loadOfflinePlayConfig();
 			loadOfflineTradeConfig();
 			loadOnlineInfoConfig();
@@ -3191,31 +3185,6 @@ public class Config
 	}
 	
 	/**
-	 * Load multilingualSupportConfig file (if exists).
-	 */
-	private static void loadMultilingualSupportConfig()
-	{
-		final ConfigReader multilingualSupportConfig = new ConfigReader(MULTILANGUAL_SUPPORT_CONFIG_FILE);
-		MULTILANG_DEFAULT = multilingualSupportConfig.getString("MultiLangDefault", "en").toLowerCase();
-		MULTILANG_ENABLE = multilingualSupportConfig.getBoolean("MultiLangEnable", false);
-		if (MULTILANG_ENABLE)
-		{
-			CHECK_HTML_ENCODING = false;
-		}
-		final String[] allowed = multilingualSupportConfig.getString("MultiLangAllowed", MULTILANG_DEFAULT).split(";");
-		MULTILANG_ALLOWED = new ArrayList<>(allowed.length);
-		for (String lang : allowed)
-		{
-			MULTILANG_ALLOWED.add(lang.toLowerCase());
-		}
-		if (!MULTILANG_ALLOWED.contains(MULTILANG_DEFAULT))
-		{
-			LOGGER.warning("MultiLang[Config.load()]: default language: " + MULTILANG_DEFAULT + " is not in allowed list !");
-		}
-		MULTILANG_VOICED_ALLOW = multilingualSupportConfig.getBoolean("MultiLangVoiceCommand", true);
-	}
-	
-	/**
 	 * Load offlinePlayConfig file (if exists).
 	 */
 	private static void loadOfflinePlayConfig()
@@ -3513,11 +3482,28 @@ public class Config
 	{
 		final ConfigReader UserPanel = new ConfigReader(USER_PANEL_COMMANDS);
 		ENABLE_USER_PANEL = UserPanel.getBoolean("EnableUserPanel", false);
-		COMBINETALISMANS_COMMAND = UserPanel.getBoolean("CombineTalismansCommand", false);
 		EPIC_COMMAND = UserPanel.getBoolean("EpicCommand", false);
-		STATISTIC_PANEL = UserPanel.getBoolean("ServerStatistics", false);
+		COMBINETALISMANS_COMMAND = UserPanel.getBoolean("CombineTalismansCommand", false);
 		DRESSME_ENABLE = UserPanel.getBoolean("DressMeSystem", false);
 		ALLOW_CHANGE_PASSWORD = UserPanel.getBoolean("AllowChangePassword", false);
+		MULTILANG_DEFAULT = UserPanel.getString("MultiLangDefault", "en").toLowerCase();
+		MULTILANG_ENABLE = UserPanel.getBoolean("MultiLangEnable", false);
+		if (MULTILANG_ENABLE)
+		{
+			CHECK_HTML_ENCODING = false;
+		}
+		final String[] allowed = UserPanel.getString("MultiLangAllowed", MULTILANG_DEFAULT).split(";");
+		MULTILANG_ALLOWED = new ArrayList<>(allowed.length);
+		for (String lang : allowed)
+		{
+			MULTILANG_ALLOWED.add(lang.toLowerCase());
+		}
+		if (!MULTILANG_ALLOWED.contains(MULTILANG_DEFAULT))
+		{
+			LOGGER.warning("MultiLang[Config.load()]: default language: " + MULTILANG_DEFAULT + " is not in allowed list !");
+		}
+		MULTILANG_VOICED_ALLOW = UserPanel.getBoolean("MultiLangVoiceCommand", true);
+		STATISTIC_PANEL = UserPanel.getBoolean("ServerStatistics", false);
 	}
 	
 	/**
