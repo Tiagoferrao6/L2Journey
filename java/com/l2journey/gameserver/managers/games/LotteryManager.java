@@ -147,8 +147,25 @@ public class LotteryManager
 					{
 						_prize = rset.getLong("prize");
 						_enddate = rset.getLong("enddate");
-						if (_enddate <= (System.currentTimeMillis() + (2 * MINUTE)))
+						
+						long currentTime = System.currentTimeMillis();
+						if (_enddate < currentTime)
 						{
+							// Calcula quantos sorteios foram perdidos
+							long missedLotteries = ((currentTime - _enddate) / 604800000) + 1;
+							
+							if (missedLotteries > 0)
+							{
+								// Atualiza para o próximo sorteio válido
+								_number += missedLotteries;
+								_enddate += (missedLotteries * 604800000);
+								
+								// Acumula o prêmio dos sorteios perdidos
+								_prize += (Config.ALT_LOTTERY_PRIZE * missedLotteries);
+								
+								LOGGER.info("Lottery: Recovered from downtime. Skipped " + missedLotteries + " lotteries. New lottery #" + _number);
+							}
+							
 							(new finishLottery()).run();
 							return;
 						}
@@ -238,203 +255,278 @@ public class LotteryManager
 		@Override
 		public void run()
 		{
-			final int[] luckynums = new int[5];
-			int luckynum = 0;
+			try
+			{
+				// 1. Gerar 5 números aleatórios distintos (1-20)
+				int[] luckyNumbers = generateLuckyNumbers();
+				
+				// 2. Converter para representação em bits
+				NumberCombo combo = convertToBitRepresentation(luckyNumbers);
+				
+				// 3. Contar bilhetes vencedores
+				WinnerCount winners = countWinningTickets(combo.enchant, combo.type2);
+				
+				// 4. Calcular prêmios
+				PrizeDistribution prizes = calculatePrizeDistribution(winners);
+				
+				// 5. Atualizar banco de dados
+				updateLotteryResults(combo, prizes);
+				
+				// 6. Notificar jogadores
+				broadcastWinners(winners);
+				
+				// 7. Preparar próximo sorteio
+				prepareNextLottery(prizes.newprize);
+			}
+			catch (Exception e)
+			{
+				LOGGER.log(Level.SEVERE, "Error finishing lottery #" + _number + ": " + e.getMessage(), e);
+				// Tentar novamente em 1 minuto
+				ThreadPool.schedule(new finishLottery(), MINUTE);
+			}
+		}
+		
+		private int[] generateLuckyNumbers()
+		{
+			int[] numbers = new int[5];
 			for (int i = 0; i < 5; i++)
 			{
-				boolean found = true;
-				
-				while (found)
+				boolean unique;
+				do
 				{
-					luckynum = Rnd.get(20) + 1;
-					found = false;
+					unique = true;
+					numbers[i] = Rnd.get(20) + 1; // Gera número entre 1-20
+					
+					// Verifica se já foi sorteado
 					for (int j = 0; j < i; j++)
 					{
-						if (luckynums[j] == luckynum)
+						if (numbers[j] == numbers[i])
 						{
-							found = true;
+							unique = false;
+							break;
 						}
 					}
 				}
-				
-				luckynums[i] = luckynum;
+				while (!unique);
 			}
-			
+			return numbers;
+		}
+		
+		private NumberCombo convertToBitRepresentation(int[] numbers)
+		{
 			int enchant = 0;
 			int type2 = 0;
-			for (int i = 0; i < 5; i++)
+			
+			for (int num : numbers)
 			{
-				if (luckynums[i] < 17)
+				if (num <= 16)
 				{
-					enchant += Math.pow(2, luckynums[i] - 1);
+					enchant |= 1 << (num - 1); // Define o bit correspondente (0-15)
 				}
 				else
 				{
-					type2 += Math.pow(2, luckynums[i] - 17);
+					type2 |= 1 << (num - 17); // Define o bit correspondente (0-3)
 				}
 			}
-			
-			int count1 = 0;
-			int count2 = 0;
-			int count3 = 0;
-			int count4 = 0;
+			return new NumberCombo(enchant, type2);
+		}
+		
+		private WinnerCount countWinningTickets(int enchant, int type2) throws SQLException
+		{
+			WinnerCount winners = new WinnerCount();
 			
 			try (Connection con = DatabaseFactory.getConnection();
 				PreparedStatement ps = con.prepareStatement(SELECT_LOTTERY_ITEM))
 			{
 				ps.setInt(1, _number);
-				try (ResultSet rset = ps.executeQuery())
+				
+				try (ResultSet rs = ps.executeQuery())
 				{
-					while (rset.next())
+					while (rs.next())
 					{
-						int curenchant = rset.getInt("enchant_level") & enchant;
-						int curtype2 = rset.getInt("custom_type2") & type2;
-						if ((curenchant == 0) && (curtype2 == 0))
-						{
-							continue;
-						}
+						int matches = countMatches(rs.getInt("enchant_level") & enchant, rs.getInt("custom_type2") & type2);
 						
-						int count = 0;
-						for (int i = 1; i <= 16; i++)
+						// Classifica os acertos
+						if (matches >= 5)
 						{
-							final int val = curenchant / 2;
-							if (val != Math.round((double) curenchant / 2))
-							{
-								count++;
-							}
-							
-							final int val2 = curtype2 / 2;
-							if (val2 != ((double) curtype2 / 2))
-							{
-								count++;
-							}
-							
-							curenchant = val;
-							curtype2 = val2;
+							winners.count1++;
 						}
-						
-						if (count == 5)
+						else if (matches == 4)
 						{
-							count1++;
+							winners.count2++;
 						}
-						else if (count == 4)
+						else if (matches == 3)
 						{
-							count2++;
+							winners.count3++;
 						}
-						else if (count == 3)
+						else if (matches >= 1)
 						{
-							count3++;
-						}
-						else if (count > 0)
-						{
-							count4++;
+							winners.count4++;
 						}
 					}
 				}
 			}
-			catch (SQLException e)
+			return winners;
+		}
+		
+		private int countMatches(int curenchant, int curtype2)
+		{
+			int count = 0;
+			
+			// Conta bits setados em curenchant (números 1-16)
+			for (int i = 0; i < 16; i++)
 			{
-				LOGGER.log(Level.WARNING, "Lottery: Could restore lottery data: " + e.getMessage(), e);
+				if ((curenchant & (1 << i)) != 0)
+				{
+					count++;
+				}
 			}
 			
-			final long prize4 = count4 * Config.ALT_LOTTERY_2_AND_1_NUMBER_PRIZE;
-			long prize1 = 0;
-			long prize2 = 0;
-			long prize3 = 0;
-			if (count1 > 0)
+			// Conta bits setados em curtype2 (números 17-20)
+			for (int i = 0; i < 4; i++)
 			{
-				prize1 = (long) (((_prize - prize4) * Config.ALT_LOTTERY_5_NUMBER_RATE) / count1);
+				if ((curtype2 & (1 << i)) != 0)
+				{
+					count++;
+				}
 			}
 			
-			if (count2 > 0)
+			return count;
+		}
+		
+		private PrizeDistribution calculatePrizeDistribution(WinnerCount winners)
+		{
+			PrizeDistribution prizes = new PrizeDistribution();
+			
+			// Prêmio para 1-2 acertos (fixo por bilhete)
+			prizes.prize4 = winners.count4 * Config.ALT_LOTTERY_2_AND_1_NUMBER_PRIZE;
+			
+			// Distribui o restante do prêmio
+			long remainingPrize = _prize - prizes.prize4;
+			
+			if (winners.count1 > 0)
 			{
-				prize2 = (long) (((_prize - prize4) * Config.ALT_LOTTERY_4_NUMBER_RATE) / count2);
+				prizes.prize1 = (long) ((remainingPrize * Config.ALT_LOTTERY_5_NUMBER_RATE) / winners.count1);
+			}
+			if (winners.count2 > 0)
+			{
+				prizes.prize2 = (long) ((remainingPrize * Config.ALT_LOTTERY_4_NUMBER_RATE) / winners.count2);
+			}
+			if (winners.count3 > 0)
+			{
+				prizes.prize3 = (long) ((remainingPrize * Config.ALT_LOTTERY_3_NUMBER_RATE) / winners.count3);
 			}
 			
-			if (count3 > 0)
+			// Calcula o novo prêmio acumulado
+			prizes.newprize = _prize - (prizes.prize1 + prizes.prize2 + prizes.prize3 + prizes.prize4);
+			return prizes;
+		}
+		
+		private void updateLotteryResults(NumberCombo combo, PrizeDistribution prizes) throws SQLException
+		{
+			try (Connection con = DatabaseFactory.getConnection();
+				PreparedStatement ps = con.prepareStatement(UPDATE_LOTTERY))
 			{
-				prize3 = (long) (((_prize - prize4) * Config.ALT_LOTTERY_3_NUMBER_RATE) / count3);
+				ps.setLong(1, _prize);
+				ps.setLong(2, prizes.newprize);
+				ps.setInt(3, combo.enchant);
+				ps.setInt(4, combo.type2);
+				ps.setLong(5, prizes.prize1);
+				ps.setLong(6, prizes.prize2);
+				ps.setLong(7, prizes.prize3);
+				ps.setInt(8, _number);
+				ps.execute();
 			}
-			
-			final long newprize = _prize - (prize1 + prize2 + prize3 + prize4);
+		}
+		
+		private void broadcastWinners(WinnerCount winners)
+		{
 			SystemMessage sm;
-			if (count1 > 0)
+			if (winners.count1 > 0)
 			{
-				// There are winners.
 				sm = new SystemMessage(SystemMessageId.THE_PRIZE_AMOUNT_FOR_THE_WINNER_OF_LOTTERY_S1_IS_S2_ADENA_WE_HAVE_S3_FIRST_PRIZE_WINNERS);
 				sm.addInt(_number);
 				sm.addLong(_prize);
-				sm.addLong(count1);
+				sm.addLong(winners.count1);
 			}
 			else
 			{
-				// There are no winners.
 				sm = new SystemMessage(SystemMessageId.THE_PRIZE_AMOUNT_FOR_LUCKY_LOTTERY_S1_IS_S2_ADENA_THERE_WAS_NO_FIRST_PRIZE_WINNER_IN_THIS_DRAWING_THEREFORE_THE_JACKPOT_WILL_BE_ADDED_TO_THE_NEXT_DRAWING);
 				sm.addInt(_number);
 				sm.addLong(_prize);
 			}
 			Broadcast.toAllOnlinePlayers(sm);
-			
-			try (Connection con = DatabaseFactory.getConnection();
-				PreparedStatement ps = con.prepareStatement(UPDATE_LOTTERY))
-			{
-				ps.setLong(1, _prize);
-				ps.setLong(2, newprize);
-				ps.setInt(3, enchant);
-				ps.setInt(4, type2);
-				ps.setLong(5, prize1);
-				ps.setLong(6, prize2);
-				ps.setLong(7, prize3);
-				ps.setInt(8, _number);
-				ps.execute();
-			}
-			catch (SQLException e)
-			{
-				LOGGER.log(Level.WARNING, "Lottery: Could not store finished lottery data: " + e.getMessage(), e);
-			}
-			
-			ThreadPool.schedule(new startLottery(), MINUTE);
+		}
+		
+		private void prepareNextLottery(long newprize)
+		{
 			_number++;
-			
+			_prize = newprize;
 			_isStarted = false;
+			ThreadPool.schedule(new startLottery(), MINUTE);
+		}
+		
+		// Classes auxiliares para organização dos dados
+		private static class NumberCombo
+		{
+			final int enchant;
+			final int type2;
+			
+			NumberCombo(int enchant, int type2)
+			{
+				this.enchant = enchant;
+				this.type2 = type2;
+			}
+		}
+		
+		private static class WinnerCount
+		{
+			int count1; // 5 acertos
+			int count2; // 4 acertos
+			int count3; // 3 acertos
+			int count4; // 1-2 acertos
+		}
+		
+		private static class PrizeDistribution
+		{
+			long prize1;
+			long prize2;
+			long prize3;
+			long prize4;
+			long newprize;
 		}
 	}
 	
+	/**
+	 * Decodes the lottery numbers from their bitmask representation
+	 * @param enchantValue Bitmask for numbers 1-16 (bits 0-15)
+	 * @param type2Value Bitmask for numbers 17-20 (bits 0-3)
+	 * @return Array with the decoded numbers (1-20)
+	 */
 	public int[] decodeNumbers(int enchantValue, int type2Value)
 	{
-		final int[] res = new int[5];
-		int id = 0;
-		int nr = 1;
+		final int[] result = new int[5];
+		int index = 0;
 		
-		int enchant = enchantValue;
-		while (enchant > 0)
+		// Decode numbers 1-16 from enchantValue
+		for (int i = 0; (i < 16) && (index < 5); i++)
 		{
-			final int val = enchant / 2;
-			if (val != ((double) enchant / 2))
+			if ((enchantValue & (1 << i)) != 0)
 			{
-				res[id] = nr;
-				id++;
+				result[index++] = i + 1;
 			}
-			enchant /= 2;
-			nr++;
 		}
 		
-		nr = 17;
-		
-		int type2 = type2Value;
-		while (type2 > 0)
+		// Decode numbers 17-20 from type2Value
+		for (int i = 0; (i < 4) && (index < 5); i++)
 		{
-			final int val = type2 / 2;
-			if (val != ((double) type2 / 2))
+			if ((type2Value & (1 << i)) != 0)
 			{
-				res[id] = nr;
-				id++;
+				result[index++] = i + 17;
 			}
-			type2 /= 2;
-			nr++;
 		}
 		
-		return res;
+		return result;
 	}
 	
 	public long[] checkTicket(Item item)
@@ -444,72 +536,52 @@ public class LotteryManager
 	
 	public long[] checkTicket(int id, int enchant, int type2)
 	{
-		final long[] res =
+		final long[] result =
 		{
 			0,
 			0
 		};
+		
 		try (Connection con = DatabaseFactory.getConnection();
 			PreparedStatement ps = con.prepareStatement(SELECT_LOTTERY_TICKET))
 		{
 			ps.setInt(1, id);
+			
 			try (ResultSet rs = ps.executeQuery())
 			{
 				if (rs.next())
 				{
-					int curenchant = rs.getInt("number1") & enchant;
-					int curtype2 = rs.getInt("number2") & type2;
-					if ((curenchant == 0) && (curtype2 == 0))
+					int winningEnchant = rs.getInt("number1");
+					int winningType2 = rs.getInt("number2");
+					
+					// Conta números acertados (1-16)
+					int matches = countSetBits(winningEnchant & enchant);
+					// Conta números acertados (17-20)
+					matches += countSetBits(winningType2 & type2);
+					
+					if (matches == 0)
 					{
-						return res;
+						return result; // Sem acertos
 					}
 					
-					int count = 0;
-					for (int i = 1; i <= 16; i++)
+					// Determina o prêmio baseado no número de acertos
+					switch (matches)
 					{
-						final int val = curenchant / 2;
-						if (val != Math.round((double) curenchant / 2))
-						{
-							count++;
-						}
-						final int val2 = curtype2 / 2;
-						if (val2 != ((double) curtype2 / 2))
-						{
-							count++;
-						}
-						curenchant = val;
-						curtype2 = val2;
-					}
-					
-					switch (count)
-					{
-						case 0:
-						{
-							break;
-						}
 						case 5:
-						{
-							res[0] = 1;
-							res[1] = rs.getLong("prize1");
+							result[0] = 1; // 1° prêmio (5 acertos)
+							result[1] = rs.getLong("prize1");
 							break;
-						}
 						case 4:
-						{
-							res[0] = 2;
-							res[1] = rs.getLong("prize2");
+							result[0] = 2; // 2° prêmio (4 acertos)
+							result[1] = rs.getLong("prize2");
 							break;
-						}
 						case 3:
-						{
-							res[0] = 3;
-							res[1] = rs.getLong("prize3");
+							result[0] = 3; // 3° prêmio (3 acertos)
+							result[1] = rs.getLong("prize3");
 							break;
-						}
-						default:
-						{
-							res[0] = 4;
-							res[1] = Config.ALT_LOTTERY_2_AND_1_NUMBER_PRIZE;
-						}
+						default: // 1-2 acertos
+							result[0] = 4;
+							result[1] = Config.ALT_LOTTERY_2_AND_1_NUMBER_PRIZE;
 					}
 				}
 			}
@@ -518,7 +590,24 @@ public class LotteryManager
 		{
 			LOGGER.log(Level.WARNING, "Lottery: Could not check lottery ticket #" + id + ": " + e.getMessage(), e);
 		}
-		return res;
+		
+		return result;
+	}
+	
+	/**
+	 * Counts the number of set bits in an integer (Hamming weight)
+	 * @param value The integer to count bits
+	 * @return Number of set bits
+	 */
+	private int countSetBits(int value)
+	{
+		int count = 0;
+		while (value != 0)
+		{
+			count += value & 1; // Add 1 if LSB is set
+			value >>>= 1; // Unsigned right shift
+		}
+		return count;
 	}
 	
 	public static LotteryManager getInstance()
