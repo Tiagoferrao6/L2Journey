@@ -628,29 +628,6 @@ public abstract class Creature extends WorldObject
 		});
 	}
 	
-	/**
-	 * Send a packet to the Creature AND to all Player in the radius (max knownlist radius) from the Creature.<br>
-	 * <br>
-	 * <b><u>Concept</u>:</b><br>
-	 * <br>
-	 * Player in the detection area of the Creature are identified in <b>_knownPlayers</b>.<br>
-	 * In order to inform other players of state modification on the Creature, server just need to go through _knownPlayers to send Server->Client Packet
-	 * @param packet
-	 * @param radiusInKnownlist
-	 *
-	public void broadcastPacket(ServerPacket packet, int radiusInKnownlist)
-	{
-		packet.sendInBroadcast();
-		
-		World.getInstance().forEachVisibleObjectInRange(this, Player.class, radiusInKnownlist, player ->
-		{
-			if (isVisibleFor(player))
-			{
-				player.sendPacket(packet);
-			}
-		});
-	}*/
-	
 	public void broadcastMoveToLocation()
 	{
 		broadcastMoveToLocation(false);
