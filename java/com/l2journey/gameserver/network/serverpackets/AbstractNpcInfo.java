@@ -103,7 +103,6 @@ public abstract class AbstractNpcInfo extends ServerPacket
 		private int _allyCrest = 0;
 		private int _allyId = 0;
 		private int _clanId = 0;
-		private int _displayEffect = 0;
 		
 		public NpcInfo(Npc cha, Creature attacker)
 		{
@@ -133,7 +132,7 @@ public abstract class AbstractNpcInfo extends ServerPacket
 					}
 				}
 			}
-			_displayEffect = cha.getDisplayEffect();
+			cha.getDisplayEffect();
 		}
 		
 		@Override
@@ -273,7 +272,7 @@ public abstract class AbstractNpcInfo extends ServerPacket
 			buffer.writeByte(_npc.isTargetable());
 			buffer.writeByte(_npc.isShowName());
 			buffer.writeInt(_npc.getAbnormalVisualEffectSpecial());
-			buffer.writeInt(_displayEffect);
+			buffer.writeInt(_npc.getDisplayEffect());
 		}
 	}
 	

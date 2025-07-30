@@ -316,6 +316,8 @@ public class SelMahumSquad extends AbstractNpcAI
 		cancelQuestTimer("chef_disable_reward", npc, null);
 		cancelQuestTimer("chef_heal_player", npc, null);
 		cancelQuestTimer("chef_set_invul", npc, null);
+		
+		npc.setDisplayEffect(MAHUM_EFFECT_NONE);
 	}
 	
 	@Override
