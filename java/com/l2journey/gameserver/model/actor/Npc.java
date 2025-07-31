@@ -149,7 +149,6 @@ public class Npc extends Creature
 	private int _castleIndex = -2;
 	/** The fortress index in the array of Fort this Npc belongs to */
 	private int _fortIndex = -2;
-	private boolean _eventMob = false;
 	private boolean _isInTown = false;
 	/** True if this Npc is autoattackable **/
 	private boolean _isAutoAttackable = false;
@@ -2202,15 +2201,5 @@ public class Npc extends Creature
 		sb.append(getObjectId());
 		sb.append("]");
 		return sb.toString();
-	}
-	
-	public boolean isEventMob()
-	{
-		return _eventMob;
-	}
-	
-	public void setEventMob(boolean value)
-	{
-		_eventMob = value;
 	}
 }

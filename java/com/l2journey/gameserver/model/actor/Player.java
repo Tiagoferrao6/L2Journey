@@ -466,7 +466,6 @@ public class Player extends Playable
 	private ScheduledFuture<?> _skillListTask;
 	private ScheduledFuture<?> _updateAndBroadcastStatusTask;
 	private ScheduledFuture<?> _broadcastCharInfoTask;
-	private ScheduledFuture<?> _broadcastStatusUpdateTask;
 	
 	private boolean _subclassLock = false;
 	protected int _baseClass;
@@ -2410,7 +2409,6 @@ public class Player extends Playable
 				{
 					_inventory.addItem(ItemProcessType.REWARD, Config.ACADEMY_REWARD_ID, Config.ACADEMY_REWARD_COUNT, this, null);
 				}
-				
 			}
 			if (isSubClassActive())
 			{
@@ -3141,6 +3139,11 @@ public class Player extends Playable
 				iu.addModifiedItem(_inventory.getAdenaInstance());
 				sendInventoryUpdate(iu);
 			}
+		}
+		
+		if ((_inventory.getAdena() == Config.MAX_ADENA) && sendMessage)
+		{
+			sendPacket(SystemMessageId.YOU_HAVE_EXCEEDED_YOUR_OUT_OF_POCKET_ADENA_LIMIT);
 		}
 	}
 	
@@ -4114,46 +4117,43 @@ public class Player extends Playable
 	@Override
 	public void broadcastStatusUpdate()
 	{
-		if (_broadcastStatusUpdateTask == null)
+		// TODO We mustn't send these informations to other players
+		// Send the Server->Client packet StatusUpdate with current HP and MP to all Player that must be informed of HP/MP updates of this Player
+		// super.broadcastStatusUpdate();
+		
+		// Send the Server->Client packet StatusUpdate with current HP, MP and CP to this Player
+		final StatusUpdate su = new StatusUpdate(this);
+		su.addAttribute(StatusUpdate.MAX_HP, getMaxHp());
+		su.addAttribute(StatusUpdate.CUR_HP, (int) getCurrentHp());
+		su.addAttribute(StatusUpdate.MAX_MP, getMaxMp());
+		su.addAttribute(StatusUpdate.CUR_MP, (int) getCurrentMp());
+		su.addAttribute(StatusUpdate.MAX_CP, getMaxCp());
+		su.addAttribute(StatusUpdate.CUR_CP, (int) getCurrentCp());
+		sendPacket(su);
+		
+		final boolean needCpUpdate = needCpUpdate();
+		final boolean needHpUpdate = needHpUpdate();
+		final Party party = getParty();
+		
+		// Check if a party is in progress and party window update is usefull
+		if ((party != null) && (needCpUpdate || needHpUpdate || needMpUpdate()))
 		{
-			_broadcastStatusUpdateTask = ThreadPool.schedule(() ->
+			party.broadcastToPartyMembers(this, new PartySmallWindowUpdate(this));
+		}
+		
+		if (_inOlympiadMode && _olympiadStart && (needCpUpdate || needHpUpdate))
+		{
+			final OlympiadGameTask game = OlympiadGameManager.getInstance().getOlympiadTask(getOlympiadGameId());
+			if ((game != null) && game.isBattleStarted())
 			{
-				final StatusUpdate su = new StatusUpdate(this);
-				su.addAttribute(StatusUpdate.MAX_HP, getMaxHp());
-				su.addAttribute(StatusUpdate.CUR_HP, (int) getCurrentHp());
-				su.addAttribute(StatusUpdate.MAX_MP, getMaxMp());
-				su.addAttribute(StatusUpdate.CUR_MP, (int) getCurrentMp());
-				su.addAttribute(StatusUpdate.MAX_CP, getMaxCp());
-				su.addAttribute(StatusUpdate.CUR_CP, (int) getCurrentCp());
-				sendPacket(su);
-				
-				final boolean needCpUpdate = needCpUpdate();
-				final boolean needHpUpdate = needHpUpdate();
-				final Party party = getParty();
-				
-				// Check if a party is in progress and party window update is useful.
-				if ((party != null) && (needCpUpdate || needHpUpdate || needMpUpdate()))
-				{
-					party.broadcastToPartyMembers(this, new PartySmallWindowUpdate(this));
-				}
-				
-				if (_inOlympiadMode && _olympiadStart && (needCpUpdate || needHpUpdate))
-				{
-					final OlympiadGameTask game = OlympiadGameManager.getInstance().getOlympiadTask(getOlympiadGameId());
-					if ((game != null) && game.isBattleStarted())
-					{
-						game.getZone().broadcastStatusUpdate(this);
-					}
-				}
-				
-				// In duel MP updated only with CP or HP.
-				if (_isInDuel && (needCpUpdate || needHpUpdate))
-				{
-					DuelManager.getInstance().broadcastToOppositTeam(this, new ExDuelUpdateUserInfo(this));
-				}
-				
-				_broadcastStatusUpdateTask = null;
-			}, 50);
+				game.getZone().broadcastStatusUpdate(this);
+			}
+		}
+		
+		// In duel MP updated only with CP or HP
+		if (_isInDuel && (needCpUpdate || needHpUpdate))
+		{
+			DuelManager.getInstance().broadcastToOppositTeam(this, new ExDuelUpdateUserInfo(this));
 		}
 	}
 	
@@ -4246,6 +4246,42 @@ public class Player extends Playable
 		World.getInstance().forEachVisibleObject(this, Player.class, player ->
 		{
 			if (!isVisibleFor(player))
+			{
+				return;
+			}
+			
+			player.sendPacket(packet);
+			
+			if (isCharInfo)
+			{
+				final int relation = getRelation(player);
+				final boolean isAutoAttackable = isAutoAttackable(player);
+				final RelationCache cache = getKnownRelations().get(player.getObjectId());
+				if ((cache == null) || (cache.getRelation() != relation) || (cache.isAutoAttackable() != isAutoAttackable))
+				{
+					player.sendPacket(new RelationChanged(this, relation, isAutoAttackable));
+					if (hasSummon())
+					{
+						player.sendPacket(new RelationChanged(_summon, relation, isAutoAttackable));
+					}
+					getKnownRelations().put(player.getObjectId(), new RelationCache(relation, isAutoAttackable));
+				}
+			}
+		});
+	}
+	
+	@Override
+	public void broadcastPacket(ServerPacket packet, int radius)
+	{
+		final boolean isCharInfo = packet instanceof CharInfo;
+		if (!isCharInfo)
+		{
+			sendPacket(packet);
+		}
+		
+		World.getInstance().forEachVisibleObject(this, Player.class, player ->
+		{
+			if (!isVisibleFor(player) || (calculateDistance3D(player) >= radius))
 			{
 				return;
 			}
@@ -4532,7 +4568,7 @@ public class Player extends Playable
 					smsg.addPcName(this);
 				}
 				smsg.addItemName(target.getId());
-				broadcastPacket(smsg);
+				broadcastPacket(smsg, 1400);
 			}
 			
 			// Check if a Party is in progress
@@ -10351,6 +10387,14 @@ public class Player extends Playable
 			return false;
 		}
 		
+		// Notify to scripts before class is removed.
+		if (EventDispatcher.getInstance().hasListener(EventType.ON_PLAYER_PROFESSION_CANCEL, this))
+		{
+			EventDispatcher.getInstance().notifyEventAsync(new OnPlayerProfessionCancel(this, subClass.getId()), this);
+		}
+		
+		getSubClasses().remove(classIndex);
+		
 		try (Connection con = DatabaseFactory.getConnection();
 			PreparedStatement deleteHennas = con.prepareStatement(DELETE_CHAR_HENNA);
 			PreparedStatement deleteShortcuts = con.prepareStatement(DELETE_CHAR_SHORTCUTS);
@@ -10362,7 +10406,7 @@ public class Player extends Playable
 			for (int slot = 1; slot < 4; slot++)
 			{
 				final Henna henna = getHenna(slot);
-				if (henna != null)
+				if ((henna != null) && !henna.isAllowedClass(getPlayerClass()))
 				{
 					deleteHennas.setInt(1, getObjectId());
 					deleteHennas.setInt(2, slot);
@@ -10400,15 +10444,6 @@ public class Player extends Playable
 			return false;
 		}
 		
-		// Notify to scripts before class is removed.
-		if (EventDispatcher.getInstance().hasListener(EventType.ON_PLAYER_PROFESSION_CANCEL, this))
-		{
-			final int classId = subClass.getId();
-			EventDispatcher.getInstance().notifyEventAsync(new OnPlayerProfessionCancel(this, classId), this);
-		}
-		
-		getSubClasses().remove(classIndex);
-		
 		return addSubClass(newClassId, classIndex);
 	}
 	
@@ -10442,7 +10477,7 @@ public class Player extends Playable
 		return _classIndex;
 	}
 	
-	private void setClassTemplate(int classId)
+	public void setClassTemplate(int classId)
 	{
 		_activeClass = classId;
 		
@@ -12479,6 +12514,7 @@ public class Player extends Playable
 		{
 			return;
 		}
+		
 		if (_fameTask == null)
 		{
 			_fameTask = ThreadPool.scheduleAtFixedRate(new FameTask(this, fameFixRate), delay, delay);

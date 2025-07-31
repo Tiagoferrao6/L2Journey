@@ -628,6 +628,29 @@ public abstract class Creature extends WorldObject
 		});
 	}
 	
+	/**
+	 * Send a packet to the Creature AND to all Player in the radius (max knownlist radius) from the Creature.<br>
+	 * <br>
+	 * <b><u>Concept</u>:</b><br>
+	 * <br>
+	 * Player in the detection area of the Creature are identified in <b>_knownPlayers</b>.<br>
+	 * In order to inform other players of state modification on the Creature, server just need to go through _knownPlayers to send Server->Client Packet
+	 * @param packet
+	 * @param radiusInKnownlist
+	 */
+	public void broadcastPacket(ServerPacket packet, int radiusInKnownlist)
+	{
+		packet.sendInBroadcast();
+		
+		World.getInstance().forEachVisibleObjectInRange(this, Player.class, radiusInKnownlist, player ->
+		{
+			if (isVisibleFor(player))
+			{
+				player.sendPacket(packet);
+			}
+		});
+	}
+	
 	public void broadcastMoveToLocation()
 	{
 		broadcastMoveToLocation(false);
@@ -4367,6 +4390,12 @@ public abstract class Creature extends WorldObject
 			delta = Math.sqrt(delta + (dz * dz));
 		}
 		
+		// Prevent non playables teleporting to another ground layer while moving.
+		if (!isPlayer() && !isFloating && (Math.abs(move.zDestination - zPrev) > 300))
+		{
+			move.zDestination = zPrev;
+		}
+		
 		// Target collision should be subtracted from current distance.
 		final double collision;
 		final WorldObject target = _target;
@@ -4702,7 +4731,7 @@ public abstract class Creature extends WorldObject
 				
 				// Support for player attack with direct movement. Tested at retail on May 11th 2023.
 				boolean directMove = false;
-				if (isPlayer() && hasAI() && (getAI().getIntention() == Intention.ATTACK))
+				if (isPlayer() && hasAI() && (asPlayer().getAI().getIntention() == Intention.ATTACK))
 				{
 					directMove = true;
 				}
@@ -4813,13 +4842,7 @@ public abstract class Creature extends WorldObject
 				}
 				
 				// Verify destination when using mouse movement and no path is found.
-				final boolean canMoveToDestination = isPlayable() && !_cursorKeyMovement // Is using mouse movement.
-					&& (move.geoPath == null // No path found.
-					) && !isInVehicle // Is not in a vehicle.
-					&& (distance < 3000) // Should be able to click far away and more.
-					&& !(((curZ - z) > 300) && (distance < 300)); // Forbid destination correction if character wants to fall.
-					
-				if (canMoveToDestination)
+				if (isPlayable() && !_cursorKeyMovement && (move.geoPath == null))
 				{
 					final Location destiny = GeoEngine.getInstance().getValidLocation(curX, curY, curZ, x, y, z, getInstanceId());
 					x = destiny.getX();
