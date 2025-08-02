@@ -22,5 +22,6 @@
 		<npc id="35603" x="152924" y="-126604" z="-2304" heading="33000" respawnDelay="60" /> <!-- Coordinator -->
 		<npc id="35604" x="143944" y="-119196" z="-2133" heading="1000" respawnDelay="60" /> <!-- Messenger -->
 		<npc id="35605" x="140824" y="-124844" z="-1864" heading="10000" respawnDelay="60" /> <!-- Angout -->
+		<npc id="31625" x="149423" y="-112436" z="-2056" heading="57343" respawnDelay="60" /> <!-- Yeti - Donath Kitchen Help -->
 	</spawn>
 </list>
