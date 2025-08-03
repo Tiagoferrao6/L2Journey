@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 L2jMobius
+ * Copyright (c) 2025 L2Journey Project
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -8,15 +8,23 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  * 
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
- * IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * 
+ * ---
+ * 
+ * Portions of this software are derived from the L2JMobius Project, 
+ * shared under the MIT License. The original license terms are preserved where 
+ * applicable..
+ * 
  */
 package custom.events.Elpies;
 
@@ -30,6 +38,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 import com.l2journey.Config;
+import com.l2journey.EventsConfig;
 import com.l2journey.commons.threads.ThreadPool;
 import com.l2journey.commons.time.SchedulingPattern;
 import com.l2journey.commons.time.TimeUtil;
@@ -41,14 +50,11 @@ import com.l2journey.gameserver.model.actor.instance.EventMonster;
 import com.l2journey.gameserver.model.quest.Event;
 import com.l2journey.gameserver.util.Broadcast;
 
+/**
+ * @author KingHanker
+ */
 public class Elpies extends Event
 {
-	// NPC
-	private static final int ELPY = 900100;
-	// Amount of Elpies to spawn when the event starts
-	private static final int ELPY_AMOUNT = 100;
-	// Event duration in minutes
-	private static final int EVENT_DURATION_MINUTES = 2;
 	// @formatter:off
 	private static final int[][] DROPLIST_CONSUMABLES =
 	{
@@ -76,12 +82,12 @@ public class Elpies extends Event
 	// Non-final variables
 	private static boolean EVENT_ACTIVE = false;
 	private ScheduledFuture<?> _eventTask = null;
-	private final Set<Npc> _elpies = ConcurrentHashMap.newKeySet(ELPY_AMOUNT);
+	private final Set<Npc> _elpies = ConcurrentHashMap.newKeySet(EventsConfig.ELPY_AMOUNT);
 	
 	private Elpies()
 	{
-		addSpawnId(ELPY);
-		addKillId(ELPY);
+		addSpawnId(EventsConfig.ELPY_ID);
+		addKillId(EventsConfig.ELPY_ID);
 		
 		loadConfig();
 	}
@@ -93,7 +99,7 @@ public class Elpies extends Event
 			@Override
 			public void load()
 			{
-				parseDatapackFile("data/scripts/custom/events/Elpies/config.xml");
+				parseDatapackFile("Config/events/ElpiesSchedule.xml");
 			}
 			
 			@Override
@@ -166,16 +172,16 @@ public class Elpies extends Event
 		EVENT_ACTIVE = true;
 		
 		final EventLocation randomLoc = getRandomEntry(EventLocation.values());
-		final long despawnDelay = EVENT_DURATION_MINUTES * 60000;
-		for (int i = 0; i < ELPY_AMOUNT; i++)
+		final long despawnDelay = EventsConfig.ELPY_DURATION_MINUTES * 60000;
+		for (int i = 0; i < EventsConfig.ELPY_AMOUNT; i++)
 		{
-			_elpies.add(addSpawn(ELPY, randomLoc.getRandomX(), randomLoc.getRandomY(), randomLoc.getZ(), 0, true, despawnDelay));
+			_elpies.add(addSpawn(EventsConfig.ELPY_ID, randomLoc.getRandomX(), randomLoc.getRandomY(), randomLoc.getZ(), 0, true, despawnDelay));
 		}
 		
 		Broadcast.toAllOnlinePlayers("*Squeak Squeak*");
 		Broadcast.toAllOnlinePlayers("Elpy invasion in " + randomLoc.getName());
 		Broadcast.toAllOnlinePlayers("Help us exterminate them!");
-		Broadcast.toAllOnlinePlayers("You have " + EVENT_DURATION_MINUTES + " minutes!");
+		Broadcast.toAllOnlinePlayers("You have " + EventsConfig.ELPY_DURATION_MINUTES + " minutes!");
 		_eventTask = ThreadPool.schedule(() ->
 		{
 			Broadcast.toAllOnlinePlayers("Time is up!");

@@ -49,13 +49,21 @@ public class EventsConfig
 {
 	private static final Logger LOGGER = Logger.getLogger(EventsConfig.class.getName());
 	
-	private static final String FACTION_SYSTEM_CONFIG_FILE = "./config/Events/FactionSystem.ini";
-	private static final String LUCKY_PIG_EVENT_CONFIG_FILE = "./config/Events/LuckyPig.ini";
-	private static final String OLYMPIAD_CONFIG_FILE = "./config/Events/Olympiad.ini";
-	private static final String PC_BANG_EVENT_CONFIG_FILE = "./config/Events/PcBangPoints.ini";
-	private static final String TOWN_WAR_EVENT_CONFIG_FILE = "./config/Events/TownWar.ini";
-	private static final String UNDERGROUND_COLISEUM_CONFIG_FILE = "./config/Events/UndergroundColiseum.ini";
-	private static final String WEDDING_CONFIG_FILE = "./config/Events/Wedding.ini";
+	private static final String ELPIES_EVENT_CONFIG_FILE = "./config/events/Elpies.ini";
+	private static final String FACTION_SYSTEM_CONFIG_FILE = "./config/events/FactionSystem.ini";
+	private static final String LUCKY_PIG_EVENT_CONFIG_FILE = "./config/events/LuckyPig.ini";
+	private static final String OLYMPIAD_CONFIG_FILE = "./config/events/Olympiad.ini";
+	private static final String PC_BANG_EVENT_CONFIG_FILE = "./config/events/PcBangPoints.ini";
+	private static final String TOWN_WAR_EVENT_CONFIG_FILE = "./config/events/TownWar.ini";
+	private static final String UNDERGROUND_COLISEUM_CONFIG_FILE = "./config/events/UndergroundColiseum.ini";
+	private static final String WEDDING_CONFIG_FILE = "./config/events/Wedding.ini";
+	
+	// --------------------------------------------------
+	// Elpies Event
+	// --------------------------------------------------
+	public static int ELPY_ID;
+	public static int ELPY_AMOUNT;
+	public static int ELPY_DURATION_MINUTES;
 	
 	// --------------------------------------------------
 	// Custom - Faction System
@@ -190,6 +198,7 @@ public class EventsConfig
 	 */
 	public static void load()
 	{
+		loadElpiesEvent();
 		loadFactionSystem();
 		loadLuckyPig();
 		loadOlympiadConfig();
@@ -197,6 +206,17 @@ public class EventsConfig
 		loadTownWarEvent();
 		loadUndergroundColiseum();
 		loadWeddingConfig();
+	}
+	
+	/**
+	 * Load loadElpiesEvent file (if exists).
+	 */
+	private static void loadElpiesEvent()
+	{
+		final ConfigReader elpiesEventConfig = new ConfigReader(ELPIES_EVENT_CONFIG_FILE);
+		ELPY_ID = elpiesEventConfig.getInt("ElpyId", 900100);
+		ELPY_AMOUNT = elpiesEventConfig.getInt("ElpyAmount", 100);
+		ELPY_DURATION_MINUTES = elpiesEventConfig.getInt("ElpyEventDuration", 2);
 	}
 	
 	/**
