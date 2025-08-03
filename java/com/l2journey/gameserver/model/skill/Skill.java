@@ -1810,4 +1810,38 @@ public class Skill
 	{
 		return _isPvPOnly;
 	}
+	
+	public void applyEffectsWithoutSuccessCheck(Creature effector, Creature effected)
+	{
+		if (effected == null)
+		{
+			return;
+		}
+		
+		if ((effector != effected) && isBad() && effected.isInvul())
+		{
+			return;
+		}
+		
+		if (effected.isInvulAgainst(_id, _level))
+		{
+			return;
+		}
+		
+		final boolean addContinuousEffects = true;
+		
+		final BuffInfo info = new BuffInfo(effector, effected, this);
+		
+		applyEffectScope(EffectScope.GENERAL, info, true, addContinuousEffects);
+		
+		final EffectScope pvpOrPveEffectScope = effector.isPlayable() && effected.isAttackable() ? EffectScope.PVE : effector.isPlayable() && effected.isPlayable() ? EffectScope.PVP : null;
+		applyEffectScope(pvpOrPveEffectScope, info, true, addContinuousEffects);
+		
+		applyEffectScope(EffectScope.CHANNELING, info, true, addContinuousEffects);
+		
+		if (addContinuousEffects)
+		{
+			effected.getEffectList().add(info);
+		}
+	}
 }

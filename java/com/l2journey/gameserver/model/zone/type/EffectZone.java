@@ -288,7 +288,14 @@ public class EffectZone extends ZoneType
 						{
 							if (!character.isAffectedBySkill(skill.getId()))
 							{
-								skill.applyEffects(character, character);
+								if (getChance() == 100)
+								{
+									skill.applyEffectsWithoutSuccessCheck(character, character);
+								}
+								else
+								{
+									skill.applyEffects(character, character);
+								}
 							}
 						}
 					}

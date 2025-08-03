@@ -451,7 +451,7 @@ public class World
 					
 					if (object.isPlayer())
 					{
-						object.sendPacket(new DeleteObject(wo));
+						object.sendPacket(new DeleteObject(wo, 1));
 					}
 				}
 				
@@ -524,7 +524,7 @@ public class World
 					
 					if (object.isPlayer())
 					{
-						object.sendPacket(new DeleteObject(wo));
+						object.sendPacket(new DeleteObject(wo, 1));
 					}
 				}
 				

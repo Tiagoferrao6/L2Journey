@@ -33,18 +33,36 @@ import com.l2journey.gameserver.model.WorldObject;
 import com.l2journey.gameserver.network.GameClient;
 import com.l2journey.gameserver.network.ServerPackets;
 
+/**
+ * @author KingHanker
+ */
 public class DeleteObject extends ServerPacket
 {
 	private final int _objectId;
+	private final int _c2;
 	
 	public DeleteObject(WorldObject obj)
 	{
 		_objectId = obj.getObjectId();
+		_c2 = 0; // Default value
 	}
 	
 	public DeleteObject(int objectId)
 	{
 		_objectId = objectId;
+		_c2 = 0; // Default value
+	}
+	
+	public DeleteObject(WorldObject obj, int c2)
+	{
+		_objectId = obj.getObjectId();
+		_c2 = c2;
+	}
+	
+	public DeleteObject(int objectId, int c2)
+	{
+		_objectId = objectId;
+		_c2 = c2;
 	}
 	
 	@Override
@@ -52,6 +70,6 @@ public class DeleteObject extends ServerPacket
 	{
 		ServerPackets.DELETE_OBJECT.writeId(this, buffer);
 		buffer.writeInt(_objectId);
-		buffer.writeInt(0); // c2
+		buffer.writeInt(_c2); // c2
 	}
 }
