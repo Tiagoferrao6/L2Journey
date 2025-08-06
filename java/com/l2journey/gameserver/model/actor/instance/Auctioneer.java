@@ -308,9 +308,9 @@ public class Auctioneer extends Npc
 					items.append(getObjectId());
 					items.append("_list ");
 					items.append(j);
-					items.append("\"> Page ");
+					items.append("\"> [Page ");
 					items.append(j);
-					items.append(" </a></center></td>");
+					items.append("]</a></center></td>");
 				}
 				
 				items.append("</tr></table>");
@@ -628,6 +628,7 @@ public class Auctioneer extends Npc
 			{
 				final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
 				html.setFile(player, "data/html/auction/location.htm");
+				html.replace("%locIcon%", MapRegionManager.getInstance().getClosestTownName(player));
 				html.replace("%location%", MapRegionManager.getInstance().getClosestTownName(player));
 				html.replace("%LOCATION%", getPictureName(player));
 				html.replace("%AGIT_LINK_BACK%", "bypass -h npc_" + getObjectId() + "_start");
