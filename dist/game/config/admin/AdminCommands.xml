@@ -239,6 +239,9 @@
 	<admin command="event_start_menu" accessLevel="100" />
 	<admin command="event_stop_menu" accessLevel="100" />
 	<admin command="event_bypass" accessLevel="100" />
+	<admin command="townwar_start" accessLevel="100" />
+	<admin command="townwar_end" accessLevel="100" />
+
 
 	<!-- ADMIN EXP SP -->
 	<admin command="add_exp_sp_to_character" accessLevel="100" />
