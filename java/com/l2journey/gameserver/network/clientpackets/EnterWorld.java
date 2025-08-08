@@ -98,6 +98,7 @@ import com.l2journey.gameserver.network.serverpackets.CreatureSay;
 import com.l2journey.gameserver.network.serverpackets.Die;
 import com.l2journey.gameserver.network.serverpackets.EtcStatusUpdate;
 import com.l2journey.gameserver.network.serverpackets.ExBasicActionList;
+import com.l2journey.gameserver.network.serverpackets.ExBrPremiumState;
 import com.l2journey.gameserver.network.serverpackets.ExGetBookMarkInfoPacket;
 import com.l2journey.gameserver.network.serverpackets.ExNoticePostArrived;
 import com.l2journey.gameserver.network.serverpackets.ExNotifyPremiumItem;
@@ -115,6 +116,7 @@ import com.l2journey.gameserver.network.serverpackets.PledgeShowMemberListAll;
 import com.l2journey.gameserver.network.serverpackets.PledgeShowMemberListUpdate;
 import com.l2journey.gameserver.network.serverpackets.PledgeSkillList;
 import com.l2journey.gameserver.network.serverpackets.PledgeStatusChanged;
+import com.l2journey.gameserver.network.serverpackets.PremiumState;
 import com.l2journey.gameserver.network.serverpackets.QuestList;
 import com.l2journey.gameserver.network.serverpackets.ShortcutInit;
 import com.l2journey.gameserver.network.serverpackets.SkillCoolTime;
@@ -479,6 +481,8 @@ public class EnterWorld extends ClientPacket
 		
 		player.spawnMe(player.getX(), player.getY(), player.getZ());
 		player.sendPacket(new ExRotation(player.getObjectId(), player.getHeading()));
+		player.sendPacket(new PremiumState(player.getObjectId(), player.hasPremiumStatus() ? 1 : 0));
+		player.sendPacket(new ExBrPremiumState(player.getObjectId(), player.hasPremiumStatus() ? 1 : 0));
 		
 		// Wedding Checks
 		if (EventsConfig.ALLOW_WEDDING)

@@ -61,6 +61,7 @@ public class Adventurer extends Folk
 		{
 			return "data/html/adventurer_guildsman/" + pom + "-pcbangpoint.htm";
 		}
+		
 		return "data/html/adventurer_guildsman/" + pom + ".htm";
 	}
 }

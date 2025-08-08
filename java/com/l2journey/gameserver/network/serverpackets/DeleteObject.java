@@ -34,11 +34,15 @@ import com.l2journey.gameserver.network.GameClient;
 import com.l2journey.gameserver.network.ServerPackets;
 
 /**
+ * Means the client will remove Collision cache, Pathfinding data and Internal footprint references
  * @author KingHanker
  */
 public class DeleteObject extends ServerPacket
 {
 	private final int _objectId;
+	
+	// c2 = 0 "normal" removal;
+	// c2 = 1 "complete" removal;
 	private final int _c2;
 	
 	public DeleteObject(WorldObject obj)

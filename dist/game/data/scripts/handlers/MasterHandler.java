@@ -75,6 +75,7 @@ import handlers.admincommandhandlers.AdminCHSiege;
 import handlers.admincommandhandlers.AdminCamera;
 import handlers.admincommandhandlers.AdminChangeAccessLevel;
 import handlers.admincommandhandlers.AdminClan;
+import handlers.admincommandhandlers.AdminClanWarehouse;
 import handlers.admincommandhandlers.AdminCreateItem;
 import handlers.admincommandhandlers.AdminCursedWeapons;
 import handlers.admincommandhandlers.AdminDebug;
@@ -104,6 +105,7 @@ import handlers.admincommandhandlers.AdminHide;
 import handlers.admincommandhandlers.AdminHtml;
 import handlers.admincommandhandlers.AdminInstance;
 import handlers.admincommandhandlers.AdminInstanceZone;
+import handlers.admincommandhandlers.AdminInventory;
 import handlers.admincommandhandlers.AdminInvul;
 import handlers.admincommandhandlers.AdminKick;
 import handlers.admincommandhandlers.AdminKill;
@@ -119,6 +121,7 @@ import handlers.admincommandhandlers.AdminPForge;
 import handlers.admincommandhandlers.AdminPathNode;
 import handlers.admincommandhandlers.AdminPcCafePoints;
 import handlers.admincommandhandlers.AdminPetition;
+import handlers.admincommandhandlers.AdminPlayerWarehouse;
 import handlers.admincommandhandlers.AdminPledge;
 import handlers.admincommandhandlers.AdminPremium;
 import handlers.admincommandhandlers.AdminPunishment;
@@ -358,6 +361,7 @@ public class MasterHandler
 			AdminChangeAccessLevel.class,
 			AdminCHSiege.class,
 			AdminClan.class,
+			AdminClanWarehouse.class,
 			AdminCreateItem.class,
 			AdminCursedWeapons.class,
 			AdminDebug.class,
@@ -387,6 +391,7 @@ public class MasterHandler
 			AdminHtml.class,
 			AdminInstance.class,
 			AdminInstanceZone.class,
+			AdminInventory.class,
 			AdminInvul.class,
 			AdminKick.class,
 			AdminKill.class,
@@ -402,6 +407,7 @@ public class MasterHandler
 			AdminPcCafePoints.class,
 			AdminPetition.class,
 			AdminPForge.class,
+			AdminPlayerWarehouse.class,
 			AdminPledge.class,
 			AdminZones.class,
 			AdminPremium.class,

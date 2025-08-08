@@ -49,6 +49,8 @@ import com.l2journey.gameserver.model.events.ListenersContainer;
 import com.l2journey.gameserver.model.events.holders.actor.player.OnPlayerLogin;
 import com.l2journey.gameserver.model.events.holders.actor.player.OnPlayerLogout;
 import com.l2journey.gameserver.model.events.listeners.ConsumerEventListener;
+import com.l2journey.gameserver.network.serverpackets.ExBrPremiumState;
+import com.l2journey.gameserver.network.serverpackets.PremiumState;
 
 /**
  * @author Mobius
@@ -74,6 +76,8 @@ public class PremiumManager
 		public void run()
 		{
 			_player.setPremiumStatus(false);
+			_player.sendPacket(new PremiumState(_player.getObjectId(), 0));
+			_player.sendPacket(new ExBrPremiumState(_player.getObjectId(), 0));
 		}
 	}
 	
@@ -97,6 +101,8 @@ public class PremiumManager
 		if (player.hasPremiumStatus())
 		{
 			startExpireTask(player, premiumExpiration - now);
+			player.sendPacket(new PremiumState(player.getObjectId(), 1));
+			player.sendPacket(new ExBrPremiumState(player.getObjectId(), 1));
 		}
 		else if (premiumExpiration > 0)
 		{
@@ -196,6 +202,8 @@ public class PremiumManager
 				if (!player.hasPremiumStatus())
 				{
 					player.setPremiumStatus(true);
+					player.sendPacket(new PremiumState(player.getObjectId(), 1));
+					player.sendPacket(new ExBrPremiumState(player.getObjectId(), 1));
 				}
 				break;
 			}
@@ -211,6 +219,8 @@ public class PremiumManager
 				if (accountName.equalsIgnoreCase(player.getAccountName()) && player.hasPremiumStatus())
 				{
 					player.setPremiumStatus(false);
+					player.sendPacket(new PremiumState(player.getObjectId(), 0));
+					player.sendPacket(new ExBrPremiumState(player.getObjectId(), 0));
 					stopExpireTask(player);
 					break;
 				}

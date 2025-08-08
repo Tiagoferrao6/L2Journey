@@ -628,9 +628,13 @@ public class Auctioneer extends Npc
 			{
 				final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
 				html.setFile(player, "data/html/auction/location.htm");
-				html.replace("%locIcon%", MapRegionManager.getInstance().getClosestTownName(player));
+				
+				final String iconName = getIconTownWithHall(player);
+				final String iconHtml = "<img src=\"" + iconName + "\" width=\"32\" height=\"32\">";
+				
 				html.replace("%location%", MapRegionManager.getInstance().getClosestTownName(player));
 				html.replace("%LOCATION%", getPictureName(player));
+				html.replace("%locIcon%", iconHtml);
 				html.replace("%AGIT_LINK_BACK%", "bypass -h npc_" + getObjectId() + "_start");
 				player.sendPacket(html);
 				return;
@@ -732,5 +736,46 @@ public class Auctioneer extends Npc
 		}
 		
 		return nearestTown;
+	}
+	
+	private static String getIconTownWithHall(Player plyr)
+	{
+		final int nearestTownId = MapRegionManager.getInstance().getMapRegionLocId(plyr);
+		
+		switch (nearestTownId)
+		{
+			case 911: // Gludin
+			{
+				return "L2UI_CT1.Minimap_DF_ICN_TerritoryWar_Gludio";
+			}
+			case 912: // Gludio
+			{
+				return "L2UI_CT1.Minimap_DF_ICN_TerritoryWar_Gludio";
+			}
+			case 916: // Dion
+			{
+				return "L2UI_CT1.Minimap_DF_ICN_TerritoryWar_Dion";
+			}
+			case 918: // Giran
+			{
+				return "L2UI_CT1.Minimap_DF_ICN_TerritoryWar_Giran";
+			}
+			case 1537: // Rune
+			{
+				return "L2UI_CT1.Minimap_DF_ICN_TerritoryWar_Rune";
+			}
+			case 1538: // Godard
+			{
+				return "L2UI_CT1.Minimap_DF_ICN_TerritoryWar_Godard";
+			}
+			case 1714: // Schuttgart
+			{
+				return "L2UI_CT1.Minimap_DF_ICN_TerritoryWar_Schuttgart";
+			}
+			default: // Aden
+			{
+				return "L2UI_CT1.Minimap_DF_ICN_TerritoryWar_Aden";
+			}
+		}
 	}
 }
