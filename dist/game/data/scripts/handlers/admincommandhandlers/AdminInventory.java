@@ -18,21 +18,20 @@ public class AdminInventory implements IAdminCommandHandler
 	};
 	
 	@Override
-	public boolean useAdminCommand(String command, Player activeChar)
+	public boolean useAdminCommand(String command, Player player)
 	{
-		if ((activeChar.getTarget() == null))
+		if ((player.getTarget() == null))
 		{
-			activeChar.sendMessage("Select a target");
+			player.sendMessage("Select a target");
 			return false;
 		}
 		
-		if (!activeChar.getTarget().isPlayer())
+		if (!player.getTarget().isPlayer())
 		{
-			activeChar.sendMessage("Target need to be player");
+			player.sendMessage("Target need to be player");
 			return false;
 		}
 		
-		Player player = activeChar.getTarget().asPlayer();
 		StringTokenizer st = new StringTokenizer(command);
 		st.nextToken();
 		if (command.startsWith(ADMIN_COMMANDS[0]))
@@ -40,27 +39,26 @@ public class AdminInventory implements IAdminCommandHandler
 			if (st.hasMoreTokens())
 			{
 				int page = Integer.parseInt(st.nextToken());
-				showItemsPage(activeChar, page);
+				showItemsPage(player, page);
 			}
 			else
 			{
-				showItemsPage(activeChar, 0);
+				showItemsPage(player, 0);
 			}
 		}
 		else if (command.contains(ADMIN_COMMANDS[1]))
 		{
 			String val = command.substring(ADMIN_COMMANDS[1].length() + 1);
 			player.destroyItem(ItemProcessType.DESTROY, Integer.parseInt(val), player.getInventory().getItemByObjectId(Integer.parseInt(val)).getCount(), null, true);
-			showItemsPage(activeChar, 0);
+			showItemsPage(player, 0);
 		}
 		
 		return true;
 	}
 	
-	private static void showItemsPage(Player activeChar, int pageValue)
+	private static void showItemsPage(Player player, int pageValue)
 	{
-		final Player target = activeChar.getTarget().asPlayer();
-		final Collection<Item> items = target.getInventory().getItems();
+		final Collection<Item> items = player.getInventory().getItems();
 		final int maxItemsPerPage = 6;
 		final int newLineBreak = 10;
 		
@@ -89,8 +87,8 @@ public class AdminInventory implements IAdminCommandHandler
 		}
 		
 		final NpcHtmlMessage adminReply = new NpcHtmlMessage(0);
-		adminReply.setFile(activeChar, "data/html/admin/inventory.htm");
-		adminReply.replace("%PLAYER_NAME%", target.getName());
+		adminReply.setFile(player, "data/html/admin/inventory.htm");
+		adminReply.replace("%PLAYER_NAME%", player.getName());
 		
 		StringBuilder sbPages = new StringBuilder();
 		for (int x = 0; x < maxPages; x++)
@@ -126,7 +124,7 @@ public class AdminInventory implements IAdminCommandHandler
 		
 		adminReply.replace("%ITEMS%", sbItems.toString());
 		
-		activeChar.sendPacket(adminReply);
+		player.sendPacket(adminReply);
 	}
 	
 	@Override
