@@ -262,6 +262,8 @@ public class CharacterCreate extends ClientPacket
 	{
 		World.getInstance().addObject(newChar);
 		
+		newChar.setLang(Config.MULTILANG_DEFAULT);
+		
 		if (Config.STARTING_ADENA > 0)
 		{
 			newChar.addAdena(ItemProcessType.REWARD, Config.STARTING_ADENA, null, false);
