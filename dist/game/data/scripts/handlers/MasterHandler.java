@@ -126,6 +126,7 @@ import handlers.admincommandhandlers.AdminPledge;
 import handlers.admincommandhandlers.AdminPremium;
 import handlers.admincommandhandlers.AdminPunishment;
 import handlers.admincommandhandlers.AdminQuest;
+import handlers.admincommandhandlers.AdminRecallAll;
 import handlers.admincommandhandlers.AdminReload;
 import handlers.admincommandhandlers.AdminRepairChar;
 import handlers.admincommandhandlers.AdminRes;
@@ -380,6 +381,7 @@ public class MasterHandler
 			AdminFightCalculator.class,
 			AdminFortSiege.class,
 			AdminGamePoints.class,
+			AdminRecallAll.class,
 			AdminGeodata.class,
 			AdminGm.class,
 			AdminGmChat.class,
