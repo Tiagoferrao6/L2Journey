@@ -6,7 +6,7 @@
 		<set name="targetType" val="SELF" />
 		<set name="abnormalLevel" val="2" />
 		<set name="abnormalTime" val="15" />
-		<set name="abnormalType" val="MP_REGEN_UP" />
+		<set name="abnormalType" val="MP_RECOVER" />
 		<set name="isMagic" val="2" /> <!-- Static Skill -->
 		<set name="itemConsumeCount" val="1" />
 		<set name="itemConsumeId" val="726" />
@@ -25,7 +25,7 @@
 		<set name="abnormalLevel" val="3" />
 		<set name="abnormalTime" val="15" />
 		<!-- set name="displayId" val="2288" / -->
-		<set name="abnormalType" val="MP_REGEN_UP" />
+		<set name="abnormalType" val="MP_RECOVER" />
 		<set name="isMagic" val="2" /> <!-- Static Skill -->
 		<set name="itemConsumeCount" val="1" />
 		<set name="itemConsumeId" val="728" />

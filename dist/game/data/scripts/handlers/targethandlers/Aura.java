@@ -51,8 +51,23 @@ public class Aura implements ITargetTypeHandler
 	{
 		final List<WorldObject> targetList = new LinkedList<>();
 		final boolean srcInArena = (creature.isInsideZone(ZoneId.PVP) && !creature.isInsideZone(ZoneId.SIEGE));
+		
+		if (!skill.isBad())
+		{
+			targetList.add(creature);
+			if (onlyFirst)
+			{
+				return targetList;
+			}
+		}
+		
 		for (Creature obj : World.getInstance().getVisibleObjectsInRange(creature, Creature.class, skill.getAffectRange()))
 		{
+			if (obj == creature)
+			{
+				continue;
+			}
+			
 			if (obj.isDoor() || obj.isAttackable() || obj.isPlayable())
 			{
 				// Stealth door targeting.

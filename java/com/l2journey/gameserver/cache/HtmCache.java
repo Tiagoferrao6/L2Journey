@@ -189,9 +189,20 @@ public class HtmCache
 		}
 		
 		// In case localisation does not exist try the default path.
-		if ((content == null) && !prefix.contentEquals(""))
+		if (Config.RESTORE_HTML_BY_DEFAULT && (content == null) && !prefix.contentEquals(""))
 		{
-			content = HTML_CACHE.get(path);
+			if (Config.HTM_CACHE)
+			{
+				content = HTML_CACHE.get(path);
+			}
+			else
+			{
+				content = loadFile(new File(Config.DATAPACK_ROOT, path));
+				if (content == null)
+				{
+					content = loadFile(new File(Config.SCRIPT_ROOT, path));
+				}
+			}
 			newPath = path;
 		}
 		

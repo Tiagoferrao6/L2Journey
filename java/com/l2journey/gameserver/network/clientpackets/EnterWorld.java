@@ -169,6 +169,7 @@ public class EnterWorld extends ClientPacket
 		{
 			PacketLogger.warning("EnterWorld failed! player returned 'null'.");
 			Disconnection.of(client).storeAndDeleteWith(LeaveWorld.STATIC_PACKET);
+			
 			return;
 		}
 		
@@ -393,6 +394,7 @@ public class EnterWorld extends ClientPacket
 			{
 				player.setSiegeState((byte) 1);
 			}
+			
 			player.setSiegeSide(TerritoryWarManager.getInstance().getRegisteredTerritoryId(player));
 		}
 		
@@ -517,6 +519,7 @@ public class EnterWorld extends ClientPacket
 		player.sendPacket(SystemMessageId.WELCOME_TO_THE_WORLD_OF_LINEAGE_II);
 		
 		SevenSigns.getInstance().sendCurrentPeriodMsg(player);
+		
 		AnnouncementsTable.getInstance().showAnnouncements(player);
 		
 		if ((Config.SERVER_RESTART_SCHEDULE_ENABLED) && (Config.SERVER_RESTART_SCHEDULE_MESSAGE))

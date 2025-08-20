@@ -1,16 +1,16 @@
 /*
  * Copyright (c) 2025 L2Journey Project
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -18,13 +18,13 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
- * 
+ *
  * ---
- * 
- * Portions of this software are derived from the L2JMobius Project, 
- * shared under the MIT License. The original license terms are preserved where 
+ *
+ * Portions of this software are derived from the L2JMobius Project,
+ * shared under the MIT License. The original license terms are preserved where
  * applicable..
- * 
+ *
  */
 package instances.DarkCloudMansion;
 
@@ -777,8 +777,9 @@ public class DarkCloudMansion extends AbstractInstance
 						mob.npc.disableCoreAI(false);
 						mob.npc.getAI().setIntention(Intention.ATTACK, player);
 						mob.npc.broadcastPacket(new NpcSay(mob.npc.getObjectId(), ChatType.NPC_GENERAL, mob.npc.getId(), _faildChat[getRandom(_faildChat.length)]));
-						startQuestTimer("decayChatBelethSamples", 4000, npc, player);
-						startQuestTimer("decayBelethSamples", 4500, npc, player);
+						
+						// REMOVIDO: O timer "decayBelethSamples" foi removido
+						// para evitar conflito com a nova lógica de reset.
 					}
 				}
 				else
@@ -791,51 +792,48 @@ public class DarkCloudMansion extends AbstractInstance
 	
 	protected void killedBelethSample(InstanceWorld world, Npc npc)
 	{
-		int decayedSamples = 0;
 		final DMCRoom fifthRoom = world.getParameters().getObject("FifthRoom", DMCRoom.class);
-		for (DMCNpc mob : fifthRoom.npcList)
+		
+		if (fifthRoom == null)
 		{
-			if (mob.npc == npc)
-			{
-				decayedSamples += 1;
-				mob.count = 2;
-			}
-			else
-			{
-				if (mob.count == 2)
-				{
-					decayedSamples += 1;
-				}
-			}
+			return;
 		}
 		
 		if (fifthRoom.reset == 1)
 		{
 			for (DMCNpc mob : fifthRoom.npcList)
 			{
-				if ((mob.count == 0) || ((mob.status == 1) && (mob.count != 2)))
+				if (mob.status == 1)
 				{
-					decayedSamples += 1;
-					mob.npc.decayMe();
-					mob.count = 2;
+					mob.npc.broadcastPacket(new NpcSay(mob.npc.getObjectId(), ChatType.NPC_GENERAL, mob.npc.getId(), _decayChat[getRandom(_decayChat.length)]));
 				}
 			}
-			if (decayedSamples == 7)
+			
+			for (DMCNpc mob : fifthRoom.npcList)
 			{
-				startQuestTimer("respawnFifth", 6000, npc, null);
+				mob.npc.decayMe();
 			}
+			
+			fifthRoom.reset = 0;
+			
+			spawnFifthRoom(world);
+			return;
 		}
-		else
+		
+		int totalDeadSamples = 0;
+		for (DMCNpc mob : fifthRoom.npcList)
 		{
-			if ((fifthRoom.reset == 0) && (fifthRoom.founded == 3))
+			if (mob.count == 2)
 			{
-				for (DMCNpc mob : fifthRoom.npcList)
-				{
-					mob.npc.decayMe();
-				}
-				endInstance(world);
+				totalDeadSamples += 1;
 			}
 		}
+		
+		if ((totalDeadSamples == 7) && (fifthRoom.founded == 3))
+		{
+			endInstance(world);
+		}
+		
 	}
 	
 	protected boolean allStonesDone(InstanceWorld world)
@@ -916,17 +914,9 @@ public class DarkCloudMansion extends AbstractInstance
 					endInstance(world);
 				}
 			}
-			else if (event.equalsIgnoreCase("decayBelethSamples"))
-			{
-				for (DMCNpc mob : fifthRoom.npcList)
-				{
-					if (mob.count == 0)
-					{
-						mob.npc.decayMe();
-						mob.count = 2;
-					}
-				}
-			}
+			// REMOVIDO: A lógica para "decayBelethSamples" foi removida
+			// para evitar conflito com a nova lógica de reset.
+			
 			else if (event.equalsIgnoreCase("decayChatBelethSamples"))
 			{
 				for (DMCNpc mob : fifthRoom.npcList)
@@ -937,10 +927,8 @@ public class DarkCloudMansion extends AbstractInstance
 					}
 				}
 			}
-			else if (event.equalsIgnoreCase("respawnFifth"))
-			{
-				spawnFifthRoom(world);
-			}
+			// REMOVIDO: A lógica de "respawnFifth" foi removida, pois
+			// a repopulação agora é chamada diretamente do onKill.
 		}
 		
 		return "";

@@ -1491,7 +1491,7 @@ public class EffectList
 			{
 				buffsToRemove = getTriggeredBuffCount() - Config.TRIGGERED_BUFFS_MAX_AMOUNT;
 			}
-			else if (!skill.isHealingPotionSkill())
+			else if ((!skill.isHealingPotionSkill()) || (!skill.isManaPotionSkill()))
 			{
 				buffsToRemove = getBuffCount() - _owner.getStat().getMaxBuffCount();
 			}
@@ -1584,7 +1584,7 @@ public class EffectList
 				{
 					for (BuffInfo info : _buffs)
 					{
-						if (info.getSkill().isHealingPotionSkill())
+						if ((info.getSkill().isHealingPotionSkill()) || (info.getSkill().isManaPotionSkill()))
 						{
 							shortBuffStatusUpdate(info);
 						}

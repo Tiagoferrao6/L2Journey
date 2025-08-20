@@ -103,7 +103,10 @@ public class SendMessageLocalisationData implements IXmlReader
 	{
 		if (Config.MULTILANG_ENABLE && (player != null))
 		{
-			final Map<String[], String[]> localisations = SEND_MESSAGE_LOCALISATIONS.get(player.getLang());
+			final String lang = (player.getLang() != null) ? player.getLang() : Config.MULTILANG_DEFAULT;
+			
+			final Map<String[], String[]> localisations = SEND_MESSAGE_LOCALISATIONS.get(lang);
+			
 			if (localisations != null)
 			{
 				// No pretty way of doing something like this.

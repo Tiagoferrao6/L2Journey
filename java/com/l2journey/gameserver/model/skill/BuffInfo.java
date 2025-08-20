@@ -242,6 +242,11 @@ public class BuffInfo
 		// Remove this buff info from BuffFinishTask.
 		_effected.removeBuffInfoTime(this);
 		finishEffects(broadcast);
+		
+		if ((_skill.getAbnormalType() == AbnormalType.DECREASE_WEIGHT_PENALTY) && _effected.isPlayer())
+		{
+			_effected.asPlayer().getInventory().refreshWeight();
+		}
 	}
 	
 	public void initializeEffects()
@@ -300,6 +305,11 @@ public class BuffInfo
 		{
 			// Add abnormal visual effects.
 			addAbnormalVisualEffects();
+		}
+		
+		if ((_skill.getAbnormalType() == AbnormalType.DECREASE_WEIGHT_PENALTY) && _effected.isPlayer())
+		{
+			_effected.asPlayer().getInventory().refreshWeight();
 		}
 	}
 	
@@ -389,6 +399,11 @@ public class BuffInfo
 		if (this == _effected.getEffectList().getShortBuff())
 		{
 			_effected.getEffectList().shortBuffStatusUpdate(null);
+		}
+		
+		if ((_skill.getAbnormalType() == AbnormalType.DECREASE_WEIGHT_PENALTY) && _effected.isPlayer())
+		{
+			_effected.asPlayer().getInventory().refreshWeight();
 		}
 	}
 	

@@ -111,7 +111,12 @@ public class Formulas
 	 */
 	public static int getRegeneratePeriod(Creature creature)
 	{
-		return creature.isDoor() ? HP_REGENERATE_PERIOD * 100 : HP_REGENERATE_PERIOD;
+		if (creature.isDoor())
+		{
+			return HP_REGENERATE_PERIOD * 100; // Doors regenerate much slower
+		}
+		
+		return HP_REGENERATE_PERIOD; // Normal regeneration period for other creatures
 	}
 	
 	/**
@@ -569,7 +574,21 @@ public class Formulas
 		final boolean isPvE = attacker.isPlayable() && target.isAttackable();
 		final double power = skill.getPower(isPvP, isPvE);
 		double damage = 0;
-		final double proximityBonus = attacker.isBehind(target) ? 1.2 : attacker.isInFrontOf(target) ? 1 : 1.1; // Behind: +20% - Side: +10% (TODO: values are unconfirmed, possibly custom, remove or update when confirmed);
+		
+		final double proximityBonus;
+		if (attacker.isBehind(target))
+		{
+			proximityBonus = 1.2; // Behind: +20%
+		}
+		else if (attacker.isInFrontOf(target))
+		{
+			proximityBonus = 1; // Front: +0%
+		}
+		else
+		{
+			proximityBonus = 1.1; // Side: +10%
+		}
+		
 		final double ssboost = ss ? 1.458 : 1;
 		double pvpBonus = 1;
 		
@@ -643,7 +662,21 @@ public class Formulas
 		final boolean isPvP = attacker.isPlayable() && target.isPlayer();
 		final boolean isPvE = attacker.isPlayable() && target.isAttackable();
 		double damage = 0;
-		final double proximityBonus = attacker.isBehind(target) ? 1.2 : attacker.isInFrontOf(target) ? 1 : 1.1; // Behind: +20% - Side: +10%
+		
+		final double proximityBonus;
+		if (attacker.isBehind(target))
+		{
+			proximityBonus = 1.2; // Behind: +20%
+		}
+		else if (attacker.isInFrontOf(target))
+		{
+			proximityBonus = 1.0; // Front: +0%
+		}
+		else
+		{
+			proximityBonus = 1.1; // Side: +10%
+		}
+		
 		final double ssboost = ss ? 1.458 : 1;
 		double pvpBonus = 1;
 		
@@ -853,6 +886,7 @@ public class Formulas
 				}
 			}
 		}
+		
 		return damage;
 	}
 	
@@ -966,6 +1000,7 @@ public class Formulas
 				}
 			}
 		}
+		
 		return damage;
 	}
 	
@@ -1056,6 +1091,7 @@ public class Formulas
 				}
 			}
 		}
+		
 		return damage;
 	}
 	
@@ -1082,6 +1118,7 @@ public class Formulas
 		{
 			rate = attacker.getStat().calcStat(Stat.CRITICAL_RATE_POS, attacker.getStat().getCriticalHit(target, null), target, skill);
 		}
+		
 		return (target.getStat().calcStat(Stat.DEFENCE_CRITICAL_RATE, rate, null, null) + target.getStat().calcStat(Stat.DEFENCE_CRITICAL_RATE_ADD, 0, null, null)) > Rnd.get(1000);
 	}
 	
@@ -1152,6 +1189,7 @@ public class Formulas
 		{
 			return 2700;
 		}
+		
 		return (int) (470000 / rate);
 	}
 	
@@ -1168,6 +1206,7 @@ public class Formulas
 		{
 			return (int) ((skillTime / attacker.getMAtkSpd()) * 333);
 		}
+		
 		return (int) ((skillTime / attacker.getPAtkSpd()) * 300);
 	}
 	
@@ -1304,6 +1343,7 @@ public class Formulas
 		final int attackerLvl = skill.getMagicLevel() > 0 ? skill.getMagicLevel() : attacker.getLevel();
 		final double skillLevelBonusRateMod = 1 + (skill.getLvlBonusRate() / 100.);
 		final double lvlMod = 1 + ((attackerLvl - target.getLevel()) / 100.);
+		
 		return skillLevelBonusRateMod * lvlMod;
 	}
 	
@@ -1408,6 +1448,7 @@ public class Formulas
 			attacker.sendPacket(sm);
 			return false;
 		}
+		
 		return true;
 	}
 	
@@ -1569,6 +1610,7 @@ public class Formulas
 			damage *= 3;
 			attacker.sendPacket(SystemMessageId.MAGIC_CRITICAL_HIT);
 		}
+		
 		return damage;
 	}
 	
@@ -1611,8 +1653,10 @@ public class Formulas
 				sm.addString(creature.getName());
 				target.asPlayer().sendPacket(sm);
 			}
+			
 			return true;
 		}
+		
 		return false;
 	}
 	
@@ -1869,6 +1913,7 @@ public class Formulas
 		{
 			return false;
 		}
+		
 		final double reflectChance = target.calcStat(skill.isMagic() ? Stat.REFLECT_SKILL_MAGIC : Stat.REFLECT_SKILL_PHYSIC, 0, null, skill);
 		return reflectChance > Rnd.get(100);
 	}
@@ -1885,6 +1930,7 @@ public class Formulas
 		{
 			return 0;
 		}
+		
 		return creature.calcStat(Stat.FALL, (fallHeight * creature.getMaxHp()) / 1000, null, null);
 	}
 	
@@ -1959,6 +2005,7 @@ public class Formulas
 				break;
 			}
 		}
+		
 		return canceled;
 	}
 	
@@ -2017,6 +2064,7 @@ public class Formulas
 			final double elementMod = calcAttributeBonus(caster, target, skill);
 			time = (int) Math.ceil(MathUtil.clamp(((time * resMod * lvlBonusMod * elementMod) / statMod), (time * 0.5), time));
 		}
+		
 		return time;
 	}
 	
@@ -2056,6 +2104,7 @@ public class Formulas
 		{
 			return (int) ((Math.abs(exp / Config.RATE_KARMA_LOST) / karmaLooseMul) / 30);
 		}
+		
 		return (int) ((Math.abs(exp) / karmaLooseMul) / 30);
 	}
 	

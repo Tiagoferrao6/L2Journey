@@ -279,6 +279,7 @@ public class Attackable extends Npc
 				master.getMinionList().onAssist(this, attacker);
 			}
 		}
+		
 		// Reduce the current HP of the Attackable and launch the doDie Task if necessary
 		super.reduceCurrentHp(damage, attacker, awake, isDOT, skill);
 	}
@@ -463,6 +464,7 @@ public class Attackable extends Npc
 						totalMemberDamage += memberAggro.getDamage();
 					}
 				}
+				
 				container.damage = totalMemberDamage;
 				
 				if (!partyContainerStream.isPresent())
@@ -612,6 +614,7 @@ public class Attackable extends Npc
 										}
 									}
 								}
+								
 								rewards.remove(partyPlayer); // Remove the Player from the Attackable rewards
 							}
 							else if (calculateDistance3D(partyPlayer) < Config.ALT_PARTY_RANGE)
@@ -686,6 +689,7 @@ public class Attackable extends Npc
 		{
 			return;
 		}
+		
 		getAttackByList().add(creature);
 	}
 	
@@ -850,6 +854,7 @@ public class Attackable extends Npc
 					setWalking();
 				}
 			}
+			
 			return;
 		}
 		
@@ -964,6 +969,7 @@ public class Attackable extends Npc
 		{
 			result.add(null);
 		}
+		
 		return result;
 	}
 	
@@ -985,6 +991,7 @@ public class Attackable extends Npc
 			
 			result.add(ai.getAttacker());
 		}
+		
 		return result;
 	}
 	
@@ -1099,6 +1106,7 @@ public class Attackable extends Npc
 					deathItems.clear();
 				}
 			}
+			
 			return;
 		}
 		
@@ -1135,6 +1143,7 @@ public class Attackable extends Npc
 					broadcastPacket(sm);
 				}
 			}
+			
 			deathItems.clear();
 		}
 	}
@@ -1193,6 +1202,7 @@ public class Attackable extends Npc
 				lootItems.add(ItemData.getInstance().getTemplate(item.getId()));
 			}
 		}
+		
 		return lootItems;
 	}
 	
@@ -1229,6 +1239,7 @@ public class Attackable extends Npc
 		{
 			attacker.sendPacket(SystemMessageId.THE_CORPSE_IS_TOO_OLD_THE_SKILL_CANNOT_BE_USED);
 		}
+		
 		return true;
 	}
 	
@@ -1247,6 +1258,7 @@ public class Attackable extends Npc
 		{
 			sweeper.sendPacket(SystemMessageId.THERE_ARE_NO_PRIORITY_RIGHTS_ON_A_SWEEPER);
 		}
+		
 		return false;
 	}
 	
@@ -1278,6 +1290,7 @@ public class Attackable extends Npc
 			_overhitAttacker = null;
 			return;
 		}
+		
 		overhitEnabled(true);
 		_overhitDamage = overhitDmg;
 		_overhitAttacker = attacker;
@@ -1428,6 +1441,7 @@ public class Attackable extends Npc
 						break;
 					}
 				}
+				
 				xp *= mul;
 				sp *= mul;
 			}
@@ -1611,6 +1625,7 @@ public class Attackable extends Npc
 		{
 			count += diff;
 		}
+		
 		_harvestItem.set(new ItemHolder(_seed.getCropId(), count * Config.RATE_DROP_MANOR));
 	}
 	
@@ -1625,6 +1640,7 @@ public class Attackable extends Npc
 		{
 			return;
 		}
+		
 		_seed = seed;
 		_seederObjId = seeder.getObjectId();
 	}

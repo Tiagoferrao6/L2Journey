@@ -122,6 +122,7 @@ public abstract class Playable extends Creature
 			{
 				return false;
 			}
+			
 			// now reset currentHp to zero
 			setCurrentHp(0);
 			setDead(true);
@@ -200,6 +201,7 @@ public abstract class Playable extends Creature
 		// Notify Creature AI
 		getAI().notifyAction(Action.DEATH);
 		updateEffectIcons();
+		
 		return true;
 	}
 	

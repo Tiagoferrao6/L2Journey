@@ -89,8 +89,8 @@ public class AdminGeodata implements IAdminCommandHandler
 				final int worldX = activeChar.getX();
 				final int worldY = activeChar.getY();
 				final int worldZ = activeChar.getZ();
-				final int geoX = GeoEngine.getInstance().getGeoX(worldX);
-				final int geoY = GeoEngine.getInstance().getGeoY(worldY);
+				final int geoX = GeoEngine.getGeoX(worldX);
+				final int geoY = GeoEngine.getGeoY(worldY);
 				if (GeoEngine.getInstance().hasGeoPos(geoX, geoY))
 				{
 					activeChar.sendSysMessage("WorldX: " + worldX + ", WorldY: " + worldY + ", WorldZ: " + worldZ + ", GeoX: " + geoX + ", GeoY: " + geoY + ", GeoZ: " + GeoEngine.getInstance().getHeight(worldX, worldY, worldZ));
@@ -106,8 +106,8 @@ public class AdminGeodata implements IAdminCommandHandler
 				final int worldX = activeChar.getX();
 				final int worldY = activeChar.getY();
 				final int worldZ = activeChar.getZ();
-				final int geoX = GeoEngine.getInstance().getGeoX(worldX);
-				final int geoY = GeoEngine.getInstance().getGeoY(worldY);
+				final int geoX = GeoEngine.getGeoX(worldX);
+				final int geoY = GeoEngine.getGeoY(worldY);
 				if (GeoEngine.getInstance().hasGeoPos(geoX, geoY))
 				{
 					activeChar.sendSysMessage("WorldX: " + worldX + ", WorldY: " + worldY + ", WorldZ: " + worldZ + ", GeoX: " + geoX + ", GeoY: " + geoY + ", GeoZ: " + GeoEngine.getInstance().getHeight(worldX, worldY, worldZ));
@@ -179,11 +179,15 @@ public class AdminGeodata implements IAdminCommandHandler
 			}
 			case "admin_geocell":
 			{
-				final int geoX = GeoEngine.getInstance().getGeoX(activeChar.getX());
-				final int geoY = GeoEngine.getInstance().getGeoY(activeChar.getY());
+				GeoEngine.getInstance();
+				final int geoX = GeoEngine.getGeoX(activeChar.getX());
+				GeoEngine.getInstance();
+				final int geoY = GeoEngine.getGeoY(activeChar.getY());
 				final int geoZ = GeoEngine.getInstance().getNearestZ(geoX, geoY, activeChar.getZ());
-				final int worldX = GeoEngine.getInstance().getWorldX(geoX);
-				final int worldY = GeoEngine.getInstance().getWorldY(geoY);
+				GeoEngine.getInstance();
+				final int worldX = GeoEngine.getWorldX(geoX);
+				GeoEngine.getInstance();
+				final int worldY = GeoEngine.getWorldY(geoY);
 				activeChar.sendSysMessage("GeoCell: " + geoX + ", " + geoY + ". XYZ (" + worldX + ", " + worldY + ", " + geoZ + ")");
 				break;
 			}
@@ -204,7 +208,9 @@ public class AdminGeodata implements IAdminCommandHandler
 				final int x = ((activeChar.getX() - World.WORLD_X_MIN) >> 15) + World.TILE_X_MIN;
 				final int y = ((activeChar.getY() - World.WORLD_Y_MIN) >> 15) + World.TILE_Y_MIN;
 				final String fileName = String.format(GeoEngine.FILE_NAME_FORMAT, x, y);
-				final IRegion region = GeoEngine.getInstance().getRegion(GeoEngine.getInstance().getGeoX(activeChar.getX()), GeoEngine.getInstance().getGeoY(activeChar.getY()));
+				GeoEngine.getInstance();
+				GeoEngine.getInstance();
+				final IRegion region = GeoEngine.getInstance().getRegion(GeoEngine.getGeoX(activeChar.getX()), GeoEngine.getGeoY(activeChar.getY()));
 				if (region instanceof NullRegion)
 				{
 					activeChar.sendSysMessage("Could not find region: " + x + "_" + y);
@@ -240,8 +246,10 @@ public class AdminGeodata implements IAdminCommandHandler
 				{
 					for (int regionY = World.TILE_Y_MIN - 1; regionY <= World.TILE_Y_MAX; regionY++)
 					{
-						final int geoX = GeoEngine.getInstance().getGeoX(worldX);
-						final int geoY = GeoEngine.getInstance().getGeoY(worldY);
+						GeoEngine.getInstance();
+						final int geoX = GeoEngine.getGeoX(worldX);
+						GeoEngine.getInstance();
+						final int geoY = GeoEngine.getGeoY(worldY);
 						final IRegion region = GeoEngine.getInstance().getRegion(geoX, geoY);
 						if (!(region instanceof NullRegion))
 						{
@@ -269,8 +277,10 @@ public class AdminGeodata implements IAdminCommandHandler
 			case "admin_geoenablenorth":
 			case "admin_en":
 			{
-				final int geoX = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : GeoEngine.getInstance().getGeoX(activeChar.getX());
-				final int geoY = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : GeoEngine.getInstance().getGeoY(activeChar.getY());
+				GeoEngine.getInstance();
+				final int geoX = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : GeoEngine.getGeoX(activeChar.getX());
+				GeoEngine.getInstance();
+				final int geoY = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : GeoEngine.getGeoY(activeChar.getY());
 				if (GeoEngine.getInstance().hasGeoPos(geoX, geoY))
 				{
 					GeoEngine.getInstance().setNearestNswe(geoX, geoY, activeChar.getZ(), Cell.NSWE_NORTH);
@@ -288,8 +298,10 @@ public class AdminGeodata implements IAdminCommandHandler
 			case "admin_geodisablenorth":
 			case "admin_dn":
 			{
-				final int geoX = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : GeoEngine.getInstance().getGeoY(activeChar.getX());
-				final int geoY = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : GeoEngine.getInstance().getGeoY(activeChar.getY());
+				GeoEngine.getInstance();
+				final int geoX = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : GeoEngine.getGeoY(activeChar.getX());
+				GeoEngine.getInstance();
+				final int geoY = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : GeoEngine.getGeoY(activeChar.getY());
 				if (GeoEngine.getInstance().hasGeoPos(geoX, geoY))
 				{
 					GeoEngine.getInstance().unsetNearestNswe(geoX, geoY, activeChar.getZ(), Cell.NSWE_NORTH);
@@ -307,8 +319,10 @@ public class AdminGeodata implements IAdminCommandHandler
 			case "admin_geoenablesouth":
 			case "admin_es":
 			{
-				final int geoX = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : GeoEngine.getInstance().getGeoX(activeChar.getX());
-				final int geoY = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : GeoEngine.getInstance().getGeoY(activeChar.getY());
+				GeoEngine.getInstance();
+				final int geoX = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : GeoEngine.getGeoX(activeChar.getX());
+				GeoEngine.getInstance();
+				final int geoY = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : GeoEngine.getGeoY(activeChar.getY());
 				if (GeoEngine.getInstance().hasGeoPos(geoX, geoY))
 				{
 					GeoEngine.getInstance().setNearestNswe(geoX, geoY, activeChar.getZ(), Cell.NSWE_SOUTH);
@@ -326,8 +340,10 @@ public class AdminGeodata implements IAdminCommandHandler
 			case "admin_geodisablesouth":
 			case "admin_ds":
 			{
-				final int geoX = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : GeoEngine.getInstance().getGeoX(activeChar.getX());
-				final int geoY = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : GeoEngine.getInstance().getGeoY(activeChar.getY());
+				GeoEngine.getInstance();
+				final int geoX = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : GeoEngine.getGeoX(activeChar.getX());
+				GeoEngine.getInstance();
+				final int geoY = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : GeoEngine.getGeoY(activeChar.getY());
 				if (GeoEngine.getInstance().hasGeoPos(geoX, geoY))
 				{
 					GeoEngine.getInstance().unsetNearestNswe(geoX, geoY, activeChar.getZ(), Cell.NSWE_SOUTH);
@@ -345,8 +361,10 @@ public class AdminGeodata implements IAdminCommandHandler
 			case "admin_geoenableeast":
 			case "admin_ee":
 			{
-				final int geoX = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : GeoEngine.getInstance().getGeoX(activeChar.getX());
-				final int geoY = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : GeoEngine.getInstance().getGeoY(activeChar.getY());
+				GeoEngine.getInstance();
+				final int geoX = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : GeoEngine.getGeoX(activeChar.getX());
+				GeoEngine.getInstance();
+				final int geoY = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : GeoEngine.getGeoY(activeChar.getY());
 				if (GeoEngine.getInstance().hasGeoPos(geoX, geoY))
 				{
 					GeoEngine.getInstance().setNearestNswe(geoX, geoY, activeChar.getZ(), Cell.NSWE_EAST);
@@ -364,8 +382,10 @@ public class AdminGeodata implements IAdminCommandHandler
 			case "admin_geodisableeast":
 			case "admin_de":
 			{
-				final int geoX = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : GeoEngine.getInstance().getGeoX(activeChar.getX());
-				final int geoY = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : GeoEngine.getInstance().getGeoY(activeChar.getY());
+				GeoEngine.getInstance();
+				final int geoX = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : GeoEngine.getGeoX(activeChar.getX());
+				GeoEngine.getInstance();
+				final int geoY = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : GeoEngine.getGeoY(activeChar.getY());
 				if (GeoEngine.getInstance().hasGeoPos(geoX, geoY))
 				{
 					GeoEngine.getInstance().unsetNearestNswe(geoX, geoY, activeChar.getZ(), Cell.NSWE_EAST);
@@ -383,8 +403,10 @@ public class AdminGeodata implements IAdminCommandHandler
 			case "admin_geoenablewest":
 			case "admin_ew":
 			{
-				final int geoX = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : GeoEngine.getInstance().getGeoX(activeChar.getX());
-				final int geoY = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : GeoEngine.getInstance().getGeoY(activeChar.getY());
+				GeoEngine.getInstance();
+				final int geoX = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : GeoEngine.getGeoX(activeChar.getX());
+				GeoEngine.getInstance();
+				final int geoY = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : GeoEngine.getGeoY(activeChar.getY());
 				if (GeoEngine.getInstance().hasGeoPos(geoX, geoY))
 				{
 					GeoEngine.getInstance().setNearestNswe(geoX, geoY, activeChar.getZ(), Cell.NSWE_WEST);
@@ -402,8 +424,10 @@ public class AdminGeodata implements IAdminCommandHandler
 			case "admin_geodisablewest":
 			case "admin_dw":
 			{
-				final int geoX = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : GeoEngine.getInstance().getGeoX(activeChar.getX());
-				final int geoY = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : GeoEngine.getInstance().getGeoY(activeChar.getY());
+				GeoEngine.getInstance();
+				final int geoX = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : GeoEngine.getGeoX(activeChar.getX());
+				GeoEngine.getInstance();
+				final int geoY = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : GeoEngine.getGeoY(activeChar.getY());
 				if (GeoEngine.getInstance().hasGeoPos(geoX, geoY))
 				{
 					GeoEngine.getInstance().unsetNearestNswe(geoX, geoY, activeChar.getZ(), Cell.NSWE_WEST);
@@ -461,8 +485,10 @@ public class AdminGeodata implements IAdminCommandHandler
 				}
 				
 				final int geoRadius = 9;
-				final int geoX = GeoEngine.getInstance().getGeoX(activeChar.getX());
-				final int geoY = GeoEngine.getInstance().getGeoY(activeChar.getY());
+				GeoEngine.getInstance();
+				final int geoX = GeoEngine.getGeoX(activeChar.getX());
+				GeoEngine.getInstance();
+				final int geoY = GeoEngine.getGeoY(activeChar.getY());
 				final int playerZ = activeChar.getZ();
 				for (int dx = -geoRadius; dx <= geoRadius; ++dx)
 				{

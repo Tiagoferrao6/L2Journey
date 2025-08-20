@@ -32,8 +32,10 @@ import com.l2journey.gameserver.model.StatSet;
 import com.l2journey.gameserver.model.actor.Creature;
 import com.l2journey.gameserver.model.conditions.Condition;
 import com.l2journey.gameserver.model.effects.AbstractEffect;
+import com.l2journey.gameserver.model.skill.AbnormalType;
 import com.l2journey.gameserver.model.skill.Skill;
 import com.l2journey.gameserver.model.skill.skillVariation.ServitorShareConditions;
+import com.l2journey.gameserver.network.serverpackets.ExRegenMax;
 
 /**
  * Mana Heal Over Time effect implementation.
@@ -64,12 +66,21 @@ public class ManaHealOverTime extends AbstractEffect
 		// Not needed to set the MP and send update packet if player is already at max MP
 		if (mp >= maxmp)
 		{
-			return true;
+			return false;
 		}
 		
 		mp += _power * getTicksMultiplier();
 		mp = Math.min(mp, maxmp);
 		effected.setCurrentMp(mp);
 		return skill.isToggle();
+	}
+	
+	@Override
+	public void onStart(Creature effector, Creature effected, Skill skill)
+	{
+		if (effected.isPlayer() && (getTicks() > 0) && (skill.getAbnormalType() == AbnormalType.MP_RECOVER))
+		{
+			effected.sendPacket(new ExRegenMax(skill.getAbnormalTime(), getTicks(), _power));
+		}
 	}
 }

@@ -1309,6 +1309,7 @@ public class Config
 	public static String MULTILANG_DEFAULT;
 	public static boolean MULTILANG_ENABLE;
 	public static List<String> MULTILANG_ALLOWED = new ArrayList<>();
+	public static boolean RESTORE_HTML_BY_DEFAULT;
 	public static boolean MULTILANG_VOICED_ALLOW;
 	public static boolean STATISTIC_PANEL;
 	
@@ -3502,6 +3503,9 @@ public class Config
 		{
 			LOGGER.warning("MultiLang[Config.load()]: default language: " + MULTILANG_DEFAULT + " is not in allowed list !");
 		}
+		
+		RESTORE_HTML_BY_DEFAULT = UserPanel.getBoolean("RestoreHtmlByDefault", true);
+		
 		MULTILANG_VOICED_ALLOW = UserPanel.getBoolean("MultiLangVoiceCommand", true);
 		STATISTIC_PANEL = UserPanel.getBoolean("ServerStatistics", false);
 	}

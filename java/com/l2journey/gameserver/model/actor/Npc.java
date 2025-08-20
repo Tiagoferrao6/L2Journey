@@ -194,6 +194,7 @@ public class Npc extends Creature
 		// Call the Creature constructor to set the _template of the Creature, copy skills from template to object
 		// and link _calculators to NPC_STD_CALCULATOR
 		super(template);
+		
 		setInstanceType(InstanceType.Npc);
 		initCharStatusUpdateValues();
 		
@@ -205,6 +206,7 @@ public class Npc extends Creature
 		// initialize the "current" collisions
 		_currentCollisionHeight = getTemplate().getFCollisionHeight();
 		_currentCollisionRadius = getTemplate().getFCollisionRadius();
+		
 		setFlying(template.isFlying());
 	}
 	
@@ -509,12 +511,14 @@ public class Npc extends Creature
 			player.sendPacket(ActionFailed.STATIC_PACKET);
 			return false;
 		}
+		
 		if (player.isLockedTarget() && (player.getLockedTarget() != this))
 		{
 			player.sendPacket(SystemMessageId.FAILED_TO_CHANGE_ATTACK_TARGET);
 			player.sendPacket(ActionFailed.STATIC_PACKET);
 			return false;
 		}
+		
 		return true;
 	}
 	
@@ -544,6 +548,7 @@ public class Npc extends Creature
 		{
 			return false;
 		}
+		
 		return true;
 	}
 	
@@ -592,6 +597,7 @@ public class Npc extends Creature
 			final int fortId = getFort() != null ? getFort().getResidenceId() : -1;
 			return (player.getClan().getCastleId() == castleId) || (player.getClan().getFortId() == fortId);
 		}
+		
 		return false;
 	}
 	
@@ -612,6 +618,7 @@ public class Npc extends Creature
 		{
 			return null;
 		}
+		
 		return CastleManager.getInstance().getCastles().get(index);
 	}
 	
@@ -655,6 +662,7 @@ public class Npc extends Creature
 		{
 			return null;
 		}
+		
 		return FortManager.getInstance().getForts().get(index);
 	}
 	
@@ -664,6 +672,7 @@ public class Npc extends Creature
 		{
 			getCastle();
 		}
+		
 		return _isInTown;
 	}
 	
@@ -851,6 +860,7 @@ public class Npc extends Creature
 			player.sendPacket(ActionFailed.STATIC_PACKET);
 			return true;
 		}
+		
 		return false;
 	}
 	
@@ -873,11 +883,13 @@ public class Npc extends Creature
 			player.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
+		
 		if (player.isCursedWeaponEquipped() && (!(player.getTarget() instanceof ClanHallManager) || !(player.getTarget() instanceof Doorman)))
 		{
 			player.setTarget(player);
 			return;
 		}
+		
 		if (player.getKarma() > 0)
 		{
 			if (!Config.ALT_GAME_KARMA_PLAYER_CAN_SHOP && (this instanceof Merchant))
@@ -963,6 +975,7 @@ public class Npc extends Creature
 								player.sendPacket(ActionFailed.STATIC_PACKET);
 								return;
 							}
+							
 							break;
 						}
 						case SevenSigns.CABAL_DUSK:
@@ -973,6 +986,7 @@ public class Npc extends Creature
 								player.sendPacket(ActionFailed.STATIC_PACKET);
 								return;
 							}
+							
 							break;
 						}
 						default:
@@ -982,6 +996,7 @@ public class Npc extends Creature
 						}
 					}
 				}
+				
 				filename += "mammmerch_1.htm";
 				break;
 			}
@@ -999,6 +1014,7 @@ public class Npc extends Creature
 								player.sendPacket(ActionFailed.STATIC_PACKET);
 								return;
 							}
+							
 							break;
 						}
 						case SevenSigns.CABAL_DUSK:
@@ -1009,6 +1025,7 @@ public class Npc extends Creature
 								player.sendPacket(ActionFailed.STATIC_PACKET);
 								return;
 							}
+							
 							break;
 						}
 						default:
@@ -1018,6 +1035,7 @@ public class Npc extends Creature
 						}
 					}
 				}
+				
 				filename += "mammblack_1.htm";
 				break;
 			}
@@ -1045,6 +1063,7 @@ public class Npc extends Creature
 				{
 					filename = (getHtmlPath(npcId, value));
 				}
+				
 				break;
 			}
 			case 31690:
@@ -1061,6 +1080,7 @@ public class Npc extends Creature
 				{
 					filename = (getHtmlPath(npcId, value));
 				}
+				
 				break;
 			}
 			case 36402:
@@ -1073,6 +1093,7 @@ public class Npc extends Creature
 				{
 					filename = Olympiad.OLYMPIAD_HTML_PATH + "olympiad_nobuffs.htm";
 				}
+				
 				break;
 			}
 			case 30298: // Blacksmith Pinter
@@ -1085,6 +1106,7 @@ public class Npc extends Creature
 				{
 					filename = (getHtmlPath(npcId, value));
 				}
+				
 				break;
 			}
 			default:
@@ -1099,12 +1121,15 @@ public class Npc extends Creature
 					{
 						filename += "rift/GuardianOfBorder-" + value + ".htm";
 					}
+					
 					break;
 				}
+				
 				if (((npcId >= 31093) && (npcId <= 31094)) || ((npcId >= 31172) && (npcId <= 31201)) || ((npcId >= 31239) && (npcId <= 31254)))
 				{
 					return;
 				}
+				
 				// Get the text of the selected HTML file in function of the npcId and of the page number
 				filename = (getHtmlPath(npcId, value));
 				break;
@@ -1348,6 +1373,7 @@ public class Npc extends Creature
 		{
 			return;
 		}
+		
 		setDecayed(true);
 		
 		// Remove the Npc from the world when the decay task is launched
@@ -1579,6 +1605,7 @@ public class Npc extends Creature
 			noTeachMsg.setHtml(html);
 			noTeachMsg.replace("%objectId%", String.valueOf(getObjectId()));
 		}
+		
 		player.sendPacket(noTeachMsg);
 	}
 	
@@ -1591,6 +1618,7 @@ public class Npc extends Creature
 				deleteMe();
 			}
 		}, delay);
+		
 		return this;
 	}
 	
@@ -1903,6 +1931,7 @@ public class Npc extends Creature
 			{
 				ItemsAutoDestroyTaskManager.getInstance().addItem(item);
 			}
+			
 			item.setProtected(false);
 			
 			// If stackable, end loop as entire count is included in 1 instance of item.
@@ -1911,6 +1940,7 @@ public class Npc extends Creature
 				break;
 			}
 		}
+		
 		return item;
 	}
 	
@@ -1942,6 +1972,7 @@ public class Npc extends Creature
 				return term.terminate();
 			}
 		}
+		
 		return super.isVisibleFor(player);
 	}
 	
@@ -2049,6 +2080,7 @@ public class Npc extends Creature
 		{
 			return _summonedNpcs.get(objectId);
 		}
+		
 		return null;
 	}
 	
@@ -2101,6 +2133,7 @@ public class Npc extends Creature
 				}
 			}
 		}
+		
 		Broadcast.toKnownPlayers(this, npcSay);
 	}
 	
@@ -2156,6 +2189,7 @@ public class Npc extends Creature
 			{
 				timer.cancelTask();
 			}
+			
 			_questTimers.clear();
 		}
 	}
@@ -2184,6 +2218,7 @@ public class Npc extends Creature
 			{
 				timer.cancelTask();
 			}
+			
 			_timerHolders.clear();
 		}
 	}

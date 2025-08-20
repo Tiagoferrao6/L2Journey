@@ -142,11 +142,13 @@ public abstract class Summon extends Playable
 		updateAndBroadcastStatus(0);
 		sendPacket(new RelationChanged(this, _owner.getRelation(_owner), false));
 		World.getInstance().forEachVisibleObjectInRange(getOwner(), Player.class, 800, player -> player.sendPacket(new RelationChanged(this, _owner.getRelation(player), isAutoAttackable(player))));
+		
 		final Party party = _owner.getParty();
 		if (party != null)
 		{
 			party.broadcastToPartyMembers(_owner, new ExPartyPetWindowAdd(this));
 		}
+		
 		setShowSummonAnimation(false); // addVisibleObject created the info packets with summon animation
 		// if someone comes into range now, the animation shouldn't show any more
 		_restoreSummon = false;
@@ -223,6 +225,7 @@ public abstract class Summon extends Playable
 				{
 					World.getInstance().forEachVisibleObject(this, Player.class, player -> player.sendPacket(new SummonInfo(this, player, 1)));
 				}
+				
 				_abnormalEffectTask = null;
 			}, 50);
 		}
@@ -242,6 +245,7 @@ public abstract class Summon extends Playable
 		{
 			return 0;
 		}
+		
 		return ExperienceData.getInstance().getExpForLevel(getLevel());
 	}
 	
@@ -251,6 +255,7 @@ public abstract class Summon extends Playable
 		{
 			return 0;
 		}
+		
 		return ExperienceData.getInstance().getExpForLevel(getLevel() + 1);
 	}
 	
@@ -293,6 +298,7 @@ public abstract class Summon extends Playable
 		{
 			return (short) getTemplate().getSoulShot();
 		}
+		
 		return 1;
 	}
 	
@@ -302,6 +308,7 @@ public abstract class Summon extends Playable
 		{
 			return (short) getTemplate().getSpiritShot();
 		}
+		
 		return 1;
 	}
 	
@@ -355,10 +362,12 @@ public abstract class Summon extends Playable
 		{
 			return false;
 		}
+		
 		if (!decayed)
 		{
 			DecayTaskManager.getInstance().add(this);
 		}
+		
 		return true;
 	}
 	
@@ -397,11 +406,14 @@ public abstract class Summon extends Playable
 		{
 			getInventory().destroyAllItems(ItemProcessType.DESTROY, _owner, this);
 		}
+		
 		decayMe();
+		
 		if (owner != null)
 		{
 			owner.setPet(null);
 		}
+		
 		super.deleteMe();
 	}
 	
@@ -431,10 +443,12 @@ public abstract class Summon extends Playable
 					_owner.setPetInvItems(false);
 				}
 			}
+			
 			abortAttack();
 			abortCast();
 			storeMe();
 			storeEffect(true);
+			
 			if (owner != null)
 			{
 				owner.setPet(null);
@@ -563,6 +577,7 @@ public abstract class Summon extends Playable
 		{
 			return null;
 		}
+		
 		return _owner.getParty();
 	}
 	
@@ -715,6 +730,7 @@ public abstract class Summon extends Playable
 				{
 					sendPacket(SystemMessageId.FORCE_ATTACK_IS_IMPOSSIBLE_AGAINST_A_TEMPORARY_ALLIED_MEMBER_DURING_A_SIEGE);
 				}
+				
 				sendPacket(ActionFailed.STATIC_PACKET);
 				return false;
 			}
@@ -742,6 +758,7 @@ public abstract class Summon extends Playable
 				}
 			}
 		}
+		
 		// Notify the AI with CAST and target
 		getAI().setIntention(Intention.CAST, skill, target);
 		return true;
@@ -892,6 +909,7 @@ public abstract class Summon extends Playable
 			{
 				return;
 			}
+			
 			player.sendPacket(new SummonInfo(this, player, value));
 		});
 	}
@@ -1037,6 +1055,7 @@ public abstract class Summon extends Playable
 			{
 				sendPacket(SystemMessageId.FORCE_ATTACK_IS_IMPOSSIBLE_AGAINST_A_TEMPORARY_ALLIED_MEMBER_DURING_A_SIEGE);
 			}
+			
 			sendPacket(ActionFailed.STATIC_PACKET);
 			return false;
 		}
@@ -1220,6 +1239,7 @@ public abstract class Summon extends Playable
 				formId = 1;
 			}
 		}
+		
 		return formId;
 	}
 	

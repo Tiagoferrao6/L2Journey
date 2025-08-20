@@ -450,6 +450,7 @@ public abstract class Creature extends WorldObject
 				}
 			}
 		}
+		
 		return _zones[zone.ordinal()] > 0;
 	}
 	
@@ -670,6 +671,7 @@ public abstract class Creature extends WorldObject
 		{
 			return;
 		}
+		
 		move.lastBroadcastTime = gameTicks;
 		
 		if (isPlayable())
@@ -1012,6 +1014,7 @@ public abstract class Creature extends WorldObject
 				return false;
 			}
 		}
+		
 		return true;
 	}
 	
@@ -1733,8 +1736,8 @@ public abstract class Creature extends WorldObject
 			setCastingSimultaneouslyNow(false);
 			return;
 		}
-		stopEffectsOnAction();
 		
+		stopEffectsOnAction();
 		beginCast(skill, true, target, targets);
 	}
 	
@@ -1827,6 +1830,7 @@ public abstract class Creature extends WorldObject
 						sendPacket(ActionFailed.STATIC_PACKET);
 						getAI().setIntention(Intention.ACTIVE);
 					}
+					
 					return;
 				}
 				
@@ -1866,6 +1870,7 @@ public abstract class Creature extends WorldObject
 				sendPacket(ActionFailed.STATIC_PACKET);
 				getAI().setIntention(Intention.ACTIVE);
 			}
+			
 			return;
 		}
 		
@@ -1896,6 +1901,7 @@ public abstract class Creature extends WorldObject
 					sendPacket(ActionFailed.STATIC_PACKET);
 					getAI().setIntention(Intention.ACTIVE);
 				}
+				
 				return;
 			}
 		}
@@ -1919,6 +1925,7 @@ public abstract class Creature extends WorldObject
 				getAI().setIntention(Intention.ACTIVE);
 				sendPacket(ActionFailed.STATIC_PACKET);
 			}
+			
 			return;
 		}
 		
@@ -2271,6 +2278,7 @@ public abstract class Creature extends WorldObject
 					{
 						sendPacket(SystemMessageId.THAT_WEAPON_CANNOT_USE_ANY_OTHER_SKILL_EXCEPT_THE_WEAPON_S_SKILL);
 					}
+					
 					return false;
 				}
 			}
@@ -2299,9 +2307,11 @@ public abstract class Creature extends WorldObject
 					// Send a System Message to the caster
 					sendPacket(SystemMessageId.THERE_ARE_NOT_ENOUGH_NECESSARY_ITEMS_TO_USE_THE_SKILL);
 				}
+				
 				return false;
 			}
 		}
+		
 		return true;
 	}
 	
@@ -2369,6 +2379,7 @@ public abstract class Creature extends WorldObject
 				}
 			}
 		}
+		
 		return -1;
 	}
 	
@@ -2471,6 +2482,7 @@ public abstract class Creature extends WorldObject
 		{
 			return;
 		}
+		
 		_disabledSkills.remove(skill.getReuseHashCode());
 	}
 	
@@ -2486,6 +2498,7 @@ public abstract class Creature extends WorldObject
 		{
 			return;
 		}
+		
 		_disabledSkills.put(skill.getReuseHashCode(), delay > 0 ? System.currentTimeMillis() + delay : Long.MAX_VALUE);
 	}
 	
@@ -2771,6 +2784,7 @@ public abstract class Creature extends WorldObject
 		{
 			return;
 		}
+		
 		setAI(null);
 	}
 	
@@ -2840,6 +2854,7 @@ public abstract class Creature extends WorldObject
 				}
 			}
 		}
+		
 		return ai;
 	}
 	
@@ -2860,6 +2875,7 @@ public abstract class Creature extends WorldObject
 		{
 			oldAI.stopAITask();
 		}
+		
 		_ai = newAI;
 	}
 	
@@ -3440,6 +3456,7 @@ public abstract class Creature extends WorldObject
 		{
 			getAI().setIntention(Intention.IDLE);
 		}
+		
 		updateAbnormalEffect();
 	}
 	
@@ -3557,6 +3574,7 @@ public abstract class Creature extends WorldObject
 		{
 			getAI().notifyAction(Action.THINK);
 		}
+		
 		updateAbnormalEffect();
 	}
 	
@@ -3588,6 +3606,7 @@ public abstract class Creature extends WorldObject
 		{
 			getAI().notifyAction(Action.THINK);
 		}
+		
 		updateAbnormalEffect();
 	}
 	
@@ -3725,6 +3744,7 @@ public abstract class Creature extends WorldObject
 			modifiedStats.add(f.getStat());
 			addStatFunc(f);
 		}
+		
 		broadcastModifiedStats(modifiedStats);
 	}
 	
@@ -3870,6 +3890,7 @@ public abstract class Creature extends WorldObject
 						_calculators[i] = null;
 					}
 				}
+				
 				i++;
 			}
 			
@@ -4368,6 +4389,7 @@ public abstract class Creature extends WorldObject
 										}
 										getAI().setIntention(Intention.IDLE);
 									}
+									
 									stopMove(null);
 									return true;
 								}
@@ -4430,6 +4452,7 @@ public abstract class Creature extends WorldObject
 			// Set the position of the Creature to estimated after parcial move.
 			super.setXYZ((int) move.xAccurate, (int) move.yAccurate, zPrev + (int) ((dz * distFraction) + 0.895));
 		}
+		
 		revalidateZone(false);
 		
 		// Set the timer of last position update to now.
@@ -4455,6 +4478,7 @@ public abstract class Creature extends WorldObject
 		{
 			return;
 		}
+		
 		_lastZoneValidateLocation.setXYZ(this);
 		
 		final ZoneRegion region = ZoneManager.getInstance().getRegion(this);
@@ -4537,6 +4561,7 @@ public abstract class Creature extends WorldObject
 			_target = null;
 			return;
 		}
+		
 		_target = object;
 	}
 	
@@ -4549,6 +4574,7 @@ public abstract class Creature extends WorldObject
 		{
 			return _target.getObjectId();
 		}
+		
 		return 0;
 	}
 	
@@ -4871,6 +4897,7 @@ public abstract class Creature extends WorldObject
 				{
 					getAI().setIntention(Intention.IDLE);
 				}
+				
 				sendPacket(ActionFailed.STATIC_PACKET);
 				return;
 			}
@@ -4910,6 +4937,7 @@ public abstract class Creature extends WorldObject
 		{
 			ThreadPool.schedule(new NotifyAITask(this, Action.ARRIVED_REVALIDATE), 2000);
 		}
+		
 		// the Event.ARRIVED will be sent when the character will actually arrive to destination by MovementTaskManager
 	}
 	
@@ -5188,6 +5216,7 @@ public abstract class Creature extends WorldObject
 			{
 				target.getAI().notifyAction(Action.EVADED, this);
 			}
+			
 			notifyAttackAvoid(target, false);
 		}
 		// else
@@ -5215,6 +5244,7 @@ public abstract class Creature extends WorldObject
 			{
 				LOGGER.warning("Skill 4515 at level 1 is missing in DP.");
 			}
+			
 			damage = 0; // prevents messing up drop calculation
 		}
 		
@@ -5299,7 +5329,9 @@ public abstract class Creature extends WorldObject
 			{
 				target.getAI().notifyAction(Action.ATTACKED, this);
 			}
+			
 			getAI().clientStartAutoAttack();
+			
 			if (isSummon())
 			{
 				final Player owner = asSummon().getOwner();
@@ -5350,6 +5382,7 @@ public abstract class Creature extends WorldObject
 		{
 			// Abort the attack of the Creature and send Server->Client ActionFailed packet
 			abortAttack();
+			
 			if (isPlayer())
 			{
 				// Send a system message
@@ -5453,6 +5486,7 @@ public abstract class Creature extends WorldObject
 			player.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
+		
 		// Notify AI with ATTACK
 		player.getAI().setIntention(Intention.ATTACK, this);
 	}
@@ -5487,10 +5521,12 @@ public abstract class Creature extends WorldObject
 		{
 			return false;
 		}
+		
 		if (isInTownWarEvent())
 		{
 			return false;
 		}
+		
 		if (InstanceManager.getInstance().getInstance(getInstanceId()).isPvP())
 		{
 			return false;
@@ -5620,6 +5656,7 @@ public abstract class Creature extends WorldObject
 					stopSkillEffects(SkillFinishType.NORMAL, oldSkill.getId());
 				}
 			}
+			
 			// Add Func objects of newSkill to the calculator set of the Creature
 			addStatFuncs(newSkill.getStatFuncs(null, this));
 			if (newSkill.isPassive())
@@ -5627,6 +5664,7 @@ public abstract class Creature extends WorldObject
 				newSkill.applyEffects(this, this, false, true, false, 0);
 			}
 		}
+		
 		return oldSkill;
 	}
 	
@@ -5821,6 +5859,7 @@ public abstract class Creature extends WorldObject
 							}
 						}
 					}
+					
 					targetList.add(target);
 				}
 			}
@@ -5841,9 +5880,11 @@ public abstract class Creature extends WorldObject
 						sendPacket(SystemMessageId.A_MALICIOUS_SKILL_CANNOT_BE_USED_IN_A_PEACE_ZONE);
 					}
 				}
+				
 				abortCast();
 				return;
 			}
+			
 			mut.setTargets(targetList);
 		}
 		
@@ -6054,6 +6095,7 @@ public abstract class Creature extends WorldObject
 				return;
 			}
 		}
+		
 		completeMagicFinalizer(skill, target);
 	}
 	
@@ -6146,6 +6188,7 @@ public abstract class Creature extends WorldObject
 					{
 						LOGGER.warning("Skill ID " + curse.getId() + " level " + curse.getLevel() + " is missing in DP!");
 					}
+					
 					return;
 				}
 				
@@ -6234,6 +6277,7 @@ public abstract class Creature extends WorldObject
 									}
 								}
 							}
+							
 							// notify target AI about the attack
 							if (target.asCreature().hasAI() && skill.isBad() && !skill.hasEffectType(EffectType.HATE) && (skill.getAbnormalType() != AbnormalType.TURN_PASSIVE))
 							{
@@ -6256,6 +6300,7 @@ public abstract class Creature extends WorldObject
 							}
 						}
 					}
+					
 					if (target.isFakePlayer() && !Config.FAKE_PLAYER_AUTO_ATTACKABLE)
 					{
 						player.updatePvPStatus();
@@ -6378,6 +6423,7 @@ public abstract class Creature extends WorldObject
 		{
 			random = 5 + (int) Math.sqrt(getLevel());
 		}
+		
 		return (1 + ((double) Rnd.get(0 - random, random) / 100));
 	}
 	
@@ -6606,6 +6652,7 @@ public abstract class Creature extends WorldObject
 			{
 				amount = 0;
 			}
+			
 			_status.reduceHp(amount, attacker, awake, isDOT, false);
 		}
 	}
@@ -6694,9 +6741,10 @@ public abstract class Creature extends WorldObject
 		{
 			// Weight Limit = (CON Modifier*69000) * Skills
 			// Source http://l2p.bravehost.com/weightlimit.html (May 2007)
-			final double baseLoad = Math.floor(BaseStat.CON.calcBonus(this) * 69000 * Config.ALT_WEIGHT_LIMIT);
-			return (int) calcStat(Stat.WEIGHT_LIMIT, baseLoad, this, null);
+			final double baseLoad = Math.floor(BaseStat.CON.calcBonus(this) * 69000);
+			return (int) calcStat(Stat.WEIGHT_LIMIT, (baseLoad * Config.ALT_WEIGHT_LIMIT), this, null);
 		}
+		
 		return 0;
 	}
 	
@@ -6706,6 +6754,7 @@ public abstract class Creature extends WorldObject
 		{
 			return (int) calcStat(Stat.WEIGHT_PENALTY, 1, this, null);
 		}
+		
 		return 0;
 	}
 	
@@ -6716,8 +6765,9 @@ public abstract class Creature extends WorldObject
 	{
 		if (isPlayer() || isPet())
 		{
-			return getInventory().getTotalWeight();
+			return (int) (getInventory().getTotalWeight() / Config.ALT_WEIGHT_LIMIT);
 		}
+		
 		return 0;
 	}
 	
@@ -6991,12 +7041,14 @@ public abstract class Creature extends WorldObject
 			{
 				_onCreatureDamageDealt = new OnCreatureDamageDealt();
 			}
+			
 			_onCreatureDamageDealt.setAttacker(attacker);
 			_onCreatureDamageDealt.setTarget(this);
 			_onCreatureDamageDealt.setDamage(damage);
 			_onCreatureDamageDealt.setSkill(skill);
 			_onCreatureDamageDealt.setCritical(critical);
 			_onCreatureDamageDealt.setDamageOverTime(damageOverTime);
+			
 			EventDispatcher.getInstance().notifyEvent(_onCreatureDamageDealt, attacker);
 		}
 		if (EventDispatcher.getInstance().hasListener(EventType.ON_CREATURE_DAMAGE_RECEIVED, this))
@@ -7005,12 +7057,14 @@ public abstract class Creature extends WorldObject
 			{
 				_onCreatureDamageReceived = new OnCreatureDamageReceived();
 			}
+			
 			_onCreatureDamageReceived.setAttacker(attacker);
 			_onCreatureDamageReceived.setTarget(this);
 			_onCreatureDamageReceived.setDamage(damage);
 			_onCreatureDamageReceived.setSkill(skill);
 			_onCreatureDamageReceived.setCritical(critical);
 			_onCreatureDamageReceived.setDamageOverTime(damageOverTime);
+			
 			EventDispatcher.getInstance().notifyEventAsync(_onCreatureDamageReceived, this);
 		}
 	}
@@ -7028,9 +7082,11 @@ public abstract class Creature extends WorldObject
 			{
 				_onCreatureAttackAvoid = new OnCreatureAttackAvoid();
 			}
+			
 			_onCreatureAttackAvoid.setAttacker(this);
 			_onCreatureAttackAvoid.setTarget(target);
 			_onCreatureAttackAvoid.setDamageOverTime(isDot);
+			
 			EventDispatcher.getInstance().notifyEvent(_onCreatureAttackAvoid, target);
 		}
 	}
@@ -7048,11 +7104,13 @@ public abstract class Creature extends WorldObject
 				return template.getBaseAttackType();
 			}
 		}
+		
 		final Weapon weapon = getActiveWeaponItem();
 		if (weapon != null)
 		{
 			return weapon.getItemType();
 		}
+		
 		return _template.getBaseAttackType();
 	}
 	
@@ -7103,6 +7161,7 @@ public abstract class Creature extends WorldObject
 		{
 			_channelizer = new SkillChannelizer(this);
 		}
+		
 		return _channelizer;
 	}
 	
@@ -7120,6 +7179,7 @@ public abstract class Creature extends WorldObject
 		{
 			_channelized = new SkillChannelized();
 		}
+		
 		return _channelized;
 	}
 	
@@ -7131,6 +7191,7 @@ public abstract class Creature extends WorldObject
 			invulHolder.increaseInstances();
 			return;
 		}
+		
 		getInvulAgainstSkills().put(holder.getSkillId(), new InvulSkillHolder(holder));
 	}
 	
@@ -7150,6 +7211,7 @@ public abstract class Creature extends WorldObject
 			final SkillHolder holder = getInvulAgainstSkills().get(skillId);
 			return ((holder != null) && ((holder.getSkillLevel() < 1) || (holder.getSkillLevel() == skillLevel)));
 		}
+		
 		return false;
 	}
 	

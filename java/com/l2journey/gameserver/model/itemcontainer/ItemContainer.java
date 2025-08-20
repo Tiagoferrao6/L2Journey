@@ -615,6 +615,7 @@ public abstract class ItemContainer
 					}
 				}
 			}
+			
 			refreshWeight();
 		}
 		catch (Exception e)

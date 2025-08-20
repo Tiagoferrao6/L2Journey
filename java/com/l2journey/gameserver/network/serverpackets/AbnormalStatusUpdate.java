@@ -43,7 +43,7 @@ public class AbnormalStatusUpdate extends ServerPacket
 	
 	public void addSkill(BuffInfo info)
 	{
-		if (!info.getSkill().isHealingPotionSkill())
+		if (!info.getSkill().isHealingPotionSkill() || (!info.getSkill().isManaPotionSkill()))
 		{
 			_effects.add(info);
 		}

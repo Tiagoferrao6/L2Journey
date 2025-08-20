@@ -205,6 +205,7 @@ public class PremiumManager
 					player.sendPacket(new PremiumState(player.getObjectId(), 1));
 					player.sendPacket(new ExBrPremiumState(player.getObjectId(), 1));
 				}
+				
 				break;
 			}
 		}
@@ -222,6 +223,7 @@ public class PremiumManager
 					player.sendPacket(new PremiumState(player.getObjectId(), 0));
 					player.sendPacket(new ExBrPremiumState(player.getObjectId(), 0));
 					stopExpireTask(player);
+					
 					break;
 				}
 			}

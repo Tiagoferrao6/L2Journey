@@ -909,6 +909,15 @@ public class Skill
 		return _abnormalType == AbnormalType.HP_RECOVER;
 	}
 	
+	/**
+	 * Verify if this is a mana potion skill.
+	 * @return {@code true} if this is a mana potion skill, {@code false} otherwise
+	 */
+	public boolean isManaPotionSkill()
+	{
+		return _abnormalType == AbnormalType.MP_RECOVER;
+	}
+	
 	public int getChargeConsumeCount()
 	{
 		return _chargeConsume;

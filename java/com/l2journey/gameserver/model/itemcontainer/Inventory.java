@@ -1793,7 +1793,8 @@ public abstract class Inventory extends ItemContainer
 				weight += item.getTemplate().getWeight() * item.getCount();
 			}
 		}
-		_totalWeight = (int) Math.min(weight, Integer.MAX_VALUE);
+		
+		_totalWeight = Math.max((int) Math.min(weight - getOwner().getBonusWeightPenalty(), Integer.MAX_VALUE), 0);
 	}
 	
 	/**
@@ -1896,6 +1897,7 @@ public abstract class Inventory extends ItemContainer
 					}
 				}
 			}
+			
 			refreshWeight();
 		}
 		catch (Exception e)
