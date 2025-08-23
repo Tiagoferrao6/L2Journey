@@ -80,6 +80,7 @@ import com.l2journey.gameserver.model.stats.functions.formulas.FuncMoveSpeed;
 import com.l2journey.gameserver.model.stats.functions.formulas.FuncPAtkMod;
 import com.l2journey.gameserver.model.stats.functions.formulas.FuncPAtkSpeed;
 import com.l2journey.gameserver.model.stats.functions.formulas.FuncPDefMod;
+import com.l2journey.gameserver.model.stats.modulators.Modulators;
 import com.l2journey.gameserver.model.zone.ZoneId;
 import com.l2journey.gameserver.model.zone.type.CastleZone;
 import com.l2journey.gameserver.model.zone.type.ClanHallZone;
@@ -887,6 +888,200 @@ public class Formulas
 			}
 		}
 		
+		if (target.isPlayer())
+		{
+			final Weapon weapon = attacker.getActiveWeaponItem();
+			final Player targetPlayer = (Player) target;
+			final Armor armor = targetPlayer.getActiveChestArmorItem();
+			
+			if ((weapon != null) && (armor != null) && !attacker.isTransformed())
+			{
+				final boolean isHeavy = targetPlayer.isWearingHeavyArmor();
+				final boolean isLight = targetPlayer.isWearingLightArmor();
+				final boolean isRobe = targetPlayer.isWearingMagicArmor();
+				
+				switch (weapon.getItemType())
+				{
+					case SWORD:
+					{
+						if (isHeavy)
+						{
+							damage *= Modulators.SWORD_VS_HEAVY;
+						}
+						else if (isLight)
+						{
+							damage *= Modulators.SWORD_VS_LIGHT;
+						}
+						else if (isRobe)
+						{
+							damage *= Modulators.SWORD_VS_ROBE;
+						}
+						break;
+					}
+					case BLUNT:
+					{
+						if (isHeavy)
+						{
+							damage *= Modulators.BLUNT_VS_HEAVY;
+						}
+						else if (isLight)
+						{
+							damage *= Modulators.BLUNT_VS_LIGHT;
+						}
+						else if (isRobe)
+						{
+							damage *= Modulators.BLUNT_VS_ROBE;
+						}
+						break;
+					}
+					case DAGGER:
+					{
+						if (isHeavy)
+						{
+							damage *= Modulators.DAGGER_VS_HEAVY;
+						}
+						else if (isLight)
+						{
+							damage *= Modulators.DAGGER_VS_LIGHT;
+						}
+						else if (isRobe)
+						{
+							damage *= Modulators.DAGGER_VS_ROBE;
+						}
+						break;
+					}
+					case BOW:
+					{
+						if (isHeavy)
+						{
+							damage *= Modulators.BOW_VS_HEAVY;
+						}
+						else if (isLight)
+						{
+							damage *= Modulators.BOW_VS_LIGHT;
+						}
+						else if (isRobe)
+						{
+							damage *= Modulators.BOW_VS_ROBE;
+						}
+						break;
+					}
+					case POLE:
+					{
+						if (isHeavy)
+						{
+							damage *= Modulators.POLE_VS_HEAVY;
+						}
+						else if (isLight)
+						{
+							damage *= Modulators.POLE_VS_LIGHT;
+						}
+						else if (isRobe)
+						{
+							damage *= Modulators.POLE_VS_ROBE;
+						}
+						break;
+					}
+					case DUAL:
+					{
+						if (isHeavy)
+						{
+							damage *= Modulators.DUAL_VS_HEAVY;
+						}
+						else if (isLight)
+						{
+							damage *= Modulators.DUAL_VS_LIGHT;
+						}
+						else if (isRobe)
+						{
+							damage *= Modulators.DUAL_VS_ROBE;
+						}
+						break;
+					}
+					case DUALFIST:
+					{
+						if (isHeavy)
+						{
+							damage *= Modulators.FIST_VS_HEAVY;
+						}
+						else if (isLight)
+						{
+							damage *= Modulators.FIST_VS_LIGHT;
+						}
+						else if (isRobe)
+						{
+							damage *= Modulators.FIST_VS_ROBE;
+						}
+						break;
+					}
+					case RAPIER:
+					{
+						if (isHeavy)
+						{
+							damage *= Modulators.RAPIER_VS_HEAVY;
+						}
+						else if (isLight)
+						{
+							damage *= Modulators.RAPIER_VS_LIGHT;
+						}
+						else if (isRobe)
+						{
+							damage *= Modulators.RAPIER_VS_ROBE;
+						}
+						break;
+					}
+					case ANCIENTSWORD:
+					{
+						if (isHeavy)
+						{
+							damage *= Modulators.ANCIENTSWORD_VS_HEAVY;
+						}
+						else if (isLight)
+						{
+							damage *= Modulators.ANCIENTSWORD_VS_LIGHT;
+						}
+						else if (isRobe)
+						{
+							damage *= Modulators.ANCIENTSWORD_VS_ROBE;
+						}
+						break;
+					}
+					case CROSSBOW:
+					{
+						if (isHeavy)
+						{
+							damage *= Modulators.CROSSBOW_VS_HEAVY;
+						}
+						else if (isLight)
+						{
+							damage *= Modulators.CROSSBOW_VS_LIGHT;
+						}
+						else if (isRobe)
+						{
+							damage *= Modulators.CROSSBOW_VS_ROBE;
+						}
+						break;
+					}
+					case DUALDAGGER:
+					{
+						if (isHeavy)
+						{
+							damage *= Modulators.DUALDAGGER_VS_HEAVY;
+						}
+						else if (isLight)
+						{
+							damage *= Modulators.DUALDAGGER_VS_LIGHT;
+						}
+						else if (isRobe)
+						{
+							damage *= Modulators.DUALDAGGER_VS_ROBE;
+						}
+						break;
+					}
+				}
+			}
+		}
+		
 		return damage;
 	}
 	
@@ -966,6 +1161,7 @@ public class Formulas
 		{
 			damage *= attacker.isPlayer() && target.isPlayer() ? 2.5 : 3;
 			damage *= attacker.calcStat(Stat.MAGIC_CRIT_DMG, 1, null, null);
+			damage *= Modulators.MCRIT_REDUCE;
 		}
 		
 		// Weapon random damage
