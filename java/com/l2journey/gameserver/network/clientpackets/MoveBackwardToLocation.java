@@ -88,6 +88,12 @@ public class MoveBackwardToLocation extends ClientPacket
 			return;
 		}
 		
+		if (player.isAttackingNow())
+		{
+			player.abortAttack();
+			player.getAI().setIntention(Intention.ACTIVE);
+		}
+		
 		if (player.isOverloaded())
 		{
 			player.sendPacket(SystemMessageId.YOU_CANNOT_MOVE_YOU_ARE_TOO_ENCUMBERED);
