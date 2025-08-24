@@ -20,6 +20,11 @@ public class AdminInventory implements IAdminCommandHandler
 	@Override
 	public boolean useAdminCommand(String command, Player player)
 	{
+		if (!player.isGM())
+		{
+			return false;
+		}
+		
 		if ((player.getTarget() == null))
 		{
 			player.sendMessage("Select a target");
