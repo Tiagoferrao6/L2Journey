@@ -54,7 +54,7 @@ public enum ClientPackets
 	CHARACTER_CREATE(0x0C, CharacterCreate::new, ConnectionState.AUTHENTICATED),
 	CHARACTER_DELETE(0x0D, CharacterDelete::new, ConnectionState.AUTHENTICATED),
 	PROTOCOL_VERSION(0x0E, ProtocolVersion::new, ConnectionState.CONNECTED),
-	MOVE_BACKWARD_TO_LOCATION(0x0F, MoveBackwardToLocation::new, ConnectionState.IN_GAME),
+	MOVE_TO_LOCATION(0x0F, MoveToLocation::new, ConnectionState.IN_GAME),
 	ENTER_WORLD(0x11, EnterWorld::new, ConnectionState.ENTERING),
 	CHARACTER_SELECT(0x12, CharacterSelect::new, ConnectionState.AUTHENTICATED),
 	NEW_CHARACTER(0x13, NewCharacter::new, ConnectionState.AUTHENTICATED),

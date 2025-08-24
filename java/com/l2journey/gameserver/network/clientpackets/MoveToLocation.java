@@ -28,13 +28,10 @@
  */
 package com.l2journey.gameserver.network.clientpackets;
 
-import java.nio.BufferUnderflowException;
-
 import com.l2journey.Config;
 import com.l2journey.gameserver.ai.Intention;
 import com.l2journey.gameserver.data.xml.DoorData;
 import com.l2journey.gameserver.geoengine.GeoEngine;
-import com.l2journey.gameserver.managers.PunishmentManager;
 import com.l2journey.gameserver.model.Location;
 import com.l2journey.gameserver.model.actor.Player;
 import com.l2journey.gameserver.model.events.EventDispatcher;
@@ -45,7 +42,7 @@ import com.l2journey.gameserver.network.SystemMessageId;
 import com.l2journey.gameserver.network.serverpackets.ActionFailed;
 import com.l2journey.gameserver.util.LocationUtil;
 
-public class MoveBackwardToLocation extends ClientPacket
+public class MoveToLocation extends ClientPacket
 {
 	private int _targetX;
 	private int _targetY;
@@ -64,19 +61,7 @@ public class MoveBackwardToLocation extends ClientPacket
 		_originX = readInt();
 		_originY = readInt();
 		_originZ = readInt();
-		// _movementMode = readInt(); // is 0 if cursor keys are used 1 if mouse is used
-		try
-		{
-			_movementMode = readInt(); // is 0 if cursor keys are used 1 if mouse is used
-		}
-		catch (BufferUnderflowException e)
-		{
-			if (Config.L2WALKER_PROTECTION)
-			{
-				Player player = getPlayer();
-				PunishmentManager.handleIllegalPlayerAction(player, "Player " + player.getName() + " is trying to use L2Walker and got kicked.", Config.DEFAULT_PUNISH);
-			}
-		}
+		_movementMode = readInt(); // is 0 if cursor keys are used 1 if mouse is used
 	}
 	
 	@Override
@@ -86,12 +71,6 @@ public class MoveBackwardToLocation extends ClientPacket
 		if (player == null)
 		{
 			return;
-		}
-		
-		if (player.isAttackingNow())
-		{
-			player.abortAttack();
-			player.getAI().setIntention(Intention.ACTIVE);
 		}
 		
 		if (player.isOverloaded())
@@ -162,6 +141,7 @@ public class MoveBackwardToLocation extends ClientPacket
 			{
 				player.setTeleMode(0);
 			}
+			
 			player.sendPacket(ActionFailed.STATIC_PACKET);
 			player.teleToLocation(new Location(_targetX, _targetY, _targetZ));
 			return;
