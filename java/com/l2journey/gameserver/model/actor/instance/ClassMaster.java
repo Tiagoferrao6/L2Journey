@@ -28,6 +28,7 @@ import com.l2journey.gameserver.data.xml.ClassListData;
 import com.l2journey.gameserver.data.xml.ItemData;
 import com.l2journey.gameserver.model.actor.Player;
 import com.l2journey.gameserver.model.actor.enums.creature.InstanceType;
+import com.l2journey.gameserver.model.actor.enums.creature.Race;
 import com.l2journey.gameserver.model.actor.enums.player.PlayerClass;
 import com.l2journey.gameserver.model.actor.templates.NpcTemplate;
 import com.l2journey.gameserver.model.clan.Clan;
@@ -92,6 +93,7 @@ public class ClassMaster extends Merchant
 				final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
 				html.setFile(player, "data/html/classmaster/ok.htm");
 				html.replace("%name%", ClassListData.getInstance().getClass(val).getClientCode());
+				html.replace("%RaceIcon%", getRaceIcon(player));
 				player.sendPacket(html);
 			}
 		}
@@ -291,6 +293,7 @@ public class ClassMaster extends Merchant
 					{
 						html.setFile(player, "data/html/classmaster/template.htm");
 						html.replace("%name%", ClassListData.getInstance().getClass(currentClassId).getClientCode());
+						html.replace("%RaceIcon%", getRaceIcon(player));
 						html.replace("%menu%", menu.toString());
 					}
 					else
@@ -329,6 +332,7 @@ public class ClassMaster extends Merchant
 		
 		String msg = HtmCache.getInstance().getHtm(player, "data/html/classmaster/tutorialtemplate.htm");
 		msg = msg.replace("%name%", ClassListData.getInstance().getClass(currentClassId).getClassName()); // getEscapedClientCode());
+		msg = msg.replace("%RaceIcon%", getRaceIcon(player));
 		
 		final StringBuilder menu = new StringBuilder(100);
 		for (PlayerClass cid : PlayerClass.values())
@@ -492,5 +496,37 @@ public class ClassMaster extends Merchant
 			sb.append("<tr><td><font color=\"LEVEL\">" + holder.getCount() + "</font></td><td>" + ItemData.getInstance().getTemplate(holder.getId()).getName() + "</td></tr>");
 		}
 		return sb.toString();
+	}
+	
+	private static String getRaceIcon(Player player)
+	{
+		if (player == null)
+		{
+			return "icon.skill0000";
+		}
+		
+		final Race race = player.getRace();
+		if (race == null)
+		{
+			return "icon.skill0000";
+		}
+		
+		switch (race)
+		{
+			case HUMAN:
+				return "icon.skillhuman";
+			case ELF:
+				return "icon.skillelf";
+			case DARK_ELF:
+				return "icon.skilldarkelf";
+			case ORC:
+				return "icon.skillorc";
+			case DWARF:
+				return "icon.skilldwarf";
+			case KAMAEL:
+				return "icon.skillkamael";
+			default:
+				return "icon.skilldefault";
+		}
 	}
 }
