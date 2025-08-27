@@ -26,7 +26,7 @@
  * applicable..
  * 
  */
-package ai.others.HealerTrainer;
+package ai.npc.Trainers.HealerTrainer;
 
 import java.util.Collection;
 
