@@ -500,11 +500,6 @@ public class ClassMaster extends Merchant
 	
 	private static String getRaceIcon(Player player)
 	{
-		if (player == null)
-		{
-			return "icon.skill0000";
-		}
-		
 		final Race race = player.getRace();
 		if (race == null)
 		{
@@ -526,7 +521,7 @@ public class ClassMaster extends Merchant
 			case KAMAEL:
 				return "icon.skillkamael";
 			default:
-				return "icon.skilldefault";
+				return "icon.skill0000";
 		}
 	}
 }

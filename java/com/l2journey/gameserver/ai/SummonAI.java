@@ -298,6 +298,7 @@ public class SummonAI extends PlayableAI implements Runnable
 		{
 			_lastAttack = null;
 		}
+		
 		super.onIntentionCast(skill, target);
 	}
 	

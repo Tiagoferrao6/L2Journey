@@ -107,6 +107,7 @@ public class PlayerAI extends PlayableAI
 			setIntention(_nextIntention._intention, _nextIntention._arg0, _nextIntention._arg1);
 			_nextIntention = null;
 		}
+		
 		super.onActionReadyToAct();
 	}
 	
@@ -181,6 +182,7 @@ public class PlayerAI extends PlayableAI
 		{
 			setAttackTarget(null);
 		}
+		
 		clientStopMoving(null);
 	}
 	
@@ -289,9 +291,11 @@ public class PlayerAI extends PlayableAI
 					// Notify the target
 					setCastTarget(null);
 				}
+				
 				_actor.setCastingNow(false);
 				return;
 			}
+			
 			if ((target != null) && maybeMoveToPawn(target, _actor.getMagicalAttackRange(_skill)))
 			{
 				_actor.setCastingNow(false);

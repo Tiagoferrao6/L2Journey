@@ -139,11 +139,13 @@ public class FortSiegeGuardAI extends CreatureAI implements Runnable
 			{
 				player = target.asSummon().getOwner();
 			}
+			
 			if ((player == null) || ((player.getClan() != null) && (player.getClan().getFortId() == _actor.asNpc().getFort().getResidenceId())))
 			{
 				return false;
 			}
 		}
+		
 		if (target.isInvul() && ((target.isPlayer() && target.isGM()) || (target.isSummon() && target.asSummon().getOwner().isGM())))
 		{
 			return false;
@@ -298,6 +300,7 @@ public class FortSiegeGuardAI extends CreatureAI implements Runnable
 				return;
 			}
 		}
+		
 		// Order to the SiegeGuard to return to its home location because there's no target to attack
 		if (_actor.getWalkSpeed() >= 0)
 		{
@@ -373,15 +376,18 @@ public class FortSiegeGuardAI extends CreatureAI implements Runnable
 						{
 							continue;
 						}
+						
 						final int chance = 5;
 						if (chance >= Rnd.get(100))
 						{
 							continue;
 						}
+						
 						if (!GeoEngine.getInstance().canSeeTarget(_actor, creature))
 						{
 							break;
 						}
+						
 						final WorldObject oldTarget = _actor.getTarget();
 						_actor.setTarget(creature);
 						clientStopMoving(null);
@@ -390,6 +396,7 @@ public class FortSiegeGuardAI extends CreatureAI implements Runnable
 						return;
 					}
 				}
+				
 				continue;
 			}
 			
@@ -422,6 +429,7 @@ public class FortSiegeGuardAI extends CreatureAI implements Runnable
 						{
 							continue;
 						}
+						
 						if (!GeoEngine.getInstance().canSeeTarget(_actor, npc))
 						{
 							break;
@@ -542,10 +550,12 @@ public class FortSiegeGuardAI extends CreatureAI implements Runnable
 					{
 						range = _selfAnalysis.maxCastRange - 50;
 					}
+					
 					if (_actor.getWalkSpeed() <= 0)
 					{
 						return;
 					}
+					
 					moveToPawn(attackTarget, attackTarget.isMoving() ? range - 70 : range);
 				}
 			}
@@ -563,12 +573,15 @@ public class FortSiegeGuardAI extends CreatureAI implements Runnable
 					{
 						range = _selfAnalysis.maxCastRange - 50;
 					}
+					
 					if (_actor.getWalkSpeed() <= 0)
 					{
 						return;
 					}
+					
 					moveToPawn(attackTarget, attackTarget.isMoving() ? range - 70 : range);
 				}
+				
 				return;
 			}
 			
@@ -580,6 +593,7 @@ public class FortSiegeGuardAI extends CreatureAI implements Runnable
 					setIntention(Intention.ACTIVE, null, null);
 					return;
 				}
+				
 				if (hated != attackTarget)
 				{
 					attackTarget = hated;
@@ -622,6 +636,7 @@ public class FortSiegeGuardAI extends CreatureAI implements Runnable
 						}
 					}
 				}
+				
 				// Finally, do the physical attack itself
 				_actor.doAttack(attackTarget);
 			}
@@ -740,6 +755,7 @@ public class FortSiegeGuardAI extends CreatureAI implements Runnable
 					me.clearAggroList();
 					setIntention(Intention.IDLE, null, null);
 				}
+				
 				return;
 			}
 			
@@ -800,6 +816,7 @@ public class FortSiegeGuardAI extends CreatureAI implements Runnable
 			_aiTask.cancel(false);
 			_aiTask = null;
 		}
+		
 		_actor.detachAI();
 		super.stopAITask();
 	}

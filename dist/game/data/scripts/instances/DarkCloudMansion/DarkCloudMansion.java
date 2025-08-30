@@ -801,6 +801,7 @@ public class DarkCloudMansion extends AbstractInstance
 		
 		if (fifthRoom.reset == 1)
 		{
+			// Lógica para enviar a mensagem de falha antes de limpar a sala
 			for (DMCNpc mob : fifthRoom.npcList)
 			{
 				if (mob.status == 1)
@@ -809,6 +810,7 @@ public class DarkCloudMansion extends AbstractInstance
 				}
 			}
 			
+			// Lógica para limpar a sala e repopular
 			for (DMCNpc mob : fifthRoom.npcList)
 			{
 				mob.npc.decayMe();

@@ -123,6 +123,7 @@ public class AttackableAI extends CreatureAI
 	/** The flag used to indicate that a thinking action is in progress, to prevent recursive thinking. */
 	private boolean _thinking;
 	private int _chaosTime = 0;
+	
 	// Fear parameters
 	private int _fearTime;
 	private Future<?> _fearTask = null;
@@ -237,14 +238,18 @@ public class AttackableAI extends CreatureAI
 				return true;
 			}
 			
-			final Party party = player.getParty();
-			if (player.isInParty() && party.isInDimensionalRift())
+			// Dimensional Rift check.
+			if ((me instanceof RiftInvader) && player.isInParty())
 			{
-				final byte riftType = party.getDimensionalRift().getType();
-				final byte riftRoom = party.getDimensionalRift().getCurrentRoom();
-				if ((me instanceof RiftInvader) && !DimensionalRiftManager.getInstance().getRoom(riftType, riftRoom).checkIfInZone(me.getX(), me.getY(), me.getZ()))
+				final Party party = player.getParty();
+				if (party.isInDimensionalRift())
 				{
-					return false;
+					final byte riftType = party.getDimensionalRift().getType();
+					final byte riftRoom = party.getDimensionalRift().getCurrentRoom();
+					if (!DimensionalRiftManager.getInstance().getRoom(riftType, riftRoom).checkIfInZone(me.getX(), me.getY(), me.getZ()))
+					{
+						return false;
+					}
 				}
 			}
 		}
@@ -257,6 +262,7 @@ public class AttackableAI extends CreatureAI
 			{
 				return GeoEngine.getInstance().canSeeTarget(me, player); // Los Check
 			}
+			
 			// Check if the Monster target is aggressive
 			if (target.isMonster() && Config.GUARD_ATTACK_AGGRO_MOB)
 			{
@@ -278,6 +284,7 @@ public class AttackableAI extends CreatureAI
 			{
 				return GeoEngine.getInstance().canSeeTarget(me, target); // Los Check
 			}
+			
 			return false;
 		}
 		else
@@ -295,6 +302,7 @@ public class AttackableAI extends CreatureAI
 					{
 						return false;
 					}
+					
 					// Los Check
 					return GeoEngine.getInstance().canSeeTarget(me, target);
 				}
@@ -426,10 +434,12 @@ public class AttackableAI extends CreatureAI
 			setCastTarget(null);
 			return;
 		}
+		
 		if (maybeMoveToPawn(getCastTarget(), _actor.getMagicalAttackRange(_skill)))
 		{
 			return;
 		}
+		
 		clientStopMoving(null);
 		setIntention(Intention.ACTIVE);
 		_actor.doCast(_skill);
@@ -492,6 +502,7 @@ public class AttackableAI extends CreatureAI
 							{
 								continue;
 							}
+							
 							if ((Config.FAKE_PLAYER_AGGRO_FPC && t.isFakePlayer()) //
 								|| (Config.FAKE_PLAYER_AGGRO_MONSTERS && t.isMonster() && !t.isFakePlayer()) //
 								|| (Config.FAKE_PLAYER_AGGRO_PLAYERS && t.isPlayer()))
@@ -505,6 +516,7 @@ public class AttackableAI extends CreatureAI
 								}
 							}
 						}
+						
 						if (nearestTarget != null)
 						{
 							npc.addDamageHate(nearestTarget, 0, 1);
@@ -528,6 +540,7 @@ public class AttackableAI extends CreatureAI
 								{
 									ItemsOnGroundManager.getInstance().removeObject(droppedItem);
 								}
+								
 								if (droppedItem.getTemplate().hasExImmediateEffect())
 								{
 									for (SkillHolder skillHolder : droppedItem.getTemplate().getSkills())
@@ -542,8 +555,10 @@ public class AttackableAI extends CreatureAI
 						{
 							npc.getFakePlayerDrops().remove(itemIndex);
 						}
+						
 						npc.setRunning();
 					}
+					
 					return;
 				}
 				
@@ -572,6 +587,7 @@ public class AttackableAI extends CreatureAI
 								npc.addDamageHate(target, 0, 0);
 							}
 						}
+						
 						return;
 					}
 					if (target.isPlayable() && EventDispatcher.getInstance().hasListener(EventType.ON_NPC_HATE, getActiveChar()))
@@ -758,9 +774,11 @@ public class AttackableAI extends CreatureAI
 						npc.setCurrentHp(npc.getMaxHp());
 						npc.setCurrentMp(npc.getMaxMp());
 					}
+					
 					npc.abortAttack();
 					npc.clearAggroList();
 					npc.getAttackByList().clear();
+					
 					if (npc.hasAI())
 					{
 						npc.getAI().setIntention(Intention.MOVE_TO, spawn.getLocation());
@@ -780,9 +798,11 @@ public class AttackableAI extends CreatureAI
 								minion.setCurrentHp(minion.getMaxHp());
 								minion.setCurrentMp(minion.getMaxMp());
 							}
+							
 							minion.abortAttack();
 							minion.clearAggroList();
 							minion.getAttackByList().clear();
+							
 							if (minion.hasAI())
 							{
 								minion.getAI().setIntention(Intention.MOVE_TO, spawn.getLocation());
@@ -793,6 +813,7 @@ public class AttackableAI extends CreatureAI
 							}
 						}
 					}
+					
 					return;
 				}
 			}
@@ -844,6 +865,7 @@ public class AttackableAI extends CreatureAI
 			{
 				npc.teleToLocation(npc.getSpawn(), false);
 			}
+			
 			return;
 		}
 		
@@ -854,6 +876,7 @@ public class AttackableAI extends CreatureAI
 			{
 				moveTo(originalAttackTarget);
 			}
+			
 			return;
 		}
 		
@@ -880,6 +903,7 @@ public class AttackableAI extends CreatureAI
 						break;
 					}
 				}
+				
 				if (targetExistsInAttackByList)
 				{
 					World.getInstance().forEachVisibleObjectInRange(npc, Attackable.class, factionRange, nearby ->
@@ -889,11 +913,13 @@ public class AttackableAI extends CreatureAI
 						{
 							return;
 						}
+						
 						// Don't call npcs who are already doing some action (e.g. attacking, casting).
 						if ((nearby.getAI()._intention != Intention.IDLE) && (nearby.getAI()._intention != Intention.ACTIVE))
 						{
 							return;
 						}
+						
 						// Don't call npcs who aren't in the same clan.
 						final NpcTemplate nearbytemplate = nearby.getTemplate();
 						if (!template.isClan(nearbytemplate.getClans()) || (nearbytemplate.hasIgnoreClanNpcIds() && nearbytemplate.getIgnoreClanNpcIds().contains(npc.getId())))
@@ -970,6 +996,7 @@ public class AttackableAI extends CreatureAI
 						// Mobius: Verify destination. Prevents wall collision issues and fixes monsters not avoiding obstacles.
 						moveTo(GeoEngine.getInstance().getValidLocation(npc.getX(), npc.getY(), npc.getZ(), newX, newY, newZ, npc.getInstanceId()));
 					}
+					
 					return;
 				}
 			}
@@ -1006,6 +1033,7 @@ public class AttackableAI extends CreatureAI
 				{
 					setIntention(Intention.MOVE_TO, new Location(posX, posY, posZ, 0));
 				}
+				
 				return;
 			}
 		}
@@ -1124,6 +1152,7 @@ public class AttackableAI extends CreatureAI
 							npc.doCast(sk);
 							npc.setTarget(target);
 							// LOGGER.debug(this + " used heal skill " + sk + " on itself");
+							
 							return;
 						}
 					}
@@ -1306,6 +1335,7 @@ public class AttackableAI extends CreatureAI
 		{
 			range = 850 + combinedCollision; // Base bow range for NPCs.
 		}
+		
 		if (mostHate.isMoving())
 		{
 			range += 50;
@@ -1331,9 +1361,11 @@ public class AttackableAI extends CreatureAI
 					{
 						range -= 100;
 					}
+					
 					moveToPawn(target, Math.max(range, 5));
 				}
 			}
+			
 			return;
 		}
 		
@@ -1385,11 +1417,13 @@ public class AttackableAI extends CreatureAI
 					_actor.setTarget(attackTarget);
 					return true;
 				}
+				
 				// If actor already have buff, start looking at others same faction mob to cast
 				if (sk.getTargetType() == TargetType.SELF)
 				{
 					return false;
 				}
+				
 				if (sk.getTargetType() == TargetType.ONE)
 				{
 					final Creature target = effectTargetReconsider(sk, true);
@@ -1402,6 +1436,7 @@ public class AttackableAI extends CreatureAI
 						return true;
 					}
 				}
+				
 				if (canParty(sk))
 				{
 					clientStopMoving(null);
@@ -1430,6 +1465,7 @@ public class AttackableAI extends CreatureAI
 						caster.doCast(sk);
 						return true;
 					}
+					
 					if (((sk.getTargetType() == TargetType.AREA) || (sk.getTargetType() == TargetType.BEHIND_AREA) || (sk.getTargetType() == TargetType.FRONT_AREA)) && GeoEngine.getInstance().canSeeTarget(caster, attackTarget) && !attackTarget.isDead() && (dist2 <= srange))
 					{
 						clientStopMoving(null);
@@ -1460,6 +1496,7 @@ public class AttackableAI extends CreatureAI
 					caster.doCast(sk);
 					return true;
 				}
+				
 				final Creature target = effectTargetReconsider(sk, false);
 				if (target != null)
 				{
@@ -1498,6 +1535,7 @@ public class AttackableAI extends CreatureAI
 					{
 						moveToPawn(leader, sk.getCastRange() + caster.getTemplate().getCollisionRadius() + leader.getTemplate().getCollisionRadius());
 					}
+					
 					if (GeoEngine.getInstance().canSeeTarget(caster, leader))
 					{
 						clientStopMoving(null);
@@ -1617,6 +1655,7 @@ public class AttackableAI extends CreatureAI
 					caster.doCast(sk);
 					return true;
 				}
+				
 				if (((sk.getTargetType() == TargetType.AREA) || (sk.getTargetType() == TargetType.BEHIND_AREA) || (sk.getTargetType() == TargetType.FRONT_AREA)) && GeoEngine.getInstance().canSeeTarget(caster, attackTarget) && !attackTarget.isDead() && (dist2 <= srange))
 				{
 					clientStopMoving(null);
@@ -1645,6 +1684,7 @@ public class AttackableAI extends CreatureAI
 					caster.doCast(sk);
 					return true;
 				}
+				
 				if (((sk.getTargetType() == TargetType.AREA) || (sk.getTargetType() == TargetType.BEHIND_AREA) || (sk.getTargetType() == TargetType.FRONT_AREA)) && GeoEngine.getInstance().canSeeTarget(caster, attackTarget) && !attackTarget.isDead() && (dist2 <= srange))
 				{
 					clientStopMoving(null);
@@ -1683,6 +1723,7 @@ public class AttackableAI extends CreatureAI
 					caster.doCast(sk);
 					return true;
 				}
+				
 				if (((sk.getTargetType() == TargetType.AREA) || (sk.getTargetType() == TargetType.BEHIND_AREA) || (sk.getTargetType() == TargetType.FRONT_AREA)) && GeoEngine.getInstance().canSeeTarget(caster, attackTarget) && !attackTarget.isDead() && (dist2 <= srange))
 				{
 					clientStopMoving(null);
@@ -1715,6 +1756,7 @@ public class AttackableAI extends CreatureAI
 						{
 							moveToPawn(leader, sk.getCastRange() + caster.getTemplate().getCollisionRadius() + leader.getTemplate().getCollisionRadius());
 						}
+						
 						if (GeoEngine.getInstance().canSeeTarget(caster, leader))
 						{
 							clientStopMoving(null);
@@ -1789,6 +1831,7 @@ public class AttackableAI extends CreatureAI
 			caster.doCast(sk);
 			return true;
 		}
+		
 		return false;
 	}
 	
@@ -1870,6 +1913,7 @@ public class AttackableAI extends CreatureAI
 			npc.doCast(sk);
 			return true;
 		}
+		
 		return false;
 	}
 	
@@ -1927,6 +1971,7 @@ public class AttackableAI extends CreatureAI
 					{
 						continue;
 					}
+					
 					try
 					{
 						actor.setTarget(getAttackTarget());
@@ -1942,6 +1987,7 @@ public class AttackableAI extends CreatureAI
 					{
 						continue;
 					}
+					
 					if ((dist2 <= range) && !getAttackTarget().isAffectedBySkill(sk.getId()))
 					{
 						return obj;
@@ -2010,6 +2056,7 @@ public class AttackableAI extends CreatureAI
 					{
 						continue;
 					}
+					
 					if ((dist2 <= range) && !targets.isAffectedBySkill(sk.getId()))
 					{
 						return targets;
@@ -2028,6 +2075,7 @@ public class AttackableAI extends CreatureAI
 				{
 					continue;
 				}
+				
 				try
 				{
 					actor.setTarget(getAttackTarget());
@@ -2050,6 +2098,7 @@ public class AttackableAI extends CreatureAI
 				}
 			}
 		}
+		
 		return null;
 	}
 	
@@ -2067,6 +2116,7 @@ public class AttackableAI extends CreatureAI
 				{
 					continue;
 				}
+				
 				try
 				{
 					actor.setTarget(getAttackTarget());
@@ -2080,6 +2130,7 @@ public class AttackableAI extends CreatureAI
 				{
 					continue;
 				}
+				
 				if (dist2 <= range)
 				{
 					return obj;
@@ -2104,15 +2155,18 @@ public class AttackableAI extends CreatureAI
 				{
 					continue;
 				}
+				
 				final Creature obj = target.isCreature() ? target.asCreature() : null;
 				if ((obj == null) || !GeoEngine.getInstance().canSeeTarget(actor, obj) || (dist2 > range))
 				{
 					continue;
 				}
+				
 				if (obj.isPlayer())
 				{
 					return obj;
 				}
+				
 				if (obj.isAttackable() && actor.isChaos())
 				{
 					if (!obj.asAttackable().isInMyClan(actor))
@@ -2121,12 +2175,14 @@ public class AttackableAI extends CreatureAI
 					}
 					continue;
 				}
+				
 				if (obj.isSummon())
 				{
 					return obj;
 				}
 			}
 		}
+		
 		return null;
 	}
 	
@@ -2178,6 +2234,7 @@ public class AttackableAI extends CreatureAI
 				{
 					return;
 				}
+				
 				if (obj.isPlayer())
 				{
 					actor.addDamageHate(obj, 0, mostHate != null ? actor.getHating(mostHate) : 2000);
@@ -2192,6 +2249,7 @@ public class AttackableAI extends CreatureAI
 						{
 							return;
 						}
+						
 						actor.addDamageHate(obj, 0, mostHate != null ? actor.getHating(mostHate) : 2000);
 						actor.setTarget(obj);
 						setAttackTarget(obj);
@@ -2236,6 +2294,7 @@ public class AttackableAI extends CreatureAI
 				{
 					continue;
 				}
+				
 				actor.addDamageHate(obj, 0, mostHate != null ? actor.getHating(mostHate) : 2000);
 				actor.setTarget(obj);
 				setAttackTarget(obj);
@@ -2251,6 +2310,7 @@ public class AttackableAI extends CreatureAI
 				{
 					return;
 				}
+				
 				if (obj.isPlayer())
 				{
 					actor.addDamageHate(obj, 0, (mostHate != null) && !mostHate.isDead() ? actor.getHating(mostHate) : 2000);
@@ -2265,6 +2325,7 @@ public class AttackableAI extends CreatureAI
 						{
 							return;
 						}
+						
 						actor.addDamageHate(obj, 0, mostHate != null ? actor.getHating(mostHate) : 2000);
 						actor.setTarget(obj);
 						setAttackTarget(obj);

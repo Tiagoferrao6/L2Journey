@@ -211,8 +211,10 @@ public class ControllableMobAI extends AttackableAI
 			{
 				moveToPawn(target, range);
 			}
+			
 			return;
 		}
+		
 		_actor.doAttack(target);
 	}
 	
@@ -265,6 +267,7 @@ public class ControllableMobAI extends AttackableAI
 				// stop hating
 				_actor.asAttackable().stopHating(getAttackTarget());
 			}
+			
 			setIntention(Intention.ACTIVE);
 		}
 		else
@@ -278,6 +281,7 @@ public class ControllableMobAI extends AttackableAI
 					{
 						return;
 					}
+					
 					if (_actor.isInsideRadius3D(npc, npc.getTemplate().getClanHelpRange()))
 					{
 						npc.getAI().notifyAction(Action.AGGRESSION, getAttackTarget(), 1);
@@ -389,6 +393,7 @@ public class ControllableMobAI extends AttackableAI
 		{
 			return false;
 		}
+		
 		return me.isAggressive();
 	}
 	

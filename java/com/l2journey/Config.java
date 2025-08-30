@@ -140,7 +140,6 @@ public class Config
 	// Player folder -
 	// --------------------------------------------------
 	private static final String ALLOWED_PLAYER_RACES_CONFIG_FILE = "./config/player/AllowedPlayerRaces.ini";
-	private static final String AUTO_PLAY_CONFIG_FILE = "./config/player/AutoPlay.ini";
 	private static final String AUTO_POTIONS_CONFIG_FILE = "./config/player/AutoPotions.ini";
 	private static final String BANKING_CONFIG_FILE = "./config/player/Banking.ini";
 	private static final String CHARACTER_CONFIG_FILE = "./config/player/Character.ini";
@@ -879,22 +878,6 @@ public class Config
 	public static boolean ALLOW_KAMAEL;
 	
 	// --------------------------------------------------
-	// Auto Play
-	// --------------------------------------------------
-	public static boolean ENABLE_AUTO_PLAY;
-	public static boolean ENABLE_AUTO_POTION;
-	public static boolean ENABLE_AUTO_SKILL;
-	public static boolean ENABLE_AUTO_ITEM;
-	public static boolean RESUME_AUTO_PLAY;
-	public static boolean ENABLE_AUTO_ASSIST;
-	public static int AUTO_PLAY_SHORT_RANGE;
-	public static int AUTO_PLAY_LONG_RANGE;
-	public static boolean AUTO_PLAY_PREMIUM;
-	public static Set<Integer> DISABLED_AUTO_SKILLS = new HashSet<>();
-	public static Set<Integer> DISABLED_AUTO_ITEMS = new HashSet<>();
-	public static String AUTO_PLAY_LOGIN_MESSAGE;
-	
-	// --------------------------------------------------
 	// Auto Potions
 	// --------------------------------------------------
 	public static boolean AUTO_POTIONS_ENABLED;
@@ -1312,6 +1295,18 @@ public class Config
 	public static boolean RESTORE_HTML_BY_DEFAULT;
 	public static boolean MULTILANG_VOICED_ALLOW;
 	public static boolean STATISTIC_PANEL;
+	public static boolean ENABLE_AUTO_PLAY;
+	public static boolean ENABLE_AUTO_POTION;
+	public static boolean ENABLE_AUTO_SKILL;
+	public static boolean ENABLE_AUTO_ITEM;
+	public static boolean RESUME_AUTO_PLAY;
+	public static boolean ENABLE_AUTO_ASSIST;
+	public static int AUTO_PLAY_SHORT_RANGE;
+	public static int AUTO_PLAY_LONG_RANGE;
+	public static boolean AUTO_PLAY_PREMIUM;
+	public static Set<Integer> DISABLED_AUTO_SKILLS = new HashSet<>();
+	public static Set<Integer> DISABLED_AUTO_ITEMS = new HashSet<>();
+	public static String AUTO_PLAY_LOGIN_MESSAGE;
 	
 	// --------------------------------------------------
 	// Warehouse Sorting
@@ -1648,7 +1643,6 @@ public class Config
 			
 			// Player Folder -
 			loadAllowedPlayerRacesConfig();
-			loadAutoPlayConfig();
 			loadAutoPotionsConfig();
 			loadBankingConfig();
 			loadCharacterConfig();
@@ -2734,42 +2728,6 @@ public class Config
 	}
 	
 	/**
-	 * Load autoPlayConfig file (if exists).
-	 */
-	private static void loadAutoPlayConfig()
-	{
-		final ConfigReader autoPlayConfig = new ConfigReader(AUTO_PLAY_CONFIG_FILE);
-		ENABLE_AUTO_PLAY = autoPlayConfig.getBoolean("EnableAutoPlay", false);
-		ENABLE_AUTO_POTION = autoPlayConfig.getBoolean("EnableAutoPotion", true);
-		ENABLE_AUTO_SKILL = autoPlayConfig.getBoolean("EnableAutoSkill", true);
-		ENABLE_AUTO_ITEM = autoPlayConfig.getBoolean("EnableAutoItem", true);
-		RESUME_AUTO_PLAY = autoPlayConfig.getBoolean("ResumeAutoPlay", false);
-		ENABLE_AUTO_ASSIST = autoPlayConfig.getBoolean("AssistLeader", false);
-		AUTO_PLAY_SHORT_RANGE = autoPlayConfig.getInt("ShortRange", 600);
-		AUTO_PLAY_LONG_RANGE = autoPlayConfig.getInt("LongRange", 1400);
-		AUTO_PLAY_PREMIUM = autoPlayConfig.getBoolean("AutoPlayPremium", false);
-		DISABLED_AUTO_SKILLS.clear();
-		final String disabledSkills = autoPlayConfig.getString("DisabledSkillIds", "");
-		if (!disabledSkills.isEmpty())
-		{
-			for (String s : disabledSkills.split(","))
-			{
-				DISABLED_AUTO_SKILLS.add(Integer.parseInt(s.trim()));
-			}
-		}
-		DISABLED_AUTO_ITEMS.clear();
-		final String disabledItems = autoPlayConfig.getString("DisabledItemIds", "");
-		if (!disabledItems.isEmpty())
-		{
-			for (String s : disabledItems.split(","))
-			{
-				DISABLED_AUTO_ITEMS.add(Integer.parseInt(s.trim()));
-			}
-		}
-		AUTO_PLAY_LOGIN_MESSAGE = autoPlayConfig.getString("AutoPlayLoginMessage", "");
-	}
-	
-	/**
 	 * Load autoPotionsConfig file (if exists).
 	 */
 	private static void loadAutoPotionsConfig()
@@ -3508,6 +3466,34 @@ public class Config
 		
 		MULTILANG_VOICED_ALLOW = UserPanel.getBoolean("MultiLangVoiceCommand", true);
 		STATISTIC_PANEL = UserPanel.getBoolean("ServerStatistics", false);
+		ENABLE_AUTO_PLAY = UserPanel.getBoolean("EnableAutoPlay", false);
+		ENABLE_AUTO_POTION = UserPanel.getBoolean("EnableAutoPotion", true);
+		ENABLE_AUTO_SKILL = UserPanel.getBoolean("EnableAutoSkill", true);
+		ENABLE_AUTO_ITEM = UserPanel.getBoolean("EnableAutoItem", true);
+		RESUME_AUTO_PLAY = UserPanel.getBoolean("ResumeAutoPlay", false);
+		ENABLE_AUTO_ASSIST = UserPanel.getBoolean("AssistLeader", false);
+		AUTO_PLAY_SHORT_RANGE = UserPanel.getInt("ShortRange", 600);
+		AUTO_PLAY_LONG_RANGE = UserPanel.getInt("LongRange", 1400);
+		AUTO_PLAY_PREMIUM = UserPanel.getBoolean("AutoPlayPremium", false);
+		DISABLED_AUTO_SKILLS.clear();
+		final String disabledSkills = UserPanel.getString("DisabledSkillIds", "");
+		if (!disabledSkills.isEmpty())
+		{
+			for (String s : disabledSkills.split(","))
+			{
+				DISABLED_AUTO_SKILLS.add(Integer.parseInt(s.trim()));
+			}
+		}
+		DISABLED_AUTO_ITEMS.clear();
+		final String disabledItems = UserPanel.getString("DisabledItemIds", "");
+		if (!disabledItems.isEmpty())
+		{
+			for (String s : disabledItems.split(","))
+			{
+				DISABLED_AUTO_ITEMS.add(Integer.parseInt(s.trim()));
+			}
+		}
+		AUTO_PLAY_LOGIN_MESSAGE = UserPanel.getString("AutoPlayLoginMessage", "");
 	}
 	
 	/**

@@ -57,7 +57,7 @@ public class PanelHtmlBuilder
 	
 	private void startHtml()
 	{
-		builder.append("<html noscrollbar><title>User Panel</title><body>");
+		builder.append("<html><title>User Panel</title><body>");
 		builder.append("<table width=245 height=135>");
 		builder.append("<tr><td valign=\"top\" align=\"center\">");
 		builder.append("<table>");
@@ -200,7 +200,7 @@ public class PanelHtmlBuilder
 	private void endHtml()
 	{
 		builder.append("</td></tr>");
-		builder.append("</table>");
+		builder.append("</table><br>");
 		builder.append("</body></html>");
 	}
 }
