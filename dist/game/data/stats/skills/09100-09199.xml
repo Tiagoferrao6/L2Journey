@@ -1390,4 +1390,15 @@
 		<set name="operateType" val="P" />
 		<set name="targetType" val="NONE" />
 	</skill>
+	<skill id="9185" levels="1" name="Bottle of Full Soul">
+		<set name="isMagic" val="2" /> <!-- Static Skill -->
+		<set name="operateType" val="A1" />
+		<set name="targetType" val="SELF" />
+		<set name="magicLevel" val="1" />
+		<effects>
+			<effect name="FocusSouls">
+				<param charge="10" />
+			</effect>
+		</effects>
+	</skill>
 </list>

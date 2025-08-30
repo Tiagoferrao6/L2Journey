@@ -150,6 +150,8 @@
 		<set name="is_dropable" val="false" />
 		<set name="is_sellable" val="false" />
 		<set name="is_stackable" val="true" />
+		<set name="handler" val="ItemSkillsTemplate" />
+		<set name="item_skill" val="9185-1" /> <!-- Bottle of Full Soul -->
 	</item>
 	<item id="10413" type="EtcItem" name="Dynastic Essence II">
 		<!-- An item that can modify Dynasty Tunic. Powerful options are available for a modified Dynasty Tunic. Grants more powerful options than Dynastic Essence. -->
