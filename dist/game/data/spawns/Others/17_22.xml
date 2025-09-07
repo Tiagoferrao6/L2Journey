@@ -77,7 +77,6 @@
 		<npc id="30386" x="-77989" y="156475" z="-3187" heading="8192" respawnDelay="60" /> <!-- Luis -->
 		<npc id="30387" x="-91792" y="149968" z="-3629" heading="0" respawnDelay="60" /> <!-- Clancy -->
 		<npc id="30391" x="-80430" y="150694" z="-3040" heading="24576" respawnDelay="60" /> <!-- Parina -->
-		<npc id="30417" x="-82437" y="150282" z="-3129" heading="16384" respawnDelay="60" /> <!-- Sir Klaus Vasper -->
 		<npc id="30422" x="-84400" y="149872" z="-3129" heading="49152" respawnDelay="60" /> <!-- Kalinta -->
 		<npc id="30424" x="-92310" y="154223" z="-3284" heading="57344" respawnDelay="60" /> <!-- Allana -->
 		<npc id="30425" x="-83414" y="151924" z="-3127" heading="57344" respawnDelay="60" /> <!-- Neti -->
@@ -128,5 +127,6 @@
 		<npc id="35399" x="-79803" y="150032" z="-3044" heading="32768" respawnDelay="60" /> <!-- Luce -->
 		<npc id="35400" x="-79587" y="151436" z="-3041" heading="8192" respawnDelay="60" /> <!-- Horner -->
 		<npc id="35401" x="-79800" y="151598" z="-3044" heading="32768" respawnDelay="60" /> <!-- Amiel -->
+		<npc id="30417" x="-82441" y="150203" z="-3155" heading="19231" respawnDelay="60" /> <!-- Sir Klaus Vasper -->
 	</spawn>
 </list>

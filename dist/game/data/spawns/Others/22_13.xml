@@ -34,7 +34,6 @@
 		<npc id="31688" x="87597" y="-143439" z="-1293" heading="16384" respawnDelay="60" /> <!-- Grand Olympiad Manager -->
 		<npc id="31690" x="87669" y="-143451" z="-1293" heading="16211" respawnDelay="60" /> <!-- Monument of Heroes -->
 		<npc id="31729" x="90340" y="-141373" z="-1542" heading="39084" respawnDelay="60" /> <!-- Adventure Guildsman -->
-		<npc id="31732" x="86514" y="-142340" z="-1343" heading="32768" respawnDelay="60" /> <!-- Adventure Guildsman -->
 		<npc id="31733" x="87130" y="-140754" z="-1542" heading="15201" respawnDelay="60" /> <!-- Adventure Guildsman -->
 		<npc id="31734" x="88223" y="-142349" z="-1343" heading="60027" respawnDelay="60" /> <!-- Adventure Guildsman -->
 		<npc id="31738" x="84521" y="-141191" z="-1542" heading="57344" respawnDelay="60" /> <!-- Adventure Guildsman -->
@@ -75,8 +74,6 @@
 		<npc id="31980" x="89939" y="-143454" z="-1527" heading="9414" respawnDelay="60" /> <!-- Rumba -->
 		<npc id="31981" x="85865" y="-142153" z="-1342" heading="59402" respawnDelay="60" /> <!-- Vishotsky -->
 		<npc id="31982" x="85714" y="-142369" z="-1342" heading="59709" respawnDelay="60" /> <!-- Glen -->
-		<npc id="31983" x="84356" y="-140880" z="-1538" heading="54303" respawnDelay="60" /> <!-- Friggar -->
-		<npc id="31984" x="84467" y="-140710" z="-1538" heading="59066" respawnDelay="60" /> <!-- Sherring -->
 		<npc id="31985" x="87242" y="-139279" z="-1539" heading="15816" respawnDelay="60" /> <!-- Kosmos -->
 		<npc id="31986" x="87474" y="-139275" z="-1538" heading="18107" respawnDelay="60" /> <!-- Erstack -->
 		<npc id="31987" x="90268" y="-140687" z="-1538" heading="63813" respawnDelay="60" /> <!-- Gotter -->
@@ -110,5 +107,8 @@
 		<npc id="35585" x="87984" y="-142303" z="-1343" heading="36736" respawnDelay="60" /> <!-- Alice -->
 		<npc id="35586" x="88664" y="-143140" z="-1327" heading="27132" respawnDelay="60" /> <!-- Serena -->
 		<npc id="35587" x="88550" y="-143274" z="-1343" heading="27132" respawnDelay="60" /> <!-- Neria -->
+		<npc id="31732" x="86505" y="-142298" z="-1368" heading="41481" respawnDelay="60" /> <!-- Adventure Guildsman -->
+		<npc id="31984" x="84448" y="-140694" z="-1564" heading="26298" respawnDelay="60" /> <!-- Sherring - Guard -->
+		<npc id="31983" x="84340" y="-140860" z="-1564" heading="26298" respawnDelay="60" /> <!-- Friggar - Guard -->
 	</spawn>
 </list>
