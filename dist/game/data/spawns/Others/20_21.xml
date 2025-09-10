@@ -370,5 +370,6 @@
 		<npc id="30673" x="16460" y="113488" z="-3575" heading="0" respawnDelay="60" /> <!-- Lorain -->
 		<npc id="31843" x="17719" y="115430" z="-6582" heading="0" respawnDelay="180" /> <!-- Teleportation Cubic -->
 		<npc id="32366" x="16411" y="113498" z="-9064" heading="0" respawnDelay="60" /> <!-- Destroyed Device -->
+		<npc id="27104" x="23132" y="118863" z="-3727" heading="6970" respawnDelay="180" /> <!-- Shadow Turen - Quest Monster -->
 	</spawn>
 </list>
