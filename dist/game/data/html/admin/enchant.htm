@@ -1,4 +1,4 @@
-<html>
+<html noscrollbar>
 	<title>Enchant & Attribute Menu</title>
 	<body>
 		<center>
@@ -9,15 +9,14 @@
 				<td width=45><button value="Back" action="bypass admin_admin7" width=65 height=22 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
 			</tr>
 		</table>
-		<br>
-		<font color="LEVEL">Enchant Enhancement</font><br1>
+		<br1>
 		<table width=250>
 			<tr>
-				<td>Enchant Value 0-65535:</td>
+				<td><font color="LEVEL">Enchant Value 0-65535</font></td>
 				<td><edit var="qbox" width=75 height=12></td>
 			</tr>
 		</table>
-		<br>
+		<br1>
 		<table width=260>
 			<tr>
 				<td><button value="+6" action="bypass -h admin_seteh 6" width=35 height=20 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
@@ -66,19 +65,18 @@
 				<td><button value="+4" action="bypass -h admin_setes 4" width=35 height=20 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
 			</tr>
 		</table>
-		<br>
-		<font color="LEVEL">Attribute Enhancement</font><br1>
+		<br1>
 		<table width=250>
 			<tr>
-				<td>Element Type:</td>
+				<td><font color="LEVEL">Element Type:</font></td>
 				<td><combobox width=75 var=ebox list=Fire;Water;Wind;Earth;Dark;Holy></td>
 			</tr>
 			<tr>
-				<td>Element Value 0-450:</td>
+				<td><font color="LEVEL">Element Value 0-450:</font></td>
 				<td><edit var="vbox" width=75 height=12></td>
 			</tr>
 		</table>
-		<br>
+		<br1>
 		<table width=260>
 			<tr>
 				<td><button value="60" action="bypass -h admin_setlh $ebox 60" width=35 height=20 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
@@ -98,7 +96,7 @@
 				<td><button value="Weapon" action="bypass -h admin_setlw $ebox $vbox" width=85 height=20 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
 				<td><button value="150" action="bypass -h admin_setlw $ebox 150" width=35 height=20 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
 			</tr>
-		</table><br>
+		</table>
 		</center>
 	</body>
 </html>
