@@ -3762,7 +3762,7 @@
 			<height normal="0.1" />
 		</collision>
 	</npc>
-	<npc id="18664" level="52" type="Monster" name="Lucky Pig" title="The Spirit of Fortune">
+	<npc id="18664" level="52" type="Folk" name="Lucky Pig" title="The Spirit of Fortune">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="150" />
@@ -3803,7 +3803,7 @@
 			<height normal="22.5" />
 		</collision>
 	</npc>
-	<npc id="18665" level="70" type="Monster" name="Lucky Pig" title="The Spirit of Fortune">
+	<npc id="18665" level="70" type="Folk" name="Lucky Pig" title="The Spirit of Fortune">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="150" />
@@ -3844,7 +3844,7 @@
 			<height normal="22.5" />
 		</collision>
 	</npc>
-	<npc id="18666" level="75" type="Monster" name="Lucky Pig" title="The Spirit of Fortune">
+	<npc id="18666" level="75" type="Folk" name="Lucky Pig" title="The Spirit of Fortune">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="150" />
