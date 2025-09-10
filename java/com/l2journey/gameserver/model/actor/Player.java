@@ -6908,7 +6908,7 @@ public class Player extends Playable
 		}
 		else if (level > 0)
 		{
-			LOGGER.warning(_accessLevel.getName() + " access level set for character " + getName() + "! Just a warning to be careful ;)");
+			LOGGER.warning(_accessLevel.getName() + ": " + getName() + " logged!");
 		}
 	}
 	
