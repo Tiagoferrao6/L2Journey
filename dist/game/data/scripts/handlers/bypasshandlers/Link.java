@@ -38,6 +38,9 @@ import com.l2journey.gameserver.model.actor.Player;
 import com.l2journey.gameserver.model.actor.instance.Teleporter;
 import com.l2journey.gameserver.network.serverpackets.NpcHtmlMessage;
 
+/**
+ * @author KingHanker
+ */
 public class Link implements IBypassHandler
 {
 	private static final String[] COMMANDS =
@@ -45,50 +48,56 @@ public class Link implements IBypassHandler
 		"Link"
 	};
 	
-	private static final Set<String> VALID_LINKS = new HashSet<>();
+	private static final Set<String> SPECIFIC_VALID_LINKS = new HashSet<>();
 	static
 	{
-		VALID_LINKS.add("adventurer_guildsman/AboutHighLevelGuilds.htm");
-		VALID_LINKS.add("adventurer_guildsman/AboutNewLifeCrystals.htm");
-		VALID_LINKS.add("clanHallDoorman/evolve.htm");
-		VALID_LINKS.add("common/augmentation_01.htm");
-		VALID_LINKS.add("common/augmentation_02.htm");
-		VALID_LINKS.add("common/crafting_01.htm");
-		VALID_LINKS.add("common/duals_01.htm");
-		VALID_LINKS.add("common/duals_02.htm");
-		VALID_LINKS.add("common/duals_03.htm");
-		VALID_LINKS.add("common/g_cube_warehouse001.htm");
-		VALID_LINKS.add("common/skill_enchant_help.htm");
-		VALID_LINKS.add("common/skill_enchant_help_01.htm");
-		VALID_LINKS.add("common/skill_enchant_help_02.htm");
-		VALID_LINKS.add("common/skill_enchant_help_03.htm");
-		VALID_LINKS.add("common/weapon_sa_01.htm");
-		VALID_LINKS.add("common/welcomeback002.htm");
-		VALID_LINKS.add("common/welcomeback003.htm");
-		VALID_LINKS.add("default/BlessingOfProtection.htm");
-		VALID_LINKS.add("default/SupportMagic.htm");
-		VALID_LINKS.add("default/SupportMagicServitor.htm");
-		VALID_LINKS.add("fisherman/fishing_championship.htm");
-		VALID_LINKS.add("fortress/foreman.htm");
-		VALID_LINKS.add("guard/kamaloka_help.htm");
-		VALID_LINKS.add("guard/kamaloka_level.htm");
-		VALID_LINKS.add("olympiad/hero_main2.htm");
-		VALID_LINKS.add("petmanager/evolve.htm");
-		VALID_LINKS.add("petmanager/exchange.htm");
-		VALID_LINKS.add("petmanager/instructions.htm");
-		VALID_LINKS.add("seven_signs/blkmrkt_1.htm");
-		VALID_LINKS.add("seven_signs/blkmrkt_2.htm");
-		VALID_LINKS.add("seven_signs/mammblack_1a.htm");
-		VALID_LINKS.add("seven_signs/mammblack_1b.htm");
-		VALID_LINKS.add("seven_signs/mammblack_1c.htm");
-		VALID_LINKS.add("seven_signs/mammblack_2a.htm");
-		VALID_LINKS.add("seven_signs/mammblack_2b.htm");
-		VALID_LINKS.add("seven_signs/mammmerch_1.htm");
-		VALID_LINKS.add("seven_signs/mammmerch_1a.htm");
-		VALID_LINKS.add("seven_signs/mammmerch_1b.htm");
-		VALID_LINKS.add("teleporter/separatedsoul.htm");
-		VALID_LINKS.add("warehouse/clanwh.htm");
-		VALID_LINKS.add("warehouse/privatewh.htm");
+		SPECIFIC_VALID_LINKS.add("adventurer_guildsman/AboutHighLevelGuilds.htm");
+		SPECIFIC_VALID_LINKS.add("adventurer_guildsman/AboutNewLifeCrystals.htm");
+		SPECIFIC_VALID_LINKS.add("clanHallDoorman/evolve.htm");
+		SPECIFIC_VALID_LINKS.add("common/augmentation_01.htm");
+		SPECIFIC_VALID_LINKS.add("common/augmentation_02.htm");
+		SPECIFIC_VALID_LINKS.add("common/crafting_01.htm");
+		SPECIFIC_VALID_LINKS.add("common/duals_01.htm");
+		SPECIFIC_VALID_LINKS.add("common/duals_02.htm");
+		SPECIFIC_VALID_LINKS.add("common/duals_03.htm");
+		SPECIFIC_VALID_LINKS.add("common/g_cube_warehouse001.htm");
+		SPECIFIC_VALID_LINKS.add("common/skill_enchant_help.htm");
+		SPECIFIC_VALID_LINKS.add("common/skill_enchant_help_01.htm");
+		SPECIFIC_VALID_LINKS.add("common/skill_enchant_help_02.htm");
+		SPECIFIC_VALID_LINKS.add("common/skill_enchant_help_03.htm");
+		SPECIFIC_VALID_LINKS.add("common/weapon_sa_01.htm");
+		SPECIFIC_VALID_LINKS.add("common/welcomeback002.htm");
+		SPECIFIC_VALID_LINKS.add("common/welcomeback003.htm");
+		SPECIFIC_VALID_LINKS.add("default/BlessingOfProtection.htm");
+		SPECIFIC_VALID_LINKS.add("default/SupportMagic.htm");
+		SPECIFIC_VALID_LINKS.add("default/SupportMagicServitor.htm");
+		SPECIFIC_VALID_LINKS.add("fisherman/fishing_championship.htm");
+		SPECIFIC_VALID_LINKS.add("fortress/foreman.htm");
+		SPECIFIC_VALID_LINKS.add("guard/kamaloka_help.htm");
+		SPECIFIC_VALID_LINKS.add("guard/kamaloka_level.htm");
+		SPECIFIC_VALID_LINKS.add("olympiad/hero_main2.htm");
+		SPECIFIC_VALID_LINKS.add("petmanager/evolve.htm");
+		SPECIFIC_VALID_LINKS.add("petmanager/exchange.htm");
+		SPECIFIC_VALID_LINKS.add("petmanager/instructions.htm");
+		SPECIFIC_VALID_LINKS.add("seven_signs/blkmrkt_1.htm");
+		SPECIFIC_VALID_LINKS.add("seven_signs/blkmrkt_2.htm");
+		SPECIFIC_VALID_LINKS.add("seven_signs/mammblack_1a.htm");
+		SPECIFIC_VALID_LINKS.add("seven_signs/mammblack_1b.htm");
+		SPECIFIC_VALID_LINKS.add("seven_signs/mammblack_1c.htm");
+		SPECIFIC_VALID_LINKS.add("seven_signs/mammblack_2a.htm");
+		SPECIFIC_VALID_LINKS.add("seven_signs/mammblack_2b.htm");
+		SPECIFIC_VALID_LINKS.add("seven_signs/mammmerch_1.htm");
+		SPECIFIC_VALID_LINKS.add("seven_signs/mammmerch_1a.htm");
+		SPECIFIC_VALID_LINKS.add("seven_signs/mammmerch_1b.htm");
+		SPECIFIC_VALID_LINKS.add("teleporter/separatedsoul.htm");
+		SPECIFIC_VALID_LINKS.add("warehouse/clanwh.htm");
+		SPECIFIC_VALID_LINKS.add("warehouse/privatewh.htm");
+	}
+	
+	private static final Set<String> ALLOWED_DIRECTORIES = new HashSet<>();
+	static
+	{
+		ALLOWED_DIRECTORIES.add("adventurer_guildsman/");
 	}
 	
 	@Override
@@ -107,20 +116,45 @@ public class Link implements IBypassHandler
 			return false;
 		}
 		
-		String content = VALID_LINKS.contains(htmlPath) ? HtmCache.getInstance().getHtm(player, "data/html/" + htmlPath) : null;
-		// Precaution.
-		if (htmlPath.startsWith("teleporter/") && !(player.getTarget() instanceof Teleporter))
+		boolean isValidLink = SPECIFIC_VALID_LINKS.contains(htmlPath) || isLinkInAllowedDirectory(htmlPath);
+		String content = null;
+		if (isValidLink)
 		{
-			content = null;
+			content = HtmCache.getInstance().getHtm(player, "data/html/" + htmlPath);
+			
+			if (htmlPath.startsWith("teleporter/") && !(player.getTarget() instanceof Teleporter))
+			{
+				LOGGER.warning(player + " tried to use teleporter link without targeting a teleporter: " + htmlPath);
+				content = null;
+			}
 		}
 		
 		final NpcHtmlMessage html = new NpcHtmlMessage(target != null ? target.getObjectId() : 0);
+		
 		if (content != null)
 		{
 			html.setHtml(content.replace("%objectId%", String.valueOf(target != null ? target.getObjectId() : 0)));
 		}
+		else
+		{
+			LOGGER.warning(player + " tried to access a link in allowed directory but file not found or invalid: " + htmlPath);
+			html.setHtml("<html><body>Link inválido ou arquivo não encontrado.</body></html>");
+		}
+		
 		player.sendPacket(html);
 		return true;
+	}
+	
+	private boolean isLinkInAllowedDirectory(String htmlPath)
+	{
+		for (String directory : ALLOWED_DIRECTORIES)
+		{
+			if (htmlPath.startsWith(directory))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	@Override
