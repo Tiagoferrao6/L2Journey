@@ -285,7 +285,7 @@ public class Auctioneer extends Npc
 				final List<ClanHallAuction> auctions = ClanHallAuctionManager.getInstance().getAuctions();
 				final SimpleDateFormat format = new SimpleDateFormat("yy/MM/dd");
 				/** Limit for make new page, prevent client crash **/
-				int limit = 14;
+				int limit = 13;
 				int start;
 				int i = 1;
 				final double npage = Math.ceil((float) auctions.size() / limit);

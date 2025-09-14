@@ -386,7 +386,7 @@ public class AdminSkill implements IAdminCommandHandler
 		final StringBuilder sb = new StringBuilder();
 		for (Race race : races)
 		{
-			sb.append("<tr><td><a action=\"bypass admin_skill_race " + race + "\">" + StringUtil.enumToString(race) + "</a></td></tr>");
+			sb.append("<td align=\"center\"><a action=\"bypass admin_skill_race " + race + "\">" + StringUtil.enumToString(race) + "</a></td>");
 		}
 		
 		final NpcHtmlMessage html = new NpcHtmlMessage();

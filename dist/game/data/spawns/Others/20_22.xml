@@ -291,7 +291,7 @@
 		<npc id="31570" x="19539" y="145987" z="-3068" heading="32500" respawnDelay="60" /> <!-- Lanosco -->
 		<npc id="31688" x="16304" y="144288" z="-2992" heading="55000" respawnDelay="60" /> <!-- Grand Olympiad Manager -->
 		<npc id="31690" x="16256" y="144256" z="-2992" heading="55000" respawnDelay="60" /> <!-- Monument of Heroes -->
-		<npc id="31797" x="15856" y="142816" z="-2704" heading="15000" respawnDelay="60" /> <!-- Adventure Guildsman -->
+		<npc id="31797" x="15822" y="142815" z="-2732" heading="16544" respawnDelay="60" /> <!-- Adventure Guildsman -->
 		<npc id="31798" x="17388" y="146912" z="-3104" heading="3000" respawnDelay="60" /> <!-- Adventure Guildsman -->
 		<npc id="31799" x="21088" y="145424" z="-3088" heading="16500" respawnDelay="60" /> <!-- Adventure Guildsman -->
 		<npc id="31800" x="19248" y="143040" z="-3040" heading="31000" respawnDelay="60" /> <!-- Adventure Guildsman -->
