@@ -98,7 +98,7 @@
 		<npc id="21107" x="28648" y="167090" z="-3403" heading="21924" respawnDelay="30" /> <!-- Delu Lizardman Commander -->
 		<npc id="21107" x="29741" y="165025" z="-3627" heading="57601" respawnDelay="30" /> <!-- Delu Lizardman Commander -->
 		<npc id="27093" x="28448" y="174080" z="-3408" heading="0" respawnDelay="60" /> <!-- Delu Chief Kalkis -->
-		<npc id="27103" x="23354" y="187991" z="-3716" heading="0" respawnDelay="180" /> <!-- Racer the Unicorn -->
+		<npc id="27103" x="23454" y="188251" z="-3626" heading="59140" respawnDelay="180" /> <!-- Racer the Unicorn - Quest Monster -->
 		<npc id="27112" x="6317" y="184549" z="-3161" heading="25731" respawnDelay="180" /> <!-- Gorr -->
 		<npc id="27113" x="20898" y="184689" z="-3358" heading="0" respawnDelay="180" /> <!-- Baraham -->
 		<npc id="30078" x="16970" y="170391" z="-3496" heading="61440" respawnDelay="60" /> <!-- Pano -->
@@ -125,5 +125,9 @@
 		<npc id="31801" x="17972" y="169945" z="-3496" heading="20000" respawnDelay="60" /> <!-- Adventure Guildsman -->
 		<npc id="31802" x="14784" y="168800" z="-3504" heading="58000" respawnDelay="60" /> <!-- Adventure Guildsman -->
 		<npc id="31803" x="13520" y="169840" z="-3712" heading="2000" respawnDelay="60" /> <!-- Adventure Guildsman -->
+		<npc id="20935" x="21967" y="187853" z="-3569" heading="39404" respawnDelay="32" /> <!-- Wasp Leader -->
+		<npc id="20935" x="20942" y="187578" z="-3496" heading="36613" respawnDelay="32" /> <!-- Wasp Leader -->
+		<npc id="20935" x="21491" y="187238" z="-3504" heading="59752" respawnDelay="32" /> <!-- Wasp Leader -->
+		<npc id="20930" x="25099" y="186963" z="-3481" heading="146" respawnDelay="32" /> <!-- Hatu Brown Bear -->
 	</spawn>
 </list>
