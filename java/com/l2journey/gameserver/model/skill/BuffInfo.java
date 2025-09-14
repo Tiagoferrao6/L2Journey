@@ -38,6 +38,7 @@ import com.l2journey.Config;
 import com.l2journey.commons.threads.ThreadPool;
 import com.l2journey.gameserver.model.EffectList;
 import com.l2journey.gameserver.model.actor.Creature;
+import com.l2journey.gameserver.model.actor.Summon;
 import com.l2journey.gameserver.model.effects.AbstractEffect;
 import com.l2journey.gameserver.model.effects.EffectTaskInfo;
 import com.l2journey.gameserver.model.effects.EffectTickTask;
@@ -303,6 +304,11 @@ public class BuffInfo
 		
 		if (update)
 		{
+			if (_effected.isSummon())
+			{
+				((Summon) _effected).updateAndBroadcastStatus(1);
+			}
+			
 			// Add abnormal visual effects.
 			addAbnormalVisualEffects();
 		}

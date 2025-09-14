@@ -3912,6 +3912,18 @@ public abstract class Creature extends WorldObject
 				}
 			}
 			
+			if (isSummon())
+			{
+				if (getCurrentHp() > getMaxHp())
+				{
+					setCurrentHp(getMaxHp());
+				}
+				if (getCurrentMp() > getMaxMp())
+				{
+					setCurrentMp(getMaxMp());
+				}
+			}
+			
 			broadcastModifiedStats(modifiedStats);
 		}
 	}
