@@ -51,7 +51,6 @@ import com.l2journey.gameserver.model.actor.Npc;
 import com.l2journey.gameserver.model.actor.Player;
 import com.l2journey.gameserver.model.actor.Summon;
 import com.l2journey.gameserver.model.actor.instance.Cubic;
-import com.l2journey.gameserver.model.actor.instance.Pet;
 import com.l2journey.gameserver.model.actor.instance.Servitor;
 import com.l2journey.gameserver.model.actor.stat.PlayerStat;
 import com.l2journey.gameserver.model.actor.status.PlayerStatus;
@@ -1140,13 +1139,7 @@ public class NpcBuffer extends Quest
 			target.setCurrentHp(maxHp);
 			target.setCurrentMp(maxMp);
 			
-			if (target instanceof Pet)
-			{
-				final Pet pet = (Pet) target;
-				pet.setCurrentFed(pet.getMaxFed());
-				player.sendPacket(new SetSummonRemainTime(pet.getMaxFed(), pet.getCurrentFed()));
-			}
-			else if (target instanceof Servitor)
+			if (target instanceof Servitor)
 			{
 				final Servitor summon = (Servitor) target;
 				summon.setLifeTimeRemaining(summon.getLifeTimeRemaining() + summon.getLifeTime());

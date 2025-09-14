@@ -2107,65 +2107,69 @@ public class Player extends Playable
 	public void refreshOverloaded()
 	{
 		final int maxLoad = getMaxLoad();
-		
-		if (maxLoad <= 0)
+		if (maxLoad > 0)
 		{
-			return;
-		}
-		
-		final long weightproc = ((getCurrentLoad() - getBonusWeightPenalty()) * 1000) / getMaxLoad();
-		int newWeightPenalty;
-		if ((weightproc < 500) || _dietMode)
-		{
-			newWeightPenalty = 0;
-		}
-		else if (weightproc < 666)
-		{
-			newWeightPenalty = 1;
-		}
-		else if (weightproc < 800)
-		{
-			newWeightPenalty = 2;
-		}
-		else if (weightproc < 1000)
-		{
-			newWeightPenalty = 3;
-		}
-		else
-		{
-			newWeightPenalty = 4;
-		}
-		
-		if (isAffectedByAbnormalType(AbnormalType.DECREASE_WEIGHT_PENALTY))
-		{
+			final long currentLoadWithoutWeightBuffs = getCurrentLoad() + getBonusWeightPenalty();
+			final long weightproc = (currentLoadWithoutWeightBuffs * 1000) / maxLoad;
+			
+			int originalWeightPenalty;
+			if ((weightproc < 500) || _dietMode)
+			{
+				originalWeightPenalty = 0;
+			}
+			else if (weightproc < 666)
+			{
+				originalWeightPenalty = 1;
+			}
+			else if (weightproc < 800)
+			{
+				originalWeightPenalty = 2;
+			}
+			else if (weightproc < 1000)
+			{
+				originalWeightPenalty = 3;
+			}
+			else
+			{
+				originalWeightPenalty = 4;
+			}
+			
+			int buffDecreaseLevel = 0;
 			for (BuffInfo info : getEffectList().getEffects())
 			{
 				if (info.isAbnormalType(AbnormalType.DECREASE_WEIGHT_PENALTY))
 				{
-					int skillLevel = info.getSkill().getLevel();
-					skillLevel = Math.max(1, skillLevel);
-					newWeightPenalty = Math.max(0, newWeightPenalty - skillLevel);
-					break;
+					buffDecreaseLevel = Math.max(buffDecreaseLevel, info.getSkill().getLevel());
 				}
 			}
-		}
-		
-		if (_curWeightPenalty != newWeightPenalty)
-		{
-			_curWeightPenalty = newWeightPenalty;
-			if ((newWeightPenalty > 0) && !_dietMode)
+			
+			int newWeightPenalty;
+			if (buffDecreaseLevel > 0)
 			{
-				addSkill(SkillData.getInstance().getSkill(4270, newWeightPenalty));
-				setOverloaded(getCurrentLoad() > maxLoad);
+				newWeightPenalty = Math.max(0, originalWeightPenalty - buffDecreaseLevel);
 			}
 			else
 			{
-				removeSkill(getKnownSkill(4270), false, true);
-				setOverloaded(false);
+				newWeightPenalty = originalWeightPenalty;
 			}
 			
-			broadcastUserInfo();
-			sendPacket(new EtcStatusUpdate(this));
+			if (_curWeightPenalty != newWeightPenalty)
+			{
+				_curWeightPenalty = newWeightPenalty;
+				if ((newWeightPenalty > 0) && !_dietMode)
+				{
+					addSkill(SkillData.getInstance().getSkill(4270, newWeightPenalty));
+					setOverloaded(newWeightPenalty == 4);
+				}
+				else
+				{
+					removeSkill(getKnownSkill(4270), false, true);
+					setOverloaded(false);
+				}
+				
+				broadcastUserInfo();
+				sendPacket(new EtcStatusUpdate(this));
+			}
 		}
 	}
 	
