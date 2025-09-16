@@ -6775,7 +6775,7 @@ public abstract class Creature extends WorldObject
 	 */
 	public int getCurrentLoad()
 	{
-		if (isPlayer() || isPet())
+		if ((isPlayer() || isPet()) && (getInventory() != null))
 		{
 			return (int) (getInventory().getTotalWeight() / Config.ALT_WEIGHT_LIMIT);
 		}
