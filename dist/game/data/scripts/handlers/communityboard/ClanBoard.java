@@ -28,14 +28,17 @@
  */
 package handlers.communityboard;
 
-import java.util.Arrays;
-import java.util.stream.Collectors;
-
+import com.l2journey.gameserver.data.sql.ClanHallTable;
 import com.l2journey.gameserver.data.sql.ClanTable;
 import com.l2journey.gameserver.handler.CommunityBoardHandler;
 import com.l2journey.gameserver.handler.IWriteBoardHandler;
+import com.l2journey.gameserver.managers.CastleManager;
 import com.l2journey.gameserver.model.actor.Player;
 import com.l2journey.gameserver.model.clan.Clan;
+import com.l2journey.gameserver.model.clan.ClanMember;
+import com.l2journey.gameserver.model.residences.AuctionableHall;
+import com.l2journey.gameserver.model.siege.Castle;
+import com.l2journey.gameserver.model.skill.Skill;
 import com.l2journey.gameserver.network.SystemMessageId;
 import com.l2journey.gameserver.util.HtmlUtil;
 
@@ -127,6 +130,7 @@ public class ClanBoard implements IWriteBoardHandler
 			{
 				clan.setNoticeEnabled(true);
 			}
+			
 			clanNotice(player, player.getClanId());
 		}
 		else if (command.startsWith("_bbsclan_clannotice_disable"))
@@ -137,12 +141,14 @@ public class ClanBoard implements IWriteBoardHandler
 			{
 				clan.setNoticeEnabled(false);
 			}
+			
 			clanNotice(player, player.getClanId());
 		}
 		else
 		{
 			CommunityBoardHandler.separateAndSend("<html><body><br><br><center>Command " + command + " need development.</center><br><br></body></html>", player);
 		}
+		
 		return true;
 	}
 	
@@ -175,7 +181,7 @@ public class ClanBoard implements IWriteBoardHandler
 						html.append("<tr><td fixwidth=610> Clan Notice Function:&nbsp;&nbsp;&nbsp;<a action=\"bypass _bbsclan_clannotice_enable\">on</a>&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;off");
 					}
 					
-					html.append("</td></tr></table><img src=\"L2UI.Squaregray\" width=\"610\" height=\"1\"><br> <br><table width=610 border=0 cellspacing=2 cellpadding=0><tr><td>Edit Notice: </td></tr><tr><td height=5></td></tr><tr><td><MultiEdit var =\"Content\" width=610 height=100></td></tr></table><br><table width=610 border=0 cellspacing=0 cellpadding=0><tr><td height=5></td></tr><tr><td align=center FIXWIDTH=65><button value=\"&$140;\" action=\"Write Notice Set _ Content Content Content\" back=\"l2ui_ch3.smallbutton2_down\" width=65 height=20 fore=\"l2ui_ch3.smallbutton2\" ></td><td align=center FIXWIDTH=45></td><td align=center FIXWIDTH=500></td></tr></table></center></body></html>");
+					html.append("</td></tr></table><img src=\"L2UI.Squaregray\" width=\"610\" height=\"1\"><br> <br><table width=610 border=0 cellspacing=2 cellpadding=0><tr><td>Edit Notice: </td></tr><tr><td height=5></td></tr><tr><td><MultiEdit var =\"Content\" width=610 height=100></td></tr></table><br><table width=610 border=0 cellspacing=0 cellpadding=0><tr><td height=5></td></tr><tr><td align=center FIXWIDTH=65><button value=\"Confirm\" action=\"Write Notice Set _ Content Content Content\" back=\"L2UI_CT1.Button_DF_Down\" width=65 height=22 fore=\"L2UI_CT1.Button_DF\" ></td><td align=center FIXWIDTH=45></td><td align=center FIXWIDTH=500></td></tr></table></center></body></html>");
 					HtmlUtil.sendCBHtml(player, html.toString(), clan.getNotice());
 				}
 				else
@@ -186,6 +192,7 @@ public class ClanBoard implements IWriteBoardHandler
 					{
 						html.append("<table border=0 cellspacing=0 cellpadding=0><tr><td>The current clan notice:</td></tr><tr><td fixwidth=5></td><td FIXWIDTH=600 align=left>" + clan.getNotice() + "</td><td fixqqwidth=5></td></tr></table>");
 					}
+					
 					html.append("</center></body></html>");
 					CommunityBoardHandler.separateAndSend(html.toString(), player);
 				}
@@ -201,7 +208,6 @@ public class ClanBoard implements IWriteBoardHandler
 			index = 1;
 		}
 		
-		// header
 		final StringBuilder html = new StringBuilder(2048);
 		html.append("<html><body><br><br><center><br1><br1><table border=0 cellspacing=0 cellpadding=0><tr><td FIXWIDTH=15>&nbsp;</td><td width=610 height=30 align=left><a action=\"bypass _bbshome\">Home</a> &nbsp;&gt;<a action=\"bypass _bbsclan_clanlist\"> Clan Community </a></td></tr></table><table border=0 cellspacing=0 cellpadding=0 width=610 bgcolor=434343><tr><td height=10></td></tr><tr><td fixWIDTH=5></td><td fixWIDTH=600><a action=\"bypass _bbsclan_clanhome;");
 		html.append(player.getClan() != null ? player.getClan().getId() : 0);
@@ -265,6 +271,7 @@ public class ClanBoard implements IWriteBoardHandler
 				html.append(" </a></td>");
 			}
 		}
+		
 		if (index == nbp)
 		{
 			html.append("<td><button action=\"\" back=\"l2ui_ch3.next1_down\" fore=\"l2ui_ch3.next1\" width=16 height=16 ></td>");
@@ -275,6 +282,7 @@ public class ClanBoard implements IWriteBoardHandler
 			html.append(index + 1);
 			html.append("\" back=\"l2ui_ch3.next1_down\" fore=\"l2ui_ch3.next1\" width=16 height=16 ></td>");
 		}
+		
 		html.append("</tr></table><table border=0 cellspacing=0 cellpadding=0><tr><td width=610><img src=\"sek.cbui141\" width=\"610\" height=\"1\"></td></tr></table><table border=0><tr><td><combobox width=65 var=keyword list=\"Name;Ruler\"></td><td><edit var = \"Search\" width=130 height=14 length=\"16\"></td>" +
 		// TODO: search (Write in BBS)
 			"<td><button value=\"&$420;\" action=\"Write 5 -1 0 Search keyword keyword\" back=\"l2ui_ct1.button.button_df_small_down\" width=65 height=23 fore=\"l2ui_ct1.button.button_df_small\"> </td> </tr></table><br><br></center></body></html>");
@@ -298,16 +306,159 @@ public class ClanBoard implements IWriteBoardHandler
 			}
 			else
 			{
-				final String html = Arrays.asList("<html><body><center><br><br><br1><br1><table border=0 cellspacing=0 cellpadding=0><tr><td FIXWIDTH=15>&nbsp;</td><td width=610 height=30 align=left><a action=\"bypass _bbshome\">Home</a> &nbsp;&gt; <a action=\"bypass _bbsclan_clanlist\"> Clan Community </a> &nbsp;&gt; <a action=\"bypass _bbsclan_clanhome;", String.valueOf(clanId), "\"> &amp;$802; </a></td></tr></table><table border=0 cellspacing=0 cellpadding=0 width=610 bgcolor=434343><tr><td height=10></td></tr><tr><td fixWIDTH=5></td><td fixwidth=600><a action=\"bypass _bbsclan_clanhome;", String.valueOf(clanId), ";announce\">[Clan Announcement]</a> <a action=\"bypass _bbsclan_clanhome;", String.valueOf(clanId), ";cbb\">[Clan Bulletin Board]</a><a action=\"bypass _bbsclan_clanhome;", String.valueOf(clanId), ";cmail\">[Clan Mail]</a>&nbsp;&nbsp;<a action=\"bypass _bbsclan_clannotice_edit;", String.valueOf(clanId), ";cnotice\">[Clan Notice]</a>&nbsp;&nbsp;</td><td fixWIDTH=5></td></tr><tr><td height=10></td></tr></table><table border=0 cellspacing=0 cellpadding=0 width=610><tr><td height=10></td></tr><tr><td fixWIDTH=5></td><td fixwidth=290 valign=top></td><td fixWIDTH=5></td><td fixWIDTH=5 align=center valign=top><img src=\"l2ui.squaregray\" width=2  height=128></td><td fixWIDTH=5></td><td fixwidth=295><table border=0 cellspacing=0 cellpadding=0 width=295><tr><td fixWIDTH=100 align=left>Clan Name</td><td fixWIDTH=195 align=left>", cl.getName(), "</td></tr><tr><td height=7></td></tr><tr><td fixWIDTH=100 align=left>Clan Level</td><td fixWIDTH=195 align=left height=16>", String.valueOf(cl.getLevel()), "</td></tr><tr><td height=7></td></tr><tr><td fixWIDTH=100 align=left>Clan Members</td><td fixWIDTH=195 align=left height=16>", String.valueOf(cl.getMembersCount()), "</td></tr><tr><td height=7></td></tr><tr><td fixWIDTH=100 align=left>Clan Leader</td><td fixWIDTH=195 align=left height=16>", cl.getLeaderName(), "</td></tr><tr><td height=7></td></tr>" +
-				// ADMINISTRATOR ??
-				/*
-				 * html.append("<tr>"); html.append("<td fixWIDTH=100 align=left>ADMINISTRATOR</td>"); html.append("<td fixWIDTH=195 align=left height=16>"+cl.getLeaderName()+"</td>"); html.append("</tr>");
-				 */
-					"<tr><td height=7></td></tr><tr><td fixWIDTH=100 align=left>Alliance</td><td fixWIDTH=195 align=left height=16>", (cl.getAllyName() != null) ? cl.getAllyName() : "", "</td></tr></table></td><td fixWIDTH=5></td></tr><tr><td height=10></td></tr></table>" +
-				// TODO: the BB for clan :)
-				// html.append("<table border=0 cellspacing=0 cellpadding=0 width=610 bgcolor=333333>");
-						"<img src=\"L2UI.squareblank\" width=\"1\" height=\"5\"><img src=\"L2UI.squaregray\" width=\"610\" height=\"1\"><br></center><br> <br></body></html>").stream().collect(Collectors.joining());
-				CommunityBoardHandler.separateAndSend(html, player);
+				StringBuilder html = new StringBuilder();
+				html.append("<html><body><center><br><br><br1><br1><table border=0 cellspacing=0 cellpadding=0><tr><td FIXWIDTH=15>&nbsp;</td><td width=610 height=30 align=left><a action=\"bypass _bbshome\">Home</a> &nbsp;&gt; <a action=\"bypass _bbsclan_clanlist\"> Clan Community </a> &nbsp;&gt; <a action=\"bypass _bbsclan_clanhome;");
+				html.append(clanId);
+				html.append("\"> &amp;$802; </a></td></tr></table><table border=0 cellspacing=0 cellpadding=0 width=610 bgcolor=434343><tr><td height=10></td></tr><tr><td fixWIDTH=5></td><td fixwidth=600><a action=\"bypass _bbsclan_clanhome;");
+				html.append(clanId);
+				html.append(";announce\"></a> <a action=\"bypass _bbsclan_clanhome;");
+				html.append(clanId);
+				html.append(";cbb\"></a><a action=\"bypass _bbsclan_clanhome;");
+				html.append(clanId);
+				html.append(";cmail\"></a>&nbsp;&nbsp;<a action=\"bypass _bbsclan_clannotice_edit;");
+				html.append(clanId);
+				html.append(";cnotice\"></a>&nbsp;&nbsp;</td><td fixWIDTH=5></td></tr><tr><td height=10></td></tr></table>");
+				
+				html.append("<div style='height:15px'></div>");
+				html.append("<table border=0 cellspacing=0 cellpadding=0 width=530><tr><td height=10></td></tr><tr><td fixWIDTH=5></td><td fixwidth=290 valign=top>");
+				
+				html.append("<table border=0 cellspacing=2 cellpadding=0>");
+				
+				int col = 0;
+				boolean hasSkill = false;
+				for (Skill skill : cl.getAllSkills())
+				{
+					if (col == 0)
+					{
+						html.append("<tr>");
+					}
+					
+					String iconPath = skill.getIcon();
+					if ((iconPath != null) && !iconPath.isEmpty())
+					{
+						html.append("<td align=\"center\"><img src=\"").append(iconPath).append("\" width=32 height=32 style=\"margin:2px;\"></td>");
+						hasSkill = true;
+					}
+					
+					col++;
+					if (col == 7)
+					{
+						html.append("</tr>");
+						col = 0;
+					}
+				}
+				
+				if (col != 0)
+				{
+					for (int i = col; i < 7; i++)
+					{
+						html.append("<td></td>");
+					}
+					
+					html.append("</tr>");
+				}
+				
+				html.append("</table>");
+				
+				if (!hasSkill)
+				{
+					html.append(" ");
+				}
+				
+				html.append("</td><td fixWIDTH=5></td><td fixWIDTH=5 align=center valign=top><img src=\"l2ui.squaregray\" width=2  height=128></td><td fixWIDTH=5></td><td fixwidth=295><table border=0 cellspacing=0 cellpadding=0 width=295><tr><td fixWIDTH=100 align=left>Clan Name</td><td fixWIDTH=195 align=left>");
+				html.append(cl.getName());
+				html.append("</td></tr><tr><td height=7></td></tr><tr><td fixWIDTH=100 align=left>Clan Level</td><td fixWIDTH=195 align=left height=16>");
+				html.append(cl.getLevel());
+				html.append("</td></tr><tr><td height=7></td></tr><tr><td fixWIDTH=100 align=left>Clan Members</td><td fixWIDTH=195 align=left height=16>");
+				html.append(cl.getMembersCount());
+				html.append("</td></tr><tr><td height=7></td></tr><tr><td fixWIDTH=100 align=left>Clan Leader</td><td fixWIDTH=195 align=left height=16>");
+				html.append(cl.getLeaderName());
+				html.append("</td></tr><tr><td height=7></td></tr><tr><td fixWIDTH=100 align=left>Clan Alliance</td><td fixWIDTH=195 align=left height=16>");
+				html.append((cl.getAllyName() != null) ? cl.getAllyName() : "");
+				html.append("</td></tr><tr><td height=7></td></tr><tr><td fixWIDTH=100 align=left>Clan Hall</td><td fixWIDTH=195 align=left height=16>");
+				
+				final AuctionableHall clanHall = ClanHallTable.getInstance().getClanHallByOwner(cl);
+				if (clanHall != null)
+				{
+					html.append(clanHall.getName());
+				}
+				else
+				{
+					html.append(" ");
+				}
+				
+				html.append("</td></tr><tr><td height=7></td></tr><tr><td fixWIDTH=100 align=left>Clan Castle</td><td fixWIDTH=195 align=left height=16>");
+				
+				final Castle castle = CastleManager.getInstance().getCastleByOwner(cl);
+				if (castle != null)
+				{
+					html.append(castle.getName());
+				}
+				else
+				{
+					html.append(" ");
+				}
+				
+				html.append("</td></tr><tr><td height=7></td></tr>");
+				
+				if (player.isClanLeader())
+				{
+					html.append("<tr>");
+					html.append("<td fixWIDTH=100 align=left>");
+					html.append("<button action=\"bypass _bbsclan_clannotice_edit;").append(cl.getId()).append(";cnotice\" value=\"Clan Notice\" width=80 height=27 back=\"L2UI_CT1.Button_DF_Down\" fore=\"L2UI_CT1.Button_DF\">");
+					html.append("</td>");
+					html.append("<td></td>");
+					html.append("</tr>");
+				}
+				
+				html.append("</table></td><td fixWIDTH=5></td></tr><tr><td height=10></td></tr></table>");
+				html.append("<img src=\"L2UI.squareblank\" width=\"1\" height=\"5\"><img src=\"L2UI.squaregray\" width=\"610\" height=\"1\"><br></center>");
+				
+				html.append("<center><font name=\"hs12\" name=\"CreditTextSmall\" color=ae9977>Clan Members</font></center><br1>");
+				
+				html.append("<center><table border=0 cellspacing=10 cellpadding=0 width=610>");
+				html.append("<tr><td></td></tr>");
+				
+				int memberCol = 0;
+				int memberCount = 0;
+				
+				html.append("<tr>");
+				
+				for (ClanMember member : cl.getMembers())
+				{
+					if (memberCount >= 40)
+					{
+						break;
+					}
+					
+					html.append("<td align=\"center\" width=120 style=\"padding:8px 0;\"><font color=\"FFFFFF\">").append(member.getName()).append("</font></td>");
+					
+					memberCol++;
+					memberCount++;
+					
+					if (memberCol == 6)
+					{
+						html.append("</tr><tr>");
+						memberCol = 0;
+					}
+				}
+				
+				if (memberCol != 0)
+				{
+					for (int i = memberCol; i < 6; i++)
+					{
+						html.append("<td></td>");
+					}
+					
+					html.append("</tr>");
+				}
+				else
+				{
+					html.append("</tr>");
+				}
+				
+				html.append("</table></center></body></html>");
+				CommunityBoardHandler.separateAndSend(html.toString(), player);
 			}
 		}
 	}
@@ -323,6 +474,7 @@ public class ClanBoard implements IWriteBoardHandler
 			clan.setNotice(arg3);
 			player.sendPacket(SystemMessageId.YOUR_CLAN_NOTICE_HAS_BEEN_SAVED);
 		}
+		
 		return true;
 	}
 }
