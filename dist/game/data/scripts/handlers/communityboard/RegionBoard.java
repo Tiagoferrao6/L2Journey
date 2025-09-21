@@ -46,6 +46,7 @@ import com.l2journey.gameserver.handler.IWriteBoardHandler;
 import com.l2journey.gameserver.managers.CastleManager;
 import com.l2journey.gameserver.model.actor.Player;
 import com.l2journey.gameserver.model.clan.Clan;
+import com.l2journey.gameserver.model.html.icons.TerritoryIcons;
 import com.l2journey.gameserver.model.siege.Castle;
 
 /**
@@ -56,9 +57,6 @@ public class RegionBoard implements IWriteBoardHandler
 {
 	private static final String CLAN_HALL_QUERY = "SELECT id, name, ownerId, location FROM clanhall WHERE location = ?";
 	
-	// Region data
-	// @formatter:off
-	private static final int[] REGIONS = { 1049, 1052, 1053, 1057, 1060, 1059, 1248, 1247, 1056 };
 	// @formatter:on
 	private static final String[] COMMANDS =
 	{
@@ -104,12 +102,12 @@ public class RegionBoard implements IWriteBoardHandler
 			final StringBuilder sb = new StringBuilder();
 			final List<Castle> castles = CastleManager.getInstance().getCastles();
 			
-			for (int i = 0; i < REGIONS.length; i++)
+			for (int i = 0; i < castles.size(); i++)
 			{
 				final Castle castle = castles.get(i);
 				final Clan clan = ClanTable.getInstance().getClan(castle.getOwnerId());
-				
-				String link = list.replace("%region_id%", String.valueOf(i)).replace("%region_name%", String.valueOf(REGIONS[i])).replace("%region_owning_clan%", (clan != null ? "<a action=\"bypass _bbsclan_clanhome;" + clan.getId() + "\">" + clan.getName() + "</a>" : "NPC")).replace("%region_owning_clan_alliance%", ((clan != null) && (clan.getAllyName() != null) ? clan.getAllyName() : "None")).replace("%region_tax_rate%", (castle.getTaxRate() * 100) + "%");
+				String icon = "<img src=\"" + TerritoryIcons.getIconByCastleName(castle.getName()) + "\" width=32 height=32 align=\"center\">";
+				String link = list.replace("%region_id%", String.valueOf(i)).replace("%region_icon%", icon).replace("%region_name%", castle.getName()).replace("%region_owning_clan%", (clan != null ? "<a action=\"bypass _bbsclan_clanhome;" + clan.getId() + "\">" + clan.getName() + "</a>" : "<font color=\"4F4F4F\">NPC</font>")).replace("%region_owning_clan_alliance%", ((clan != null) && (clan.getAllyName() != null) ? clan.getAllyName() : "<font color=\"4F4F4F\">None</font>")).replace("%region_tax_rate%", (castle.getTaxRate() * 100) + "%");
 				sb.append(link);
 			}
 			
@@ -142,7 +140,7 @@ public class RegionBoard implements IWriteBoardHandler
 			html = html.replace("%regionName%", castle.getName()).replace("%tax%", (castle.getTaxRate() * 100) + "%").replace("%lord%", clan != null ? clan.getLeaderName() : "NPC").replace("%clanName%", (clan != null ? "<a action=\"bypass _bbsclan_clanhome;" + clan.getId() + "\">" + clan.getName() + "</a>" : "NPC")).replace("%allyName%", ((clan != null) && (clan.getAllyName() != null) ? clan.getAllyName() : "None")).replace("%siegeDate%", new SimpleDateFormat("dd-MM-yyyy HH:mm").format(castle.getSiegeDate().getTimeInMillis()));
 			
 			final StringBuilder hallsList = new StringBuilder();
-			hallsList.append("<br><br><center><table width=730 align=left bgcolor=A7A19A><tr><td width=10></td><td width=200>Clan Hall Name</td><td width=200>Owning Clan</td><td width=200>Clan Leader Name</td><td width=5></td></tr></table></center><br1>");
+			hallsList.append("<br><br><center><table width=730 align=left bgcolor=2E2E2E><tr><td width=10></td><td width=200 align=\"center\"><font name=\"hs12\" name=\"CreditTextSmall\" color=ae9977>Clan Hall Name</font></td><td width=200 align=\"center\"><font name=\"hs12\" name=\"CreditTextSmall\" color=ae9977>Owning Clan</font></td><td width=200 align=\"center\"><font name=\"hs12\" name=\"CreditTextSmall\" color=ae9977>Clan Leader Name</font></td><td width=5></td></tr></table><br1><img src=\"L2UI.Squaregray\" width=720 height=1></center><br1>");
 			final Map<Integer, ClanHall> clanHalls = getClanHallsByLocation(castle.getName());
 			if (clanHalls.isEmpty())
 			{
@@ -153,7 +151,7 @@ public class RegionBoard implements IWriteBoardHandler
 				for (ClanHall hall : clanHalls.values())
 				{
 					Clan hallOwner = ClanTable.getInstance().getClan(hall.getOwnerId());
-					hallsList.append("<center><table width=730><tr><td width=10></td><td width=200>").append(hall.getName()).append("</td><td width=200>").append(hallOwner != null ? "<a action=\"bypass _bbsclan_clanhome;" + hallOwner.getId() + "\">" + hallOwner.getName() + "</a>" : "None").append("</td><td width=200>").append(hallOwner != null ? hallOwner.getLeaderName() : "None").append("</td><td width=5></td></tr></table><br1><img src=\"L2UI.Squaregray\" width=720 height=1></center><br1>");
+					hallsList.append("<center><table width=730><tr><td width=10></td><td width=200 align=\"center\">").append(hall.getName()).append("</td><td width=200 align=\"center\">").append(hallOwner != null ? "<a action=\"bypass _bbsclan_clanhome;" + hallOwner.getId() + "\">" + hallOwner.getName() + "</a>" : "<font color=\"4F4F4F\">-</font>").append("</td><td width=200 align=\"center\">").append(hallOwner != null ? hallOwner.getLeaderName() : "<font color=\"4F4F4F\">-</font>").append("</td><td width=5></td></tr></table><br1><img src=\"L2UI.Squaregray\" width=720 height=1></center><br1>");
 				}
 			}
 			

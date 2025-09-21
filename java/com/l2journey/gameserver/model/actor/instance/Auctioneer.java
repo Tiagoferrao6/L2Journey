@@ -46,6 +46,7 @@ import com.l2journey.gameserver.model.actor.enums.creature.InstanceType;
 import com.l2journey.gameserver.model.actor.templates.NpcTemplate;
 import com.l2journey.gameserver.model.clan.Clan;
 import com.l2journey.gameserver.model.clan.ClanAccess;
+import com.l2journey.gameserver.model.html.icons.TerritoryIcons;
 import com.l2journey.gameserver.model.residences.ClanHallAuction;
 import com.l2journey.gameserver.model.residences.ClanHallAuction.Bidder;
 import com.l2journey.gameserver.network.SystemMessageId;
@@ -629,7 +630,8 @@ public class Auctioneer extends Npc
 				final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
 				html.setFile(player, "data/html/auction/location.htm");
 				
-				final String iconName = getIconTownWithHall(player);
+				final int nearestTownId = MapRegionManager.getInstance().getMapRegionLocId(player);
+				final String iconName = TerritoryIcons.getIcon(nearestTownId);
 				final String iconHtml = "<img src=\"" + iconName + "\" width=\"32\" height=\"32\">";
 				
 				html.replace("%location%", MapRegionManager.getInstance().getClosestTownName(player));
@@ -736,46 +738,5 @@ public class Auctioneer extends Npc
 		}
 		
 		return nearestTown;
-	}
-	
-	private static String getIconTownWithHall(Player plyr)
-	{
-		final int nearestTownId = MapRegionManager.getInstance().getMapRegionLocId(plyr);
-		
-		switch (nearestTownId)
-		{
-			case 911: // Gludin
-			{
-				return "L2UI_CT1.Minimap_DF_ICN_TerritoryWar_Gludio";
-			}
-			case 912: // Gludio
-			{
-				return "L2UI_CT1.Minimap_DF_ICN_TerritoryWar_Gludio";
-			}
-			case 916: // Dion
-			{
-				return "L2UI_CT1.Minimap_DF_ICN_TerritoryWar_Dion";
-			}
-			case 918: // Giran
-			{
-				return "L2UI_CT1.Minimap_DF_ICN_TerritoryWar_Giran";
-			}
-			case 1537: // Rune
-			{
-				return "L2UI_CT1.Minimap_DF_ICN_TerritoryWar_Rune";
-			}
-			case 1538: // Godard
-			{
-				return "L2UI_CT1.Minimap_DF_ICN_TerritoryWar_Godard";
-			}
-			case 1714: // Schuttgart
-			{
-				return "L2UI_CT1.Minimap_DF_ICN_TerritoryWar_Schuttgart";
-			}
-			default: // Aden
-			{
-				return "L2UI_CT1.Minimap_DF_ICN_TerritoryWar_Aden";
-			}
-		}
 	}
 }

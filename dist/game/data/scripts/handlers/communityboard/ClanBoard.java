@@ -365,34 +365,34 @@ public class ClanBoard implements IWriteBoardHandler
 					html.append(" ");
 				}
 				
-				html.append("</td><td fixWIDTH=5></td><td fixWIDTH=5 align=center valign=top><img src=\"l2ui.squaregray\" width=2  height=128></td><td fixWIDTH=5></td><td fixwidth=295><table border=0 cellspacing=0 cellpadding=0 width=295><tr><td fixWIDTH=100 align=left>Clan Name</td><td fixWIDTH=195 align=left>");
-				html.append(cl.getName());
-				html.append("</td></tr><tr><td height=7></td></tr><tr><td fixWIDTH=100 align=left>Clan Level</td><td fixWIDTH=195 align=left height=16>");
-				html.append(cl.getLevel());
-				html.append("</td></tr><tr><td height=7></td></tr><tr><td fixWIDTH=100 align=left>Clan Members</td><td fixWIDTH=195 align=left height=16>");
-				html.append(cl.getMembersCount());
-				html.append("</td></tr><tr><td height=7></td></tr><tr><td fixWIDTH=100 align=left>Clan Leader</td><td fixWIDTH=195 align=left height=16>");
-				html.append(cl.getLeaderName());
-				html.append("</td></tr><tr><td height=7></td></tr><tr><td fixWIDTH=100 align=left>Clan Alliance</td><td fixWIDTH=195 align=left height=16>");
-				html.append((cl.getAllyName() != null) ? cl.getAllyName() : "");
-				html.append("</td></tr><tr><td height=7></td></tr><tr><td fixWIDTH=100 align=left>Clan Hall</td><td fixWIDTH=195 align=left height=16>");
+				html.append("</td><td fixWIDTH=5></td><td fixWIDTH=5 align=center valign=top><img src=\"l2ui.squaregray\" width=2  height=128></td><td fixWIDTH=5></td><td fixwidth=295><table border=0 cellspacing=0 cellpadding=0 width=295><tr><td fixWIDTH=100 align=left><font name=\"hs8\" name=\"CreditTextSmall\" color=ae9977>Clan Name:</font></td><td fixWIDTH=195 align=left>");
+				html.append("<font name=\"hs8\" name=\"CreditTextSmall\" color=B0C4DE>" + cl.getName() +"</font>");
+				html.append("</td></tr><tr><td height=7></td></tr><tr><td fixWIDTH=100 align=left><font name=\"hs8\" name=\"CreditTextSmall\" color=ae9977>Clan Level:</font></td><td fixWIDTH=195 align=left height=16>");
+				html.append("<font name=\"hs8\" name=\"CreditTextSmall\" color=B0C4DE>" + cl.getLevel() +"</font>");
+				html.append("</td></tr><tr><td height=7></td></tr><tr><td fixWIDTH=100 align=left><font name=\"hs8\" name=\"CreditTextSmall\" color=ae9977>Clan Members:</font></td><td fixWIDTH=195 align=left height=16>");
+				html.append("<font name=\"hs8\" name=\"CreditTextSmall\" color=B0C4DE>" + cl.getMembersCount() +"</font>");
+				html.append("</td></tr><tr><td height=7></td></tr><tr><td fixWIDTH=100 align=left><font name=\"hs8\" name=\"CreditTextSmall\" color=ae9977>Clan Leader:<font></td><td fixWIDTH=195 align=left height=16>");
+				html.append("<font name=\"hs8\" name=\"CreditTextSmall\" color=B0C4DE>" + cl.getLeaderName() +"</font>");
+				html.append("</td></tr><tr><td height=7></td></tr><tr><td fixWIDTH=100 align=left><font name=\"hs8\" name=\"CreditTextSmall\" color=ae9977>Clan Alliance:</font></td><td fixWIDTH=195 align=left height=16>");
+				html.append((cl.getAllyName() != null) ? "<font name=\"hs8\" name=\"CreditTextSmall\" color=B0C4DE>" + cl.getAllyName() + "</font>" : "");
+				html.append("</td></tr><tr><td height=7></td></tr><tr><td fixWIDTH=100 align=left><font name=\"hs8\" name=\"CreditTextSmall\" color=ae9977>Clan Hall:</font></td><td fixWIDTH=195 align=left height=16>");
 				
 				final AuctionableHall clanHall = ClanHallTable.getInstance().getClanHallByOwner(cl);
 				if (clanHall != null)
 				{
-					html.append(clanHall.getName());
+					html.append("<font name=\"hs8\" name=\"CreditTextSmall\" color=B0C4DE>" + clanHall.getName() + "</font>");
 				}
 				else
 				{
 					html.append(" ");
 				}
 				
-				html.append("</td></tr><tr><td height=7></td></tr><tr><td fixWIDTH=100 align=left>Clan Castle</td><td fixWIDTH=195 align=left height=16>");
+				html.append("</td></tr><tr><td height=7></td></tr><tr><td fixWIDTH=100 align=left><font name=\"hs8\" name=\"CreditTextSmall\" color=ae9977>Clan Castle:</font></td><td fixWIDTH=195 align=left height=16>");
 				
 				final Castle castle = CastleManager.getInstance().getCastleByOwner(cl);
 				if (castle != null)
 				{
-					html.append(castle.getName());
+					html.append("<font name=\"hs8\" name=\"CreditTextSmall\" color=B0C4DE>" + castle.getName() + "</font>");
 				}
 				else
 				{
@@ -415,6 +415,7 @@ public class ClanBoard implements IWriteBoardHandler
 				html.append("<img src=\"L2UI.squareblank\" width=\"1\" height=\"5\"><img src=\"L2UI.squaregray\" width=\"610\" height=\"1\"><br></center>");
 				
 				html.append("<center><font name=\"hs12\" name=\"CreditTextSmall\" color=ae9977>Clan Members</font></center><br1>");
+				html.append("<center><img src=\"L2UI.squareblank\" width=\"1\" height=\"5\"><img src=\"L2UI.squaregray\" width=\"350\" height=\"1\"><br></center>");
 				
 				html.append("<center><table border=0 cellspacing=10 cellpadding=0 width=610>");
 				html.append("<tr><td></td></tr>");
