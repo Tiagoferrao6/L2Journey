@@ -54,7 +54,6 @@ import com.l2journey.gameserver.network.serverpackets.ShowMiniMap;
  */
 public class DropSearchBoard implements IParseBoardHandler
 {
-	private static final String NAVIGATION_PATH = "data/html/CommunityBoard/Custom/navigation.html";
 	private static final String[] COMMAND =
 	{
 		"_bbs_search_item",
@@ -160,14 +159,22 @@ public class DropSearchBoard implements IParseBoardHandler
 	@Override
 	public boolean parseCommunityBoardCommand(String command, Player player)
 	{
-		final String navigation = HtmCache.getInstance().getHtm(player, NAVIGATION_PATH);
 		final String[] params = command.split(" ");
-		String html = HtmCache.getInstance().getHtm(player, "data/html/CommunityBoard/Custom/dropsearch/main.html");
+		String html = HtmCache.getInstance().getHtm(player, "data/html/CommunityBoard/dropsearch/main.html");
+		if (html == null)
+		{
+			return true;
+		}
 		switch (params[0])
 		{
 			case "_bbs_search_item":
 			{
-				final String itemName = buildItemName(params);
+				String itemName = buildItemName(params);
+				if ((itemName == null) || itemName.trim().isEmpty())
+				{
+					itemName = "Adena"; // Item padrão
+				}
+				
 				final String result = buildItemSearchResult(itemName);
 				html = html.replace("%searchResult%", result);
 				break;
@@ -347,7 +354,6 @@ public class DropSearchBoard implements IParseBoardHandler
 		
 		if (html != null)
 		{
-			html = html.replace("%navigation%", navigation);
 			CommunityBoardHandler.separateAndSend(html, player);
 		}
 		
