@@ -240,7 +240,7 @@ public class Config
 	// --------------------------------------------------
 	// Community Board
 	// --------------------------------------------------
-	public static boolean CUSTOM_CB_ENABLED;
+	public static boolean COMMUNITYBOARD_ENABLED;
 	public static int COMMUNITYBOARD_CURRENCY;
 	public static boolean COMMUNITYBOARD_ENABLE_MULTISELLS;
 	public static boolean COMMUNITYBOARD_ENABLE_TELEPORTS;
@@ -1815,7 +1815,7 @@ public class Config
 	private static void loadCommunityBoardConfig()
 	{
 		final ConfigReader communityBoardConfig = new ConfigReader(COMMUNITY_BOARD_CONFIG_FILE);
-		CUSTOM_CB_ENABLED = communityBoardConfig.getBoolean("CustomCommunityBoard", false);
+		COMMUNITYBOARD_ENABLED = communityBoardConfig.getBoolean("CommunityBoardEnable", false);
 		COMMUNITYBOARD_CURRENCY = communityBoardConfig.getInt("CommunityCurrencyId", 57);
 		COMMUNITYBOARD_ENABLE_MULTISELLS = communityBoardConfig.getBoolean("CommunityEnableMultisells", true);
 		COMMUNITYBOARD_ENABLE_TELEPORTS = communityBoardConfig.getBoolean("CommunityEnableTeleports", true);

@@ -60,6 +60,7 @@ import com.l2journey.gameserver.model.actor.Summon;
 import com.l2journey.gameserver.model.item.enums.ItemProcessType;
 import com.l2journey.gameserver.model.skill.Skill;
 import com.l2journey.gameserver.model.zone.ZoneId;
+import com.l2journey.gameserver.network.SystemMessageId;
 import com.l2journey.gameserver.network.serverpackets.BuyList;
 import com.l2journey.gameserver.network.serverpackets.ExBuySellList;
 import com.l2journey.gameserver.network.serverpackets.MagicSkillUse;
@@ -73,7 +74,6 @@ public class HomeBoard implements IParseBoardHandler
 {
 	// SQL Queries
 	private static final String COUNT_FAVORITES = "SELECT COUNT(*) AS favorites FROM `bbs_favorites` WHERE `playerId`=?";
-	private static final String NAVIGATION_PATH = "data/html/CommunityBoard/Custom/navigation.html";
 	
 	private static final String[] COMMANDS =
 	{
@@ -121,6 +121,11 @@ public class HomeBoard implements IParseBoardHandler
 	@Override
 	public boolean parseCommunityBoardCommand(String command, Player player)
 	{
+		if (!Config.COMMUNITYBOARD_ENABLED)
+		{
+			player.sendPacket(SystemMessageId.THE_COMMUNITY_SERVER_IS_CURRENTLY_OFFLINE);
+			return false;
+		}
 		// Old custom conditions check move to here
 		if (Config.COMMUNITYBOARD_COMBAT_DISABLED && COMBAT_CHECK.test(command, player))
 		{
@@ -141,26 +146,22 @@ public class HomeBoard implements IParseBoardHandler
 		}
 		
 		String returnHtml = null;
-		final String navigation = HtmCache.getInstance().getHtm(player, NAVIGATION_PATH);
 		if (command.equals("_bbshome") || command.equals("_bbstop"))
 		{
-			final String customPath = Config.CUSTOM_CB_ENABLED ? "Custom/" : "";
 			CommunityBoardHandler.getInstance().addBypass(player, "Home", command);
-			returnHtml = HtmCache.getInstance().getHtm(player, "data/html/CommunityBoard/" + customPath + "home.html");
-			if (!Config.CUSTOM_CB_ENABLED)
-			{
-				returnHtml = returnHtml.replace("%fav_count%", Integer.toString(getFavoriteCount(player)));
-				returnHtml = returnHtml.replace("%region_count%", Integer.toString(getRegionCount(player)));
-				returnHtml = returnHtml.replace("%clan_count%", Integer.toString(ClanTable.getInstance().getClanCount()));
-			}
+			returnHtml = HtmCache.getInstance().getHtm(player, "data/html/CommunityBoard/home.html");
+			
+			returnHtml = returnHtml.replace("%fav_count%", Integer.toString(getFavoriteCount(player)));
+			returnHtml = returnHtml.replace("%region_count%", Integer.toString(getRegionCount(player)));
+			returnHtml = returnHtml.replace("%clan_count%", Integer.toString(ClanTable.getInstance().getClanCount()));
+			
 		}
 		else if (command.startsWith("_bbstop;"))
 		{
-			final String customPath = Config.CUSTOM_CB_ENABLED ? "Custom/" : "";
 			final String path = command.replace("_bbstop;", "");
 			if ((path.length() > 0) && path.endsWith(".html"))
 			{
-				returnHtml = HtmCache.getInstance().getHtm(player, "data/html/CommunityBoard/" + customPath + path);
+				returnHtml = HtmCache.getInstance().getHtm(player, "data/html/CommunityBoard/" + path);
 			}
 		}
 		else if (command.startsWith("_bbsmultisell"))
@@ -321,12 +322,9 @@ public class HomeBoard implements IParseBoardHandler
 		
 		if (returnHtml != null)
 		{
-			if (Config.CUSTOM_CB_ENABLED)
-			{
-				returnHtml = returnHtml.replace("%navigation%", navigation);
-			}
 			CommunityBoardHandler.separateAndSend(returnHtml, player);
 		}
+		
 		return false;
 	}
 	
