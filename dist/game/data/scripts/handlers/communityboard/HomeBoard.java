@@ -74,6 +74,7 @@ public class HomeBoard implements IParseBoardHandler
 {
 	// SQL Queries
 	private static final String COUNT_FAVORITES = "SELECT COUNT(*) AS favorites FROM `bbs_favorites` WHERE `playerId`=?";
+	private final TopBoard topBoard = new TopBoard();
 	
 	private static final String[] COMMANDS =
 	{
@@ -115,6 +116,7 @@ public class HomeBoard implements IParseBoardHandler
 		final List<String> commands = new ArrayList<>();
 		commands.addAll(Arrays.asList(COMMANDS));
 		commands.addAll(Arrays.asList(CUSTOM_COMMANDS));
+		commands.addAll(Arrays.asList(topBoard.getCommunityBoardCommands()));
 		return commands.stream().filter(Objects::nonNull).toArray(String[]::new);
 	}
 	
@@ -156,6 +158,11 @@ public class HomeBoard implements IParseBoardHandler
 			returnHtml = returnHtml.replace("%clan_count%", Integer.toString(ClanTable.getInstance().getClanCount()));
 			
 		}
+		else if (command.startsWith("_bbstopboard"))
+		{
+			return topBoard.parseCommunityBoardCommand(command, player);
+		}
+		
 		else if (command.startsWith("_bbstop;"))
 		{
 			final String path = command.replace("_bbstop;", "");
