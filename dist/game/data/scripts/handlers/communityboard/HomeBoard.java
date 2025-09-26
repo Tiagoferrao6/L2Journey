@@ -32,10 +32,16 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
@@ -68,7 +74,7 @@ import com.l2journey.gameserver.network.serverpackets.ShowBoard;
 
 /**
  * Home board.
- * @author Zoey76, Mobius
+ * @author Zoey76, Mobius, KingHanker
  */
 public class HomeBoard implements IParseBoardHandler
 {
@@ -105,11 +111,78 @@ public class HomeBoard implements IParseBoardHandler
 				break;
 			}
 		}
+		
 		return commandCheck && (player.isCastingNow() || player.isCastingSimultaneouslyNow() || player.isInCombat() || player.isInDuel() || player.isInOlympiadMode() || player.isInsideZone(ZoneId.SIEGE) || player.isInsideZone(ZoneId.PVP) || (player.getPvpFlag() > 0) || player.isAlikeDead() || player.isOnEvent() || player.isInStoreMode());
 	};
 	
 	private static final Predicate<Player> KARMA_CHECK = player -> Config.COMMUNITYBOARD_KARMA_DISABLED && (player.getKarma() > 0);
 	
+	private static final Map<Integer, String> BOSS_STATUS_CACHE = new ConcurrentHashMap<>();
+	private static final int[] BOSSES =
+	{
+		29068,
+		29020,
+		29118,
+		29006,
+		29014,
+		29001,
+		29028
+	};
+	
+	private static final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+	private static LocalDateTime lastUpdateTime = LocalDateTime.now();
+	private static LocalDateTime nextUpdateTime = lastUpdateTime.plusHours(1);
+	private static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm");
+	
+	static
+	{
+		// Updates the cache immediately on startup
+		updateBossStatusCache();
+		// Schedules update every 1 hour
+		scheduler.scheduleAtFixedRate(HomeBoard::updateBossStatusCache, 1, 1, TimeUnit.HOURS);
+	}
+	
+	private static void updateBossStatusCache()
+	{
+		for (int bossId : BOSSES)
+		{
+			long delay = com.l2journey.gameserver.managers.GrandBossManager.getInstance().getStatSet(bossId).getLong("respawn_time");
+			if (delay <= System.currentTimeMillis())
+			{
+				BOSS_STATUS_CACHE.put(bossId, "<font color=\"32C332\">Is Alive</font>");
+			}
+			else
+			{
+				BOSS_STATUS_CACHE.put(bossId, "<font color=\"FF3333\">Is Dead</font>");
+			}
+		}
+		
+		lastUpdateTime = LocalDateTime.now();
+		nextUpdateTime = lastUpdateTime.plusHours(1);
+	}
+	
+	/**
+	 * Returns the last update time for the boss status cache.
+	 * @return String formatted as HH:mm
+	 */
+	public static String getLastUpdateTime()
+	{
+		return lastUpdateTime.format(TIME_FORMAT);
+	}
+	
+	/**
+	 * Returns the next scheduled update time for the boss status cache.
+	 * @return String formatted as HH:mm
+	 */
+	public static String getNextUpdateTime()
+	{
+		return nextUpdateTime.format(TIME_FORMAT);
+	}
+	
+	/**
+	 * Returns the list of supported Community Board commands.
+	 * @return Array of command strings
+	 */
 	@Override
 	public String[] getCommunityBoardCommands()
 	{
@@ -120,6 +193,12 @@ public class HomeBoard implements IParseBoardHandler
 		return commands.stream().filter(Objects::nonNull).toArray(String[]::new);
 	}
 	
+	/**
+	 * Parses and executes a Community Board command for the given player.
+	 * @param command The command string
+	 * @param player The player instance
+	 * @return true if the command was handled, false otherwise
+	 */
 	@Override
 	public boolean parseCommunityBoardCommand(String command, Player player)
 	{
@@ -157,12 +236,23 @@ public class HomeBoard implements IParseBoardHandler
 			returnHtml = returnHtml.replace("%region_count%", Integer.toString(getRegionCount(player)));
 			returnHtml = returnHtml.replace("%clan_count%", Integer.toString(ClanTable.getInstance().getClanCount()));
 			
+			// Epic boss status replacement
+			returnHtml = returnHtml.replace("%antharas_status%", HomeBoard.getBossStatus(29068));
+			returnHtml = returnHtml.replace("%baium_status%", HomeBoard.getBossStatus(29020));
+			returnHtml = returnHtml.replace("%beleth_status%", HomeBoard.getBossStatus(29118));
+			returnHtml = returnHtml.replace("%core_status%", HomeBoard.getBossStatus(29006));
+			returnHtml = returnHtml.replace("%orfen_status%", HomeBoard.getBossStatus(29014));
+			returnHtml = returnHtml.replace("%queenant_status%", HomeBoard.getBossStatus(29001));
+			returnHtml = returnHtml.replace("%valakas_status%", HomeBoard.getBossStatus(29028));
+			// Add last and next update times
+			returnHtml = returnHtml.replace("%boss_update_time%", HomeBoard.getLastUpdateTime());
+			returnHtml = returnHtml.replace("%boss_next_update_time%", HomeBoard.getNextUpdateTime());
+			
 		}
 		else if (command.startsWith("_bbstopboard"))
 		{
 			return topBoard.parseCommunityBoardCommand(command, player);
 		}
-		
 		else if (command.startsWith("_bbstop;"))
 		{
 			final String path = command.replace("_bbstop;", "");
@@ -242,6 +332,7 @@ public class HomeBoard implements IParseBoardHandler
 					{
 						continue;
 					}
+					
 					for (Creature target : targets)
 					{
 						skill.applyEffects(player, target);
@@ -270,12 +361,14 @@ public class HomeBoard implements IParseBoardHandler
 				player.setCurrentHp(player.getMaxHp());
 				player.setCurrentMp(player.getMaxMp());
 				player.setCurrentCp(player.getMaxCp());
+				
 				if (player.hasSummon())
 				{
 					player.getSummon().setCurrentHp(player.getSummon().getMaxHp());
 					player.getSummon().setCurrentMp(player.getSummon().getMaxMp());
 					player.getSummon().setCurrentCp(player.getSummon().getMaxCp());
 				}
+				
 				player.updateUserInfo();
 				player.sendMessage("You used heal!");
 			}
@@ -323,6 +416,7 @@ public class HomeBoard implements IParseBoardHandler
 				{
 					PcCafePointsManager.getInstance().run(player);
 				}
+				
 				returnHtml = HtmCache.getInstance().getHtm(player, "data/html/CommunityBoard/Custom/premium/thankyou.html");
 			}
 		}
@@ -357,8 +451,9 @@ public class HomeBoard implements IParseBoardHandler
 		}
 		catch (Exception e)
 		{
-			LOG.warning(FavoriteBoard.class.getSimpleName() + ": Coudn't load favorites count for " + player);
+			LOG.warning(FavoriteBoard.class.getSimpleName() + ": Couldn't load favorites count for " + player);
 		}
+		
 		return count;
 	}
 	
@@ -370,5 +465,15 @@ public class HomeBoard implements IParseBoardHandler
 	private static int getRegionCount(Player player)
 	{
 		return 0; // TODO: Implement.
+	}
+	
+	/**
+	 * Returns the status of the boss for Community Board HTML.
+	 * @param bossId Boss NPC ID
+	 * @return HTML string: 'Is Alive' (green) or 'Is Dead' (red)
+	 */
+	public static String getBossStatus(int bossId)
+	{
+		return BOSS_STATUS_CACHE.getOrDefault(bossId, "?");
 	}
 }

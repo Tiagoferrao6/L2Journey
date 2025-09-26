@@ -44,7 +44,7 @@ import com.l2journey.gameserver.util.HtmlUtil;
 
 /**
  * Clan board.
- * @author Zoey76
+ * @author Zoey76, KingHanker
  */
 public class ClanBoard implements IWriteBoardHandler
 {
@@ -366,13 +366,13 @@ public class ClanBoard implements IWriteBoardHandler
 				}
 				
 				html.append("</td><td fixWIDTH=5></td><td fixWIDTH=5 align=center valign=top><img src=\"l2ui.squaregray\" width=2  height=128></td><td fixWIDTH=5></td><td fixwidth=295><table border=0 cellspacing=0 cellpadding=0 width=295><tr><td fixWIDTH=100 align=left><font name=\"hs8\" name=\"CreditTextSmall\" color=ae9977>Clan Name:</font></td><td fixWIDTH=195 align=left>");
-				html.append("<font name=\"hs8\" name=\"CreditTextSmall\" color=B0C4DE>" + cl.getName() +"</font>");
+				html.append("<font name=\"hs8\" name=\"CreditTextSmall\" color=B0C4DE>" + cl.getName() + "</font>");
 				html.append("</td></tr><tr><td height=7></td></tr><tr><td fixWIDTH=100 align=left><font name=\"hs8\" name=\"CreditTextSmall\" color=ae9977>Clan Level:</font></td><td fixWIDTH=195 align=left height=16>");
-				html.append("<font name=\"hs8\" name=\"CreditTextSmall\" color=B0C4DE>" + cl.getLevel() +"</font>");
+				html.append("<font name=\"hs8\" name=\"CreditTextSmall\" color=B0C4DE>" + cl.getLevel() + "</font>");
 				html.append("</td></tr><tr><td height=7></td></tr><tr><td fixWIDTH=100 align=left><font name=\"hs8\" name=\"CreditTextSmall\" color=ae9977>Clan Members:</font></td><td fixWIDTH=195 align=left height=16>");
-				html.append("<font name=\"hs8\" name=\"CreditTextSmall\" color=B0C4DE>" + cl.getMembersCount() +"</font>");
+				html.append("<font name=\"hs8\" name=\"CreditTextSmall\" color=B0C4DE>" + cl.getMembersCount() + "</font>");
 				html.append("</td></tr><tr><td height=7></td></tr><tr><td fixWIDTH=100 align=left><font name=\"hs8\" name=\"CreditTextSmall\" color=ae9977>Clan Leader:<font></td><td fixWIDTH=195 align=left height=16>");
-				html.append("<font name=\"hs8\" name=\"CreditTextSmall\" color=B0C4DE>" + cl.getLeaderName() +"</font>");
+				html.append("<font name=\"hs8\" name=\"CreditTextSmall\" color=B0C4DE>" + cl.getLeaderName() + "</font>");
 				html.append("</td></tr><tr><td height=7></td></tr><tr><td fixWIDTH=100 align=left><font name=\"hs8\" name=\"CreditTextSmall\" color=ae9977>Clan Alliance:</font></td><td fixWIDTH=195 align=left height=16>");
 				html.append((cl.getAllyName() != null) ? "<font name=\"hs8\" name=\"CreditTextSmall\" color=B0C4DE>" + cl.getAllyName() + "</font>" : "");
 				html.append("</td></tr><tr><td height=7></td></tr><tr><td fixWIDTH=100 align=left><font name=\"hs8\" name=\"CreditTextSmall\" color=ae9977>Clan Hall:</font></td><td fixWIDTH=195 align=left height=16>");

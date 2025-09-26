@@ -48,7 +48,7 @@ import com.l2journey.gameserver.model.actor.holders.player.ClassInfoHolder;
 import com.l2journey.gameserver.model.html.icons.RankingIcons;
 
 /**
- * @author Debug
+ * @author KingHanker
  */
 public class TopBoard implements IParseBoardHandler
 {
