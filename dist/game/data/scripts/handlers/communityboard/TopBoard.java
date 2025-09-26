@@ -54,14 +54,12 @@ public class TopBoard implements IParseBoardHandler
 {
 	private static final String LOAD_PVP = "SELECT c.char_name, c.pvpkills, c.classid, cl.clan_name " + "FROM characters c LEFT JOIN clan_data cl ON c.clanid = cl.clan_id " + "WHERE c.accesslevel=0 ORDER BY c.pvpkills DESC LIMIT 25";
 	private static final String LOAD_PK = "SELECT c.char_name, c.pkkills, c.classid, cl.clan_name " + "FROM characters c LEFT JOIN clan_data cl ON c.clanid = cl.clan_id " + "WHERE c.accesslevel=0 ORDER BY c.pkkills DESC LIMIT 25";
-	private static final String LOAD_FAME = "SELECT c.char_name, c.fame, c.classid, cl.clan_name " + "FROM characters c LEFT JOIN clan_data cl ON c.clanid = cl.clan_id " + "WHERE c.accesslevel=0 ORDER BY c.fame DESC LIMIT 25";
 	
 	private static final String[] COMMANDS =
 	{
 		"_bbstopboard",
 		"_bbstopboard;pvp",
-		"_bbstopboard;pk",
-		"_bbstopboard;fame"
+		"_bbstopboard;pk"
 	};
 	
 	private static final int CACHE_SIZE = 25;
@@ -69,7 +67,6 @@ public class TopBoard implements IParseBoardHandler
 	
 	private static final List<TopEntry> pvpCache = new ArrayList<>();
 	private static final List<TopEntry> pkCache = new ArrayList<>();
-	private static final List<TopEntry> fameCache = new ArrayList<>();
 	
 	private static volatile LocalDateTime lastUpdate = LocalDateTime.now();
 	private static volatile LocalDateTime nextUpdate = lastUpdate.plusMinutes(REFRESH_INTERVAL_MINUTES);
@@ -84,7 +81,6 @@ public class TopBoard implements IParseBoardHandler
 	{
 		refreshRanking(LOAD_PVP, pvpCache, "pvpkills");
 		refreshRanking(LOAD_PK, pkCache, "pkkills");
-		refreshRanking(LOAD_FAME, fameCache, "Fame");
 		lastUpdate = LocalDateTime.now();
 		nextUpdate = lastUpdate.plusMinutes(REFRESH_INTERVAL_MINUTES);
 	}
@@ -171,10 +167,6 @@ public class TopBoard implements IParseBoardHandler
 				columnTitle = "Pks";
 				cache = pkCache;
 				break;
-			case "fame":
-				columnTitle = "Fame";
-				cache = fameCache;
-				break;
 			default:
 				columnTitle = "PvPs";
 				cache = pvpCache;
@@ -185,7 +177,6 @@ public class TopBoard implements IParseBoardHandler
 		sb.append("<table width=320><tr>");
 		sb.append("<td><button value=\"PvP\" action=\"bypass _bbstopboard;pvp\" width=60 height=20 back=\"L2UI_CT1.Button_DF_Down\" fore=\"L2UI_CT1.Button_DF\"></td>");
 		sb.append("<td><button value=\"PK\" action=\"bypass _bbstopboard;pk\" width=60 height=20 back=\"L2UI_CT1.Button_DF_Down\" fore=\"L2UI_CT1.Button_DF\"></td>");
-		sb.append("<td><button value=\"Fame\" action=\"bypass _bbstopboard;fame\" width=60 height=20 back=\"L2UI_CT1.Button_DF_Down\" fore=\"L2UI_CT1.Button_DF\"></td>");
 		sb.append("</tr></table><br>");
 		sb.append("<table width=750 border=0 cellspacing=0 cellpadding=2 background=L2UI_CT1.Windows_DF_Drawer_Bg>");
 		sb.append("<tr>");
