@@ -57,7 +57,9 @@ public class DarkElfChange2 extends AbstractNpcAI
 		31974, // Drizzit
 		32096, // Helminter
 	};
+	
 	// Items
+	private static final int SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE = 8870;
 	private static int MARK_OF_CHALLENGER = 2627;
 	private static int MARK_OF_DUTY = 2633;
 	private static int MARK_OF_SEEKER = 2673;
@@ -122,11 +124,14 @@ public class DarkElfChange2 extends AbstractNpcAI
 						player.setPlayerClass(CLASSES[i][0]);
 						player.setBaseClass(CLASSES[i][0]);
 						player.broadcastUserInfo();
+						giveItems(player, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15);
 					}
 				}
+				
 				return "30474-" + suffix + ".html";
 			}
 		}
+		
 		return event;
 	}
 	
@@ -187,6 +192,7 @@ public class DarkElfChange2 extends AbstractNpcAI
 		{
 			htmltext = "30474-56.html"; // other races
 		}
+		
 		return htmltext;
 	}
 	
