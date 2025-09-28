@@ -72,7 +72,7 @@
 		<npc id="30990" x="83331" y="147905" z="-3400" heading="16700" respawnDelay="5" /> <!-- Lottery Ticket Seller -->
 		<npc id="31031" x="82272" y="147072" z="-3514" heading="16384" respawnDelay="5" /> <!-- Broadcasting Tower -->
 		<npc id="31049" x="83264" y="150176" z="-3520" heading="24576" respawnDelay="60" /> <!-- Pepper -->
-		<npc id="31081" x="83369" y="149273" z="-3400" heading="32500" respawnDelay="60" /> <!-- Priest of Dawn -->
+		<npc id="31081" x="83368" y="149315" z="-3431" heading="50417" respawnDelay="60" /> <!-- Priest of Dawn -->
 		<npc id="31088" x="81623" y="148606" z="-3464" heading="32500" respawnDelay="60" /> <!-- Dusk Priestess -->
 		<npc id="31092" x="81360" y="150016" z="-3528" heading="16000" respawnDelay="60" /> <!-- Black Marketeer of Mammon -->
 		<npc id="31205" x="81100" y="145840" z="-3531" heading="50491" respawnDelay="5" /> <!-- Katz -->
