@@ -85,12 +85,4 @@
 		<node X="-80245" Y="-43614" />
 		<node X="-81544" Y="-43878" />
 	</zone>
-	<!-- Fantasy Island (Handy's Block Checker) -->
-	<zone name="18_16_etc08_nodrop" type="ConditionZone" shape="NPoly" minZ="-2425" maxZ="-2225">
-		<stat name="NoItemDrop" val="true" />
-		<node X="-58571" Y="-64074" />
-		<node X="-56368" Y="-64071" />
-		<node X="-56370" Y="-61896" />
-		<node X="-58565" Y="-61904" />
-	</zone>
 </list>

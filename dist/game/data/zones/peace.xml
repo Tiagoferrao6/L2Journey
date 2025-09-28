@@ -732,33 +732,6 @@
 		<node X="-123726" Y="37705" />
 		<node X="-121506" Y="37701" />
 	</zone>
-	<zone name="themepark_peace1" type="PeaceZone" shape="NPoly" minZ="-4696" maxZ="3304"> <!-- [17_15] -->
-		<node X="-76662" Y="-77593" />
-		<node X="-65536" Y="-77344" />
-		<node X="-65536" Y="-65536" />
-		<node X="-81410" Y="-65536" />
-	</zone>
-	<zone name="themepark_peace2" type="PeaceZone" shape="NPoly" minZ="-4696" maxZ="3304"> <!-- [18_15] -->
-		<node X="-51267" Y="-78666" />
-		<node X="-44978" Y="-75445" />
-		<node X="-44281" Y="-65536" />
-		<node X="-65536" Y="-65536" />
-		<node X="-65536" Y="-72713" />
-	</zone>
-	<zone name="themepark_peace3" type="PeaceZone" shape="NPoly" minZ="-4696" maxZ="3304"> <!-- [17_16] -->
-		<node X="-83544" Y="-65536" />
-		<node X="-65536" Y="-65536" />
-		<node X="-65536" Y="-41699" />
-		<node X="-80543" Y="-39424" />
-		<node X="-91856" Y="-41776" />
-		<node X="-92099" Y="-53834" />
-	</zone>
-	<zone name="themepark_peace4" type="PeaceZone" shape="NPoly" minZ="-4696" maxZ="3304"> <!-- [18_16] -->
-		<node X="-65536" Y="-65536" />
-		<node X="-43060" Y="-65536" />
-		<node X="-44899" Y="-44178" />
-		<node X="-65536" Y="-43068" />
-	</zone>
 	<zone name="gludio_platform_peace1" type="PeaceZone" shape="NPoly" minZ="-424" maxZ="376"> <!-- [15_25] -->
 		<node X="-151634" Y="252804" />
 		<node X="-147155" Y="252804" />

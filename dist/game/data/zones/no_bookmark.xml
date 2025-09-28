@@ -335,37 +335,6 @@
 		<node X="155456" Y="-123772" />
 		<node X="152140" Y="-124528" />
 	</zone>
-	<zone name="no_bookmark_themepark_peace1" type="ConditionZone" shape="NPoly" minZ="-4696" maxZ="3304">
-		<stat name="NoBookmark" val="true" />
-		<node X="-76662" Y="-77593" />
-		<node X="-65536" Y="-77344" />
-		<node X="-65536" Y="-65536" />
-		<node X="-81410" Y="-65536" />
-	</zone>
-	<zone name="no_bookmark_themepark_peace2" type="ConditionZone" shape="NPoly" minZ="-4696" maxZ="3304">
-		<stat name="NoBookmark" val="true" />
-		<node X="-51267" Y="-78666" />
-		<node X="-44978" Y="-75445" />
-		<node X="-44281" Y="-65536" />
-		<node X="-65536" Y="-65536" />
-		<node X="-65536" Y="-72713" />
-	</zone>
-	<zone name="no_bookmark_themepark_peace3" type="ConditionZone" shape="NPoly" minZ="-4696" maxZ="3304">
-		<stat name="NoBookmark" val="true" />
-		<node X="-83544" Y="-65536" />
-		<node X="-65536" Y="-65536" />
-		<node X="-65536" Y="-41699" />
-		<node X="-80543" Y="-39424" />
-		<node X="-91856" Y="-41776" />
-		<node X="-92099" Y="-53834" />
-	</zone>
-	<zone name="no_bookmark_themepark_peace4" type="ConditionZone" shape="NPoly" minZ="-4696" maxZ="3304">
-		<stat name="NoBookmark" val="true" />
-		<node X="-65536" Y="-65536" />
-		<node X="-43060" Y="-65536" />
-		<node X="-44899" Y="-44178" />
-		<node X="-65536" Y="-43068" />
-	</zone>
 	<zone name="no_bookmark_dion_monster_pvp" type="ConditionZone" shape="NPoly" minZ="-3596" maxZ="0">
 		<stat name="NoBookmark" val="true" />
 		<node X="11947" Y="183019" />

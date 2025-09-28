@@ -381,11 +381,11 @@
 		<node X="-65536" Y="-65536" />
 		<node X="-32768" Y="-32768" />
 	</zone>
-	<zone name="18_16_water2" type="WaterZone" shape="Cuboid" minZ="-2069" maxZ="-2066">
+	<zone name="18_16_water2" type="WaterZone" shape="Cuboid" minZ="-2126" maxZ="-2168">
 		<node X="-61172" Y="-58276" />
 		<node X="-58317" Y="-55532" />
 	</zone>
-	<zone name="18_16_water3" type="WaterZone" shape="Cuboid" minZ="-2086" maxZ="-2062">
+	<zone name="18_16_water3" type="WaterZone" shape="Cuboid" minZ="-2126" maxZ="-2162">
 		<node X="-61684" Y="-59972" />
 		<node X="-60556" Y="-59196" />
 	</zone>
