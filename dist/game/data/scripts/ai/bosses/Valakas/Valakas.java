@@ -51,6 +51,8 @@ import com.l2journey.gameserver.model.skill.Skill;
 import com.l2journey.gameserver.model.skill.holders.SkillHolder;
 import com.l2journey.gameserver.model.zone.type.BossZone;
 import com.l2journey.gameserver.model.zone.type.NoRestartZone;
+import com.l2journey.gameserver.network.NpcStringId;
+import com.l2journey.gameserver.network.serverpackets.ExShowScreenMessage;
 import com.l2journey.gameserver.network.serverpackets.PlaySound;
 import com.l2journey.gameserver.network.serverpackets.SocialAction;
 import com.l2journey.gameserver.network.serverpackets.SpecialCamera;
@@ -332,6 +334,15 @@ public class Valakas extends AbstractNpcAI
 				
 				startQuestTimer("regen_task", 60000, npc, null, true);
 				startQuestTimer("skill_task", 2000, npc, null, true);
+				
+				for (Player insidePlayer : BOSS_ZONE.getPlayersInside())
+				{
+					if (insidePlayer.isHero() && Config.VALAKAS_RECOGNIZE_HERO)
+					{
+						BOSS_ZONE.broadcastPacket(new ExShowScreenMessage(NpcStringId.S1_YOU_CANNOT_HOPE_TO_DEFEAT_ME_WITH_YOUR_MEAGER_STRENGTH, 2, 4000, insidePlayer.getName()));
+						break;
+					}
+				}
 			}
 			// Death cinematic, spawn of Teleport Cubes.
 			else if (event.equalsIgnoreCase("die_1"))

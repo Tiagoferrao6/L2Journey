@@ -336,12 +336,7 @@ public class HomeBoard implements IParseBoardHandler
 					for (Creature target : targets)
 					{
 						skill.applyEffects(player, target);
-						if (Config.COMMUNITYBOARD_CAST_ANIMATIONS)
-						{
-							player.sendPacket(new MagicSkillUse(player, target, skill.getId(), skill.getLevel(), skill.getHitTime(), skill.getReuseDelay()));
-							// not recommend broadcast
-							// player.broadcastPacket(new MagicSkillUse(player, target, skill.getId(), skill.getLevel(), skill.getHitTime(), skill.getReuseDelay()));
-						}
+						player.sendPacket(new MagicSkillUse(player, target, skill.getId(), skill.getLevel(), skill.getHitTime(), skill.getReuseDelay()));
 					}
 				}
 			}

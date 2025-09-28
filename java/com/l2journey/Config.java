@@ -254,7 +254,6 @@ public class Config
 	public static boolean COMMUNITYBOARD_PEACE_ONLY;
 	public static boolean COMMUNITYBOARD_COMBAT_DISABLED;
 	public static boolean COMMUNITYBOARD_KARMA_DISABLED;
-	public static boolean COMMUNITYBOARD_CAST_ANIMATIONS;
 	public static boolean COMMUNITY_PREMIUM_SYSTEM_ENABLED;
 	public static int COMMUNITY_PREMIUM_COIN_ID;
 	public static int COMMUNITY_PREMIUM_PRICE_PER_DAY;
@@ -642,11 +641,14 @@ public class Config
 	public static int ANTHARAS_WAIT_TIME;
 	public static int ANTHARAS_SPAWN_INTERVAL;
 	public static int ANTHARAS_SPAWN_RANDOM;
+	public static boolean ANTHARAS_RECOGNIZE_HERO;
 	public static int VALAKAS_WAIT_TIME;
 	public static int VALAKAS_SPAWN_INTERVAL;
 	public static int VALAKAS_SPAWN_RANDOM;
+	public static boolean VALAKAS_RECOGNIZE_HERO;
 	public static int BAIUM_SPAWN_INTERVAL;
 	public static int BAIUM_SPAWN_RANDOM;
+	public static boolean BAIUM_RECOGNIZE_HERO;
 	public static int CORE_SPAWN_INTERVAL;
 	public static int CORE_SPAWN_RANDOM;
 	public static int ORFEN_SPAWN_INTERVAL;
@@ -1829,7 +1831,6 @@ public class Config
 		COMMUNITYBOARD_PEACE_ONLY = communityBoardConfig.getBoolean("CommunityBoardPeaceOnly", false);
 		COMMUNITYBOARD_COMBAT_DISABLED = communityBoardConfig.getBoolean("CommunityCombatDisabled", true);
 		COMMUNITYBOARD_KARMA_DISABLED = communityBoardConfig.getBoolean("CommunityKarmaDisabled", true);
-		COMMUNITYBOARD_CAST_ANIMATIONS = communityBoardConfig.getBoolean("CommunityCastAnimations", false);
 		COMMUNITY_PREMIUM_SYSTEM_ENABLED = communityBoardConfig.getBoolean("CommunityPremiumSystem", false);
 		COMMUNITY_PREMIUM_COIN_ID = communityBoardConfig.getInt("CommunityPremiumBuyCoinId", 57);
 		COMMUNITY_PREMIUM_PRICE_PER_DAY = communityBoardConfig.getInt("CommunityPremiumPricePerDay", 1000000);
@@ -2411,11 +2412,14 @@ public class Config
 		ANTHARAS_WAIT_TIME = grandBossConfig.getInt("AntharasWaitTime", 30);
 		ANTHARAS_SPAWN_INTERVAL = grandBossConfig.getInt("IntervalOfAntharasSpawn", 264);
 		ANTHARAS_SPAWN_RANDOM = grandBossConfig.getInt("RandomOfAntharasSpawn", 72);
+		ANTHARAS_RECOGNIZE_HERO = grandBossConfig.getBoolean("AntharasRecognizeHero", true);
 		VALAKAS_WAIT_TIME = grandBossConfig.getInt("ValakasWaitTime", 30);
 		VALAKAS_SPAWN_INTERVAL = grandBossConfig.getInt("IntervalOfValakasSpawn", 264);
 		VALAKAS_SPAWN_RANDOM = grandBossConfig.getInt("RandomOfValakasSpawn", 72);
+		VALAKAS_RECOGNIZE_HERO = grandBossConfig.getBoolean("ValakasRecognizeHero", true);
 		BAIUM_SPAWN_INTERVAL = grandBossConfig.getInt("IntervalOfBaiumSpawn", 168);
 		BAIUM_SPAWN_RANDOM = grandBossConfig.getInt("RandomOfBaiumSpawn", 48);
+		BAIUM_RECOGNIZE_HERO = grandBossConfig.getBoolean("BaiumRecognizeHero", true);
 		CORE_SPAWN_INTERVAL = grandBossConfig.getInt("IntervalOfCoreSpawn", 60);
 		CORE_SPAWN_RANDOM = grandBossConfig.getInt("RandomOfCoreSpawn", 24);
 		ORFEN_SPAWN_INTERVAL = grandBossConfig.getInt("IntervalOfOrfenSpawn", 48);
