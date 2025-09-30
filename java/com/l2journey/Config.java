@@ -149,7 +149,7 @@ public class Config
 	private static final String OFFLINE_PLAY_CONFIG_FILE = "./config/player/OfflinePlay.ini";
 	private static final String OFFLINE_TRADE_CONFIG_FILE = "./config/player/OfflineTrade.ini";
 	private static final String ONLINE_INFO_CONFIG_FILE = "./config/player/OnlineInfo.ini";
-	private static final String PLAYER_CONTROL = "./config/Player/PlayerControl.ini";
+	private static final String PLAYER_CONTROL = "./config/player/PlayerControl.ini";
 	private static final String PREMIUM_SYSTEM_CONFIG_FILE = "./config/player/PremiumSystem.ini";
 	private static final String PVP_CONFIG_FILE = "./config/player/PVP.ini";
 	private static final String PVP_ANNOUNCE_CONFIG_FILE = "./config/player/PvpAnnounce.ini";
@@ -160,7 +160,7 @@ public class Config
 	private static final String SERVER_TIME_CONFIG_FILE = "./config/player/ServerTime.ini";
 	private static final String STARTING_LOCATION_CONFIG_FILE = "./config/player/StartingLocation.ini";
 	private static final String STARTING_TITLE_CONFIG_FILE = "./config/player/StartingTitle.ini";
-	private static final String USER_PANEL_COMMANDS = "./config/Player/UserPanel.ini";
+	private static final String USER_PANEL_COMMANDS = "./config/player/UserPanel.ini";
 	private static final String WAREHOUSE_SORTING_CONFIG_FILE = "./config/player/WarehouseSorting.ini";
 	
 	// --------------------------------------------------
