@@ -28,14 +28,12 @@ public final class AngelCat extends LongTimeEvent
 	{
 		// Determine player state
 		final long reuse = player.getVariables().getLong(GIFT_REUSE_VAR_NAME, 0);
-		
 		if (reuse > System.currentTimeMillis())
 		{
 			final long remainingTime = (reuse - System.currentTimeMillis()) / 1000;
 			final int hours = (int) (remainingTime / 3600);
 			final int minutes = (int) ((remainingTime % 3600) / 60);
 			
-			// Use custom message to avoid yellow color (which is caused by addItemName)
 			final String timeMessage = String.format("Angel Cat's Blessing will be available for re-use after %d hour(s) %d minute(s).", hours, minutes);
 			player.sendMessage(timeMessage);
 			return "4308-1.htm";
@@ -47,7 +45,6 @@ public final class AngelCat extends LongTimeEvent
 			return "4308-2.htm";
 		}
 		
-		// Give the reward item
 		player.addItem(ItemProcessType.REWARD, GIFT_ID, GIFT_AMOUNT, npc, true);
 		player.getVariables().set(GIFT_REUSE_VAR_NAME, System.currentTimeMillis() + TimeUnit.HOURS.toMillis(GIFT_REUSE_HOURS));
 		player.sendPacket(new PlaySound("ItemSound.quest_finish"));
