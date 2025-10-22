@@ -136,6 +136,8 @@ import com.l2journey.gameserver.model.TradeList;
 import com.l2journey.gameserver.model.UIKeysSettings;
 import com.l2journey.gameserver.model.World;
 import com.l2journey.gameserver.model.WorldObject;
+import com.l2journey.gameserver.model.achievements.PlayerAchievements;
+import com.l2journey.gameserver.model.achievements.PlayerCounters;
 import com.l2journey.gameserver.model.actor.appearance.PlayerAppearance;
 import com.l2journey.gameserver.model.actor.enums.creature.InstanceType;
 import com.l2journey.gameserver.model.actor.enums.creature.Race;
@@ -459,6 +461,9 @@ public class Player extends Playable
 	private long _onlineBeginTime;
 	private long _lastAccess;
 	private long _uptime;
+	
+	// Achievements / Counters (lazy init)
+	private PlayerCounters _counters;
 	
 	private final InventoryUpdate _inventoryUpdate = new InventoryUpdate();
 	private ScheduledFuture<?> _inventoryUpdateTask;
@@ -12112,6 +12117,19 @@ public class Player extends Playable
 		}
 		
 		PlayerAutoSaveTaskManager.getInstance().remove(this);
+
+		// Flush final de counters de achievements antes de remover o player
+		try
+		{
+			if (_counters != null)
+			{
+				_counters.dispose();
+			}
+		}
+		catch (Exception e)
+		{
+			LOGGER.log(Level.WARNING, "Falha ao flushar counters no logout de " + getName(), e);
+		}
 		
 		return super.deleteMe();
 	}
@@ -12544,6 +12562,10 @@ public class Player extends Playable
 		_fishCombat = null;
 		_lure = null;
 		// Ends fishing
+		if (win)
+		{
+			try { getCounters().onFishCaught(); } catch (Exception e) { }
+		}
 		broadcastPacket(new ExFishingEnd(win, this));
 		sendPacket(SystemMessageId.YOU_REEL_YOUR_LINE_IN_AND_STOP_FISHING);
 		setImmobilized(false);
@@ -14912,6 +14934,15 @@ public class Player extends Playable
 	}
 	
 	/**
+	 * @return {@link PlayerAchievements} instance containing achievement status for player.
+	 */
+	public PlayerAchievements getAchievements()
+	{
+		final PlayerAchievements achievements = getScript(PlayerAchievements.class);
+		return achievements != null ? achievements : addScript(new PlayerAchievements(getObjectId()));
+	}
+	
+	/**
 	 * @return {@code true} if {@link AccountVariables} instance is attached to current player's scripts, {@code false} otherwise.
 	 */
 	public boolean hasAccountVariables()
@@ -15381,5 +15412,21 @@ public class Player extends Playable
 	public boolean isAutoPlaying()
 	{
 		return _autoPlaying.get();
+	}
+	
+	/**
+	 * Retorna gerenciador de contadores do jogador (lazy).
+	 * @return PlayerCounters
+	 */
+	public PlayerCounters getCounters()
+	{
+		PlayerCounters ref = _counters;
+		if (ref == null)
+		{
+			ref = new PlayerCounters(this);
+			_counters = ref; // write depois para visibilidade entre threads
+		}
+		
+		return ref;
 	}
 }

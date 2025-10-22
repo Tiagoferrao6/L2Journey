@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="xsd/Achievements.xsd">
+    <categories>
+        <kitekat>
+        <cat id="1" name="Farming" desc="Become a great hunter" icon="icon.skill5860"/>
+        <cat id="2" name="Combat" desc="Overcome your limits" icon="icon.skill0426"/>
+        <cat id="3" name="Clan" desc="Be part of something bigger" icon="icon.skill1327"/>
+        <cat id="4" name="Others" desc="Varied challenges" icon="icon.skill3123"/>
+        </kitekat>
+    </categories> 
+    
+    <!-- Enemy achievements -->
+    <achievement id="1" cat="1" type="raidkill" desc="You need to kill %need% raidbosses.">
+        <levels>
+            <lvl id="1" name="Raid Slayer" icon="icon.skill4289" need="1"  />
+            <lvl id="2" name="Raid Slayer" icon="icon.skill4289" need="5"  />
+            <lvl id="3" name="Raid Slayer" icon="icon.skill4289" need="25" />
+            <lvl id="4" name="Raid Slayer" icon="icon.skill4289" need="100" />
+            <lvl id="5" name="Raid Slayer" icon="icon.skill4289" need="500" />
+            <lvl id="6" name="Raid Slayer" icon="icon.skill4289" need="1000" />
+            <lvl id="7" name="Raid Slayer" icon="icon.skill4289" need="2500" />
+        </levels>
+        <rewards >
+            <item id="57" count="10" />
+            <item id="5570" count="5" />
+            <item id="5572" count="5" />
+            <item id="5574" count="5" />
+        </rewards>
+    </achievement>
+    
+    <!-- Combo achievements -->
+    <achievement id="2" cat="2" type="pvpkill" desc="You need to win %need% PvPs.">
+        <levels>
+            <lvl id="1" name="Head Hunter" icon="icon.skill0522" need="10" />
+            <lvl id="2" name="Head Hunter" icon="icon.skill0522" need="50" />
+            <lvl id="3" name="Head Hunter" icon="icon.skill0522" need="200" />
+            <lvl id="4" name="Head Hunter" icon="icon.skill0522" need="400"  />
+            <lvl id="5" name="Head Hunter" icon="icon.skill0522" need="750" />
+            <lvl id="6" name="Head Hunter" icon="icon.skill0522" need="1500" />
+            <lvl id="7" name="Head Hunter" icon="icon.skill0522" need="3000" />
+            <lvl id="8" name="Head Hunter" icon="icon.skill0522" need="5000" />
+            <lvl id="9" name="Head Hunter" icon="icon.skill0522" need="10000" />
+            <lvl id="10" name="Head Hunter" icon="icon.skill0522" need="15000" />
+            <lvl id="11" name="Head Hunter" icon="icon.skill0522" need="30000" />
+            <lvl id="12" name="Head Hunter" icon="icon.skill0522" need="50000" />
+        </levels>
+        <rewards >
+            <item id="57" count="10" />
+            <item id="5570" count="5" />
+            <item id="5572" count="5" />
+            <item id="5574" count="5" />
+        </rewards>
+    </achievement>
+    <!-- Hero achievement (binary) -->
+    <achievement id="3" cat="2" type="hero" desc="Become a Hero.">
+        <levels>
+            <lvl id="1" name="Heroic Champion" icon="icon.skill5762" need="1" />
+        </levels>
+        <rewards >
+            <item id="57" count="10" />
+            <item id="5570" count="5" />
+            <item id="5572" count="5" />
+            <item id="5574" count="5" />
+        </rewards>
+    </achievement>
+    
+    <!-- Clan achievements -->
+    <achievement id="4" cat="3" type="siegewon" desc="Have your own castle.">
+        <levels>
+            <lvl id="1" name="Castle Holder" icon="icon.skill4416_none" need="1" />
+        </levels>
+        <rewards >
+            <item id="57" count="10" />
+            <item id="5570" count="5" />
+            <item id="5572" count="5" />
+            <item id="5574" count="5" />
+        </rewards>
+    </achievement>
+    <achievement id="5" cat="3" type="fortressewon" desc="Have your own fortress.">
+        <levels>
+            <lvl id="1" name="Fortress Holder" icon="icon.skill4416_castleguard" need="1" />
+        </levels>
+        <rewards >
+            <item id="57" count="10" />
+            <item id="5570" count="5" />
+            <item id="5572" count="5" />
+            <item id="5574" count="5" />
+        </rewards>
+    </achievement>
+    
+    <!-- Other achievements -->
+    <achievement id="6" cat="4" type="craft" desc="Craft %need% items.">
+        <levels>
+            <lvl id="1" name="No Money No Honey" icon="icon.skill1368" need="1"  />
+            <lvl id="2" name="No Money No Honey" icon="icon.skill1368" need="5"  />
+            <lvl id="3" name="No Money No Honey" icon="icon.skill1368" need="20"  />
+            <lvl id="4" name="No Money No Honey" icon="icon.skill1368" need="40" />
+            <lvl id="5" name="No Money No Honey" icon="icon.skill1368" need="60" />
+            <lvl id="6" name="No Money No Honey" icon="icon.skill1368" need="80" />
+            <lvl id="7" name="No Money No Honey" icon="icon.skill1368" need="100" />
+            <lvl id="8" name="No Money No Honey" icon="icon.skill1368" need="200"/>
+            <lvl id="9" name="No Money No Honey" icon="icon.skill1368" need="300"/>
+            <lvl id="10" name="No Money No Honey" icon="icon.skill1368" need="400"/>
+            <lvl id="11" name="No Money No Honey" icon="icon.skill1368" need="500" />
+            <lvl id="12" name="No Money No Honey" icon="icon.skill1368" need="600"/>
+        </levels>
+        <rewards >
+            <item id="57" count="10" />
+            <item id="5570" count="5" />
+            <item id="5572" count="5" />
+            <item id="5574" count="5" />
+        </rewards>
+    </achievement>
+	<achievement id="7" cat="4" type="catchFish" desc="Catch %need% fishes.">
+        <levels>
+            <lvl id="1" name="Fisherman" icon="icon.skill1319" need="5" />
+            <lvl id="2" name="Fisherman" icon="icon.skill1319" need="10" />
+            <lvl id="3" name="Fisherman" icon="icon.skill1319" need="50" />
+            <lvl id="4" name="Fisherman" icon="icon.skill1319" need="100" />
+            <lvl id="5" name="Fisherman" icon="icon.skill1319" need="500" />
+            <lvl id="6" name="Fisherman" icon="icon.skill1319" need="1000" />
+            <lvl id="7" name="Fisherman" icon="icon.skill1319" need="5000" />
+            <lvl id="8" name="Fisherman" icon="icon.skill1319" need="10000" />
+        </levels>
+        <rewards >
+            <item id="57" count="10" />
+            <item id="5570" count="5" />
+            <item id="5572" count="5" />
+            <item id="5574" count="5" />
+        </rewards>
+    </achievement>
+    <!-- Noble achievement (binary) -->
+    <achievement id="8" cat="4" type="noble" desc="Become a Noble.">
+        <levels>
+            <lvl id="1" name="Noble Soul" icon="icon.skill6288" need="1" />
+        </levels>
+        <rewards >
+            <item id="57" count="10" />
+            <item id="5570" count="5" />
+            <item id="5572" count="5" />
+            <item id="5574" count="5" />
+        </rewards>
+    </achievement>
+ </list>

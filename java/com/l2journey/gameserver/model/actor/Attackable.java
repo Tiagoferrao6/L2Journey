@@ -339,6 +339,18 @@ public class Attackable extends Npc
 			}
 		}
 		
+		try
+		{
+			final Player playerKiller = (killer != null) ? killer.asPlayer() : null;
+			if ((playerKiller != null) && isRaid())
+			{
+				playerKiller.getCounters().onRaidKill();
+			}
+		}
+		catch (Exception e)
+		{
+			/* silencioso */ }
+			
 		return true;
 	}
 	

@@ -647,6 +647,16 @@ public class RecipeManager
 			int itemId = _recipeList.getItemId();
 			int itemCount = _recipeList.getCount();
 			final ItemTemplate template = ItemData.getInstance().getTemplate(itemId);
+
+			// Achievement: craft concluído com sucesso (apenas 1 incremento por receita independente de quantidade)
+			try
+			{
+				_player.getCounters().onCraftSuccess();
+			}
+			catch (Exception e)
+			{
+				// Não interromper fluxo de craft
+			}
 			
 			// check that the current recipe has a rare production or not
 			if ((rareProdId != -1) && ((rareProdId == itemId) || Config.CRAFT_MASTERWORK))

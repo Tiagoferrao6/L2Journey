@@ -6,4 +6,11 @@
 			<height normal="30" />
 		</collision>
 	</npc>
+	<!-- Achievement NPC -->
+	<npc id="70000" displayId="31275" name="Achievement Master" usingServerSideName="true" title="Achievements" usingServerSideTitle="true" type="Folk">
+		<collision>
+			<radius normal="8" />
+			<height normal="30" />
+		</collision>
+	</npc>
 </list>
