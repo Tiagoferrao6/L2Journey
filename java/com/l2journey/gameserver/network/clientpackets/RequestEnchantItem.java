@@ -247,6 +247,7 @@ public class RequestEnchantItem extends ClientPacket
 							player.sendSkillList();
 						}
 					}
+					
 					player.sendItemList(false);
 					break;
 				}

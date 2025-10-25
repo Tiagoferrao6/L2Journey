@@ -62,7 +62,7 @@ import ai.AbstractNpcAI;
 public class AchievementNpc extends AbstractNpcAI
 {
 	private static final Logger LOGGER = Logger.getLogger(AchievementNpc.class.getName());
-
+	
 	private static final int ACHIEVEMENT_NPC_ID = 70000;
 	private static final String ACHIEVEMENTS_FILE = "data/Achievements.xml";
 	private static final boolean DEBUG_MINIMAL_HTML = false;
@@ -71,13 +71,13 @@ public class AchievementNpc extends AbstractNpcAI
 	private static final boolean SHOW_PROGRESS_BAR = false;
 	private static final boolean MULTI_MODE = true;
 	private static final int LEVEL_ID_FACTOR = 1000;
-
+	
 	private static final List<Achievement> ACHIEVEMENTS = new ArrayList<>();
-
+	
 	private static final Map<Integer, Category> CATEGORIES = new HashMap<>();
 	private static final Map<Integer, BaseAchievement> BASE_ACHIEVEMENTS = new HashMap<>();
 	private static final Map<Integer, LevelEntry> LEVELS_BY_PHYSICAL_ID = new HashMap<>();
-
+	
 	public static class Category
 	{
 		public final int id;
@@ -85,7 +85,7 @@ public class AchievementNpc extends AbstractNpcAI
 		public final String desc;
 		public final String icon;
 		public final List<BaseAchievement> achievements = new ArrayList<>();
-
+		
 		public Category(int id, String name, String desc, String icon)
 		{
 			this.id = id;
@@ -94,16 +94,16 @@ public class AchievementNpc extends AbstractNpcAI
 			this.icon = ((icon == null) || icon.isEmpty()) ? DEFAULT_ICON : icon;
 		}
 	}
-
+	
 	public static class BaseAchievement
 	{
 		public final int baseId;
 		public final int categoryId;
-		public final String type; // Counter
+		public final String type;
 		public final String descTemplate;
 		public final List<LevelEntry> levels = new ArrayList<>();
 		public final List<RewardItem> globalRewards = new ArrayList<>();
-
+		
 		public BaseAchievement(int baseId, int categoryId, String type, String descTemplate)
 		{
 			this.baseId = baseId;
@@ -112,16 +112,16 @@ public class AchievementNpc extends AbstractNpcAI
 			this.descTemplate = (descTemplate == null) ? "" : descTemplate;
 		}
 	}
-
+	
 	public static class LevelEntry
 	{
 		public final int levelId;
-		public final int physicalId; // baseId * LEVEL_ID_FACTOR + levelId
+		public final int physicalId;
 		public final long need;
 		public final String name;
 		public final String icon;
 		public final List<RewardItem> rewards = new ArrayList<>();
-
+		
 		public LevelEntry(int levelId, int physicalId, long need, String name, String icon)
 		{
 			this.levelId = levelId;
@@ -131,19 +131,19 @@ public class AchievementNpc extends AbstractNpcAI
 			this.icon = ((icon == null) || icon.isEmpty()) ? DEFAULT_ICON : icon;
 		}
 	}
-
+	
 	public static class RewardItem
 	{
 		public final int itemId;
 		public final long count;
-
+		
 		public RewardItem(int itemId, long count)
 		{
 			this.itemId = itemId;
 			this.count = count;
 		}
 	}
-
+	
 	public static class Achievement
 	{
 		public final int id;
@@ -153,7 +153,7 @@ public class AchievementNpc extends AbstractNpcAI
 		public final String type;
 		public String icon;
 		public final List<RewardItem> rewards = new ArrayList<>();
-
+		
 		public Achievement(int id, String name, String description, long target, String type, String icon)
 		{
 			this.id = id;
@@ -164,7 +164,7 @@ public class AchievementNpc extends AbstractNpcAI
 			this.icon = ((icon == null) || icon.isEmpty()) ? DEFAULT_ICON : icon;
 		}
 	}
-
+	
 	public AchievementNpc()
 	{
 		addStartNpc(ACHIEVEMENT_NPC_ID);
@@ -172,7 +172,7 @@ public class AchievementNpc extends AbstractNpcAI
 		addTalkId(ACHIEVEMENT_NPC_ID);
 		loadAchievements();
 	}
-
+	
 	/**
 	 * Reload achievements in runtime. Only for Admin (ex: GM)
 	 */
@@ -180,7 +180,7 @@ public class AchievementNpc extends AbstractNpcAI
 	{
 		loadAchievements();
 	}
-
+	
 	private void loadAchievements()
 	{
 		ACHIEVEMENTS.clear();
@@ -190,37 +190,38 @@ public class AchievementNpc extends AbstractNpcAI
 		try
 		{
 			final File f = new File(Config.DATAPACK_ROOT, ACHIEVEMENTS_FILE);
-			LOGGER.log(Level.INFO, "AchievementNpc: Loading file: " + f.getAbsolutePath());
+			LOGGER.log(Level.INFO, "Achievements: Loaded");
 			if (!f.exists())
 			{
 				LOGGER.log(Level.WARNING, getClass().getSimpleName() + ": " + ACHIEVEMENTS_FILE + " not found: " + f.getAbsolutePath());
 				return;
 			}
+			
 			final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			factory.setIgnoringComments(true);
 			final DocumentBuilder builder = factory.newDocumentBuilder();
 			final Document doc = builder.parse(f);
 			final Node root = doc.getDocumentElement();
-			if (root == null || !"list".equalsIgnoreCase(root.getNodeName()))
+			if ((root == null) || !"list".equalsIgnoreCase(root.getNodeName()))
 			{
 				LOGGER.log(Level.WARNING, "AchievementNpc: unexpected root value.");
 				return;
 			}
-
+			
 			final Set<Integer> parsedBases = new HashSet<>();
 			traverseAndParse(root, parsedBases);
-			LOGGER.log(Level.INFO, getClass().getSimpleName() + ": Loaded (achievements=" + ACHIEVEMENTS.size() + ") categories=" + CATEGORIES.size() + ", baseAchievements=" + BASE_ACHIEVEMENTS.size() + ", levels=" + LEVELS_BY_PHYSICAL_ID.size());
+			LOGGER.log(Level.INFO, getClass().getSimpleName() + ": Categories: " + CATEGORIES.size() + ", Achievements: " + BASE_ACHIEVEMENTS.size());
 		}
 		catch (Exception e)
 		{
 			LOGGER.log(Level.SEVERE, "Error loading achievements.", e);
 		}
 	}
-
+	
 	/**
-	 * Varre recursivamente a árvore de nós procurando elementos <cat> e <achievement> em qualquer profundidade.
-	 * @param node Nó raiz a partir do qual a varredura inicia.
-	 * @param parsedBases conjunto de IDs de achievements já processados para evitar duplicação.
+	 * Recursively traverses the DOM tree looking for <cat> and <achievement> elements at any depth.
+	 * @param node Root node to start scanning from.
+	 * @param parsedBases set of already processed base achievement IDs to avoid duplication.
 	 */
 	private void traverseAndParse(Node node, java.util.Set<Integer> parsedBases)
 	{
@@ -253,7 +254,7 @@ public class AchievementNpc extends AbstractNpcAI
 					int baseId = parseInt(n, "id", -1);
 					if ((baseId >= 0) && parsedBases.contains(baseId))
 					{
-						LOGGER.log(Level.WARNING, "Achievement duplicado: id=" + baseId + " ignorado.");
+						LOGGER.log(Level.WARNING, "Duplicate achievement: id=" + baseId + " ignored.");
 					}
 					else
 					{
@@ -262,11 +263,11 @@ public class AchievementNpc extends AbstractNpcAI
 					}
 				}
 			}
-			// Recurse further.
+			
 			traverseAndParse(n, parsedBases);
 		}
 	}
-
+	
 	private void parseLegacyAchievement(Node n)
 	{
 		int id = parseInt(n, "id", -1);
@@ -314,10 +315,10 @@ public class AchievementNpc extends AbstractNpcAI
 				}
 			}
 		}
-
+		
 		ACHIEVEMENTS.add(a);
 	}
-
+	
 	private void parseMultiAchievement(Node n)
 	{
 		int baseId = parseInt(n, "id", -1);
@@ -326,10 +327,10 @@ public class AchievementNpc extends AbstractNpcAI
 		String desc = parseString(n, "desc", "");
 		if ((baseId < 0) || (catId < 0))
 		{
-			LOGGER.log(Level.WARNING, "Achievement base ignorado (id ou cat inválido): id=" + baseId + ", cat=" + catId);
+			LOGGER.log(Level.WARNING, "Base achievement ignored (invalid id or category): id=" + baseId + ", cat=" + catId);
 			return;
 		}
-
+		
 		Category cat = CATEGORIES.get(catId);
 		if (cat == null)
 		{
@@ -337,7 +338,7 @@ public class AchievementNpc extends AbstractNpcAI
 			CATEGORIES.put(catId, cat);
 		}
 		BaseAchievement base = new BaseAchievement(baseId, catId, type, desc);
-
+		
 		for (Node c = n.getFirstChild(); c != null; c = c.getNextSibling())
 		{
 			if (c.getNodeType() != Node.ELEMENT_NODE)
@@ -356,13 +357,13 @@ public class AchievementNpc extends AbstractNpcAI
 						String licon = parseString(l, "icon", null);
 						if ((levelId < 0) || (need < 0))
 						{
-							LOGGER.log(Level.WARNING, "Level inválido em achievement base=" + baseId + " level=" + levelId);
+							LOGGER.log(Level.WARNING, "Invalid level in base achievement=" + baseId + " level=" + levelId);
 							continue;
 						}
 						int physicalId = (baseId * LEVEL_ID_FACTOR) + levelId;
 						if (LEVELS_BY_PHYSICAL_ID.containsKey(physicalId))
 						{
-							LOGGER.log(Level.SEVERE, "Colisão de physicalId=" + physicalId + " (achievement base " + baseId + ")");
+							LOGGER.log(Level.SEVERE, "physicalId collision=" + physicalId + " (base achievement " + baseId + ")");
 							continue;
 						}
 						LevelEntry le = new LevelEntry(levelId, physicalId, need, lname, licon);
@@ -389,7 +390,7 @@ public class AchievementNpc extends AbstractNpcAI
 								}
 							}
 						}
-
+						
 						base.levels.add(le);
 						LEVELS_BY_PHYSICAL_ID.put(physicalId, le);
 					}
@@ -411,18 +412,18 @@ public class AchievementNpc extends AbstractNpcAI
 				}
 			}
 		}
-
+		
 		if (base.levels.isEmpty())
 		{
-			LOGGER.log(Level.WARNING, "Achievement base sem níveis: " + baseId);
+			LOGGER.log(Level.WARNING, "Base achievement without levels: " + baseId);
 			return;
 		}
-
+		
 		Collections.sort(base.levels, Comparator.comparingInt(l -> l.levelId));
 		BASE_ACHIEVEMENTS.put(baseId, base);
 		cat.achievements.add(base);
 	}
-
+	
 	private int parseInt(Node n, String att, int def)
 	{
 		Node a = n.getAttributes().getNamedItem(att);
@@ -439,7 +440,7 @@ public class AchievementNpc extends AbstractNpcAI
 			return def;
 		}
 	}
-
+	
 	private long parseLong(Node n, String att, long def)
 	{
 		Node a = n.getAttributes().getNamedItem(att);
@@ -456,13 +457,13 @@ public class AchievementNpc extends AbstractNpcAI
 			return def;
 		}
 	}
-
+	
 	private String parseString(Node n, String att, String def)
 	{
 		Node a = n.getAttributes().getNamedItem(att);
 		return a == null ? def : a.getNodeValue();
 	}
-
+	
 	@Override
 	public String onEvent(String event, Npc npc, Player player)
 	{
@@ -470,7 +471,7 @@ public class AchievementNpc extends AbstractNpcAI
 		{
 			return null;
 		}
-
+		
 		if (MULTI_MODE)
 		{
 			if ("back_categories".equalsIgnoreCase(event))
@@ -486,7 +487,7 @@ public class AchievementNpc extends AbstractNpcAI
 				}
 				catch (Exception e)
 				{
-					player.sendMessage("Categoria inválida.");
+					player.sendMessage("Invalid category.");
 				}
 			}
 			if (event.startsWith("ach_"))
@@ -498,7 +499,7 @@ public class AchievementNpc extends AbstractNpcAI
 				}
 				catch (Exception e)
 				{
-					player.sendMessage("Achievement inválido.");
+					player.sendMessage("Invalid achievement.");
 				}
 			}
 			if (event.startsWith("claim_"))
@@ -510,7 +511,7 @@ public class AchievementNpc extends AbstractNpcAI
 				}
 				catch (Exception e)
 				{
-					player.sendMessage("ID inválido.");
+					player.sendMessage("Invalid ID.");
 				}
 			}
 			if (event.startsWith("back_cat_"))
@@ -531,16 +532,16 @@ public class AchievementNpc extends AbstractNpcAI
 				if (player.isGM())
 				{
 					reloadAchievements();
-					player.sendMessage("[Achievements] Recarregado.");
+					player.sendMessage("[Achievements] Reloaded.");
 					return showCategoriesUI(player);
 				}
-				player.sendMessage("Você não tem permissão para recarregar os achievements.");
+				player.sendMessage("You don't have permission to reload achievements.");
 				return null;
 			}
-
+			
 			return null;
 		}
-
+		
 		if (event.startsWith("claim_"))
 		{
 			try
@@ -554,10 +555,10 @@ public class AchievementNpc extends AbstractNpcAI
 				return showAchievementList(player);
 			}
 		}
-
+		
 		return null;
 	}
-
+	
 	@Override
 	public String onTalk(Npc npc, Player player)
 	{
@@ -565,10 +566,10 @@ public class AchievementNpc extends AbstractNpcAI
 		{
 			return showCategoriesUI(player);
 		}
-
+		
 		return showAchievementList(player); // fallback
 	}
-
+	
 	@Override
 	public String onFirstTalk(Npc npc, Player player)
 	{
@@ -576,10 +577,10 @@ public class AchievementNpc extends AbstractNpcAI
 		{
 			return showCategoriesUI(player);
 		}
-
+		
 		return showAchievementList(player); // fallback
 	}
-
+	
 	public String showCategoriesUI(Player player)
 	{
 		String template = loadTemplate("data/html/achievements/categories.htm");
@@ -621,17 +622,17 @@ public class AchievementNpc extends AbstractNpcAI
 		player.sendPacket(msg);
 		return null;
 	}
-
+	
 	private String showCategoryAchievements(Player player, int categoryId)
 	{
 		Category cat = CATEGORIES.get(categoryId);
 		if (cat == null)
 		{
-			player.sendMessage("Categoria não encontrada.");
+			player.sendMessage("Category not found.");
 			return showCategoriesUI(player);
 		}
 		String template = loadTemplate("data/html/achievements/category_achievements.htm");
-
+		
 		double sum = 0d;
 		for (BaseAchievement ba : cat.achievements)
 		{
@@ -648,12 +649,12 @@ public class AchievementNpc extends AbstractNpcAI
 		{
 			filled = inner;
 		}
-
+		
 		int remaining = inner - filled;
 		String caps1Short = (filled > 0) ? "Gauge_DF_Large_MP_Left" : "Gauge_DF_Large_Exp_bg_Left";
 		String caps2Short = (filled >= inner) ? "Gauge_DF_Large_MP_Right" : "Gauge_DF_Large_Exp_bg_Right";
 		template = template.replace("%caps1%", caps1Short).replace("%caps2%", caps2Short).replace("%bar1up%", String.valueOf(filled)).replace("%bar2up%", String.valueOf(remaining)).replace("%catname%", escape(cat.name)).replace("%catDesc%", escape(cat.desc)).replace("%catIcon%", cat.icon);
-
+		
 		StringBuilder activeRows = new StringBuilder();
 		List<BaseAchievement> list = new ArrayList<>(cat.achievements);
 		Collections.sort(list, Comparator.comparingInt(a -> a.baseId));
@@ -672,10 +673,10 @@ public class AchievementNpc extends AbstractNpcAI
 				{
 					break;
 				}
-
+				
 				prevNeed = prev.need;
 			}
-
+			
 			double segmentPercent;
 			if (next.need <= prevNeed)
 			{
@@ -695,7 +696,7 @@ public class AchievementNpc extends AbstractNpcAI
 				double doneSeg = currentValue - prevNeed;
 				segmentPercent = (doneSeg / span) * 100d;
 			}
-
+			
 			if (!Double.isFinite(segmentPercent) || (segmentPercent < 0d))
 			{
 				segmentPercent = 0d;
@@ -716,7 +717,7 @@ public class AchievementNpc extends AbstractNpcAI
 			row.append("<tr><td height=24 valign=top><font color=af9f47>" + escape(next.name) + " (Lv." + next.levelId + ")</font></td></tr>");
 			row.append("<tr><td><font color=999999>" + escape(desc) + "</font></td></tr>");
 			row.append("</table></td>");
-
+			
 			row.append("<td width=32 align=center valign=middle>");
 			boolean completedSegment = (segmentPercent >= 100d) && !player.getAchievements().isClaimed(next.physicalId);
 			if (completedSegment)
@@ -727,41 +728,41 @@ public class AchievementNpc extends AbstractNpcAI
 			{
 				row.append("<img src=\"branchSys.PremiumItemBtn_disable\" width=32 height=32>");
 			}
-
+			
 			row.append("</td>");
 			row.append("</tr></table>");
 			activeRows.append(row);
 		}
 		if (activeRows.length() == 0)
 		{
-			activeRows.append("<center><font color=55FF55>Todas as conquistas desta categoria concluídas.</font></center>");
+			activeRows.append("<center><font color=55FF55>All achievements in this category completed.</font></center>");
 		}
-
+		
 		template = template.replace("%achivmentsNotDone%", activeRows.toString()).replace("%achivmentsDone%", "");
 		NpcHtmlMessage msg = new NpcHtmlMessage(player.getObjectId());
 		msg.setHtml(template);
 		player.sendPacket(msg);
 		return null;
 	}
-
+	
 	private String showAchievementDetail(Player player, int baseId)
 	{
 		BaseAchievement ba = BASE_ACHIEVEMENTS.get(baseId);
 		if (ba == null)
 		{
-			player.sendMessage("Achievement inexistente.");
+			player.sendMessage("Non-existent achievement.");
 			return showCategoriesUI(player);
 		}
-
+		
 		Category cat = CATEGORIES.get(ba.categoryId);
 		if (cat == null)
 		{
-			// Categoria foi removida ou não carregada corretamente; evita NPE e retorna à tela principal
-			LOGGER.warning("[Achievements] Categoria inexistente para baseId=" + baseId + " categoryId=" + ba.categoryId);
-			player.sendMessage("Categoria ausente para este achievement.");
+			// Category was removed or not loaded properly; avoid NPE and return to main screen
+			LOGGER.warning("[Achievements] Non-existent category for baseId=" + baseId + " categoryId=" + ba.categoryId);
+			player.sendMessage("Missing category for this achievement.");
 			return showCategoriesUI(player);
 		}
-
+		
 		long currentValue = getCurrentValue(player, ba.type);
 		String template = loadTemplate("data/html/achievements/achievement_detail.htm");
 		String desc = applyPlaceholders(player, ba, currentValue);
@@ -779,7 +780,7 @@ public class AchievementNpc extends AbstractNpcAI
 				}
 				prevNeed = prev.need;
 			}
-
+			
 			double segmentPercent;
 			if (le.need <= prevNeed)
 			{
@@ -799,7 +800,7 @@ public class AchievementNpc extends AbstractNpcAI
 				double done = currentValue - prevNeed;
 				segmentPercent = (done / span) * 100d;
 			}
-
+			
 			if (!Double.isFinite(segmentPercent) || (segmentPercent < 0d))
 			{
 				segmentPercent = 0d;
@@ -808,7 +809,7 @@ public class AchievementNpc extends AbstractNpcAI
 			{
 				segmentPercent = 100d;
 			}
-
+			
 			StringBuilder r = new StringBuilder();
 			r.append("<table width=205 height=60 cellspacing=0 cellpadding=7><tr>");
 			r.append("<td valign=top><table width=32 cellspacing=0 cellpadding=0>");
@@ -832,7 +833,7 @@ public class AchievementNpc extends AbstractNpcAI
 			}
 			r.append("</table></td>");
 			r.append("<td width=32 align=center valign=middle>");
-
+			
 			if (claimed)
 			{
 				r.append("<font color=00FF00>OK</font>");
@@ -849,14 +850,14 @@ public class AchievementNpc extends AbstractNpcAI
 			r.append("</tr></table>");
 			levelRows.append(r);
 		}
-
+		
 		template = template.replace("%cat_name%", escape(cat.name)).replace("%type%", escape(ba.type)).replace("%desc%", escape(desc)).replace("%level_rows%", levelRows.toString()).replace("%cat_id%", String.valueOf(cat.id));
 		NpcHtmlMessage msg = new NpcHtmlMessage(player.getObjectId());
 		msg.setHtml(template);
 		player.sendPacket(msg);
 		return null;
 	}
-
+	
 	private LevelEntry getNextPendingLevel(Player player, BaseAchievement ba)
 	{
 		for (LevelEntry le : ba.levels)
@@ -866,10 +867,10 @@ public class AchievementNpc extends AbstractNpcAI
 				return le;
 			}
 		}
-
+		
 		return null;
 	}
-
+	
 	private double computeOverallPercent(Player player, BaseAchievement ba)
 	{
 		long currentValue = getCurrentValue(player, ba.type);
@@ -878,7 +879,7 @@ public class AchievementNpc extends AbstractNpcAI
 		{
 			return 0d;
 		}
-
+		
 		Collections.sort(lvls, Comparator.comparingInt(l -> l.levelId));
 		int n = lvls.size();
 		long prevNeed = 0L;
@@ -893,7 +894,7 @@ public class AchievementNpc extends AbstractNpcAI
 				prevNeed = le.need;
 				continue;
 			}
-
+			
 			if (currentValue <= prevNeed)
 			{
 				partial = 0d;
@@ -909,10 +910,10 @@ public class AchievementNpc extends AbstractNpcAI
 		{
 			total = 100d;
 		}
-
+		
 		return total;
 	}
-
+	
 	private String applyPlaceholders(Player player, BaseAchievement ba, long currentValue)
 	{
 		LevelEntry next = getNextPendingLevelForPlaceholder(player, ba);
@@ -924,11 +925,11 @@ public class AchievementNpc extends AbstractNpcAI
 		out = out.replace("%maxlevel%", String.valueOf(ba.levels.size()));
 		out = out.replace("%level%", String.valueOf(claimedLevel));
 		out = out.replace("%nextneed%", String.valueOf(nextNeed));
-		out = out.replace("%need%", String.valueOf(remaining)); // definido pelo usuário como restante.
+		out = out.replace("%need%", String.valueOf(remaining)); // user-defined as remaining.
 		out = out.replace("%remaining%", String.valueOf(remaining));
 		return out;
 	}
-
+	
 	private LevelEntry getNextPendingLevelForPlaceholder(Player player, BaseAchievement ba)
 	{
 		for (LevelEntry le : ba.levels)
@@ -938,10 +939,10 @@ public class AchievementNpc extends AbstractNpcAI
 				return le;
 			}
 		}
-
+		
 		return null;
 	}
-
+	
 	private int getHighestClaimedLevel(Player player, BaseAchievement ba)
 	{
 		int highest = 0;
@@ -952,19 +953,19 @@ public class AchievementNpc extends AbstractNpcAI
 				highest = Math.max(highest, le.levelId);
 			}
 		}
-
+		
 		return highest;
 	}
-
+	
 	private String claimLevel(Player player, int physicalId)
 	{
 		LevelEntry le = LEVELS_BY_PHYSICAL_ID.get(physicalId);
 		if (le == null)
 		{
-			player.sendMessage("Nível inválido.");
+			player.sendMessage("Invalid level.");
 			return showCategoriesUI(player);
 		}
-
+		
 		BaseAchievement base = null;
 		for (BaseAchievement b : BASE_ACHIEVEMENTS.values())
 		{
@@ -981,7 +982,7 @@ public class AchievementNpc extends AbstractNpcAI
 				break;
 			}
 		}
-
+		
 		if (base == null)
 		{
 			return showCategoriesUI(player);
@@ -989,10 +990,10 @@ public class AchievementNpc extends AbstractNpcAI
 		long currentValue = getCurrentValue(player, base.type);
 		if (currentValue < le.need)
 		{
-			player.sendMessage("Requisitos não atingidos.");
+			player.sendMessage("Requirements not met.");
 			return showAchievementDetail(player, base.baseId);
 		}
-
+		
 		for (LevelEntry prev : base.levels)
 		{
 			if (prev.levelId >= le.levelId)
@@ -1001,21 +1002,21 @@ public class AchievementNpc extends AbstractNpcAI
 			}
 			if (!player.getAchievements().isClaimed(prev.physicalId))
 			{
-				player.sendMessage("Claim anteriores pendentes.");
+				player.sendMessage("Previous claims pending.");
 				return showAchievementDetail(player, base.baseId);
 			}
 		}
-
+		
 		if (!player.getAchievements().isCompleted(physicalId))
 		{
 			player.getAchievements().setCompleted(physicalId);
 		}
 		if (player.getAchievements().isClaimed(physicalId))
 		{
-			player.sendMessage("Já reivindicado.");
+			player.sendMessage("Already claimed.");
 			return showAchievementDetail(player, base.baseId);
 		}
-
+		
 		if (le.rewards.isEmpty())
 		{
 			for (RewardItem gri : base.globalRewards)
@@ -1031,11 +1032,11 @@ public class AchievementNpc extends AbstractNpcAI
 			}
 		}
 		player.getAchievements().setClaimed(physicalId);
-		player.sendMessage("Recompensa recebida: " + le.name);
-
+		player.sendMessage("Reward received: " + le.name);
+		
 		return showCategoryAchievements(player, base.categoryId);
 	}
-
+	
 	private long getCurrentValue(Player player, String type)
 	{
 		switch (type)
@@ -1104,12 +1105,12 @@ public class AchievementNpc extends AbstractNpcAI
 				return player.getCounters().getCounter(type);
 		}
 	}
-
+	
 	/**
-	 * Barra gráfica genérica (não utilizada após migração parcial, mantida para futura reutilização em outras telas).
-	 * @param percent valor percentual 0-100
-	 * @param innerWidth largura útil (sem caps) em pixels
-	 * @return HTML da barra completa com percent textual
+	 * Generic gauge bar (not used after partial migration, kept for potential reuse in other screens).
+	 * @param percent percentage value 0-100
+	 * @param innerWidth usable width (without caps) in pixels
+	 * @return HTML for the complete bar with textual percent
 	 */
 	@SuppressWarnings("unused")
 	private String renderGaugeBar(double percent, int innerWidth)
@@ -1125,7 +1126,7 @@ public class AchievementNpc extends AbstractNpcAI
 			filled = innerWidth;
 		}
 		int remaining = innerWidth - filled;
-
+		
 		String capLeft = (filled > 0) ? "Gauge_DF_MP_Left" : "Gauge_DF_Exp_bg_Left";
 		String capRight;
 		if (filled >= innerWidth)
@@ -1137,7 +1138,7 @@ public class AchievementNpc extends AbstractNpcAI
 			capRight = "Gauge_DF_Exp_bg_Right";
 		}
 		StringBuilder sb = new StringBuilder();
-
+		
 		int total = innerWidth + 8;
 		sb.append("<table width=" + total + " cellpadding=0 cellspacing=0><tr>");
 		sb.append("<td width=4><img src=\"L2UI_CT1." + capLeft + "\" width=4 height=8></td>");
@@ -1151,15 +1152,15 @@ public class AchievementNpc extends AbstractNpcAI
 		}
 		sb.append("<td width=4><img src=\"L2UI_CT1." + capRight + "\" width=4 height=8></td>");
 		sb.append("</tr></table>");
-
+		
 		sb.append("<font color=999999>" + p + "%</font><br>");
 		return sb.toString();
 	}
-
+	
 	/**
-	 * Versão compacta para a galeria de categorias (total 32px: 2 + inner(28) + 2). Sem label percentual. Caps encolhidos para 2px conforme ajuste solicitado.
-	 * @param percent valor percentual 0-100
-	 * @return HTML da barra compacta
+	 * Compact version for the categories gallery (total 32px: 2 + inner(28) + 2). No percent label. Caps reduced to 2px as requested.
+	 * @param percent percentage value 0-100
+	 * @return HTML for the compact bar
 	 */
 	private String renderGaugeBarCompact24(double percent)
 	{
@@ -1192,21 +1193,21 @@ public class AchievementNpc extends AbstractNpcAI
 		sb.append("</tr></table>");
 		return sb.toString();
 	}
-
+	
 	private String escape(String s)
 	{
 		if (s == null)
 		{
 			return "";
 		}
-
+		
 		return s.replace("<", "&lt;").replace(">", "&gt;");
 	}
-
+	
 	/**
-	 * Carrega um template de arquivo simples.
-	 * @param path relativo ao datapack root
-	 * @return conteúdo ou string fallback em caso de erro
+	 * Loads a simple template file.
+	 * @param path relative to the datapack root
+	 * @return content or a fallback string in case of error
 	 */
 	private String loadTemplate(String path)
 	{
@@ -1215,17 +1216,17 @@ public class AchievementNpc extends AbstractNpcAI
 			File f = new File(Config.DATAPACK_ROOT, path);
 			if (!f.exists())
 			{
-				return "<html><body><font color=FF0000>Template ausente: " + path + "</font></body></html>";
+				return "<html><body><font color=FF0000>Template missing: " + path + "</font></body></html>";
 			}
 			return new String(Files.readAllBytes(f.toPath()));
 		}
 		catch (Exception e)
 		{
-			LOGGER.log(Level.WARNING, "Falha ao carregar template: " + path, e);
-			return "<html><body><font color=FF0000>Erro template: " + path + "</font></body></html>";
+			LOGGER.log(Level.WARNING, "Failed to load template: " + path, e);
+			return "<html><body><font color=FF0000>Template error: " + path + "</font></body></html>";
 		}
 	}
-
+	
 	private String showAchievementList(Player player)
 	{
 		if (DEBUG_MINIMAL_HTML)
@@ -1236,27 +1237,27 @@ public class AchievementNpc extends AbstractNpcAI
 			player.sendPacket(msg);
 			return null;
 		}
-
+		
 		final PlayerAchievements playerAchievements = player.getAchievements();
-
+		
 		final long playerAdena = player.getAdena();
-
+		
 		final StringBuilder html = new StringBuilder();
 		html.append("<html>");
 		html.append("<title>Achievement System</title>");
 		html.append("<body>");
 		html.append("<br>");
-
+		
 		html.append("<font color=\"AAAAAA\">Adena Achievements</font><br>");
 		for (Achievement a : ACHIEVEMENTS)
 		{
 			buildAchievementBlock(html, a, playerAchievements.isClaimed(a.id), playerAchievements.isCompleted(a.id), playerAdena, player, false);
 		}
-
+		
 		html.append("</body></html>");
-
+		
 		String out = html.toString();
-
+		
 		if (out.length() > 12000)
 		{
 			out = "<html><body><font color=\"FF0000\">The achievement list is too long to display.</font></body></html>";
@@ -1266,7 +1267,7 @@ public class AchievementNpc extends AbstractNpcAI
 		player.sendPacket(msg);
 		return null;
 	}
-
+	
 	private void buildAchievementBlock(StringBuilder html, Achievement a, boolean claimed, boolean completed, long currentValue, Player player, boolean isKarma)
 	{
 		final boolean meets = currentValue >= a.target;
@@ -1276,7 +1277,7 @@ public class AchievementNpc extends AbstractNpcAI
 			completed = true;
 		}
 		final boolean canClaim = meets && !claimed;
-
+		
 		html.append("<table width=\"270\" cellpadding=\"2\" cellspacing=\"0\" bgcolor=\"000000\"><tr>");
 		if (SHOW_ICONS)
 		{
@@ -1310,7 +1311,7 @@ public class AchievementNpc extends AbstractNpcAI
 			}
 			html.append("] " + percent + "%<br>");
 		}
-
+		
 		html.append("</td><td valign=\"top\" align=\"right\" width=\"70\">");
 		if (claimed)
 		{
@@ -1333,7 +1334,7 @@ public class AchievementNpc extends AbstractNpcAI
 		}
 		html.append("</td></tr></table><br>");
 	}
-
+	
 	private String claimAchievement(Player player, int achievementId)
 	{
 		Achievement achievement = null;
@@ -1374,7 +1375,7 @@ public class AchievementNpc extends AbstractNpcAI
 		player.sendMessage("Achievement claimed: " + achievement.name);
 		return showAchievementList(player);
 	}
-
+	
 	public static void main(String[] args)
 	{
 		new AchievementNpc();
