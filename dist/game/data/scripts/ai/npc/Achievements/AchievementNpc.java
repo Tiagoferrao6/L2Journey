@@ -49,9 +49,14 @@ import com.l2journey.Config;
 import com.l2journey.gameserver.model.achievements.PlayerAchievements;
 import com.l2journey.gameserver.model.actor.Npc;
 import com.l2journey.gameserver.model.actor.Player;
+import com.l2journey.gameserver.model.actor.enums.player.PlayerClass;
 import com.l2journey.gameserver.model.item.enums.ItemProcessType;
 import com.l2journey.gameserver.network.serverpackets.NpcHtmlMessage;
 import com.l2journey.gameserver.util.FormatUtil;
+import com.l2journey.gameserver.model.variables.PlayerVariables;
+import com.l2journey.gameserver.managers.CHSiegeManager;
+import com.l2journey.gameserver.data.sql.ClanHallTable;
+import com.l2journey.gameserver.model.residences.AuctionableHall;
 
 import ai.AbstractNpcAI;
 
@@ -656,8 +661,8 @@ public class AchievementNpc extends AbstractNpcAI
 		template = template.replace("%caps1%", caps1Short).replace("%caps2%", caps2Short).replace("%bar1up%", String.valueOf(filled)).replace("%bar2up%", String.valueOf(remaining)).replace("%catname%", escape(cat.name)).replace("%catDesc%", escape(cat.desc)).replace("%catIcon%", cat.icon);
 		
 		StringBuilder activeRows = new StringBuilder();
+		// Preserve the XML-defined order: do not sort here.
 		List<BaseAchievement> list = new ArrayList<>(cat.achievements);
-		Collections.sort(list, Comparator.comparingInt(a -> a.baseId));
 		for (BaseAchievement ba : list)
 		{
 			LevelEntry next = getNextPendingLevel(player, ba);
@@ -714,7 +719,13 @@ public class AchievementNpc extends AbstractNpcAI
 			row.append("<tr><td>" + renderGaugeBarCompact24(segmentPercent) + "</td></tr>");
 			row.append("</table></td>");
 			row.append("<td valign=top><table width=164 cellspacing=0 cellpadding=0>");
-			row.append("<tr><td height=24 valign=top><font color=af9f47>" + escape(next.name) + " (Lv." + next.levelId + ")</font></td></tr>");
+			// If this achievement has only one level (level 1), don't show the level suffix in the title
+			{
+				int totalLevels = ba.levels.size();
+				boolean showLevelSuffix = !((totalLevels == 1) && (next.levelId == 1));
+				String title = escape(next.name) + (showLevelSuffix ? (" (Lv." + next.levelId + ")") : "");
+				row.append("<tr><td height=24 valign=top><font color=af9f47>" + title + "</font></td></tr>");
+			}
 			row.append("<tr><td><font color=999999>" + escape(desc) + "</font></td></tr>");
 			row.append("</table></td>");
 			
@@ -818,7 +829,13 @@ public class AchievementNpc extends AbstractNpcAI
 			r.append("<tr><td>" + renderGaugeBarCompact24(segmentPercent) + "</td></tr>");
 			r.append("</table></td>");
 			r.append("<td valign=top><table width=140 cellspacing=0 cellpadding=0>");
-			r.append("<tr><td height=24 valign=top><font color=af9f47>" + escape(le.name) + " (Lv." + le.levelId + ")</font></td></tr>");
+			// If the base achievement has only one level (level 1), don't show the level suffix here either
+			{
+				int totalLevels = ba.levels.size();
+				boolean showLevelSuffix = !((totalLevels == 1) && (le.levelId == 1));
+				String title = escape(le.name) + (showLevelSuffix ? (" (Lv." + le.levelId + ")") : "");
+				r.append("<tr><td height=24 valign=top><font color=af9f47>" + title + "</font></td></tr>");
+			}
 			if (completed && !claimed)
 			{
 				r.append("<tr><td><font color=55FF55>Ready to claim</font></td></tr>");
@@ -1045,6 +1062,8 @@ public class AchievementNpc extends AbstractNpcAI
 				return player.getAdena();
 			case "pvpkill":
 				return player.getPvpKills();
+			case "level":
+				return player.getLevel();
 			case "hero":
 			{
 				try
@@ -1073,6 +1092,31 @@ public class AchievementNpc extends AbstractNpcAI
 				}
 				return 0L;
 			}
+			case "classlevel":
+			{
+				// Use the base class to avoid counting subclass progress.
+				try
+				{
+					int baseClassId = player.getBaseClass();
+					int level = PlayerClass.getPlayerClass(baseClassId).level();
+					return level;
+				}
+				catch (Exception e)
+				{
+					return 0L;
+				}
+			}
+			case "hassubclass":
+			{
+				try
+				{
+					return (player.getTotalSubClasses() > 0) ? 1L : 0L;
+				}
+				catch (Exception e)
+				{
+					return 0L;
+				}
+			}
 			case "siegewon":
 			{
 				try
@@ -1092,6 +1136,93 @@ public class AchievementNpc extends AbstractNpcAI
 				try
 				{
 					if ((player.getClan() != null) && (player.getClan().getFortId() > 0))
+					{
+						return 1L;
+					}
+				}
+				catch (Exception e)
+				{
+				}
+				return 0L;
+			}
+			case "contestableclanhall":
+			{
+				try
+				{
+					if (player.getClan() != null)
+					{
+						final int chId = player.getClan().getHideoutId();
+						if (chId > 0)
+						{
+							// Use CHSiegeManager to determine if this clan hall is conquerable/contestable
+							final Object hall = CHSiegeManager.getInstance().getSiegableHall(chId);
+							if (hall != null)
+							{
+								return 1L;
+							}
+						}
+					}
+				}
+				catch (Exception e)
+				{
+				}
+				return 0L;
+			}
+			case "buyableclanhall":
+			{
+				try
+				{
+					if (player.getClan() != null)
+					{
+						final int chId = player.getClan().getHideoutId();
+						if (chId > 0)
+						{
+							// Must be in clanhall table (auctionable) and NOT in siegable table
+							final AuctionableHall ah = ClanHallTable.getInstance().getAuctionableHallById(chId);
+							final Object siegable = CHSiegeManager.getInstance().getSiegableHall(chId);
+							if ((ah != null) && (siegable == null))
+							{
+								return 1L;
+							}
+						}
+					}
+				}
+				catch (Exception e)
+				{
+				}
+				return 0L;
+			}
+			case "usedzariche":
+			{
+				try
+				{
+					// 8190 = Zariche
+					if (player.isCursedWeaponEquipped() && (player.getCursedWeaponEquippedId() == 8190))
+					{
+						return 1L;
+					}
+					final PlayerVariables vars = player.getVariables();
+					if (vars.getInt("HAS_EVER_USED_ZARICHE", 0) == 1)
+					{
+						return 1L;
+					}
+				}
+				catch (Exception e)
+				{
+				}
+				return 0L;
+			}
+			case "usedakamanah":
+			{
+				try
+				{
+					// 8689 = Akamanah
+					if (player.isCursedWeaponEquipped() && (player.getCursedWeaponEquippedId() == 8689))
+					{
+						return 1L;
+					}
+					final PlayerVariables vars = player.getVariables();
+					if (vars.getInt("HAS_EVER_USED_AKAMANAH", 0) == 1)
 					{
 						return 1L;
 					}

@@ -48,6 +48,7 @@ import com.l2journey.gameserver.model.groups.PartyMessageType;
 import com.l2journey.gameserver.model.item.ItemTemplate;
 import com.l2journey.gameserver.model.item.enums.ItemProcessType;
 import com.l2journey.gameserver.model.item.instance.Item;
+import com.l2journey.gameserver.model.variables.PlayerVariables;
 import com.l2journey.gameserver.model.skill.CommonSkill;
 import com.l2journey.gameserver.model.skill.Skill;
 import com.l2journey.gameserver.network.SystemMessageId;
@@ -387,6 +388,24 @@ public class CursedWeapon
 		_playerKarma = _player.getKarma();
 		_playerPkKills = _player.getPkKills();
 		saveData();
+
+		try
+		{
+			final PlayerVariables vars = _player.getVariables();
+			if (_itemId == 8190) // Zariche
+			{
+				vars.set("HAS_EVER_USED_ZARICHE", 1);
+			}
+			else if (_itemId == 8689) // Akamanah
+			{
+				vars.set("HAS_EVER_USED_AKAMANAH", 1);
+			}
+			vars.storeMe();
+		}
+		catch (Exception e)
+		{
+			// ignore, non-critical
+		}
 		
 		// Change player stats
 		_player.setCursedWeaponEquippedId(_itemId);
