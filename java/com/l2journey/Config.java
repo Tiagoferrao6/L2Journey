@@ -185,7 +185,7 @@ public class Config
 	// --------------------------------------------------
 	// Login Files
 	// --------------------------------------------------
-	private static final String LOGIN_CONFIG_FILE = "./config/LoginServer.ini";
+	private static final String LOGIN_CONFIG_FILE = "./config/loginserver.ini";
 	
 	// --------------------------------------------------
 	// Variable Definitions
