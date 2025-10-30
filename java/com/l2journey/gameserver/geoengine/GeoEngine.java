@@ -76,6 +76,11 @@ public class GeoEngine
 	
 	private static final int ELEVATED_SEE_OVER_DISTANCE = 2;
 	private static final int MAX_SEE_OVER_HEIGHT = 48;
+	/**
+	 * Eye-level offset used for LOS ray start/end height. This helps reduce false negatives when the
+	 * character stands on uneven tiles compared to the target by sampling a bit above floor level.
+	 */
+	private static final int EYE_LEVEL = 24;
 	private static final int SPAWN_Z_DELTA_LIMIT = 100;
 	
 	private static final int WORLD_MIN_X = -655360;
@@ -131,6 +136,27 @@ public class GeoEngine
 			Config.PATHFINDING = 0;
 			LOGGER.info(getClass().getSimpleName() + ": Pathfinding is disabled.");
 		}
+	}
+
+	/**
+	 * Returns the lower floor height under the given world Z for the provided world X/Y.
+	 * This mirrors the common multilayer intent (bridges/tunnels): choose the layer below the probe height
+	 * instead of the absolute nearest which could pick a ceiling above.
+	 * @param x world X
+	 * @param y world Y
+	 * @param z probe world Z
+	 * @return lower floor height (world Z)
+	 */
+	public int getLowerHeight(int x, int y, int z)
+	{
+		final int geoX = getGeoX(x);
+		final int geoY = getGeoY(y);
+		if (!hasGeoPos(geoX, geoY))
+		{
+			return z;
+		}
+		// Slightly bias upwards to avoid reselecting the same layer when we stand exactly on it.
+		return getNextLowerZ(geoX, geoY, z + 20);
 	}
 	
 	/**
@@ -479,7 +505,7 @@ public class GeoEngine
 			return false;
 		}
 		
-		return canSeeTarget(x, y, z, tx, ty, tz);
+		return canSeeTargetInternal(x, y, z, tx, ty, tz, true);
 	}
 	
 	private int getLosGeoZ(int prevX, int prevY, int prevGeoZ, int curX, int curY, int nswe)
@@ -503,13 +529,30 @@ public class GeoEngine
 	 */
 	public boolean canSeeTarget(int x, int y, int z, int tx, int ty, int tz)
 	{
+		return canSeeTargetInternal(x, y, z, tx, ty, tz, true);
+	}
+
+	/**
+	 * Internal LOS with optional reverse validation to reduce false positives on steep edges.
+	 * @param x source world X
+	 * @param y source world Y
+	 * @param z source world Z
+	 * @param tx target world X
+	 * @param ty target world Y
+	 * @param tz target world Z
+	 * @param performReverse whether to validate LOS also from target to source
+	 * @return true if there is clear line of sight
+	 */
+	private boolean canSeeTargetInternal(int x, int y, int z, int tx, int ty, int tz, boolean performReverse)
+	{
 		int geoX = getGeoX(x);
 		int geoY = getGeoY(y);
 		int tGeoX = getGeoX(tx);
 		int tGeoY = getGeoY(ty);
 		
-		int nearestFromZ = getNearestZ(geoX, geoY, z);
-		int nearestToZ = getNearestZ(tGeoX, tGeoY, tz);
+		// Sample at eye level to stabilize LOS around uneven floors.
+		int nearestFromZ = getNearestZ(geoX, geoY, z + EYE_LEVEL);
+		int nearestToZ = getNearestZ(tGeoX, tGeoY, tz + EYE_LEVEL);
 		
 		// Fastpath.
 		if ((geoX == tGeoX) && (geoY == tGeoY))
@@ -616,7 +659,9 @@ public class GeoEngine
 			++ptIndex;
 		}
 		
-		return true;
+		// If we reached here, forward LOS passed. Optionally validate from target to source to avoid
+		// rare one-sided passes on steep edges.
+		return !performReverse || canSeeTargetInternal(tx, ty, tz, x, y, z, false);
 	}
 	
 	/**
@@ -673,7 +718,8 @@ public class GeoEngine
 		{
 			final int curX = pointIter.x();
 			final int curY = pointIter.y();
-			final int curZ = getNearestZ(curX, curY, prevZ);
+			// Prefer lower layer under the trace height to avoid "snapping" to ceilings above (bridges/tunnels).
+			final int curZ = getNextLowerZ(curX, curY, prevZ + 20);
 			if ((curZ - prevZ) > 40) // Check for sudden height increase.
 			{
 				// Can't move, return previous location.
@@ -685,6 +731,11 @@ public class GeoEngine
 				if (isCompletelyBlocked(curX, curY, curZ))
 				{
 					// Can't move, return previous location.
+					return new Location(getWorldX(prevX), getWorldY(prevY), prevZ);
+				}
+				// Optional: avoid stepping into partially obstructed nodes if configured, mirrors canMoveToTarget.
+				if (Config.AVOID_OBSTRUCTED_PATH_NODES && !checkNearestNswe(curX, curY, curZ, Cell.NSWE_ALL))
+				{
 					return new Location(getWorldX(prevX), getWorldY(prevY), prevZ);
 				}
 				
@@ -745,7 +796,8 @@ public class GeoEngine
 		{
 			final int curX = pointIter.x();
 			final int curY = pointIter.y();
-			final int curZ = getNearestZ(curX, curY, prevZ);
+			// Prefer lower layer under the trace height to avoid "snapping" to ceilings above (bridges/tunnels).
+			final int curZ = getNextLowerZ(curX, curY, prevZ + 20);
 			if ((curZ - prevZ) > 40) // Check for sudden height increase.
 			{
 				return false;

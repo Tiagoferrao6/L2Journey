@@ -178,6 +178,15 @@ public class PathFinding
 		}
 		
 		final int gtz = geoEngine.getHeight(tx, ty, tz);
+		// Fast-path: if we can move directly from start to end, return a direct path.
+		// This avoids unnecessary A* work and reduces artefacts when a straight line is valid.
+		if (geoEngine.canMoveToTarget(x, y, z, tx, ty, tz, instanceId))
+		{
+			final List<GeoLocation> directPath = new ArrayList<>(1);
+			// GeoLocation expects geo coordinates for X/Y and a geo-valid Z.
+			directPath.add(new GeoLocation(gtx, gty, gtz));
+			return directPath;
+		}
 		final NodeBuffer buffer = alloc(64 + (2 * Math.max(Math.abs(gx - gtx), Math.abs(gy - gty))));
 		if (buffer == null)
 		{
