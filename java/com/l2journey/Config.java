@@ -96,20 +96,20 @@ public class Config
 	// --------------------------------------------------
 	// Server Files
 	// --------------------------------------------------
-	private static final String SERVER_CONFIG_FILE = "./config/Server.ini";
-	private static final String GENERAL_CONFIG_FILE = "./config/General.ini";
-	private static final String DATABASE_CONFIG_FILE = "./config/Database.ini";
-	private static final String COMMUNITY_BOARD_CONFIG_FILE = "./config/CommunityBoard.ini";
-	private static final String CUSTOM_MAIL_MANAGER_CONFIG_FILE = "./config/CustomMailManager.ini";
+	private static final String SERVER_CONFIG_FILE = "./config/server.ini";
+	private static final String GENERAL_CONFIG_FILE = "./config/general.ini";
+	private static final String DATABASE_CONFIG_FILE = "./config/database.ini";
+	private static final String COMMUNITY_BOARD_CONFIG_FILE = "./config/communityboard.ini";
+	private static final String CUSTOM_MAIL_MANAGER_CONFIG_FILE = "./config/custommailmanager.ini";
 	
 	// --------------------------------------------------
 	// Admin folder -
 	// --------------------------------------------------
-	private static final String ADMINISTRATOR_CONFIG_FILE = "./config/admin/Administrator.ini";
-	private static final String DEVELOPMENT_CONFIG_FILE = "./config/admin/Development.ini";
-	private static final String GEOENGINE_CONFIG_FILE = "./config/admin/GeoEngine.ini";
-	private static final String ID_MANAGER_CONFIG_FILE = "./config/admin/IdManager.ini";
-	private static final String RATES_CONFIG_FILE = "./config/admin/Rates.ini";
+	private static final String ADMINISTRATOR_CONFIG_FILE = "./config/admin/administrator.ini";
+	private static final String DEVELOPMENT_CONFIG_FILE = "./config/admin/development.ini";
+	private static final String GEOENGINE_CONFIG_FILE = "./config/admin/geoengine.ini";
+	private static final String ID_MANAGER_CONFIG_FILE = "./config/admin/idmanager.ini";
+	private static final String RATES_CONFIG_FILE = "./config/admin/rates.ini";
 	
 	// --------------------------------------------------
 	// IPConfig folder -
@@ -120,67 +120,67 @@ public class Config
 	// --------------------------------------------------
 	// Npcs folder -
 	// --------------------------------------------------
-	private static final String BOSS_ANNOUNCEMENTS_CONFIG_FILE = "./config/npcs/BossAnnouncements.ini";
-	private static final String CHAMPION_MONSTERS_CONFIG_FILE = "./config/npcs/ChampionMonsters.ini";
-	private static final String DELEVEL_MANAGER_CONFIG_FILE = "./config/npcs/DelevelManager.ini";
-	private static final String FAKE_PLAYERS_CONFIG_FILE = "./config/npcs/FakePlayers.ini";
-	private static final String GRACIASEEDS_CONFIG_FILE = "./config/npcs/GraciaSeeds.ini";
-	private static final String GRANDBOSS_CONFIG_FILE = "./config/npcs/GrandBoss.ini";
-	private static final String MERCHANT_ZERO_SELL_PRICE_CONFIG_FILE = "./config/npcs/MerchantZeroSellPrice.ini";
-	private static final String NOBLESS_MASTER_CONFIG_FILE = "./config/npcs/NoblessMaster.ini";
-	private static final String NPC_CONFIG_FILE = "./config/npcs/NPC.ini";
-	public static final String NPC_BUFFER_FILE = "./config/npcs/NpcBuffer.ini";
-	public static final String NPC_BUFFER_PREMIUM_FILE = "./config/npcs/NpcBufferPremium.ini";
-	private static final String NPC_STAT_MULTIPLIERS_CONFIG_FILE = "./config/npcs/NpcStatMultipliers.ini";
-	private static final String RANDOM_SPAWNS_CONFIG_FILE = "./config/npcs/RandomSpawns.ini";
-	private static final String SCHEME_BUFFER_CONFIG_FILE = "./config/npcs/SchemeBuffer.ini";
-	private static final String TRANSMOG_CONFIG_FILE = "./config/npcs/Transmog.ini";
+	private static final String BOSS_ANNOUNCEMENTS_CONFIG_FILE = "./config/npcs/bossannouncements.ini";
+	private static final String CHAMPION_MONSTERS_CONFIG_FILE = "./config/npcs/championmonsters.ini";
+	private static final String DELEVEL_MANAGER_CONFIG_FILE = "./config/npcs/delevelmanager.ini";
+	private static final String FAKE_PLAYERS_CONFIG_FILE = "./config/npcs/fakeplayers.ini";
+	private static final String GRACIASEEDS_CONFIG_FILE = "./config/npcs/graciaseeds.ini";
+	private static final String GRANDBOSS_CONFIG_FILE = "./config/npcs/grandboss.ini";
+	private static final String MERCHANT_ZERO_SELL_PRICE_CONFIG_FILE = "./config/npcs/merchantzerosellprice.ini";
+	private static final String NOBLESS_MASTER_CONFIG_FILE = "./config/npcs/noblessmaster.ini";
+	private static final String NPC_CONFIG_FILE = "./config/npcs/npc.ini";
+	public static final String NPC_BUFFER_FILE = "./config/npcs/npcbuffer.ini";
+	public static final String NPC_BUFFER_PREMIUM_FILE = "./config/npcs/npcbufferpremium.ini";
+	private static final String NPC_STAT_MULTIPLIERS_CONFIG_FILE = "./config/npcs/npcstatmultipliers.ini";
+	private static final String RANDOM_SPAWNS_CONFIG_FILE = "./config/npcs/randomspawns.ini";
+	private static final String SCHEME_BUFFER_CONFIG_FILE = "./config/npcs/schemebuffer.ini";
+	private static final String TRANSMOG_CONFIG_FILE = "./config/npcs/transmog.ini";
 	
 	// --------------------------------------------------
 	// Player folder -
 	// --------------------------------------------------
-	private static final String ALLOWED_PLAYER_RACES_CONFIG_FILE = "./config/player/AllowedPlayerRaces.ini";
-	private static final String AUTO_POTIONS_CONFIG_FILE = "./config/player/AutoPotions.ini";
-	private static final String BANKING_CONFIG_FILE = "./config/player/Banking.ini";
-	private static final String CHARACTER_CONFIG_FILE = "./config/player/Character.ini";
-	private static final String CLAN_DEFINITIONS = "./config/player/ClanDefinitions.ini";
-	private static final String FIND_PVP_CONFIG_FILE = "./config/player/FindPvP.ini";
-	private static final String HELLBOUND_STATUS_CONFIG_FILE = "./config/player/HellboundStatus.ini";
-	private static final String OFFLINE_PLAY_CONFIG_FILE = "./config/player/OfflinePlay.ini";
-	private static final String OFFLINE_TRADE_CONFIG_FILE = "./config/player/OfflineTrade.ini";
-	private static final String ONLINE_INFO_CONFIG_FILE = "./config/player/OnlineInfo.ini";
-	private static final String PLAYER_CONTROL = "./config/player/PlayerControl.ini";
-	private static final String PREMIUM_SYSTEM_CONFIG_FILE = "./config/player/PremiumSystem.ini";
-	private static final String PVP_CONFIG_FILE = "./config/player/PVP.ini";
-	private static final String PVP_ANNOUNCE_CONFIG_FILE = "./config/player/PvpAnnounce.ini";
-	private static final String PVP_REWARD_ITEM_CONFIG_FILE = "./config/player/PvpRewardItem.ini";
-	private static final String PVP_TITLE_CONFIG_FILE = "./config/player/PvpTitleColor.ini";
-	private static final String SCREEN_WELCOME_MESSAGE_CONFIG_FILE = "./config/player/ScreenWelcomeMessage.ini";
-	private static final String SELL_BUFFS_CONFIG_FILE = "./config/player/SellBuffs.ini";
-	private static final String SERVER_TIME_CONFIG_FILE = "./config/player/ServerTime.ini";
-	private static final String STARTING_LOCATION_CONFIG_FILE = "./config/player/StartingLocation.ini";
-	private static final String STARTING_TITLE_CONFIG_FILE = "./config/player/StartingTitle.ini";
-	private static final String USER_PANEL_COMMANDS = "./config/player/UserPanel.ini";
-	private static final String WAREHOUSE_SORTING_CONFIG_FILE = "./config/player/WarehouseSorting.ini";
+	private static final String ALLOWED_PLAYER_RACES_CONFIG_FILE = "./config/player/allowedplayerraces.ini";
+	private static final String AUTO_POTIONS_CONFIG_FILE = "./config/player/autopotions.ini";
+	private static final String BANKING_CONFIG_FILE = "./config/player/banking.ini";
+	private static final String CHARACTER_CONFIG_FILE = "./config/player/character.ini";
+	private static final String CLAN_DEFINITIONS = "./config/player/clandefinitions.ini";
+	private static final String FIND_PVP_CONFIG_FILE = "./config/player/findpvp.ini";
+	private static final String HELLBOUND_STATUS_CONFIG_FILE = "./config/player/hellboundstatus.ini";
+	private static final String OFFLINE_PLAY_CONFIG_FILE = "./config/player/offlineplay.ini";
+	private static final String OFFLINE_TRADE_CONFIG_FILE = "./config/player/offlinetrade.ini";
+	private static final String ONLINE_INFO_CONFIG_FILE = "./config/player/onlineinfo.ini";
+	private static final String PLAYER_CONTROL = "./config/player/playercontrol.ini";
+	private static final String PREMIUM_SYSTEM_CONFIG_FILE = "./config/player/premiumsystem.ini";
+	private static final String PVP_CONFIG_FILE = "./config/player/pvp.ini";
+	private static final String PVP_ANNOUNCE_CONFIG_FILE = "./config/player/pvpannounce.ini";
+	private static final String PVP_REWARD_ITEM_CONFIG_FILE = "./config/player/pvprewarditem.ini";
+	private static final String PVP_TITLE_CONFIG_FILE = "./config/player/pvptitlecolor.ini";
+	private static final String SCREEN_WELCOME_MESSAGE_CONFIG_FILE = "./config/player/screenwelcomemessage.ini";
+	private static final String SELL_BUFFS_CONFIG_FILE = "./config/player/sellbuffs.ini";
+	private static final String SERVER_TIME_CONFIG_FILE = "./config/player/servertime.ini";
+	private static final String STARTING_LOCATION_CONFIG_FILE = "./config/player/startinglocation.ini";
+	private static final String STARTING_TITLE_CONFIG_FILE = "./config/player/startingtitle.ini";
+	private static final String USER_PANEL_COMMANDS = "./config/player/userpanel.ini";
+	private static final String WAREHOUSE_SORTING_CONFIG_FILE = "./config/player/warehousesorting.ini";
 	
 	// --------------------------------------------------
 	// Security folder -
 	// --------------------------------------------------
-	private static final String CAPTCHA_CONFIG_FILE = "./config/security/Captcha.ini";
+	private static final String CAPTCHA_CONFIG_FILE = "./config/security/captcha.ini";
 	private static final String CHAT_FILTER_FILE = "./config/security/chatfilter.txt";
-	private static final String DUALBOX_CHECK_CONFIG_FILE = "./config/security/DualboxCheck.ini";
-	private static final String FLOOD_PROTECTOR_CONFIG_FILE = "./config/security/FloodProtector.ini";
-	private static final String PRIVATE_STORE_RANGE_CONFIG_FILE = "./config/security/PrivateStoreRange.ini";
-	private static final String WALKER_BOT_PROTECTION_CONFIG_FILE = "./config/security/WalkerBotProtection.ini";
+	private static final String DUALBOX_CHECK_CONFIG_FILE = "./config/security/dualboxcheck.ini";
+	private static final String FLOOD_PROTECTOR_CONFIG_FILE = "./config/security/floodprotector.ini";
+	private static final String PRIVATE_STORE_RANGE_CONFIG_FILE = "./config/security/privatestorerange.ini";
+	private static final String WALKER_BOT_PROTECTION_CONFIG_FILE = "./config/security/walkerbotprotection.ini";
 	
 	// --------------------------------------------------
 	// Siege folder -
 	// --------------------------------------------------
-	private static final String CONQUERABLE_HALL_SIEGE_CONFIG_FILE = "./config/siege/ConquerableHallSiege.ini";
-	public static final String FORTSIEGE_CONFIG_FILE = "./config/siege/FortSiege.ini";
-	private static final String FEATURE_CONFIG_FILE = "./config/siege/Residences.ini";
-	public static final String SIEGE_CONFIG_FILE = "./config/siege/Siege.ini";
-	public static final String TW_CONFIG_FILE = "./config/siege/TerritoryWar.ini";
+	private static final String CONQUERABLE_HALL_SIEGE_CONFIG_FILE = "./config/siege/conquerablehallsiege.ini";
+	public static final String FORTSIEGE_CONFIG_FILE = "./config/siege/fortsiege.ini";
+	private static final String FEATURE_CONFIG_FILE = "./config/siege/residences.ini";
+	public static final String SIEGE_CONFIG_FILE = "./config/siege/siege.ini";
+	public static final String TW_CONFIG_FILE = "./config/siege/territorywar.ini";
 	
 	// --------------------------------------------------
 	// Login Files
