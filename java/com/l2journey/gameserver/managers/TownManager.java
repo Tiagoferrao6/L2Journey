@@ -41,7 +41,7 @@ import com.l2journey.gameserver.model.zone.type.TownZone;
 public class TownManager
 {
 	private static final Map<Integer, Integer> CASTLES = new ConcurrentHashMap<>();
-
+	
 	private TownManager()
 	{
 		CASTLES.put(912, 1);
@@ -54,12 +54,12 @@ public class TownManager
 		CASTLES.put(1537, 8);
 		CASTLES.put(1714, 9);
 	}
-
+	
 	public static int getTownCastle(int townId)
 	{
 		return CASTLES.containsKey(townId) ? CASTLES.get(townId) : 0;
 	}
-
+	
 	public static boolean townHasCastleInSiege(int townId)
 	{
 		final int castleIndex = getTownCastle(townId);

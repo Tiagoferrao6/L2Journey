@@ -42,7 +42,7 @@ public enum PrivateStoreType
 	PACKAGE_SELL(8),
 	SELL_BUFFS(9);
 	
-	private int _id;
+	private final int _id;
 	
 	private PrivateStoreType(int id)
 	{

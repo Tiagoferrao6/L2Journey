@@ -74,7 +74,7 @@ public class Asher extends AbstractNpcAI
 		{
 			return event;
 		}
-
+		
 		return super.onEvent(event, npc, player);
 	}
 	

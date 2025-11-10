@@ -187,12 +187,7 @@ public class Q00325_GrimCollector extends Quest
 	public void onKill(Npc npc, Player killer, boolean isSummon)
 	{
 		final QuestState qs = getQuestState(killer, false);
-		if ((qs == null) || !qs.isStarted())
-		{
-			return;
-		}
-		
-		if (!LocationUtil.checkIfInRange(Config.ALT_PARTY_RANGE, killer, npc, true) || !hasQuestItems(killer, ANATOMY_DIAGRAM))
+		if ((qs == null) || !qs.isStarted() || !LocationUtil.checkIfInRange(Config.ALT_PARTY_RANGE, killer, npc, true) || !hasQuestItems(killer, ANATOMY_DIAGRAM))
 		{
 			return;
 		}

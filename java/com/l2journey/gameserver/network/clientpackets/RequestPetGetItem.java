@@ -71,13 +71,7 @@ public class RequestPetGetItem extends ClientPacket
 		}
 		
 		final int castleId = MercTicketManager.getInstance().getTicketCastleId(item.getId());
-		if (castleId > 0)
-		{
-			player.sendPacket(ActionFailed.STATIC_PACKET);
-			return;
-		}
-		
-		if (FortSiegeManager.getInstance().isCombat(item.getId()))
+		if ((castleId > 0) || FortSiegeManager.getInstance().isCombat(item.getId()))
 		{
 			player.sendPacket(ActionFailed.STATIC_PACKET);
 			return;

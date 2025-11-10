@@ -68,12 +68,7 @@ public class RequestExEnchantSkill extends ClientPacket
 	@Override
 	protected void runImpl()
 	{
-		if (!getClient().getFloodProtectors().canPerformPlayerAction())
-		{
-			return;
-		}
-		
-		if ((_skillId <= 0) || (_skillLevel <= 0))
+		if (!getClient().getFloodProtectors().canPerformPlayerAction() || (_skillId <= 0) || (_skillLevel <= 0))
 		{
 			return;
 		}

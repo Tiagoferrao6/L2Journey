@@ -20,7 +20,7 @@
  */
 package handlers.effecthandlers;
 
-import com.l2journey.gameserver.geoengine.GeoEngine;
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.model.Location;
 import com.l2journey.gameserver.model.StatSet;
 import com.l2journey.gameserver.model.actor.Creature;
@@ -98,7 +98,7 @@ public class ThrowUp extends AbstractEffect
 		final int x = effector.getX() - (int) (offset * cos);
 		final int y = effector.getY() - (int) (offset * sin);
 		final int z = effected.getZ();
-		final Location destination = GeoEngine.getInstance().getValidLocation(effected.getX(), effected.getY(), effected.getZ(), x, y, z, effected.getInstanceId());
+		final Location destination = GeoData.getInstance().moveCheck(effected.getX(), effected.getY(), effected.getZ(), x, y, z, effected.getInstanceId());
 		effected.broadcastPacket(new FlyToLocation(effected, destination, FlyType.THROW_UP));
 		effected.setXYZ(destination);
 		effected.broadcastPacket(new ValidateLocation(effected));

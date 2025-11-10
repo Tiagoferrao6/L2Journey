@@ -57,12 +57,7 @@ public class EnemySummon implements ITargetTypeHandler
 				if ((player.getSummon() != targetSummon) && !targetSummon.isDead())
 				{
 					final Player targetOwner = targetSummon.getOwner();
-					if ((targetOwner.getPvpFlag() != 0) || (targetOwner.getKarma() > 0))
-					{
-						return Collections.singletonList(targetSummon);
-					}
-					
-					if (targetOwner.isInsideZone(ZoneId.PVP) && player.isInsideZone(ZoneId.PVP))
+					if ((targetOwner.getPvpFlag() != 0) || (targetOwner.getKarma() > 0) || (targetOwner.isInsideZone(ZoneId.PVP) && player.isInsideZone(ZoneId.PVP)))
 					{
 						return Collections.singletonList(targetSummon);
 					}

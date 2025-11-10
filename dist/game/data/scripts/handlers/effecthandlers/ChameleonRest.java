@@ -59,12 +59,7 @@ public class ChameleonRest extends AbstractEffect
 	@Override
 	public boolean onActionTime(Creature effector, Creature effected, Skill skill)
 	{
-		if (effected.isDead())
-		{
-			return false;
-		}
-		
-		if (effected.isPlayer() && !effected.asPlayer().isSitting())
+		if (effected.isDead() || (effected.isPlayer() && !effected.asPlayer().isSitting()))
 		{
 			return false;
 		}

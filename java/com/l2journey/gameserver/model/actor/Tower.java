@@ -28,8 +28,8 @@
  */
 package com.l2journey.gameserver.model.actor;
 
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.ai.Intention;
-import com.l2journey.gameserver.geoengine.GeoEngine;
 import com.l2journey.gameserver.model.actor.templates.NpcTemplate;
 import com.l2journey.gameserver.network.serverpackets.ActionFailed;
 
@@ -72,7 +72,7 @@ public abstract class Tower extends Npc
 			// Set the target of the Player player
 			player.setTarget(this);
 		}
-		else if (interact && isAutoAttackable(player) && (Math.abs(player.getZ() - getZ()) < 100) && GeoEngine.getInstance().canSeeTarget(player, this))
+		else if (interact && isAutoAttackable(player) && (Math.abs(player.getZ() - getZ()) < 100) && GeoData.getInstance().canSeeTarget(player, this))
 		{
 			// Notify the Player AI with INTERACT
 			player.getAI().setIntention(Intention.ATTACK, this);

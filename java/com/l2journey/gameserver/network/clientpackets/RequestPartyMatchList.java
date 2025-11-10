@@ -106,11 +106,7 @@ public class RequestPartyMatchList extends ClientPacket
 			{
 				for (Player ptmember : player.getParty().getMembers())
 				{
-					if (ptmember == null)
-					{
-						continue;
-					}
-					if (ptmember == player)
+					if ((ptmember == null) || (ptmember == player))
 					{
 						continue;
 					}

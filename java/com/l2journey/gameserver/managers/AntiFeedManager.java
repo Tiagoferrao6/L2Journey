@@ -85,13 +85,8 @@ public class AntiFeedManager
 		}
 		
 		final Player targetPlayer = target.asPlayer();
-		if (targetPlayer == null)
-		{
-			return false;
-		}
-		
 		// Players in offline mode should't be valid targets.
-		if (targetPlayer.getClient().isDetached())
+		if ((targetPlayer == null) || targetPlayer.getClient().isDetached())
 		{
 			return false;
 		}
@@ -236,12 +231,7 @@ public class AntiFeedManager
 		}
 		
 		final Player player = client.getPlayer();
-		if (player == null)
-		{
-			return;
-		}
-		
-		if (player.isInOfflineMode())
+		if ((player == null) || player.isInOfflineMode())
 		{
 			return;
 		}

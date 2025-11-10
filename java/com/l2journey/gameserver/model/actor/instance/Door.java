@@ -604,12 +604,7 @@ public class Door extends Creature
 	{
 		if (isWall() && (getInstanceId() == 0))
 		{
-			if (!attacker.isServitor())
-			{
-				return;
-			}
-			
-			if (attacker.getTemplate().getRace() != Race.SIEGE_WEAPON)
+			if (!attacker.isServitor() || (attacker.getTemplate().getRace() != Race.SIEGE_WEAPON))
 			{
 				return;
 			}
@@ -718,13 +713,8 @@ public class Door extends Creature
 	private void startAutoCloseTask()
 	{
 		final DoorTemplate template = getTemplate();
-		if ((template.getCloseTime() < 0) || isOpenableByTime())
-		{
-			return;
-		}
-		
 		// Clanhall doors should not auto close.
-		if (template.getClanHallId() > 0)
+		if ((template.getCloseTime() < 0) || isOpenableByTime() || (template.getClanHallId() > 0))
 		{
 			return;
 		}

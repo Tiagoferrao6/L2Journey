@@ -137,22 +137,7 @@ public class NpcBufferAI implements Runnable
 		if (target.isPlayable())
 		{
 			final Player targetPlayer = target.asPlayer();
-			if (player == targetPlayer)
-			{
-				return true;
-			}
-			
-			if (player.isInPartyWith(targetPlayer))
-			{
-				return true;
-			}
-			
-			if (player.isInCommandChannelWith(targetPlayer))
-			{
-				return true;
-			}
-			
-			if (player.isInClanWith(targetPlayer))
+			if ((player == targetPlayer) || player.isInPartyWith(targetPlayer) || player.isInCommandChannelWith(targetPlayer) || player.isInClanWith(targetPlayer))
 			{
 				return true;
 			}
@@ -198,22 +183,7 @@ public class NpcBufferAI implements Runnable
 			final Player targetPlayer = target.asPlayer();
 			if (!isFriendly(player, targetPlayer))
 			{
-				if (targetPlayer.getPvpFlag() != 0)
-				{
-					return true;
-				}
-				
-				if (targetPlayer.getKarma() != 0)
-				{
-					return true;
-				}
-				
-				if (player.isAtWarWith(targetPlayer))
-				{
-					return true;
-				}
-				
-				if (targetPlayer.isInsideZone(ZoneId.PVP))
+				if ((targetPlayer.getPvpFlag() != 0) || (targetPlayer.getKarma() != 0) || player.isAtWarWith(targetPlayer) || targetPlayer.isInsideZone(ZoneId.PVP))
 				{
 					return true;
 				}

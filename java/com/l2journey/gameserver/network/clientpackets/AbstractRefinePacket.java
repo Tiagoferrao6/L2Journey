@@ -220,18 +220,11 @@ public abstract class AbstractRefinePacket extends ClientPacket
 	 */
 	protected static boolean isValid(Player player, Item item, Item refinerItem, Item gemStones)
 	{
-		if (!isValid(player, item, refinerItem))
-		{
-			return false;
-		}
+		
 		
 		// GemStones must belong to owner
-		if (gemStones.getOwnerId() != player.getObjectId())
-		{
-			return false;
-		}
 		// .. and located in inventory
-		if (gemStones.getItemLocation() != ItemLocation.INVENTORY)
+		if (!isValid(player, item, refinerItem) || (gemStones.getOwnerId() != player.getObjectId()) || (gemStones.getItemLocation() != ItemLocation.INVENTORY))
 		{
 			return false;
 		}
@@ -262,18 +255,11 @@ public abstract class AbstractRefinePacket extends ClientPacket
 	 */
 	protected static boolean isValid(Player player, Item item, Item refinerItem)
 	{
-		if (!isValid(player, item))
-		{
-			return false;
-		}
+		
 		
 		// Item must belong to owner
-		if (refinerItem.getOwnerId() != player.getObjectId())
-		{
-			return false;
-		}
 		// Lifestone must be located in inventory
-		if (refinerItem.getItemLocation() != ItemLocation.INVENTORY)
+		if (!isValid(player, item) || (refinerItem.getOwnerId() != player.getObjectId()) || (refinerItem.getItemLocation() != ItemLocation.INVENTORY))
 		{
 			return false;
 		}
@@ -310,21 +296,10 @@ public abstract class AbstractRefinePacket extends ClientPacket
 	 */
 	protected static boolean isValid(Player player, Item item)
 	{
-		if (!isValid(player))
-		{
-			return false;
-		}
+		
 		
 		// Item must belong to owner
-		if (item.getOwnerId() != player.getObjectId())
-		{
-			return false;
-		}
-		if (item.isAugmented())
-		{
-			return false;
-		}
-		if (item.isHeroItem())
+		if (!isValid(player) || (item.getOwnerId() != player.getObjectId()) || item.isAugmented() || item.isHeroItem())
 		{
 			return false;
 		}
@@ -450,11 +425,7 @@ public abstract class AbstractRefinePacket extends ClientPacket
 			player.sendPacket(SystemMessageId.YOU_CANNOT_AUGMENT_ITEMS_WHILE_SITTING_DOWN);
 			return false;
 		}
-		if (player.isCursedWeaponEquipped())
-		{
-			return false;
-		}
-		if (player.isEnchanting() || player.isProcessingTransaction())
+		if (player.isCursedWeaponEquipped() || player.isEnchanting() || player.isProcessingTransaction())
 		{
 			return false;
 		}

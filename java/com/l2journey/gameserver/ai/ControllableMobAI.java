@@ -359,13 +359,8 @@ public class ControllableMobAI extends AttackableAI
 	
 	private boolean checkAutoAttackCondition(Creature target)
 	{
-		if ((target == null) || target.isNpc() || target.isDoor())
-		{
-			return false;
-		}
-		
 		// TODO(Zoey76)[#112]: This check must change if summon fall in Npc hierarchy.
-		if (target.isNpc())
+		if ((target == null) || target.isNpc() || target.isDoor() || target.isNpc())
 		{
 			return false;
 		}

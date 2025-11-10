@@ -28,7 +28,7 @@
  */
 package com.l2journey.gameserver.ai;
 
-import com.l2journey.gameserver.geoengine.GeoEngine;
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.model.actor.Attackable;
 import com.l2journey.gameserver.model.actor.Creature;
 
@@ -65,7 +65,7 @@ public class DistrustAI extends AttackableAI
 			return;
 		}
 		
-		if (!GeoEngine.getInstance().canSeeTarget(_actor, _forcedTarget))
+		if (!GeoData.getInstance().canSeeTarget(_actor, _forcedTarget))
 		{
 			return;
 		}

@@ -88,12 +88,7 @@ public class EventItem implements IItemHandler
 		}
 		
 		final Skill sk = item.getEtcItem().getSkills()[0].getSkill();
-		if (sk == null)
-		{
-			return false;
-		}
-		
-		if (!caster.destroyItem(ItemProcessType.NONE, item, 1, caster, true))
+		if ((sk == null) || !caster.destroyItem(ItemProcessType.NONE, item, 1, caster, true))
 		{
 			return false;
 		}

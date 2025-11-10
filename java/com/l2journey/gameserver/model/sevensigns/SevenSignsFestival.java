@@ -1308,12 +1308,7 @@ public class SevenSignsFestival
 	
 	public boolean isParticipant(Player player)
 	{
-		if (SevenSigns.getInstance().isSealValidationPeriod())
-		{
-			return false;
-		}
-		
-		if (_managerInstance == null)
+		if (SevenSigns.getInstance().isSealValidationPeriod() || (_managerInstance == null))
 		{
 			return false;
 		}

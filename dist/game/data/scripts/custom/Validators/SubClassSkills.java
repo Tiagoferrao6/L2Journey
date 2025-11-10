@@ -107,12 +107,7 @@ public class SubClassSkills extends AbstractNpcAI
 	@Override
 	public void onEnterWorld(Player player)
 	{
-		if (!Config.SKILL_CHECK_ENABLE)
-		{
-			return;
-		}
-		
-		if (player.isGM() && !Config.SKILL_CHECK_GM)
+		if (!Config.SKILL_CHECK_ENABLE || (player.isGM() && !Config.SKILL_CHECK_GM))
 		{
 			return;
 		}

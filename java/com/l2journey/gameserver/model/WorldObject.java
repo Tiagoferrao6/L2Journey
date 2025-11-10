@@ -1009,12 +1009,7 @@ public abstract class WorldObject extends ListenersContainer implements IPositio
 		}
 		
 		final WorldRegion worldRegion = worldObject.getWorldRegion();
-		if (worldRegion == null)
-		{
-			return false;
-		}
-		
-		if (_worldRegion == null)
+		if ((worldRegion == null) || (_worldRegion == null))
 		{
 			return false;
 		}

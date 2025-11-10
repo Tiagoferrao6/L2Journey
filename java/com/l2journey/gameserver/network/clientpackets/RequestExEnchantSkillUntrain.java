@@ -126,13 +126,7 @@ public class RequestExEnchantSkillUntrain extends ClientPacket
 		final int requireditems = esd.getAdenaCost();
 		final Item spb = player.getInventory().getItemByItemId(reqItemId);
 		// does not have spellbook
-		if (Config.ES_SP_BOOK_NEEDED && (spb == null))
-		{
-			player.sendPacket(SystemMessageId.YOU_DO_NOT_HAVE_ALL_OF_THE_ITEMS_NEEDED_TO_ENCHANT_THAT_SKILL);
-			return;
-		}
-		
-		if (player.getInventory().getAdena() < requireditems)
+		if ((Config.ES_SP_BOOK_NEEDED && (spb == null)) || (player.getInventory().getAdena() < requireditems))
 		{
 			player.sendPacket(SystemMessageId.YOU_DO_NOT_HAVE_ALL_OF_THE_ITEMS_NEEDED_TO_ENCHANT_THAT_SKILL);
 			return;

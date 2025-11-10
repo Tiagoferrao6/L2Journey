@@ -98,12 +98,7 @@ public class BabyPet extends Pet
 			}
 			
 			final Skill skill = SkillData.getInstance().getSkill(id, level);
-			if (skill == null)
-			{
-				continue;
-			}
-			
-			if ((skill.getId() == BUFF_CONTROL) || (skill.getId() == AWAKENING))
+			if ((skill == null) || (skill.getId() == BUFF_CONTROL) || (skill.getId() == AWAKENING))
 			{
 				continue;
 			}
@@ -317,12 +312,7 @@ public class BabyPet extends Pet
 					for (SkillHolder buff : _buffs)
 					{
 						skill = buff.getSkill();
-						if (_baby.isSkillDisabled(skill))
-						{
-							continue;
-						}
-						
-						if (_baby.getCurrentMp() < skill.getMpConsume())
+						if (_baby.isSkillDisabled(skill) || (_baby.getCurrentMp() < skill.getMpConsume()))
 						{
 							continue;
 						}

@@ -57,12 +57,7 @@ public class Ground implements ITargetTypeHandler
 		{
 			if ((character != null) && character.isInsideRadius2D(player.getCurrentSkillWorldPosition(), skill.getAffectRange()))
 			{
-				if (!Skill.checkForAreaOffensiveSkills(creature, character, skill, srcInArena))
-				{
-					return;
-				}
-				
-				if (character.isDoor())
+				if (!Skill.checkForAreaOffensiveSkills(creature, character, skill, srcInArena) || character.isDoor())
 				{
 					return;
 				}

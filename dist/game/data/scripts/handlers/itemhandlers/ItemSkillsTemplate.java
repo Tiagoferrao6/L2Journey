@@ -95,18 +95,8 @@ public class ItemSkillsTemplate implements IItemHandler
 					hasConsumeSkill = true;
 				}
 				
-				if (!itemSkill.checkCondition(playable, playable.getTarget(), false))
-				{
-					return false;
-				}
-				
-				if (playable.isSkillDisabled(itemSkill))
-				{
-					return false;
-				}
-				
 				// Verify that skill is not under reuse.
-				if (!checkReuse(playable, itemSkill, item))
+				if (!itemSkill.checkCondition(playable, playable.getTarget(), false) || playable.isSkillDisabled(itemSkill) || !checkReuse(playable, itemSkill, item))
 				{
 					return false;
 				}

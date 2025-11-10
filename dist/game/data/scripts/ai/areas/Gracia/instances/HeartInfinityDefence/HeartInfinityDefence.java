@@ -282,12 +282,7 @@ public class HeartInfinityDefence extends AbstractNpcAI
 			player.sendPacket(SystemMessageId.YOU_ARE_NOT_CURRENTLY_IN_A_PARTY_SO_YOU_CANNOT_ENTER);
 			return false;
 		}
-		if (party.getLeader() != player)
-		{
-			player.sendPacket(SystemMessageId.ONLY_A_PARTY_LEADER_CAN_MAKE_THE_REQUEST_TO_ENTER);
-			return false;
-		}
-		if ((party.getCommandChannel() == null) || (party.getCommandChannel().getLeader() != player))
+		if ((party.getLeader() != player) || (party.getCommandChannel() == null) || (party.getCommandChannel().getLeader() != player))
 		{
 			player.sendPacket(SystemMessageId.ONLY_A_PARTY_LEADER_CAN_MAKE_THE_REQUEST_TO_ENTER);
 			return false;

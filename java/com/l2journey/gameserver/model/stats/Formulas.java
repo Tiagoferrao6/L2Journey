@@ -1663,13 +1663,8 @@ public class Formulas
 		}
 		
 		// Perfect Shield Block.
-		if (shld == SHIELD_DEFENSE_PERFECT_BLOCK)
-		{
-			return false;
-		}
-		
 		// if target reflect this skill then the effect will fail
-		if (calcBuffDebuffReflection(target, skill))
+		if ((shld == SHIELD_DEFENSE_PERFECT_BLOCK) || calcBuffDebuffReflection(target, skill))
 		{
 			return false;
 		}

@@ -735,12 +735,7 @@ public class FortSiege implements Siegable
 			
 			for (Fort fort : FortManager.getInstance().getForts())
 			{
-				if (fort.getSiege().getAttackerClan(player.getClanId()) != null)
-				{
-					return 3; // Players clan is already registred to siege
-				}
-				
-				if ((fort.getOwnerClan() == clan) && (fort.getSiege().isInProgress() || (fort.getSiege()._siegeStartTask != null)))
+				if ((fort.getSiege().getAttackerClan(player.getClanId()) != null) || ((fort.getOwnerClan() == clan) && (fort.getSiege().isInProgress() || (fort.getSiege()._siegeStartTask != null))))
 				{
 					return 3; // Players clan is already registred to siege
 				}
@@ -959,11 +954,7 @@ public class FortSiege implements Siegable
 			
 			if (siege.getSiegeDate().get(Calendar.DAY_OF_WEEK) == getSiegeDate().get(Calendar.DAY_OF_WEEK))
 			{
-				if (siege.checkIsAttacker(clan))
-				{
-					return true;
-				}
-				if (siege.checkIsDefender(clan))
+				if (siege.checkIsAttacker(clan) || siege.checkIsDefender(clan))
 				{
 					return true;
 				}

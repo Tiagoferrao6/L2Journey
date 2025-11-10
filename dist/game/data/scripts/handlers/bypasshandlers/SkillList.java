@@ -96,12 +96,7 @@ public class SkillList implements IBypassHandler
 						{
 							for (PlayerClass cid : classesToTeach)
 							{
-								if (cid.level() > classCheck.level())
-								{
-									continue;
-								}
-								
-								if (SkillTreeData.getInstance().getAvailableSkills(player, cid, false, false).isEmpty())
+								if ((cid.level() > classCheck.level()) || SkillTreeData.getInstance().getAvailableSkills(player, cid, false, false).isEmpty())
 								{
 									continue;
 								}

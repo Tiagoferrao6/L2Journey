@@ -1003,18 +1003,8 @@ public class Pet extends Summon
 					
 					final Skill skill = info.getSkill();
 					// Do not save heals.
-					if (skill.getAbnormalType() == AbnormalType.LIFE_FORCE_OTHERS)
-					{
-						continue;
-					}
-					
-					if (skill.isToggle())
-					{
-						continue;
-					}
-					
 					// Dances and songs are not kept in retail.
-					if (skill.isDance() && !Config.ALT_STORE_DANCES)
+					if ((skill.getAbnormalType() == AbnormalType.LIFE_FORCE_OTHERS) || skill.isToggle() || (skill.isDance() && !Config.ALT_STORE_DANCES))
 					{
 						continue;
 					}

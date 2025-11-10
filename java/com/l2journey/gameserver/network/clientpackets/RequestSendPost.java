@@ -144,13 +144,7 @@ public class RequestSendPost extends ClientPacket
 			return;
 		}
 		
-		if (player.getActiveTradeList() != null)
-		{
-			player.sendPacket(SystemMessageId.YOU_CANNOT_FORWARD_DURING_AN_EXCHANGE);
-			return;
-		}
-		
-		if (player.isInventoryDisabled())
+		if ((player.getActiveTradeList() != null) || player.isInventoryDisabled())
 		{
 			player.sendPacket(SystemMessageId.YOU_CANNOT_FORWARD_DURING_AN_EXCHANGE);
 			return;

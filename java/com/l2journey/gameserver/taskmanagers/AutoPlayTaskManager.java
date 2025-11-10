@@ -34,8 +34,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.l2journey.Config;
 import com.l2journey.commons.threads.ThreadPool;
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.ai.Intention;
-import com.l2journey.gameserver.geoengine.GeoEngine;
 import com.l2journey.gameserver.model.Location;
 import com.l2journey.gameserver.model.World;
 import com.l2journey.gameserver.model.WorldObject;
@@ -136,8 +136,8 @@ public class AutoPlayTaskManager
 					}
 					else if ((creature.getTarget() == player) || (creature.getTarget() == null))
 					{
-						// GeoEngine can see target check.
-						if (!GeoEngine.getInstance().canSeeTarget(player, creature))
+						// GeoData can see target check.
+						if (!GeoData.getInstance().canSeeTarget(player, creature))
 						{
 							player.setTarget(null);
 							continue PLAY;
@@ -145,7 +145,7 @@ public class AutoPlayTaskManager
 						
 						// Logic adjustment for summons not attacking.
 						final Summon summon = player.getSummon();
-						if ((summon != null) && summon.hasAI() && !summon.isMoving() && !summon.isDisabled() && (summon.getAI().getIntention() != Intention.ATTACK) && (summon.getAI().getIntention() != Intention.CAST) && creature.isAutoAttackable(player) && GeoEngine.getInstance().canSeeTarget(player, creature))
+						if ((summon != null) && summon.hasAI() && !summon.isMoving() && !summon.isDisabled() && (summon.getAI().getIntention() != Intention.ATTACK) && (summon.getAI().getIntention() != Intention.CAST) && creature.isAutoAttackable(player) && GeoData.getInstance().canSeeTarget(player, creature))
 						{
 							summon.getAI().setIntention(Intention.ATTACK, creature);
 						}
@@ -168,8 +168,8 @@ public class AutoPlayTaskManager
 							{
 								if (creature.isAutoAttackable(player))
 								{
-									// GeoEngine can see target check.
-									if (!GeoEngine.getInstance().canSeeTarget(player, creature))
+									// GeoData can see target check.
+									if (!GeoData.getInstance().canSeeTarget(player, creature))
 									{
 										player.setTarget(null);
 										continue PLAY;
@@ -227,7 +227,7 @@ public class AutoPlayTaskManager
 						// Check if item is reachable.
 						if ((droppedItem == null) //
 							|| (!droppedItem.isSpawned()) //
-							|| !GeoEngine.getInstance().canMoveToTarget(player.getX(), player.getY(), player.getZ(), droppedItem.getX(), droppedItem.getY(), droppedItem.getZ(), player.getInstanceId()))
+							|| !GeoData.getInstance().canMove(player.getX(), player.getY(), player.getZ(), droppedItem.getX(), droppedItem.getY(), droppedItem.getZ(), player.getInstanceId()))
 						{
 							continue PICKUP;
 						}
@@ -294,7 +294,7 @@ public class AutoPlayTaskManager
 						}
 						
 						// Check if creature is reachable.
-						if ((Math.abs(player.getZ() - nearby.getZ()) < 800) && GeoEngine.getInstance().canSeeTarget(player, nearby) && GeoEngine.getInstance().canMoveToTarget(player.getX(), player.getY(), player.getZ(), nearby.getX(), nearby.getY(), nearby.getZ(), player.getInstanceId()))
+						if ((Math.abs(player.getZ() - nearby.getZ()) < 800) && GeoData.getInstance().canSeeTarget(player, nearby) && GeoData.getInstance().canMove(player.getX(), player.getY(), player.getZ(), nearby.getX(), nearby.getY(), nearby.getZ(), player.getInstanceId()))
 						{
 							final double creatureDistance = player.calculateDistance2D(nearby);
 							if (creatureDistance < closestDistance)

@@ -38,9 +38,9 @@ import java.util.logging.Logger;
 
 import com.l2journey.Config;
 import com.l2journey.commons.util.Rnd;
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.data.xml.NpcData;
 import com.l2journey.gameserver.data.xml.NpcPersonalAIData;
-import com.l2journey.gameserver.geoengine.GeoEngine;
 import com.l2journey.gameserver.managers.WalkingManager;
 import com.l2journey.gameserver.managers.ZoneManager;
 import com.l2journey.gameserver.model.actor.Npc;
@@ -414,8 +414,8 @@ public class Spawn extends Location
 		{
 			final int randX = newlocx + Rnd.get(Config.MOB_MIN_SPAWN_RANGE, Config.MOB_MAX_SPAWN_RANGE);
 			final int randY = newlocy + Rnd.get(Config.MOB_MIN_SPAWN_RANGE, Config.MOB_MAX_SPAWN_RANGE);
-			if (GeoEngine.getInstance().canMoveToTarget(newlocx, newlocy, newlocz, randX, randY, newlocz, getInstanceId()) //
-				&& GeoEngine.getInstance().canSeeTarget(newlocx, newlocy, newlocz, randX, randY, newlocz, getInstanceId()))
+			if (GeoData.getInstance().canMove(newlocx, newlocy, newlocz, randX, randY, newlocz, getInstanceId()) //
+				&& GeoData.getInstance().canSeeTarget(newlocx, newlocy, newlocz, randX, randY, newlocz, getInstanceId()))
 			{
 				newlocx = randX;
 				newlocy = randY;
@@ -428,7 +428,7 @@ public class Spawn extends Location
 		if (npc.isMonster() && !npc.isFlying() && (water == null))
 		{
 			// Do not correct Z distances greater than 300.
-			final int geoZ = GeoEngine.getInstance().getHeight(newlocx, newlocy, newlocz);
+			final int geoZ = GeoData.getInstance().getHeight(newlocx, newlocy, newlocz);
 			if (LocationUtil.calculateDistance(newlocx, newlocy, newlocz, newlocx, newlocy, geoZ, true, true) < 300)
 			{
 				newlocz = geoZ;

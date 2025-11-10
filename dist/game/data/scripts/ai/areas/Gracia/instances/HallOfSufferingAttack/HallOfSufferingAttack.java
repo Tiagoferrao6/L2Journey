@@ -528,7 +528,7 @@ public class HallOfSufferingAttack extends AbstractNpcAI
 				world.incStatus();
 				world.storeTime[1] = System.currentTimeMillis();
 				
-				final Long finishDiff = world.storeTime[1] - world.storeTime[0];
+				final long finishDiff = world.storeTime[1] - world.storeTime[0];
 				if (finishDiff < 1260000)
 				{
 					world.setParameter("tag", 13777);

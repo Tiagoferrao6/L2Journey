@@ -63,12 +63,7 @@ public class RequestBrBuyProduct extends ClientPacket
 	protected void runImpl()
 	{
 		final Player player = getPlayer();
-		if (player == null)
-		{
-			return;
-		}
-		
-		if ((_count > 99) || (_count < 0))
+		if ((player == null) || (_count > 99) || (_count < 0))
 		{
 			return;
 		}

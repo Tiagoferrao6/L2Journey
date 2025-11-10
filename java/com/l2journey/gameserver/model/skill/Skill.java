@@ -42,9 +42,9 @@ import java.util.logging.Logger;
 
 import com.l2journey.Config;
 import com.l2journey.commons.util.Rnd;
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.data.xml.SkillData;
 import com.l2journey.gameserver.data.xml.SkillTreeData;
-import com.l2journey.gameserver.geoengine.GeoEngine;
 import com.l2journey.gameserver.handler.ITargetTypeHandler;
 import com.l2journey.gameserver.handler.TargetHandler;
 import com.l2journey.gameserver.model.ExtractableProductItem;
@@ -1145,13 +1145,8 @@ public class Skill
 				if ((party != null) && (targetParty != null))
 				{
 					// Same party
-					if (party.getLeaderObjectId() == targetParty.getLeaderObjectId())
-					{
-						return false;
-					}
-					
 					// Same command channel
-					if (party.isInCommandChannel() && (party.getCommandChannel() == targetParty.getCommandChannel()))
+					if ((party.getLeaderObjectId() == targetParty.getLeaderObjectId()) || (party.isInCommandChannel() && (party.getCommandChannel() == targetParty.getCommandChannel())))
 					{
 						return false;
 					}
@@ -1174,12 +1169,7 @@ public class Skill
 				
 				if (!sourceInArena && !(targetPlayer.isInsideZone(ZoneId.PVP) && !targetPlayer.isInsideZone(ZoneId.SIEGE)) && !targetPlayer.isInTownWarEvent())
 				{
-					if ((player.getAllyId() != 0) && (player.getAllyId() == targetPlayer.getAllyId()))
-					{
-						return false;
-					}
-					
-					if ((player.getClanId() != 0) && (player.getClanId() == targetPlayer.getClanId()))
+					if (((player.getAllyId() != 0) && (player.getAllyId() == targetPlayer.getAllyId())) || ((player.getClanId() != 0) && (player.getClanId() == targetPlayer.getClanId())))
 					{
 						return false;
 					}
@@ -1200,7 +1190,7 @@ public class Skill
 			}
 		}
 		
-		if (!GeoEngine.getInstance().canSeeTarget(caster, target))
+		if (!GeoData.getInstance().canSeeTarget(caster, target))
 		{
 			return false;
 		}
@@ -1218,12 +1208,7 @@ public class Skill
 	
 	public static boolean addCharacter(Creature caster, Creature target, int radius, boolean isDead)
 	{
-		if (isDead != target.isDead())
-		{
-			return false;
-		}
-		
-		if ((radius > 0) && !LocationUtil.checkIfInRange(radius, caster, target, true))
+		if ((isDead != target.isDead()) || ((radius > 0) && !LocationUtil.checkIfInRange(radius, caster, target, true)))
 		{
 			return false;
 		}
@@ -1232,12 +1217,7 @@ public class Skill
 	
 	public List<AbstractFunction> getStatFuncs(AbstractEffect effect, Creature creature)
 	{
-		if ((_funcTemplates == null) || (creature == null))
-		{
-			return Collections.<AbstractFunction> emptyList();
-		}
-		
-		if (!creature.isPlayable() && !creature.isAttackable())
+		if ((_funcTemplates == null) || (creature == null) || (!creature.isPlayable() && !creature.isAttackable()))
 		{
 			return Collections.<AbstractFunction> emptyList();
 		}
@@ -1822,12 +1802,7 @@ public class Skill
 	
 	public void applyEffectsWithoutSuccessCheck(Creature effector, Creature effected)
 	{
-		if (effected == null)
-		{
-			return;
-		}
-		
-		if ((effector != effected) && isBad() && effected.isInvul())
+		if ((effected == null) || ((effector != effected) && isBad() && effected.isInvul()))
 		{
 			return;
 		}

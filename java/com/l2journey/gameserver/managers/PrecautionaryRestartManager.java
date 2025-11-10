@@ -161,17 +161,7 @@ public class PrecautionaryRestartManager
 				continue;
 			}
 			
-			if (player.isInOlympiadMode())
-			{
-				return true;
-			}
-			
-			if (player.isOnEvent())
-			{
-				return true;
-			}
-			
-			if (player.getInstanceId() > 0)
+			if (player.isInOlympiadMode() || player.isOnEvent() || (player.getInstanceId() > 0))
 			{
 				return true;
 			}

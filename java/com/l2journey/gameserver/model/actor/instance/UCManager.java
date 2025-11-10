@@ -128,16 +128,7 @@ public class UCManager extends Folk
 						continue;
 					}
 					
-					if (member.getPlayerClass().level() < 2)
-					{
-						final NpcHtmlMessage packet = new NpcHtmlMessage(getObjectId());
-						packet.setFile(member, "data/html/undergroundColiseum/wrongLevel.htm");
-						packet.replace("%name%", member.getName());
-						player.sendPacket(packet);
-						return;
-					}
-					
-					if (!((member.getLevel() >= arena.getMinLevel()) && (member.getLevel() <= arena.getMaxLevel())))
+					if ((member.getPlayerClass().level() < 2) || !((member.getLevel() >= arena.getMinLevel()) && (member.getLevel() <= arena.getMaxLevel())))
 					{
 						final NpcHtmlMessage packet = new NpcHtmlMessage(getObjectId());
 						packet.setFile(member, "data/html/undergroundColiseum/wrongLevel.htm");

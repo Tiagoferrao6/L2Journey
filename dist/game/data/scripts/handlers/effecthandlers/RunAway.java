@@ -51,12 +51,7 @@ public class RunAway extends AbstractEffect
 	@Override
 	public void onStart(Creature effector, Creature effected, Skill skill)
 	{
-		if (!effected.isAttackable())
-		{
-			return;
-		}
-		
-		if (Rnd.get(100) > _power)
+		if (!effected.isAttackable() || (Rnd.get(100) > _power))
 		{
 			return;
 		}

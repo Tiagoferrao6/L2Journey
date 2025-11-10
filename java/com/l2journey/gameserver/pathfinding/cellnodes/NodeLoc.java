@@ -26,22 +26,26 @@
  * applicable..
  * 
  */
-package com.l2journey.gameserver.geoengine.pathfinding;
+package com.l2journey.gameserver.pathfinding.cellnodes;
 
-import com.l2journey.gameserver.geoengine.GeoEngine;
-import com.l2journey.gameserver.geoengine.geodata.Cell;
+import com.l2journey.commons.terrain.geoengine.Direction;
+import com.l2journey.gameserver.GeoData;
+import com.l2journey.gameserver.pathfinding.AbstractNodeLoc;
 
 /**
- * @author Mobius
+ * @author -Nemesiss-, HorridoJoho
  */
-public class GeoLocation
+public class NodeLoc extends AbstractNodeLoc
 {
 	private int _x;
 	private int _y;
-	private int _nswe;
+	private boolean _goNorth;
+	private boolean _goEast;
+	private boolean _goSouth;
+	private boolean _goWest;
 	private int _geoHeight;
 	
-	public GeoLocation(int x, int y, int z)
+	public NodeLoc(int x, int y, int z)
 	{
 		set(x, y, z);
 	}
@@ -50,84 +54,74 @@ public class GeoLocation
 	{
 		_x = x;
 		_y = y;
-		_nswe = 0; // Reset the bitmask.
-		
-		// Set the NSWE bitmask based on movement possibilities.
-		final GeoEngine geoEngine = GeoEngine.getInstance();
-		if (geoEngine.checkNearestNswe(x, y, z, Cell.NSWE_NORTH))
-		{
-			_nswe |= Cell.NSWE_NORTH;
-		}
-		if (geoEngine.checkNearestNswe(x, y, z, Cell.NSWE_EAST))
-		{
-			_nswe |= Cell.NSWE_EAST;
-		}
-		if (geoEngine.checkNearestNswe(x, y, z, Cell.NSWE_SOUTH))
-		{
-			_nswe |= Cell.NSWE_SOUTH;
-		}
-		if (geoEngine.checkNearestNswe(x, y, z, Cell.NSWE_WEST))
-		{
-			_nswe |= Cell.NSWE_WEST;
-		}
-		
-		_geoHeight = geoEngine.getNearestZ(x, y, z);
+		_goNorth = GeoData.getInstance().canEnterNeighbors(x, y, z, Direction.NORTH);
+		_goEast = GeoData.getInstance().canEnterNeighbors(x, y, z, Direction.EAST);
+		_goSouth = GeoData.getInstance().canEnterNeighbors(x, y, z, Direction.SOUTH);
+		_goWest = GeoData.getInstance().canEnterNeighbors(x, y, z, Direction.WEST);
+		_geoHeight = GeoData.getInstance().getNearestZ(x, y, z);
 	}
 	
 	public boolean canGoNorth()
 	{
-		return (_nswe & Cell.NSWE_NORTH) != 0;
+		return _goNorth;
 	}
 	
 	public boolean canGoEast()
 	{
-		return (_nswe & Cell.NSWE_EAST) != 0;
+		return _goEast;
 	}
 	
 	public boolean canGoSouth()
 	{
-		return (_nswe & Cell.NSWE_SOUTH) != 0;
+		return _goSouth;
 	}
 	
 	public boolean canGoWest()
 	{
-		return (_nswe & Cell.NSWE_WEST) != 0;
+		return _goWest;
 	}
 	
 	public boolean canGoNone()
 	{
-		return _nswe == 0;
+		return !canGoNorth() && !canGoEast() && !canGoSouth() && !canGoWest();
 	}
 	
 	public boolean canGoAll()
 	{
-		return _nswe == Cell.NSWE_ALL;
+		return canGoNorth() && canGoEast() && canGoSouth() && canGoWest();
 	}
 	
+	@Override
 	public int getX()
 	{
-		return GeoEngine.getWorldX(_x);
+		return GeoData.getInstance().getWorldX(_x);
 	}
 	
+	@Override
 	public int getY()
 	{
-		return GeoEngine.getWorldY(_y);
+		return GeoData.getInstance().getWorldY(_y);
 	}
 	
+	@Override
 	public int getZ()
 	{
 		return _geoHeight;
 	}
 	
+	@Override
 	public void setZ(short z)
 	{
+		//
 	}
 	
+	@Override
 	public int getNodeX()
 	{
 		return _x;
 	}
 	
+	@Override
 	public int getNodeY()
 	{
 		return _y;
@@ -141,10 +135,27 @@ public class GeoLocation
 		result = (prime * result) + _x;
 		result = (prime * result) + _y;
 		
-		// Combine the geo height and the NSWE bitmask into the hash.
-		result = (prime * result) + (((_geoHeight & 0xFFFF) << 1) | _nswe);
+		byte nswe = 0;
+		if (canGoNorth())
+		{
+			nswe |= 1;
+		}
+		if (canGoEast())
+		{
+			nswe |= 1 << 1;
+		}
+		if (canGoSouth())
+		{
+			nswe |= 1 << 2;
+		}
+		if (canGoEast())
+		{
+			nswe |= 1 << 3;
+		}
 		
+		result = (prime * result) + (((_geoHeight & 0xFFFF) << 1) | nswe);
 		return result;
+		// return super.hashCode();
 	}
 	
 	@Override
@@ -154,14 +165,39 @@ public class GeoLocation
 		{
 			return true;
 		}
-		
-		if ((obj == null) || (getClass() != obj.getClass()))
+		if ((obj == null) || !(obj instanceof NodeLoc))
 		{
 			return false;
 		}
-		
-		// Compare _x, _y, _geoHeight, and the bitmask _nswe directly.
-		final GeoLocation other = (GeoLocation) obj;
-		return (_x == other._x) && (_y == other._y) && (_geoHeight == other._geoHeight) && (_nswe == other._nswe);
+		final NodeLoc other = (NodeLoc) obj;
+		if (_x != other._x)
+		{
+			return false;
+		}
+		if (_y != other._y)
+		{
+			return false;
+		}
+		if (_goNorth != other._goNorth)
+		{
+			return false;
+		}
+		if (_goEast != other._goEast)
+		{
+			return false;
+		}
+		if (_goSouth != other._goSouth)
+		{
+			return false;
+		}
+		if (_goWest != other._goWest)
+		{
+			return false;
+		}
+		if (_geoHeight != other._geoHeight)
+		{
+			return false;
+		}
+		return true;
 	}
 }

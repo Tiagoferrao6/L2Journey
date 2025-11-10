@@ -20,7 +20,7 @@
  */
 package com.l2journey.gameserver.model.conditions;
 
-import com.l2journey.gameserver.geoengine.GeoEngine;
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.model.actor.Creature;
 import com.l2journey.gameserver.model.item.ItemTemplate;
 import com.l2journey.gameserver.model.skill.Skill;
@@ -42,6 +42,6 @@ public class ConditionMinDistance extends Condition
 	{
 		return (effected != null) //
 			&& (effector.calculateDistance3D(effected) >= _distance) //
-			&& GeoEngine.getInstance().canSeeTarget(effector, effected);
+			&& GeoData.getInstance().canSeeTarget(effector, effected);
 	}
 }

@@ -28,8 +28,8 @@
  */
 package ai.others.TownPets;
 
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.ai.Intention;
-import com.l2journey.gameserver.geoengine.GeoEngine;
 import com.l2journey.gameserver.model.Location;
 import com.l2journey.gameserver.model.Spawn;
 import com.l2journey.gameserver.model.actor.Npc;
@@ -77,7 +77,7 @@ public class TownPets extends AbstractNpcAI
 				final Spawn spawn = npc.getSpawn();
 				final int locX = spawn.getX() + getRandom(-50, 50);
 				final int locY = spawn.getY() + getRandom(-50, 50);
-				final Location moveLocation = GeoEngine.getInstance().getValidLocation(npc.getX(), npc.getY(), npc.getZ(), locX, locY, npc.getZ(), 0);
+				final Location moveLocation = GeoData.getInstance().moveCheck(npc.getX(), npc.getY(), npc.getZ(), locX, locY, npc.getZ(), 0);
 				if (npc.calculateDistance3D(moveLocation) > 20)
 				{
 					npc.getAI().setIntention(Intention.MOVE_TO, moveLocation);

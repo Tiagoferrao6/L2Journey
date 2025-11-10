@@ -34,7 +34,7 @@ import java.util.List;
 import com.l2journey.Config;
 import com.l2journey.commons.threads.ThreadPool;
 import com.l2journey.commons.util.Rnd;
-import com.l2journey.gameserver.geoengine.GeoEngine;
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.managers.WalkingManager;
 import com.l2journey.gameserver.model.Location;
 import com.l2journey.gameserver.model.World;
@@ -956,18 +956,12 @@ public class CreatureAI extends AbstractAI
 		}
 		
 		// If pathfinding enabled the creature will go to the destination or it will go to the nearest obstacle.
-		setIntention(Intention.MOVE_TO, Config.PATHFINDING > 0 ? GeoEngine.getInstance().getValidLocation(_actor.getX(), _actor.getY(), _actor.getZ(), posX, posY, posZ, _actor.getInstanceId()) : new Location(posX, posY, posZ));
+		setIntention(Intention.MOVE_TO, Config.PATHFINDING > 0 ? GeoData.getInstance().moveCheck(_actor.getX(), _actor.getY(), _actor.getZ(), posX, posY, posZ, _actor.getInstanceId()) : new Location(posX, posY, posZ));
 	}
 	
 	protected boolean maybeMoveToPosition(ILocational worldPosition, int offset)
 	{
-		if (worldPosition == null)
-		{
-			// LOGGER.warning("maybeMoveToPosition: worldPosition == NULL!");
-			return false;
-		}
-		
-		if (offset < 0)
+		if ((worldPosition == null) || (offset < 0))
 		{
 			return false; // skill radius -1
 		}
@@ -1031,13 +1025,7 @@ public class CreatureAI extends AbstractAI
 	protected boolean maybeMoveToPawn(WorldObject target, int offsetValue)
 	{
 		// Get the distance between the current position of the Creature and the target (x,y)
-		if (target == null)
-		{
-			// LOGGER.warning("maybeMoveToPawn: target == NULL!");
-			return false;
-		}
-		
-		if (offsetValue < 0)
+		if ((target == null) || (offsetValue < 0))
 		{
 			return false; // skill radius -1
 		}
@@ -1183,7 +1171,7 @@ public class CreatureAI extends AbstractAI
 			{
 				if (_actor.isPlayer() && _actor.isMoving())
 				{
-					if (!GeoEngine.getInstance().canMoveToTarget(_actor, target))
+					if (!GeoData.getInstance().canMove(_actor, target))
 					{
 						setIntention(Intention.ACTIVE);
 						return true;
@@ -1191,7 +1179,7 @@ public class CreatureAI extends AbstractAI
 				}
 				else
 				{
-					if (!GeoEngine.getInstance().canSeeTarget(_actor, target))
+					if (!GeoData.getInstance().canSeeTarget(_actor, target))
 					{
 						setIntention(Intention.ACTIVE);
 						return true;
@@ -1201,7 +1189,7 @@ public class CreatureAI extends AbstractAI
 			
 			if (_actor.isSummon())
 			{
-				if (GeoEngine.getInstance().canMoveToTarget(_actor, target))
+				if (GeoData.getInstance().canMove(_actor, target))
 				{
 					return false;
 				}
@@ -1509,7 +1497,7 @@ public class CreatureAI extends AbstractAI
 				boolean cancast = true;
 				for (Creature target : World.getInstance().getVisibleObjectsInRange(_actor, Creature.class, sk.getAffectRange()))
 				{
-					if (!GeoEngine.getInstance().canSeeTarget(_actor, target) || (target.isAttackable() && !_actor.asNpc().isChaos()))
+					if (!GeoData.getInstance().canSeeTarget(_actor, target) || (target.isAttackable() && !_actor.asNpc().isChaos()))
 					{
 						continue;
 					}
@@ -1530,7 +1518,7 @@ public class CreatureAI extends AbstractAI
 				boolean cancast = true;
 				for (Creature target : World.getInstance().getVisibleObjectsInRange(getAttackTarget(), Creature.class, sk.getAffectRange()))
 				{
-					if (!GeoEngine.getInstance().canSeeTarget(_actor, target) || (target == null) || (target.isAttackable() && !_actor.asNpc().isChaos()))
+					if (!GeoData.getInstance().canSeeTarget(_actor, target) || (target == null) || (target.isAttackable() && !_actor.asNpc().isChaos()))
 					{
 						continue;
 					}
@@ -1552,7 +1540,7 @@ public class CreatureAI extends AbstractAI
 			boolean cancast = false;
 			for (Creature target : World.getInstance().getVisibleObjectsInRange(_actor, Creature.class, sk.getAffectRange()))
 			{
-				if (!GeoEngine.getInstance().canSeeTarget(_actor, target) || (target.isAttackable() && !_actor.asNpc().isChaos()))
+				if (!GeoData.getInstance().canSeeTarget(_actor, target) || (target.isAttackable() && !_actor.asNpc().isChaos()))
 				{
 					continue;
 				}
@@ -1573,7 +1561,7 @@ public class CreatureAI extends AbstractAI
 			boolean cancast = true;
 			for (Creature target : World.getInstance().getVisibleObjectsInRange(getAttackTarget(), Creature.class, sk.getAffectRange()))
 			{
-				if (!GeoEngine.getInstance().canSeeTarget(_actor, target) || (target.isAttackable() && !_actor.asNpc().isChaos()))
+				if (!GeoData.getInstance().canSeeTarget(_actor, target) || (target.isAttackable() && !_actor.asNpc().isChaos()))
 				{
 					continue;
 				}
@@ -1601,7 +1589,7 @@ public class CreatureAI extends AbstractAI
 			int ccount = 0;
 			for (Attackable target : World.getInstance().getVisibleObjectsInRange(_actor, Attackable.class, sk.getAffectRange()))
 			{
-				if (!GeoEngine.getInstance().canSeeTarget(_actor, target))
+				if (!GeoData.getInstance().canSeeTarget(_actor, target))
 				{
 					continue;
 				}

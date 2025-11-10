@@ -89,12 +89,7 @@ public class PlayerStat extends PlayableStat
 		final Player player = getActiveChar();
 		
 		// Allowed to gain exp?
-		if (!getActiveChar().getAccessLevel().canGainExp())
-		{
-			return false;
-		}
-		
-		if (!super.addExp(value))
+		if (!getActiveChar().getAccessLevel().canGainExp() || !super.addExp(value))
 		{
 			return false;
 		}

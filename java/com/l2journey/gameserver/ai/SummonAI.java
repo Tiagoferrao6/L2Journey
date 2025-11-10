@@ -25,12 +25,12 @@ import java.util.concurrent.Future;
 import com.l2journey.Config;
 import com.l2journey.commons.threads.ThreadPool;
 import com.l2journey.commons.util.Rnd;
-import com.l2journey.gameserver.geoengine.GeoEngine;
-import com.l2journey.gameserver.geoengine.pathfinding.PathFinding;
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.model.WorldObject;
 import com.l2journey.gameserver.model.actor.Creature;
 import com.l2journey.gameserver.model.actor.Summon;
 import com.l2journey.gameserver.model.skill.Skill;
+import com.l2journey.gameserver.pathfinding.PathFinding;
 
 public class SummonAI extends PlayableAI implements Runnable
 {
@@ -260,7 +260,7 @@ public class SummonAI extends PlayableAI implements Runnable
 		final double angle = Math.toRadians(Rnd.get(-90, 90)) + Math.atan2(ownerY - _actor.getY(), ownerX - _actor.getX());
 		final int targetX = ownerX + (int) (AVOID_RADIUS * Math.cos(angle));
 		final int targetY = ownerY + (int) (AVOID_RADIUS * Math.sin(angle));
-		if (GeoEngine.getInstance().canMoveToTarget(_actor.getX(), _actor.getY(), _actor.getZ(), targetX, targetY, _actor.getZ(), _actor.getInstanceId()))
+		if (GeoData.getInstance().canMove(_actor.getX(), _actor.getY(), _actor.getZ(), targetX, targetY, _actor.getZ(), _actor.getInstanceId()))
 		{
 			moveTo(targetX, targetY, _actor.getZ());
 		}

@@ -72,11 +72,7 @@ public class RequestJoinAlly extends ClientPacket
 		
 		final Player target = ob;
 		final Clan clan = player.getClan();
-		if (!clan.checkAllyJoinCondition(player, target))
-		{
-			return;
-		}
-		if (!player.getRequest().setRequest(target, this))
+		if (!clan.checkAllyJoinCondition(player, target) || !player.getRequest().setRequest(target, this))
 		{
 			return;
 		}

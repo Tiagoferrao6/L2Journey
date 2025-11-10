@@ -201,12 +201,7 @@ public class TradeList
 		}
 		
 		final Item item = (Item) o;
-		if (!(item.isTradeable() || (_owner.isGM() && Config.GM_TRADE_RESTRICTED_ITEMS)) || item.isQuestItem())
-		{
-			return null;
-		}
-		
-		if (!_owner.getInventory().canManipulateWithItemId(item.getId()))
+		if (!(item.isTradeable() || (_owner.isGM() && Config.GM_TRADE_RESTRICTED_ITEMS)) || item.isQuestItem() || !_owner.getInventory().canManipulateWithItemId(item.getId()))
 		{
 			return null;
 		}

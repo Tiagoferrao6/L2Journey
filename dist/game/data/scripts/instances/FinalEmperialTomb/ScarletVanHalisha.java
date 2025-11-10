@@ -31,9 +31,9 @@ package instances.FinalEmperialTomb;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.ai.Intention;
 import com.l2journey.gameserver.data.xml.SkillData;
-import com.l2journey.gameserver.geoengine.GeoEngine;
 import com.l2journey.gameserver.model.World;
 import com.l2journey.gameserver.model.WorldObject;
 import com.l2journey.gameserver.model.actor.Creature;
@@ -224,7 +224,7 @@ public class ScarletVanHalisha extends AbstractNpcAI
 					continue;
 				}
 				
-				if (((obj.asCreature().getZ() < (npc.getZ() - 100)) && (obj.asCreature().getZ() > (npc.getZ() + 100))) || !GeoEngine.getInstance().canSeeTarget(obj, npc))
+				if (((obj.asCreature().getZ() < (npc.getZ() - 100)) && (obj.asCreature().getZ() > (npc.getZ() + 100))) || !GeoData.getInstance().canSeeTarget(obj, npc))
 				{
 					continue;
 				}

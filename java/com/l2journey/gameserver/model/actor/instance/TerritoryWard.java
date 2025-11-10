@@ -48,11 +48,7 @@ public class TerritoryWard extends Attackable
 	@Override
 	public boolean isAutoAttackable(Creature attacker)
 	{
-		if (isInvul())
-		{
-			return false;
-		}
-		if ((getCastle() == null) || !getCastle().getZone().isActive())
+		if (isInvul() || (getCastle() == null) || !getCastle().getZone().isActive())
 		{
 			return false;
 		}
@@ -100,19 +96,7 @@ public class TerritoryWard extends Attackable
 		}
 		
 		final Player actingPlayer = attacker.asPlayer();
-		if (actingPlayer == null)
-		{
-			return;
-		}
-		if (actingPlayer.isCombatFlagEquipped())
-		{
-			return;
-		}
-		if (actingPlayer.getSiegeSide() == 0)
-		{
-			return;
-		}
-		if (getCastle() == null)
+		if ((actingPlayer == null) || actingPlayer.isCombatFlagEquipped() || (actingPlayer.getSiegeSide() == 0) || (getCastle() == null))
 		{
 			return;
 		}

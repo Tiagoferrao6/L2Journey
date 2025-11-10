@@ -26,60 +26,62 @@
  * applicable..
  * 
  */
-package com.l2journey.gameserver.geoengine.geodata.regions;
+package com.l2journey.commons.terrain.geodriver.blocks;
 
-import com.l2journey.gameserver.geoengine.geodata.IRegion;
+import java.nio.ByteBuffer;
+
+import com.l2journey.commons.terrain.geodriver.IBlock;
+import com.l2journey.commons.terrain.geoengine.Direction;
 
 /**
- * @author HorridoJoho, Mobius
+ * @author FBIagent
  */
-public class NullRegion implements IRegion
+public class FlatBlock implements IBlock
 {
-	public static final NullRegion INSTANCE = new NullRegion();
+	private final short _height;
+	
+	/**
+	 * Initializes a new instance of this block reading the specified buffer.
+	 * @param bb the buffer
+	 */
+	public FlatBlock(ByteBuffer bb)
+	{
+		_height = bb.getShort();
+	}
 	
 	@Override
-	public boolean checkNearestNswe(int geoX, int geoY, int worldZ, int nswe)
+	public boolean hasGeoPos(int geoX, int geoY)
 	{
 		return true;
 	}
 	
 	@Override
-	public void setNearestNswe(int geoX, int geoY, int worldZ, byte nswe)
-	{
-	}
-	
-	@Override
-	public void unsetNearestNswe(int geoX, int geoY, int worldZ, byte nswe)
-	{
-	}
-	
-	@Override
 	public int getNearestZ(int geoX, int geoY, int worldZ)
 	{
-		return worldZ;
+		return _height;
 	}
 	
 	@Override
 	public int getNextLowerZ(int geoX, int geoY, int worldZ)
 	{
-		return worldZ;
+		return _height <= worldZ ? _height : worldZ;
 	}
 	
 	@Override
 	public int getNextHigherZ(int geoX, int geoY, int worldZ)
 	{
-		return worldZ;
+		return _height >= worldZ ? _height : worldZ;
 	}
 	
 	@Override
-	public boolean hasGeo()
+	public boolean canMoveIntoDirections(int geoX, int geoY, int worldZ, Direction first, Direction... more)
 	{
-		return false;
+		return true;
 	}
 	
 	@Override
-	public boolean saveToFile(String fileName)
+	public boolean canMoveIntoAllDirections(int geoX, int geoY, int worldZ)
 	{
-		return false;
+		return true;
 	}
 }

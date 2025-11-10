@@ -90,12 +90,7 @@ public class TriggerSkillByDamageReceived extends AbstractEffect
 			return;
 		}
 		
-		if (event.getAttacker() == event.getTarget())
-		{
-			return;
-		}
-		
-		if ((event.getAttacker().getLevel() < _minAttackerLevel) || (event.getAttacker().getLevel() > _maxAttackerLevel))
+		if ((event.getAttacker() == event.getTarget()) || (event.getAttacker().getLevel() < _minAttackerLevel) || (event.getAttacker().getLevel() > _maxAttackerLevel))
 		{
 			return;
 		}

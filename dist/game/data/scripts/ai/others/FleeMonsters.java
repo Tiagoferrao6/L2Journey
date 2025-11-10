@@ -28,8 +28,8 @@
  */
 package ai.others;
 
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.ai.Intention;
-import com.l2journey.gameserver.geoengine.GeoEngine;
 import com.l2journey.gameserver.model.Location;
 import com.l2journey.gameserver.model.actor.Npc;
 import com.l2journey.gameserver.model.actor.Player;
@@ -81,7 +81,7 @@ public class FleeMonsters extends AbstractNpcAI
 		final int posX = (int) (npc.getX() + (FLEE_DISTANCE * Math.cos(radians)));
 		final int posY = (int) (npc.getY() + (FLEE_DISTANCE * Math.sin(radians)));
 		final int posZ = npc.getZ();
-		final Location destination = GeoEngine.getInstance().getValidLocation(npc.getX(), npc.getY(), npc.getZ(), posX, posY, posZ, npc.getInstanceId());
+		final Location destination = GeoData.getInstance().moveCheck(npc.getX(), npc.getY(), npc.getZ(), posX, posY, posZ, npc.getInstanceId());
 		npc.getAI().setIntention(Intention.MOVE_TO, destination);
 	}
 	

@@ -54,12 +54,7 @@ public class PrivateWarehouse implements IBypassHandler
 	@Override
 	public boolean useBypass(String command, Player player, Creature target)
 	{
-		if (!target.isNpc())
-		{
-			return false;
-		}
-		
-		if (player.isEnchanting())
+		if (!target.isNpc() || player.isEnchanting())
 		{
 			return false;
 		}

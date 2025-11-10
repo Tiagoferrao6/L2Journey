@@ -143,8 +143,7 @@ public class Q00141_ShadowFoxPart3 extends Quest
 			return;
 		}
 		
-		final 
-QuestState qs = getQuestState(member, false);
+		final QuestState qs = getQuestState(member, false);
 		if (getRandom(100) < MOBS.get(npc.getId()))
 		{
 			giveItems(member, PREDECESSORS_REPORT, 1);

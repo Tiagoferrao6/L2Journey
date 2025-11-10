@@ -55,17 +55,7 @@ public class ConditionChangeWeapon extends Condition
 		if (_required)
 		{
 			final Weapon weaponItem = effector.getActiveWeaponItem();
-			if (weaponItem == null)
-			{
-				return false;
-			}
-			
-			if (weaponItem.getChangeWeaponId() == 0)
-			{
-				return false;
-			}
-			
-			if (player.isEnchanting())
+			if ((weaponItem == null) || (weaponItem.getChangeWeaponId() == 0) || player.isEnchanting())
 			{
 				return false;
 			}

@@ -46,10 +46,10 @@ import com.l2journey.Config;
 import com.l2journey.EventsConfig;
 import com.l2journey.commons.database.DatabaseFactory;
 import com.l2journey.commons.util.StringUtil;
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.data.xml.EnchantItemOptionsData;
 import com.l2journey.gameserver.data.xml.ItemData;
 import com.l2journey.gameserver.data.xml.OptionData;
-import com.l2journey.gameserver.geoengine.GeoEngine;
 import com.l2journey.gameserver.managers.IdManager;
 import com.l2journey.gameserver.managers.ItemsOnGroundManager;
 import com.l2journey.gameserver.managers.MercTicketManager;
@@ -745,12 +745,7 @@ public class Item extends WorldObject
 	 */
 	public boolean isDropable()
 	{
-		if (!_itemTemplate.isDropable())
-		{
-			return false;
-		}
-		
-		if (isEquipable() && (getTransmogId() > 0))
+		if (!_itemTemplate.isDropable() || (isEquipable() && (getTransmogId() > 0)))
 		{
 			return false;
 		}
@@ -788,12 +783,7 @@ public class Item extends WorldObject
 	 */
 	public boolean isTradeable()
 	{
-		if (!_itemTemplate.isTradeable())
-		{
-			return false;
-		}
-		
-		if (isEquipable() && (getTransmogId() > 0))
+		if (!_itemTemplate.isTradeable() || (isEquipable() && (getTransmogId() > 0)))
 		{
 			return false;
 		}
@@ -812,12 +802,7 @@ public class Item extends WorldObject
 	 */
 	public boolean isSellable()
 	{
-		if (!_itemTemplate.isSellable())
-		{
-			return false;
-		}
-		
-		if (isEquipable() && (getTransmogId() > 0))
+		if (!_itemTemplate.isSellable() || (isEquipable() && (getTransmogId() > 0)))
 		{
 			return false;
 		}
@@ -1587,7 +1572,7 @@ public class Item extends WorldObject
 		
 		if (dropper != null)
 		{
-			final Location dropDest = GeoEngine.getInstance().getValidLocation(dropper.getX(), dropper.getY(), dropper.getZ(), x, y, z, dropper.getInstanceId());
+			final Location dropDest = GeoData.getInstance().moveCheck(dropper.getX(), dropper.getY(), dropper.getZ(), x, y, z, dropper.getInstanceId());
 			x = dropDest.getX();
 			y = dropDest.getY();
 			z = dropDest.getZ();
@@ -2013,12 +1998,7 @@ public class Item extends WorldObject
 	
 	public void giveSkillsToOwner()
 	{
-		if (!_itemTemplate.hasSkills())
-		{
-			return;
-		}
-		
-		if (!isEquipped() && !hasPassiveSkills())
+		if (!_itemTemplate.hasSkills() || (!isEquipped() && !hasPassiveSkills()))
 		{
 			return;
 		}

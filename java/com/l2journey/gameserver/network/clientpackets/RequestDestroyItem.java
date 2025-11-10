@@ -95,14 +95,8 @@ public class RequestDestroyItem extends ClientPacket
 		final Item itemToRemove = player.getInventory().getItemByObjectId(_objectId);
 		
 		// if we can't find the requested item, it is actually a cheat
-		if (itemToRemove == null)
-		{
-			player.sendPacket(SystemMessageId.THIS_ITEM_CANNOT_BE_DISCARDED);
-			return;
-		}
-		
 		// Cannot discard item that the skill is consuming
-		if (player.isCastingNow() && (player.getCurrentSkill() != null) && (player.getCurrentSkill().getSkill().getItemConsumeId() == itemToRemove.getId()))
+		if ((itemToRemove == null) || (player.isCastingNow() && (player.getCurrentSkill() != null) && (player.getCurrentSkill().getSkill().getItemConsumeId() == itemToRemove.getId())))
 		{
 			player.sendPacket(SystemMessageId.THIS_ITEM_CANNOT_BE_DISCARDED);
 			return;

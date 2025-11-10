@@ -207,17 +207,7 @@ public abstract class Playable extends Creature
 	
 	public boolean checkIfPvP(Creature target)
 	{
-		if (target == null)
-		{
-			return false; // Target is null
-		}
-		
-		if (target == this)
-		{
-			return false; // Target is self
-		}
-		
-		if (!target.isPlayable())
+		if ((target == null) || (target == this) || !target.isPlayable())
 		{
 			return false; // Target is not a Playable
 		}

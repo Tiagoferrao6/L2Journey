@@ -29,7 +29,7 @@
 package com.l2journey.gameserver.model.zone.form;
 
 import com.l2journey.commons.util.Rnd;
-import com.l2journey.gameserver.geoengine.GeoEngine;
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.model.Location;
 import com.l2journey.gameserver.model.itemcontainer.Inventory;
 import com.l2journey.gameserver.model.zone.ZoneForm;
@@ -75,19 +75,7 @@ public class ZoneCylinder extends ZoneForm
 		}
 		
 		// Any point of the rectangle intersecting the Circle?
-		if ((Math.pow(ax1 - _x, 2) + Math.pow(ay1 - _y, 2)) < _radS)
-		{
-			return true;
-		}
-		if ((Math.pow(ax1 - _x, 2) + Math.pow(ay2 - _y, 2)) < _radS)
-		{
-			return true;
-		}
-		if ((Math.pow(ax2 - _x, 2) + Math.pow(ay1 - _y, 2)) < _radS)
-		{
-			return true;
-		}
-		if ((Math.pow(ax2 - _x, 2) + Math.pow(ay2 - _y, 2)) < _radS)
+		if (((Math.pow(ax1 - _x, 2) + Math.pow(ay1 - _y, 2)) < _radS) || ((Math.pow(ax1 - _x, 2) + Math.pow(ay2 - _y, 2)) < _radS) || ((Math.pow(ax2 - _x, 2) + Math.pow(ay1 - _y, 2)) < _radS) || ((Math.pow(ax2 - _x, 2) + Math.pow(ay2 - _y, 2)) < _radS))
 		{
 			return true;
 		}
@@ -164,7 +152,7 @@ public class ZoneCylinder extends ZoneForm
 			y = Rnd.get(y2, y3);
 		}
 		
-		return new Location(x, y, GeoEngine.getInstance().getHeight(x, y, (_z1 + _z2) / 2));
+		return new Location(x, y, GeoData.getInstance().getHeight(x, y, (_z1 + _z2) / 2));
 	}
 	
 	@Override

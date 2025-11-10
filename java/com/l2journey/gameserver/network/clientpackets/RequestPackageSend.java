@@ -109,13 +109,8 @@ public class RequestPackageSend extends ClientPacket
 		}
 		
 		// get current tradelist if any
-		if (player.getActiveTradeList() != null)
-		{
-			return;
-		}
-		
 		// Alt game - Karma punishment
-		if (!Config.ALT_GAME_KARMA_PLAYER_CAN_USE_WAREHOUSE && (player.getKarma() > 0))
+		if ((player.getActiveTradeList() != null) || (!Config.ALT_GAME_KARMA_PLAYER_CAN_USE_WAREHOUSE && (player.getKarma() > 0)))
 		{
 			return;
 		}

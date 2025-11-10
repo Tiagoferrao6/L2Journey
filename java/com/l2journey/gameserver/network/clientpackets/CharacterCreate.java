@@ -120,14 +120,8 @@ public class CharacterCreate extends ClientPacket
 			}
 		}
 		
-		if (FakePlayerData.getInstance().getProperName(_name) != null)
-		{
-			client.sendPacket(new CharCreateFail(CharCreateFail.REASON_INCORRECT_NAME));
-			return;
-		}
-		
 		// Last Verified: May 30, 2009 - Gracia Final
-		if (!StringUtil.isAlphaNumeric(_name) || !isValidName(_name))
+		if ((FakePlayerData.getInstance().getProperName(_name) != null) || !StringUtil.isAlphaNumeric(_name) || !isValidName(_name))
 		{
 			client.sendPacket(new CharCreateFail(CharCreateFail.REASON_INCORRECT_NAME));
 			return;

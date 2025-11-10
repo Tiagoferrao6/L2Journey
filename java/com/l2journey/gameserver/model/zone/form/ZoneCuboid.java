@@ -31,7 +31,7 @@ package com.l2journey.gameserver.model.zone.form;
 import java.awt.Rectangle;
 
 import com.l2journey.commons.util.Rnd;
-import com.l2journey.gameserver.geoengine.GeoEngine;
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.model.Location;
 import com.l2journey.gameserver.model.itemcontainer.Inventory;
 import com.l2journey.gameserver.model.zone.ZoneForm;
@@ -147,7 +147,7 @@ public class ZoneCuboid extends ZoneForm
 		final int x = Rnd.get(_r.x, _r.x + _r.width);
 		final int y = Rnd.get(_r.y, _r.y + _r.height);
 		
-		return new Location(x, y, GeoEngine.getInstance().getHeight(x, y, (_z1 + _z2) / 2));
+		return new Location(x, y, GeoData.getInstance().getHeight(x, y, (_z1 + _z2) / 2));
 	}
 	
 	@Override

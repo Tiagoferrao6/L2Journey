@@ -111,14 +111,7 @@ public class Action extends ClientPacket
 		}
 		
 		// If object requested does not exist, add warn msg into logs
-		if (obj == null)
-		{
-			// pressing e.g. pickup many times quickly would get you here
-			player.sendPacket(ActionFailed.STATIC_PACKET);
-			return;
-		}
-		
-		if (!obj.isTargetable() && !player.isGM())
+		if ((obj == null) || (!obj.isTargetable() && !player.isGM()))
 		{
 			player.sendPacket(ActionFailed.STATIC_PACKET);
 			return;

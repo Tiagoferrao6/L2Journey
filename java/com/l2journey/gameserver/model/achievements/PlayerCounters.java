@@ -30,13 +30,13 @@ public class PlayerCounters
 	private final Set<String> _dirty = ConcurrentHashMap.newKeySet();
 	/** Momento (ms) do último flush persistente. */
 	private volatile long _lastFlush = System.currentTimeMillis();
-
+	
 	// ===== Infra global para flush periódico =====
 	private static final Set<PlayerCounters> INSTANCES = new CopyOnWriteArraySet<>();
 	private static final long FLUSH_INTERVAL_MS = 30_000L; // 30s
 	private static final int MAX_DIRTY_BEFORE_FORCE = 25; // força flush se muitos tipos foram alterados rapidamente
 	private static volatile boolean SCHEDULER_STARTED = false;
-
+	
 	// Lista de nomes de counters suportados (documentação / depuração)
 	public static final String C_RAID_KILL = "raidkill";
 	public static final String C_FISH_CAUGHT = "catchFish"; // segue nomenclatura do XML
@@ -49,14 +49,14 @@ public class PlayerCounters
 		INSTANCES.add(this);
 		startSchedulerIfNeeded();
 	}
-
+	
 	/** Remove este registro da lista global (chamar em logout/desconexão). */
 	public void dispose()
 	{
 		flush();
 		INSTANCES.remove(this);
 	}
-
+	
 	private static synchronized void startSchedulerIfNeeded()
 	{
 		if (SCHEDULER_STARTED)
@@ -132,7 +132,7 @@ public class PlayerCounters
 		ps.setLong(4, value);
 		ps.addBatch();
 	}
-
+	
 	/** Flush explícito (força escrita de todos os dirty). */
 	public void flush()
 	{
@@ -162,7 +162,7 @@ public class PlayerCounters
 			LOGGER.log(Level.WARNING, "Falha ao flush counters de " + _owner.getName(), e);
 		}
 	}
-
+	
 	/** Flush condicionado a intervalo ou excesso de dirty. */
 	private void flushIfInterval()
 	{
@@ -176,7 +176,7 @@ public class PlayerCounters
 			flush();
 		}
 	}
-
+	
 	/** Verifica se precisa flushar por volume. */
 	private void flushIfNeededByVolume()
 	{
@@ -195,7 +195,7 @@ public class PlayerCounters
 	{
 		return _counters.getOrDefault(name, 0L);
 	}
-
+	
 	/** Incrementa um contador simples em +1. */
 	/**
 	 * Incrementa em 1 o contador indicado.
@@ -206,7 +206,7 @@ public class PlayerCounters
 	{
 		return add(name, 1L);
 	}
-
+	
 	/** Adiciona delta ao contador. */
 	/**
 	 * Soma um delta (positivo ou negativo) ao contador.
@@ -225,7 +225,7 @@ public class PlayerCounters
 		flushIfNeededByVolume();
 		return nv;
 	}
-
+	
 	/**
 	 * Ajusta o contador para "value" apenas se o valor informado for maior que o atual (uso para máximos).
 	 * @param name nome do contador
@@ -245,11 +245,22 @@ public class PlayerCounters
 			return current;
 		});
 	}
-
+	
 	// ==== Helpers semânticos (facilitam chamadas diretas em pontos de evento) ====
-	public void onRaidKill() { increment(C_RAID_KILL); }
-	public void onFishCaught() { increment(C_FISH_CAUGHT); }
-	public void onCraftSuccess() { increment(C_CRAFT); }
+	public void onRaidKill()
+	{
+		increment(C_RAID_KILL);
+	}
+	
+	public void onFishCaught()
+	{
+		increment(C_FISH_CAUGHT);
+	}
+	
+	public void onCraftSuccess()
+	{
+		increment(C_CRAFT);
+	}
 	/**
 	 * Atualiza o maior nível de enchant já observado.
 	 * @param enchantLevel nível de enchant a comparar

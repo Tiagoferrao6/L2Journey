@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.l2journey.commons.threads.ThreadPool;
-import com.l2journey.gameserver.geoengine.GeoEngine;
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.managers.CastleManager;
 import com.l2journey.gameserver.managers.FortManager;
 import com.l2journey.gameserver.model.Spawn;
@@ -173,19 +173,11 @@ public class SiegeGuards extends AbstractNpcAI
 			for (Npc guard : guards)
 			{
 				// Should never happen.
-				if ((guard == null) || !guard.isAttackable())
-				{
-					continue;
-				}
+				
 				
 				// Ignore dead guards.
-				if (guard.isDead())
-				{
-					continue;
-				}
-				
 				// Skip if guard is currently attacking.
-				if (guard.isInCombat())
+				if ((guard == null) || !guard.isAttackable() || guard.isDead() || guard.isInCombat())
 				{
 					continue;
 				}
@@ -202,7 +194,7 @@ public class SiegeGuards extends AbstractNpcAI
 				for (Playable nearby : World.getInstance().getVisibleObjectsInRange(guard, Playable.class, guard.getAggroRange()))
 				{
 					// Do not attack players/summons who are dead/invis/invul or cannot be seen.
-					if (nearby.isDead() || nearby.isInvisible() || nearby.isInvul() || !GeoEngine.getInstance().canSeeTarget(guard, nearby))
+					if (nearby.isDead() || nearby.isInvisible() || nearby.isInvul() || !GeoData.getInstance().canSeeTarget(guard, nearby))
 					{
 						continue;
 					}

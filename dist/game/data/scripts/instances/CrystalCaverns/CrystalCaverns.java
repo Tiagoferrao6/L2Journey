@@ -35,9 +35,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.l2journey.Config;
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.ai.Intention;
 import com.l2journey.gameserver.data.xml.SkillData;
-import com.l2journey.gameserver.geoengine.GeoEngine;
 import com.l2journey.gameserver.managers.InstanceManager;
 import com.l2journey.gameserver.model.Location;
 import com.l2journey.gameserver.model.World;
@@ -703,7 +703,7 @@ public class CrystalCaverns extends AbstractInstance
 		final int _x = effector.getX() - (int) (offset * cos);
 		final int _y = effector.getY() - (int) (offset * sin);
 		final int _z = effected.getZ();
-		final Location destination = GeoEngine.getInstance().getValidLocation(effected.getX(), effected.getY(), effected.getZ(), _x, _y, _z, effected.getInstanceId());
+		final Location destination = GeoData.getInstance().moveCheck(effected.getX(), effected.getY(), effected.getZ(), _x, _y, _z, effected.getInstanceId());
 		effected.broadcastPacket(new FlyToLocation(effected, destination, FlyType.THROW_UP));
 		
 		// maybe is need force set X,Y,Z
@@ -2065,12 +2065,7 @@ public class CrystalCaverns extends AbstractInstance
 					{
 						if (door.getId() == (room + 24220000))
 						{
-							if (door.isOpen())
-							{
-								return;
-							}
-							
-							if (!hasQuestItems(creature.asPlayer(), SECRET_KEY))
+							if (door.isOpen() || !hasQuestItems(creature.asPlayer(), SECRET_KEY))
 							{
 								return;
 							}

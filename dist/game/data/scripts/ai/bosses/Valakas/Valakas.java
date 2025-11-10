@@ -33,9 +33,9 @@ import java.util.List;
 
 import com.l2journey.Config;
 import com.l2journey.commons.time.TimeUtil;
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.ai.Intention;
 import com.l2journey.gameserver.data.xml.SkillData;
-import com.l2journey.gameserver.geoengine.GeoEngine;
 import com.l2journey.gameserver.managers.GrandBossManager;
 import com.l2journey.gameserver.managers.ZoneManager;
 import com.l2journey.gameserver.model.Location;
@@ -520,7 +520,7 @@ public class Valakas extends AbstractNpcAI
 				final int posX = x + getRandom(-1400, 1400);
 				final int posY = y + getRandom(-1400, 1400);
 				
-				if (GeoEngine.getInstance().canMoveToTarget(x, y, z, posX, posY, z, npc.getInstanceId()))
+				if (GeoData.getInstance().canMove(x, y, z, posX, posY, z, npc.getInstanceId()))
 				{
 					npc.getAI().setIntention(Intention.MOVE_TO, new Location(posX, posY, z, 0));
 				}

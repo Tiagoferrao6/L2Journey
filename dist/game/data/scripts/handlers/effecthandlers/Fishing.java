@@ -18,7 +18,7 @@ package handlers.effecthandlers;
 
 import com.l2journey.Config;
 import com.l2journey.commons.util.Rnd;
-import com.l2journey.gameserver.geoengine.GeoEngine;
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.managers.ZoneManager;
 import com.l2journey.gameserver.model.Location;
 import com.l2journey.gameserver.model.StatSet;
@@ -223,31 +223,26 @@ public class Fishing extends AbstractEffect
 	 */
 	private static int computeBaitZ(Player player, int baitX, int baitY, FishingZone fishingZone, WaterZone waterZone)
 	{
-		if ((fishingZone == null))
-		{
-			return Integer.MIN_VALUE;
-		}
-		
-		if ((waterZone == null))
+		if ((fishingZone == null) || (waterZone == null))
 		{
 			return Integer.MIN_VALUE;
 		}
 		
 		// always use water zone, fishing zone high z is high in the air...
 		final int baitZ = waterZone.getWaterZ();
-		if (!GeoEngine.getInstance().canSeeTarget(player, new Location(baitX, baitY, baitZ)))
+		if (!GeoData.getInstance().canSeeTarget(player, new Location(baitX, baitY, baitZ)))
 		{
 			return Integer.MIN_VALUE;
 		}
 		
-		if (GeoEngine.getInstance().hasGeo(baitX, baitY))
+		if (GeoData.getInstance().hasGeo(baitX, baitY))
 		{
-			if (GeoEngine.getInstance().getHeight(baitX, baitY, baitZ) > baitZ)
+			if (GeoData.getInstance().getHeight(baitX, baitY, baitZ) > baitZ)
 			{
 				return Integer.MIN_VALUE;
 			}
 			
-			if (GeoEngine.getInstance().getHeight(baitX, baitY, player.getZ()) > baitZ)
+			if (GeoData.getInstance().getHeight(baitX, baitY, player.getZ()) > baitZ)
 			{
 				return Integer.MIN_VALUE;
 			}

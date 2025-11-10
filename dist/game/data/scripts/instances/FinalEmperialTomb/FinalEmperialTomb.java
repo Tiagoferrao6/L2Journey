@@ -43,8 +43,8 @@ import org.w3c.dom.Node;
 
 import com.l2journey.commons.threads.ThreadPool;
 import com.l2journey.commons.util.IXmlReader;
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.ai.Intention;
-import com.l2journey.gameserver.geoengine.GeoEngine;
 import com.l2journey.gameserver.managers.InstanceManager;
 import com.l2journey.gameserver.model.Location;
 import com.l2journey.gameserver.model.Territory;
@@ -584,7 +584,7 @@ public class FinalEmperialTomb extends AbstractInstance implements IXmlReader
 						final Location location = _spawnZoneList.get(spw.zone).getRandomPoint();
 						if (location != null)
 						{
-							spawn(world, spw.npcId, location.getX(), location.getY(), GeoEngine.getInstance().getHeight(location.getX(), location.getY(), location.getZ()), getRandom(65535), spw.isNeededNextFlag);
+							spawn(world, spw.npcId, location.getX(), location.getY(), GeoData.getInstance().getHeight(location.getX(), location.getY(), location.getZ()), getRandom(65535), spw.isNeededNextFlag);
 						}
 					}
 					else

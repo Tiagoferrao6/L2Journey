@@ -351,13 +351,8 @@ public class TamedBeast extends FeedableBeast
 			return;
 		}
 		// if the owner is dead, do nothing...
-		if (_owner.isDead() || _isFreyaBeast)
-		{
-			return;
-		}
-		
 		// if the tamed beast is currently in the middle of casting, let it complete its skill...
-		if (isCastingNow())
+		if (_owner.isDead() || _isFreyaBeast || isCastingNow())
 		{
 			return;
 		}
@@ -521,12 +516,8 @@ public class TamedBeast extends FeedableBeast
 				return;
 			}
 			// if the owner is dead, do nothing...
-			if (owner.isDead())
-			{
-				return;
-			}
 			// if the tamed beast is currently casting a spell, do not interfere (do not attempt to cast anything new yet).
-			if (isCastingNow())
+			if (owner.isDead() || isCastingNow())
 			{
 				return;
 			}

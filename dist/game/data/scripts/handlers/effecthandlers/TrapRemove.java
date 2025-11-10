@@ -57,12 +57,7 @@ public class TrapRemove extends AbstractEffect
 	@Override
 	public void onStart(Creature effector, Creature effected, Skill skill)
 	{
-		if (!effected.isTrap())
-		{
-			return;
-		}
-		
-		if (effected.isAlikeDead())
+		if (!effected.isTrap() || effected.isAlikeDead())
 		{
 			return;
 		}

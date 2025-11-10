@@ -65,11 +65,7 @@ public class RequestDispel extends ClientPacket
 			return;
 		}
 		final Skill skill = SkillData.getInstance().getSkill(_skillId, _skillLevel);
-		if (skill == null)
-		{
-			return;
-		}
-		if (!skill.canBeDispeled() || skill.isStayAfterDeath() || skill.isDebuff())
+		if ((skill == null) || !skill.canBeDispeled() || skill.isStayAfterDeath() || skill.isDebuff())
 		{
 			return;
 		}

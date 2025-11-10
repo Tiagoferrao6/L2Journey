@@ -60,12 +60,7 @@ public class ClanWarehouse implements IBypassHandler
 	@Override
 	public boolean useBypass(String command, Player player, Creature target)
 	{
-		if (!(target instanceof Warehouse) && !(target instanceof ClanHallManager))
-		{
-			return false;
-		}
-		
-		if (player.isEnchanting())
+		if ((!(target instanceof Warehouse) && !(target instanceof ClanHallManager)) || player.isEnchanting())
 		{
 			return false;
 		}

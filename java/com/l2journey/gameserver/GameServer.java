@@ -103,7 +103,6 @@ import com.l2journey.gameserver.data.xml.SpawnData;
 import com.l2journey.gameserver.data.xml.StaticObjectData;
 import com.l2journey.gameserver.data.xml.TransformData;
 import com.l2journey.gameserver.data.xml.UIData;
-import com.l2journey.gameserver.geoengine.GeoEngine;
 import com.l2journey.gameserver.handler.EffectHandler;
 import com.l2journey.gameserver.managers.AirShipManager;
 import com.l2journey.gameserver.managers.AntiFeedManager;
@@ -283,7 +282,7 @@ public class GameServer
 		ClanHallAuctionManager.getInstance();
 		
 		printSection("Geodata");
-		GeoEngine.getInstance();
+		GeoData.getInstance();
 		
 		printSection("NPCs");
 		DoorData.getInstance();

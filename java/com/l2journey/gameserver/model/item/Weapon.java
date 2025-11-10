@@ -385,13 +385,7 @@ public class Weapon extends ItemTemplate
 		}
 		
 		final Skill onCritSkill = _skillsOnCrit.getSkill();
-		if ((_skillsOnCritCondition != null) && !_skillsOnCritCondition.test(caster, target, onCritSkill))
-		{
-			// Chance not met
-			return;
-		}
-		
-		if (!onCritSkill.checkCondition(caster, target, false))
+		if (((_skillsOnCritCondition != null) && !_skillsOnCritCondition.test(caster, target, onCritSkill)) || !onCritSkill.checkCondition(caster, target, false))
 		{
 			// Skill condition not met
 			return;
@@ -415,18 +409,10 @@ public class Weapon extends ItemTemplate
 		final Skill onMagicSkill = _skillsOnMagic.getSkill();
 		
 		// Trigger only if both are good or bad magic.
-		if (trigger.isBad() != onMagicSkill.isBad())
-		{
-			return;
-		}
+		
 		
 		// No Trigger if not Magic Skill
-		if (!trigger.isMagic() && !onMagicSkill.isMagic())
-		{
-			return;
-		}
-		
-		if (trigger.isToggle())
+		if ((trigger.isBad() != onMagicSkill.isBad()) || (!trigger.isMagic() && !onMagicSkill.isMagic()) || trigger.isToggle())
 		{
 			return;
 		}

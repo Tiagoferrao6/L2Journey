@@ -2855,12 +2855,8 @@ public class Clan
 	{
 		Skill current = _subPledgeSkills.get(skillId);
 		// is next level?
-		if ((current != null) && ((current.getLevel() + 1) == skillLevel))
-		{
-			return true;
-		}
 		// is first level?
-		if ((current == null) && (skillLevel == 1))
+		if (((current != null) && ((current.getLevel() + 1) == skillLevel)) || ((current == null) && (skillLevel == 1)))
 		{
 			return true;
 		}
@@ -2906,12 +2902,8 @@ public class Clan
 			current = _subPledges.get(subType).getSkill(id);
 		}
 		// is next level?
-		if ((current != null) && ((current.getLevel() + 1) == skill.getLevel()))
-		{
-			return true;
-		}
 		// is first level?
-		if ((current == null) && (skill.getLevel() == 1))
+		if (((current != null) && ((current.getLevel() + 1) == skill.getLevel())) || ((current == null) && (skill.getLevel() == 1)))
 		{
 			return true;
 		}

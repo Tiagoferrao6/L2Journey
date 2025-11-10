@@ -226,12 +226,7 @@ public class PetManager extends Merchant
 	
 	public static boolean doEvolve(Player player, Npc npc, int itemIdtake, int itemIdgive, int petminLevel)
 	{
-		if ((itemIdtake == 0) || (itemIdgive == 0) || (petminLevel == 0))
-		{
-			return false;
-		}
-		
-		if (!player.hasPet())
+		if ((itemIdtake == 0) || (itemIdgive == 0) || (petminLevel == 0) || !player.hasPet())
 		{
 			return false;
 		}

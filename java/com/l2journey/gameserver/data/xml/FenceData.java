@@ -128,13 +128,8 @@ public class FenceData implements IXmlReader
 		for (Fence fence : fences)
 		{
 			// Check if fence is geodata enabled.
-			if (!fence.getState().isGeodataEnabled())
-			{
-				continue;
-			}
-			
 			// Check if fence is within the instance we search for.
-			if (fence.getInstanceId() != instanceId)
+			if (!fence.getState().isGeodataEnabled() || (fence.getInstanceId() != instanceId))
 			{
 				continue;
 			}
@@ -181,11 +176,7 @@ public class FenceData implements IXmlReader
 		
 		final double xCross = result[0];
 		final double yCross = result[1];
-		if ((xCross <= xMax) && (xCross >= xMin))
-		{
-			return true;
-		}
-		if ((yCross <= yMax) && (yCross >= yMin))
+		if (((xCross <= xMax) && (xCross >= xMin)) || ((yCross <= yMax) && (yCross >= yMin)))
 		{
 			return true;
 		}

@@ -50,12 +50,7 @@ public class VitalityTask implements Runnable
 	@Override
 	public void run()
 	{
-		if (!_player.isInsideZone(ZoneId.PEACE))
-		{
-			return;
-		}
-		
-		if (_player.getVitalityPoints() >= PlayerStat.MAX_VITALITY_POINTS)
+		if (!_player.isInsideZone(ZoneId.PEACE) || (_player.getVitalityPoints() >= PlayerStat.MAX_VITALITY_POINTS))
 		{
 			return;
 		}

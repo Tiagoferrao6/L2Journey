@@ -26,69 +26,35 @@
  * applicable..
  * 
  */
-package com.l2journey.gameserver.geoengine.geodata.blocks;
-
-import java.nio.ByteBuffer;
-
-import com.l2journey.gameserver.geoengine.geodata.Cell;
-import com.l2journey.gameserver.geoengine.geodata.IBlock;
+package com.l2journey.commons.terrain.geodriver;
 
 /**
- * @author HorridoJoho, Mobius
+ * @author FBIagent
  */
-public class FlatBlock implements IBlock
+public final class Cell
 {
-	private final short _height;
+	/** East NSWE flag */
+	public static final byte FLAG_NSWE_EAST = 1 << 0;
+	/** West NSWE flag */
+	public static final byte FLAG_NSWE_WEST = 1 << 1;
+	/** South NSWE flag */
+	public static final byte FLAG_NSWE_SOUTH = 1 << 2;
+	/** North NSWE flag */
+	public static final byte FLAG_NSWE_NORTH = 1 << 3;
 	
-	public FlatBlock(ByteBuffer bb)
-	{
-		_height = bb.getShort();
-	}
+	/** North-East NSWE flags */
+	public static final byte FLAG_NSWE_NORTH_EAST = FLAG_NSWE_NORTH | FLAG_NSWE_EAST;
+	/** North-West NSWE flags */
+	public static final byte FLAG_NSWE_NORTH_WEST = FLAG_NSWE_NORTH | FLAG_NSWE_WEST;
+	/** South-East NSWE flags */
+	public static final byte FLAG_NSWE_SOUTH_EAST = FLAG_NSWE_SOUTH | FLAG_NSWE_EAST;
+	/** South-West NSWE flags */
+	public static final byte FLAG_NSWE_SOUTH_WEST = FLAG_NSWE_SOUTH | FLAG_NSWE_WEST;
 	
-	@Override
-	public boolean checkNearestNswe(int geoX, int geoY, int worldZ, int nswe)
-	{
-		return true;
-	}
+	/** All directions NSWE flags */
+	public static final byte FLAG_NSWE_ALL = FLAG_NSWE_EAST | FLAG_NSWE_WEST | FLAG_NSWE_SOUTH | FLAG_NSWE_NORTH;
 	
-	@Override
-	public void setNearestNswe(int geoX, int geoY, int worldZ, byte nswe)
+	private Cell()
 	{
-		throw new RuntimeException("Cannot set NSWE on a flat block!");
-	}
-	
-	@Override
-	public void unsetNearestNswe(int geoX, int geoY, int worldZ, byte nswe)
-	{
-		throw new RuntimeException("Cannot unset NSWE on a flat block!");
-	}
-	
-	@Override
-	public short getNearestNswe(int geoX, int geoY, int worldZ)
-	{
-		return Cell.NSWE_ALL;
-	}
-	
-	@Override
-	public int getNearestZ(int geoX, int geoY, int worldZ)
-	{
-		return _height;
-	}
-	
-	@Override
-	public int getNextLowerZ(int geoX, int geoY, int worldZ)
-	{
-		return _height <= worldZ ? _height : worldZ;
-	}
-	
-	@Override
-	public int getNextHigherZ(int geoX, int geoY, int worldZ)
-	{
-		return _height >= worldZ ? _height : worldZ;
-	}
-	
-	public short getHeight()
-	{
-		return _height;
 	}
 }

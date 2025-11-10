@@ -125,13 +125,7 @@ public class RequestExEnchantSkillSafe extends ClientPacket
 		{
 			// No config option for safe enchant book consume
 			final Item spb = player.getInventory().getItemByItemId(reqItemId);
-			if (spb == null)// Haven't spellbook
-			{
-				player.sendPacket(SystemMessageId.YOU_DO_NOT_HAVE_ALL_OF_THE_ITEMS_NEEDED_TO_ENCHANT_THAT_SKILL);
-				return;
-			}
-			
-			if (player.getInventory().getAdena() < requireditems)
+			if ((spb == null) || (player.getInventory().getAdena() < requireditems))
 			{
 				player.sendPacket(SystemMessageId.YOU_DO_NOT_HAVE_ALL_OF_THE_ITEMS_NEEDED_TO_ENCHANT_THAT_SKILL);
 				return;

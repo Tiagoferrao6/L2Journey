@@ -23,7 +23,7 @@ package com.l2journey.gameserver.model.zone.type;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.l2journey.gameserver.geoengine.GeoEngine;
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.model.Location;
 import com.l2journey.gameserver.model.zone.ZoneForm;
 
@@ -87,12 +87,7 @@ public class NpcSpawnTerritory
 					}
 				}
 				
-				if (GeoEngine.getInstance().getHeight(randomX, randomY, randomZ) > _territory.getHighZ())
-				{
-					continue;
-				}
-				
-				if (!GeoEngine.getInstance().canSeeTarget(randomX, randomY, randomZ, centerX, centerY, centerZ, 0))
+				if ((GeoData.getInstance().getHeight(randomX, randomY, randomZ) > _territory.getHighZ()) || !GeoData.getInstance().canSeeTarget(randomX, randomY, randomZ, centerX, centerY, centerZ, 0))
 				{
 					continue;
 				}
@@ -128,12 +123,7 @@ public class NpcSpawnTerritory
 			randomY = location.getY();
 			randomZ = location.getZ();
 			
-			if (GeoEngine.getInstance().getHeight(randomX, randomY, randomZ) > _territory.getHighZ())
-			{
-				continue;
-			}
-			
-			if (!GeoEngine.getInstance().canSeeTarget(randomX, randomY, randomZ, centerX, centerY, centerZ, 0))
+			if ((GeoData.getInstance().getHeight(randomX, randomY, randomZ) > _territory.getHighZ()) || !GeoData.getInstance().canSeeTarget(randomX, randomY, randomZ, centerX, centerY, centerZ, 0))
 			{
 				continue;
 			}

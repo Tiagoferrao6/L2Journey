@@ -58,13 +58,7 @@ public class Clan implements ITargetTypeHandler
 				return targetList;
 			}
 			
-			if (player.isInOlympiadMode())
-			{
-				targetList.add(player);
-				return targetList;
-			}
-			
-			if (onlyFirst)
+			if (player.isInOlympiadMode() || onlyFirst)
 			{
 				targetList.add(player);
 				return targetList;

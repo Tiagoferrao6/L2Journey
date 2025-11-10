@@ -33,13 +33,12 @@ import java.util.concurrent.ScheduledFuture;
 import com.l2journey.Config;
 import com.l2journey.commons.threads.ThreadPool;
 import com.l2journey.commons.util.Rnd;
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.ai.CreatureAI;
 import com.l2journey.gameserver.ai.Intention;
 import com.l2journey.gameserver.ai.SummonAI;
 import com.l2journey.gameserver.data.xml.ExperienceData;
 import com.l2journey.gameserver.data.xml.ItemData;
-import com.l2journey.gameserver.geoengine.GeoEngine;
-import com.l2journey.gameserver.geoengine.pathfinding.PathFinding;
 import com.l2journey.gameserver.handler.IItemHandler;
 import com.l2journey.gameserver.handler.ItemHandler;
 import com.l2journey.gameserver.managers.TerritoryWarManager;
@@ -84,6 +83,7 @@ import com.l2journey.gameserver.network.serverpackets.RelationChanged;
 import com.l2journey.gameserver.network.serverpackets.ServerPacket;
 import com.l2journey.gameserver.network.serverpackets.SystemMessage;
 import com.l2journey.gameserver.network.serverpackets.TeleportToLocation;
+import com.l2journey.gameserver.pathfinding.PathFinding;
 import com.l2journey.gameserver.taskmanagers.DecayTaskManager;
 import com.l2journey.gameserver.util.ArrayUtil;
 
@@ -124,7 +124,7 @@ public abstract class Summon extends Playable
 		final int x = owner.getX();
 		final int y = owner.getY();
 		final int z = owner.getZ();
-		final Location location = GeoEngine.getInstance().getValidLocation(x, y, z, x + Rnd.get(-100, 100), y + Rnd.get(-100, 100), z, owner.getInstanceId());
+		final Location location = GeoData.getInstance().moveCheck(x, y, z, x + Rnd.get(-100, 100), y + Rnd.get(-100, 100), z, owner.getInstanceId());
 		setXYZInvisible(location.getX(), location.getY(), location.getZ());
 	}
 	
@@ -610,13 +610,8 @@ public abstract class Summon extends Playable
 	public boolean useMagic(Skill skill, boolean forceUse, boolean dontMove)
 	{
 		// Null skill, dead summon or null owner are reasons to prevent casting.
-		if ((skill == null) || isDead() || (_owner == null))
-		{
-			return false;
-		}
-		
 		// Check if the skill is active
-		if (skill.isPassive())
+		if ((skill == null) || isDead() || (_owner == null) || skill.isPassive())
 		{
 			// just ignore the passive skill request. why does the client send it anyway ??
 			return false;
@@ -1094,7 +1089,7 @@ public abstract class Summon extends Playable
 			return false;
 		}
 		
-		if (!GeoEngine.getInstance().canMoveToTarget(this, target))
+		if (!GeoData.getInstance().canMove(this, target))
 		{
 			getAI().setIntention(Intention.FOLLOW, _owner);
 			sendPacket(SystemMessageId.CANNOT_SEE_TARGET);

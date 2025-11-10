@@ -102,13 +102,8 @@ public class CorpseClan implements ITargetTypeHandler
 						continue;
 					}
 					
-					if (!Skill.addCharacter(creature, obj, radius, true))
-					{
-						continue;
-					}
-					
 					// check target is not in a active siege zone
-					if (obj.isInsideZone(ZoneId.SIEGE) && !obj.isInSiege())
+					if (!Skill.addCharacter(creature, obj, radius, true) || (obj.isInsideZone(ZoneId.SIEGE) && !obj.isInSiege()))
 					{
 						continue;
 					}

@@ -59,12 +59,7 @@ public class RequestExEnchantSkillInfo extends ClientPacket
 		}
 		
 		final Player player = getPlayer();
-		if (player == null)
-		{
-			return;
-		}
-		
-		if (player.getLevel() < 76)
+		if ((player == null) || (player.getLevel() < 76))
 		{
 			return;
 		}

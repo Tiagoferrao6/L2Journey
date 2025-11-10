@@ -61,12 +61,7 @@ public class RequestExRemoveItemAttribute extends ClientPacket
 		}
 		
 		final Item targetItem = player.getInventory().getItemByObjectId(_objectId);
-		if (targetItem == null)
-		{
-			return;
-		}
-		
-		if ((targetItem.getElementals() == null) || (targetItem.getElemental(_element) == null))
+		if ((targetItem == null) || (targetItem.getElementals() == null) || (targetItem.getElemental(_element) == null))
 		{
 			return;
 		}

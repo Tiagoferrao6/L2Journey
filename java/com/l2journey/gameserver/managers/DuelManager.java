@@ -188,11 +188,7 @@ public class DuelManager
 			return;
 		}
 		final Duel duel = getDuel(player.getDuelId());
-		if (duel == null)
-		{
-			return;
-		}
-		if ((duel.getPlayerA() == null) || (duel.getPlayerB() == null))
+		if ((duel == null) || (duel.getPlayerA() == null) || (duel.getPlayerB() == null))
 		{
 			return;
 		}

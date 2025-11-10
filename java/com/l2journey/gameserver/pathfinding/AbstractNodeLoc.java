@@ -26,35 +26,22 @@
  * applicable..
  * 
  */
-package com.l2journey.gameserver.geoengine.geodata;
+package com.l2journey.gameserver.pathfinding;
 
 /**
- * @author HorridoJoho
+ * @author -Nemesiss-
  */
-public interface IBlock
+public abstract class AbstractNodeLoc
 {
-	int TYPE_FLAT = 0;
-	int TYPE_COMPLEX = 1;
-	int TYPE_MULTILAYER = 2;
+	public abstract int getX();
 	
-	/** Cells in a block on the x axis */
-	int BLOCK_CELLS_X = 8;
-	/** Cells in a block on the y axis */
-	int BLOCK_CELLS_Y = 8;
-	/** Cells in a block */
-	int BLOCK_CELLS = BLOCK_CELLS_X * BLOCK_CELLS_Y;
+	public abstract int getY();
 	
-	boolean checkNearestNswe(int geoX, int geoY, int worldZ, int nswe);
+	public abstract int getZ();
 	
-	void setNearestNswe(int geoX, int geoY, int worldZ, byte nswe);
+	public abstract void setZ(short z);
 	
-	void unsetNearestNswe(int geoX, int geoY, int worldZ, byte nswe);
+	public abstract int getNodeX();
 	
-	short getNearestNswe(int geoX, int geoY, int worldZ);
-	
-	int getNearestZ(int geoX, int geoY, int worldZ);
-	
-	int getNextLowerZ(int geoX, int geoY, int worldZ);
-	
-	int getNextHigherZ(int geoX, int geoY, int worldZ);
+	public abstract int getNodeY();
 }

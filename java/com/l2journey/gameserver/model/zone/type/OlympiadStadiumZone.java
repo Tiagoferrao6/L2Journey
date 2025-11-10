@@ -261,11 +261,7 @@ public class OlympiadStadiumZone extends ZoneRespawn
 		final SystemMessage sm = battleStarted ? new SystemMessage(SystemMessageId.YOU_HAVE_ENTERED_A_COMBAT_ZONE) : new SystemMessage(SystemMessageId.YOU_HAVE_LEFT_A_COMBAT_ZONE);
 		for (Creature creature : getCharactersInside())
 		{
-			if (creature == null)
-			{
-				continue;
-			}
-			if (creature.getInstanceId() != getInstanceId())
+			if ((creature == null) || (creature.getInstanceId() != getInstanceId()))
 			{
 				continue;
 			}

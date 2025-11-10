@@ -31,7 +31,7 @@ package ai.others;
 import java.util.logging.Level;
 
 import com.l2journey.commons.util.Rnd;
-import com.l2journey.gameserver.geoengine.GeoEngine;
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.model.Location;
 import com.l2journey.gameserver.model.Spawn;
 import com.l2journey.gameserver.model.actor.Npc;
@@ -73,7 +73,7 @@ public class AltarsOfSacrifice extends AbstractNpcAI
 			final double angleRadians = Rnd.nextDouble() * 2 * Math.PI;
 			final int spawnX = (int) (radius * Math.cos(angleRadians)) + _middlePoint.getX();
 			final int spawnY = (int) (radius * Math.sin(angleRadians)) + _middlePoint.getY();
-			spawn.setXYZ(spawnX, spawnY, GeoEngine.getInstance().getHeight(spawnX, spawnY, _middlePoint.getZ()));
+			spawn.setXYZ(spawnX, spawnY, GeoData.getInstance().getHeight(spawnX, spawnY, _middlePoint.getZ()));
 			spawn.stopRespawn();
 			_spawnedBoss = spawn.doSpawn(false);
 		}

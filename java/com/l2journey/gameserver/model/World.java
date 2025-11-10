@@ -82,6 +82,12 @@ public class World
 	public static final int WORLD_X_MAX = ((TILE_X_MAX - TILE_ZERO_COORD_X) + 1) * TILE_SIZE;
 	public static final int WORLD_Y_MAX = ((TILE_Y_MAX - TILE_ZERO_COORD_Y) + 1) * TILE_SIZE;
 	
+	/** Aliases for pathfinding compatibility. */
+	public static final int MAP_MIN_X = WORLD_X_MIN;
+	public static final int MAP_MIN_Y = WORLD_Y_MIN;
+	public static final int MAP_MAX_X = WORLD_X_MAX;
+	public static final int MAP_MAX_Y = WORLD_Y_MAX;
+	
 	/** Calculated offset used so top left region is 0,0 */
 	public static final int OFFSET_X = Math.abs(WORLD_X_MIN >> SHIFT_BY);
 	public static final int OFFSET_Y = Math.abs(WORLD_Y_MIN >> SHIFT_BY);
@@ -653,12 +659,7 @@ public class World
 			
 			for (WorldObject wo : visibleObjects)
 			{
-				if ((wo == object) || !clazz.isInstance(wo))
-				{
-					continue;
-				}
-				
-				if (wo.getInstanceId() != object.getInstanceId())
+				if ((wo == object) || !clazz.isInstance(wo) || (wo.getInstanceId() != object.getInstanceId()))
 				{
 					continue;
 				}
@@ -712,12 +713,7 @@ public class World
 			
 			for (WorldObject wo : visibleObjects)
 			{
-				if ((wo == object) || !clazz.isInstance(wo))
-				{
-					continue;
-				}
-				
-				if (wo.getInstanceId() != object.getInstanceId())
+				if ((wo == object) || !clazz.isInstance(wo) || (wo.getInstanceId() != object.getInstanceId()))
 				{
 					continue;
 				}

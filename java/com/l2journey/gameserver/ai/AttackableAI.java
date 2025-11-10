@@ -36,7 +36,7 @@ import com.l2journey.Config;
 import com.l2journey.EventsConfig;
 import com.l2journey.commons.threads.ThreadPool;
 import com.l2journey.commons.util.Rnd;
-import com.l2journey.gameserver.geoengine.GeoEngine;
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.managers.DimensionalRiftManager;
 import com.l2journey.gameserver.managers.ItemsOnGroundManager;
 import com.l2journey.gameserver.model.Location;
@@ -187,12 +187,7 @@ public class AttackableAI extends CreatureAI
 		if (target.isInvul())
 		{
 			// However EffectInvincible requires to check GMs specially
-			if (target.isPlayer() && target.isGM())
-			{
-				return false;
-			}
-			
-			if (target.isSummon() && target.asSummon().getOwner().isGM())
+			if ((target.isPlayer() && target.isGM()) || (target.isSummon() && target.asSummon().getOwner().isGM()))
 			{
 				return false;
 			}
@@ -222,13 +217,8 @@ public class AttackableAI extends CreatureAI
 		if (player != null)
 		{
 			// Don't take the aggro if the GM has the access level below or equal to GM_DONT_TAKE_AGGRO
-			if (player.isGM() && !player.getAccessLevel().canTakeAggro())
-			{
-				return false;
-			}
-			
 			// check if the target is within the grace period for JUST getting up from fake death
-			if (player.isRecentFakeDeath())
+			if ((player.isGM() && !player.getAccessLevel().canTakeAggro()) || player.isRecentFakeDeath())
 			{
 				return false;
 			}
@@ -260,13 +250,13 @@ public class AttackableAI extends CreatureAI
 			// Check if the Player target has karma (=PK)
 			if ((player != null) && (player.getKarma() > 0))
 			{
-				return GeoEngine.getInstance().canSeeTarget(me, player); // Los Check
+				return GeoData.getInstance().canSeeTarget(me, player); // Los Check
 			}
 			
 			// Check if the Monster target is aggressive
 			if (target.isMonster() && Config.GUARD_ATTACK_AGGRO_MOB)
 			{
-				return (target.asMonster().isAggressive() && GeoEngine.getInstance().canSeeTarget(me, target));
+				return (target.asMonster().isAggressive() && GeoData.getInstance().canSeeTarget(me, target));
 			}
 			
 			return false;
@@ -282,7 +272,7 @@ public class AttackableAI extends CreatureAI
 			// Check if the Player target has karma (=PK)
 			if (target.isPlayer() && (target.asPlayer().getKarma() > 0))
 			{
-				return GeoEngine.getInstance().canSeeTarget(me, target); // Los Check
+				return GeoData.getInstance().canSeeTarget(me, target); // Los Check
 			}
 			
 			return false;
@@ -304,7 +294,7 @@ public class AttackableAI extends CreatureAI
 					}
 					
 					// Los Check
-					return GeoEngine.getInstance().canSeeTarget(me, target);
+					return GeoData.getInstance().canSeeTarget(me, target);
 				}
 			}
 			
@@ -326,7 +316,7 @@ public class AttackableAI extends CreatureAI
 			}
 			
 			// Check if the actor is Aggressive.
-			return me.isAggressive() && GeoEngine.getInstance().canSeeTarget(me, target);
+			return me.isAggressive() && GeoData.getInstance().canSeeTarget(me, target);
 		}
 	}
 	
@@ -735,7 +725,7 @@ public class AttackableAI extends CreatureAI
 			}
 			
 			// Move the actor to Location (x,y,z) server side AND client side by sending Server->Client packet MoveToLocation (broadcast)
-			final Location moveLoc = _actor.isFlying() ? new Location(x1, y1, z1) : GeoEngine.getInstance().getValidLocation(npc.getX(), npc.getY(), npc.getZ(), x1, y1, z1, npc.getInstanceId());
+			final Location moveLoc = _actor.isFlying() ? new Location(x1, y1, z1) : GeoData.getInstance().moveCheck(npc.getX(), npc.getY(), npc.getZ(), x1, y1, z1, npc.getInstanceId());
 			if (LocationUtil.calculateDistance(npc.getSpawn(), moveLoc, false, false) <= Config.MAX_DRIFT_RANGE)
 			{
 				moveTo(moveLoc.getX(), moveLoc.getY(), moveLoc.getZ());
@@ -870,7 +860,7 @@ public class AttackableAI extends CreatureAI
 		}
 		
 		// Actor should be able to see target.
-		if (!GeoEngine.getInstance().canSeeTarget(_actor, originalAttackTarget))
+		if (!GeoData.getInstance().canSeeTarget(_actor, originalAttackTarget))
 		{
 			if (_actor.calculateDistance3D(originalAttackTarget) < 6000)
 			{
@@ -994,7 +984,7 @@ public class AttackableAI extends CreatureAI
 						final int newZ = npc.getZ() + 30;
 						
 						// Mobius: Verify destination. Prevents wall collision issues and fixes monsters not avoiding obstacles.
-						moveTo(GeoEngine.getInstance().getValidLocation(npc.getX(), npc.getY(), npc.getZ(), newX, newY, newZ, npc.getInstanceId()));
+						moveTo(GeoData.getInstance().moveCheck(npc.getX(), npc.getY(), npc.getZ(), newX, newY, newZ, npc.getInstanceId()));
 					}
 					
 					return;
@@ -1029,7 +1019,7 @@ public class AttackableAI extends CreatureAI
 					posY -= 300;
 				}
 				
-				if (GeoEngine.getInstance().canMoveToTarget(npc.getX(), npc.getY(), npc.getZ(), posX, posY, posZ, npc.getInstanceId()))
+				if (GeoData.getInstance().canMove(npc.getX(), npc.getY(), npc.getZ(), posX, posY, posZ, npc.getInstanceId()))
 				{
 					setIntention(Intention.MOVE_TO, new Location(posX, posY, posZ, 0));
 				}
@@ -1104,12 +1094,7 @@ public class AttackableAI extends CreatureAI
 						{
 							for (Skill healSkill : aiHealSkills)
 							{
-								if (healSkill.getTargetType() == TargetType.SELF)
-								{
-									continue;
-								}
-								
-								if (!checkSkillCastConditions(npc, healSkill))
+								if ((healSkill.getTargetType() == TargetType.SELF) || !checkSkillCastConditions(npc, healSkill))
 								{
 									continue;
 								}
@@ -1120,7 +1105,7 @@ public class AttackableAI extends CreatureAI
 									return;
 								}
 								
-								if (GeoEngine.getInstance().canSeeTarget(npc, leader))
+								if (GeoData.getInstance().canSeeTarget(npc, leader))
 								{
 									clientStopMoving(null);
 									
@@ -1168,18 +1153,13 @@ public class AttackableAI extends CreatureAI
 						{
 							for (Attackable obj : World.getInstance().getVisibleObjectsInRange(npc, Attackable.class, sk.getCastRange() + collision))
 							{
-								if (!obj.isDead())
-								{
-									continue;
-								}
-								
-								if (!obj.isInMyClan(npc))
+								if (!obj.isDead() || !obj.isInMyClan(npc))
 								{
 									continue;
 								}
 								
 								percentage = (obj.getCurrentHp() / obj.getMaxHp()) * 100;
-								if ((Rnd.get(100) < ((100 - percentage) / 10)) && GeoEngine.getInstance().canSeeTarget(npc, obj))
+								if ((Rnd.get(100) < ((100 - percentage) / 10)) && GeoData.getInstance().canSeeTarget(npc, obj))
 								{
 									clientStopMoving(null);
 									
@@ -1213,12 +1193,7 @@ public class AttackableAI extends CreatureAI
 						{
 							for (Skill sk : aiResSkills)
 							{
-								if (sk.getTargetType() == TargetType.SELF)
-								{
-									continue;
-								}
-								
-								if (!checkSkillCastConditions(npc, sk))
+								if ((sk.getTargetType() == TargetType.SELF) || !checkSkillCastConditions(npc, sk))
 								{
 									continue;
 								}
@@ -1229,7 +1204,7 @@ public class AttackableAI extends CreatureAI
 									return;
 								}
 								
-								if (GeoEngine.getInstance().canSeeTarget(npc, leader))
+								if (GeoData.getInstance().canSeeTarget(npc, leader))
 								{
 									clientStopMoving(null);
 									
@@ -1255,17 +1230,12 @@ public class AttackableAI extends CreatureAI
 						{
 							for (Attackable obj : World.getInstance().getVisibleObjectsInRange(npc, Attackable.class, sk.getCastRange() + collision))
 							{
-								if (!obj.isDead())
+								if (!obj.isDead() || !npc.isInMyClan(obj))
 								{
 									continue;
 								}
 								
-								if (!npc.isInMyClan(obj))
-								{
-									continue;
-								}
-								
-								if ((Rnd.get(100) < 10) && GeoEngine.getInstance().canSeeTarget(npc, obj))
+								if ((Rnd.get(100) < 10) && GeoData.getInstance().canSeeTarget(npc, obj))
 								{
 									clientStopMoving(null);
 									
@@ -1346,7 +1316,7 @@ public class AttackableAI extends CreatureAI
 		}
 		
 		// Starts melee attack
-		if ((dist2 > range) || !GeoEngine.getInstance().canSeeTarget(npc, mostHate))
+		if ((dist2 > range) || !GeoData.getInstance().canSeeTarget(npc, mostHate))
 		{
 			if (npc.isMovementDisabled())
 			{
@@ -1448,7 +1418,7 @@ public class AttackableAI extends CreatureAI
 			}
 			else
 			{
-				if (GeoEngine.getInstance().canSeeTarget(caster, attackTarget) && !canAOE(sk) && !attackTarget.isDead() && (dist2 <= srange))
+				if (GeoData.getInstance().canSeeTarget(caster, attackTarget) && !canAOE(sk) && !attackTarget.isDead() && (dist2 <= srange))
 				{
 					if (!attackTarget.isAffectedBySkill(sk.getId()))
 					{
@@ -1466,7 +1436,7 @@ public class AttackableAI extends CreatureAI
 						return true;
 					}
 					
-					if (((sk.getTargetType() == TargetType.AREA) || (sk.getTargetType() == TargetType.BEHIND_AREA) || (sk.getTargetType() == TargetType.FRONT_AREA)) && GeoEngine.getInstance().canSeeTarget(caster, attackTarget) && !attackTarget.isDead() && (dist2 <= srange))
+					if (((sk.getTargetType() == TargetType.AREA) || (sk.getTargetType() == TargetType.BEHIND_AREA) || (sk.getTargetType() == TargetType.FRONT_AREA)) && GeoData.getInstance().canSeeTarget(caster, attackTarget) && !attackTarget.isDead() && (dist2 <= srange))
 					{
 						clientStopMoving(null);
 						caster.doCast(sk);
@@ -1490,7 +1460,7 @@ public class AttackableAI extends CreatureAI
 		{
 			if (sk.getTargetType() == TargetType.ONE)
 			{
-				if ((attackTarget.getEffectList().getFirstEffect(EffectType.BUFF) != null) && GeoEngine.getInstance().canSeeTarget(caster, attackTarget) && !attackTarget.isDead() && (dist2 <= srange))
+				if ((attackTarget.getEffectList().getFirstEffect(EffectType.BUFF) != null) && GeoData.getInstance().canSeeTarget(caster, attackTarget) && !attackTarget.isDead() && (dist2 <= srange))
 				{
 					clientStopMoving(null);
 					caster.doCast(sk);
@@ -1509,13 +1479,13 @@ public class AttackableAI extends CreatureAI
 			}
 			else if (canAOE(sk))
 			{
-				if (((sk.getTargetType() == TargetType.AURA) || (sk.getTargetType() == TargetType.BEHIND_AURA) || (sk.getTargetType() == TargetType.FRONT_AURA)) && GeoEngine.getInstance().canSeeTarget(caster, attackTarget))
+				if (((sk.getTargetType() == TargetType.AURA) || (sk.getTargetType() == TargetType.BEHIND_AURA) || (sk.getTargetType() == TargetType.FRONT_AURA)) && GeoData.getInstance().canSeeTarget(caster, attackTarget))
 				{
 					clientStopMoving(null);
 					caster.doCast(sk);
 					return true;
 				}
-				else if (((sk.getTargetType() == TargetType.AREA) || (sk.getTargetType() == TargetType.BEHIND_AREA) || (sk.getTargetType() == TargetType.FRONT_AREA)) && GeoEngine.getInstance().canSeeTarget(caster, attackTarget) && !attackTarget.isDead() && (dist2 <= srange))
+				else if (((sk.getTargetType() == TargetType.AREA) || (sk.getTargetType() == TargetType.BEHIND_AREA) || (sk.getTargetType() == TargetType.FRONT_AREA)) && GeoData.getInstance().canSeeTarget(caster, attackTarget) && !attackTarget.isDead() && (dist2 <= srange))
 				{
 					clientStopMoving(null);
 					caster.doCast(sk);
@@ -1536,7 +1506,7 @@ public class AttackableAI extends CreatureAI
 						moveToPawn(leader, sk.getCastRange() + caster.getTemplate().getCollisionRadius() + leader.getTemplate().getCollisionRadius());
 					}
 					
-					if (GeoEngine.getInstance().canSeeTarget(caster, leader))
+					if (GeoData.getInstance().canSeeTarget(caster, leader))
 					{
 						clientStopMoving(null);
 						caster.setTarget(leader);
@@ -1561,18 +1531,13 @@ public class AttackableAI extends CreatureAI
 			{
 				for (Attackable obj : World.getInstance().getVisibleObjectsInRange(caster, Attackable.class, sk.getCastRange() + caster.getTemplate().getCollisionRadius()))
 				{
-					if (obj.isDead())
-					{
-						continue;
-					}
-					
-					if (!caster.isInMyClan(obj))
+					if (obj.isDead() || !caster.isInMyClan(obj))
 					{
 						continue;
 					}
 					
 					percentage = (obj.getCurrentHp() / obj.getMaxHp()) * 100;
-					if ((Rnd.get(100) < ((100 - percentage) / 10)) && GeoEngine.getInstance().canSeeTarget(caster, obj))
+					if ((Rnd.get(100) < ((100 - percentage) / 10)) && GeoData.getInstance().canSeeTarget(caster, obj))
 					{
 						clientStopMoving(null);
 						caster.setTarget(obj);
@@ -1602,7 +1567,7 @@ public class AttackableAI extends CreatureAI
 		{
 			if (!canAura(sk))
 			{
-				if (GeoEngine.getInstance().canSeeTarget(caster, attackTarget) && !attackTarget.isDead() && (dist2 <= srange))
+				if (GeoData.getInstance().canSeeTarget(caster, attackTarget) && !attackTarget.isDead() && (dist2 <= srange))
 				{
 					clientStopMoving(null);
 					caster.doCast(sk);
@@ -1656,7 +1621,7 @@ public class AttackableAI extends CreatureAI
 					return true;
 				}
 				
-				if (((sk.getTargetType() == TargetType.AREA) || (sk.getTargetType() == TargetType.BEHIND_AREA) || (sk.getTargetType() == TargetType.FRONT_AREA)) && GeoEngine.getInstance().canSeeTarget(caster, attackTarget) && !attackTarget.isDead() && (dist2 <= srange))
+				if (((sk.getTargetType() == TargetType.AREA) || (sk.getTargetType() == TargetType.BEHIND_AREA) || (sk.getTargetType() == TargetType.FRONT_AREA)) && GeoData.getInstance().canSeeTarget(caster, attackTarget) && !attackTarget.isDead() && (dist2 <= srange))
 				{
 					clientStopMoving(null);
 					caster.doCast(sk);
@@ -1667,7 +1632,7 @@ public class AttackableAI extends CreatureAI
 		
 		if (sk.hasEffectType(EffectType.STUN, EffectType.ROOT, EffectType.PARALYZE, EffectType.MUTE, EffectType.FEAR))
 		{
-			if (GeoEngine.getInstance().canSeeTarget(caster, attackTarget) && !canAOE(sk) && (dist2 <= srange))
+			if (GeoData.getInstance().canSeeTarget(caster, attackTarget) && !canAOE(sk) && (dist2 <= srange))
 			{
 				if (!attackTarget.isAffectedBySkill(sk.getId()))
 				{
@@ -1685,7 +1650,7 @@ public class AttackableAI extends CreatureAI
 					return true;
 				}
 				
-				if (((sk.getTargetType() == TargetType.AREA) || (sk.getTargetType() == TargetType.BEHIND_AREA) || (sk.getTargetType() == TargetType.FRONT_AREA)) && GeoEngine.getInstance().canSeeTarget(caster, attackTarget) && !attackTarget.isDead() && (dist2 <= srange))
+				if (((sk.getTargetType() == TargetType.AREA) || (sk.getTargetType() == TargetType.BEHIND_AREA) || (sk.getTargetType() == TargetType.FRONT_AREA)) && GeoData.getInstance().canSeeTarget(caster, attackTarget) && !attackTarget.isDead() && (dist2 <= srange))
 				{
 					clientStopMoving(null);
 					caster.doCast(sk);
@@ -1706,7 +1671,7 @@ public class AttackableAI extends CreatureAI
 		
 		if (sk.hasEffectType(EffectType.DMG_OVER_TIME, EffectType.DMG_OVER_TIME_PERCENT))
 		{
-			if (GeoEngine.getInstance().canSeeTarget(caster, attackTarget) && !canAOE(sk) && !attackTarget.isDead() && (dist2 <= srange))
+			if (GeoData.getInstance().canSeeTarget(caster, attackTarget) && !canAOE(sk) && !attackTarget.isDead() && (dist2 <= srange))
 			{
 				if (!attackTarget.isAffectedBySkill(sk.getId()))
 				{
@@ -1724,7 +1689,7 @@ public class AttackableAI extends CreatureAI
 					return true;
 				}
 				
-				if (((sk.getTargetType() == TargetType.AREA) || (sk.getTargetType() == TargetType.BEHIND_AREA) || (sk.getTargetType() == TargetType.FRONT_AREA)) && GeoEngine.getInstance().canSeeTarget(caster, attackTarget) && !attackTarget.isDead() && (dist2 <= srange))
+				if (((sk.getTargetType() == TargetType.AREA) || (sk.getTargetType() == TargetType.BEHIND_AREA) || (sk.getTargetType() == TargetType.FRONT_AREA)) && GeoData.getInstance().canSeeTarget(caster, attackTarget) && !attackTarget.isDead() && (dist2 <= srange))
 				{
 					clientStopMoving(null);
 					caster.doCast(sk);
@@ -1757,7 +1722,7 @@ public class AttackableAI extends CreatureAI
 							moveToPawn(leader, sk.getCastRange() + caster.getTemplate().getCollisionRadius() + leader.getTemplate().getCollisionRadius());
 						}
 						
-						if (GeoEngine.getInstance().canSeeTarget(caster, leader))
+						if (GeoData.getInstance().canSeeTarget(caster, leader))
 						{
 							clientStopMoving(null);
 							caster.setTarget(leader);
@@ -1770,17 +1735,12 @@ public class AttackableAI extends CreatureAI
 				
 				for (Attackable obj : World.getInstance().getVisibleObjectsInRange(caster, Attackable.class, sk.getCastRange() + caster.getTemplate().getCollisionRadius()))
 				{
-					if (!obj.isDead())
+					if (!obj.isDead() || !caster.isInMyClan(obj))
 					{
 						continue;
 					}
 					
-					if (!caster.isInMyClan(obj))
-					{
-						continue;
-					}
-					
-					if ((Rnd.get(100) < 10) && GeoEngine.getInstance().canSeeTarget(caster, obj))
+					if ((Rnd.get(100) < 10) && GeoData.getInstance().canSeeTarget(caster, obj))
 					{
 						clientStopMoving(null);
 						caster.setTarget(obj);
@@ -1808,7 +1768,7 @@ public class AttackableAI extends CreatureAI
 		
 		if (!canAura(sk))
 		{
-			if (GeoEngine.getInstance().canSeeTarget(caster, attackTarget) && !attackTarget.isDead() && (dist2 <= srange))
+			if (GeoData.getInstance().canSeeTarget(caster, attackTarget) && !attackTarget.isDead() && (dist2 <= srange))
 			{
 				clientStopMoving(null);
 				caster.doCast(sk);
@@ -1858,12 +1818,7 @@ public class AttackableAI extends CreatureAI
 			return;
 		}
 		
-		if ((random < 20) && tryCast(npc, target, AISkillScope.COT, dist))
-		{
-			return;
-		}
-		
-		if ((random < 30) && tryCast(npc, target, AISkillScope.DEBUFF, dist))
+		if (((random < 20) && tryCast(npc, target, AISkillScope.COT, dist)) || ((random < 30) && tryCast(npc, target, AISkillScope.DEBUFF, dist)))
 		{
 			return;
 		}
@@ -1885,7 +1840,7 @@ public class AttackableAI extends CreatureAI
 		
 		// If cannot cast, try to attack.
 		final int range = npc.getPhysicalAttackRange() + npc.getTemplate().getCollisionRadius() + target.getTemplate().getCollisionRadius();
-		if ((dist <= range) && GeoEngine.getInstance().canSeeTarget(npc, target))
+		if ((dist <= range) && GeoData.getInstance().canSeeTarget(npc, target))
 		{
 			_actor.doAttack(target);
 			return;
@@ -1899,12 +1854,7 @@ public class AttackableAI extends CreatureAI
 	{
 		for (Skill sk : npc.getTemplate().getAISkills(aiSkillScope))
 		{
-			if (!checkSkillCastConditions(npc, sk) || (((sk.getCastRange() + target.getTemplate().getCollisionRadius()) <= dist) && !canAura(sk)))
-			{
-				continue;
-			}
-			
-			if (!GeoEngine.getInstance().canSeeTarget(npc, target))
+			if (!checkSkillCastConditions(npc, sk) || (((sk.getCastRange() + target.getTemplate().getCollisionRadius()) <= dist) && !canAura(sk)) || !GeoData.getInstance().canSeeTarget(npc, target))
 			{
 				continue;
 			}
@@ -1924,19 +1874,11 @@ public class AttackableAI extends CreatureAI
 	 */
 	private static boolean checkSkillCastConditions(Attackable caster, Skill skill)
 	{
-		if (caster.isCastingNow() && !skill.isSimultaneousCast())
-		{
-			return false;
-		}
+		
 		
 		// Not enough MP.
-		if (skill.getMpConsume() >= caster.getCurrentMp())
-		{
-			return false;
-		}
-		
 		// Character is in "skill disabled" mode.
-		if (caster.isSkillDisabled(skill))
+		if ((caster.isCastingNow() && !skill.isSimultaneousCast()) || (skill.getMpConsume() >= caster.getCurrentMp()) || caster.isSkillDisabled(skill))
 		{
 			return false;
 		}
@@ -1967,7 +1909,7 @@ public class AttackableAI extends CreatureAI
 				int range = 0;
 				for (Creature obj : actor.getAttackByList())
 				{
-					if ((obj == null) || obj.isDead() || !GeoEngine.getInstance().canSeeTarget(actor, obj) || (obj == getAttackTarget()))
+					if ((obj == null) || obj.isDead() || !GeoData.getInstance().canSeeTarget(actor, obj) || (obj == getAttackTarget()))
 					{
 						continue;
 					}
@@ -1998,7 +1940,7 @@ public class AttackableAI extends CreatureAI
 				// If there is nearby Target with aggro, start going on random target that is attackable
 				for (Creature obj : World.getInstance().getVisibleObjectsInRange(actor, Creature.class, range))
 				{
-					if (obj.isDead() || !GeoEngine.getInstance().canSeeTarget(actor, obj))
+					if (obj.isDead() || !GeoData.getInstance().canSeeTarget(actor, obj))
 					{
 						continue;
 					}
@@ -2031,12 +1973,7 @@ public class AttackableAI extends CreatureAI
 				int range = 0;
 				for (Attackable targets : World.getInstance().getVisibleObjectsInRange(actor, Attackable.class, range))
 				{
-					if (targets.isDead() || !GeoEngine.getInstance().canSeeTarget(actor, targets))
-					{
-						continue;
-					}
-					
-					if (targets.isInMyClan(actor))
+					if (targets.isDead() || !GeoData.getInstance().canSeeTarget(actor, targets) || targets.isInMyClan(actor))
 					{
 						continue;
 					}
@@ -2071,7 +2008,7 @@ public class AttackableAI extends CreatureAI
 			int range = sk.getCastRange() + actor.getTemplate().getCollisionRadius() + getAttackTarget().getTemplate().getCollisionRadius();
 			for (Creature obj : World.getInstance().getVisibleObjectsInRange(actor, Creature.class, range))
 			{
-				if (obj.isDead() || !GeoEngine.getInstance().canSeeTarget(actor, obj))
+				if (obj.isDead() || !GeoData.getInstance().canSeeTarget(actor, obj))
 				{
 					continue;
 				}
@@ -2112,7 +2049,7 @@ public class AttackableAI extends CreatureAI
 		{
 			for (Creature obj : actor.getHateList())
 			{
-				if ((obj == null) || !GeoEngine.getInstance().canSeeTarget(actor, obj) || obj.isDead())
+				if ((obj == null) || !GeoData.getInstance().canSeeTarget(actor, obj) || obj.isDead())
 				{
 					continue;
 				}
@@ -2157,7 +2094,7 @@ public class AttackableAI extends CreatureAI
 				}
 				
 				final Creature obj = target.isCreature() ? target.asCreature() : null;
-				if ((obj == null) || !GeoEngine.getInstance().canSeeTarget(actor, obj) || (dist2 > range))
+				if ((obj == null) || !GeoData.getInstance().canSeeTarget(actor, obj) || (dist2 > range))
 				{
 					continue;
 				}
@@ -2197,7 +2134,7 @@ public class AttackableAI extends CreatureAI
 		{
 			for (Creature obj : actor.getHateList())
 			{
-				if ((obj == null) || !GeoEngine.getInstance().canSeeTarget(actor, obj) || obj.isDead() || (obj != mostHate) || (obj == actor))
+				if ((obj == null) || !GeoData.getInstance().canSeeTarget(actor, obj) || obj.isDead() || (obj != mostHate) || (obj == actor))
 				{
 					continue;
 				}
@@ -2230,7 +2167,7 @@ public class AttackableAI extends CreatureAI
 		{
 			World.getInstance().forEachVisibleObject(actor, Creature.class, obj ->
 			{
-				if ((obj == null) || !GeoEngine.getInstance().canSeeTarget(actor, obj) || obj.isDead() || (obj != mostHate) || (obj == actor) || (obj == getAttackTarget()))
+				if ((obj == null) || !GeoData.getInstance().canSeeTarget(actor, obj) || obj.isDead() || (obj != mostHate) || (obj == actor) || (obj == getAttackTarget()))
 				{
 					return;
 				}
@@ -2281,7 +2218,7 @@ public class AttackableAI extends CreatureAI
 					continue;
 				}
 				
-				if ((obj == null) || !GeoEngine.getInstance().canSeeTarget(actor, obj) || obj.isDead() || (obj == getAttackTarget()) || (obj == actor))
+				if ((obj == null) || !GeoData.getInstance().canSeeTarget(actor, obj) || obj.isDead() || (obj == getAttackTarget()) || (obj == actor))
 				{
 					continue;
 				}
@@ -2306,7 +2243,7 @@ public class AttackableAI extends CreatureAI
 		{
 			World.getInstance().forEachVisibleObject(actor, Creature.class, obj ->
 			{
-				if (!GeoEngine.getInstance().canSeeTarget(actor, obj) || obj.isDead() || (obj != mostHate) || (obj == actor))
+				if (!GeoData.getInstance().canSeeTarget(actor, obj) || obj.isDead() || (obj != mostHate) || (obj == actor))
 				{
 					return;
 				}
@@ -2355,13 +2292,8 @@ public class AttackableAI extends CreatureAI
 		
 		// Check if region and its neighbors are active.
 		final WorldRegion region = _actor.getWorldRegion();
-		if ((region == null) || !region.areNeighborsActive())
-		{
-			return;
-		}
-		
 		// Check if the actor is all skills disabled.
-		if (getActiveChar().isAllSkillsDisabled())
+		if ((region == null) || !region.areNeighborsActive() || getActiveChar().isAllSkillsDisabled())
 		{
 			return;
 		}

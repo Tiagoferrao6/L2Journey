@@ -114,14 +114,9 @@ public class PartyClan implements ITargetTypeHandler
 				}
 			}
 			
-			if (!((hasClan && (obj.getClanId() == player.getClanId())) || (hasParty && obj.isInParty() && (player.getParty().getLeaderObjectId() == obj.getParty().getLeaderObjectId()))))
-			{
-				continue;
-			}
-			
 			// Don't add this target if this is a Pc->Pc pvp
 			// casting and pvp condition not met
-			if (!player.checkPvpSkill(obj, skill))
+			if (!((hasClan && (obj.getClanId() == player.getClanId())) || (hasParty && obj.isInParty() && (player.getParty().getLeaderObjectId() == obj.getParty().getLeaderObjectId()))) || !player.checkPvpSkill(obj, skill))
 			{
 				continue;
 			}

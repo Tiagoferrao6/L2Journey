@@ -47,6 +47,7 @@ import com.l2journey.Config;
 import com.l2journey.EventsConfig;
 import com.l2journey.commons.threads.ThreadPool;
 import com.l2journey.commons.util.Rnd;
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.ai.Action;
 import com.l2journey.gameserver.ai.AttackableAI;
 import com.l2journey.gameserver.ai.CreatureAI;
@@ -60,9 +61,6 @@ import com.l2journey.gameserver.data.xml.FenceData;
 import com.l2journey.gameserver.data.xml.ItemData;
 import com.l2journey.gameserver.data.xml.NpcData;
 import com.l2journey.gameserver.data.xml.SendMessageLocalisationData;
-import com.l2journey.gameserver.geoengine.GeoEngine;
-import com.l2journey.gameserver.geoengine.pathfinding.GeoLocation;
-import com.l2journey.gameserver.geoengine.pathfinding.PathFinding;
 import com.l2journey.gameserver.managers.CaptchaManager;
 import com.l2journey.gameserver.managers.IdManager;
 import com.l2journey.gameserver.managers.InstanceManager;
@@ -173,6 +171,8 @@ import com.l2journey.gameserver.network.serverpackets.StatusUpdate;
 import com.l2journey.gameserver.network.serverpackets.StopMove;
 import com.l2journey.gameserver.network.serverpackets.SystemMessage;
 import com.l2journey.gameserver.network.serverpackets.TeleportToLocation;
+import com.l2journey.gameserver.pathfinding.AbstractNodeLoc;
+import com.l2journey.gameserver.pathfinding.PathFinding;
 import com.l2journey.gameserver.taskmanagers.AttackStanceTaskManager;
 import com.l2journey.gameserver.taskmanagers.CreatureSeeTaskManager;
 import com.l2journey.gameserver.taskmanagers.GameTimeTaskManager;
@@ -252,6 +252,8 @@ public abstract class Creature extends WorldObject
 	private boolean _isInTownWar;
 	
 	private final StampedLock _attackLock = new StampedLock();
+	
+	private Creature _debugger = null;
 	
 	private Team _team = Team.NONE;
 	
@@ -822,7 +824,7 @@ public abstract class Creature extends WorldObject
 		
 		int x = xValue;
 		int y = yValue;
-		int z = _isFlying ? zValue : GeoEngine.getInstance().getHeight(x, y, zValue);
+		int z = _isFlying ? zValue : GeoData.getInstance().getHeight(x, y, zValue);
 		int heading = headingValue;
 		
 		// Prepare creature for teleport.
@@ -1165,7 +1167,7 @@ public abstract class Creature extends WorldObject
 			stopEffectsOnAction();
 			
 			// GeoData Los Check here (or dz > 1000)
-			if (!GeoEngine.getInstance().canSeeTarget(this, target))
+			if (!GeoData.getInstance().canSeeTarget(this, target))
 			{
 				sendPacket(SystemMessageId.CANNOT_SEE_TARGET);
 				getAI().setIntention(Intention.ACTIVE);
@@ -3658,7 +3660,7 @@ public abstract class Creature extends WorldObject
 		
 		public boolean disregardingGeodata;
 		public int onGeodataPathIndex;
-		public List<GeoLocation> geoPath;
+		public List<AbstractNodeLoc> geoPath;
 		public int geoPathAccurateTx;
 		public int geoPathAccurateTy;
 		public int geoPathGtx;
@@ -4119,19 +4121,18 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * This method returns a list of {@link GeoLocation} objects representing the movement path.<br>
-	 * If the move operation is defined (not null), it returns the path from the 'geoPath' field of the move.<br>
-	 * Otherwise, it returns null.
-	 * @return List of {@link GeoLocation} representing the movement path, or null if move is undefined.
+	 * Este método retorna uma lista de nós do pathfinding representando o caminho de movimento.<br>
+	 * Se a operação de movimento estiver definida (não nula), retorna o path do campo 'geoPath' do movimento.<br>
+	 * Caso contrário, retorna null.
+	 * @return Lista de AbstractNodeLoc representando o caminho, ou null se indefinido.
 	 */
-	public List<GeoLocation> getGeoPath()
+	public List<AbstractNodeLoc> getGeoPath()
 	{
 		final MoveData move = _move;
-		if (move != null)
+		if ((move != null) && (move.geoPath != null))
 		{
-			return move.geoPath;
+			return new ArrayList<>(move.geoPath);
 		}
-		
 		return null;
 	}
 	
@@ -4318,7 +4319,7 @@ public abstract class Creature extends WorldObject
 				final int y1 = (int) (Math.sin(Math.PI + radian + course) * frontDistance);
 				final int x = xPrev + x1;
 				final int y = yPrev + y1;
-				if (!GeoEngine.getInstance().canMoveToTarget(xPrev, yPrev, zPrev, x, y, zPrev, getInstanceId()))
+				if (!GeoData.getInstance().canMove(xPrev, yPrev, zPrev, x, y, zPrev, getInstanceId()))
 				{
 					_move.onGeodataPathIndex = -1;
 					stopMove(asPlayer().getLastServerPosition());
@@ -4339,7 +4340,7 @@ public abstract class Creature extends WorldObject
 					final int y1 = (int) (Math.sin(Math.PI + radian + course) * frontDistance);
 					final int x = xPrev + x1;
 					final int y = yPrev + y1;
-					if (!GeoEngine.getInstance().canMoveToTarget(xPrev, yPrev, zPrev, x, y, zPrev, getInstanceId()))
+					if (!GeoData.getInstance().canMove(xPrev, yPrev, zPrev, x, y, zPrev, getInstanceId()))
 					{
 						_move.onGeodataPathIndex = -1;
 						if (hasAI())
@@ -4365,7 +4366,7 @@ public abstract class Creature extends WorldObject
 						final int y1 = (int) (Math.sin(Math.PI + radian + course) * frontDistance);
 						final int x = xPrev + x1;
 						final int y = yPrev + y1;
-						if (!GeoEngine.getInstance().canMoveToTarget(xPrev, yPrev, zPrev, x, y, zPrev, getInstanceId()))
+						if (!GeoData.getInstance().canMove(xPrev, yPrev, zPrev, x, y, zPrev, getInstanceId()))
 						{
 							_move.onGeodataPathIndex = -1;
 							broadcastPacket(new StopMove(this));
@@ -4781,7 +4782,7 @@ public abstract class Creature extends WorldObject
 						&& !(((curZ - z) > 300) && (distance < 300)))) // Prohibit correcting destination if character wants to fall.
 				{
 					// location different if destination wasn't reached (or just z coord is different)
-					final Location destiny = GeoEngine.getInstance().getValidLocation(curX, curY, curZ, x, y, z, getInstanceId());
+					final Location destiny = GeoData.getInstance().moveCheck(curX, curY, curZ, x, y, z, getInstanceId());
 					x = destiny.getX();
 					y = destiny.getY();
 					if (!isPlayer())
@@ -4817,7 +4818,7 @@ public abstract class Creature extends WorldObject
 						int destinationY = 0;
 						double shortDistance = Double.MAX_VALUE;
 						double tempDistance;
-						List<GeoLocation> tempPath;
+						List<AbstractNodeLoc> tempPath;
 						for (int sX = xMin; sX < xMax; sX += 500)
 						{
 							for (int sY = yMin; sY < yMax; sY += 500)
@@ -4882,7 +4883,7 @@ public abstract class Creature extends WorldObject
 				// Verify destination when using mouse movement and no path is found.
 				if (isPlayable() && !_cursorKeyMovement && (move.geoPath == null))
 				{
-					final Location destiny = GeoEngine.getInstance().getValidLocation(curX, curY, curZ, x, y, z, getInstanceId());
+					final Location destiny = GeoData.getInstance().moveCheck(curX, curY, curZ, x, y, z, getInstanceId());
 					x = destiny.getX();
 					y = destiny.getY();
 					z = destiny.getZ();
@@ -5486,7 +5487,7 @@ public abstract class Creature extends WorldObject
 		}
 		
 		// GeoData Los Check or dz > 1000
-		// if (!GeoEngine.getInstance().canSeeTarget(player, this))
+		// if (!GeoData.getInstance().canSeeTarget(player, this))
 		// {
 		// player.sendPacket(SystemMessageId.CANNOT_SEE_TARGET);
 		// player.sendPacket(ActionFailed.STATIC_PACKET);
@@ -5846,7 +5847,7 @@ public abstract class Creature extends WorldObject
 					
 					// Healing party members should ignore LOS.
 					if (((skill.getTargetType() != TargetType.PARTY) || !skill.hasEffectType(EffectType.HEAL)) //
-						&& (mut.getSkillTime() > 550) && !GeoEngine.getInstance().canSeeTarget(this, target))
+						&& (mut.getSkillTime() > 550) && !GeoData.getInstance().canSeeTarget(this, target))
 					{
 						skipLOS++;
 						continue;
@@ -6660,7 +6661,7 @@ public abstract class Creature extends WorldObject
 		}
 		else
 		{
-			if (isPlayer() && !isDOT && (skill != null) && (skill.getCastRange() > 0) && (attacker != null) && !GeoEngine.getInstance().canSeeTarget(attacker, this))
+			if (isPlayer() && !isDOT && (skill != null) && (skill.getCastRange() > 0) && (attacker != null) && !GeoData.getInstance().canSeeTarget(attacker, this))
 			{
 				amount = 0;
 			}
@@ -7422,5 +7423,22 @@ public abstract class Creature extends WorldObject
 	public void setInTownWarEvent(boolean value)
 	{
 		_isInTownWar = value;
+	}
+	
+	/**
+	 * @return True if debugging is enabled for this L2Character
+	 */
+	public boolean isDebug()
+	{
+		return _debugger != null;
+	}
+	
+	/**
+	 * Sets L2Character instance, to which debug packets will be send
+	 * @param d
+	 */
+	public void setDebug(Creature d)
+	{
+		_debugger = d;
 	}
 }

@@ -31,7 +31,6 @@ package com.l2journey.gameserver.network.clientpackets;
 import com.l2journey.Config;
 import com.l2journey.gameserver.ai.Intention;
 import com.l2journey.gameserver.data.xml.DoorData;
-import com.l2journey.gameserver.geoengine.GeoEngine;
 import com.l2journey.gameserver.model.Location;
 import com.l2journey.gameserver.model.actor.Player;
 import com.l2journey.gameserver.model.events.EventDispatcher;
@@ -95,11 +94,11 @@ public class MoveToLocation extends ClientPacket
 		}
 		
 		// Check if target location is obstructed.
-		if (GeoEngine.getInstance().isCompletelyBlocked(GeoEngine.getGeoX(_targetX), GeoEngine.getGeoY(_targetY), _targetZ))
-		{
-			player.sendPacket(ActionFailed.STATIC_PACKET);
-			return;
-		}
+		// if (GeoData.getInstance().isCompletelyBlocked(GeoData.getGeoX(_targetX), GeoData.getGeoY(_targetY), _targetZ))
+		// {
+		// player.sendPacket(ActionFailed.STATIC_PACKET);
+		// return;
+		// }
 		
 		// Check for possible door logout and move over exploit. Also checked at ValidatePosition.
 		if (DoorData.getInstance().checkIfDoorsBetween(player.getLastServerPosition(), player.getLocation(), player.getInstanceId()))

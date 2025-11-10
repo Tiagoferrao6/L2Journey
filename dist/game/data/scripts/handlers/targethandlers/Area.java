@@ -89,12 +89,7 @@ public class Area implements ITargetTypeHandler
 			
 			if (LocationUtil.checkIfInRange(skill.getAffectRange(), origin, obj, true))
 			{
-				if (!Skill.checkForAreaOffensiveSkills(creature, obj, skill, srcInArena))
-				{
-					return;
-				}
-				
-				if ((maxTargets > 0) && (targetList.size() >= maxTargets))
+				if (!Skill.checkForAreaOffensiveSkills(creature, obj, skill, srcInArena) || ((maxTargets > 0) && (targetList.size() >= maxTargets)))
 				{
 					return;
 				}

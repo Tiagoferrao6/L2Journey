@@ -25,7 +25,7 @@ import java.util.concurrent.Future;
 
 import com.l2journey.commons.threads.ThreadPool;
 import com.l2journey.commons.util.Rnd;
-import com.l2journey.gameserver.geoengine.GeoEngine;
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.model.World;
 import com.l2journey.gameserver.model.WorldObject;
 import com.l2journey.gameserver.model.actor.Attackable;
@@ -162,7 +162,7 @@ public class FortSiegeGuardAI extends CreatureAI implements Runnable
 			}
 		}
 		
-		return (!currentTarget.isPlayable() || !currentTarget.asPlayable().isSilentMovingAffected() || _actor.isInsideRadius2D(currentTarget, 250)) && _actor.isAutoAttackable(currentTarget) && GeoEngine.getInstance().canSeeTarget(_actor, currentTarget);
+		return (!currentTarget.isPlayable() || !currentTarget.asPlayable().isSilentMovingAffected() || _actor.isInsideRadius2D(currentTarget, 250)) && _actor.isAutoAttackable(currentTarget) && GeoData.getInstance().canSeeTarget(_actor, currentTarget);
 	}
 	
 	/**
@@ -383,7 +383,7 @@ public class FortSiegeGuardAI extends CreatureAI implements Runnable
 							continue;
 						}
 						
-						if (!GeoEngine.getInstance().canSeeTarget(_actor, creature))
+						if (!GeoData.getInstance().canSeeTarget(_actor, creature))
 						{
 							break;
 						}
@@ -408,7 +408,7 @@ public class FortSiegeGuardAI extends CreatureAI implements Runnable
 			
 			if (npc.getAI() != null) // TODO: possibly check not needed
 			{
-				if (!npc.isDead() && (Math.abs(target.getZ() - npc.getZ()) < 600) && ((npc.getAI()._intention == Intention.IDLE) || (npc.getAI()._intention == Intention.ACTIVE)) && target.isInsideRadius3D(npc, 1500) && GeoEngine.getInstance().canSeeTarget(npc, target))
+				if (!npc.isDead() && (Math.abs(target.getZ() - npc.getZ()) < 600) && ((npc.getAI()._intention == Intention.IDLE) || (npc.getAI()._intention == Intention.ACTIVE)) && target.isInsideRadius3D(npc, 1500) && GeoData.getInstance().canSeeTarget(npc, target))
 				{
 					// Notify the WorldObject AI with AGGRESSION
 					npc.getAI().notifyAction(Action.AGGRESSION, getAttackTarget(), 1);
@@ -430,7 +430,7 @@ public class FortSiegeGuardAI extends CreatureAI implements Runnable
 							continue;
 						}
 						
-						if (!GeoEngine.getInstance().canSeeTarget(_actor, npc))
+						if (!GeoData.getInstance().canSeeTarget(_actor, npc))
 						{
 							break;
 						}

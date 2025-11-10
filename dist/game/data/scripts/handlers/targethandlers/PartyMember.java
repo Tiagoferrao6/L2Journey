@@ -57,12 +57,7 @@ public class PartyMember implements ITargetTypeHandler
 		// Check if target is a valid party member.
 		if (!target.isDead())
 		{
-			if (target == creature)
-			{
-				return Collections.singletonList(target);
-			}
-			
-			if (creature.isInParty() && target.isInParty() && (creature.getParty().getLeaderObjectId() == target.getParty().getLeaderObjectId()))
+			if ((target == creature) || (creature.isInParty() && target.isInParty() && (creature.getParty().getLeaderObjectId() == target.getParty().getLeaderObjectId())))
 			{
 				return Collections.singletonList(target);
 			}

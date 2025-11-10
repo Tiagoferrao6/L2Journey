@@ -145,8 +145,7 @@ public class Q00139_ShadowFoxPart1 extends Quest
 			return;
 		}
 		
-		final 
-QuestState qs = getQuestState(member, false);
+		final QuestState qs = getQuestState(member, false);
 		if (!qs.isSet("talk") && (getRandom(100) < DROP_CHANCE))
 		{
 			final int itemId = (getRandom(11) == 0) ? CHEST : FRAGMENT;

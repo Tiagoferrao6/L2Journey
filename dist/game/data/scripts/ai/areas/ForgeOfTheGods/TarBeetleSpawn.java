@@ -42,7 +42,7 @@ import org.w3c.dom.Node;
 import com.l2journey.commons.threads.ThreadPool;
 import com.l2journey.commons.util.IXmlReader;
 import com.l2journey.commons.util.Rnd;
-import com.l2journey.gameserver.geoengine.GeoEngine;
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.model.Location;
 import com.l2journey.gameserver.model.Spawn;
 import com.l2journey.gameserver.model.Territory;
@@ -240,7 +240,7 @@ public class TarBeetleSpawn implements IXmlReader
 					{
 						final Spawn spawn = new Spawn(18804);
 						spawn.setHeading(Rnd.get(65535));
-						spawn.setXYZ(location.getX(), location.getY(), GeoEngine.getInstance().getHeight(location.getX(), location.getY(), location.getZ()));
+						spawn.setXYZ(location.getX(), location.getY(), GeoData.getInstance().getHeight(location.getX(), location.getY(), location.getZ()));
 						final Npc npc = spawn.doSpawn();
 						spawn.stopRespawn();
 						npc.setRandomWalking(false);

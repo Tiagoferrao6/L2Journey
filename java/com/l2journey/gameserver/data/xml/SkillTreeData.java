@@ -1301,18 +1301,8 @@ public class SkillTreeData implements IXmlReader
 	 */
 	public boolean isSkillAllowed(Player player, Skill skill)
 	{
-		if (skill.isExcludedFromCheck())
-		{
-			return true;
-		}
-		
-		if (player.isGM() && skill.isGMSkill())
-		{
-			return true;
-		}
-		
 		// Prevent accidental skill remove during reload
-		if (_loading)
+		if (skill.isExcludedFromCheck() || (player.isGM() && skill.isGMSkill()) || _loading)
 		{
 			return true;
 		}

@@ -55,12 +55,7 @@ public class Sweeper extends AbstractEffect
 		
 		final Player player = effector.asPlayer();
 		final Attackable monster = effected.asAttackable();
-		if (!monster.checkSpoilOwner(player, false))
-		{
-			return;
-		}
-		
-		if (!player.getInventory().checkInventorySlotsAndWeight(monster.getSpoilLootItems(), false, false))
+		if (!monster.checkSpoilOwner(player, false) || !player.getInventory().checkInventorySlotsAndWeight(monster.getSpoilLootItems(), false, false))
 		{
 			return;
 		}

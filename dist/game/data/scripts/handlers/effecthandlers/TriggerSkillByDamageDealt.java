@@ -119,13 +119,8 @@ public class TriggerSkillByDamageDealt extends AbstractEffect
 		}
 		
 		// When no skill attacks are allowed.
-		if (!_allowSkillAttack && (event.getSkill() != null))
-		{
-			return;
-		}
-		
 		// When no normal attacks are allowed.
-		if (!_allowNormalAttack && (event.getSkill() == null))
+		if ((!_allowSkillAttack && (event.getSkill() != null)) || (!_allowNormalAttack && (event.getSkill() == null)))
 		{
 			return;
 		}

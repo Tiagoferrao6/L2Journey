@@ -59,12 +59,7 @@ public class RequestPledgeSetMemberPowerGrade extends ClientPacket
 		}
 		
 		final Clan clan = player.getClan();
-		if (clan == null)
-		{
-			return;
-		}
-		
-		if (!player.hasAccess(ClanAccess.MODIFY_RANKS))
+		if ((clan == null) || !player.hasAccess(ClanAccess.MODIFY_RANKS))
 		{
 			return;
 		}

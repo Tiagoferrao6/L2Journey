@@ -29,7 +29,7 @@
 package handlers.itemhandlers;
 
 import com.l2journey.commons.util.Rnd;
-import com.l2journey.gameserver.geoengine.GeoEngine;
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.handler.IItemHandler;
 import com.l2journey.gameserver.model.Location;
 import com.l2journey.gameserver.model.actor.Playable;
@@ -77,7 +77,7 @@ public class RollingDice implements IItemHandler
 		final int x = player.getX() + x1;
 		final int y = player.getY() + y1;
 		final int z = player.getZ();
-		final Location destination = GeoEngine.getInstance().getValidLocation(player.getX(), player.getY(), player.getZ(), x, y, z, player.getInstanceId());
+		final Location destination = GeoData.getInstance().moveCheck(player.getX(), player.getY(), player.getZ(), x, y, z, player.getInstanceId());
 		Broadcast.toSelfAndKnownPlayers(player, new Dice(player.getObjectId(), itemId, number, destination.getX(), destination.getY(), destination.getZ()));
 		
 		final SystemMessage sm = new SystemMessage(SystemMessageId.C1_HAS_ROLLED_A_S2);

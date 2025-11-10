@@ -691,13 +691,8 @@ public class Cubic
 					final Summon summon = player.getSummon();
 					if (summon != null)
 					{
-						if (summon.isDead())
-						{
-							continue;
-						}
-						
 						// If party member's pet not dead, check if it is in cast range of heal cubic.
-						if (!isInCubicRange(_owner, summon))
+						if (summon.isDead() || !isInCubicRange(_owner, summon))
 						{
 							continue;
 						}

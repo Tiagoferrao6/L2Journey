@@ -347,13 +347,8 @@ public class WalkingManager implements IXmlReader
 				if (_activeRoutes.containsKey(npc.getObjectId()) && ((npc.getAI().getIntention() == Intention.ACTIVE) || (npc.getAI().getIntention() == Intention.IDLE)))
 				{
 					final WalkInfo walk = _activeRoutes.get(npc.getObjectId());
-					if (walk == null)
-					{
-						return;
-					}
-					
 					// Prevent call simultaneously from scheduled task and onArrived() or temporarily stop walking for resuming in future
-					if (walk.isBlocked() || walk.isSuspended())
+					if ((walk == null) || walk.isBlocked() || walk.isSuspended())
 					{
 						return;
 					}

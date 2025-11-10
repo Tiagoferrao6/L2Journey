@@ -26,86 +26,72 @@
  * applicable..
  * 
  */
-package com.l2journey.gameserver.geoengine.pathfinding;
+package com.l2journey.gameserver.pathfinding.geonodes;
+
+import com.l2journey.gameserver.model.World;
+import com.l2journey.gameserver.pathfinding.AbstractNodeLoc;
 
 /**
- * @author Mobius
+ * @author -Nemesiss-
  */
-public class GeoNode
+public class GeoNodeLoc extends AbstractNodeLoc
 {
-	private GeoLocation _location;
-	private GeoNode _parent;
-	private GeoNode _next = null;
-	private boolean _isInUse = true;
-	private float _cost = -1000;
+	private final short _x;
+	private final short _y;
+	private final short _z;
 	
-	public GeoNode(GeoLocation location)
+	public GeoNodeLoc(short x, short y, short z)
 	{
-		_location = location;
+		_x = x;
+		_y = y;
+		_z = z;
 	}
 	
-	public void setParent(GeoNode parent)
+	@Override
+	public int getX()
 	{
-		_parent = parent;
+		return World.MAP_MIN_X + (_x * 128) + 48;
 	}
 	
-	public GeoNode getParent()
+	@Override
+	public int getY()
 	{
-		return _parent;
+		return World.MAP_MIN_Y + (_y * 128) + 48;
 	}
 	
-	public GeoLocation getLocation()
+	@Override
+	public int getZ()
 	{
-		return _location;
+		return _z;
 	}
 	
-	public void setLoc(GeoLocation location)
+	@Override
+	public void setZ(short z)
 	{
-		_location = location;
+		//
 	}
 	
-	public boolean isInUse()
+	@Override
+	public int getNodeX()
 	{
-		return _isInUse;
+		return _x;
 	}
 	
-	public void setInUse()
+	@Override
+	public int getNodeY()
 	{
-		_isInUse = true;
-	}
-	
-	public GeoNode getNext()
-	{
-		return _next;
-	}
-	
-	public void setNext(GeoNode next)
-	{
-		_next = next;
-	}
-	
-	public float getCost()
-	{
-		return _cost;
-	}
-	
-	public void setCost(double cost)
-	{
-		_cost = (float) cost;
-	}
-	
-	public void free()
-	{
-		setParent(null);
-		_cost = -1000;
-		_isInUse = false;
-		_next = null;
+		return _y;
 	}
 	
 	@Override
 	public int hashCode()
 	{
-		return (31 * 1) + ((_location == null) ? 0 : _location.hashCode());
+		final int prime = 31;
+		int result = 1;
+		result = (prime * result) + _x;
+		result = (prime * result) + _y;
+		result = (prime * result) + _z;
+		return result;
 	}
 	
 	@Override
@@ -115,23 +101,20 @@ public class GeoNode
 		{
 			return true;
 		}
-		if (obj == null)
+		if ((obj == null) || !(obj instanceof GeoNodeLoc))
 		{
 			return false;
 		}
-		if (!(obj instanceof GeoNode))
+		final GeoNodeLoc other = (GeoNodeLoc) obj;
+		if (_x != other._x)
 		{
 			return false;
 		}
-		final GeoNode other = (GeoNode) obj;
-		if (_location == null)
+		if (_y != other._y)
 		{
-			if (other._location != null)
-			{
-				return false;
-			}
+			return false;
 		}
-		else if (!_location.equals(other._location))
+		if (_z != other._z)
 		{
 			return false;
 		}

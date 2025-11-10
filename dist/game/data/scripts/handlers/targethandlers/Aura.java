@@ -80,12 +80,7 @@ public class Aura implements ITargetTypeHandler
 					}
 				}
 				
-				if (!Skill.checkForAreaOffensiveSkills(creature, obj, skill, srcInArena))
-				{
-					continue;
-				}
-				
-				if (creature.isPlayable() && obj.isAttackable() && !skill.isBad())
+				if (!Skill.checkForAreaOffensiveSkills(creature, obj, skill, srcInArena) || (creature.isPlayable() && obj.isAttackable() && !skill.isBad()))
 				{
 					continue;
 				}

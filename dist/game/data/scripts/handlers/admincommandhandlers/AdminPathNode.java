@@ -23,45 +23,75 @@ package handlers.admincommandhandlers;
 import java.util.List;
 
 import com.l2journey.Config;
-import com.l2journey.gameserver.geoengine.pathfinding.GeoLocation;
-import com.l2journey.gameserver.geoengine.pathfinding.PathFinding;
 import com.l2journey.gameserver.handler.IAdminCommandHandler;
 import com.l2journey.gameserver.model.actor.Player;
+import com.l2journey.gameserver.pathfinding.AbstractNodeLoc;
+import com.l2journey.gameserver.pathfinding.PathFinding;
 
 public class AdminPathNode implements IAdminCommandHandler
 {
 	private static final String[] ADMIN_COMMANDS =
 	{
-		"admin_path_find"
+		"admin_pn_info",
+		"admin_show_path",
+		"admin_path_debug",
+		"admin_show_pn",
+		"admin_find_path",
 	};
 	
 	@Override
 	public boolean useAdminCommand(String command, Player activeChar)
 	{
-		if (command.equals("admin_path_find"))
+		if (command.equals("admin_pn_info"))
 		{
-			if (Config.PATHFINDING < 1)
+			final String[] info = PathFinding.getInstance().getStat();
+			if (info == null)
 			{
-				activeChar.sendSysMessage("PathFinding is disabled.");
+				activeChar.sendMessage("Not supported");
+			}
+			else
+			{
+				for (String msg : info)
+				{
+					activeChar.sendMessage(msg);
+				}
+			}
+		}
+		else if (command.equals("admin_show_path"))
+		{
+			
+		}
+		else if (command.equals("admin_path_debug"))
+		{
+			
+		}
+		else if (command.equals("admin_show_pn"))
+		{
+			
+		}
+		else if (command.equals("admin_find_path"))
+		{
+			if (Config.PATHFINDING == 0)
+			{
+				activeChar.sendMessage("PathFinding is disabled.");
 				return true;
 			}
-			
 			if (activeChar.getTarget() != null)
 			{
-				final List<GeoLocation> path = PathFinding.getInstance().findPath(activeChar.getX(), activeChar.getY(), (short) activeChar.getZ(), activeChar.getTarget().getX(), activeChar.getTarget().getY(), (short) activeChar.getTarget().getZ(), activeChar.getInstanceId(), true);
+				List<AbstractNodeLoc> path = PathFinding.getInstance().findPath(activeChar.getX(), activeChar.getY(), (short) activeChar.getZ(), activeChar.getTarget().getX(), activeChar.getTarget().getY(), (short) activeChar.getTarget().getZ(), activeChar.getInstanceId(), true);
 				if (path == null)
 				{
-					activeChar.sendSysMessage("No Route!");
+					activeChar.sendMessage("No Route!");
 					return true;
 				}
-				for (GeoLocation a : path)
+				for (AbstractNodeLoc a : path)
 				{
-					activeChar.sendSysMessage("x:" + a.getX() + " y:" + a.getY() + " z:" + a.getZ());
+					activeChar.sendMessage("x:" + a.getX() + " y:" + a.getY() + " z:" + a.getZ());
 				}
 			}
 			else
 			{
-				activeChar.sendSysMessage("No Target!");
+				activeChar.sendMessage("No Target!");
 			}
 		}
 		return true;

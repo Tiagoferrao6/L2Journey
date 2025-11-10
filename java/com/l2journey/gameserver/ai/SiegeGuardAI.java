@@ -25,7 +25,7 @@ import java.util.concurrent.Future;
 
 import com.l2journey.commons.threads.ThreadPool;
 import com.l2journey.commons.util.Rnd;
-import com.l2journey.gameserver.geoengine.GeoEngine;
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.model.World;
 import com.l2journey.gameserver.model.WorldObject;
 import com.l2journey.gameserver.model.actor.Attackable;
@@ -152,7 +152,7 @@ public class SiegeGuardAI extends CreatureAI implements Runnable
 		}
 		
 		// Los Check Here
-		return (_actor.isAutoAttackable(currentTarget) && GeoEngine.getInstance().canSeeTarget(_actor, currentTarget));
+		return (_actor.isAutoAttackable(currentTarget) && GeoData.getInstance().canSeeTarget(_actor, currentTarget));
 	}
 	
 	/**
@@ -372,7 +372,7 @@ public class SiegeGuardAI extends CreatureAI implements Runnable
 							continue;
 						}
 						
-						if (!GeoEngine.getInstance().canSeeTarget(_actor, creature))
+						if (!GeoData.getInstance().canSeeTarget(_actor, creature))
 						{
 							break;
 						}
@@ -397,7 +397,7 @@ public class SiegeGuardAI extends CreatureAI implements Runnable
 			
 			if (npc.getAI() != null) // TODO: possibly check not needed
 			{
-				if (!npc.isDead() && (Math.abs(target.getZ() - npc.getZ()) < 600) && ((npc.getAI()._intention == Intention.IDLE) || (npc.getAI()._intention == Intention.ACTIVE)) && target.isInsideRadius3D(npc, 1500) && GeoEngine.getInstance().canSeeTarget(npc, target))
+				if (!npc.isDead() && (Math.abs(target.getZ() - npc.getZ()) < 600) && ((npc.getAI()._intention == Intention.IDLE) || (npc.getAI()._intention == Intention.ACTIVE)) && target.isInsideRadius3D(npc, 1500) && GeoData.getInstance().canSeeTarget(npc, target))
 				{
 					// Notify the WorldObject AI with AGGRESSION
 					npc.getAI().notifyAction(Action.AGGRESSION, getAttackTarget(), 1);
@@ -419,7 +419,7 @@ public class SiegeGuardAI extends CreatureAI implements Runnable
 							continue;
 						}
 						
-						if (!GeoEngine.getInstance().canSeeTarget(_actor, npc))
+						if (!GeoData.getInstance().canSeeTarget(_actor, npc))
 						{
 							break;
 						}
@@ -464,16 +464,7 @@ public class SiegeGuardAI extends CreatureAI implements Runnable
 		
 		// never attack defenders
 		final Defender sGuard = (Defender) _actor;
-		if (attackTarget.isPlayer() && (sGuard.getConquerableHall() == null) && sGuard.getCastle().getSiege().checkIsDefender(attackTarget.asPlayer().getClan()))
-		{
-			// Cancel the target
-			sGuard.stopHating(attackTarget);
-			_actor.setTarget(null);
-			setIntention(Intention.IDLE, null, null);
-			return;
-		}
-		
-		if (!GeoEngine.getInstance().canSeeTarget(_actor, attackTarget))
+		if ((attackTarget.isPlayer() && (sGuard.getConquerableHall() == null) && sGuard.getCastle().getSiege().checkIsDefender(attackTarget.asPlayer().getClan())) || !GeoData.getInstance().canSeeTarget(_actor, attackTarget))
 		{
 			// Siege guards differ from normal mobs currently:
 			// If target cannot seen, don't attack any more

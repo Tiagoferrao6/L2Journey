@@ -35,8 +35,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.l2journey.commons.threads.ThreadPool;
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.data.xml.SkillData;
-import com.l2journey.gameserver.geoengine.GeoEngine;
 import com.l2journey.gameserver.model.WorldObject;
 import com.l2journey.gameserver.model.actor.Creature;
 import com.l2journey.gameserver.model.item.enums.ShotType;
@@ -195,7 +195,7 @@ public class SkillChannelizer implements Runnable
 					{
 						continue;
 					}
-					else if (!GeoEngine.getInstance().canSeeTarget(_channelizer, creature))
+					else if (!GeoData.getInstance().canSeeTarget(_channelizer, creature))
 					{
 						continue;
 					}

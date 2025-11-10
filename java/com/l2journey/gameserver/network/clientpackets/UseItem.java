@@ -80,13 +80,8 @@ public class UseItem extends ClientPacket
 	protected void runImpl()
 	{
 		final Player player = getPlayer();
-		if (player == null)
-		{
-			return;
-		}
-		
 		// Flood protect UseItem
-		if (!getClient().getFloodProtectors().canUseItem())
+		if ((player == null) || !getClient().getFloodProtectors().canUseItem())
 		{
 			return;
 		}

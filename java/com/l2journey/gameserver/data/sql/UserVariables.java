@@ -57,11 +57,11 @@ public class UserVariables
 		try (var conn = DatabaseFactory.getConnection();
 			var query = conn.prepareStatement(statementQuery))
 		{
-			query.setInt(1, this.player.getObjectId());
+			query.setInt(1, player.getObjectId());
 			query.setString(2, variableName);
 			query.setString(3, String.valueOf(value));
 			query.execute();
-			this.databaseVariablesMap.put(variableName, value);
+			databaseVariablesMap.put(variableName, value);
 		}
 		catch (Exception ex)
 		{
@@ -80,10 +80,10 @@ public class UserVariables
 		try (var conn = DatabaseFactory.getConnection();
 			var query = conn.prepareStatement(statementQuery))
 		{
-			query.setInt(1, this.player.getObjectId());
+			query.setInt(1, player.getObjectId());
 			query.setString(2, variableName);
 			query.execute();
-			this.databaseVariablesMap.remove(variableName);
+			databaseVariablesMap.remove(variableName);
 		}
 		catch (Exception ex)
 		{
@@ -93,7 +93,7 @@ public class UserVariables
 	
 	public String getVar(String variableName, String defaultValue)
 	{
-		final String str = this.databaseVariablesMap.get(variableName);
+		final String str = databaseVariablesMap.get(variableName);
 		if ((str == null) || str.isEmpty())
 		{
 			return defaultValue;
@@ -103,7 +103,7 @@ public class UserVariables
 	
 	public boolean getVarB(String variableName, boolean defaultValue)
 	{
-		final String str = this.databaseVariablesMap.get(variableName);
+		final String str = databaseVariablesMap.get(variableName);
 		if ((str == null) || str.isEmpty())
 		{
 			return defaultValue;
@@ -113,13 +113,13 @@ public class UserVariables
 	
 	public boolean getVarB(String variableName)
 	{
-		final String str = this.databaseVariablesMap.get(variableName);
+		final String str = databaseVariablesMap.get(variableName);
 		return (str != null) && !str.isEmpty() && !str.equals("0") && !str.equalsIgnoreCase("false");
 	}
 	
 	public Map<String, String> getVars()
 	{
-		return this.databaseVariablesMap;
+		return databaseVariablesMap;
 	}
 	
 	public void loadVariables()
@@ -128,7 +128,7 @@ public class UserVariables
 		try (var conn = DatabaseFactory.getConnection();
 			var query = conn.prepareStatement(statementQuery))
 		{
-			query.setInt(1, this.player.getObjectId());
+			query.setInt(1, player.getObjectId());
 			ResultSet queryResults = query.executeQuery();
 			
 			while (queryResults.next())
@@ -144,14 +144,14 @@ public class UserVariables
 	
 	public void setQuickVar(String variableName, Object value)
 	{
-		this.memoryVariablesMap.put(variableName, value);
+		memoryVariablesMap.put(variableName, value);
 	}
 	
 	public String getQuickVar(String variableName, String... paramVarArgs)
 	{
-		if (this.memoryVariablesMap.containsKey(variableName))
+		if (memoryVariablesMap.containsKey(variableName))
 		{
-			return (String) this.memoryVariablesMap.get(variableName);
+			return (String) memoryVariablesMap.get(variableName);
 		}
 		
 		if (paramVarArgs.length > 0)
@@ -164,9 +164,9 @@ public class UserVariables
 	
 	public boolean getQuickVarB(String variableName, boolean... paramVarArgs)
 	{
-		if (this.memoryVariablesMap.containsKey(variableName))
+		if (memoryVariablesMap.containsKey(variableName))
 		{
-			return ((Boolean) this.memoryVariablesMap.get(variableName)).booleanValue();
+			return ((Boolean) memoryVariablesMap.get(variableName)).booleanValue();
 		}
 		
 		if (paramVarArgs.length > 0)
@@ -179,9 +179,9 @@ public class UserVariables
 	
 	public int getQuickVarI(String variableName, int... paramVarArgs)
 	{
-		if (this.memoryVariablesMap.containsKey(variableName))
+		if (memoryVariablesMap.containsKey(variableName))
 		{
-			return ((Integer) this.memoryVariablesMap.get(variableName)).intValue();
+			return ((Integer) memoryVariablesMap.get(variableName)).intValue();
 		}
 		
 		if (paramVarArgs.length > 0)
@@ -194,9 +194,9 @@ public class UserVariables
 	
 	public long getQuickVarL(String variableName, long... paramVarArgs)
 	{
-		if (this.memoryVariablesMap.containsKey(variableName))
+		if (memoryVariablesMap.containsKey(variableName))
 		{
-			return ((Long) this.memoryVariablesMap.get(variableName)).longValue();
+			return ((Long) memoryVariablesMap.get(variableName)).longValue();
 		}
 		
 		if (paramVarArgs.length > 0)
@@ -209,9 +209,9 @@ public class UserVariables
 	
 	public Object getQuickVarO(String variableName, Object... paramVarArgs)
 	{
-		if (this.memoryVariablesMap.containsKey(variableName))
+		if (memoryVariablesMap.containsKey(variableName))
 		{
-			return this.memoryVariablesMap.get(variableName);
+			return memoryVariablesMap.get(variableName);
 		}
 		
 		if (paramVarArgs.length > 0)
@@ -224,16 +224,16 @@ public class UserVariables
 	
 	public boolean containsQuickVar(String variableName)
 	{
-		return this.memoryVariablesMap.containsKey(variableName);
+		return memoryVariablesMap.containsKey(variableName);
 	}
 	
 	public void deleteQuickVar(String variableName)
 	{
-		this.memoryVariablesMap.remove(variableName);
+		memoryVariablesMap.remove(variableName);
 	}
 	
 	public Player getPlayer()
 	{
-		return this.player;
+		return player;
 	}
 }

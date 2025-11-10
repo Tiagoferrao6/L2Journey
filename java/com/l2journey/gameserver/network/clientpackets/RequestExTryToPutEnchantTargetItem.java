@@ -55,12 +55,7 @@ public class RequestExTryToPutEnchantTargetItem extends ClientPacket
 	protected void runImpl()
 	{
 		final Player player = getPlayer();
-		if ((_objectId == 0) || (player == null))
-		{
-			return;
-		}
-		
-		if (player.isEnchanting())
+		if ((_objectId == 0) || (player == null) || player.isEnchanting())
 		{
 			return;
 		}

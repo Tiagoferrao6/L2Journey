@@ -689,12 +689,7 @@ public class VillageMaster extends Folk
 					/**
 					 * Warning: the information about this subclass will be removed from the subclass list even if false!
 					 */
-					if (!player.getClient().getFloodProtectors().canChangeSubclass())
-					{
-						return;
-					}
-					
-					if (!isValidNewSubClass(player, paramTwo))
+					if (!player.getClient().getFloodProtectors().canChangeSubclass() || !isValidNewSubClass(player, paramTwo))
 					{
 						return;
 					}

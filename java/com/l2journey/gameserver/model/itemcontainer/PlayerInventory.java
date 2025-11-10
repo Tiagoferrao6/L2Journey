@@ -138,12 +138,7 @@ public class PlayerInventory extends Inventory
 		final List<Item> result = new LinkedList<>();
 		for (Item item : _items)
 		{
-			if (!allowAdena && (item.getId() == ADENA_ID))
-			{
-				continue;
-			}
-			
-			if (!allowAncientAdena && (item.getId() == ANCIENT_ADENA_ID))
+			if ((!allowAdena && (item.getId() == ADENA_ID)) || (!allowAncientAdena && (item.getId() == ANCIENT_ADENA_ID)))
 			{
 				continue;
 			}

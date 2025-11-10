@@ -32,7 +32,7 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.l2journey.gameserver.geoengine.GeoEngine;
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.handler.ITargetTypeHandler;
 import com.l2journey.gameserver.model.World;
 import com.l2journey.gameserver.model.WorldObject;
@@ -78,12 +78,7 @@ public class AreaFriendly implements ITargetTypeHandler
 			final int maxTargets = skill.getAffectLimit();
 			World.getInstance().forEachVisibleObjectInRange(target, Creature.class, skill.getAffectRange(), obj ->
 			{
-				if (!checkTarget(player, obj) || (obj == creature))
-				{
-					return;
-				}
-				
-				if ((maxTargets > 0) && (targetList.size() >= maxTargets))
+				if (!checkTarget(player, obj) || (obj == creature) || ((maxTargets > 0) && (targetList.size() >= maxTargets)))
 				{
 					return;
 				}
@@ -102,7 +97,7 @@ public class AreaFriendly implements ITargetTypeHandler
 			return false;
 		}
 		
-		if (!GeoEngine.getInstance().canSeeTarget(player, target))
+		if (!GeoData.getInstance().canSeeTarget(player, target))
 		{
 			return false;
 		}
@@ -115,17 +110,7 @@ public class AreaFriendly implements ITargetTypeHandler
 				return true;
 			}
 			
-			if (targetPlayer.inObserverMode() || targetPlayer.isInOlympiadMode())
-			{
-				return false;
-			}
-			
-			if (player.isInDuelWith(target))
-			{
-				return false;
-			}
-			
-			if (player.isAtWarWith(targetPlayer))
+			if (targetPlayer.inObserverMode() || targetPlayer.isInOlympiadMode() || player.isInDuelWith(target) || player.isAtWarWith(targetPlayer))
 			{
 				return false;
 			}

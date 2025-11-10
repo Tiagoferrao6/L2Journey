@@ -73,14 +73,7 @@ public abstract class PlayableAI extends CreatureAI
 				return;
 			}
 			
-			if (targetPlayer.isCursedWeaponEquipped() && (player.getLevel() <= 20))
-			{
-				player.sendPacket(SystemMessageId.THAT_IS_AN_INCORRECT_TARGET);
-				clientActionFailed();
-				return;
-			}
-			
-			if (player.isCursedWeaponEquipped() && (targetPlayer.getLevel() <= 20))
+			if ((targetPlayer.isCursedWeaponEquipped() && (player.getLevel() <= 20)) || (player.isCursedWeaponEquipped() && (targetPlayer.getLevel() <= 20)))
 			{
 				player.sendPacket(SystemMessageId.THAT_IS_AN_INCORRECT_TARGET);
 				clientActionFailed();

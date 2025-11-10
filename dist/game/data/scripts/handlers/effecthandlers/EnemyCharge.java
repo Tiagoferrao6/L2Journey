@@ -20,7 +20,7 @@
  */
 package handlers.effecthandlers;
 
-import com.l2journey.gameserver.geoengine.GeoEngine;
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.model.Location;
 import com.l2journey.gameserver.model.StatSet;
 import com.l2journey.gameserver.model.actor.Creature;
@@ -95,7 +95,7 @@ public class EnemyCharge extends AbstractEffect
 		final int x = curX + (int) ((distance - offset) * cos);
 		final int y = curY + (int) ((distance - offset) * sin);
 		final int z = effected.getZ();
-		final Location destination = GeoEngine.getInstance().getValidLocation(effector.getX(), effector.getY(), effector.getZ(), x, y, z, effector.getInstanceId());
+		final Location destination = GeoData.getInstance().moveCheck(effector.getX(), effector.getY(), effector.getZ(), x, y, z, effector.getInstanceId());
 		effector.broadcastPacket(new FlyToLocation(effector, destination, FlyType.CHARGE));
 		effector.setXYZ(destination);
 		effector.broadcastPacket(new ValidateLocation(effector));

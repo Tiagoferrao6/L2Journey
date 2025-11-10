@@ -28,8 +28,8 @@
  */
 package ai.areas.PrimevalIsle;
 
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.ai.Intention;
-import com.l2journey.gameserver.geoengine.GeoEngine;
 import com.l2journey.gameserver.handler.IItemHandler;
 import com.l2journey.gameserver.handler.ItemHandler;
 import com.l2journey.gameserver.model.Location;
@@ -281,7 +281,7 @@ public class PrimevalIsle extends AbstractNpcAI
 					final double cos = Math.cos(radian);
 					final int newX = (int) (npc.getX() + (cos * distance));
 					final int newY = (int) (npc.getY() + (sin * distance));
-					final Location loc = GeoEngine.getInstance().getValidLocation(npc.getX(), npc.getY(), npc.getZ(), newX, newY, npc.getZ(), npc.getInstanceId());
+					final Location loc = GeoData.getInstance().moveCheck(npc.getX(), npc.getY(), npc.getZ(), newX, newY, npc.getZ(), npc.getInstanceId());
 					npc.getAI().setIntention(Intention.MOVE_TO, loc, 0);
 				}
 				else if (ag_type == 1)

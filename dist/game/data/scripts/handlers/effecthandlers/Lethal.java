@@ -51,12 +51,7 @@ public class Lethal extends AbstractEffect
 	@Override
 	public void onStart(Creature effector, Creature effected, Skill skill)
 	{
-		if (effector.isPlayer() && !effector.getAccessLevel().canGiveDamage())
-		{
-			return;
-		}
-		
-		if (skill.getMagicLevel() < (effected.getLevel() - 6))
+		if ((effector.isPlayer() && !effector.getAccessLevel().canGiveDamage()) || (skill.getMagicLevel() < (effected.getLevel() - 6)))
 		{
 			return;
 		}

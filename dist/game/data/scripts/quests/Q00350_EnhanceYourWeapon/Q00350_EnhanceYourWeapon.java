@@ -133,12 +133,7 @@ public class Q00350_EnhanceYourWeapon extends Quest
 	{
 		super.onSkillSee(npc, caster, skill, targets, isSummon);
 		
-		if ((skill == null) || (skill.getId() != 2096))
-		{
-			return;
-		}
-		
-		if ((caster == null) || caster.isDead())
+		if ((skill == null) || (skill.getId() != 2096) || (caster == null) || caster.isDead())
 		{
 			return;
 		}

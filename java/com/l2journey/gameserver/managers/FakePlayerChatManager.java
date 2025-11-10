@@ -39,10 +39,10 @@ import com.l2journey.Config;
 import com.l2journey.commons.threads.ThreadPool;
 import com.l2journey.commons.util.IXmlReader;
 import com.l2journey.commons.util.Rnd;
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.data.SpawnTable;
 import com.l2journey.gameserver.data.holders.FakePlayerChatHolder;
 import com.l2journey.gameserver.data.xml.FakePlayerData;
-import com.l2journey.gameserver.geoengine.GeoEngine;
 import com.l2journey.gameserver.model.Spawn;
 import com.l2journey.gameserver.model.StatSet;
 import com.l2journey.gameserver.model.actor.Npc;
@@ -124,7 +124,7 @@ public class FakePlayerChatManager implements IXmlReader
 				{
 					if (npc.calculateDistance2D(player) < 3000)
 					{
-						if (GeoEngine.getInstance().canSeeTarget(npc, player) && !player.isInvisible())
+						if (GeoData.getInstance().canSeeTarget(npc, player) && !player.isInvisible())
 						{
 							sendChat(player, fpcName, Rnd.nextBoolean() ? "i am not blind" : Rnd.nextBoolean() ? "of course i can" : "yes");
 						}

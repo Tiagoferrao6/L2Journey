@@ -237,12 +237,7 @@ public class Transmog extends AbstractNpcAI
 		}
 		
 		final Integer bodypart = itemTemplate.getBodyPart();
-		if ((bodypart < ItemTemplate.SLOT_R_HAND) || (bodypart > ItemTemplate.SLOT_HAIRALL))
-		{
-			return;
-		}
-		
-		if (Config.TRANSMOG_BANNED_ITEM_IDS.contains(itemTemplate.getId()))
+		if ((bodypart < ItemTemplate.SLOT_R_HAND) || (bodypart > ItemTemplate.SLOT_HAIRALL) || Config.TRANSMOG_BANNED_ITEM_IDS.contains(itemTemplate.getId()))
 		{
 			return;
 		}

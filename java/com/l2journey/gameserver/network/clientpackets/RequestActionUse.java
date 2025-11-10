@@ -1093,12 +1093,7 @@ public class RequestActionUse extends ClientPacket
 	private void useSkill(Player player, int skillId, WorldObject target, boolean pet)
 	{
 		final Summon summon = player.getSummon();
-		if (!validateSummon(player, summon, pet))
-		{
-			return;
-		}
-		
-		if (!canControl(player, summon))
+		if (!validateSummon(player, summon, pet) || !canControl(player, summon))
 		{
 			return;
 		}
@@ -1128,12 +1123,7 @@ public class RequestActionUse extends ClientPacket
 	private void useSkill(Player player, String skillName, WorldObject target, boolean pet)
 	{
 		final Summon summon = player.getSummon();
-		if (!validateSummon(player, summon, pet))
-		{
-			return;
-		}
-		
-		if (!canControl(player, summon))
+		if (!validateSummon(player, summon, pet) || !canControl(player, summon))
 		{
 			return;
 		}

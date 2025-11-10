@@ -95,13 +95,7 @@ public class RequestUnEquipItem extends ClientPacket
 			return;
 		}
 		
-		if (!player.getInventory().canManipulateWithItemId(item.getId()))
-		{
-			player.sendPacket(SystemMessageId.THAT_ITEM_CANNOT_BE_TAKEN_OFF);
-			return;
-		}
-		
-		if (item.isWeapon() && item.getWeaponItem().isForceEquip() && !player.isGM())
+		if (!player.getInventory().canManipulateWithItemId(item.getId()) || (item.isWeapon() && item.getWeaponItem().isForceEquip() && !player.isGM()))
 		{
 			player.sendPacket(SystemMessageId.THAT_ITEM_CANNOT_BE_TAKEN_OFF);
 			return;

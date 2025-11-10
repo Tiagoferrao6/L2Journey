@@ -86,7 +86,7 @@ public class DemonPrince extends AbstractNpcAI
 				spawnMinions(npc);
 				ATTACK_STATE.put(npc.getObjectId(), false);
 			}
-			else if ((npc.getCurrentHp() < (npc.getMaxHp() * 0.1)) && ATTACK_STATE.containsKey(npc.getObjectId()) && (ATTACK_STATE.get(npc.getObjectId()) == false))
+			else if ((npc.getCurrentHp() < (npc.getMaxHp() * 0.1)) && ATTACK_STATE.containsKey(npc.getObjectId()) && !ATTACK_STATE.get(npc.getObjectId()))
 			{
 				npc.doCast(UD.getSkill());
 				spawnMinions(npc);

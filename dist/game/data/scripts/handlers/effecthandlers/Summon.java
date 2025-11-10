@@ -94,8 +94,8 @@ public class Summon extends AbstractEffect
 		}
 		
 		summon.fullRestore();
-		summon.setHeading(player.getHeading());		
-		player.setPet(summon);		
+		summon.setHeading(player.getHeading());
+		player.setPet(summon);
 		summon.spawnMe();
 		summon.setRunning();
 	}

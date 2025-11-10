@@ -274,12 +274,7 @@ public class Q00640_TheZeroHour extends Quest
 	public void onKill(Npc npc, Player killer, boolean isSummon)
 	{
 		final Player partyMember = getRandomPartyMemberState(killer, State.STARTED);
-		if (partyMember == null)
-		{
-			return;
-		}
-		
-		if (partyMember.getQuestState(Q00640_TheZeroHour.class.getSimpleName()) == null)
+		if ((partyMember == null) || (partyMember.getQuestState(Q00640_TheZeroHour.class.getSimpleName()) == null))
 		{
 			return;
 		}

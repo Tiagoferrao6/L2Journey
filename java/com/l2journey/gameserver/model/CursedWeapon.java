@@ -48,9 +48,9 @@ import com.l2journey.gameserver.model.groups.PartyMessageType;
 import com.l2journey.gameserver.model.item.ItemTemplate;
 import com.l2journey.gameserver.model.item.enums.ItemProcessType;
 import com.l2journey.gameserver.model.item.instance.Item;
-import com.l2journey.gameserver.model.variables.PlayerVariables;
 import com.l2journey.gameserver.model.skill.CommonSkill;
 import com.l2journey.gameserver.model.skill.Skill;
+import com.l2journey.gameserver.model.variables.PlayerVariables;
 import com.l2journey.gameserver.network.SystemMessageId;
 import com.l2journey.gameserver.network.serverpackets.Earthquake;
 import com.l2journey.gameserver.network.serverpackets.ExRedSky;
@@ -388,7 +388,7 @@ public class CursedWeapon
 		_playerKarma = _player.getKarma();
 		_playerPkKills = _player.getPkKills();
 		saveData();
-
+		
 		try
 		{
 			final PlayerVariables vars = _player.getVariables();

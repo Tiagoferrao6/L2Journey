@@ -49,17 +49,7 @@ public class RentPet implements IBypassHandler
 	@Override
 	public boolean useBypass(String command, Player player, Creature target)
 	{
-		if (!(target instanceof Merchant))
-		{
-			return false;
-		}
-		
-		if (!Config.ALLOW_RENTPET)
-		{
-			return false;
-		}
-		
-		if (!Config.LIST_PET_RENT_NPC.contains(target.getId()))
+		if (!(target instanceof Merchant) || !Config.ALLOW_RENTPET || !Config.LIST_PET_RENT_NPC.contains(target.getId()))
 		{
 			return false;
 		}

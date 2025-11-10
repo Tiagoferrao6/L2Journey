@@ -31,7 +31,7 @@ package com.l2journey.gameserver.model.zone.form;
 import java.awt.Polygon;
 
 import com.l2journey.commons.util.Rnd;
-import com.l2journey.gameserver.geoengine.GeoEngine;
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.model.Location;
 import com.l2journey.gameserver.model.itemcontainer.Inventory;
 import com.l2journey.gameserver.model.zone.ZoneForm;
@@ -171,7 +171,7 @@ public class ZoneNPoly extends ZoneForm
 			y = Rnd.get(minY, maxY);
 		}
 		
-		return new Location(x, y, GeoEngine.getInstance().getHeight(x, y, (_z1 + _z2) / 2));
+		return new Location(x, y, GeoData.getInstance().getHeight(x, y, (_z1 + _z2) / 2));
 	}
 	
 	public int[] getX()

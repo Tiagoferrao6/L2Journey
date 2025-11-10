@@ -132,11 +132,7 @@ public class Festival implements IBypassHandler
 				{
 					final int stoneType = Integer.parseInt(command.substring(11));
 					final int stoneCount = npc.getStoneCount(stoneType);
-					if (stoneCount <= 0)
-					{
-						return false;
-					}
-					if (!player.destroyItemByItemId(ItemProcessType.FEE, stoneType, stoneCount, npc, true))
+					if ((stoneCount <= 0) || !player.destroyItemByItemId(ItemProcessType.FEE, stoneType, stoneCount, npc, true))
 					{
 						return false;
 					}
@@ -167,13 +163,8 @@ public class Festival implements IBypassHandler
 					}
 					final List<Integer> prevParticipants = SevenSignsFestival.getInstance().getPreviousParticipants(npc.getFestivalOracle(), npc.getFestivalType());
 					// Check if there are any past participants.
-					if ((prevParticipants == null) || prevParticipants.isEmpty() || !prevParticipants.contains(player.getObjectId()))
-					{
-						npc.showChatWindow(player, 3, "b", false);
-						return true;
-					}
 					// Check if this player was the party leader in the festival.
-					if (player.getObjectId() != prevParticipants.get(0))
+					if ((prevParticipants == null) || prevParticipants.isEmpty() || !prevParticipants.contains(player.getObjectId()) || (player.getObjectId() != prevParticipants.get(0)))
 					{
 						npc.showChatWindow(player, 3, "b", false);
 						return true;
@@ -261,11 +252,7 @@ public class Festival implements IBypassHandler
 				}
 				case 8: // Increase the Festival Challenge
 				{
-					if (!player.isInParty())
-					{
-						return true;
-					}
-					if (!SevenSignsFestival.getInstance().isFestivalInProgress())
+					if (!player.isInParty() || !SevenSignsFestival.getInstance().isFestivalInProgress())
 					{
 						return true;
 					}

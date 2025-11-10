@@ -16,8 +16,8 @@
  */
 package handlers.effecthandlers;
 
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.ai.Intention;
-import com.l2journey.gameserver.geoengine.GeoEngine;
 import com.l2journey.gameserver.model.Location;
 import com.l2journey.gameserver.model.StatSet;
 import com.l2journey.gameserver.model.actor.Creature;
@@ -50,7 +50,7 @@ public class TeleportToTarget extends AbstractEffect
 	@Override
 	public boolean canStart(Creature effector, Creature effected, Skill skill)
 	{
-		return (effected != null) && GeoEngine.getInstance().canSeeTarget(effected, effector);
+		return (effected != null) && GeoData.getInstance().canSeeTarget(effected, effector);
 	}
 	
 	@Override
@@ -80,7 +80,7 @@ public class TeleportToTarget extends AbstractEffect
 		final int x = (int) (px + (25 * Math.cos(ph)));
 		final int y = (int) (py + (25 * Math.sin(ph)));
 		final int z = effected.getZ();
-		final Location loc = GeoEngine.getInstance().getValidLocation(effector.getX(), effector.getY(), effector.getZ(), x, y, z, effector.getInstanceId());
+		final Location loc = GeoData.getInstance().moveCheck(effector.getX(), effector.getY(), effector.getZ(), x, y, z, effector.getInstanceId());
 		effector.getAI().setIntention(Intention.IDLE);
 		effector.broadcastPacket(new FlyToLocation(effector, loc.getX(), loc.getY(), loc.getZ(), FlyType.DUMMY));
 		effector.abortAttack();

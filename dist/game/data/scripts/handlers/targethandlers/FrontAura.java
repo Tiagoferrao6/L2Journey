@@ -54,12 +54,7 @@ public class FrontAura implements ITargetTypeHandler
 		{
 			if (obj.isAttackable() || obj.isPlayable())
 			{
-				if (!obj.isInFrontOf(creature))
-				{
-					continue;
-				}
-				
-				if (!Skill.checkForAreaOffensiveSkills(creature, obj, skill, srcInArena))
+				if (!obj.isInFrontOf(creature) || !Skill.checkForAreaOffensiveSkills(creature, obj, skill, srcInArena))
 				{
 					continue;
 				}

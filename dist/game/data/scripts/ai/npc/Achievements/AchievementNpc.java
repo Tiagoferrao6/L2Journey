@@ -46,17 +46,17 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 import com.l2journey.Config;
+import com.l2journey.gameserver.data.sql.ClanHallTable;
+import com.l2journey.gameserver.managers.CHSiegeManager;
 import com.l2journey.gameserver.model.achievements.PlayerAchievements;
 import com.l2journey.gameserver.model.actor.Npc;
 import com.l2journey.gameserver.model.actor.Player;
 import com.l2journey.gameserver.model.actor.enums.player.PlayerClass;
 import com.l2journey.gameserver.model.item.enums.ItemProcessType;
+import com.l2journey.gameserver.model.residences.AuctionableHall;
+import com.l2journey.gameserver.model.variables.PlayerVariables;
 import com.l2journey.gameserver.network.serverpackets.NpcHtmlMessage;
 import com.l2journey.gameserver.util.FormatUtil;
-import com.l2journey.gameserver.model.variables.PlayerVariables;
-import com.l2journey.gameserver.managers.CHSiegeManager;
-import com.l2journey.gameserver.data.sql.ClanHallTable;
-import com.l2journey.gameserver.model.residences.AuctionableHall;
 
 import ai.AbstractNpcAI;
 

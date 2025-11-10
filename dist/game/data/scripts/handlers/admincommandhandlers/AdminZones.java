@@ -31,7 +31,7 @@ import java.util.logging.Level;
 import com.l2journey.Config;
 import com.l2journey.commons.util.Rnd;
 import com.l2journey.commons.util.StringUtil;
-import com.l2journey.gameserver.geoengine.GeoEngine;
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.handler.IAdminCommandHandler;
 import com.l2journey.gameserver.managers.ZoneManager;
 import com.l2journey.gameserver.model.Location;
@@ -272,7 +272,7 @@ public class AdminZones extends AbstractNpcAI implements IAdminCommandHandler
 			{
 				final int x = zone.getX()[i];
 				final int y = zone.getY()[i];
-				holder.addNode(new Location(x, y, GeoEngine.getInstance().getHeight(x, y, Rnd.get(zone.getLowZ(), zone.getHighZ()))));
+				holder.addNode(new Location(x, y, GeoData.getInstance().getHeight(x, y, Rnd.get(zone.getLowZ(), zone.getHighZ()))));
 			}
 			showPoints(activeChar);
 		}

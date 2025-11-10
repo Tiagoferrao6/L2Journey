@@ -42,52 +42,52 @@ public class HotSpringRedSpa extends ZoneType
 	private static final int HOT_SPRING_CHOLERA = 4552;
 	private static final int HOT_SPRING_MALARIA = 4554;
 	private static final int REDUCTION_INTERVAL = 1 * 60 * 1000;
-
+	
 	public HotSpringRedSpa(int id)
 	{
 		super(id);
 	}
-
+	
 	@Override
 	protected void onEnter(Creature creature)
 	{
 		creature.setInsideZone(ZoneId.HOTSPRING_RED_SPA, true);
 		startDebuffReduction(creature);
 	}
-
+	
 	@Override
 	protected void onExit(Creature creature)
 	{
 		creature.setInsideZone(ZoneId.HOTSPRING_RED_SPA, false);
 	}
-
+	
 	private void startDebuffReduction(Creature creature)
 	{
 		checkDebuff(creature, HOT_SPRING_CHOLERA);
 		checkDebuff(creature, HOT_SPRING_MALARIA);
 	}
-
+	
 	private void checkDebuff(Creature creature, int skillId)
 	{
 		if (!creature.isAffectedBySkill(skillId))
 		{
 			return;
 		}
-
+		
 		BuffInfo buffInfo = creature.getEffectList().getBuffInfoBySkillId(skillId);
 		if (buffInfo != null)
 		{
 			scheduleNextReduction(creature, skillId, buffInfo.getSkill().getLevel());
 		}
 	}
-
+	
 	private void scheduleNextReduction(Creature creature, int skillId, int currentLevel)
 	{
 		if (!creature.isInsideZone(ZoneId.HOTSPRING_RED_SPA))
 		{
 			return;
 		}
-
+		
 		ThreadPool.schedule(() ->
 		{
 			if (creature.isInsideZone(ZoneId.HOTSPRING_RED_SPA))
@@ -96,33 +96,33 @@ public class HotSpringRedSpa extends ZoneType
 			}
 		}, REDUCTION_INTERVAL);
 	}
-
+	
 	private void reduceDebuffLevel(Creature creature, int skillId, int currentLevel)
 	{
 		if (!creature.isInsideZone(ZoneId.HOTSPRING_RED_SPA))
 		{
 			return;
 		}
-
+		
 		creature.stopSkillEffects(SkillFinishType.REMOVED, skillId);
 		if (currentLevel <= 1)
 		{
 			return;
 		}
-
+		
 		int newLevel = currentLevel - 1;
 		Skill reducedSkill = SkillData.getInstance().getSkill(skillId, newLevel);
 		if (reducedSkill == null)
 		{
 			return;
 		}
-
+		
 		if (creature.isPlayer())
 		{
 			String skillName = reducedSkill.getName();
 			creature.sendMessage("The effects of " + skillName + " has been reduced to level " + newLevel + ".");
 		}
-
+		
 		if (creature.isInsideZone(ZoneId.HOTSPRING_RED_SPA))
 		{
 			reducedSkill.applyEffects(creature, creature);

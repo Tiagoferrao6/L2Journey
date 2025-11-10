@@ -87,12 +87,7 @@ public class FrontArea implements ITargetTypeHandler
 		final int maxTargets = skill.getAffectLimit();
 		World.getInstance().forEachVisibleObject(creature, Creature.class, obj ->
 		{
-			if (!(obj.isAttackable() || obj.isPlayable()))
-			{
-				return;
-			}
-			
-			if (obj == origin)
+			if (!(obj.isAttackable() || obj.isPlayable()) || (obj == origin))
 			{
 				return;
 			}

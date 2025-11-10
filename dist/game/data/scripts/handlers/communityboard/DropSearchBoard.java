@@ -170,7 +170,7 @@ public class DropSearchBoard implements IParseBoardHandler
 			case "_bbs_search_item":
 			{
 				String itemName = buildItemName(params);
-				if (itemName == null || itemName.trim().isEmpty())
+				if ((itemName == null) || itemName.trim().isEmpty())
 				{
 					itemName = "Adena"; // Item padrão
 				}
@@ -371,12 +371,7 @@ public class DropSearchBoard implements IParseBoardHandler
 		final List<ItemTemplate> items = new ArrayList<>();
 		for (ItemTemplate item : ItemData.getInstance().getAllItems())
 		{
-			if (item == null)
-			{
-				continue;
-			}
-			
-			if (!existInDropData.contains(item.getId()))
+			if ((item == null) || !existInDropData.contains(item.getId()))
 			{
 				continue;
 			}

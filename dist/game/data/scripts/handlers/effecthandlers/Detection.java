@@ -54,15 +54,7 @@ public class Detection extends AbstractEffect
 		final Player target = effected.asPlayer();
 		if (target.isInvisible())
 		{
-			if (player.isInPartyWith(target))
-			{
-				return;
-			}
-			if (player.isInClanWith(target))
-			{
-				return;
-			}
-			if (player.isInAllyWith(target))
+			if (player.isInPartyWith(target) || player.isInClanWith(target) || player.isInAllyWith(target))
 			{
 				return;
 			}

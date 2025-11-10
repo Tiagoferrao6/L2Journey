@@ -96,13 +96,8 @@ public class AdminCommandAccessRight
 		}
 		
 		// Check if the character's access level matches the required access level.
-		if (accessLevel.getLevel() == playerAccessLevel.getLevel())
-		{
-			return true;
-		}
-		
 		// Check if the character's access level has child access to the required access level.
-		if (playerAccessLevel.hasChildAccess(accessLevel))
+		if ((accessLevel.getLevel() == playerAccessLevel.getLevel()) || playerAccessLevel.hasChildAccess(accessLevel))
 		{
 			return true;
 		}

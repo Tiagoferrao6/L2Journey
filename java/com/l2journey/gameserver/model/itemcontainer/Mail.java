@@ -47,36 +47,36 @@ public class Mail extends ItemContainer
 {
 	private final int _ownerId;
 	private int _messageId;
-
+	
 	public Mail(int objectId, int messageId)
 	{
 		_ownerId = objectId;
 		_messageId = messageId;
 	}
-
+	
 	@Override
 	public String getName()
 	{
 		return "Mail";
 	}
-
+	
 	@Override
 	public Player getOwner()
 	{
 		return null;
 	}
-
+	
 	@Override
 	public ItemLocation getBaseLocation()
 	{
 		return ItemLocation.MAIL;
 	}
-
+	
 	public int getMessageId()
 	{
 		return _messageId;
 	}
-
+	
 	public void setNewMessageId(int messageId)
 	{
 		_messageId = messageId;
@@ -90,7 +90,7 @@ public class Mail extends ItemContainer
 		}
 		updateDatabase();
 	}
-
+	
 	public void returnToWh(ItemContainer wh)
 	{
 		for (Item item : _items)
@@ -109,7 +109,7 @@ public class Mail extends ItemContainer
 			}
 		}
 	}
-
+	
 	@Override
 	protected void addItem(Item item)
 	{
@@ -118,13 +118,13 @@ public class Mail extends ItemContainer
 		super.addItem(item);
 		item.updateDatabase(true);
 	}
-
+	
 	@Override
 	public void updateDatabase()
 	{
 		_items.forEach(i -> i.updateDatabase(true));
 	}
-
+	
 	@Override
 	public void restore()
 	{
@@ -144,9 +144,9 @@ public class Mail extends ItemContainer
 					{
 						continue;
 					}
-
+					
 					World.getInstance().addObject(item);
-
+					
 					// If stackable item is found just add to current quantity
 					if (item.isStackable() && (getItemByItemId(item.getId()) != null))
 					{
@@ -164,13 +164,13 @@ public class Mail extends ItemContainer
 			LOGGER.log(Level.WARNING, "could not restore container:", e);
 		}
 	}
-
+	
 	@Override
 	public int getOwnerId()
 	{
 		return _ownerId;
 	}
-
+	
 	@Override
 	public void deleteMe()
 	{

@@ -588,13 +588,8 @@ public class BlockCheckerManager
 			for (Item item : _drops)
 			{
 				// npe
-				if (item == null)
-				{
-					continue;
-				}
-				
 				// a player has it, it will be deleted later
-				if (!item.isSpawned() || (item.getOwnerId() != 0))
+				if ((item == null) || !item.isSpawned() || (item.getOwnerId() != 0))
 				{
 					continue;
 				}

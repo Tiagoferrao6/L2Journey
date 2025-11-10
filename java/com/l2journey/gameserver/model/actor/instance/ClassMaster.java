@@ -140,12 +140,7 @@ public class ClassMaster extends Merchant
 	
 	public static void onTutorialLink(Player player, String request)
 	{
-		if (!Config.ALTERNATE_CLASS_MASTER || (request == null) || !request.startsWith("CO"))
-		{
-			return;
-		}
-		
-		if (!player.getClient().getFloodProtectors().canUseServerBypass())
+		if (!Config.ALTERNATE_CLASS_MASTER || (request == null) || !request.startsWith("CO") || !player.getClient().getFloodProtectors().canUseServerBypass())
 		{
 			return;
 		}
@@ -180,12 +175,7 @@ public class ClassMaster extends Merchant
 		}
 		
 		final PlayerClass classId = player.getPlayerClass();
-		if (getMinLevel(classId.level()) > player.getLevel())
-		{
-			return;
-		}
-		
-		if (!Config.CLASS_MASTER_SETTINGS.isAllowed(classId.level() + 1))
+		if ((getMinLevel(classId.level()) > player.getLevel()) || !Config.CLASS_MASTER_SETTINGS.isAllowed(classId.level() + 1))
 		{
 			return;
 		}
@@ -355,12 +345,7 @@ public class ClassMaster extends Merchant
 	private static boolean checkAndChangeClass(Player player, int value)
 	{
 		final PlayerClass currentClassId = player.getPlayerClass();
-		if ((getMinLevel(currentClassId.level()) > player.getLevel()) && !Config.ALLOW_ENTIRE_TREE)
-		{
-			return false;
-		}
-		
-		if (!validateClassId(currentClassId, value))
+		if (((getMinLevel(currentClassId.level()) > player.getLevel()) && !Config.ALLOW_ENTIRE_TREE) || !validateClassId(currentClassId, value))
 		{
 			return false;
 		}
@@ -471,12 +456,7 @@ public class ClassMaster extends Merchant
 			return false;
 		}
 		
-		if (oldCID == newCID.getParent())
-		{
-			return true;
-		}
-		
-		if (Config.ALLOW_ENTIRE_TREE && newCID.childOf(oldCID))
+		if ((oldCID == newCID.getParent()) || (Config.ALLOW_ENTIRE_TREE && newCID.childOf(oldCID)))
 		{
 			return true;
 		}

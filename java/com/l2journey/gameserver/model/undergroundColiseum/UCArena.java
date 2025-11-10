@@ -346,13 +346,7 @@ public class UCArena
 		boolean isValid = true;
 		for (UCTeam team : _teams)
 		{
-			if (team.getParty() == null)
-			{
-				isValid = false;
-				continue;
-			}
-			
-			if (team.getParty().getMemberCount() < EventsConfig.UC_PARTY_SIZE)
+			if ((team.getParty() == null) || (team.getParty().getMemberCount() < EventsConfig.UC_PARTY_SIZE))
 			{
 				isValid = false;
 				continue;

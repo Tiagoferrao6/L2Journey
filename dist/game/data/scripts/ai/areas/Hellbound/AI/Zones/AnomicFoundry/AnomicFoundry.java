@@ -269,12 +269,7 @@ public class AnomicFoundry extends AbstractNpcAI
 		for (Spawn spawn : spawns)
 		{
 			final Npc lastSpawn = spawn.getLastSpawn();
-			if (lastSpawn == null)
-			{
-				continue;
-			}
-			
-			if (!lastSpawn.isMonster())
+			if ((lastSpawn == null) || !lastSpawn.isMonster())
 			{
 				continue;
 			}

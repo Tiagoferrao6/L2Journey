@@ -21,8 +21,8 @@
 package com.l2journey.gameserver.network.clientpackets;
 
 import com.l2journey.commons.threads.ThreadPool;
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.data.xml.DoorData;
-import com.l2journey.gameserver.geoengine.GeoEngine;
 import com.l2journey.gameserver.model.Location;
 import com.l2journey.gameserver.model.World;
 import com.l2journey.gameserver.model.actor.Player;
@@ -58,12 +58,7 @@ public class ValidatePosition extends ClientPacket
 		final int realX = player.getX();
 		final int realY = player.getY();
 		int realZ = player.getZ();
-		if ((_x == 0) && (_y == 0) && (realX != 0))
-		{
-			return;
-		}
-		
-		if (player.isInVehicle())
+		if (((_x == 0) && (_y == 0) && (realX != 0)) || player.isInVehicle())
 		{
 			return;
 		}
@@ -94,6 +89,7 @@ public class ValidatePosition extends ClientPacket
 		final int dy = _y - realY;
 		final int dz = _z - realZ;
 		final double diffSq = ((dx * dx) + (dy * dy));
+		// CoordSynchronize logic (L2J Sunrise style)
 		if (player.isFlying() || player.isInsideZone(ZoneId.WATER))
 		{
 			player.setXYZ(realX, realY, _z);
@@ -104,6 +100,32 @@ public class ValidatePosition extends ClientPacket
 		}
 		else if (diffSq < 360000) // If too large, messes observation.
 		{
+			if (com.l2journey.Config.COORD_SYNCHRONIZE == -1) // Apenas sincroniza Z
+			{
+				player.setXYZ(realX, realY, _z);
+				return;
+			}
+			if (com.l2journey.Config.COORD_SYNCHRONIZE == 1) // Confia também em X/Y do cliente
+			{
+				if (!player.isMoving() || (player.getHeading() != _heading))
+				{
+					if (diffSq < 2500)
+					{
+						player.setXYZ(realX, realY, _z);
+					}
+					else
+					{
+						player.setXYZ(_x, _y, _z);
+					}
+				}
+				else
+				{
+					player.setXYZ(realX, realY, _z);
+				}
+				player.setHeading(_heading);
+				return;
+			}
+			// COORD_SYNCHRONIZE == 2 ou outro valor: sincronização estrita/geodata
 			if ((diffSq > 250000) || (Math.abs(dz) > 200))
 			{
 				if ((Math.abs(dz) > 200) && (Math.abs(dz) < 1500) && (Math.abs(_z - player.getClientZ()) < 800))
@@ -127,7 +149,7 @@ public class ValidatePosition extends ClientPacket
 			}
 			else
 			{
-				player.setXYZ(_x, _y, realZ > _z ? GeoEngine.getInstance().getHeight(_x, _y, realZ) : _z);
+				player.setXYZ(_x, _y, realZ > _z ? GeoData.getInstance().getHeight(_x, _y, realZ) : _z);
 			}
 		}
 		

@@ -44,8 +44,8 @@ import org.w3c.dom.Node;
 import com.l2journey.Config;
 import com.l2journey.commons.threads.ThreadPool;
 import com.l2journey.commons.util.IXmlReader;
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.ai.Intention;
-import com.l2journey.gameserver.geoengine.GeoEngine;
 import com.l2journey.gameserver.managers.ZoneManager;
 import com.l2journey.gameserver.model.Location;
 import com.l2journey.gameserver.model.World;
@@ -325,7 +325,7 @@ public class FourSepulchers extends AbstractNpcAI implements IXmlReader
 			{
 				if ((npc != null) && !npc.isDead())
 				{
-					final Location destination = GeoEngine.getInstance().getValidLocation(npc.getX(), npc.getY(), npc.getZ(), npc.getSpawn().getLocation().getX() + getRandom(-400, 400), npc.getSpawn().getLocation().getY() + getRandom(-400, 400), npc.getZ(), npc.getInstanceId());
+					final Location destination = GeoData.getInstance().moveCheck(npc.getX(), npc.getY(), npc.getZ(), npc.getSpawn().getLocation().getX() + getRandom(-400, 400), npc.getSpawn().getLocation().getY() + getRandom(-400, 400), npc.getZ(), npc.getInstanceId());
 					if (LocationUtil.calculateDistance(npc, npc.getSpawn().getLocation(), false, false) < 600)
 					{
 						npc.getAI().setIntention(Intention.MOVE_TO, destination);

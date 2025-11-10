@@ -1,3 +1,7 @@
+package com.l2journey.gameserver.model.actor;
+
+import com.l2journey.gameserver.pathfinding.AbstractNodeLoc;
+import com.l2journey.gameserver.pathfinding.geonodes.GeoNodeLoc;
 /*
  * Copyright (c) 2025 L2Journey Project
  * 
@@ -26,7 +30,6 @@
  * applicable..
  * 
  */
-package com.l2journey.gameserver.model.actor;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -60,6 +63,7 @@ import com.l2journey.EventsConfig;
 import com.l2journey.commons.database.DatabaseFactory;
 import com.l2journey.commons.threads.ThreadPool;
 import com.l2journey.commons.util.Rnd;
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.LoginServerThread;
 import com.l2journey.gameserver.ai.CreatureAI;
 import com.l2journey.gameserver.ai.Intention;
@@ -92,7 +96,6 @@ import com.l2journey.gameserver.data.xml.RecipeData;
 import com.l2journey.gameserver.data.xml.SendMessageLocalisationData;
 import com.l2journey.gameserver.data.xml.SkillData;
 import com.l2journey.gameserver.data.xml.SkillTreeData;
-import com.l2journey.gameserver.geoengine.GeoEngine;
 import com.l2journey.gameserver.handler.IItemHandler;
 import com.l2journey.gameserver.handler.ItemHandler;
 import com.l2journey.gameserver.managers.AntiFeedManager;
@@ -370,6 +373,9 @@ import com.l2journey.gameserver.util.LocationUtil;
  */
 public class Player extends Playable
 {
+	// Debug path para geodata (AdminDebug)
+	private List<Location> _geoPath = null;
+
 	// Character Skill SQL String Definitions:
 	private static final String RESTORE_SKILLS_FOR_CHAR = "SELECT skill_id,skill_level FROM character_skills WHERE charId=? AND class_index=?";
 	private static final String UPDATE_CHARACTER_SKILL_LEVEL = "UPDATE character_skills SET skill_level=? WHERE skill_id=? AND charId=? AND class_index=?";
@@ -909,6 +915,33 @@ public class Player extends Playable
 		// Create a Radar object
 		_radar = new Radar(this);
 		startVitalityTask();
+
+		// Inicializa path de debug geodata
+		_geoPath = null;
+	}
+
+	/**
+	 * Define o path de debug de geodata para este player (AdminDebug).
+	 * @param path Lista de Location representando o path calculado.
+	 */
+	public void setGeoPath(List<Location> path)
+	{
+		_geoPath = path;
+	}
+
+	/**
+	 * Retorna o path de debug de geodata deste player (AdminDebug).
+	 * @return Lista de Location representando o path, ou null se não definido.
+	 */
+	@Override
+	public List<AbstractNodeLoc> getGeoPath()
+	{
+		if (_geoPath == null)
+			return null;
+		List<AbstractNodeLoc> geoList = new ArrayList<>();
+		for (Location loc : _geoPath)
+			geoList.add(new GeoNodeLoc((short) loc.getX(), (short) loc.getY(), (short) loc.getZ()));
+		return geoList;
 	}
 	
 	/**
@@ -6767,7 +6800,7 @@ public class Player extends Playable
 				sendPacket(ActionFailed.STATIC_PACKET);
 				return false;
 			}
-			if ((GeoEngine.getInstance().getHeight(getX(), getY(), getZ()) + 300) < getZ())
+			if ((GeoData.getInstance().getHeight(getX(), getY(), getZ()) + 300) < getZ())
 			{
 				sendPacket(SystemMessageId.YOU_CANNOT_DISMOUNT_FROM_THIS_ELEVATION);
 				sendPacket(ActionFailed.STATIC_PACKET);
@@ -7243,7 +7276,7 @@ public class Player extends Playable
 					// Set the x,y,z position of the Player and make it invisible
 					final int x = rset.getInt("x");
 					final int y = rset.getInt("y");
-					final int z = GeoEngine.getInstance().getHeight(x, y, rset.getInt("z"));
+					final int z = GeoData.getInstance().getHeight(x, y, rset.getInt("z"));
 					player.setXYZInvisible(x, y, z);
 					player.setLastServerPosition(x, y, z);
 					
@@ -9315,14 +9348,14 @@ public class Player extends Playable
 		{
 			if (sklTargetType == TargetType.GROUND)
 			{
-				if (!GeoEngine.getInstance().canSeeTarget(this, _currentSkillWorldPosition))
+				if (!GeoData.getInstance().canSeeTarget(this, _currentSkillWorldPosition))
 				{
 					sendPacket(SystemMessageId.CANNOT_SEE_TARGET);
 					sendPacket(ActionFailed.STATIC_PACKET);
 					return false;
 				}
 			}
-			else if (!GeoEngine.getInstance().canSeeTarget(this, target))
+			else if (!GeoData.getInstance().canSeeTarget(this, target))
 			{
 				sendPacket(SystemMessageId.CANNOT_SEE_TARGET);
 				sendPacket(ActionFailed.STATIC_PACKET);
@@ -9330,7 +9363,7 @@ public class Player extends Playable
 			}
 		}
 		
-		if ((skill.getFlyType() == FlyType.CHARGE) && !GeoEngine.getInstance().canMoveToTarget(getX(), getY(), getZ(), target.getX(), target.getY(), target.getZ(), getInstanceId()))
+		if ((skill.getFlyType() == FlyType.CHARGE) && !GeoData.getInstance().canMove(getX(), getY(), getZ(), target.getX(), target.getY(), target.getZ(), getInstanceId()))
 		{
 			sendPacket(SystemMessageId.THE_TARGET_IS_LOCATED_WHERE_YOU_CANNOT_CHARGE);
 			return false;
@@ -14113,7 +14146,7 @@ public class Player extends Playable
 		}
 		
 		// If there is no geodata loaded for the place we are, client Z correction might cause falling damage.
-		if (!GeoEngine.getInstance().hasGeo(getX(), getY()))
+		if (!GeoData.getInstance().hasGeo(getX(), getY()))
 		{
 			_fallingTimestamp = 0;
 			return false;

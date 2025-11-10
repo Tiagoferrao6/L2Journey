@@ -64,17 +64,7 @@ public class AreaSummon implements ITargetTypeHandler
 		final int maxTargets = skill.getAffectLimit();
 		World.getInstance().forEachVisibleObjectInRange(targetCreature, Creature.class, skill.getAffectRange(), obj ->
 		{
-			if (obj == creature)
-			{
-				return;
-			}
-			
-			if (!(obj.isAttackable() || obj.isPlayable()))
-			{
-				return;
-			}
-			
-			if (!Skill.checkForAreaOffensiveSkills(creature, obj, skill, srcInArena))
+			if ((obj == creature) || !(obj.isAttackable() || obj.isPlayable()) || !Skill.checkForAreaOffensiveSkills(creature, obj, skill, srcInArena))
 			{
 				return;
 			}

@@ -183,11 +183,7 @@ public class ArmorSet
 	
 	public boolean containAll(int chest, int legs, int head, int gloves, int feet)
 	{
-		if ((_chestId != 0) && (_chestId != chest))
-		{
-			return false;
-		}
-		if (!_legs.isEmpty() && !_legs.contains(legs))
+		if (((_chestId != 0) && (_chestId != chest)) || (!_legs.isEmpty() && !_legs.contains(legs)))
 		{
 			return false;
 		}

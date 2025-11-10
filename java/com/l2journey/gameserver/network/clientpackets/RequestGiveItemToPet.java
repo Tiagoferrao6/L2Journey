@@ -117,13 +117,7 @@ public class RequestGiveItemToPet extends ClientPacket
 			return;
 		}
 		
-		if (!pet.getInventory().validateCapacity(item))
-		{
-			player.sendPacket(SystemMessageId.YOUR_PET_CANNOT_CARRY_ANY_MORE_ITEMS);
-			return;
-		}
-		
-		if (!pet.getInventory().validateWeight(item, _amount))
+		if (!pet.getInventory().validateCapacity(item) || !pet.getInventory().validateWeight(item, _amount))
 		{
 			player.sendPacket(SystemMessageId.YOUR_PET_CANNOT_CARRY_ANY_MORE_ITEMS);
 			return;

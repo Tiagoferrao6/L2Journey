@@ -214,19 +214,11 @@ public abstract class ZoneType extends ListenersContainer
 				return false;
 			}
 		}
-		if (!isEnabled())
-		{
-			return false;
-		}
+		
 		
 		// Check level
-		if ((creature.getLevel() < _minLevel) || (creature.getLevel() > _maxLevel))
-		{
-			return false;
-		}
-		
 		// check obj class
-		if (!creature.isInstanceTypes(_target))
+		if (!isEnabled() || (creature.getLevel() < _minLevel) || (creature.getLevel() > _maxLevel) || !creature.isInstanceTypes(_target))
 		{
 			return false;
 		}

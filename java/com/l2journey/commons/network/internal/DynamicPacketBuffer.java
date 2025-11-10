@@ -480,7 +480,7 @@ public class DynamicPacketBuffer extends InternalWritableBuffer
 		{
 			this.buffer = buffer;
 			this.initialIndex = initialIndex;
-			this.endIndex = initialIndex + buffer.capacity();
+			endIndex = initialIndex + buffer.capacity();
 			this.offset = offset;
 		}
 		

@@ -85,12 +85,7 @@ public class RequestRestartPoint extends ClientPacket
 	protected void runImpl()
 	{
 		final Player player = getPlayer();
-		if (player == null)
-		{
-			return;
-		}
-		
-		if (!player.canRevive())
+		if ((player == null) || !player.canRevive())
 		{
 			return;
 		}
@@ -253,7 +248,7 @@ public class RequestRestartPoint extends ClientPacket
 						}
 					}
 					
-					//PacketLogger.warning("Player [" + player.getName() + "] called RestartPointPacket - To Siege HQ and he doesn't have Siege HQ!");
+					// PacketLogger.warning("Player [" + player.getName() + "] called RestartPointPacket - To Siege HQ and he doesn't have Siege HQ!");
 					return;
 				}
 				loc = MapRegionManager.getInstance().getTeleToLocation(player, TeleportWhereType.SIEGEFLAG);

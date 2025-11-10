@@ -54,12 +54,7 @@ public class BehindAura implements ITargetTypeHandler
 		{
 			if (obj.isAttackable() || obj.isPlayable())
 			{
-				if (!obj.isBehind(creature))
-				{
-					continue;
-				}
-				
-				if (!Skill.checkForAreaOffensiveSkills(creature, obj, skill, srcInArena))
+				if (!obj.isBehind(creature) || !Skill.checkForAreaOffensiveSkills(creature, obj, skill, srcInArena))
 				{
 					continue;
 				}

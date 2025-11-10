@@ -26,40 +26,36 @@
  * applicable..
  * 
  */
-package com.l2journey.gameserver.geoengine.geodata;
+package com.l2journey.gameserver.pathfinding.utils;
+
+import java.util.ArrayList;
+
+import com.l2journey.gameserver.pathfinding.AbstractNode;
 
 /**
- * @author HorridoJoho, Mobius
+ * @author -Nemesiss-
  */
-public interface IRegion
+public class FastNodeList
 {
-	/** Blocks in a region on the x axis. */
-	int REGION_BLOCKS_X = 256;
-	/** Blocks in a region on the y axis. */
-	int REGION_BLOCKS_Y = 256;
-	/** Blocks in a region. */
-	int REGION_BLOCKS = REGION_BLOCKS_X * REGION_BLOCKS_Y;
+	private final ArrayList<AbstractNode<?>> _list;
 	
-	/** Cells in a region on the x axis. */
-	int REGION_CELLS_X = REGION_BLOCKS_X * IBlock.BLOCK_CELLS_X;
-	/** Cells in a region on the y axis. */
-	int REGION_CELLS_Y = REGION_BLOCKS_Y * IBlock.BLOCK_CELLS_Y;
-	/** Cells in a region. */
-	int REGION_CELLS = REGION_CELLS_X * REGION_CELLS_Y;
+	public FastNodeList(int size)
+	{
+		_list = new ArrayList<>(size);
+	}
 	
-	boolean checkNearestNswe(int geoX, int geoY, int worldZ, int nswe);
+	public void add(AbstractNode<?> n)
+	{
+		_list.add(n);
+	}
 	
-	void setNearestNswe(int geoX, int geoY, int worldZ, byte nswe);
+	public boolean contains(AbstractNode<?> n)
+	{
+		return _list.contains(n);
+	}
 	
-	void unsetNearestNswe(int geoX, int geoY, int worldZ, byte nswe);
-	
-	int getNearestZ(int geoX, int geoY, int worldZ);
-	
-	int getNextLowerZ(int geoX, int geoY, int worldZ);
-	
-	int getNextHigherZ(int geoX, int geoY, int worldZ);
-	
-	boolean hasGeo();
-	
-	boolean saveToFile(String fileName);
+	public boolean containsRev(AbstractNode<?> n)
+	{
+		return _list.lastIndexOf(n) != -1;
+	}
 }

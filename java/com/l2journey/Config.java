@@ -73,6 +73,7 @@ import com.l2journey.commons.util.ConfigReader;
 import com.l2journey.commons.util.IXmlReader;
 import com.l2journey.commons.util.StringUtil;
 import com.l2journey.gameserver.model.Location;
+import com.l2journey.gameserver.model.World;
 import com.l2journey.gameserver.model.actor.enums.npc.DropType;
 import com.l2journey.gameserver.model.actor.enums.player.ChatBroadcastType;
 import com.l2journey.gameserver.model.actor.enums.player.IllegalActionPunishmentType;
@@ -107,7 +108,7 @@ public class Config
 	// --------------------------------------------------
 	private static final String ADMINISTRATOR_CONFIG_FILE = "./config/admin/administrator.ini";
 	private static final String DEVELOPMENT_CONFIG_FILE = "./config/admin/development.ini";
-	private static final String GEOENGINE_CONFIG_FILE = "./config/admin/geoengine.ini";
+	private static final String GEODATA_CONFIG_FILE = "./config/admin/geodata.ini";
 	private static final String ID_MANAGER_CONFIG_FILE = "./config/admin/idmanager.ini";
 	private static final String RATES_CONFIG_FILE = "./config/admin/rates.ini";
 	
@@ -186,6 +187,8 @@ public class Config
 	// Login Files
 	// --------------------------------------------------
 	private static final String LOGIN_CONFIG_FILE = "./config/loginserver.ini";
+	
+	public static final String EOL = System.getProperty("line.separator");
 	
 	// --------------------------------------------------
 	// Variable Definitions
@@ -459,20 +462,23 @@ public class Config
 	public static Set<String> EXCLUDED_DEBUG_PACKETS;
 	
 	// --------------------------------------------------
-	// GeoEngine
+	// GeoData
 	// --------------------------------------------------
-	public static Path GEODATA_PATH;
-	public static Path PATHNODE_PATH;
-	public static Path GEOEDIT_PATH;
 	public static int PATHFINDING;
+	public static File PATHNODE_DIR;
 	public static String PATHFIND_BUFFERS;
 	public static float LOW_WEIGHT;
 	public static float MEDIUM_WEIGHT;
 	public static float HIGH_WEIGHT;
 	public static boolean ADVANCED_DIAGONAL_STRATEGY;
-	public static boolean AVOID_OBSTRUCTED_PATH_NODES;
 	public static float DIAGONAL_WEIGHT;
 	public static int MAX_POSTFILTER_PASSES;
+	public static boolean DEBUG_PATH;
+	public static boolean FORCE_GEODATA;
+	public static int COORD_SYNCHRONIZE;
+	public static Path GEODATA_PATH;
+	public static boolean TRY_LOAD_UNSPECIFIED_REGIONS;
+	public static Map<String, Boolean> GEODATA_REGIONS;
 	
 	// --------------------------------------------------
 	// Id Manager
@@ -1622,7 +1628,7 @@ public class Config
 			// Admin folder -
 			loadAdministratorConfig();
 			loadDevelopmentConfig();
-			loadGeoEngineConfig();
+			loadGeoDataConfig();
 			loadIdManagerConfig();
 			loadRatesConfig();
 			
@@ -2108,23 +2114,46 @@ public class Config
 	}
 	
 	/**
-	 * Load geoEngineConfig file (if exists).
+	 * Load GeoDataConfig file (if exists).
 	 */
-	private static void loadGeoEngineConfig()
+	private static void loadGeoDataConfig()
 	{
-		final ConfigReader geoEngineConfig = new ConfigReader(GEOENGINE_CONFIG_FILE);
-		GEODATA_PATH = Paths.get(Config.DATAPACK_ROOT.getPath() + "/" + geoEngineConfig.getString("GeoDataPath", "geodata"));
-		PATHNODE_PATH = Paths.get(Config.DATAPACK_ROOT.getPath() + "/" + geoEngineConfig.getString("PathnodePath", "pathnode"));
-		GEOEDIT_PATH = Paths.get(Config.DATAPACK_ROOT.getPath() + "/" + geoEngineConfig.getString("GeoEditPath", "saves"));
-		PATHFINDING = geoEngineConfig.getInt("PathFinding", 0);
-		PATHFIND_BUFFERS = geoEngineConfig.getString("PathFindBuffers", "100x6;128x6;192x6;256x4;320x4;384x4;500x2");
-		LOW_WEIGHT = geoEngineConfig.getFloat("LowWeight", 0.5f);
-		MEDIUM_WEIGHT = geoEngineConfig.getFloat("MediumWeight", 2);
-		HIGH_WEIGHT = geoEngineConfig.getFloat("HighWeight", 3);
-		ADVANCED_DIAGONAL_STRATEGY = geoEngineConfig.getBoolean("AdvancedDiagonalStrategy", true);
-		AVOID_OBSTRUCTED_PATH_NODES = geoEngineConfig.getBoolean("AvoidObstructedPathNodes", true);
-		DIAGONAL_WEIGHT = geoEngineConfig.getFloat("DiagonalWeight", 0.707f);
-		MAX_POSTFILTER_PASSES = geoEngineConfig.getInt("MaxPostfilterPasses", 3);
+		final ConfigReader GeoDataConfig = new ConfigReader(GEODATA_CONFIG_FILE);
+		try
+		{
+			PATHNODE_DIR = new File(GeoDataConfig.getString("PathnodeDirectory", "data/pathnode").replaceAll("\\\\", "/")).getCanonicalFile();
+		}
+		catch (IOException e)
+		{
+			LOGGER.log(Level.WARNING, "Error setting pathnode directory!", e);
+			PATHNODE_DIR = new File("data/pathnode");
+		}
+		
+		PATHFINDING = GeoDataConfig.getInt("PathFinding", 0);
+		PATHFIND_BUFFERS = GeoDataConfig.getString("PathFindBuffers", "100x6;128x6;192x6;256x4;320x4;384x4;500x2");
+		LOW_WEIGHT = GeoDataConfig.getFloat("LowWeight", 0.5f);
+		MEDIUM_WEIGHT = GeoDataConfig.getFloat("MediumWeight", 2);
+		HIGH_WEIGHT = GeoDataConfig.getFloat("HighWeight", 3);
+		ADVANCED_DIAGONAL_STRATEGY = GeoDataConfig.getBoolean("AdvancedDiagonalStrategy", true);
+		DIAGONAL_WEIGHT = GeoDataConfig.getFloat("DiagonalWeight", 0.707f);
+		MAX_POSTFILTER_PASSES = GeoDataConfig.getInt("MaxPostfilterPasses", 3);
+		DEBUG_PATH = GeoDataConfig.getBoolean("DebugPath", false);
+		FORCE_GEODATA = GeoDataConfig.getBoolean("ForceGeoData", true);
+		COORD_SYNCHRONIZE = GeoDataConfig.getInt("CoordSynchronize", -1);
+		GEODATA_PATH = Paths.get(GeoDataConfig.getString("geodataPath", "./data/geodata"));
+		TRY_LOAD_UNSPECIFIED_REGIONS = GeoDataConfig.getBoolean("tryLoadUnspecifiedRegions", true);
+		GEODATA_REGIONS = new HashMap<>();
+		for (int regionX = World.TILE_X_MIN; regionX <= World.TILE_X_MAX; regionX++)
+		{
+			for (int regionY = World.TILE_Y_MIN; regionY <= World.TILE_Y_MAX; regionY++)
+			{
+				String key = regionX + "_" + regionY;
+				if (GeoDataConfig.containsKey(regionX + "_" + regionY))
+				{
+					GEODATA_REGIONS.put(key, GeoDataConfig.getBoolean(key, false));
+				}
+			}
+		}
 	}
 	
 	/**

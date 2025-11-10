@@ -31,7 +31,7 @@ package handlers.targethandlers;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.l2journey.gameserver.geoengine.GeoEngine;
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.handler.ITargetTypeHandler;
 import com.l2journey.gameserver.model.World;
 import com.l2journey.gameserver.model.WorldObject;
@@ -56,12 +56,7 @@ public class AuraFriendly implements ITargetTypeHandler
 		final int maxTargets = skill.getAffectLimit();
 		World.getInstance().forEachVisibleObject(player, Creature.class, obj ->
 		{
-			if ((obj == creature) || !checkTarget(player, obj))
-			{
-				return;
-			}
-			
-			if ((maxTargets > 0) && (targetList.size() >= maxTargets))
+			if ((obj == creature) || !checkTarget(player, obj) || ((maxTargets > 0) && (targetList.size() >= maxTargets)))
 			{
 				return;
 			}
@@ -74,7 +69,7 @@ public class AuraFriendly implements ITargetTypeHandler
 	
 	private boolean checkTarget(Player player, Creature target)
 	{
-		if ((target == null) || !GeoEngine.getInstance().canSeeTarget(player, target))
+		if ((target == null) || !GeoData.getInstance().canSeeTarget(player, target))
 		{
 			return false;
 		}

@@ -162,12 +162,7 @@ public class Trap extends Npc
 			}
 		}
 		
-		if (_isInArena)
-		{
-			return true;
-		}
-		
-		if (_owner.isInParty() && creature.isInParty() && (_owner.getParty().getLeaderObjectId() == creature.getParty().getLeaderObjectId()))
+		if (_isInArena || (_owner.isInParty() && creature.isInParty() && (_owner.getParty().getLeaderObjectId() == creature.getParty().getLeaderObjectId())))
 		{
 			return true;
 		}
@@ -177,12 +172,7 @@ public class Trap extends Npc
 	public boolean checkTarget(Creature target)
 	{
 		// Range seems to be reduced from Freya(300) to H5(150)
-		if (!target.isInsideRadius2D(this, 150))
-		{
-			return false;
-		}
-		
-		if (!Skill.checkForAreaOffensiveSkills(this, target, _skill.getSkill(), _isInArena))
+		if (!target.isInsideRadius2D(this, 150) || !Skill.checkForAreaOffensiveSkills(this, target, _skill.getSkill(), _isInArena))
 		{
 			return false;
 		}

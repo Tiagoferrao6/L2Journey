@@ -57,12 +57,7 @@ public class DDSConverter
 			}
 			
 			final Color color = (Color) obj;
-			if (b != color.b)
-			{
-				return false;
-			}
-			
-			if (g != color.g)
+			if ((b != color.b) || (g != color.g))
 			{
 				return false;
 			}

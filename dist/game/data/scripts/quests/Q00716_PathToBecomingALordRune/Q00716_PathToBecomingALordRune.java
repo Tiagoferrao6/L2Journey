@@ -290,12 +290,7 @@ public class Q00716_PathToBecomingALordRune extends Quest
 	public void onKill(Npc npc, Player killer, boolean isSummon)
 	{
 		final QuestState qs = killer.getQuestState(getName());
-		if (qs == null)
-		{
-			return;
-		}
-		
-		if (qs.getState() != State.STARTED)
+		if ((qs == null) || (qs.getState() != State.STARTED))
 		{
 			return;
 		}

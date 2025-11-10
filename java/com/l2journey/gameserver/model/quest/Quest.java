@@ -4981,12 +4981,8 @@ public class Quest implements IEventTimerEvent<String>, IEventTimerCancel<String
 	 */
 	protected static boolean takeAllItems(Player player, ItemHolder... itemList)
 	{
-		if ((itemList == null) || (itemList.length == 0))
-		{
-			return false;
-		}
 		// first check if the player has all items to avoid taking half the items from the list
-		if (!hasAllItems(player, true, itemList))
+		if ((itemList == null) || (itemList.length == 0) || !hasAllItems(player, true, itemList))
 		{
 			return false;
 		}

@@ -66,12 +66,7 @@ public class AreaCorpseMob implements ITargetTypeHandler
 		final boolean srcInArena = creature.isInsideZone(ZoneId.PVP) && !creature.isInsideZone(ZoneId.SIEGE);
 		World.getInstance().forEachVisibleObject(creature, Creature.class, obj ->
 		{
-			if (!(obj.isAttackable() || obj.isPlayable()) || !LocationUtil.checkIfInRange(skill.getAffectRange(), target, obj, true))
-			{
-				return;
-			}
-			
-			if (!Skill.checkForAreaOffensiveSkills(creature, obj, skill, srcInArena))
+			if (!(obj.isAttackable() || obj.isPlayable()) || !LocationUtil.checkIfInRange(skill.getAffectRange(), target, obj, true) || !Skill.checkForAreaOffensiveSkills(creature, obj, skill, srcInArena))
 			{
 				return;
 			}
