@@ -49,14 +49,14 @@ public class EventsConfig
 {
 	private static final Logger LOGGER = Logger.getLogger(EventsConfig.class.getName());
 	
-	private static final String ELPIES_EVENT_CONFIG_FILE = "./config/events/Elpies.ini";
-	private static final String FACTION_SYSTEM_CONFIG_FILE = "./config/events/FactionSystem.ini";
-	private static final String LUCKY_PIG_EVENT_CONFIG_FILE = "./config/events/LuckyPig.ini";
-	private static final String OLYMPIAD_CONFIG_FILE = "./config/events/Olympiad.ini";
-	private static final String PC_BANG_EVENT_CONFIG_FILE = "./config/events/PcBangPoints.ini";
-	private static final String TOWN_WAR_EVENT_CONFIG_FILE = "./config/events/TownWar.ini";
-	private static final String UNDERGROUND_COLISEUM_CONFIG_FILE = "./config/events/UndergroundColiseum.ini";
-	private static final String WEDDING_CONFIG_FILE = "./config/events/Wedding.ini";
+	private static final String ELPIES_EVENT_CONFIG_FILE = "./config/events/elpies.ini";
+	private static final String FACTION_SYSTEM_CONFIG_FILE = "./config/events/factionsystem.ini";
+	private static final String LUCKY_PIG_EVENT_CONFIG_FILE = "./config/events/luckypig.ini";
+	private static final String OLYMPIAD_CONFIG_FILE = "./config/events/olympiad.ini";
+	private static final String PC_BANG_EVENT_CONFIG_FILE = "./config/events/pcbangpoints.ini";
+	private static final String TOWN_WAR_EVENT_CONFIG_FILE = "./config/events/townwar.ini";
+	private static final String UNDERGROUND_COLISEUM_CONFIG_FILE = "./config/events/undergroundcoliseum.ini";
+	private static final String WEDDING_CONFIG_FILE = "./config/events/wedding.ini";
 	
 	// --------------------------------------------------
 	// Elpies Event
