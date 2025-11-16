@@ -5487,12 +5487,12 @@ public abstract class Creature extends WorldObject
 		}
 		
 		// GeoData Los Check or dz > 1000
-		// if (!GeoData.getInstance().canSeeTarget(player, this))
-		// {
-		// player.sendPacket(SystemMessageId.CANNOT_SEE_TARGET);
-		// player.sendPacket(ActionFailed.STATIC_PACKET);
-		// return;
-		// }
+		if (!GeoData.getInstance().canSeeTarget(player, this))
+		{
+			player.sendPacket(SystemMessageId.CANNOT_SEE_TARGET);
+			player.sendPacket(ActionFailed.STATIC_PACKET);
+			return;
+		}
 		
 		if (player.getBlockCheckerArena() != -1)
 		{

@@ -48,7 +48,7 @@ import com.l2journey.gameserver.util.LinePointIterator;
 import com.l2journey.gameserver.util.Util;
 
 /**
- * @author -Nemesiss-, FBIagent
+ * @author -Nemesiss-, FBIagent, kinghanker
  */
 public class GeoData implements IGeoDriver
 {
@@ -384,6 +384,12 @@ public class GeoData implements IGeoDriver
 				}
 				
 				int maxHeight;
+				// Check if the current Z is within the allowed height range from the start Z.
+				// This is the core of the height-difference check to prevent attacks across floors.
+				if (Math.abs(beeCurNearestZ - z) > 700)
+				{
+					return false;
+				}
 				if ((ptIndex < ELEVATED_SEE_OVER_DISTANCE) && (fullDist >= ELEVATED_SEE_OVER_DISTANCE))
 				{
 					maxHeight = z + MAX_SEE_OVER_HEIGHT;
