@@ -1,4 +1,4 @@
-<html noscrollbar>
+<html>
 	<title>Server Management Panel</title>
 	<body>
 		<center>
@@ -60,5 +60,15 @@
 		</table>
 		</center>
 		<br><br>
+		Geodata:<br1>
+		<table width=270>
+			<tr>
+				<td><button value="pos" action="bypass -h admin_geo_pos" width=50 height=21 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+				<td><button value="spawn" action="bypass -h admin_geo_spawn_pos" width=50 height=21 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+				<td><button value="cMove" action="bypass -h admin_geo_can_move" width=50 height=21 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+				<td><button value="LoS" action="bypass -h admin_geo_can_see" width=50 height=21 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+				<td><button value="Grid" action="bypass -h admin_geogrid" width=50 height=21 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+			</tr>
+		</table>
 	</body>
 </html>
