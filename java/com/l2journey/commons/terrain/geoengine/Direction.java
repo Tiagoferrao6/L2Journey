@@ -29,7 +29,7 @@
 package com.l2journey.commons.terrain.geoengine;
 
 /**
- * @author FBIagent
+ * @author FBIagent, KingHanker
  */
 public enum Direction
 {
@@ -48,5 +48,10 @@ public enum Direction
 	/** West direction */
 	WEST,
 	/** North-West direction */
-	NORTH_WEST
+	NORTH_WEST;
+	
+	public boolean isDiagonal()
+	{
+		return (this == NORTH_EAST) || (this == NORTH_WEST) || (this == SOUTH_EAST) || (this == SOUTH_WEST);
+	}
 }

@@ -30,10 +30,8 @@ package com.l2journey.gameserver.pathfinding;
 
 import java.util.List;
 
-import com.l2journey.Config;
 import com.l2journey.gameserver.model.World;
 import com.l2journey.gameserver.pathfinding.cellnodes.CellPathFinding;
-import com.l2journey.gameserver.pathfinding.geonodes.GeoPathFinding;
 
 /**
  * @author -Nemesiss-
@@ -42,11 +40,11 @@ public abstract class PathFinding
 {
 	public static PathFinding getInstance()
 	{
-		if (Config.PATHFINDING == 1)
-		{
-			// Higher Memory Usage, Smaller Cpu Usage
-			return GeoPathFinding.getInstance();
-		}
+		// if (Config.PATHFINDING == 1)
+		// {
+		// Higher Memory Usage, Smaller Cpu Usage
+		// return GeoPathFinding.getInstance();
+		// }
 		// Cell pathfinding, calculated directly from geodata files
 		return CellPathFinding.getInstance();
 	}
@@ -54,111 +52,6 @@ public abstract class PathFinding
 	public abstract boolean pathNodesExist(short regionoffset);
 	
 	public abstract List<AbstractNodeLoc> findPath(int x, int y, int z, int tx, int ty, int tz, int instanceId, boolean playable);
-	
-	// @formatter:off
-	/*
-	public List<AbstractNodeLoc> search(AbstractNode start, AbstractNode end, int instanceId)
-	{
-		// The simplest grid-based pathfinding.
-		// Drawback is not having higher cost for diagonal movement (means funny routes)
-		// Could be optimized e.g. not to calculate backwards as far as forwards.
-		
-		// List of Visited Nodes
-		LinkedList<AbstractNode> visited = new LinkedList<AbstractNode>();
-		
-		// List of Nodes to Visit
-		LinkedList<AbstractNode> to_visit = new LinkedList<AbstractNode>();
-		to_visit.add(start);
-		
-		int i = 0;
-		while (i < 800)
-		{
-			AbstractNode node;
-			try
-			{
-				node = to_visit.removeFirst();
-			}
-			catch (Exception e)
-			{
-				// No Path found
-				return null;
-			}
-			if (node.equals(end)) //path found!
-				return constructPath(node, instanceId);
-			else
-			{
-				i++;
-				visited.add(node);
-				node.attachNeighbors();
-				Node[] neighbors = node.getNeighbors();
-				if (neighbors == null)
-					continue;
-				for (Node n : neighbors)
-				{
-					if (!visited.contains(n) && !to_visit.contains(n))
-					{
-						n.setParent(node);
-						to_visit.add(n);
-					}
-				}
-			}
-		}
-		//No Path found
-		return null;
-	}
-	 */
-	/*
-	public List<AbstractNodeLoc> searchAStar(Node start, Node end, int instanceId)
-	{
-		// Not operational yet?
-		int start_x = start.getLoc().getX();
-		int start_y = start.getLoc().getY();
-		int end_x = end.getLoc().getX();
-		int end_y = end.getLoc().getY();
-		//List of Visited Nodes
-		FastNodeList visited = new FastNodeList(800);//TODO! Add limit to cfg
-		
-		// List of Nodes to Visit
-		BinaryNodeHeap to_visit = new BinaryNodeHeap(800);
-		to_visit.add(start);
-		
-		int i = 0;
-		while (i < 800)//TODO! Add limit to cfg
-		{
-			AbstractNode node;
-			try
-			{
-				node = to_visit.removeFirst();
-			}
-			catch (Exception e)
-			{
-				// No Path found
-				return null;
-			}
-			if (node.equals(end)) //path found!
-				return constructPath(node, instanceId);
-			else
-			{
-				visited.add(node);
-				node.attachNeighbors();
-				for (Node n : node.getNeighbors())
-				{
-					if (!visited.contains(n) && !to_visit.contains(n))
-					{
-						i++;
-						n.setParent(node);
-						n.setCost(Math.abs(start_x - n.getLoc().getNodeX()) + Math.abs(start_y - n.getLoc().getNodeY())
-								+ Math.abs(end_x - n.getLoc().getNodeX()) + Math.abs(end_y - n.getLoc().getNodeY()));
-						to_visit.add(n);
-					}
-				}
-			}
-		}
-		//No Path found
-		return null;
-	}
-	 */
-	// @formatter:on
 	
 	/**
 	 * Convert geodata position to pathnode position

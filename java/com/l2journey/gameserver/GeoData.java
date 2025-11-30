@@ -56,6 +56,8 @@ public class GeoData implements IGeoDriver
 	private static final int ELEVATED_SEE_OVER_DISTANCE = 2;
 	private static final int MAX_SEE_OVER_HEIGHT = 48;
 	private static final int SPAWN_Z_DELTA_LIMIT = 100;
+	private static final int MAX_STEP_HEIGHT = 48;
+	private static final int MULTI_FLOOR_LIMIT = 60;
 	
 	private final IGeoDriver _driver;
 	
@@ -181,12 +183,55 @@ public class GeoData implements IGeoDriver
 	 */
 	public int getSpawnHeight(int x, int y, int z)
 	{
-		final int height = getHeight(x, y, z);
-		if ((height > (z + SPAWN_Z_DELTA_LIMIT)) || (height < (z - SPAWN_Z_DELTA_LIMIT)))
+		final int geoX = getGeoX(x);
+		final int geoY = getGeoY(y);
+		final int height = getNearestZ(geoX, geoY, z);
+		
+		// Limite reduzido para áreas com múltiplos andares
+		if ((Math.abs(height - z) > SPAWN_Z_DELTA_LIMIT) || isMultiFloorArea(geoX, geoY))
 		{
-			return z;
+			return getBestFloorWithLowerPreference(geoX, geoY, z, MULTI_FLOOR_LIMIT);
 		}
+		
 		return height;
+	}
+	
+	private int getBestFloorWithLowerPreference(int geoX, int geoY, int worldZ, int limit)
+	{
+		int lowerZ = getNextLowerZ(geoX, geoY, worldZ);
+		int higherZ = getNextHigherZ(geoX, geoY, worldZ);
+		int nearestZ = getNearestZ(geoX, geoY, worldZ);
+		
+		// PRIORIDADE 1: Andar inferior dentro do limite
+		if ((lowerZ != Integer.MIN_VALUE) && (Math.abs(lowerZ - worldZ) <= limit))
+		{
+			return lowerZ;
+		}
+		
+		// PRIORIDADE 2: Altura mais próxima dentro do limite
+		if (Math.abs(nearestZ - worldZ) <= limit)
+		{
+			return nearestZ;
+		}
+		
+		// PRIORIDADE 3: Andar superior dentro do limite (apenas se necessário)
+		if ((higherZ != Integer.MIN_VALUE) && (Math.abs(higherZ - worldZ) <= limit))
+		{
+			return higherZ;
+		}
+		
+		// Caso nenhum esteja dentro do limite, manter altura original
+		return worldZ;
+	}
+	
+	private boolean isMultiFloorArea(int geoX, int geoY)
+	{
+		// Verificar se há múltiplos níveis de altura nesta célula
+		int baseZ = getNearestZ(geoX, geoY, 0);
+		int higherZ = getNextHigherZ(geoX, geoY, baseZ);
+		
+		// Se há um nível significativamente mais alto, é uma área multi-andar
+		return (higherZ != Integer.MIN_VALUE) && ((higherZ - baseZ) > 80);
 	}
 	
 	/**
@@ -465,16 +510,28 @@ public class GeoData implements IGeoDriver
 	 */
 	public Location moveCheck(int x, int y, int z, int tx, int ty, int tz, int instanceId)
 	{
-		int geoX = getGeoX(x);
-		int geoY = getGeoY(y);
-		z = getNearestZ(geoX, geoY, z);
-		int tGeoX = getGeoX(tx);
-		int tGeoY = getGeoY(ty);
-		tz = getNearestZ(tGeoX, tGeoY, tz);
-		
-		if (DoorData.getInstance().checkIfDoorsBetween(x, y, z, tx, ty, tz, instanceId, false))
+		// Usar a validação rigorosa primeiro
+		if (validateMovementPath(x, y, z, tx, ty, tz, instanceId))
 		{
-			return new Location(x, y, getHeight(x, y, z));
+			return new Location(tx, ty, tz);
+		}
+		
+		// Se falhou, usar o método original para encontrar ponto mais próximo
+		return findNearestValidLocation(x, y, z, tx, ty, tz, instanceId);
+	}
+	
+	private Location findNearestValidLocation(int fromX, int fromY, int fromZ, int toX, int toY, int toZ, int instanceId)
+	{
+		int geoX = getGeoX(fromX);
+		int geoY = getGeoY(fromY);
+		fromZ = getNearestZ(geoX, geoY, fromZ);
+		int tGeoX = getGeoX(toX);
+		int tGeoY = getGeoY(toY);
+		toZ = getNearestZ(tGeoX, tGeoY, toZ);
+		
+		if (DoorData.getInstance().checkIfDoorsBetween(fromX, fromY, fromZ, toX, toY, toZ, instanceId, false))
+		{
+			return new Location(fromX, fromY, getHeight(fromX, fromY, fromZ));
 		}
 		
 		LinePointIterator pointIter = new LinePointIterator(geoX, geoY, tGeoX, tGeoY);
@@ -482,7 +539,8 @@ public class GeoData implements IGeoDriver
 		pointIter.next();
 		int prevX = pointIter.x();
 		int prevY = pointIter.y();
-		int prevZ = z;
+		int prevZ = fromZ;
+		Location lastValid = new Location(fromX, fromY, fromZ);
 		
 		while (pointIter.next())
 		{
@@ -519,23 +577,26 @@ public class GeoData implements IGeoDriver
 				
 				if (!canEnter)
 				{
-					// can't move, return previous location
-					return new Location(getWorldX(prevX), getWorldY(prevY), prevZ);
+					// can't move, return previous valid location
+					return lastValid;
 				}
 			}
+			
+			// Atualizar última localização válida
+			lastValid = new Location(getWorldX(curX), getWorldY(curY), curZ);
 			
 			prevX = curX;
 			prevY = curY;
 			prevZ = curZ;
 		}
 		
-		if (hasGeoPos(prevX, prevY) && (prevZ != tz))
+		if (hasGeoPos(prevX, prevY) && (prevZ != toZ))
 		{
-			// different floors, return start location
-			return new Location(x, y, z);
+			// different floors, return last valid location
+			return lastValid;
 		}
 		
-		return new Location(tx, ty, tz);
+		return lastValid;
 	}
 	
 	public boolean canMove(AbstractNodeLoc actor, WorldObject target)
@@ -561,6 +622,81 @@ public class GeoData implements IGeoDriver
 	 */
 	public boolean canMove(int fromX, int fromY, int fromZ, int toX, int toY, int toZ, int instanceId)
 	{
+		return validateMovementPath(fromX, fromY, fromZ, toX, toY, toZ, instanceId);
+	}
+	
+	/**
+	 * Verifica rigorosamente se pode mover em uma direção, considerando todos os bloqueios
+	 * @param geoX
+	 * @param geoY
+	 * @param worldZ
+	 * @param direction
+	 * @return
+	 */
+	public boolean canMoveToDirection(int geoX, int geoY, int worldZ, Direction direction)
+	{
+		if (!hasGeoPos(geoX, geoY))
+		{
+			return true; // Sem geodata, movimento livre
+		}
+		
+		// Verificar se a direção principal está bloqueada
+		if (!_driver.canEnterNeighbors(geoX, geoY, worldZ, direction))
+		{
+			return false;
+		}
+		
+		// Verificação extra para diagonais
+		if (direction.isDiagonal())
+		{
+			return canMoveDiagonal(geoX, geoY, worldZ, direction);
+		}
+		
+		return true;
+	}
+	
+	/**
+	 * Verificação rigorosa para movimento diagonal
+	 * @param geoX
+	 * @param geoY
+	 * @param worldZ
+	 * @param diagonalDir
+	 * @return
+	 */
+	private boolean canMoveDiagonal(int geoX, int geoY, int worldZ, Direction diagonalDir)
+	{
+		switch (diagonalDir)
+		{
+			case NORTH_EAST:
+				return _driver.canEnterNeighbors(geoX, geoY, worldZ, Direction.NORTH, Direction.EAST) && _driver.canEnterNeighbors(geoX, geoY - 1, worldZ, Direction.EAST) && _driver.canEnterNeighbors(geoX + 1, geoY, worldZ, Direction.NORTH);
+			
+			case NORTH_WEST:
+				return _driver.canEnterNeighbors(geoX, geoY, worldZ, Direction.NORTH, Direction.WEST) && _driver.canEnterNeighbors(geoX, geoY - 1, worldZ, Direction.WEST) && _driver.canEnterNeighbors(geoX - 1, geoY, worldZ, Direction.NORTH);
+			
+			case SOUTH_EAST:
+				return _driver.canEnterNeighbors(geoX, geoY, worldZ, Direction.SOUTH, Direction.EAST) && _driver.canEnterNeighbors(geoX, geoY + 1, worldZ, Direction.EAST) && _driver.canEnterNeighbors(geoX + 1, geoY, worldZ, Direction.SOUTH);
+			
+			case SOUTH_WEST:
+				return _driver.canEnterNeighbors(geoX, geoY, worldZ, Direction.SOUTH, Direction.WEST) && _driver.canEnterNeighbors(geoX, geoY + 1, worldZ, Direction.WEST) && _driver.canEnterNeighbors(geoX - 1, geoY, worldZ, Direction.SOUTH);
+			
+			default:
+				return true;
+		}
+	}
+	
+	/**
+	 * Valida toda a trajetória do movimento com verificações rigorosas
+	 * @param fromX
+	 * @param fromY
+	 * @param fromZ
+	 * @param toX
+	 * @param toY
+	 * @param toZ
+	 * @param instanceId
+	 * @return
+	 */
+	public boolean validateMovementPath(int fromX, int fromY, int fromZ, int toX, int toY, int toZ, int instanceId)
+	{
 		int geoX = getGeoX(fromX);
 		int geoY = getGeoY(fromY);
 		fromZ = getNearestZ(geoX, geoY, fromZ);
@@ -574,7 +710,13 @@ public class GeoData implements IGeoDriver
 		}
 		
 		LinePointIterator pointIter = new LinePointIterator(geoX, geoY, tGeoX, tGeoY);
-		// first point is guaranteed to be available
+		
+		// Verificar ponto inicial
+		if (hasCollisionAt(getWorldX(geoX), getWorldY(geoY), fromZ, instanceId))
+		{
+			return false;
+		}
+		
 		pointIter.next();
 		int prevX = pointIter.x();
 		int prevY = pointIter.y();
@@ -586,37 +728,24 @@ public class GeoData implements IGeoDriver
 			int curY = pointIter.y();
 			int curZ = getNearestZ(curX, curY, prevZ);
 			
-			if (hasGeoPos(prevX, prevY))
+			Direction dir = GeoUtils.computeDirection(prevX, prevY, curX, curY);
+			
+			// Verificação rigorosa de direção
+			if (!canMoveToDirection(prevX, prevY, prevZ, dir))
 			{
-				Direction dir = GeoUtils.computeDirection(prevX, prevY, curX, curY);
-				boolean canEnter = false;
-				if (canEnterNeighbors(prevX, prevY, prevZ, dir))
-				{
-					// check diagonal movement
-					switch (dir)
-					{
-						case NORTH_EAST:
-							canEnter = canEnterNeighbors(prevX, prevY - 1, prevZ, Direction.EAST) && canEnterNeighbors(prevX + 1, prevY, prevZ, Direction.NORTH);
-							break;
-						case NORTH_WEST:
-							canEnter = canEnterNeighbors(prevX, prevY - 1, prevZ, Direction.WEST) && canEnterNeighbors(prevX - 1, prevY, prevZ, Direction.NORTH);
-							break;
-						case SOUTH_EAST:
-							canEnter = canEnterNeighbors(prevX, prevY + 1, prevZ, Direction.EAST) && canEnterNeighbors(prevX + 1, prevY, prevZ, Direction.SOUTH);
-							break;
-						case SOUTH_WEST:
-							canEnter = canEnterNeighbors(prevX, prevY + 1, prevZ, Direction.WEST) && canEnterNeighbors(prevX - 1, prevY, prevZ, Direction.SOUTH);
-							break;
-						default:
-							canEnter = true;
-							break;
-					}
-				}
-				
-				if (!canEnter)
-				{
-					return false;
-				}
+				return false;
+			}
+			
+			// Verificar colisão na posição atual
+			if (hasCollisionAt(getWorldX(curX), getWorldY(curY), curZ, instanceId))
+			{
+				return false;
+			}
+			
+			// Verificação adicional de altura para movimento válido
+			if (Math.abs(curZ - prevZ) > MAX_STEP_HEIGHT)
+			{
+				return false;
 			}
 			
 			prevX = curX;
@@ -624,13 +753,55 @@ public class GeoData implements IGeoDriver
 			prevZ = curZ;
 		}
 		
-		if (hasGeoPos(prevX, prevY) && (prevZ != toZ))
+		return true;
+	}
+	
+	/**
+	 * Verifica colisão imediata na posição atual do player
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param instanceId
+	 * @return
+	 */
+	public boolean hasCollisionAt(int x, int y, int z, int instanceId)
+	{
+		int geoX = getGeoX(x);
+		int geoY = getGeoY(y);
+		z = getNearestZ(geoX, geoY, z);
+		
+		// Se não tem geodata, não há colisão
+		if (!hasGeoPos(geoX, geoY))
 		{
-			// different floors
 			return false;
 		}
 		
-		return true;
+		// Verificar se está em uma célula bloqueada
+		if (isBlockedCell(geoX, geoY, z))
+		{
+			return true;
+		}
+		
+		// Verificar se há doors na posição
+		if (DoorData.getInstance().checkIfDoorsBetween(x, y, z, x, y, z, instanceId, false))
+		{
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Verifica se uma célula está completamente bloqueada
+	 * @param geoX
+	 * @param geoY
+	 * @param worldZ
+	 * @return
+	 */
+	private boolean isBlockedCell(int geoX, int geoY, int worldZ)
+	{
+		// Célula está bloqueada se não pode mover em nenhuma direção
+		return !_driver.canEnterAllNeighbors(geoX, geoY, worldZ);
 	}
 	
 	public int traceTerrainZ(int x, int y, int z, int tx, int ty)

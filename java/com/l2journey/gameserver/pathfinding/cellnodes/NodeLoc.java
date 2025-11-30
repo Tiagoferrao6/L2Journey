@@ -165,39 +165,48 @@ public class NodeLoc extends AbstractNodeLoc
 		{
 			return true;
 		}
+		
 		if ((obj == null) || !(obj instanceof NodeLoc))
 		{
 			return false;
 		}
+		
 		final NodeLoc other = (NodeLoc) obj;
 		if (_x != other._x)
 		{
 			return false;
 		}
+		
 		if (_y != other._y)
 		{
 			return false;
 		}
+		
 		if (_goNorth != other._goNorth)
 		{
 			return false;
 		}
+		
 		if (_goEast != other._goEast)
 		{
 			return false;
 		}
+		
 		if (_goSouth != other._goSouth)
 		{
 			return false;
 		}
+		
 		if (_goWest != other._goWest)
 		{
 			return false;
 		}
+		
 		if (_geoHeight != other._geoHeight)
 		{
 			return false;
 		}
+		
 		return true;
 	}
 }

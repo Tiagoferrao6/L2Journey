@@ -4451,7 +4451,7 @@ public abstract class Creature extends WorldObject
 			distFraction = distPassed / delta;
 		}
 		
-		final boolean arrived = distFraction > 1.79;
+		final boolean arrived = distFraction > 1;
 		if (arrived)
 		{
 			// Set the position of the Creature to the destination.
@@ -4463,7 +4463,7 @@ public abstract class Creature extends WorldObject
 			move.yAccurate += dy * distFraction;
 			
 			// Set the position of the Creature to estimated after parcial move.
-			super.setXYZ((int) move.xAccurate, (int) move.yAccurate, zPrev + (int) ((dz * distFraction) + 0.895));
+			super.setXYZ((int) move.xAccurate, (int) move.yAccurate, zPrev + (int) ((dz * distFraction) + 0.5));
 		}
 		
 		revalidateZone(false);
@@ -4692,7 +4692,7 @@ public abstract class Creature extends WorldObject
 		double sin;
 		
 		// Check if a movement offset is defined or no distance to go through
-		if ((offset > 0) || (distance < 1.79))
+		if ((offset > 0) || (distance < 1))
 		{
 			// approximation for moving closer when z coordinates are different
 			// TODO: handle Z axis movement better
@@ -4703,7 +4703,7 @@ public abstract class Creature extends WorldObject
 			}
 			
 			// If no distance to go through, the movement is canceled
-			if ((distance < 1.79) || ((distance - offset) <= 0))
+			if ((distance < 1) || ((distance - offset) <= 0))
 			{
 				// Notify the AI that the Creature is arrived at destination
 				getAI().notifyAction(Action.ARRIVED);
@@ -4796,7 +4796,9 @@ public abstract class Creature extends WorldObject
 				}
 				
 				// Pathfinding checks.
-				if (!directMove && ((originalDistance - distance) > 30) && !isAfraid() && !isInVehicle)
+				final boolean usePathfinding = !isPlayer() || (isPlayer() && isInsideZone(ZoneId.PEACE));
+				
+				if (!directMove && ((originalDistance - distance) > 30) && !isAfraid() && !isInVehicle && usePathfinding)
 				{
 					// Path calculation -- overrides previous movement check
 					move.geoPath = PathFinding.getInstance().findPath(curX, curY, curZ, originalX, originalY, originalZ, getInstanceId(), isPlayer());
@@ -4895,7 +4897,7 @@ public abstract class Creature extends WorldObject
 			}
 			
 			// If no distance to go through, the movement is canceled
-			if ((distance < 1.79) && ((Config.PATHFINDING > 0) || isPlayable()))
+			if ((distance < 1) && ((Config.PATHFINDING > 0) || isPlayable()))
 			{
 				if (isSummon())
 				{

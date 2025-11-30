@@ -55,6 +55,7 @@ import com.l2journey.gameserver.pathfinding.AbstractNode;
 import com.l2journey.gameserver.pathfinding.AbstractNodeLoc;
 import com.l2journey.gameserver.pathfinding.PathFinding;
 import com.l2journey.gameserver.pathfinding.utils.FastNodeList;
+import com.l2journey.gameserver.util.Util;
 
 /**
  * @author -Nemesiss-
@@ -62,6 +63,7 @@ import com.l2journey.gameserver.pathfinding.utils.FastNodeList;
 public class GeoPathFinding extends PathFinding
 {
 	private static Logger _log = LoggerFactory.getLogger(GeoPathFinding.class);
+	
 	private static Map<Short, ByteBuffer> _pathNodes = new HashMap<>();
 	private static Map<Short, IntBuffer> _pathNodesIndex = new HashMap<>();
 	
@@ -92,6 +94,7 @@ public class GeoPathFinding extends PathFinding
 		{
 			return null; // not correct layer
 		}
+		
 		if (start == end)
 		{
 			return null;
@@ -150,6 +153,7 @@ public class GeoPathFinding extends PathFinding
 				// No Path found
 				return null;
 			}
+			
 			if (node.equals(end))
 			{
 				return constructPath2(node);
@@ -163,6 +167,7 @@ public class GeoPathFinding extends PathFinding
 			{
 				continue;
 			}
+			
 			for (GeoNode n : neighbors)
 			{
 				if (!visited.containsRev(n) && !to_visit.contains(n))
@@ -213,8 +218,10 @@ public class GeoPathFinding extends PathFinding
 				previousDirectionY = directionY;
 				path.addFirst(node.getLoc());
 			}
+			
 			node = node.getParent();
 		}
+		
 		return path;
 	}
 	
@@ -246,11 +253,13 @@ public class GeoPathFinding extends PathFinding
 			new_node_x = (short) node_x;
 			new_node_y = (short) (node_y - 1);
 			newNode = readNode(new_node_x, new_node_y, neighbor);
+			
 			if (newNode != null)
 			{
 				neighbors.add(newNode);
 			}
 		}
+		
 		neighbor = pn.get(idx++); // NE
 		if (neighbor > 0)
 		{
@@ -263,6 +272,7 @@ public class GeoPathFinding extends PathFinding
 				neighbors.add(newNode);
 			}
 		}
+		
 		neighbor = pn.get(idx++); // E
 		if (neighbor > 0)
 		{
@@ -275,6 +285,7 @@ public class GeoPathFinding extends PathFinding
 				neighbors.add(newNode);
 			}
 		}
+		
 		neighbor = pn.get(idx++); // SE
 		if (neighbor > 0)
 		{
@@ -287,6 +298,7 @@ public class GeoPathFinding extends PathFinding
 				neighbors.add(newNode);
 			}
 		}
+		
 		neighbor = pn.get(idx++); // S
 		if (neighbor > 0)
 		{
@@ -299,6 +311,7 @@ public class GeoPathFinding extends PathFinding
 				neighbors.add(newNode);
 			}
 		}
+		
 		neighbor = pn.get(idx++); // SW
 		if (neighbor > 0)
 		{
@@ -311,6 +324,7 @@ public class GeoPathFinding extends PathFinding
 				neighbors.add(newNode);
 			}
 		}
+		
 		neighbor = pn.get(idx++); // W
 		if (neighbor > 0)
 		{
@@ -323,6 +337,7 @@ public class GeoPathFinding extends PathFinding
 				neighbors.add(newNode);
 			}
 		}
+		
 		neighbor = pn.get(idx++); // NW
 		if (neighbor > 0)
 		{
@@ -335,6 +350,7 @@ public class GeoPathFinding extends PathFinding
 				neighbors.add(newNode);
 			}
 		}
+		
 		GeoNode[] result = new GeoNode[neighbors.size()];
 		return neighbors.toArray(result);
 	}
@@ -348,6 +364,7 @@ public class GeoPathFinding extends PathFinding
 		{
 			return null;
 		}
+		
 		short nbx = getNodeBlock(node_x);
 		short nby = getNodeBlock(node_y);
 		int idx = _pathNodesIndex.get(regoffset).get((nby << 8) + nbx);
@@ -359,6 +376,7 @@ public class GeoPathFinding extends PathFinding
 		{
 			_log.warn("SmthWrong!");
 		}
+		
 		short node_z = pn.getShort(idx);
 		idx += 2;
 		return new GeoNode(new GeoNodeLoc(node_x, node_y, node_z), idx);
@@ -373,6 +391,7 @@ public class GeoPathFinding extends PathFinding
 		{
 			return null;
 		}
+		
 		short nbx = getNodeBlock(node_x);
 		short nby = getNodeBlock(node_y);
 		int idx = _pathNodesIndex.get(regoffset).get((nby << 8) + nbx);
@@ -389,9 +408,11 @@ public class GeoPathFinding extends PathFinding
 				last_z = node_z;
 				idx2 = idx + 2;
 			}
+			
 			idx += 10; // short + 8 byte
 			nodes--;
 		}
+		
 		return new GeoNode(new GeoNodeLoc(node_x, node_y, last_z), idx2);
 	}
 	
@@ -408,8 +429,8 @@ public class GeoPathFinding extends PathFinding
 					final String[] parts = line.split("_");
 					
 					if ((parts.length < 2)
-						|| !parts[0].matches("\\d+")
-						|| !parts[1].matches("\\d+"))
+						|| !Util.isDigit(parts[0])
+						|| !Util.isDigit(parts[1]))
 					{
 						_log.warn("Invalid pathnode entry: '" + line + "', must be in format 'XX_YY', where X and Y - integers");
 						return;
@@ -435,6 +456,7 @@ public class GeoPathFinding extends PathFinding
 			_log.warn("Failed to Load PathNode File: invalid region " + rx + "," + ry + Config.EOL);
 			return;
 		}
+		
 		short regionoffset = getRegionOffset(rx, ry);
 		File file = new File(Config.PATHNODE_DIR, rx + "_" + ry + ".pn");
 		_log.info("Path Engine: - Loading: " + file.getName() + " -> region offset: " + regionoffset + " X: " + rx + " Y: " + ry);
@@ -465,6 +487,7 @@ public class GeoPathFinding extends PathFinding
 				indexs.put(node++, index);
 				index += (layer * 10) + 1;
 			}
+			
 			_pathNodesIndex.put(regionoffset, indexs);
 			_pathNodes.put(regionoffset, nodes);
 		}

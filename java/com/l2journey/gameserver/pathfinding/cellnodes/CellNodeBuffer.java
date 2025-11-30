@@ -73,10 +73,13 @@ public class CellNodeBuffer
 		_timeStamp = System.currentTimeMillis();
 		_baseX = x + ((tx - x - _mapSize) / 2); // middle of the line (x,y) - (tx,ty)
 		_baseY = y + ((ty - y - _mapSize) / 2); // will be in the center of the buffer
+		
 		_targetX = tx;
 		_targetY = ty;
 		_targetZ = tz;
+		
 		_current = getNode(x, y, z);
+		
 		_current.setCost(getCost(x, y, z, Config.HIGH_WEIGHT));
 		
 		for (int count = 0; count < MAX_ITERATIONS; count++)
@@ -94,6 +97,7 @@ public class CellNodeBuffer
 			
 			_current = _current.getNext();
 		}
+		
 		return null;
 	}
 	
@@ -145,6 +149,7 @@ public class CellNodeBuffer
 				result.add(n);
 			}
 		}
+		
 		return result;
 	}
 	
@@ -272,6 +277,7 @@ public class CellNodeBuffer
 		{
 			return null;
 		}
+		
 		if (newNode.getCost() >= 0)
 		{
 			return newNode;
@@ -322,6 +328,7 @@ public class CellNodeBuffer
 			}
 			node = node.getNext();
 		}
+		
 		if (count == (MAX_ITERATIONS * 4))
 		{
 			System.err.println("Pathfinding: too long loop detected, cost:" + newNode.getCost());

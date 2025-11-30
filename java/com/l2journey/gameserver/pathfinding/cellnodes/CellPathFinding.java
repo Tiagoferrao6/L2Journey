@@ -106,17 +106,21 @@ public class CellPathFinding extends PathFinding
 	{
 		int gx = GeoData.getInstance().getGeoX(x);
 		int gy = GeoData.getInstance().getGeoY(y);
+		
 		if (!GeoData.getInstance().hasGeo(x, y))
 		{
 			return null;
 		}
+		
 		int gz = GeoData.getInstance().getHeight(x, y, z);
 		int gtx = GeoData.getInstance().getGeoX(tx);
 		int gty = GeoData.getInstance().getGeoY(ty);
+		
 		if (!GeoData.getInstance().hasGeo(tx, ty))
 		{
 			return null;
 		}
+		
 		int gtz = GeoData.getInstance().getHeight(tx, ty, tz);
 		CellNodeBuffer buffer = alloc(64 + (2 * Math.max(Math.abs(gx - gtx), Math.abs(gy - gty))), playable);
 		if (buffer == null)
@@ -242,14 +246,17 @@ public class CellPathFinding extends PathFinding
 		
 		_findSuccess++;
 		_postFilterElapsed += System.currentTimeMillis() - timeStamp;
+		
 		return path;
 	}
 	
 	private List<AbstractNodeLoc> constructPath(AbstractNode<NodeLoc> node)
 	{
 		final List<AbstractNodeLoc> path = new CopyOnWriteArrayList<>();
+		
 		int previousDirectionX = Integer.MIN_VALUE;
 		int previousDirectionY = Integer.MIN_VALUE;
+		
 		int directionX, directionY;
 		
 		while (node.getParent() != null)
@@ -287,11 +294,14 @@ public class CellPathFinding extends PathFinding
 			
 			node = node.getParent();
 		}
+		
 		return path;
 	}
 	
 	private final CellNodeBuffer alloc(int size, boolean playable)
 	{
+		int BufferSize = 100;
+		size += BufferSize;
 		CellNodeBuffer current = null;
 		for (BufferInfo i : _allBuffers)
 		{

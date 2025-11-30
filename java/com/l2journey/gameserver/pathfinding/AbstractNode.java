@@ -74,10 +74,12 @@ public abstract class AbstractNode<Loc extends AbstractNodeLoc>
 		{
 			return true;
 		}
+		
 		if ((obj == null) || !(obj instanceof AbstractNode))
 		{
 			return false;
 		}
+		
 		final AbstractNode<?> other = (AbstractNode<?>) obj;
 		if (_loc == null)
 		{
@@ -90,6 +92,7 @@ public abstract class AbstractNode<Loc extends AbstractNodeLoc>
 		{
 			return false;
 		}
+		
 		return true;
 	}
 }
