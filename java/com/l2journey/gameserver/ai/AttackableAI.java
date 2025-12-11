@@ -845,6 +845,10 @@ public class AttackableAI extends CreatureAI
 			// Set the AI Intention to ACTIVE
 			setIntention(Intention.ACTIVE);
 			
+			// Clear target so the monster can return to spawn point.
+			// Aggro list will be cleared naturally when HP/MP regenerate to full.
+			setTarget(null);
+			
 			if (!_actor.isFakePlayer())
 			{
 				npc.setWalking();
