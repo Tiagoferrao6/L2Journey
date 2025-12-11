@@ -150,13 +150,8 @@ public class Trap extends Npc
 		if (creature.isPlayer())
 		{
 			// observers can't see trap
-			if (creature.asPlayer().inObserverMode())
-			{
-				return false;
-			}
-			
 			// olympiad competitors can't see trap
-			if (_owner.isInOlympiadMode() && creature.asPlayer().isInOlympiadMode() && (creature.asPlayer().getOlympiadSide() != _owner.getOlympiadSide()))
+			if (creature.asPlayer().inObserverMode() || (_owner.isInOlympiadMode() && creature.asPlayer().isInOlympiadMode() && (creature.asPlayer().getOlympiadSide() != _owner.getOlympiadSide())))
 			{
 				return false;
 			}

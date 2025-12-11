@@ -95,13 +95,7 @@ public class RequestDropItem extends ClientPacket
 			return;
 		}
 		
-		if (_count > item.getCount())
-		{
-			player.sendPacket(SystemMessageId.THIS_ITEM_CANNOT_BE_DISCARDED);
-			return;
-		}
-		
-		if ((Config.PLAYER_SPAWN_PROTECTION > 0) && player.isInvul() && !player.isGM())
+		if ((_count > item.getCount()) || ((Config.PLAYER_SPAWN_PROTECTION > 0) && player.isInvul() && !player.isGM()))
 		{
 			player.sendPacket(SystemMessageId.THIS_ITEM_CANNOT_BE_DISCARDED);
 			return;

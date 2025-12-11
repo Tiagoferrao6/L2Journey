@@ -217,23 +217,9 @@ public class RecipeManager
 				return;
 			}
 			
-			if (_player.isProcessingTransaction())
-			{
-				_player.sendPacket(ActionFailed.STATIC_PACKET);
-				abort();
-				return;
-			}
-			
 			// validate recipe list
-			if (_recipeList.getRecipes().length == 0)
-			{
-				_player.sendPacket(ActionFailed.STATIC_PACKET);
-				abort();
-				return;
-			}
-			
 			// validate skill level
-			if (_recipeList.getLevel() > _skillLevel)
+			if (_player.isProcessingTransaction() || (_recipeList.getRecipes().length == 0) || (_recipeList.getLevel() > _skillLevel))
 			{
 				_player.sendPacket(ActionFailed.STATIC_PACKET);
 				abort();

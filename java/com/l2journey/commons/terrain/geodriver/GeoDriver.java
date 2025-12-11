@@ -156,7 +156,6 @@ public final class GeoDriver implements IGeoDriver
 			MappedByteBuffer mbb = fc.map(FileChannel.MapMode.READ_ONLY, 0, fc.size()).load();
 			mbb.order(ByteOrder.LITTLE_ENDIAN);
 			NonNullRegion nnr = new NonNullRegion(mbb);
-			_LOGGER.info("Loaded " + filePath);
 			return nnr;
 		}
 	}

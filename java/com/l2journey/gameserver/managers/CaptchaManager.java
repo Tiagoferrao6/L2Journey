@@ -110,12 +110,7 @@ public class CaptchaManager
 		
 		// Check if auto-play is enabled and player is auto-playing.
 		final Player killer = player.asPlayer();
-		if (Config.ENABLE_AUTO_PLAY && killer.isAutoPlaying())
-		{
-			return; // Don't count kills when auto-play is enabled.
-		}
-		
-		if (VALIDATION.get(killer.getObjectId()) != null)
+		if ((Config.ENABLE_AUTO_PLAY && killer.isAutoPlaying()) || (VALIDATION.get(killer.getObjectId()) != null))
 		{
 			return;
 		}

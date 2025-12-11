@@ -215,7 +215,6 @@ public abstract class ZoneType extends ListenersContainer
 			}
 		}
 		
-		
 		// Check level
 		// check obj class
 		if (!isEnabled() || (creature.getLevel() < _minLevel) || (creature.getLevel() > _maxLevel) || !creature.isInstanceTypes(_target))

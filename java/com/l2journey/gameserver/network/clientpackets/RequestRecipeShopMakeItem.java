@@ -59,12 +59,7 @@ public class RequestRecipeShopMakeItem extends ClientPacket
 		}
 		
 		final Player manufacturer = World.getInstance().getPlayer(_id);
-		if (manufacturer == null)
-		{
-			return;
-		}
-		
-		if ((manufacturer.getInstanceId() != player.getInstanceId()) && (player.getInstanceId() != -1))
+		if ((manufacturer == null) || ((manufacturer.getInstanceId() != player.getInstanceId()) && (player.getInstanceId() != -1)))
 		{
 			return;
 		}

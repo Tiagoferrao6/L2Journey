@@ -213,12 +213,7 @@ public abstract class Playable extends Creature
 		}
 		
 		final Player player = asPlayer();
-		if (player == null)
-		{
-			return false; // Active player is null
-		}
-		
-		if (player.getKarma() != 0)
+		if ((player == null) || (player.getKarma() != 0))
 		{
 			return false; // Active player has karma
 		}

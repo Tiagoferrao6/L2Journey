@@ -206,12 +206,7 @@ public class TradeList
 			return null;
 		}
 		
-		if ((count <= 0) || (count > item.getCount()))
-		{
-			return null;
-		}
-		
-		if (!item.isStackable() && (count > 1))
+		if ((count <= 0) || (count > item.getCount()) || (!item.isStackable() && (count > 1)))
 		{
 			return null;
 		}

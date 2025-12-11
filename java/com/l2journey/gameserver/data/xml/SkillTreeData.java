@@ -1309,17 +1309,7 @@ public class SkillTreeData implements IXmlReader
 		
 		final int maxLevel = SkillData.getInstance().getMaxLevel(skill.getId());
 		final int hashCode = SkillData.getSkillHashCode(skill.getId(), Math.min(skill.getLevel(), maxLevel));
-		if (Arrays.binarySearch(_skillsByClassIdHashCodes.get(player.getPlayerClass().getId()), hashCode) >= 0)
-		{
-			return true;
-		}
-		
-		if (Arrays.binarySearch(_skillsByRaceHashCodes.get(player.getRace().ordinal()), hashCode) >= 0)
-		{
-			return true;
-		}
-		
-		if (Arrays.binarySearch(_allSkillsHashCodes, hashCode) >= 0)
+		if ((Arrays.binarySearch(_skillsByClassIdHashCodes.get(player.getPlayerClass().getId()), hashCode) >= 0) || (Arrays.binarySearch(_skillsByRaceHashCodes.get(player.getRace().ordinal()), hashCode) >= 0) || (Arrays.binarySearch(_allSkillsHashCodes, hashCode) >= 0))
 		{
 			return true;
 		}

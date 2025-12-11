@@ -138,11 +138,7 @@ public class FenceData implements IXmlReader
 			final int xMax = fence.getXMax();
 			final int yMin = fence.getYMin();
 			final int yMax = fence.getYMax();
-			if ((x < xMin) && (tx < xMin))
-			{
-				continue;
-			}
-			if ((x > xMax) && (tx > xMax))
+			if (((x < xMin) && (tx < xMin)) || ((x > xMax) && (tx > xMax)))
 			{
 				continue;
 			}

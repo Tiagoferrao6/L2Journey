@@ -204,18 +204,8 @@ public class UseItem extends ClientPacket
 			}
 			
 			// Don't allow to put formal wear while a cursed weapon is equipped.
-			if (player.isCursedWeaponEquipped() && (_itemId == 6408))
-			{
-				return;
-			}
-			
 			// Equip or unEquip
-			if (FortSiegeManager.getInstance().isCombat(_itemId))
-			{
-				return; // no message
-			}
-			
-			if (player.isCombatFlagEquipped())
+			if ((player.isCursedWeaponEquipped() && (_itemId == 6408)) || FortSiegeManager.getInstance().isCombat(_itemId) || player.isCombatFlagEquipped())
 			{
 				return;
 			}

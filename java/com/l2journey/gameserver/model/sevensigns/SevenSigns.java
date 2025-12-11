@@ -1594,11 +1594,7 @@ public class SevenSigns
 		{
 			return true;
 		}
-		if ((itemId > 7997) && (itemId < 8008))
-		{
-			return true;
-		}
-		if ((itemId > 7940) && (itemId < 7951))
+		if (((itemId > 7997) && (itemId < 8008)) || ((itemId > 7940) && (itemId < 7951)))
 		{
 			return true;
 		}
@@ -1628,11 +1624,7 @@ public class SevenSigns
 		{
 			return true;
 		}
-		if ((itemId > 7950) && (itemId < 7971))
-		{
-			return true;
-		}
-		if ((itemId > 8007) && (itemId < 8028))
+		if (((itemId > 7950) && (itemId < 7971)) || ((itemId > 8007) && (itemId < 8028)))
 		{
 			return true;
 		}

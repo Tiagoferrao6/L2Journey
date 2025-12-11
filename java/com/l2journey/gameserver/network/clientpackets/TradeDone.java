@@ -89,13 +89,7 @@ public class TradeDone extends ClientPacket
 				return;
 			}
 			
-			if ((player.getInstanceId() != trade.getPartner().getInstanceId()) && (player.getInstanceId() != -1))
-			{
-				player.cancelActiveTrade();
-				return;
-			}
-			
-			if (player.calculateDistance3D(trade.getPartner()) > 150)
+			if (((player.getInstanceId() != trade.getPartner().getInstanceId()) && (player.getInstanceId() != -1)) || (player.calculateDistance3D(trade.getPartner()) > 150))
 			{
 				player.cancelActiveTrade();
 				return;

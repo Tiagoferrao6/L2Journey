@@ -187,11 +187,7 @@ public class ArmorSet
 		{
 			return false;
 		}
-		if (!_head.isEmpty() && !_head.contains(head))
-		{
-			return false;
-		}
-		if (!_gloves.isEmpty() && !_gloves.contains(gloves))
+		if ((!_head.isEmpty() && !_head.contains(head)) || (!_gloves.isEmpty() && !_gloves.contains(gloves)))
 		{
 			return false;
 		}

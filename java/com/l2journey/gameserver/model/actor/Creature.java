@@ -682,26 +682,35 @@ public abstract class Creature extends WorldObject
 		}
 		else
 		{
-			final CreatureAI ai = hasAI() ? getAI() : null;
-			final Intention intention = ai != null ? ai.getIntention() : null;
-			final WorldObject target = ((intention == Intention.ATTACK) || (intention == Intention.FOLLOW)) ? _target : null;
-			if (target != null)
+			// When on geodata path, always send MoveToLocation with waypoint coordinates
+			// This ensures client shows NPC following the calculated path, not going through walls
+			if (isOnGeodataPath())
 			{
-				if (target != this)
-				{
-					broadcastPacket(new MoveToPawn(this, target, getAI().getClientMovingToPawnOffset()));
-				}
-				else
-				{
-					broadcastPacket(new MoveToLocation(this));
-				}
+				broadcastPacket(new MoveToLocation(this));
 			}
 			else
 			{
-				final WorldRegion region = getWorldRegion();
-				if (((region != null) && region.areNeighborsActive()))
+				final CreatureAI ai = hasAI() ? getAI() : null;
+				final Intention intention = ai != null ? ai.getIntention() : null;
+				final WorldObject target = ((intention == Intention.ATTACK) || (intention == Intention.FOLLOW)) ? _target : null;
+				if (target != null)
 				{
-					broadcastPacket(new MoveToLocation(this));
+					if (target != this)
+					{
+						broadcastPacket(new MoveToPawn(this, target, getAI().getClientMovingToPawnOffset()));
+					}
+					else
+					{
+						broadcastPacket(new MoveToLocation(this));
+					}
+				}
+				else
+				{
+					final WorldRegion region = getWorldRegion();
+					if (((region != null) && region.areNeighborsActive()))
+					{
+						broadcastPacket(new MoveToLocation(this));
+					}
 				}
 			}
 		}
@@ -1573,25 +1582,10 @@ public abstract class Creature extends WorldObject
 				for (Creature obj : World.getInstance().getVisibleObjectsInRange(this, Creature.class, maxRadius))
 				{
 					// Skip main target.
-					if (obj == target)
-					{
-						continue;
-					}
-					
 					// Skip dead or fake dead target.
-					if (obj.isAlikeDead())
-					{
-						continue;
-					}
-					
 					// Check if target is auto attackable.
-					if (!obj.isAutoAttackable(this))
-					{
-						continue;
-					}
-					
 					// Check if target is within attack angle.
-					if (Math.abs(calculateDirectionTo(obj) - headingAngle) > physicalAttackAngle)
+					if ((obj == target) || obj.isAlikeDead() || !obj.isAutoAttackable(this) || (Math.abs(calculateDirectionTo(obj) - headingAngle) > physicalAttackAngle))
 					{
 						continue;
 					}
@@ -2657,12 +2651,8 @@ public abstract class Creature extends WorldObject
 							return;
 						}
 						// Don't call npcs who are already doing some action (e.g. attacking, casting).
-						if ((called.getAI().getIntention() != Intention.IDLE) && (called.getAI().getIntention() != Intention.ACTIVE))
-						{
-							return;
-						}
 						// Don't call npcs who aren't in the same clan.
-						if (!template.isClan(called.getTemplate().getClans()))
+						if (((called.getAI().getIntention() != Intention.IDLE) && (called.getAI().getIntention() != Intention.ACTIVE)) || !template.isClan(called.getTemplate().getClans()))
 						{
 							return;
 						}
@@ -3932,12 +3922,7 @@ public abstract class Creature extends WorldObject
 	
 	protected void broadcastModifiedStats(List<Stat> stats)
 	{
-		if (!isSpawned())
-		{
-			return;
-		}
-		
-		if ((stats == null) || stats.isEmpty())
+		if (!isSpawned() || (stats == null) || stats.isEmpty())
 		{
 			return;
 		}
@@ -4107,12 +4092,7 @@ public abstract class Creature extends WorldObject
 	 */
 	public boolean isOnGeodataPath(MoveData move)
 	{
-		if (move.onGeodataPathIndex == -1)
-		{
-			return false;
-		}
-		
-		if (move.onGeodataPathIndex == (move.geoPath.size() - 1))
+		if ((move.onGeodataPathIndex == -1) || (move.onGeodataPathIndex == (move.geoPath.size() - 1)))
 		{
 			return false;
 		}
@@ -4426,9 +4406,18 @@ public abstract class Creature extends WorldObject
 		}
 		
 		// Prevent non playables teleporting to another ground layer while moving.
+		// Only apply if the destination Z is significantly different AND the creature would be floating in air.
+		// This allows natural ramp/slope movement while preventing layer teleportation.
 		if (!isPlayer() && !isFloating && (Math.abs(move.zDestination - zPrev) > 300))
 		{
-			move.zDestination = zPrev;
+			// Check if destination Z is valid ground level at that position
+			final int groundZ = GeoData.getInstance().getHeight(move.xDestination, move.yDestination, move.zDestination);
+			// If destination Z is close to ground level, it's likely a valid slope - allow it
+			// If destination Z is far from ground level, it's likely a layer issue - prevent it
+			if (Math.abs(groundZ - move.zDestination) > 100)
+			{
+				move.zDestination = zPrev;
+			}
 		}
 		
 		// Target collision should be subtracted from current distance.
@@ -4796,7 +4785,9 @@ public abstract class Creature extends WorldObject
 				}
 				
 				// Pathfinding checks.
-				final boolean usePathfinding = !isPlayer() || (isPlayer() && isInsideZone(ZoneId.PEACE));
+				// Players use pathfinding only in peace zones.
+				// Monsters (Attackable) use pathfinding only when in combat (attacking or being attacked).
+				final boolean usePathfinding = (isPlayer() && isInsideZone(ZoneId.PEACE)) || (isAttackable() && isInCombat());
 				
 				if (!directMove && ((originalDistance - distance) > 30) && !isAfraid() && !isInVehicle && usePathfinding)
 				{
@@ -5532,17 +5523,7 @@ public abstract class Creature extends WorldObject
 	
 	public boolean isInsidePeaceZone(WorldObject attacker, WorldObject target)
 	{
-		if ((target == null) || !((target.isPlayable() || target.isFakePlayer()) && attacker.isPlayable()))
-		{
-			return false;
-		}
-		
-		if (isInTownWarEvent())
-		{
-			return false;
-		}
-		
-		if (InstanceManager.getInstance().getInstance(getInstanceId()).isPvP())
+		if ((target == null) || !((target.isPlayable() || target.isFakePlayer()) && attacker.isPlayable()) || isInTownWarEvent() || InstanceManager.getInstance().getInstance(getInstanceId()).isPvP())
 		{
 			return false;
 		}

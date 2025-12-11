@@ -366,13 +366,8 @@ public class ControllableMobAI extends AttackableAI
 		}
 		
 		// Check if the target isn't invulnerable
-		if (target.isInvul() || target.isAlikeDead())
-		{
-			return false;
-		}
-		
 		// Spawn protection (only against mobs)
-		if (target.isPlayer() && target.asPlayer().isSpawnProtected())
+		if (target.isInvul() || target.isAlikeDead() || (target.isPlayer() && target.asPlayer().isSpawnProtected()))
 		{
 			return false;
 		}
