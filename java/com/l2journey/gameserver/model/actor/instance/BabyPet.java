@@ -319,13 +319,8 @@ public class BabyPet extends Pet
 						
 						// If owner already have the buff, continue.
 						final BuffInfo buffInfo = owner.getEffectList().getBuffInfoByAbnormalType(skill.getAbnormalType());
-						if ((buffInfo != null) && (skill.getAbnormalLevel() <= buffInfo.getSkill().getAbnormalLevel()))
-						{
-							continue;
-						}
-						
 						// If owner have the buff blocked, continue.
-						if ((owner.getEffectList().getBlockedAbnormalTypes() != null) && owner.getEffectList().getBlockedAbnormalTypes().contains(skill.getAbnormalType()))
+						if (((buffInfo != null) && (skill.getAbnormalLevel() <= buffInfo.getSkill().getAbnormalLevel())) || ((owner.getEffectList().getBlockedAbnormalTypes() != null) && owner.getEffectList().getBlockedAbnormalTypes().contains(skill.getAbnormalType())))
 						{
 							continue;
 						}

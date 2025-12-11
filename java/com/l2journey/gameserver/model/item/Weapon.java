@@ -410,25 +410,13 @@ public class Weapon extends ItemTemplate
 		
 		// Trigger only if both are good or bad magic.
 		
-		
 		// No Trigger if not Magic Skill
 		if ((trigger.isBad() != onMagicSkill.isBad()) || (!trigger.isMagic() && !onMagicSkill.isMagic()) || trigger.isToggle())
 		{
 			return;
 		}
 		
-		if (caster.getAI().getCastTarget() != target)
-		{
-			return;
-		}
-		
-		if ((_skillsOnMagicCondition != null) && !_skillsOnMagicCondition.test(caster, target, onMagicSkill))
-		{
-			// Chance not met
-			return;
-		}
-		
-		if (!onMagicSkill.checkCondition(caster, target, false))
+		if ((caster.getAI().getCastTarget() != target) || ((_skillsOnMagicCondition != null) && !_skillsOnMagicCondition.test(caster, target, onMagicSkill)) || !onMagicSkill.checkCondition(caster, target, false))
 		{
 			// Skill condition not met
 			return;

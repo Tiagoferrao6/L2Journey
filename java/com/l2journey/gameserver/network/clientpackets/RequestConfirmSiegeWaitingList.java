@@ -63,13 +63,8 @@ public class RequestConfirmSiegeWaitingList extends ClientPacket
 		}
 		
 		final Castle castle = CastleManager.getInstance().getCastleById(_castleId);
-		if (castle == null)
-		{
-			return;
-		}
-		
 		// Check if leader of the clan who owns the castle?
-		if ((castle.getOwnerId() != player.getClanId()) || (!player.isClanLeader()))
+		if ((castle == null) || (castle.getOwnerId() != player.getClanId()) || (!player.isClanLeader()))
 		{
 			return;
 		}

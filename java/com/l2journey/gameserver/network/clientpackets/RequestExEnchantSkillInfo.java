@@ -65,12 +65,7 @@ public class RequestExEnchantSkillInfo extends ClientPacket
 		}
 		
 		final Skill skill = SkillData.getInstance().getSkill(_skillId, _skillLevel);
-		if ((skill == null) || (skill.getId() != _skillId))
-		{
-			return;
-		}
-		
-		if (EnchantSkillGroupsData.getInstance().getSkillEnchantmentBySkillId(_skillId) == null)
+		if ((skill == null) || (skill.getId() != _skillId) || (EnchantSkillGroupsData.getInstance().getSkillEnchantmentBySkillId(_skillId) == null))
 		{
 			return;
 		}

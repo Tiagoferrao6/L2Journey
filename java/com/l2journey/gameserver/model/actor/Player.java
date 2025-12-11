@@ -1,7 +1,3 @@
-package com.l2journey.gameserver.model.actor;
-
-import com.l2journey.gameserver.pathfinding.AbstractNodeLoc;
-import com.l2journey.gameserver.pathfinding.geonodes.GeoNodeLoc;
 /*
  * Copyright (c) 2025 L2Journey Project
  * 
@@ -30,6 +26,7 @@ import com.l2journey.gameserver.pathfinding.geonodes.GeoNodeLoc;
  * applicable..
  * 
  */
+package com.l2journey.gameserver.model.actor;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -356,6 +353,36 @@ import com.l2journey.gameserver.network.serverpackets.TradeOtherDone;
 import com.l2journey.gameserver.network.serverpackets.TradeStart;
 import com.l2journey.gameserver.network.serverpackets.UserInfo;
 import com.l2journey.gameserver.network.serverpackets.ValidateLocation;
+import com.l2journey.gameserver.pathfinding.AbstractNodeLoc;
+import com.l2journey.gameserver.pathfinding.geonodes.GeoNodeLoc;
+/*
+ * Copyright (c) 2025 L2Journey Project
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * 
+ * ---
+ * 
+ * Portions of this software are derived from the L2JMobius Project, 
+ * shared under the MIT License. The original license terms are preserved where 
+ * applicable..
+ * 
+ */
 import com.l2journey.gameserver.taskmanagers.AttackStanceTaskManager;
 import com.l2journey.gameserver.taskmanagers.AutoPlayTaskManager;
 import com.l2journey.gameserver.taskmanagers.AutoUseTaskManager;
@@ -375,7 +402,7 @@ public class Player extends Playable
 {
 	// Debug path para geodata (AdminDebug)
 	private List<Location> _geoPath = null;
-
+	
 	// Character Skill SQL String Definitions:
 	private static final String RESTORE_SKILLS_FOR_CHAR = "SELECT skill_id,skill_level FROM character_skills WHERE charId=? AND class_index=?";
 	private static final String UPDATE_CHARACTER_SKILL_LEVEL = "UPDATE character_skills SET skill_level=? WHERE skill_id=? AND charId=? AND class_index=?";
@@ -915,11 +942,11 @@ public class Player extends Playable
 		// Create a Radar object
 		_radar = new Radar(this);
 		startVitalityTask();
-
+		
 		// Inicializa path de debug geodata
 		_geoPath = null;
 	}
-
+	
 	/**
 	 * Define o path de debug de geodata para este player (AdminDebug).
 	 * @param path Lista de Location representando o path calculado.
@@ -928,7 +955,7 @@ public class Player extends Playable
 	{
 		_geoPath = path;
 	}
-
+	
 	/**
 	 * Retorna o path de debug de geodata deste player (AdminDebug).
 	 * @return Lista de Location representando o path, ou null se não definido.
@@ -937,10 +964,14 @@ public class Player extends Playable
 	public List<AbstractNodeLoc> getGeoPath()
 	{
 		if (_geoPath == null)
+		{
 			return null;
+		}
 		List<AbstractNodeLoc> geoList = new ArrayList<>();
 		for (Location loc : _geoPath)
+		{
 			geoList.add(new GeoNodeLoc((short) loc.getX(), (short) loc.getY(), (short) loc.getZ()));
+		}
 		return geoList;
 	}
 	
@@ -1758,13 +1789,8 @@ public class Player extends Playable
 		
 		// If target isn't a player, is self.
 		final Player targetPlayer = target.asPlayer();
-		if ((targetPlayer == null) || (targetPlayer == this))
-		{
-			return false;
-		}
-		
 		// If target isn't on same siege or not on same state, not friends.
-		if ((targetPlayer.getSiegeSide() != _siegeSide) || (_siegeState != targetPlayer.getSiegeState()))
+		if ((targetPlayer == null) || (targetPlayer == this) || (targetPlayer.getSiegeSide() != _siegeSide) || (_siegeState != targetPlayer.getSiegeState()))
 		{
 			return false;
 		}
@@ -1832,13 +1858,8 @@ public class Player extends Playable
 	public void revalidateZone(boolean force)
 	{
 		// Cannot validate if not in a world region (happens during teleport)
-		if (getWorldRegion() == null)
-		{
-			return;
-		}
-		
 		// This function is called too often from movement code.
-		if (!force && (calculateDistance3D(_lastZoneValidateLocation) < 100))
+		if ((getWorldRegion() == null) || (!force && (calculateDistance3D(_lastZoneValidateLocation) < 100)))
 		{
 			return;
 		}
@@ -2288,13 +2309,8 @@ public class Player extends Playable
 	public void useEquippableItem(Item item, boolean abortAttack)
 	{
 		// Check if the item is null.
-		if (item == null)
-		{
-			return;
-		}
-		
 		// Check if the item is owned by this player.
-		if (item.getOwnerId() != getObjectId())
+		if ((item == null) || (item.getOwnerId() != getObjectId()))
 		{
 			return;
 		}
@@ -4038,12 +4054,7 @@ public class Player extends Playable
 		}
 		
 		// Pet is summoned and not the item that summoned the pet AND not the buggle from strider you're mounting
-		if ((hasSummon() && (_summon.getControlObjectId() == objectId)) || (_mountObjectID == objectId))
-		{
-			return null;
-		}
-		
-		if (_activeEnchantItemId == objectId)
+		if ((hasSummon() && (_summon.getControlObjectId() == objectId)) || (_mountObjectID == objectId) || (_activeEnchantItemId == objectId))
 		{
 			return null;
 		}
@@ -5649,13 +5660,8 @@ public class Player extends Playable
 		}
 		
 		// Olympiad support
-		if (isInOlympiadMode() || killedPlayer.isInOlympiadMode())
-		{
-			return;
-		}
-		
 		// Duel support
-		if (isInDuel() && killedPlayer.isInDuel())
+		if (isInOlympiadMode() || killedPlayer.isInOlympiadMode() || (isInDuel() && killedPlayer.isInDuel()))
 		{
 			return;
 		}
@@ -5831,12 +5837,7 @@ public class Player extends Playable
 	public void updatePvPStatus(Creature target)
 	{
 		final Player targetPlayer = target.asPlayer();
-		if (targetPlayer == null)
-		{
-			return;
-		}
-		
-		if (this == targetPlayer)
+		if ((targetPlayer == null) || (this == targetPlayer))
 		{
 			return;
 		}
@@ -6546,19 +6547,11 @@ public class Player extends Playable
 		}
 		
 		// Don't allow disarming a cursed weapon
-		if (isCursedWeaponEquipped())
-		{
-			return false;
-		}
+		
 		
 		// Don't allow disarming a Combat Flag or Territory Ward.
-		if (_combatFlagEquippedId)
-		{
-			return false;
-		}
-		
 		// Don't allow disarming if the weapon is force equip.
-		if (wpn.getWeaponItem().isForceEquip())
+		if (isCursedWeaponEquipped() || _combatFlagEquippedId || wpn.getWeaponItem().isForceEquip())
 		{
 			return false;
 		}
@@ -7844,13 +7837,8 @@ public class Player extends Playable
 						
 						final Skill skill = info.getSkill();
 						// Do not save heals.
-						if (skill.getAbnormalType() == AbnormalType.LIFE_FORCE_OTHERS)
-						{
-							continue;
-						}
-						
 						// Toggles are skipped, unless they are necessary to be always on.
-						if (skill.isToggle() && !Config.ALT_STORE_TOGGLES)
+						if ((skill.getAbnormalType() == AbnormalType.LIFE_FORCE_OTHERS) || (skill.isToggle() && !Config.ALT_STORE_TOGGLES))
 						{
 							continue;
 						}
@@ -8736,13 +8724,8 @@ public class Player extends Playable
 	@Override
 	public boolean isAutoAttackable(Creature attacker)
 	{
-		if (attacker == null)
-		{
-			return false;
-		}
-		
 		// Invisible GM players should not be attackable.
-		if (isInvisible() && isGM())
+		if ((attacker == null) || (isInvisible() && isGM()))
 		{
 			return false;
 		}
@@ -9399,12 +9382,7 @@ public class Player extends Playable
 			return false;
 		}
 		
-		if (!target.isPlayable())
-		{
-			return true;
-		}
-		
-		if (isInTownWarEvent())
+		if (!target.isPlayable() || isInTownWarEvent())
 		{
 			return true;
 		}
@@ -9929,13 +9907,7 @@ public class Player extends Playable
 		
 		if (hasEnteredWorld())
 		{
-			if (isInvisible() && hide)
-			{
-				// Already hiding.
-				return false;
-			}
-			
-			if (!isInvisible() && !hide)
+			if ((isInvisible() && hide) || (!isInvisible() && !hide))
 			{
 				// Already visible.
 				return false;
@@ -10548,12 +10520,7 @@ public class Player extends Playable
 		
 		try
 		{
-			if ((getTotalSubClasses() == Config.MAX_SUBCLASS) || (classIndex == 0))
-			{
-				return false;
-			}
-			
-			if (getSubClasses().containsKey(classIndex))
+			if ((getTotalSubClasses() == Config.MAX_SUBCLASS) || (classIndex == 0) || getSubClasses().containsKey(classIndex))
 			{
 				return false;
 			}
@@ -11639,12 +11606,7 @@ public class Player extends Playable
 		}
 		
 		// Pet is summoned and not the item that summoned the pet AND not the buggle from strider you're mounting
-		if ((hasSummon() && (_summon.getControlObjectId() == objectId)) || (_mountObjectID == objectId))
-		{
-			return false;
-		}
-		
-		if (_activeEnchantItemId == objectId)
+		if ((hasSummon() && (_summon.getControlObjectId() == objectId)) || (_mountObjectID == objectId) || (_activeEnchantItemId == objectId))
 		{
 			return false;
 		}
@@ -12150,7 +12112,7 @@ public class Player extends Playable
 		}
 		
 		PlayerAutoSaveTaskManager.getInstance().remove(this);
-
+		
 		// Flush final de counters de achievements antes de remover o player
 		try
 		{
@@ -12597,7 +12559,13 @@ public class Player extends Playable
 		// Ends fishing
 		if (win)
 		{
-			try { getCounters().onFishCaught(); } catch (Exception e) { }
+			try
+			{
+				getCounters().onFishCaught();
+			}
+			catch (Exception e)
+			{
+			}
 		}
 		broadcastPacket(new ExFishingEnd(win, this));
 		sendPacket(SystemMessageId.YOU_REEL_YOUR_LINE_IN_AND_STOP_FISHING);
@@ -12797,12 +12765,7 @@ public class Player extends Playable
 	
 	public void startFameTask(long delay, int fameFixRate)
 	{
-		if (!Config.FAME_SYSTEM_ENABLED)
-		{
-			return;
-		}
-		
-		if ((getLevel() < 40) || (getPlayerClass().level() < 2))
+		if (!Config.FAME_SYSTEM_ENABLED || (getLevel() < 40) || (getPlayerClass().level() < 2))
 		{
 			return;
 		}
@@ -13812,17 +13775,7 @@ public class Player extends Playable
 	
 	public boolean isAllowedToEnchantSkills()
 	{
-		if (_subclassLock)
-		{
-			return false;
-		}
-		
-		if (isTransformed() || isInStance())
-		{
-			return false;
-		}
-		
-		if (AttackStanceTaskManager.getInstance().hasAttackStanceTask(this))
+		if (_subclassLock || isTransformed() || isInStance() || AttackStanceTaskManager.getInstance().hasAttackStanceTask(this))
 		{
 			return false;
 		}
@@ -14139,14 +14092,8 @@ public class Player extends Playable
 		}
 		
 		final int deltaZ = getZ() - z;
-		if (deltaZ <= getBaseTemplate().getSafeFallHeight())
-		{
-			_fallingTimestamp = 0;
-			return false;
-		}
-		
 		// If there is no geodata loaded for the place we are, client Z correction might cause falling damage.
-		if (!GeoData.getInstance().hasGeo(getX(), getY()))
+		if ((deltaZ <= getBaseTemplate().getSafeFallHeight()) || !GeoData.getInstance().hasGeo(getX(), getY()))
 		{
 			_fallingTimestamp = 0;
 			return false;
@@ -14435,24 +14382,14 @@ public class Player extends Playable
 			}
 			else if (isInParty() && target.isInParty())
 			{
-				if (getParty() == target.getParty())
-				{
-					return false;
-				}
-				
-				if (((getParty().getCommandChannel() != null) || (target.getParty().getCommandChannel() != null)) && (getParty().getCommandChannel() == target.getParty().getCommandChannel()))
+				if ((getParty() == target.getParty()) || (((getParty().getCommandChannel() != null) || (target.getParty().getCommandChannel() != null)) && (getParty().getCommandChannel() == target.getParty().getCommandChannel())))
 				{
 					return false;
 				}
 			}
 			else if ((getClan() != null) && (target.getClan() != null))
 			{
-				if (getClanId() == target.getClanId())
-				{
-					return false;
-				}
-				
-				if (((getAllyId() > 0) || (target.getAllyId() > 0)) && (getAllyId() == target.getAllyId()))
+				if ((getClanId() == target.getClanId()) || (((getAllyId() > 0) || (target.getAllyId() > 0)) && (getAllyId() == target.getAllyId())))
 				{
 					return false;
 				}

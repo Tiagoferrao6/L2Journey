@@ -48,7 +48,7 @@ import com.l2journey.gameserver.util.LinePointIterator;
 import com.l2journey.gameserver.util.Util;
 
 /**
- * @author -Nemesiss-, FBIagent, kinghanker
+ * @author -Nemesiss-, FBIagent
  */
 public class GeoData implements IGeoDriver
 {
@@ -731,19 +731,9 @@ public class GeoData implements IGeoDriver
 			Direction dir = GeoUtils.computeDirection(prevX, prevY, curX, curY);
 			
 			// Verificação rigorosa de direção
-			if (!canMoveToDirection(prevX, prevY, prevZ, dir))
-			{
-				return false;
-			}
-			
 			// Verificar colisão na posição atual
-			if (hasCollisionAt(getWorldX(curX), getWorldY(curY), curZ, instanceId))
-			{
-				return false;
-			}
-			
 			// Verificação adicional de altura para movimento válido
-			if (Math.abs(curZ - prevZ) > MAX_STEP_HEIGHT)
+			if (!canMoveToDirection(prevX, prevY, prevZ, dir) || hasCollisionAt(getWorldX(curX), getWorldY(curY), curZ, instanceId) || (Math.abs(curZ - prevZ) > MAX_STEP_HEIGHT))
 			{
 				return false;
 			}
@@ -777,13 +767,8 @@ public class GeoData implements IGeoDriver
 		}
 		
 		// Verificar se está em uma célula bloqueada
-		if (isBlockedCell(geoX, geoY, z))
-		{
-			return true;
-		}
-		
 		// Verificar se há doors na posição
-		if (DoorData.getInstance().checkIfDoorsBetween(x, y, z, x, y, z, instanceId, false))
+		if (isBlockedCell(geoX, geoY, z) || DoorData.getInstance().checkIfDoorsBetween(x, y, z, x, y, z, instanceId, false))
 		{
 			return true;
 		}

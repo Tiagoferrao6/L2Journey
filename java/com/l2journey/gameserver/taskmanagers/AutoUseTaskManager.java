@@ -180,11 +180,7 @@ public class AutoUseTaskManager
 					BUFFS: for (Integer skillId : player.getAutoUseSettings().getAutoBuffs())
 					{
 						// Fixes start area issue.
-						
-						
 						// Already casting.
-						
-						
 						// Attacking.
 						// Player is teleporting.
 						if (isInPeaceZone || player.isCastingNow() || player.isAttackingNow() || player.isTeleporting())

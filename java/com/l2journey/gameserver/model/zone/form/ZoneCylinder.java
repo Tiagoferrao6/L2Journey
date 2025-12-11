@@ -83,22 +83,14 @@ public class ZoneCylinder extends ZoneForm
 		// Collision on any side of the rectangle?
 		if ((_x > ax1) && (_x < ax2))
 		{
-			if (Math.abs(_y - ay2) < _rad)
-			{
-				return true;
-			}
-			if (Math.abs(_y - ay1) < _rad)
+			if ((Math.abs(_y - ay2) < _rad) || (Math.abs(_y - ay1) < _rad))
 			{
 				return true;
 			}
 		}
 		if ((_y > ay1) && (_y < ay2))
 		{
-			if (Math.abs(_x - ax2) < _rad)
-			{
-				return true;
-			}
-			if (Math.abs(_x - ax1) < _rad)
+			if ((Math.abs(_x - ax2) < _rad) || (Math.abs(_x - ax1) < _rad))
 			{
 				return true;
 			}

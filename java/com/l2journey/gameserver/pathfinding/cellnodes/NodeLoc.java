@@ -172,22 +172,7 @@ public class NodeLoc extends AbstractNodeLoc
 		}
 		
 		final NodeLoc other = (NodeLoc) obj;
-		if (_x != other._x)
-		{
-			return false;
-		}
-		
-		if (_y != other._y)
-		{
-			return false;
-		}
-		
-		if (_goNorth != other._goNorth)
-		{
-			return false;
-		}
-		
-		if (_goEast != other._goEast)
+		if ((_x != other._x) || (_y != other._y) || (_goNorth != other._goNorth) || (_goEast != other._goEast))
 		{
 			return false;
 		}

@@ -169,14 +169,8 @@ public class RequestPostAttachment extends ClientPacket
 		}
 		
 		// Item Max Limit Check
-		if (!player.getInventory().validateCapacity(slots))
-		{
-			player.sendPacket(SystemMessageId.YOU_COULD_NOT_RECEIVE_BECAUSE_YOUR_INVENTORY_IS_FULL);
-			return;
-		}
-		
 		// Weight limit Check
-		if (!player.getInventory().validateWeight(weight))
+		if (!player.getInventory().validateCapacity(slots) || !player.getInventory().validateWeight(weight))
 		{
 			player.sendPacket(SystemMessageId.YOU_COULD_NOT_RECEIVE_BECAUSE_YOUR_INVENTORY_IS_FULL);
 			return;

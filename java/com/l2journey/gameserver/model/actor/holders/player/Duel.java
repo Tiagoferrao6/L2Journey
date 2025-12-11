@@ -911,8 +911,6 @@ public class Duel
 		else if (!_partyDuel)
 		{
 			// Duel was interrupted e.g.: player was attacked by mobs / other players
-			
-			
 			// Are the players too far apart?
 			// Did one of the players engage in PvP combat?
 			if ((_playerA.getDuelState() == DUELSTATE_INTERRUPTED) || (_playerB.getDuelState() == DUELSTATE_INTERRUPTED) || !_playerA.isInsideRadius2D(_playerB, 1600) || isDuelistInPvp(true))

@@ -220,8 +220,6 @@ public abstract class AbstractRefinePacket extends ClientPacket
 	 */
 	protected static boolean isValid(Player player, Item item, Item refinerItem, Item gemStones)
 	{
-		
-		
 		// GemStones must belong to owner
 		// .. and located in inventory
 		if (!isValid(player, item, refinerItem) || (gemStones.getOwnerId() != player.getObjectId()) || (gemStones.getItemLocation() != ItemLocation.INVENTORY))
@@ -233,12 +231,8 @@ public abstract class AbstractRefinePacket extends ClientPacket
 		final LifeStone ls = _lifeStones.get(refinerItem.getId());
 		
 		// Check for item id
-		if (getGemStoneId(grade) != gemStones.getId())
-		{
-			return false;
-		}
 		// Count must be greater or equal of required number
-		if (getGemStoneCount(grade, ls.getGrade()) > gemStones.getCount())
+		if ((getGemStoneId(grade) != gemStones.getId()) || (getGemStoneCount(grade, ls.getGrade()) > gemStones.getCount()))
 		{
 			return false;
 		}
@@ -256,7 +250,6 @@ public abstract class AbstractRefinePacket extends ClientPacket
 	protected static boolean isValid(Player player, Item item, Item refinerItem)
 	{
 		
-		
 		// Item must belong to owner
 		// Lifestone must be located in inventory
 		if (!isValid(player, item) || (refinerItem.getOwnerId() != player.getObjectId()) || (refinerItem.getItemLocation() != ItemLocation.INVENTORY))
@@ -265,12 +258,8 @@ public abstract class AbstractRefinePacket extends ClientPacket
 		}
 		
 		final LifeStone ls = _lifeStones.get(refinerItem.getId());
-		if (ls == null)
-		{
-			return false;
-		}
 		// weapons can't be augmented with accessory ls
-		if ((item.getTemplate() instanceof Weapon) && (ls.getGrade() == GRADE_ACC))
+		if ((ls == null) || ((item.getTemplate() instanceof Weapon) && (ls.getGrade() == GRADE_ACC)))
 		{
 			return false;
 		}
@@ -297,25 +286,12 @@ public abstract class AbstractRefinePacket extends ClientPacket
 	protected static boolean isValid(Player player, Item item)
 	{
 		
-		
 		// Item must belong to owner
 		if (!isValid(player) || (item.getOwnerId() != player.getObjectId()) || item.isAugmented() || item.isHeroItem())
 		{
 			return false;
 		}
-		if (item.isShadowItem())
-		{
-			return false;
-		}
-		if (item.isCommonItem())
-		{
-			return false;
-		}
-		if (item.isEtcItem())
-		{
-			return false;
-		}
-		if (item.isTimeLimitedItem())
+		if (item.isShadowItem() || item.isCommonItem() || item.isEtcItem() || item.isTimeLimitedItem())
 		{
 			return false;
 		}

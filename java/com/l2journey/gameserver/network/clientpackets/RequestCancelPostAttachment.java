@@ -153,13 +153,7 @@ public class RequestCancelPostAttachment extends ClientPacket
 			}
 		}
 		
-		if (!player.getInventory().validateCapacity(slots))
-		{
-			player.sendPacket(SystemMessageId.YOU_COULD_NOT_CANCEL_RECEIPT_BECAUSE_YOUR_INVENTORY_IS_FULL);
-			return;
-		}
-		
-		if (!player.getInventory().validateWeight(weight))
+		if (!player.getInventory().validateCapacity(slots) || !player.getInventory().validateWeight(weight))
 		{
 			player.sendPacket(SystemMessageId.YOU_COULD_NOT_CANCEL_RECEIPT_BECAUSE_YOUR_INVENTORY_IS_FULL);
 			return;

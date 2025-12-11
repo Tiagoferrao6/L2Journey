@@ -1874,8 +1874,6 @@ public class AttackableAI extends CreatureAI
 	 */
 	private static boolean checkSkillCastConditions(Attackable caster, Skill skill)
 	{
-		
-		
 		// Not enough MP.
 		// Character is in "skill disabled" mode.
 		if ((caster.isCastingNow() && !skill.isSimultaneousCast()) || (skill.getMpConsume() >= caster.getCurrentMp()) || caster.isSkillDisabled(skill))
