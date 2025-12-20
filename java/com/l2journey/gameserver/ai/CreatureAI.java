@@ -1041,13 +1041,20 @@ public class CreatureAI extends AbstractAI
 			// Caller should be Playable and thinkAttack/thinkCast/thinkInteract/thinkPickUp
 			if (isFollowing())
 			{
-				// allow larger hit range when the target is moving (check is run only once per second)
+				// When clearly outside extended range, just continue following.
 				if (!_actor.isInsideRadius2D(target, offsetWithCollision + 100))
 				{
 					return true;
 				}
 				
+				// Inside extended range - allow attack with tolerance.
 				stopFollow();
+				return false;
+			}
+			
+			// Not following - check if already inside extended range to allow attack.
+			if (_actor.isInsideRadius2D(target, offsetWithCollision + 100))
+			{
 				return false;
 			}
 			
