@@ -58,7 +58,7 @@ public class DynamicExpRateData implements IXmlReader
 	@Override
 	public void load()
 	{
-		parseDatapackFile("config/admin/DynamicExpRates.xml");
+		parseDatapackFile("config/admin/dynamicexprates.xml");
 	}
 	
 	@Override

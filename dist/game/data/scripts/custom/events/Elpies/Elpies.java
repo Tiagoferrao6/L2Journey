@@ -99,7 +99,7 @@ public class Elpies extends Event
 			@Override
 			public void load()
 			{
-				parseDatapackFile("Config/events/ElpiesSchedule.xml");
+				parseDatapackFile("Config/events/elpiesschedule.xml");
 			}
 			
 			@Override

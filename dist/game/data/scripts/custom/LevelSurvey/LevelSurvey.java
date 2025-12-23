@@ -70,7 +70,7 @@ public class LevelSurvey extends Quest implements IXmlReader
 	public void load()
 	{
 		LEVEL_REWARDS.clear();
-		parseFile(new File("config/player/LevelSurvey.xml"));
+		parseFile(new File("config/player/levelsurvey.xml"));
 		
 		if (SYSTEM_ENABLED)
 		{
