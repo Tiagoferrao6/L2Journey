@@ -76,6 +76,7 @@ public class RequestActionUse extends ClientPacket
 {
 	private static final int SIN_EATER_ID = 12564;
 	private static final int SWITCH_STANCE_ID = 6054;
+	
 	private static final NpcStringId[] NPC_STRINGS =
 	{
 		NpcStringId.USING_A_SPECIAL_SKILL_HERE_COULD_TRIGGER_A_BLOODBATH,
@@ -480,22 +481,22 @@ public class RequestActionUse extends ClientPacket
 			}
 			case 1003: // Wind Hatchling/Strider - Wild Stun
 			{
-				useSkill(player, "PhysicalSpecial", true);
+				useSkill(player, 4710, true);
 				break;
 			}
 			case 1004: // Wind Hatchling/Strider - Wild Defense
 			{
-				useSkill(player, "Buff", player, true);
+				useSkill(player, 4711, player, true);
 				break;
 			}
 			case 1005: // Star Hatchling/Strider - Bright Burst
 			{
-				useSkill(player, "DDMagic", true);
+				useSkill(player, 4712, true);
 				break;
 			}
 			case 1006: // Star Hatchling/Strider - Bright Heal
 			{
-				useSkill(player, "Heal", player, true);
+				useSkill(player, 4713, player, true);
 				break;
 			}
 			case 1007: // Feline Queen - Blessing of Queen
@@ -605,22 +606,22 @@ public class RequestActionUse extends ClientPacket
 			}
 			case 1041: // Great Wolf - Bite Attack
 			{
-				useSkill(player, "Skill01", true);
+				useSkill(player, 5442, true);
 				break;
 			}
 			case 1042: // Great Wolf - Maul
 			{
-				useSkill(player, "Skill03", true);
+				useSkill(player, 5444, true);
 				break;
 			}
 			case 1043: // Great Wolf - Cry of the Wolf
 			{
-				useSkill(player, "Skill02", true);
+				useSkill(player, 5443, true);
 				break;
 			}
 			case 1044: // Great Wolf - Awakening
 			{
-				useSkill(player, "Skill04", true);
+				useSkill(player, 5445, true);
 				break;
 			}
 			case 1045: // Great Wolf - Howl
@@ -1098,6 +1099,22 @@ public class RequestActionUse extends ClientPacket
 			return;
 		}
 		
+		// Handle Switch State skill directly without executing it
+		if (skillId == SWITCH_STANCE_ID)
+		{
+			if (summon instanceof BabyPet)
+			{
+				((BabyPet) summon).switchMode();
+			}
+			return;
+		}
+		
+		if ((summon instanceof BabyPet) && ((BabyPet) summon).isInSupportMode() && (skillId != SWITCH_STANCE_ID))
+		{
+			player.sendPacket(SystemMessageId.A_PET_ON_AUXILIARY_MODE_CANNOT_USE_SKILLS);
+			return;
+		}
+		
 		int level = 0;
 		if (summon.isPet())
 		{
@@ -1113,11 +1130,6 @@ public class RequestActionUse extends ClientPacket
 			summon.setTarget(target);
 			summon.useMagic(SkillData.getInstance().getSkill(skillId, level), _ctrlPressed, _shiftPressed);
 		}
-		
-		if (skillId == SWITCH_STANCE_ID)
-		{
-			summon.switchMode();
-		}
 	}
 	
 	private void useSkill(Player player, String skillName, WorldObject target, boolean pet)
@@ -1125,12 +1137,6 @@ public class RequestActionUse extends ClientPacket
 		final Summon summon = player.getSummon();
 		if (!validateSummon(player, summon, pet) || !canControl(player, summon))
 		{
-			return;
-		}
-		
-		if ((summon instanceof BabyPet) && !((BabyPet) summon).isInSupportMode())
-		{
-			player.sendPacket(SystemMessageId.A_PET_ON_AUXILIARY_MODE_CANNOT_USE_SKILLS);
 			return;
 		}
 		
@@ -1143,23 +1149,23 @@ public class RequestActionUse extends ClientPacket
 		final Skill skill = skillHolder.getSkill();
 		if (skill != null)
 		{
-			summon.setTarget(target);
-			summon.useMagic(skill, _ctrlPressed, _shiftPressed);
+			// Handle Switch State skill directly without executing it
 			if (skill.getId() == SWITCH_STANCE_ID)
 			{
-				summon.switchMode();
+				if (summon instanceof BabyPet)
+				{
+					((BabyPet) summon).switchMode();
+				}
+				return;
 			}
+						
+			summon.setTarget(target);
+			summon.useMagic(skill, _ctrlPressed, _shiftPressed);
 		}
 	}
 	
 	private boolean canControl(Player player, Summon summon)
 	{
-		if ((summon instanceof BabyPet) && !((BabyPet) summon).isInSupportMode())
-		{
-			player.sendPacket(SystemMessageId.A_PET_ON_AUXILIARY_MODE_CANNOT_USE_SKILLS);
-			return false;
-		}
-		
 		if (summon.isPet() && ((summon.getLevel() - player.getLevel()) > 20))
 		{
 			player.sendPacket(SystemMessageId.YOUR_PET_IS_TOO_HIGH_LEVEL_TO_CONTROL);

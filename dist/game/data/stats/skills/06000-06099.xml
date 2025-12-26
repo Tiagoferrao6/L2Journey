@@ -634,10 +634,9 @@
 	</skill>
 	<skill id="6054" levels="1" name="Switch State">
 		<!-- The pet's condition changes. -->
-		<set name="operateType" val="T" />
-		<set name="targetType" val="SELF" />
-		<set name="abnormalVisualEffect" val="NONE" />
-		<set name="magicLevel" val="85" />
+	    <set name="icon" val="icon.action113" />
+	    <set name="operateType" val="T" />
+	    <set name="targetType" val="SELF" />
 	</skill>
 	<skill id="6055" levels="1" name="Report Status">
 		<!-- You are under suspicion of using this program illegally. Your actions have been restricted. -->

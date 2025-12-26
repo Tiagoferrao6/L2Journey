@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 L2jMobius
+ * Copyright (c) 2025 L2Journey Project
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -8,15 +8,23 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  * 
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
- * IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * 
+ * ---
+ * 
+ * Portions of this software are derived from the L2JMobius Project, 
+ * shared under the MIT License. The original license terms are preserved where 
+ * applicable..
+ * 
  */
 package com.l2journey.gameserver.model.actor.instance;
 
@@ -30,7 +38,7 @@ import com.l2journey.gameserver.ai.Intention;
 import com.l2journey.gameserver.data.enums.CategoryType;
 import com.l2journey.gameserver.data.xml.PetDataTable;
 import com.l2journey.gameserver.data.xml.SkillData;
-import com.l2journey.gameserver.model.PetData.PetSkillLearn;
+import com.l2journey.gameserver.model.PetData;
 import com.l2journey.gameserver.model.actor.Creature;
 import com.l2journey.gameserver.model.actor.Player;
 import com.l2journey.gameserver.model.actor.enums.creature.InstanceType;
@@ -40,13 +48,12 @@ import com.l2journey.gameserver.model.item.instance.Item;
 import com.l2journey.gameserver.model.skill.BuffInfo;
 import com.l2journey.gameserver.model.skill.Skill;
 import com.l2journey.gameserver.model.skill.holders.SkillHolder;
-import com.l2journey.gameserver.network.SystemMessageId;
-import com.l2journey.gameserver.network.serverpackets.SystemMessage;
 
 public class BabyPet extends Pet
 {
 	private static final int BUFF_CONTROL = 5771;
 	private static final int AWAKENING = 5753;
+	private static final int SWITCH_STATE = 6054;
 	
 	protected List<SkillHolder> _buffs = null;
 	protected SkillHolder _majorHeal = null;
@@ -88,17 +95,38 @@ public class BabyPet extends Pet
 		super.onSpawn();
 		
 		double healPower = 0;
-		for (PetSkillLearn psl : PetDataTable.getInstance().getPetData(getId()).getAvailableSkills())
+		
+		final PetData petData = PetDataTable.getInstance().getPetData(getId());
+		if (petData == null)
 		{
+			startCastTask();
+			return;
+		}
+		
+		if (_buffs != null)
+		{
+			_buffs.clear();
+		}
+		
+		for (PetData.PetSkillLearn psl : petData.getAvailableSkills())
+		{
+			final int minLevel = psl.getMinLevel();
+			final int currentLevel = getLevel();
+			
+			if (currentLevel < minLevel)
+			{
+				continue;
+			}
+			
 			final int id = psl.getSkillId();
-			final int level = PetDataTable.getInstance().getPetData(getId()).getAvailableLevel(id, getLevel());
+			final int level = petData.getAvailableLevel(id, currentLevel);
 			if (level == 0)
 			{
 				continue;
 			}
 			
 			final Skill skill = SkillData.getInstance().getSkill(id, level);
-			if ((skill == null) || (skill.getId() == BUFF_CONTROL) || (skill.getId() == AWAKENING))
+			if ((skill == null) || (skill.getId() == BUFF_CONTROL) || (skill.getId() == AWAKENING) || (skill.getId() == SWITCH_STATE))
 			{
 				continue;
 			}
@@ -113,14 +141,12 @@ public class BabyPet extends Pet
 			{
 				if (healPower == 0)
 				{
-					// set both heal types to the same skill
 					_majorHeal = new SkillHolder(skill);
 					_minorHeal = _majorHeal;
 					healPower = skill.getPower();
 				}
 				else
 				{
-					// another heal skill found - search for most powerful
 					if (skill.getPower() > healPower)
 					{
 						_majorHeal = new SkillHolder(skill);
@@ -195,6 +221,18 @@ public class BabyPet extends Pet
 	public void switchMode()
 	{
 		_bufferMode = !_bufferMode;
+		
+		if (getOwner() != null)
+		{
+			if (_bufferMode)
+			{
+				getOwner().sendMessage("Pet in support mode");
+			}
+			else
+			{
+				getOwner().sendMessage("Support mode disabled");
+			}
+		}
 	}
 	
 	/**
@@ -229,10 +267,6 @@ public class BabyPet extends Pet
 		
 		setTarget(getOwner());
 		useMagic(skill, false, false);
-		
-		final SystemMessage msg = new SystemMessage(SystemMessageId.YOUR_PET_USES_S1);
-		msg.addSkillName(skill);
-		sendPacket(msg);
 		
 		// calling useMagic changes the follow status, if the babypet actually casts
 		// (as opposed to failing due some factors, such as too low MP, etc).
@@ -317,13 +351,32 @@ public class BabyPet extends Pet
 							continue;
 						}
 						
-						// If owner already have the buff, continue.
-						final BuffInfo buffInfo = owner.getEffectList().getBuffInfoByAbnormalType(skill.getAbnormalType());
-						// If owner have the buff blocked, continue.
-						if (((buffInfo != null) && (skill.getAbnormalLevel() <= buffInfo.getSkill().getAbnormalLevel())) || ((owner.getEffectList().getBlockedAbnormalTypes() != null) && owner.getEffectList().getBlockedAbnormalTypes().contains(skill.getAbnormalType())))
+						// Check if skill requires items and if pet has them
+						if ((skill.getItemConsumeId() > 0) && (skill.getItemConsumeCount() > 0))
+						{
+							if (_baby.getInventory().getInventoryItemCount(skill.getItemConsumeId(), -1) < skill.getItemConsumeCount())
+							{
+								// Item missing, skip this skill
+								continue;
+							}
+						}
+						
+						// Check if owner already has the buff
+						final BuffInfo ownerBuffInfo = owner.getEffectList().getBuffInfoByAbnormalType(skill.getAbnormalType());
+						// Check if owner has the buff blocked
+						if (((ownerBuffInfo != null) && (skill.getAbnormalLevel() <= ownerBuffInfo.getSkill().getAbnormalLevel())) || ((owner.getEffectList().getBlockedAbnormalTypes() != null) && owner.getEffectList().getBlockedAbnormalTypes().contains(skill.getAbnormalType())))
 						{
 							continue;
 						}
+						
+						// Check if pet itself already has the buff
+						final BuffInfo petBuffInfo = _baby.getEffectList().getBuffInfoByAbnormalType(skill.getAbnormalType());
+						// Check if pet has the buff blocked
+						if (((petBuffInfo != null) && (skill.getAbnormalLevel() <= petBuffInfo.getSkill().getAbnormalLevel())) || ((_baby.getEffectList().getBlockedAbnormalTypes() != null) && _baby.getEffectList().getBlockedAbnormalTypes().contains(skill.getAbnormalType())))
+						{
+							continue;
+						}
+						
 						_currentBuffs.add(skill);
 					}
 				}

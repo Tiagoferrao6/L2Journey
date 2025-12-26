@@ -106,17 +106,17 @@ public class ItemSkillsTemplate implements IItemHandler
 					return false;
 				}
 				
-				// Send message to the master.
-				if (playable.isPet())
-				{
-					final SystemMessage sm = new SystemMessage(SystemMessageId.YOUR_PET_USES_S1);
-					sm.addSkillName(itemSkill);
-					playable.sendPacket(sm);
-				}
-				
 				if (itemSkill.isSimultaneousCast() || ((item.getTemplate().hasImmediateEffect() || item.getTemplate().hasExImmediateEffect()) && itemSkill.isStatic()))
 				{
 					playable.doSimultaneousCast(itemSkill);
+					
+					// Send message to the master only if skill was used successfully
+					if (playable.isPet())
+					{
+						final SystemMessage sm = new SystemMessage(SystemMessageId.YOUR_PET_USES_S1);
+						sm.addSkillName(itemSkill);
+						playable.sendPacket(sm);
+					}
 				}
 				else
 				{
@@ -124,6 +124,14 @@ public class ItemSkillsTemplate implements IItemHandler
 					if (!playable.useMagic(itemSkill, forceUse, false))
 					{
 						return false;
+					}
+					
+					// Send message to the master only if skill was used successfully
+					if (playable.isPet())
+					{
+						final SystemMessage sm = new SystemMessage(SystemMessageId.YOUR_PET_USES_S1);
+						sm.addSkillName(itemSkill);
+						playable.sendPacket(sm);
 					}
 				}
 				

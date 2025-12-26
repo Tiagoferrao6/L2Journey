@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 L2jMobius
+ * Copyright (c) 2025 L2Journey Project
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -8,15 +8,23 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  * 
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
- * IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * 
+ * ---
+ * 
+ * Portions of this software are derived from the L2JMobius Project, 
+ * shared under the MIT License. The original license terms are preserved where 
+ * applicable..
+ * 
  */
 package com.l2journey.gameserver.model.actor.instance;
 
@@ -79,6 +87,9 @@ import com.l2journey.gameserver.network.serverpackets.StopMove;
 import com.l2journey.gameserver.network.serverpackets.SystemMessage;
 import com.l2journey.gameserver.taskmanagers.DecayTaskManager;
 
+/**
+ * @author KingHanker
+ */
 public class Pet extends Summon
 {
 	protected static final Logger LOGGER_PET = Logger.getLogger(Pet.class.getName());
@@ -140,6 +151,7 @@ public class Pet extends Summon
 		{
 			_leveldata = PetDataTable.getInstance().getPetLevelData(getTemplate().getId(), getStat().getLevel());
 		}
+		
 		return _leveldata;
 	}
 	
@@ -149,12 +161,56 @@ public class Pet extends Summon
 		{
 			_data = PetDataTable.getInstance().getPetData(getTemplate().getId());
 		}
+		
 		return _data;
 	}
 	
 	public void setPetData(PetLevelData value)
 	{
 		_leveldata = value;
+	}
+	
+	/**
+	 * Loads available skills for the pet based on its current level. This method should be called whenever the pet is summoned or levels up.
+	 */
+	private void loadPetSkills()
+	{
+		final PetData pd = getPetData();
+		if (pd == null)
+		{
+			return;
+		}
+		
+		final int currentLevel = getLevel();
+		
+		for (PetData.PetSkillLearn psl : pd.getAvailableSkills())
+		{
+			final int minLevel = psl.getMinLevel();
+			final int skillId = psl.getSkillId();
+			
+			if (currentLevel < minLevel)
+			{
+				continue;
+			}
+			
+			final int skillLevel = pd.getAvailableLevel(skillId, currentLevel);
+			if (skillLevel > 0)
+			{
+				final Skill skill = SkillData.getInstance().getSkill(skillId, skillLevel);
+				if (skill != null)
+				{
+					addSkill(skill);
+				}
+			}
+		}
+	}
+	
+	@Override
+	public void onSpawn()
+	{
+		super.onSpawn();
+		
+		loadPetSkills();
 	}
 	
 	/**
@@ -175,7 +231,9 @@ public class Pet extends Summon
 					stopFeed();
 					return;
 				}
+				
 				setCurrentFed(_curFed > getFeedConsume() ? _curFed - getFeedConsume() : 0);
+				
 				broadcastStatusUpdate();
 				
 				final Set<Integer> foodIds = getPetData().getFood();
@@ -195,6 +253,7 @@ public class Pet extends Summon
 					{
 						sendPacket(SystemMessageId.THERE_IS_NOT_MUCH_TIME_REMAINING_UNTIL_THE_HUNTING_HELPER_PET_LEAVES);
 					}
+					
 					return;
 				}
 				
@@ -257,8 +316,10 @@ public class Pet extends Summon
 				pet.getStat().setLevel(availableLevel);
 				pet.getStat().setExp(pet.getStat().getExpForLevel(availableLevel));
 			}
+			
 			World.getInstance().addPet(owner.getObjectId(), pet);
 		}
+		
 		return pet;
 	}
 	
@@ -311,6 +372,7 @@ public class Pet extends Summon
 		{
 			sendPacket(new ExChangeNpcState(getObjectId(), 0x65));
 		}
+		
 		_curFed = num > getMaxFed() ? getMaxFed() : num;
 	}
 	
@@ -327,6 +389,7 @@ public class Pet extends Summon
 				return item;
 			}
 		}
+		
 		return null;
 	}
 	
@@ -379,6 +442,7 @@ public class Pet extends Summon
 			{
 				sendPacket(SystemMessageId.INCORRECT_ITEM_COUNT_2);
 			}
+			
 			return false;
 		}
 		
@@ -402,6 +466,7 @@ public class Pet extends Summon
 				sm.addItemName(item.getId());
 			}
 		}
+		
 		return true;
 	}
 	
@@ -424,6 +489,7 @@ public class Pet extends Summon
 			{
 				sendPacket(SystemMessageId.INCORRECT_ITEM_COUNT_2);
 			}
+			
 			return false;
 		}
 		
@@ -446,6 +512,7 @@ public class Pet extends Summon
 				sm = new SystemMessage(SystemMessageId.S1_HAS_DISAPPEARED);
 				sm.addItemName(item.getId());
 			}
+			
 			sendPacket(sm);
 		}
 		
@@ -531,6 +598,7 @@ public class Pet extends Summon
 					smsg = new SystemMessage(SystemMessageId.YOU_HAVE_FAILED_TO_PICK_UP_S1);
 					smsg.addItemName(target);
 				}
+				
 				sendPacket(ActionFailed.STATIC_PACKET);
 				sendPacket(smsg);
 				return;
@@ -637,9 +705,11 @@ public class Pet extends Summon
 		{
 			return false;
 		}
+		
 		stopFeed();
 		sendPacket(SystemMessageId.THE_PET_HAS_BEEN_KILLED_IF_YOU_DON_T_RESURRECT_IT_WITHIN_24_HOURS_THE_PET_S_BODY_WILL_DISAPPEAR_ALONG_WITH_ALL_THE_PET_S_ITEMS);
 		DecayTaskManager.getInstance().add(this);
+		
 		// do not decrease exp if is in duel, arena
 		return true;
 	}
@@ -658,6 +728,7 @@ public class Pet extends Summon
 		{
 			setRunning();
 		}
+		
 		getAI().setIntention(Intention.ACTIVE, null);
 	}
 	
@@ -817,6 +888,7 @@ public class Pet extends Summon
 			{
 				dropit.getDropProtection().protect(getOwner());
 			}
+			
 			LOGGER_PET.finer("Item id to drop: " + dropit.getId() + " amount: " + dropit.getCount());
 			dropit.dropMe(this, getX(), getY(), getZ() + 100);
 		}
@@ -855,6 +927,7 @@ public class Pet extends Summon
 					{
 						pet = new Pet(template, owner, control);
 					}
+					
 					return pet;
 				}
 				
@@ -893,12 +966,14 @@ public class Pet extends Summon
 				
 				pet.setCurrentFed(rs.getInt("fed"));
 			}
+			
 			return pet;
 		}
 		catch (Exception e)
 		{
 			LOGGER_PET.log(Level.WARNING, "Could not restore pet data for owner: " + owner + " - " + e.getMessage(), e);
 		}
+		
 		return null;
 	}
 	
@@ -1025,6 +1100,7 @@ public class Pet extends Summon
 					
 					SummonEffectTable.getInstance().addPetEffect(getControlObjectId(), skill, info.getTime());
 				}
+				
 				ps2.executeBatch();
 			}
 		}
@@ -1082,6 +1158,7 @@ public class Pet extends Summon
 		{
 			return;
 		}
+		
 		_feedTask.cancel(false);
 		_feedTask = null;
 	}
@@ -1188,13 +1265,22 @@ public class Pet extends Summon
 	@Override
 	public int getSkillLevel(int skillId)
 	{
-		if (getKnownSkill(skillId) == null)
+		final Skill knownSkill = getKnownSkill(skillId);
+		if (knownSkill == null)
 		{
 			return 0;
 		}
 		
-		final int level = getLevel();
-		return level > 70 ? 7 + ((level - 70) / 5) : level / 10;
+		// Obtém o PetData para verificar as habilidades disponíveis
+		final PetData pd = getPetData();
+		if (pd != null)
+		{
+			// Usa o método getAvailableLevel do PetData que já verifica o nível mínimo
+			return pd.getAvailableLevel(skillId, getLevel());
+		}
+		
+		// Se não houver PetData, retorna o nível da habilidade conhecida
+		return knownSkill.getLevel();
 	}
 	
 	public void updateRefOwner(Player owner)
@@ -1335,6 +1421,7 @@ public class Pet extends Summon
 		{
 			LOGGER.log(Level.WARNING, "Pet control item null, for pet: " + toString());
 		}
+		
 		super.setName(name);
 	}
 	
@@ -1380,6 +1467,7 @@ public class Pet extends Summon
 		{
 			return isRunning() ? getSwimRunSpeed() : getSwimWalkSpeed();
 		}
+		
 		return isRunning() ? getRunSpeed() : getWalkSpeed();
 	}
 }
