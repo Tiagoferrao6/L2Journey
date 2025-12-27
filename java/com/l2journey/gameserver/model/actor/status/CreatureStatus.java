@@ -271,7 +271,7 @@ public class CreatureStatus
 	{
 		// Get the Max HP of the Creature
 		final int currentHp = (int) _currentHp;
-		final double maxHp = _creature.getMaxHp();
+		final double maxHp = (_creature.isSummon() && _creature.asSummon().getOwner() != null && _creature.asSummon().getOwner().isAffected(EffectFlag.SERVITOR_SHARE)) ? _creature.getMaxHp() : _creature.getMaxRecoverableHp();
 		
 		// Tempfix for updating UserInfo when skills like Final Frenzy and Final Fortress conditions activate.
 		final double thirtyPercent = maxHp * 0.3;
@@ -353,7 +353,7 @@ public class CreatureStatus
 	{
 		// Get the Max MP of the Creature
 		final int currentMp = (int) _currentMp;
-		final int maxMp = _creature.getMaxMp();
+		final double maxMp = (_creature.isSummon() && _creature.asSummon().getOwner() != null && _creature.asSummon().getOwner().isAffected(EffectFlag.SERVITOR_SHARE)) ? _creature.getMaxMp() : _creature.getMaxRecoverableMp();
 		
 		synchronized (this)
 		{
@@ -401,8 +401,8 @@ public class CreatureStatus
 		// Modify the current HP/MP of the Creature and broadcast Server->Client packet StatusUpdate
 		if (!_creature.isDead())
 		{
-			final double maxHp = _creature.isSummon() && _creature.isAffected(EffectFlag.SERVITOR_SHARE) ? _creature.getMaxHp() : _creature.getMaxRecoverableHp();
-			final double maxMp = _creature.isSummon() && _creature.isAffected(EffectFlag.SERVITOR_SHARE) ? _creature.getMaxMp() : _creature.getMaxRecoverableMp();
+			final double maxHp = (_creature.isSummon() && _creature.asSummon().getOwner() != null && _creature.asSummon().getOwner().isAffected(EffectFlag.SERVITOR_SHARE)) ? _creature.getMaxHp() : _creature.getMaxRecoverableHp();
+			final double maxMp = (_creature.isSummon() && _creature.asSummon().getOwner() != null && _creature.asSummon().getOwner().isAffected(EffectFlag.SERVITOR_SHARE)) ? _creature.getMaxMp() : _creature.getMaxRecoverableMp();
 			
 			if ((_currentHp < maxHp) || (_currentMp < maxMp))
 			{

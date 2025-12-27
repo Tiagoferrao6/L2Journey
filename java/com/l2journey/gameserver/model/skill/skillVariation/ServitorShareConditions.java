@@ -44,7 +44,7 @@ public final class ServitorShareConditions
 	 */
 	public static double getMaxServitorRecoverableMp(Creature creature)
 	{
-		return creature.isSummon() && creature.isAffected(EffectFlag.SERVITOR_SHARE) ? creature.getMaxMp() : creature.getMaxRecoverableMp();
+		return (creature.isSummon() && creature.asSummon().getOwner() != null && creature.asSummon().getOwner().isAffected(EffectFlag.SERVITOR_SHARE)) ? creature.getMaxMp() : creature.getMaxRecoverableMp();
 	}
 	
 	/**
@@ -54,6 +54,6 @@ public final class ServitorShareConditions
 	 */
 	public static double getMaxServitorRecoverableHp(Creature creature)
 	{
-		return creature.isSummon() && creature.isAffected(EffectFlag.SERVITOR_SHARE) ? creature.getMaxHp() : creature.getMaxRecoverableHp();
+		return (creature.isSummon() && creature.asSummon().getOwner() != null && creature.asSummon().getOwner().isAffected(EffectFlag.SERVITOR_SHARE)) ? creature.getMaxHp() : creature.getMaxRecoverableHp();
 	}
 }
