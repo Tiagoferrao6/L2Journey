@@ -1365,6 +1365,26 @@ public class EffectList
 	}
 	
 	/**
+	 * Checks if the owner is a player with Servitor Share active and restarts summon regeneration if needed. This is called when effects that modify MAX_HP or MAX_MP are added/removed.
+	 */
+	private void checkServitorRegeneration()
+	{
+		if (_owner.isPlayer())
+		{
+			final Player player = _owner.asPlayer();
+			if (player.isAffected(EffectFlag.SERVITOR_SHARE) && player.hasSummon())
+			{
+				final var summon = player.getSummon();
+				// Check if summon needs regeneration (current HP/MP is below max)
+				if ((summon.getCurrentHp() < summon.getMaxHp()) || (summon.getCurrentMp() < summon.getMaxMp()))
+				{
+					summon.getStatus().startHpMpRegeneration();
+				}
+			}
+		}
+	}
+	
+	/**
 	 * Adds a set of effects to this effect list.
 	 * @param info the buff info
 	 */
@@ -1520,6 +1540,11 @@ public class EffectList
 		info.initializeEffects();
 		// Update effect flags and icons.
 		updateEffectList(true);
+		// Check if servitor regeneration needs to be restarted due to stat changes.
+		if (_owner.isPlayer() && _owner.asPlayer().isAffected(EffectFlag.SERVITOR_SHARE))
+		{
+			checkServitorRegeneration();
+		}
 	}
 	
 	/**
