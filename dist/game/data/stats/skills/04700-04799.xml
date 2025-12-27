@@ -441,6 +441,7 @@
 		<set name="abnormalLevel" val="1" />
 		<set name="abnormalTime" val="30" />
 		<set name="abnormalType" val="ULTIMATE_BUFF" />
+		<set name="abnormalVisualEffect" val="ULTIMATE_DEFENCE" />
 		<set name="activateRate" val="#activateRates" />
 		<set name="coolTime" val="400" />
 		<set name="effectPoint" val="#effectPoints" />

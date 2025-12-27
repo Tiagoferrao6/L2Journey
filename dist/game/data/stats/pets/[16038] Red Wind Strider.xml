@@ -8,7 +8,7 @@
 		<set name="hungry_limit" val="55" />
 		<set name="load" val="54510" />
 		<skills>
-			<!-- s_pet_wild_stun -->
+			<!-- Wild Stun -->
 			<skill minLevel="55" skillId="4710" skillLevel="5" />
 			<skill minLevel="60" skillId="4710" skillLevel="6" />
 			<skill minLevel="65" skillId="4710" skillLevel="6" />
@@ -16,7 +16,7 @@
 			<skill minLevel="75" skillId="4710" skillLevel="8" />
 			<skill minLevel="80" skillId="4710" skillLevel="9" />
 			<skill minLevel="85" skillId="4710" skillLevel="10" />
-			<!-- s_pet_wild_defence -->
+			<!-- Wild Defence -->
 			<skill minLevel="55" skillId="4711" skillLevel="5" />
 			<skill minLevel="60" skillId="4711" skillLevel="6" />
 			<skill minLevel="65" skillId="4711" skillLevel="6" />
@@ -24,7 +24,7 @@
 			<skill minLevel="75" skillId="4711" skillLevel="8" />
 			<skill minLevel="80" skillId="4711" skillLevel="9" />
 			<skill minLevel="85" skillId="4711" skillLevel="10" />
-			<!-- s_pet_strider_roar -->
+			<!-- Strider Roar -->
 			<skill minLevel="60" skillId="5585" skillLevel="1" />
 		</skills>
 		<stats>

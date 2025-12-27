@@ -13,7 +13,6 @@
 			<skill minLevel="60" skillId="5442" skillLevel="2" />
 			<skill minLevel="65" skillId="5442" skillLevel="3" />
 			<skill minLevel="70" skillId="5442" skillLevel="4" />
-
 			<!-- Cry of the Wolf -->
 			<skill minLevel="60" skillId="5443" skillLevel="1" />
 			<skill minLevel="65" skillId="5443" skillLevel="2" />
