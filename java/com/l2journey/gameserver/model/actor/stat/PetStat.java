@@ -106,13 +106,13 @@ public class PetStat extends SummonStat
 		{
 			pet.broadcastPacket(new SocialAction(pet.getObjectId(), SocialAction.LEVEL_UP));
 
-			// Recarrega as skills do pet baseado no novo nível
+			// Reload pet skills based on new level
 			pet.onSpawn();
 
 			final Player owner = pet.getOwner();
 			if (owner != null)
 			{
-				// Se a janela do pet está aberta, força refresh simulando fechamento/reabertura
+				// If pet status window is open, force refresh by simulating close/reopen
 				if (owner.isPetStatusWindowOpen())
 				{
 					owner.sendPacket(new PetDelete(pet.getSummonType(), pet.getObjectId()));

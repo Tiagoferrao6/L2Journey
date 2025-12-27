@@ -4101,9 +4101,9 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Este método retorna uma lista de nós do pathfinding representando o caminho de movimento.<br>
-	 * Se a operação de movimento estiver definida (não nula), retorna o path do campo 'geoPath' do movimento.<br>
-	 * Caso contrário, retorna null.
+	 * This method returns a list of pathfinding nodes representing the movement path.<br>
+	 * If movement operation is set (not null), returns the path from the 'geoPath' field of the movement.<br>
+	 * Otherwise, returns null.
 	 * @return Lista de AbstractNodeLoc representando o caminho, ou null se indefinido.
 	 */
 	public List<AbstractNodeLoc> getGeoPath()

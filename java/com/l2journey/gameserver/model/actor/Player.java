@@ -961,7 +961,7 @@ public class Player extends Playable
 
 	/**
 	 * Retorna o path de debug de geodata deste player (AdminDebug).
-	 * @return Lista de Location representando o path, ou null se não definido.
+	 * @return List of Location representing the path, or null if not set.
 	 */
 	@Override
 	public List<AbstractNodeLoc> getGeoPath()

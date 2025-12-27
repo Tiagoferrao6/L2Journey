@@ -100,12 +100,12 @@ public class ValidatePosition extends ClientPacket
 		}
 		else if (diffSq < 360000) // If too large, messes observation.
 		{
-			if (com.l2journey.Config.COORD_SYNCHRONIZE == -1) // Apenas sincroniza Z
+			if (com.l2journey.Config.COORD_SYNCHRONIZE == -1) // Only synchronize Z
 			{
 				player.setXYZ(realX, realY, _z);
 				return;
 			}
-			if (com.l2journey.Config.COORD_SYNCHRONIZE == 1) // Confia também em X/Y do cliente
+			if (com.l2journey.Config.COORD_SYNCHRONIZE == 1) // Also trust client X/Y
 			{
 				if (!player.isMoving() || (player.getHeading() != _heading))
 				{
@@ -125,7 +125,7 @@ public class ValidatePosition extends ClientPacket
 				player.setHeading(_heading);
 				return;
 			}
-			// COORD_SYNCHRONIZE == 2 ou outro valor: sincronização estrita/geodata
+			// COORD_SYNCHRONIZE == 2 or other value: strict/geodata synchronization
 			if ((diffSq > 250000) || (Math.abs(dz) > 200))
 			{
 				if ((Math.abs(dz) > 200) && (Math.abs(dz) < 1500) && (Math.abs(_z - player.getClientZ()) < 800))

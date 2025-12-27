@@ -2217,7 +2217,7 @@ public class Formulas
 		
 		// Garante que a chance esteja entre os valores minimo e maximo da skill
 		int clampedChance = Math.min(Math.max(chance, skill.getMinChance()), skill.getMaxChance());
-		// Verifica se o número aleatorio e menor que a chance calculada
+		// Check if random number is less than calculated chance
 		return Rnd.get(100) < clampedChance;
 	}
 	
