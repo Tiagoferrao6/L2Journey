@@ -28,13 +28,18 @@
  */
 package handlers.effecthandlers;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
+import com.l2journey.Config;
+import com.l2journey.commons.threads.ThreadPool;
 import com.l2journey.gameserver.model.StatSet;
 import com.l2journey.gameserver.model.actor.Creature;
 import com.l2journey.gameserver.model.conditions.Condition;
 import com.l2journey.gameserver.model.effects.AbstractEffect;
 import com.l2journey.gameserver.model.effects.EffectType;
+import com.l2journey.gameserver.model.skill.BuffInfo;
 import com.l2journey.gameserver.model.skill.Skill;
 import com.l2journey.gameserver.model.skill.skillVariation.CancelRestrictions;
 
@@ -73,7 +78,29 @@ public class DispelAll extends AbstractEffect
 		
 		if ((random < chance) && CancelRestrictions.canTakeCancel(effected))
 		{
+			// Armazena buffs antes de remover se config estiver ativa
+			final List<BuffInfo> removedBuffs = new ArrayList<>();
+			if (Config.RETURN_CANCEL)
+			{
+				removedBuffs.addAll(effected.getEffectList().getEffects());
+			}
+			
 			effected.stopAllEffects();
+			
+			// Agenda retorno dos buffs
+			if (Config.RETURN_CANCEL && !removedBuffs.isEmpty())
+			{
+				ThreadPool.schedule(() ->
+				{
+					for (BuffInfo buff : removedBuffs)
+					{
+						if ((buff != null) && effected.isPlayer() && effected.asPlayer().isOnline() && !effected.isDead())
+						{
+							buff.getSkill().applyEffects(effected, effected);
+						}
+					}
+				}, Config.RETURN_CANCEL_TIME * 1000L);
+			}
 		}
 		else
 		{
@@ -82,6 +109,5 @@ public class DispelAll extends AbstractEffect
 				effected.sendMessage("You resisted the Cancel");
 			}
 		}
-		effected.stopAllEffects();
 	}
 }

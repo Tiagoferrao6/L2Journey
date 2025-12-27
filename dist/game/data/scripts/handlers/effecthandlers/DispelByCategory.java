@@ -28,8 +28,11 @@
  */
 package handlers.effecthandlers;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.l2journey.Config;
+import com.l2journey.commons.threads.ThreadPool;
 import com.l2journey.commons.util.Rnd;
 import com.l2journey.gameserver.model.StatSet;
 import com.l2journey.gameserver.model.actor.Creature;
@@ -86,9 +89,32 @@ public class DispelByCategory extends AbstractEffect
 		if ((Rnd.get(100) < _chance) && CancelRestrictions.canTakeCancel(effected))
 		{
 			final List<BuffInfo> canceled = Formulas.calcCancelStealEffects(effector, effected, skill, _slot, _rate, _max);
+			
+			// Armazena buffs para retorno se config estiver ativa
+			final List<BuffInfo> toRestore = new ArrayList<>();
+			if (Config.RETURN_CANCEL)
+			{
+				toRestore.addAll(canceled);
+			}
+			
 			for (BuffInfo can : canceled)
 			{
 				effected.getEffectList().stopSkillEffects(SkillFinishType.REMOVED, can.getSkill());
+			}
+			
+			// Agenda retorno dos buffs
+			if (Config.RETURN_CANCEL && !toRestore.isEmpty())
+			{
+				ThreadPool.schedule(() ->
+				{
+					for (BuffInfo buff : toRestore)
+					{
+						if ((buff != null) && effected.isPlayer() && effected.asPlayer().isOnline() && !effected.isDead())
+						{
+							buff.getSkill().applyEffects(effected, effected);
+						}
+					}
+				}, Config.RETURN_CANCEL_TIME * 1000L);
 			}
 		}
 		else

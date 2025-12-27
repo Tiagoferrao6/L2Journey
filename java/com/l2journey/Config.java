@@ -1210,6 +1210,8 @@ public class Config
 	public static int ANTIFEED_INTERVAL;
 	public static int PVP_NORMAL_TIME;
 	public static int PVP_PVP_TIME;
+	public static boolean RETURN_CANCEL;
+	public static int RETURN_CANCEL_TIME;
 	
 	// --------------------------------------------------
 	// PvP Announce
@@ -3355,6 +3357,8 @@ public class Config
 		ANTIFEED_INTERVAL = pvpConfig.getInt("AntiFeedInterval", 120) * 1000;
 		PVP_NORMAL_TIME = pvpConfig.getInt("PvPVsNormalTime", 120000);
 		PVP_PVP_TIME = pvpConfig.getInt("PvPVsPvPTime", 60000);
+		RETURN_CANCEL = pvpConfig.getBoolean("ReturnCancel", true);
+		RETURN_CANCEL_TIME = pvpConfig.getInt("ReturnCancelTime", 10);
 	}
 	
 	/**
