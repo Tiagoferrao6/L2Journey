@@ -32,8 +32,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.l2journey.Config;
-import com.l2journey.commons.threads.ThreadPool;
 import com.l2journey.gameserver.model.StatSet;
 import com.l2journey.gameserver.model.actor.Creature;
 import com.l2journey.gameserver.model.conditions.Condition;
@@ -78,29 +76,18 @@ public class DispelAll extends AbstractEffect
 		
 		if ((random < chance) && CancelRestrictions.canTakeCancel(effected))
 		{
-			// Armazena buffs antes de remover se config estiver ativa
+			// Store buffs with remaining time before removal if config is active
 			final List<BuffInfo> removedBuffs = new ArrayList<>();
-			if (Config.RETURN_CANCEL)
+			final List<Integer> remainingTimes = new ArrayList<>();
+			for (BuffInfo buff : effected.getEffectList().getEffects())
 			{
-				removedBuffs.addAll(effected.getEffectList().getEffects());
+				Skill.storeBuffForRestore(buff, removedBuffs, remainingTimes);
 			}
 			
 			effected.stopAllEffects();
 			
-			// Agenda retorno dos buffs
-			if (Config.RETURN_CANCEL && !removedBuffs.isEmpty())
-			{
-				ThreadPool.schedule(() ->
-				{
-					for (BuffInfo buff : removedBuffs)
-					{
-						if ((buff != null) && effected.isPlayer() && effected.asPlayer().isOnline() && !effected.isDead())
-						{
-							buff.getSkill().applyEffects(effected, effected);
-						}
-					}
-				}, Config.RETURN_CANCEL_TIME * 1000L);
-			}
+			// Schedule buff restoration with original remaining time
+			Skill.scheduleBuffRestore(effected, removedBuffs, remainingTimes);
 		}
 		else
 		{

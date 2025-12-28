@@ -23,8 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.l2journey.Config;
-import com.l2journey.commons.threads.ThreadPool;
 import com.l2journey.commons.util.Rnd;
 import com.l2journey.gameserver.model.EffectList;
 import com.l2journey.gameserver.model.StatSet;
@@ -39,7 +37,7 @@ import com.l2journey.gameserver.model.skill.enums.SkillFinishType;
 
 /**
  * Dispel By Slot Probability effect implementation.
- * @author Adry_85, Zoey76
+ * @author Adry_85, Zoey76, KingHanker
  */
 public class DispelBySlotProbability extends AbstractEffect
 {
@@ -90,6 +88,7 @@ public class DispelBySlotProbability extends AbstractEffect
 		
 		final EffectList effectList = effected.getEffectList();
 		final List<BuffInfo> removedBuffs = new ArrayList<>();
+		final List<Integer> remainingTimes = new ArrayList<>();
 		
 		// There is no need to iterate over all buffs,
 		// Just iterate once over all slots to dispel and get the buff with that abnormal if exists,
@@ -112,30 +111,15 @@ public class DispelBySlotProbability extends AbstractEffect
 				
 				if ((toDispel.getSkill().getAbnormalType() == entry.getKey()) && (entry.getValue() >= toDispel.getSkill().getAbnormalLevel()))
 				{
-					// Armazena buff antes de remover se config estiver ativa
-					if (Config.RETURN_CANCEL)
-					{
-						removedBuffs.add(toDispel);
-					}
+					// Store buff with remaining time before removal if config is active
+					Skill.storeBuffForRestore(toDispel, removedBuffs, remainingTimes);
 					
 					effectList.stopSkillEffects(SkillFinishType.REMOVED, entry.getKey());
 				}
 			}
 		}
 		
-		// Agenda retorno dos buffs
-		if (Config.RETURN_CANCEL && !removedBuffs.isEmpty())
-		{
-			ThreadPool.schedule(() ->
-			{
-				for (BuffInfo buff : removedBuffs)
-				{
-					if ((buff != null) && effected.isPlayer() && effected.asPlayer().isOnline() && !effected.isDead())
-					{
-						buff.getSkill().applyEffects(effected, effected);
-					}
-				}
-			}, Config.RETURN_CANCEL_TIME * 1000L);
-		}
+		// Schedule buff restoration with original remaining time
+		Skill.scheduleBuffRestore(effected, removedBuffs, remainingTimes);
 	}
 }

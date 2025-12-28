@@ -41,6 +41,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.l2journey.Config;
+import com.l2journey.commons.threads.ThreadPool;
 import com.l2journey.commons.util.Rnd;
 import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.data.xml.SkillData;
@@ -1407,6 +1408,46 @@ public class Skill
 			final BuffInfo info = new BuffInfo(effector, effector, this);
 			applyEffectScope(EffectScope.PASSIVE, info, false, true);
 			effector.getEffectList().add(info);
+		}
+	}
+	
+	/**
+	 * Stores a buff and its remaining time for later restoration.
+	 * @param buff the BuffInfo to be stored
+	 * @param buffs list where the buff will be added
+	 * @param remainingTimes list where the remaining time will be added
+	 */
+	public static void storeBuffForRestore(BuffInfo buff, List<BuffInfo> buffs, List<Integer> remainingTimes)
+	{
+		if (Config.RETURN_CANCEL && (buff != null))
+		{
+			buffs.add(buff);
+			remainingTimes.add(buff.getTime());
+		}
+	}
+	
+	/**
+	 * Schedules the restoration of cancelled buffs after RETURN_CANCEL_TIME seconds.
+	 * @param effected the target that had buffs removed
+	 * @param buffs list of removed BuffInfo
+	 * @param remainingTimes list with corresponding remaining times in seconds
+	 */
+	public static void scheduleBuffRestore(Creature effected, List<BuffInfo> buffs, List<Integer> remainingTimes)
+	{
+		if (Config.RETURN_CANCEL && !buffs.isEmpty())
+		{
+			ThreadPool.schedule(() ->
+			{
+				for (int i = 0; i < buffs.size(); i++)
+				{
+					final BuffInfo buff = buffs.get(i);
+					final int remainingTime = remainingTimes.get(i);
+					if ((buff != null) && effected.isPlayer() && effected.asPlayer().isOnline() && !effected.isDead())
+					{
+						buff.getSkill().applyEffects(effected, effected, false, remainingTime);
+					}
+				}
+			}, Config.RETURN_CANCEL_TIME * 1000L);
 		}
 	}
 	

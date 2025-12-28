@@ -28,8 +28,11 @@
  */
 package handlers.effecthandlers;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.l2journey.Config;
+import com.l2journey.commons.threads.ThreadPool;
 import com.l2journey.commons.util.Rnd;
 import com.l2journey.gameserver.model.StatSet;
 import com.l2journey.gameserver.model.actor.Creature;
@@ -96,8 +99,22 @@ public class StealAbnormal extends AbstractEffect
 			return;
 		}
 		
+		// Store stolen buffs for restoration to the original owner (effected)
+		final List<BuffInfo> stolenBuffsForRestore = new ArrayList<>();
+		final List<Integer> remainingTimes = new ArrayList<>();
+		
+		// Store buffs that will be given to the stealer (effector) for later removal
+		final List<BuffInfo> buffsGivenToStealer = new ArrayList<>();
+		
 		for (BuffInfo infoToSteal : buffstoSteal)
 		{
+			// Store buff info for later restoration to original owner if config is active
+			if (Config.RETURN_CANCEL)
+			{
+				stolenBuffsForRestore.add(infoToSteal);
+				remainingTimes.add(infoToSteal.getTime());
+			}
+			
 			// Cria um novo BuffInfo invertendo effected e effector.
 			final BuffInfo stolen = new BuffInfo(effected, effector, infoToSteal.getSkill());
 			stolen.setAbnormalTime(infoToSteal.getTime()); // Copia o tempo restante.
@@ -108,6 +125,39 @@ public class StealAbnormal extends AbstractEffect
 			// Remove buff do antigo dono e aplicar ao novo.
 			effected.getEffectList().remove(SkillFinishType.REMOVED, infoToSteal);
 			effector.getEffectList().add(stolen);
+			
+			// Store the buff given to stealer for later removal if config is active
+			if (Config.RETURN_CANCEL)
+			{
+				buffsGivenToStealer.add(stolen);
+			}
+		}
+		
+		// Schedule restoration of stolen buffs to original owner and removal from stealer
+		if (Config.RETURN_CANCEL && !stolenBuffsForRestore.isEmpty())
+		{
+			ThreadPool.schedule(() ->
+			{
+				// Restore buffs to the original owner (effected)
+				for (int i = 0; i < stolenBuffsForRestore.size(); i++)
+				{
+					final BuffInfo buff = stolenBuffsForRestore.get(i);
+					final int remainingTime = remainingTimes.get(i);
+					if ((buff != null) && effected.isPlayer() && effected.asPlayer().isOnline() && !effected.isDead())
+					{
+						buff.getSkill().applyEffects(effected, effected, false, remainingTime);
+					}
+				}
+				
+				// Remove stolen buffs from the stealer (effector)
+				for (BuffInfo stolenBuff : buffsGivenToStealer)
+				{
+					if ((stolenBuff != null) && effector.isPlayer() && effector.asPlayer().isOnline())
+					{
+						effector.getEffectList().remove(SkillFinishType.REMOVED, stolenBuff);
+					}
+				}
+			}, Config.RETURN_CANCEL_TIME * 1000L);
 		}
 		
 		sendSuccessMessage(effector, effected);
