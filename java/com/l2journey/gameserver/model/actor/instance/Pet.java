@@ -208,6 +208,9 @@ public class Pet extends Summon
 		super.onSpawn();
 		
 		loadPetSkills();
+		
+		// Enable pet actions and update shortcuts after skills are loaded
+		sendPetActionList();
 	}
 	
 	/**

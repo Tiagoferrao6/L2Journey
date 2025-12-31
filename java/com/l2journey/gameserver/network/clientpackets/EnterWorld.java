@@ -446,8 +446,15 @@ public class EnterWorld extends ClientPacket
 		// Send Shortcuts
 		player.sendPacket(new ShortcutInit(player));
 		
-		// Send Action list
-		player.sendPacket(ExBasicActionList.STATIC_PACKET);
+		// Send Action list - disable only the player's pet actions if no summon
+		if (player.hasSummon())
+		{
+			player.sendPacket(ExBasicActionList.STATIC_PACKET);
+		}
+		else
+		{
+			player.sendPacket(ExBasicActionList.getPacketWithoutPlayerPetActions(player));
+		}
 		
 		// Send Dye Information
 		player.sendPacket(new HennaInfo(player));

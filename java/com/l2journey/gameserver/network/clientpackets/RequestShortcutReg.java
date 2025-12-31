@@ -28,11 +28,15 @@
  */
 package com.l2journey.gameserver.network.clientpackets;
 
+import com.l2journey.gameserver.data.PetActionData;
 import com.l2journey.gameserver.model.actor.Player;
+import com.l2journey.gameserver.model.actor.Summon;
 import com.l2journey.gameserver.model.actor.enums.player.ShortcutType;
 import com.l2journey.gameserver.model.actor.holders.player.Shortcut;
 import com.l2journey.gameserver.network.serverpackets.ShortcutRegister;
-
+/**
+ * @author KingHanker
+ */
 public class RequestShortcutReg extends ClientPacket
 {
 	private ShortcutType _type;
@@ -64,7 +68,50 @@ public class RequestShortcutReg extends ClientPacket
 			return;
 		}
 		
-		final Shortcut sc = new Shortcut(_slot, _page, _type, _id, _level, _characterType);
+		// Determine character type based on shortcut type and ID
+		int characterType = _characterType;
+		
+		if (_type == ShortcutType.SKILL)
+		{
+			// For skills, check if it belongs to player or pet
+			if (player.hasSummon())
+			{
+				final Summon pet = player.getSummon();
+				final boolean petHasSkill = pet.getKnownSkill(_id) != null;
+				final boolean playerHasSkill = player.getKnownSkill(_id) != null;
+				
+				if (petHasSkill && !playerHasSkill)
+				{
+					characterType = 2; // Pet skill
+				}
+				else
+				{
+					characterType = 1; // Player skill
+				}
+			}
+			else if (characterType == 0)
+			{
+				characterType = 1; // Default to player when no pet
+			}
+		}
+		else if (_type == ShortcutType.ACTION)
+		{
+			// Check if this action ID is a pet/servitor action using PetActionData
+			if (PetActionData.isPetAction(_id))
+			{
+				characterType = 2; // Pet action
+			}
+			else if (characterType == 0)
+			{
+				characterType = 1; // Player action
+			}
+		}
+		else if (characterType == 0)
+		{
+			characterType = 1; // Default to player for other shortcuts
+		}
+		
+		final Shortcut sc = new Shortcut(_slot, _page, _type, _id, _level, characterType);
 		player.registerShortcut(sc);
 		player.sendPacket(new ShortcutRegister(sc));
 	}

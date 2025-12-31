@@ -97,6 +97,9 @@ public class Servitor extends Summon implements Runnable
 		{
 			_summonLifeTask = ThreadPool.scheduleAtFixedRate(this, 0, 5000);
 		}
+		
+		// Enable servitor actions and update shortcuts
+		sendPetActionList();
 	}
 	
 	@Override

@@ -28,12 +28,18 @@
  */
 package com.l2journey.gameserver.network.serverpackets;
 
+import java.util.Arrays;
+import java.util.Set;
+
 import com.l2journey.commons.network.WritableBuffer;
+import com.l2journey.gameserver.data.PetActionData;
+import com.l2journey.gameserver.model.actor.Player;
+import com.l2journey.gameserver.model.actor.Summon;
 import com.l2journey.gameserver.network.GameClient;
 import com.l2journey.gameserver.network.ServerPackets;
 
 /**
- * @author KenM
+ * @author KenM, KingHanker
  */
 public class ExBasicActionList extends ServerPacket
 {
@@ -99,7 +105,87 @@ public class ExBasicActionList extends ServerPacket
 		}
 	}
 	
+	// Action list without pet/servitor actions (basic actions and skill actions)
+	// Basic pet: 15-19 (Attack, Stop, Unsummon, Move, Follow)
+	// Basic servitor: 21-23 (Attack, Stop, Follow), 52-54 (Unsummon, Move, Move)
+	// Skill actions: 1000-1099 and 5000-5015
+	public static final int[] NO_PET_ACTION_LIST;
+	static
+	{
+		NO_PET_ACTION_LIST = Arrays.stream(DEFAULT_ACTION_LIST).filter(id ->
+		{
+			// Filter out basic pet actions (15-19)
+			if ((id >= 15) && (id <= 19))
+			{
+				return false;
+			}
+			// Filter out basic servitor actions (21-23)
+			if ((id >= 21) && (id <= 23))
+			{
+				return false;
+			}
+			// Filter out additional servitor actions (52-54)
+			if ((id >= 52) && (id <= 54))
+			{
+				return false;
+			}
+			// Filter out pet skill actions (1000-1099)
+			if ((id >= 1000) && (id < 1100))
+			{
+				return false;
+			}
+			// Filter out baby pet actions (5000-5015)
+			if ((id >= 5000) && (id < 5016))
+			{
+				return false;
+			}
+			return true;
+		}).toArray();
+	}
+	
 	public static final ExBasicActionList STATIC_PACKET = new ExBasicActionList(DEFAULT_ACTION_LIST);
+	public static final ExBasicActionList NO_PET_PACKET = new ExBasicActionList(NO_PET_ACTION_LIST);
+	
+	/**
+	 * Creates a dynamic action list that excludes all pet/servitor actions. Used when pet is unsummoned - blocks basic pet actions and all skill actions.
+	 * @param player the player (unused but kept for API compatibility)
+	 * @return ExBasicActionList without any pet actions
+	 */
+	public static ExBasicActionList getPacketWithoutPlayerPetActions(Player player)
+	{
+		// Simply return the NO_PET_PACKET which excludes all pet/servitor actions
+		return NO_PET_PACKET;
+	}
+	
+	/**
+	 * Creates a dynamic action list based on the summon's available skills. Player actions (0-73) are always included. Pet/Servitor actions are filtered based on summon's NPC ID and skills.
+	 * @param summon the summon to check skills for
+	 * @return ExBasicActionList with only available actions
+	 */
+	public static ExBasicActionList getPacketForSummon(Summon summon)
+	{
+		if (summon == null)
+		{
+			return NO_PET_PACKET;
+		}
+		
+		// Get available pet actions based on summon's NPC ID and skills
+		final Set<Integer> petActions = PetActionData.getAvailableActions(summon);
+		
+		// Build action list: player actions (0-73) + pet actions
+		final int[] actionList = Arrays.stream(DEFAULT_ACTION_LIST).filter(id ->
+		{
+			// Always include player actions
+			if (id < 74)
+			{
+				return true;
+			}
+			// Only include if summon has this specific action
+			return petActions.contains(id);
+		}).toArray();
+		
+		return new ExBasicActionList(actionList);
+	}
 	
 	private final int[] _actionIds;
 	

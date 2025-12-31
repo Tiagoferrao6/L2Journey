@@ -46,6 +46,9 @@ import com.l2journey.gameserver.network.serverpackets.ExAutoSoulShot;
 import com.l2journey.gameserver.network.serverpackets.ShortcutInit;
 import com.l2journey.gameserver.network.serverpackets.ShortcutRegister;
 
+/**
+ * @author KingHanker
+ */
 public class Shortcuts
 {
 	private static final Logger LOGGER = Logger.getLogger(Shortcuts.class.getName());
@@ -101,7 +104,7 @@ public class Shortcuts
 		}
 		
 		try (Connection con = DatabaseFactory.getConnection();
-			PreparedStatement statement = con.prepareStatement("REPLACE INTO character_shortcuts (charId,slot,page,type,shortcut_id,level,class_index) values(?,?,?,?,?,?,?)"))
+			PreparedStatement statement = con.prepareStatement("REPLACE INTO character_shortcuts (charId,slot,page,type,shortcut_id,level,class_index,character_type) values(?,?,?,?,?,?,?,?)"))
 		{
 			statement.setInt(1, _owner.getObjectId());
 			statement.setInt(2, shortcut.getSlot());
@@ -110,6 +113,7 @@ public class Shortcuts
 			statement.setInt(5, shortcut.getId());
 			statement.setInt(6, shortcut.getLevel());
 			statement.setInt(7, _owner.getClassIndex());
+			statement.setInt(8, shortcut.getCharacterType());
 			statement.execute();
 		}
 		catch (Exception e)
@@ -177,7 +181,7 @@ public class Shortcuts
 	{
 		_shortcuts.clear();
 		try (Connection con = DatabaseFactory.getConnection();
-			PreparedStatement statement = con.prepareStatement("SELECT charId, slot, page, type, shortcut_id, level FROM character_shortcuts WHERE charId=? AND class_index=?"))
+			PreparedStatement statement = con.prepareStatement("SELECT charId, slot, page, type, shortcut_id, level, character_type FROM character_shortcuts WHERE charId=? AND class_index=?"))
 		{
 			statement.setInt(1, _owner.getObjectId());
 			statement.setInt(2, _owner.getClassIndex());
@@ -188,7 +192,8 @@ public class Shortcuts
 				{
 					final int slot = rset.getInt("slot");
 					final int page = rset.getInt("page");
-					_shortcuts.put(slot + (page * MAX_SHORTCUTS_PER_BAR), new Shortcut(slot, page, ShortcutType.values()[rset.getInt("type")], rset.getInt("shortcut_id"), rset.getInt("level"), 1));
+					final int characterType = rset.getInt("character_type");
+					_shortcuts.put(slot + (page * MAX_SHORTCUTS_PER_BAR), new Shortcut(slot, page, ShortcutType.values()[rset.getInt("type")], rset.getInt("shortcut_id"), rset.getInt("level"), characterType > 0 ? characterType : 1));
 				}
 			}
 		}
@@ -230,7 +235,7 @@ public class Shortcuts
 		{
 			if ((sc.getId() == skillId) && (sc.getType() == ShortcutType.SKILL))
 			{
-				final Shortcut newsc = new Shortcut(sc.getSlot(), sc.getPage(), sc.getType(), sc.getId(), skillLevel, 1);
+				final Shortcut newsc = new Shortcut(sc.getSlot(), sc.getPage(), sc.getType(), sc.getId(), skillLevel, sc.getCharacterType());
 				_owner.sendPacket(new ShortcutRegister(newsc));
 				_owner.registerShortcut(newsc);
 			}

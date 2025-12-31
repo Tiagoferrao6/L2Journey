@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS `character_shortcuts` (
   `shortcut_id` decimal(16) ,
   `level` varchar(4) ,
   `class_index` int(1) NOT NULL DEFAULT '0',
+  `character_type` INT NOT NULL DEFAULT 1,
   PRIMARY KEY (`charId`,`slot`,`page`,`class_index`),
   KEY `shortcut_id` (`shortcut_id`)
 ) DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
