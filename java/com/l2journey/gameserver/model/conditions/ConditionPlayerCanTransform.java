@@ -64,6 +64,11 @@ public class ConditionPlayerCanTransform extends Condition
 			player.sendPacket(SystemMessageId.YOU_CANNOT_POLYMORPH_WHILE_RIDING_A_PET);
 			canTransform = false;
 		}
+		else if (player.hasSummon())
+		{
+			player.sendMessage("You cannot transform while you have a pet or summon active.");
+			canTransform = false;
+		}
 		else if (player.isRegisteredOnEvent())
 		{
 			player.sendMessage("You cannot transform while registered on an event.");

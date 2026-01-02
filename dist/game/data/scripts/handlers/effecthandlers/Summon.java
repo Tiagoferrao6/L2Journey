@@ -66,7 +66,7 @@ public class Summon extends AbstractEffect
 	@Override
 	public void onStart(Creature effector, Creature effected, Skill skill)
 	{
-		if (!effector.isPlayer() || effector.asPlayer().hasSummon())
+		if (!effector.isPlayer() || effector.asPlayer().hasSummon() || effector.asPlayer().isTransformed())
 		{
 			return;
 		}

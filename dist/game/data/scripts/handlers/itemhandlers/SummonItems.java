@@ -73,6 +73,12 @@ public class SummonItems extends ItemSkillsTemplate
 			return false;
 		}
 		
+		if (player.isTransformed())
+		{
+			player.sendMessage("You cannot summon a pet while transformed.");
+			return false;
+		}
+		
 		if (player.isAttackingNow())
 		{
 			player.sendPacket(SystemMessageId.YOU_CANNOT_SUMMON_DURING_COMBAT);

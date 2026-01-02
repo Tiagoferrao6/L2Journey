@@ -297,6 +297,7 @@ import com.l2journey.gameserver.network.serverpackets.ConfirmDlg;
 import com.l2journey.gameserver.network.serverpackets.CreatureSay;
 import com.l2journey.gameserver.network.serverpackets.EtcStatusUpdate;
 import com.l2journey.gameserver.network.serverpackets.ExAutoSoulShot;
+import com.l2journey.gameserver.network.serverpackets.ExBasicActionList;
 import com.l2journey.gameserver.network.serverpackets.ExBrExtraUserInfo;
 import com.l2journey.gameserver.network.serverpackets.ExDuelUpdateUserInfo;
 import com.l2journey.gameserver.network.serverpackets.ExFishingEnd;
@@ -4939,6 +4940,10 @@ public class Player extends Playable
 		transformation.onTransform(this);
 		sendSkillList();
 		sendPacket(new SkillCoolTime(this));
+		
+		// Disable pet/summon actions in hotbar while transformed
+		sendPacket(ExBasicActionList.NO_PET_PACKET);
+		
 		broadcastUserInfo();
 
 		// Notify to scripts
@@ -4962,6 +4967,10 @@ public class Player extends Playable
 		getEffectList().stopSkillEffects(SkillFinishType.NORMAL, AbnormalType.TRANSFORM);
 		sendSkillList();
 		sendPacket(new SkillCoolTime(this));
+		
+		// Restore actions in hotbar - only enable pet actions if player has a summon
+		sendPacket(ExBasicActionList.NO_PET_PACKET);
+		
 		broadcastUserInfo();
 
 		// Notify to scripts
