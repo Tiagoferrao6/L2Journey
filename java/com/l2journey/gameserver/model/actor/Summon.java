@@ -1115,7 +1115,9 @@ public abstract class Summon extends Playable
 			return false;
 		}
 		
-		if (!GeoData.getInstance().canMove(this, target))
+		// Siege golems can attack doors/walls without canMove check (door itself is the obstacle)
+		final boolean isSiegeGolemAttackingDoor = (getTemplate().getRace() == Race.SIEGE_WEAPON) && target.isDoor();
+		if (!isSiegeGolemAttackingDoor && !GeoData.getInstance().canMove(this, target))
 		{
 			getAI().setIntention(Intention.FOLLOW, _owner);
 			sendPacket(SystemMessageId.CANNOT_SEE_TARGET);

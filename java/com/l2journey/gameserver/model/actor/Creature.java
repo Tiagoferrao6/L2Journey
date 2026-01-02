@@ -1176,10 +1176,10 @@ public abstract class Creature extends WorldObject
 			stopEffectsOnAction();
 			
 			// GeoData Los Check here (or dz > 1000)
-			if (!GeoData.getInstance().canSeeTarget(this, target))
+			// Siege golems can attack doors/walls without canSeeTarget check (door itself blocks line of sight)
+			final boolean isSiegeGolemAttackingDoor = isServitor() && (getTemplate().getRace() == Race.SIEGE_WEAPON) && target.isDoor();
+			if (!isSiegeGolemAttackingDoor && !GeoData.getInstance().canSeeTarget(this, target))
 			{
-				sendPacket(SystemMessageId.CANNOT_SEE_TARGET);
-				getAI().setIntention(Intention.ACTIVE);
 				sendPacket(ActionFailed.STATIC_PACKET);
 				return;
 			}
