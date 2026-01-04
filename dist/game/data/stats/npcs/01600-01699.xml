@@ -40,8 +40,8 @@
 			<skill id="23318" level="1" /> <!-- Cat the Ranger Boots -->
 		</skillList>
 		<collision>
-			<radius normal="25" />
-			<height normal="35" />
+			<radius normal="15" />
+			<height normal="25" />
 		</collision>
 	</npc>
 	<npc id="1602" level="80" type="BabyPet" name="Super Kat the Cat Z">
@@ -71,8 +71,8 @@
 			<skill id="23318" level="1" /> <!-- Cat the Ranger Boots -->
 		</skillList>
 		<collision>
-			<radius normal="25" />
-			<height normal="35" />
+			<radius normal="15" />
+			<height normal="25" />
 		</collision>
 	</npc>
 	<npc id="1603" level="80" type="BabyPet" name="Super Mew the Cat Z">
@@ -100,8 +100,8 @@
 			<skill id="23318" level="1" /> <!-- Cat the Ranger Boots -->
 		</skillList>
 		<collision>
-			<radius normal="25" />
-			<height normal="35" />
+			<radius normal="15" />
+			<height normal="25" />
 		</collision>
 	</npc>
 	<npc id="1604" level="80" type="Folk" name="Hanbok Agathion">
