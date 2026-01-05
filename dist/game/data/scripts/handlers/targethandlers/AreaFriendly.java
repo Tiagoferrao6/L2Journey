@@ -28,6 +28,7 @@
  */
 package handlers.targethandlers;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
@@ -45,7 +46,7 @@ import com.l2journey.gameserver.model.zone.ZoneId;
 import com.l2journey.gameserver.network.SystemMessageId;
 
 /**
- * @author Adry_85
+ * @author Adry_85, KingHanker
  */
 public class AreaFriendly implements ITargetTypeHandler
 {
@@ -54,7 +55,7 @@ public class AreaFriendly implements ITargetTypeHandler
 	{
 		final List<WorldObject> targetList = new LinkedList<>();
 		final Player player = creature.asPlayer();
-		if (!checkTarget(player, target) && (skill.getCastRange() >= 0))
+		if (!checkPrimaryTarget(player, target) && (skill.getCastRange() >= 0))
 		{
 			player.sendPacket(SystemMessageId.THAT_IS_AN_INCORRECT_TARGET);
 			return targetList;
@@ -76,21 +77,81 @@ public class AreaFriendly implements ITargetTypeHandler
 		if (target != null)
 		{
 			final int maxTargets = skill.getAffectLimit();
+			
+			// Collect all valid targets in range first
+			final List<Creature> potentialTargets = new ArrayList<>();
 			World.getInstance().forEachVisibleObjectInRange(target, Creature.class, skill.getAffectRange(), obj ->
 			{
-				if (!checkTarget(player, obj) || (obj == creature) || ((maxTargets > 0) && (targetList.size() >= maxTargets)))
+				if (checkSecondaryTarget(player, obj) && (obj != creature))
 				{
-					return;
+					potentialTargets.add(obj);
 				}
-				
-				targetList.add(obj);
 			});
+			
+			// Sort by HP percentage (most injured first)
+			potentialTargets.sort(new CharComparator());
+			
+			// Add the most injured targets up to the limit
+			final int limit = (maxTargets > 0) ? Math.min(maxTargets - 1, potentialTargets.size()) : potentialTargets.size(); // -1 because target is already added
+			for (int i = 0; i < limit; i++)
+			{
+				targetList.add(potentialTargets.get(i));
+			}
 		}
 		
 		return targetList;
 	}
 	
-	private boolean checkTarget(Player player, Creature target)
+	/**
+	 * Check if primary target (clicked target) is valid. Primary target can be any player/summon except NPCs, monsters, or raids.
+	 * @param player
+	 * @param target
+	 * @return
+	 */
+	private boolean checkPrimaryTarget(Player player, Creature target)
+	{
+		if ((target == null) || target.isAlikeDead() || target.isDoor() || (target instanceof SiegeFlag))
+		{
+			return false;
+		}
+		
+		// Cannot target NPCs, monsters, or raids
+		if (target.isMonster() || target.isNpc() || target.isRaid())
+		{
+			return false;
+		}
+		
+		if (!GeoData.getInstance().canSeeTarget(player, target))
+		{
+			return false;
+		}
+		
+		if (target.isPlayable())
+		{
+			final Player targetPlayer = target.asPlayer();
+			
+			if (targetPlayer.inObserverMode() || targetPlayer.isInOlympiadMode())
+			{
+				return false;
+			}
+			
+			// Cannot target enemies - check for war, duel
+			if (player.isInDuelWith(target) || player.isAtWarWith(targetPlayer))
+			{
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	/**
+	 * Check if secondary target (area targets) is valid. Secondary targets must be in party, clan, ally, or command channel.
+	 * @param player
+	 * @param target
+	 * @return
+	 */
+	private boolean checkSecondaryTarget(Player player, Creature target)
 	{
 		if ((target == null) || target.isAlikeDead() || target.isDoor() || (target instanceof SiegeFlag) || target.isMonster() || target.isNpc())
 		{
@@ -130,10 +191,8 @@ public class AreaFriendly implements ITargetTypeHandler
 				return true;
 			}
 			
-			if ((targetPlayer.getPvpFlag() > 0) || (targetPlayer.getKarma() > 0))
-			{
-				return false;
-			}
+			// If not in party, clan, ally, or command channel, they are not friendly
+			return false;
 		}
 		
 		return true;

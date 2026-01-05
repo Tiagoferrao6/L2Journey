@@ -2437,7 +2437,7 @@
 		<set name="icon" val="icon.skill1553" />
 		<set name="operateType" val="A1" /> <!-- FIXME: value unconfirmed -->
 		<set name="targetType" val="AREA_FRIENDLY" />
-		<set name="affectLimit" val="5-12" />
+		<set name="affectLimit" val="1-11" /> <!-- Target + up to 10 most injured allies -->
 		<set name="affectRange" val="300" />
 		<set name="castRange" val="900" />
 		<set name="effectPoint" val="398" />
@@ -2451,7 +2451,7 @@
 		<set name="mpInitialConsume" val="38" />
 		<set name="reuseDelay" val="5000" />
 		<effects>
-			<effect name="HealPercent">
+			<effect name="ChainHeal">
 				<param power="30" />
 			</effect>
 		</effects>
