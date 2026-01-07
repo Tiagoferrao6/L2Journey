@@ -38,6 +38,9 @@
 		<set name="hitTime" val="3000" />
 		<set name="isMagic" val="2" /> <!-- Static Skill -->
 		<set name="magicLevel" val="85" />
+		<conditions msgId="2958">
+			<player hasAgathion="false" />
+		</conditions>
 		<effects>
 			<effect name="SummonAgathion">
 				<param npcId="1576" />
@@ -52,6 +55,9 @@
 		<set name="hitTime" val="3000" />
 		<set name="isMagic" val="2" /> <!-- Static Skill -->
 		<set name="magicLevel" val="85" />
+		<conditions msgId="2958">
+			<player hasAgathion="false" />
+		</conditions>
 		<effects>
 			<effect name="SummonAgathion">
 				<param npcId="1577" />
@@ -66,6 +72,9 @@
 		<set name="hitTime" val="3000" />
 		<set name="isMagic" val="2" /> <!-- Static Skill -->
 		<set name="magicLevel" val="85" />
+		<conditions msgId="2958">
+			<player hasAgathion="false" />
+		</conditions>
 		<effects>
 			<effect name="SummonAgathion">
 				<param npcId="1578" />
@@ -80,6 +89,9 @@
 		<set name="hitTime" val="3000" />
 		<set name="isMagic" val="2" /> <!-- Static Skill -->
 		<set name="magicLevel" val="85" />
+		<conditions msgId="2958">
+			<player hasAgathion="false" />
+		</conditions>
 		<effects>
 			<effect name="SummonAgathion">
 				<param npcId="1579" />
@@ -94,6 +106,9 @@
 		<set name="hitTime" val="3000" />
 		<set name="isMagic" val="2" /> <!-- Static Skill -->
 		<set name="magicLevel" val="85" />
+		<conditions msgId="2958">
+			<player hasAgathion="false" />
+		</conditions>
 		<effects>
 			<effect name="SummonAgathion">
 				<param npcId="1580" />
@@ -108,6 +123,9 @@
 		<set name="hitTime" val="3000" />
 		<set name="isMagic" val="2" /> <!-- Static Skill -->
 		<set name="magicLevel" val="85" />
+		<conditions msgId="2958">
+			<player hasAgathion="false" />
+		</conditions>
 		<effects>
 			<effect name="SummonAgathion">
 				<param npcId="1581" />
@@ -122,6 +140,9 @@
 		<set name="hitTime" val="3000" />
 		<set name="isMagic" val="2" /> <!-- Static Skill -->
 		<set name="magicLevel" val="85" />
+		<conditions msgId="2958">
+			<player hasAgathion="false" />
+		</conditions>
 		<effects>
 			<effect name="SummonAgathion">
 				<param npcId="1582" />
@@ -136,6 +157,9 @@
 		<set name="hitTime" val="3000" />
 		<set name="isMagic" val="2" /> <!-- Static Skill -->
 		<set name="magicLevel" val="85" />
+		<conditions msgId="2958">
+			<player hasAgathion="false" />
+		</conditions>
 		<effects>
 			<effect name="SummonAgathion">
 				<param npcId="1583" />
@@ -150,6 +174,9 @@
 		<set name="hitTime" val="3000" />
 		<set name="isMagic" val="2" /> <!-- Static Skill -->
 		<set name="magicLevel" val="85" />
+		<conditions msgId="2958">
+			<player hasAgathion="false" />
+		</conditions>
 		<effects>
 			<effect name="SummonAgathion">
 				<param npcId="1584" />
@@ -171,6 +198,9 @@
 		<set name="hitTime" val="3000" />
 		<set name="isMagic" val="2" /> <!-- Static Skill -->
 		<set name="magicLevel" val="85" />
+		<conditions msgId="2958">
+			<player hasAgathion="false" />
+		</conditions>
 		<effects>
 			<effect name="SummonAgathion">
 				<param npcId="1585" />
@@ -185,6 +215,9 @@
 		<set name="hitTime" val="3000" />
 		<set name="isMagic" val="2" /> <!-- Static Skill -->
 		<set name="magicLevel" val="85" />
+		<conditions msgId="2958">
+			<player hasAgathion="false" />
+		</conditions>
 		<effects>
 			<effect name="SummonAgathion">
 				<param npcId="1586" />
@@ -199,6 +232,9 @@
 		<set name="hitTime" val="3000" />
 		<set name="isMagic" val="2" /> <!-- Static Skill -->
 		<set name="magicLevel" val="85" />
+		<conditions msgId="2958">
+			<player hasAgathion="false" />
+		</conditions>
 		<effects>
 			<effect name="SummonAgathion">
 				<param npcId="1587" />
@@ -213,6 +249,9 @@
 		<set name="hitTime" val="3000" />
 		<set name="isMagic" val="2" /> <!-- Static Skill -->
 		<set name="magicLevel" val="85" />
+		<conditions msgId="2958">
+			<player hasAgathion="false" />
+		</conditions>
 		<effects>
 			<effect name="SummonAgathion">
 				<param npcId="1588" />
@@ -227,6 +266,9 @@
 		<set name="hitTime" val="3000" />
 		<set name="isMagic" val="2" /> <!-- Static Skill -->
 		<set name="magicLevel" val="85" />
+		<conditions msgId="2958">
+			<player hasAgathion="false" />
+		</conditions>
 		<effects>
 			<effect name="SummonAgathion">
 				<param npcId="1589" />
@@ -241,6 +283,9 @@
 		<set name="hitTime" val="3000" />
 		<set name="isMagic" val="2" /> <!-- Static Skill -->
 		<set name="magicLevel" val="85" />
+		<conditions msgId="2958">
+			<player hasAgathion="false" />
+		</conditions>
 		<effects>
 			<effect name="SummonAgathion">
 				<param npcId="1590" />
@@ -255,6 +300,9 @@
 		<set name="hitTime" val="3000" />
 		<set name="isMagic" val="2" /> <!-- Static Skill -->
 		<set name="magicLevel" val="85" />
+		<conditions msgId="2958">
+			<player hasAgathion="false" />
+		</conditions>
 		<effects>
 			<effect name="SummonAgathion">
 				<param npcId="1591" />
@@ -269,6 +317,9 @@
 		<set name="hitTime" val="3000" />
 		<set name="isMagic" val="2" /> <!-- Static Skill -->
 		<set name="magicLevel" val="85" />
+		<conditions msgId="2958">
+			<player hasAgathion="false" />
+		</conditions>
 		<effects>
 			<effect name="SummonAgathion">
 				<param npcId="1592" />
@@ -283,6 +334,9 @@
 		<set name="hitTime" val="3000" />
 		<set name="isMagic" val="2" /> <!-- Static Skill -->
 		<set name="magicLevel" val="85" />
+		<conditions msgId="2958">
+			<player hasAgathion="false" />
+		</conditions>
 		<effects>
 			<effect name="SummonAgathion">
 				<param npcId="1593" />
@@ -371,6 +425,9 @@
 		<set name="hitTime" val="3000" />
 		<set name="isMagic" val="2" /> <!-- Static Skill -->
 		<set name="magicLevel" val="85" />
+		<conditions msgId="2958">
+			<player hasAgathion="false" />
+		</conditions>
 		<effects>
 			<effect name="SummonAgathion">
 				<param npcId="1594" />
@@ -384,6 +441,9 @@
 		<set name="hitTime" val="3000" />
 		<set name="isMagic" val="2" /> <!-- Static Skill -->
 		<set name="magicLevel" val="85" />
+		<conditions msgId="2958">
+			<player hasAgathion="false" />
+		</conditions>
 		<effects>
 			<effect name="SummonAgathion">
 				<param npcId="1595" />
@@ -450,6 +510,9 @@
 		<set name="hitTime" val="3000" />
 		<set name="isMagic" val="2" /> <!-- Static Skill -->
 		<set name="magicLevel" val="85" />
+		<conditions msgId="2958">
+			<player hasAgathion="false" />
+		</conditions>
 		<effects>
 			<effect name="SummonAgathion">
 				<param npcId="1596" />
@@ -463,6 +526,9 @@
 		<set name="hitTime" val="3000" />
 		<set name="isMagic" val="2" /> <!-- Static Skill -->
 		<set name="magicLevel" val="85" />
+		<conditions msgId="2958">
+			<player hasAgathion="false" />
+		</conditions>
 		<effects>
 			<effect name="SummonAgathion">
 				<param npcId="1597" />
@@ -560,6 +626,9 @@
 		<set name="hitTime" val="3000" />
 		<set name="isMagic" val="2" /> <!-- Static Skill -->
 		<set name="magicLevel" val="85" />
+		<conditions msgId="2958">
+			<player hasAgathion="false" />
+		</conditions>
 		<effects>
 			<effect name="SummonAgathion">
 				<param npcId="1598" />
@@ -583,6 +652,9 @@
 		<set name="hitTime" val="3000" />
 		<set name="isMagic" val="2" /> <!-- Static Skill -->
 		<set name="magicLevel" val="85" />
+		<conditions msgId="2958">
+			<player hasAgathion="false" />
+		</conditions>
 		<effects>
 			<effect name="SummonAgathion">
 				<param npcId="1599" />
@@ -596,6 +668,9 @@
 		<set name="hitTime" val="3000" />
 		<set name="isMagic" val="2" /> <!-- Static Skill -->
 		<set name="magicLevel" val="85" />
+		<conditions msgId="2958">
+			<player hasAgathion="false" />
+		</conditions>
 		<effects>
 			<effect name="SummonAgathion">
 				<param npcId="1600" />
@@ -728,6 +803,9 @@
 		<set name="hitTime" val="3000" />
 		<set name="isMagic" val="2" /> <!-- Static Skill -->
 		<set name="magicLevel" val="85" />
+		<conditions msgId="2958">
+			<player hasAgathion="false" />
+		</conditions>
 		<effects>
 			<effect name="SummonAgathion">
 				<param npcId="1604" />
@@ -771,6 +849,9 @@
 		<set name="hitTime" val="3000" />
 		<set name="isMagic" val="2" /> <!-- Static Skill -->
 		<set name="magicLevel" val="85" />
+		<conditions msgId="2958">
+			<player hasAgathion="false" />
+		</conditions>
 		<effects>
 			<effect name="SummonAgathion">
 				<param npcId="1605" />
