@@ -897,7 +897,7 @@
 		</enchant3effects>
 	</skill>
 	<skill id="109" levels="1" name="Ogre Spirit Totem">
-		<!-- Becomes possessed by an Ogre's soul. Increases one's own P. Atk./P. Def./M. Def. by 30% and Critical Damage by 10%, but reduces Speed by 30% and Evasion by 9 for 5 minutes. Requires a hand-to-hand weapon. -->
+		<!-- Becomes possessed by an Ogre's soul. Increases one's own P. Atk./P. Def./M. Def. by 30% and Critical Damage by 10% for 5 minutes. Requires a hand-to-hand weapon. -->
 		<set name="icon" val="icon.skill0109" />
 		<set name="operateType" val="A2" />
 		<set name="targetType" val="SELF" />
@@ -919,8 +919,6 @@
 				</mul>
 				<mul stat="pDef" val="1.3" />
 				<mul stat="mDef" val="1.3" />
-				<mul stat="runSpd" val="0.7" />
-				<sub stat="rEvas" val="9" />
 				<mul stat="critDmg" val="1.1">
 					<using kind="DUALFIST" />
 				</mul>
