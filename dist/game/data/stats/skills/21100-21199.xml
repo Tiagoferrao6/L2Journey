@@ -1406,6 +1406,9 @@
 		<set name="reuseDelay" val="180000" />
 		<set name="staticReuse" val="true" />
 		<set name="energyConsume" val="240" />
+		<conditions msgId="2292">
+			<player hasAgathion="true" />
+		</conditions>
 		<effects>
 			<effect name="Buff">
 				<add stat="CON" val="1" />
@@ -1427,6 +1430,9 @@
 		<set name="reuseDelay" val="180000" />
 		<set name="staticReuse" val="true" />
 		<set name="energyConsume" val="240" />
+		<conditions msgId="2292">
+			<player hasAgathion="true" />
+		</conditions>
 		<effects>
 			<effect name="Buff">
 				<add stat="WIT" val="1" />
@@ -1448,6 +1454,9 @@
 		<set name="reuseDelay" val="180000" />
 		<set name="staticReuse" val="true" />
 		<set name="energyConsume" val="240" />
+		<conditions msgId="2292">
+			<player hasAgathion="true" />
+		</conditions>
 		<effects>
 			<effect name="Buff">
 				<add stat="WIT" val="1" />
@@ -1469,6 +1478,9 @@
 		<set name="reuseDelay" val="180000" />
 		<set name="staticReuse" val="true" />
 		<set name="energyConsume" val="240" />
+		<conditions msgId="2292">
+			<player hasAgathion="true" />
+		</conditions>
 		<effects>
 			<effect name="Buff">
 				<add stat="CON" val="1" />
