@@ -101,6 +101,8 @@ public class Skill
 	private final int _mpPerChanneling;
 	/** HP consumption. */
 	private final int _hpConsume;
+	/** Energy consumption (for agathion skills). */
+	private final int _energyConsume;
 	/** Amount of items consumed by this skill from caster. */
 	private final int _itemConsumeCount;
 	/** Id of item consumed by this skill from caster. */
@@ -238,6 +240,7 @@ public class Skill
 		_mpInitialConsume = set.getInt("mpInitialConsume", 0);
 		_mpPerChanneling = set.getInt("mpPerChanneling", _mpConsume);
 		_hpConsume = set.getInt("hpConsume", 0);
+		_energyConsume = set.getInt("energyConsume", 0);
 		_itemConsumeCount = set.getInt("itemConsumeCount", 0);
 		_itemConsumeId = set.getInt("itemConsumeId", 0);
 		_castRange = set.getInt("castRange", -1);
@@ -771,6 +774,14 @@ public class Skill
 	public int getMpPerChanneling()
 	{
 		return _mpPerChanneling;
+	}
+	
+	/**
+	 * @return the energy consumption
+	 */
+	public int getEnergyConsume()
+	{
+		return _energyConsume;
 	}
 	
 	/**

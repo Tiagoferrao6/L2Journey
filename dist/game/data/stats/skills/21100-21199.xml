@@ -1396,57 +1396,85 @@
 		<!-- By enhance authority, CON+1 / STR+1 for 2 minutes. Consumes 240 energy. Reuse delay 3 minutes. -->
 		<set name="icon" val="BranchSys2.icon.br_soulavatar_stat_i00" />
 		<set name="operateType" val="A2" />
-		<set name="targetType" val="NONE" />
+		<set name="targetType" val="SELF" />
 		<set name="abnormalLevel" val="26" />
 		<set name="abnormalTime" val="120" />
-		<set name="abnormalType" val="BR_EVENT_BUF10" />
+		<set name="abnormalType" val="AUTHORITY" />
 		<set name="abnormalVisualEffect" val="BR_SOUL_AVATAR" />
 		<set name="blockedInOlympiad" val="true" />
 		<set name="magicLevel" val="-1" />
 		<set name="reuseDelay" val="180000" />
 		<set name="staticReuse" val="true" />
+		<set name="energyConsume" val="240" />
+		<effects>
+			<effect name="Buff">
+				<add stat="CON" val="1" />
+				<add stat="STR" val="1" />
+			</effect>
+		</effects>
 	</skill>
 	<skill id="21173" levels="1" name="Enhanced Authority - WIT+1 INT+1">
 		<!-- By enhance authority, WIT+1 / INT+1 for 2 minutes. Consumes 240 energy. Reuse delay 3 minutes. -->
 		<set name="icon" val="BranchSys2.icon.br_soulavatar_stat_i00" />
 		<set name="operateType" val="A2" />
-		<set name="targetType" val="NONE" />
+		<set name="targetType" val="SELF" />
 		<set name="abnormalLevel" val="26" />
 		<set name="abnormalTime" val="120" />
-		<set name="abnormalType" val="BR_EVENT_BUF10" />
+		<set name="abnormalType" val="AUTHORITY" />
 		<set name="abnormalVisualEffect" val="BR_SOUL_AVATAR" />
 		<set name="blockedInOlympiad" val="true" />
 		<set name="magicLevel" val="-1" />
 		<set name="reuseDelay" val="180000" />
 		<set name="staticReuse" val="true" />
+		<set name="energyConsume" val="240" />
+		<effects>
+			<effect name="Buff">
+				<add stat="WIT" val="1" />
+				<add stat="INT" val="1" />
+			</effect>
+		</effects>
 	</skill>
 	<skill id="21174" levels="1" name="Enhanced Authority - WIT+1 MEN+1">
 		<!-- By enhance authority, WIT+1 / MEN+1 for 2 minutes. Consumes 240 energy. Reuse delay 3 minutes. -->
 		<set name="icon" val="BranchSys2.icon.br_soulavatar_stat_i00" />
 		<set name="operateType" val="A2" />
-		<set name="targetType" val="NONE" />
+		<set name="targetType" val="SELF" />
 		<set name="abnormalLevel" val="26" />
 		<set name="abnormalTime" val="120" />
-		<set name="abnormalType" val="BR_EVENT_BUF10" />
+		<set name="abnormalType" val="AUTHORITY" />
 		<set name="abnormalVisualEffect" val="BR_SOUL_AVATAR" />
 		<set name="blockedInOlympiad" val="true" />
 		<set name="magicLevel" val="-1" />
 		<set name="reuseDelay" val="180000" />
 		<set name="staticReuse" val="true" />
+		<set name="energyConsume" val="240" />
+		<effects>
+			<effect name="Buff">
+				<add stat="WIT" val="1" />
+				<add stat="MEN" val="1" />
+			</effect>
+		</effects>
 	</skill>
 	<skill id="21175" levels="1" name="Enhanced Authority - CON+1 DEX+1">
 		<!-- By enhance authority, CON+1 / DEX+1 for 2 minutes. Consumes 240 energy. Reuse delay 3 minutes. -->
 		<set name="icon" val="BranchSys2.icon.br_soulavatar_stat_i00" />
 		<set name="operateType" val="A2" />
-		<set name="targetType" val="NONE" />
+		<set name="targetType" val="SELF" />
 		<set name="abnormalLevel" val="26" />
 		<set name="abnormalTime" val="120" />
-		<set name="abnormalType" val="BR_EVENT_BUF10" />
+		<set name="abnormalType" val="AUTHORITY" />
 		<set name="abnormalVisualEffect" val="BR_SOUL_AVATAR" />
 		<set name="blockedInOlympiad" val="true" />
 		<set name="magicLevel" val="-1" />
 		<set name="reuseDelay" val="180000" />
 		<set name="staticReuse" val="true" />
+		<set name="energyConsume" val="240" />
+		<effects>
+			<effect name="Buff">
+				<add stat="CON" val="1" />
+				<add stat="DEX" val="1" />
+			</effect>
+		</effects>
 	</skill>
 	<skill id="21176" levels="1" name="Divine Protection - Divinity">
 		<!-- Increases Holy P. Atk. and P. Def. by 10 each. Continuously consumes energy. -->
