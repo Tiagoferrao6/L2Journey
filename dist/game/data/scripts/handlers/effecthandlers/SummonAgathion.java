@@ -16,16 +16,22 @@
  */
 package handlers.effecthandlers;
 
+import java.util.Collections;
+
 import com.l2journey.gameserver.model.StatSet;
 import com.l2journey.gameserver.model.actor.Creature;
 import com.l2journey.gameserver.model.actor.Player;
 import com.l2journey.gameserver.model.conditions.Condition;
 import com.l2journey.gameserver.model.effects.AbstractEffect;
+import com.l2journey.gameserver.model.item.instance.Item;
+import com.l2journey.gameserver.model.itemcontainer.Inventory;
 import com.l2journey.gameserver.model.skill.Skill;
+import com.l2journey.gameserver.network.SystemMessageId;
+import com.l2journey.gameserver.network.serverpackets.ExBrAgathionEnergyInfo;
 
 /**
  * Summon Agathion effect implementation.
- * @author Zoey76
+ * @author Zoey76, KingHanker
  */
 public class SummonAgathion extends AbstractEffect
 {
@@ -58,6 +64,25 @@ public class SummonAgathion extends AbstractEffect
 		}
 		
 		final Player player = effected.asPlayer();
+		
+		// Check agathion energy on bracelet
+		final Item bracelet = player.getInventory().getPaperdollItem(Inventory.PAPERDOLL_LBRACELET);
+		if ((bracelet != null) && bracelet.isAgathionItem())
+		{
+			// Check if bracelet has energy
+			if (bracelet.getAgathionEnergy() <= 0)
+			{
+				player.sendPacket(SystemMessageId.THE_ENERGY_IS_DEPLETED);
+				return;
+			}
+			
+			// Start energy consumption
+			bracelet.scheduleConsumeEnergyTask();
+			
+			// Send energy info to client
+			player.sendPacket(new ExBrAgathionEnergyInfo(Collections.singletonList(bracelet)));
+		}
+		
 		player.setAgathionId(_npcId);
 		player.broadcastUserInfo();
 	}

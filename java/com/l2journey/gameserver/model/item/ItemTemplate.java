@@ -206,6 +206,9 @@ public abstract class ItemTemplate extends ListenersContainer
 	protected int _reuseDelay;
 	private int _sharedReuseGroup;
 	
+	/** Agathion max energy for bracelet items */
+	private int _agathionMaxEnergy = -1;
+	
 	/**
 	 * Constructor of the Item that fill class variables.
 	 * @param set : StatSet corresponding to a set of couples (key,value) for description of the item
@@ -251,6 +254,7 @@ public abstract class ItemTemplate extends ListenersContainer
 		_defaultEnchantLevel = set.getInt("enchanted", 0);
 		_reuseDelay = set.getInt("reuse_delay", 0);
 		_sharedReuseGroup = set.getInt("shared_reuse_group", 0);
+		_agathionMaxEnergy = set.getInt("agathion_energy", -1);
 		String skills = set.getString("item_skill", null);
 		if (skills != null)
 		{
@@ -398,6 +402,15 @@ public abstract class ItemTemplate extends ListenersContainer
 	public int getAutoDestroyTime()
 	{
 		return _autoDestroyTime;
+	}
+	
+	/**
+	 * Returns the maximum agathion energy of this item.
+	 * @return agathion max energy, -1 if not an agathion item
+	 */
+	public int getAgathionMaxEnergy()
+	{
+		return _agathionMaxEnergy;
 	}
 	
 	/**

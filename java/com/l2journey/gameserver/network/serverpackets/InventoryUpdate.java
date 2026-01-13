@@ -28,16 +28,18 @@
  */
 package com.l2journey.gameserver.network.serverpackets;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.l2journey.commons.network.WritableBuffer;
 import com.l2journey.gameserver.model.ItemInfo;
+import com.l2journey.gameserver.model.actor.Player;
 import com.l2journey.gameserver.model.item.instance.Item;
 import com.l2journey.gameserver.network.GameClient;
 import com.l2journey.gameserver.network.ServerPackets;
 
 /**
- * @author Advi
+ * @author Advi, KingHanker
  */
 public class InventoryUpdate extends AbstractInventoryUpdate
 {
@@ -60,5 +62,26 @@ public class InventoryUpdate extends AbstractInventoryUpdate
 	{
 		ServerPackets.INVENTORY_UPDATE.writeId(this, buffer);
 		writeItems(buffer);
+	}
+	
+	@Override
+	public void runImpl(Player player)
+	{
+		if (player != null)
+		{
+			// Send agathion energy info after inventory update
+			final List<Item> agathionItems = new ArrayList<>();
+			for (Item item : player.getInventory().getItems())
+			{
+				if (item.isAgathionItem())
+				{
+					agathionItems.add(item);
+				}
+			}
+			if (!agathionItems.isEmpty())
+			{
+				player.sendPacket(new ExBrAgathionEnergyInfo(agathionItems));
+			}
+		}
 	}
 }

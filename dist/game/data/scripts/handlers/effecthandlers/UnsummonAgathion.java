@@ -21,11 +21,14 @@ import com.l2journey.gameserver.model.actor.Creature;
 import com.l2journey.gameserver.model.actor.Player;
 import com.l2journey.gameserver.model.conditions.Condition;
 import com.l2journey.gameserver.model.effects.AbstractEffect;
+import com.l2journey.gameserver.model.item.instance.Item;
+import com.l2journey.gameserver.model.itemcontainer.Inventory;
 import com.l2journey.gameserver.model.skill.Skill;
+import com.l2journey.gameserver.taskmanagers.ItemEnergyTaskManager;
 
 /**
  * Unsummon Agathion effect implementation.
- * @author Zoey76
+ * @author Zoey76, KingHanker
  */
 public class UnsummonAgathion extends AbstractEffect
 {
@@ -46,6 +49,14 @@ public class UnsummonAgathion extends AbstractEffect
 		final Player player = effector.asPlayer();
 		if (player != null)
 		{
+			// Stop energy consumption on bracelet
+			final Item bracelet = player.getInventory().getPaperdollItem(Inventory.PAPERDOLL_LBRACELET);
+			if ((bracelet != null) && bracelet.isAgathionItem())
+			{
+				bracelet.stopConsumeEnergyTask();
+				ItemEnergyTaskManager.getInstance().remove(bracelet);
+			}
+			
 			player.setAgathionId(0);
 			player.broadcastUserInfo();
 		}

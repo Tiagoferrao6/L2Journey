@@ -319,6 +319,7 @@
 		<set name="is_sellable" val="false" />
 		<set name="is_premium" val="true" />
 		<set name="is_oly_restricted" val="true" />
+		<set name="agathion_energy" val="100000" />
 		<set name="unequip_skill" val="3267-1" />
 		<set name="item_skill" val="3267-1;21157-1;23141-1;21172-1;21176-1;21182-1;21188-1;21190-1" /> <!-- Dismiss Agathion -->
 	</item>
@@ -353,6 +354,7 @@
 		<set name="is_premium" val="true" />
 		<set name="is_oly_restricted" val="true" />
 		<set name="is_freightable" val="true" />
+		<set name="agathion_energy" val="100000" />
 		<set name="unequip_skill" val="3267-1" />
 		<set name="item_skill" val="3267-1;21158-1;23142-1;21173-1;21176-1;21182-1;21189-1;21190-1" /> <!-- Dismiss Agathion -->
 	</item>
@@ -387,6 +389,7 @@
 		<set name="is_premium" val="true" />
 		<set name="is_oly_restricted" val="true" />
 		<set name="is_freightable" val="true" />
+		<set name="agathion_energy" val="100000" />
 		<set name="unequip_skill" val="3267-1" />
 		<set name="item_skill" val="3267-1;21159-1;23143-1;21175-1;21177-1;21183-1;21188-1;21190-1" /> <!-- Dismiss Agathion -->
 	</item>
@@ -421,6 +424,7 @@
 		<set name="is_premium" val="true" />
 		<set name="is_oly_restricted" val="true" />
 		<set name="is_freightable" val="true" />
+		<set name="agathion_energy" val="100000" />
 		<set name="unequip_skill" val="3267-1" />
 		<set name="item_skill" val="3267-1;21160-1;23144-1;21174-1;21177-1;21183-1;21189-1;21190-1" /> <!-- Dismiss Agathion -->
 	</item>
@@ -455,6 +459,7 @@
 		<set name="is_premium" val="true" />
 		<set name="is_oly_restricted" val="true" />
 		<set name="is_freightable" val="true" />
+		<set name="agathion_energy" val="100000" />
 		<set name="unequip_skill" val="3267-1" />
 		<set name="item_skill" val="3267-1;21161-1;23145-1;21172-1;21181-1;21184-1;21188-1;21190-1" /> <!-- Dismiss Agathion -->
 	</item>
@@ -489,6 +494,7 @@
 		<set name="is_premium" val="true" />
 		<set name="is_oly_restricted" val="true" />
 		<set name="is_freightable" val="true" />
+		<set name="agathion_energy" val="100000" />
 		<set name="unequip_skill" val="3267-1" />
 		<set name="item_skill" val="3267-1;21162-1;23146-1;21173-1;21181-1;21184-1;21189-1;21190-1" /> <!-- Dismiss Agathion -->
 	</item>
@@ -523,6 +529,7 @@
 		<set name="is_premium" val="true" />
 		<set name="is_oly_restricted" val="true" />
 		<set name="is_freightable" val="true" />
+		<set name="agathion_energy" val="100000" />
 		<set name="unequip_skill" val="3267-1" />
 		<set name="item_skill" val="3267-1;21163-1;23147-1;21175-1;21180-1;21185-1;21188-1;21190-1" /> <!-- Dismiss Agathion -->
 	</item>
@@ -557,6 +564,7 @@
 		<set name="is_premium" val="true" />
 		<set name="is_oly_restricted" val="true" />
 		<set name="is_freightable" val="true" />
+		<set name="agathion_energy" val="100000" />
 		<set name="unequip_skill" val="3267-1" />
 		<set name="item_skill" val="3267-1;21164-1;23148-1;21174-1;21180-1;21185-1;21189-1;21190-1" /> <!-- Dismiss Agathion -->
 	</item>
@@ -591,6 +599,7 @@
 		<set name="is_premium" val="true" />
 		<set name="is_oly_restricted" val="true" />
 		<set name="is_freightable" val="true" />
+		<set name="agathion_energy" val="100000" />
 		<set name="unequip_skill" val="3267-1" />
 		<set name="item_skill" val="3267-1;21165-1;23149-1;21172-1;21178-1;21186-1;21188-1;21190-1" /> <!-- Dismiss Agathion -->
 	</item>
@@ -625,6 +634,7 @@
 		<set name="is_premium" val="true" />
 		<set name="is_oly_restricted" val="true" />
 		<set name="is_freightable" val="true" />
+		<set name="agathion_energy" val="100000" />
 		<set name="unequip_skill" val="3267-1" />
 		<set name="item_skill" val="3267-1;21166-1;23150-1;21173-1;21178-1;21186-1;21189-1;21190-1" /> <!-- Dismiss Agathion -->
 	</item>
@@ -659,6 +669,7 @@
 		<set name="is_premium" val="true" />
 		<set name="is_oly_restricted" val="true" />
 		<set name="is_freightable" val="true" />
+		<set name="agathion_energy" val="100000" />
 		<set name="unequip_skill" val="3267-1" />
 		<set name="item_skill" val="3267-1;21167-1;23151-1;21175-1;21179-1;21187-1;21188-1;21190-1" /> <!-- Dismiss Agathion -->
 	</item>
@@ -693,6 +704,7 @@
 		<set name="is_premium" val="true" />
 		<set name="is_oly_restricted" val="true" />
 		<set name="is_freightable" val="true" />
+		<set name="agathion_energy" val="100000" />
 		<set name="unequip_skill" val="3267-1" />
 		<set name="item_skill" val="3267-1;21168-1;23152-1;21174-1;21179-1;21187-1;21189-1;21190-1" /> <!-- Dismiss Agathion -->
 	</item>

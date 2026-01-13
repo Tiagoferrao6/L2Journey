@@ -91,7 +91,7 @@ public class LoginController
 	
 	private static LoginController INSTANCE;
 	
-	/** Permite letras, números e alguns símbolos. */
+	/** Allows letters, numbers and some symbols. */
 	private static final Pattern VALID_LOGIN_PATTERN = Pattern.compile("^[a-zA-Z0-9!@\\-_\\.]{3,16}$");
 	
 	private LoginController() throws GeneralSecurityException

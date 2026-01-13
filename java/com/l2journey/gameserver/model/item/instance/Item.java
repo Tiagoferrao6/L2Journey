@@ -30,12 +30,14 @@ package com.l2journey.gameserver.model.item.instance;
 
 import static com.l2journey.gameserver.model.itemcontainer.Inventory.ADENA_ID;
 import static com.l2journey.gameserver.model.itemcontainer.Inventory.MAX_ADENA;
+import static com.l2journey.gameserver.model.itemcontainer.Inventory.PAPERDOLL_LBRACELET;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.locks.ReentrantLock;
@@ -87,11 +89,13 @@ import com.l2journey.gameserver.model.stats.functions.AbstractFunction;
 import com.l2journey.gameserver.model.variables.ItemVariables;
 import com.l2journey.gameserver.network.SystemMessageId;
 import com.l2journey.gameserver.network.serverpackets.DropItem;
+import com.l2journey.gameserver.network.serverpackets.ExBrAgathionEnergyInfo;
 import com.l2journey.gameserver.network.serverpackets.GetItem;
 import com.l2journey.gameserver.network.serverpackets.InventoryUpdate;
 import com.l2journey.gameserver.network.serverpackets.SpawnItem;
 import com.l2journey.gameserver.network.serverpackets.StatusUpdate;
 import com.l2journey.gameserver.network.serverpackets.SystemMessage;
+import com.l2journey.gameserver.taskmanagers.ItemEnergyTaskManager;
 import com.l2journey.gameserver.taskmanagers.ItemLifeTimeTaskManager;
 import com.l2journey.gameserver.taskmanagers.ItemManaTaskManager;
 import com.l2journey.gameserver.util.GMAudit;
@@ -146,6 +150,9 @@ public class Item extends WorldObject
 	private int _mana = -1;
 	private boolean _consumingMana = false;
 	
+	/** Agathion energy */
+	private int _agathionEnergy = -1;
+	private boolean _consumingEnergy = false;
 	/** Custom item types (used loto, race tickets) */
 	private int _type1;
 	private int _type2;
@@ -203,6 +210,7 @@ public class Item extends WorldObject
 		_type2 = 0;
 		_dropTime = 0;
 		_mana = _itemTemplate.getDuration();
+		_agathionEnergy = _itemTemplate.getAgathionMaxEnergy();
 		_time = _itemTemplate.getTime() == -1 ? -1 : System.currentTimeMillis() + (_itemTemplate.getTime() * 60 * 1000);
 		_enchantLevel = 0;
 		scheduleLifeTimeTask();
@@ -227,6 +235,7 @@ public class Item extends WorldObject
 		setCount(1);
 		_loc = ItemLocation.VOID;
 		_mana = _itemTemplate.getDuration();
+		_agathionEnergy = _itemTemplate.getAgathionMaxEnergy();
 		_time = _itemTemplate.getTime() == -1 ? -1 : System.currentTimeMillis() + (_itemTemplate.getTime() * 60 * 1000);
 		scheduleLifeTimeTask();
 	}
@@ -1413,6 +1422,149 @@ public class Item extends WorldObject
 	}
 	
 	/**
+	 * Returns true if this item is an agathion item with energy system.
+	 * @return true if agathion energy is enabled
+	 */
+	public boolean isAgathionItem()
+	{
+		return _agathionEnergy >= 0;
+	}
+	
+	/**
+	 * Returns the current agathion energy of this item.
+	 * @return agathion energy value, -1 if not an agathion item
+	 */
+	public int getAgathionEnergy()
+	{
+		return _agathionEnergy;
+	}
+	
+	/**
+	 * Sets the agathion energy of this item.
+	 * @param energy the energy value to set
+	 */
+	public void setAgathionEnergy(int energy)
+	{
+		// If energy is -1 (not set in DB), check if item template has agathion energy
+		if (energy < 0)
+		{
+			final int maxEnergy = _itemTemplate.getAgathionMaxEnergy();
+			if (maxEnergy > 0)
+			{
+				// First time initialization - set to max energy
+				_agathionEnergy = maxEnergy;
+			}
+			else
+			{
+				_agathionEnergy = energy;
+			}
+		}
+		else
+		{
+			_agathionEnergy = energy;
+		}
+		_storedInDb = false;
+	}
+	
+	/**
+	 * Decreases the agathion energy of this item.
+	 * @param resetConsumingEnergy if true forces a new consumption task if item is equipped
+	 */
+	public void decreaseAgathionEnergy(boolean resetConsumingEnergy)
+	{
+		decreaseAgathionEnergy(resetConsumingEnergy, 1);
+	}
+	
+	/**
+	 * Decreases the agathion energy of this item.
+	 * @param resetConsumingEnergy if forces a new consumption task if item is equipped
+	 * @param count how much energy to decrease
+	 */
+	public void decreaseAgathionEnergy(boolean resetConsumingEnergy, int count)
+	{
+		if (!isAgathionItem())
+		{
+			return;
+		}
+		
+		if ((_agathionEnergy - count) >= 0)
+		{
+			_agathionEnergy -= count;
+		}
+		else
+		{
+			_agathionEnergy = 0;
+		}
+		
+		if (_storedInDb)
+		{
+			_storedInDb = false;
+		}
+		if (resetConsumingEnergy)
+		{
+			_consumingEnergy = false;
+		}
+		
+		final Player player = asPlayer();
+		if (player == null)
+		{
+			return;
+		}
+		
+		// Send energy info packet to client
+		player.sendPacket(new ExBrAgathionEnergyInfo(Collections.singletonList(this)));
+		
+		if (_agathionEnergy == 0) // Energy depleted
+		{
+			// Unequip the bracelet - this will automatically unsummon the agathion
+			// and remove all associated skills/effects
+			player.getInventory().unEquipItemInSlot(PAPERDOLL_LBRACELET);
+			
+			final InventoryUpdate iu = new InventoryUpdate();
+			iu.addModifiedItem(this);
+			player.sendInventoryUpdate(iu);
+			
+			player.sendPacket(SystemMessageId.THE_ENERGY_IS_DEPLETED);
+			player.broadcastUserInfo();
+		}
+		else
+		{
+			// Reschedule if still equipped and agathion is active
+			if (!_consumingEnergy && isEquipped() && (player.getAgathionId() > 0))
+			{
+				scheduleConsumeEnergyTask();
+			}
+			if (_loc != ItemLocation.WAREHOUSE)
+			{
+				final InventoryUpdate iu = new InventoryUpdate();
+				iu.addModifiedItem(this);
+				player.sendInventoryUpdate(iu);
+			}
+		}
+	}
+	
+	/**
+	 * Schedules a task to consume agathion energy.
+	 */
+	public void scheduleConsumeEnergyTask()
+	{
+		if (_consumingEnergy)
+		{
+			return;
+		}
+		_consumingEnergy = true;
+		ItemEnergyTaskManager.getInstance().add(this);
+	}
+	
+	/**
+	 * Stops consuming agathion energy.
+	 */
+	public void stopConsumeEnergyTask()
+	{
+		_consumingEnergy = false;
+	}
+	
+	/**
 	 * Returns false cause item can't be attacked
 	 * @return boolean false
 	 */
@@ -1492,6 +1644,7 @@ public class Item extends WorldObject
 		int customType1;
 		int customType2;
 		int manaLeft;
+		int agathionEnergy = -1;
 		long time;
 		long count;
 		ItemLocation loc;
@@ -1509,6 +1662,17 @@ public class Item extends WorldObject
 			manaLeft = rs.getInt("mana_left");
 			time = rs.getLong("time");
 			visualItemId = rs.getInt("visual_item_id");
+			
+			// Try to read agathion_energy column (may not exist in older databases)
+			try
+			{
+				agathionEnergy = rs.getInt("agathion_energy");
+			}
+			catch (SQLException e)
+			{
+				// Column doesn't exist yet, use default from item template
+				agathionEnergy = -1;
+			}
 		}
 		catch (Exception e)
 		{
@@ -1534,6 +1698,9 @@ public class Item extends WorldObject
 		// Setup life time for shadow weapons
 		inst.setMana(manaLeft);
 		inst._time = time;
+		
+		// Setup agathion energy
+		inst.setAgathionEnergy(agathionEnergy);
 		
 		// Set visual item id for dress me
 		inst.setVisualItemId(visualItemId);
@@ -1627,7 +1794,7 @@ public class Item extends WorldObject
 		}
 		
 		try (Connection con = DatabaseFactory.getConnection();
-			PreparedStatement ps = con.prepareStatement("UPDATE items SET owner_id=?,count=?,loc=?,loc_data=?,enchant_level=?,custom_type1=?,custom_type2=?,mana_left=?,time=?,visual_item_id=? WHERE object_id = ?"))
+			PreparedStatement ps = con.prepareStatement("UPDATE items SET owner_id=?,count=?,loc=?,loc_data=?,enchant_level=?,custom_type1=?,custom_type2=?,mana_left=?,time=?,visual_item_id=?,agathion_energy=? WHERE object_id = ?"))
 		{
 			ps.setInt(1, _ownerId);
 			ps.setLong(2, _count);
@@ -1639,7 +1806,8 @@ public class Item extends WorldObject
 			ps.setInt(8, _mana);
 			ps.setLong(9, _time);
 			ps.setInt(10, getVisualItemId());
-			ps.setInt(11, getObjectId());
+			ps.setInt(11, _agathionEnergy);
+			ps.setInt(12, getObjectId());
 			ps.executeUpdate();
 			_existsInDb = true;
 			_storedInDb = true;
@@ -1661,7 +1829,7 @@ public class Item extends WorldObject
 		}
 		
 		try (Connection con = DatabaseFactory.getConnection();
-			PreparedStatement ps = con.prepareStatement("INSERT INTO items (owner_id,item_id,count,loc,loc_data,enchant_level,object_id,custom_type1,custom_type2,mana_left,time,visual_item_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"))
+			PreparedStatement ps = con.prepareStatement("INSERT INTO items (owner_id,item_id,count,loc,loc_data,enchant_level,object_id,custom_type1,custom_type2,mana_left,time,visual_item_id,agathion_energy) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)"))
 		{
 			ps.setInt(1, _ownerId);
 			ps.setInt(2, _itemId);
@@ -1675,6 +1843,7 @@ public class Item extends WorldObject
 			ps.setInt(10, _mana);
 			ps.setLong(11, _time);
 			ps.setInt(12, getVisualItemId());
+			ps.setInt(13, _agathionEnergy);
 			
 			ps.executeUpdate();
 			_existsInDb = true;

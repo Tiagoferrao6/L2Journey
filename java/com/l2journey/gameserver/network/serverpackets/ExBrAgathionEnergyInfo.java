@@ -18,67 +18,67 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
- * 
- * ---
- * 
- * Portions of this software are derived from the L2JMobius Project, 
- * shared under the MIT License. The original license terms are preserved where 
- * applicable..
- * 
  */
 package com.l2journey.gameserver.network.serverpackets;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.l2journey.commons.network.WritableBuffer;
-import com.l2journey.gameserver.model.actor.Player;
 import com.l2journey.gameserver.model.item.instance.Item;
 import com.l2journey.gameserver.network.GameClient;
 import com.l2journey.gameserver.network.ServerPackets;
 
 /**
- * Packet to send the full inventory item list to the player.
- * Also triggers sending of quest items and agathion energy information.
+ * Packet to send agathion energy information to the client.
+ * @author KingHanker
  */
-public class ItemList extends AbstractItemPacket
+public class ExBrAgathionEnergyInfo extends ServerPacket
 {
-	private final Player _player;
-	private final boolean _showWindow;
-	private final List<Item> _items = new ArrayList<>();
+	private final List<Item> _items;
 	
-	public ItemList(Player player, boolean showWindow)
+	/**
+	 * Creates the packet with a list of items.
+	 * @param items the list of agathion items
+	 */
+	public ExBrAgathionEnergyInfo(List<Item> items)
 	{
-		_player = player;
-		_showWindow = showWindow;
-		for (Item item : player.getInventory().getItems())
-		{
-			if (!item.isQuestItem())
-			{
-				_items.add(item);
-			}
-		}
+		_items = items;
 	}
 	
 	@Override
 	public void writeImpl(GameClient client, WritableBuffer buffer)
 	{
-		ServerPackets.ITEM_LIST.writeId(this, buffer);
-		buffer.writeShort(_showWindow);
-		buffer.writeShort(_items.size());
+		ServerPackets.EX_BR_AGATHION_ENERGY_INFO.writeId(this, buffer);
+		
+		// Count only items that are actual agathion items
+		int count = 0;
 		for (Item item : _items)
 		{
-			writeItem(item, buffer);
+			if ((item != null) && item.isAgathionItem())
+			{
+				count++;
+			}
 		}
-		writeInventoryBlock(_player.getInventory(), buffer);
-	}
-	
-	@Override
-	public void runImpl(Player player)
-	{
-		if (player != null)
+		
+		buffer.writeInt(count);
+		
+		for (Item item : _items)
 		{
-			player.sendPacket(new ExQuestItemList(_player));
+			if ((item == null) || !item.isAgathionItem())
+			{
+				continue;
+			}
+			
+			final int objectId = item.getObjectId();
+			final int displayId = item.getDisplayId();
+			final int energy = item.getAgathionEnergy();
+			final int maxEnergy = item.getTemplate().getAgathionMaxEnergy();
+			
+			buffer.writeInt(objectId);
+			buffer.writeInt(displayId);
+			buffer.writeInt(0x200000); // left bracelet slot
+			buffer.writeInt(energy);
+			buffer.writeInt(maxEnergy);
 		}
 	}
 }

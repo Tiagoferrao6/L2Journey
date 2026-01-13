@@ -68,6 +68,9 @@ public class ItemInfo
 	private int _mana;
 	private int _time;
 	
+	/** The agathion energy of this item */
+	private int _agathionEnergy;
+	
 	private int _location;
 	
 	private int _elemAtkType = -2;
@@ -140,6 +143,10 @@ public class ItemInfo
 		// Get shadow item mana
 		_mana = item.getMana();
 		_time = item.isTimeLimitedItem() ? (int) (item.getRemainingTime() / 1000) : -9999;
+		
+		// Get agathion energy
+		_agathionEnergy = item.getAgathionEnergy();
+		
 		_location = item.getLocationSlot();
 		_elemAtkType = item.getAttackElementType();
 		_elemAtkPower = item.getAttackElementPower();
@@ -191,6 +198,10 @@ public class ItemInfo
 		// Get shadow item mana
 		_mana = -1;
 		_time = -9999;
+		
+		// Agathion energy not applicable for trade items
+		_agathionEnergy = -1;
+		
 		_location = item.getLocationSlot();
 		_elemAtkType = item.getAttackElementType();
 		_elemAtkPower = item.getAttackElementPower();
@@ -252,9 +263,25 @@ public class ItemInfo
 		return _change;
 	}
 	
+	/**
+	 * Returns the mana value for this item.
+	 * For agathion items, returns agathion energy instead of shadow mana.
+	 * @return mana or agathion energy
+	 */
 	public int getMana()
 	{
+		// If this is an agathion item, return agathion energy
+		// The client uses the same field to display energy for agathions
+		if (_agathionEnergy >= 0)
+		{
+			return _agathionEnergy;
+		}
 		return _mana;
+	}
+	
+	public int getAgathionEnergy()
+	{
+		return _agathionEnergy;
 	}
 	
 	public int getTime()

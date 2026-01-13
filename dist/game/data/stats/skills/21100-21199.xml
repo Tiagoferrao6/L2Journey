@@ -1141,6 +1141,9 @@
 		<conditions msgId="2958">
 			<player hasAgathion="false" />
 		</conditions>
+		<conditions msgId="867">
+			<player agathionEnergy="true" />
+		</conditions>
 		<effects>
 			<effect name="SummonAgathion">
 				<param npcId="1539" />
@@ -1157,6 +1160,9 @@
 		<set name="magicLevel" val="85" />
 		<conditions msgId="2958">
 			<player hasAgathion="false" />
+		</conditions>
+		<conditions msgId="867">
+			<player agathionEnergy="true" />
 		</conditions>
 		<effects>
 			<effect name="SummonAgathion">
@@ -1175,6 +1181,9 @@
 		<conditions msgId="2958">
 			<player hasAgathion="false" />
 		</conditions>
+		<conditions msgId="867">
+			<player agathionEnergy="true" />
+		</conditions>
 		<effects>
 			<effect name="SummonAgathion">
 				<param npcId="1541" />
@@ -1191,6 +1200,9 @@
 		<set name="magicLevel" val="85" />
 		<conditions msgId="2958">
 			<player hasAgathion="false" />
+		</conditions>
+		<conditions msgId="867">
+			<player agathionEnergy="true" />
 		</conditions>
 		<effects>
 			<effect name="SummonAgathion">
@@ -1209,6 +1221,9 @@
 		<conditions msgId="2958">
 			<player hasAgathion="false" />
 		</conditions>
+		<conditions msgId="867">
+			<player agathionEnergy="true" />
+		</conditions>
 		<effects>
 			<effect name="SummonAgathion">
 				<param npcId="1543" />
@@ -1226,13 +1241,16 @@
 		<conditions msgId="2958">
 			<player hasAgathion="false" />
 		</conditions>
+		<conditions msgId="867">
+			<player agathionEnergy="true" />
+		</conditions>
 		<effects>
 			<effect name="SummonAgathion">
 				<param npcId="1544" />
 			</effect>
 		</effects>
 	</skill>
-	<skill id="21163" levels="1" name="Agathion Seal Cancel - Hayance">
+	<skill id="21163" levels="1" name="Agathion Seal Cancel - Heintz">
 		<!-- Removes the seal of Agathion. -->
 		<set name="icon" val="icon.etc_summon_aga_agit_i00" />
 		<set name="operateType" val="A1" />
@@ -1242,6 +1260,9 @@
 		<set name="magicLevel" val="85" />
 		<conditions msgId="2958">
 			<player hasAgathion="false" />
+		</conditions>
+		<conditions msgId="867">
+			<player agathionEnergy="true" />
 		</conditions>
 		<effects>
 			<effect name="SummonAgathion">
@@ -1260,6 +1281,9 @@
 		<conditions msgId="2958">
 			<player hasAgathion="false" />
 		</conditions>
+		<conditions msgId="867">
+			<player agathionEnergy="true" />
+		</conditions>
 		<effects>
 			<effect name="SummonAgathion">
 				<param npcId="1546" />
@@ -1276,6 +1300,9 @@
 		<set name="magicLevel" val="85" />
 		<conditions msgId="2958">
 			<player hasAgathion="false" />
+		</conditions>
+		<conditions msgId="867">
+			<player agathionEnergy="true" />
 		</conditions>
 		<effects>
 			<effect name="SummonAgathion">
@@ -1294,6 +1321,9 @@
 		<conditions msgId="2958">
 			<player hasAgathion="false" />
 		</conditions>
+		<conditions msgId="867">
+			<player agathionEnergy="true" />
+		</conditions>
 		<effects>
 			<effect name="SummonAgathion">
 				<param npcId="1548" />
@@ -1311,6 +1341,9 @@
 		<conditions msgId="2958">
 			<player hasAgathion="false" />
 		</conditions>
+		<conditions msgId="867">
+			<player agathionEnergy="true" />
+		</conditions>
 		<effects>
 			<effect name="SummonAgathion">
 				<param npcId="1549" />
@@ -1327,6 +1360,9 @@
 		<set name="magicLevel" val="85" />
 		<conditions msgId="2958">
 			<player hasAgathion="false" />
+		</conditions>
+		<conditions msgId="867">
+			<player agathionEnergy="true" />
 		</conditions>
 		<effects>
 			<effect name="SummonAgathion">

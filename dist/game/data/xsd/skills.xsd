@@ -163,6 +163,7 @@
 													<xs:attribute name="canTakeFort" type="xs:boolean" use="optional" />
 													<xs:attribute name="agathionId" type="xs:unsignedShort" use="optional" />
 													<xs:attribute name="hasAgathion" type="xs:boolean" use="optional" />
+													<xs:attribute name="agathionEnergy" type="xs:boolean" use="optional" />
 													<xs:attribute name="active_effect_id" type="xs:unsignedShort" use="optional" />
 													<xs:attribute name="checkAbnormal" type="xs:string" use="optional" />
 													<xs:attribute name="class_id_restriction" type="xs:string" use="optional" />
@@ -240,6 +241,7 @@
 																	<xs:attribute name="active_skill_id_lvl" type="xs:string" use="optional" />
 																	<xs:attribute name="agathionId" type="xs:unsignedShort" use="optional" />
 																	<xs:attribute name="hasAgathion" type="xs:boolean" use="optional" />
+																	<xs:attribute name="agathionEnergy" type="xs:boolean" use="optional" />
 																</xs:complexType>
 															</xs:element>
 															<xs:element name="not">

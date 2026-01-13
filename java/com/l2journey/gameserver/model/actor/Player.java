@@ -298,6 +298,7 @@ import com.l2journey.gameserver.network.serverpackets.CreatureSay;
 import com.l2journey.gameserver.network.serverpackets.EtcStatusUpdate;
 import com.l2journey.gameserver.network.serverpackets.ExAutoSoulShot;
 import com.l2journey.gameserver.network.serverpackets.ExBasicActionList;
+import com.l2journey.gameserver.network.serverpackets.ExBrAgathionEnergyInfo;
 import com.l2journey.gameserver.network.serverpackets.ExBrExtraUserInfo;
 import com.l2journey.gameserver.network.serverpackets.ExDuelUpdateUserInfo;
 import com.l2journey.gameserver.network.serverpackets.ExFishingEnd;
@@ -15186,6 +15187,20 @@ public class Player extends Playable
 		_itemListTask = ThreadPool.schedule(() ->
 		{
 			sendPacket(new ItemList(this, open));
+			
+			// Send agathion energy info for items with energy
+			final List<Item> agathionItems = new ArrayList<>();
+			for (Item item : getInventory().getItems())
+			{
+				if (item.isAgathionItem())
+				{
+					agathionItems.add(item);
+				}
+			}
+			if (!agathionItems.isEmpty())
+			{
+				sendPacket(new ExBrAgathionEnergyInfo(agathionItems));
+			}
 		}, 250);
 	}
 

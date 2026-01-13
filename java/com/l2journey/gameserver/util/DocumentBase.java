@@ -85,6 +85,7 @@ import com.l2journey.gameserver.model.conditions.ConditionPlayerCloakStatus;
 import com.l2journey.gameserver.model.conditions.ConditionPlayerCp;
 import com.l2journey.gameserver.model.conditions.ConditionPlayerFlyMounted;
 import com.l2journey.gameserver.model.conditions.ConditionPlayerGrade;
+import com.l2journey.gameserver.model.conditions.ConditionPlayerAgathionEnergy;
 import com.l2journey.gameserver.model.conditions.ConditionPlayerHasAgathion;
 import com.l2journey.gameserver.model.conditions.ConditionPlayerHasCastle;
 import com.l2journey.gameserver.model.conditions.ConditionPlayerHasClanHall;
@@ -793,6 +794,12 @@ public abstract class DocumentBase
 				{
 					final boolean val = Boolean.parseBoolean(a.getNodeValue());
 					cond = joinAnd(cond, new ConditionPlayerHasAgathion(val));
+					break;
+				}
+				case "agathionenergy":
+				{
+					final boolean val = Boolean.parseBoolean(a.getNodeValue());
+					cond = joinAnd(cond, new ConditionPlayerAgathionEnergy(val));
 					break;
 				}
 				case "cloakstatus":
