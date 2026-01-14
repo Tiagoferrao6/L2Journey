@@ -64,6 +64,7 @@ import com.l2journey.gameserver.model.conditions.ConditionLogicOr;
 import com.l2journey.gameserver.model.conditions.ConditionMinDistance;
 import com.l2journey.gameserver.model.conditions.ConditionPlayerActiveEffectId;
 import com.l2journey.gameserver.model.conditions.ConditionPlayerActiveSkillId;
+import com.l2journey.gameserver.model.conditions.ConditionAgathionItemId;
 import com.l2journey.gameserver.model.conditions.ConditionPlayerAgathionId;
 import com.l2journey.gameserver.model.conditions.ConditionPlayerCallPc;
 import com.l2journey.gameserver.model.conditions.ConditionPlayerCanCreateBase;
@@ -800,6 +801,18 @@ public abstract class DocumentBase
 				{
 					final boolean val = Boolean.parseBoolean(a.getNodeValue());
 					cond = joinAnd(cond, new ConditionPlayerAgathionEnergy(val));
+					break;
+				}
+				case "agathionitems":
+				{
+					final StringTokenizer st = new StringTokenizer(a.getNodeValue(), ",");
+					final List<Integer> array = new ArrayList<>(st.countTokens());
+					while (st.hasMoreTokens())
+					{
+						final String item = st.nextToken().trim();
+						array.add(Integer.decode(getValue(item, null)));
+					}
+					cond = joinAnd(cond, new ConditionAgathionItemId(array));
 					break;
 				}
 				case "cloakstatus":

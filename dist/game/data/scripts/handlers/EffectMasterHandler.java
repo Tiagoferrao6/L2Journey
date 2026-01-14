@@ -96,6 +96,7 @@ public class EffectMasterHandler
 		EnableCloak.class,
 		EnemyCharge.class,
 		EnergyDamage.class,
+		EnergyReplenish.class,
 		EnlargeAbnormalSlot.class,
 		Escape.class,
 		FakeDeath.class,

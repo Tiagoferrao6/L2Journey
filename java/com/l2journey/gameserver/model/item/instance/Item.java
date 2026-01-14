@@ -1467,6 +1467,48 @@ public class Item extends WorldObject
 	}
 	
 	/**
+	 * Increases the agathion energy of this item, respecting the maximum limit.
+	 * @param amount how much energy to add
+	 * @return the actual amount of energy added
+	 */
+	public int increaseAgathionEnergy(int amount)
+	{
+		if (!isAgathionItem() || (amount <= 0))
+		{
+			return 0;
+		}
+		
+		final int maxEnergy = _itemTemplate.getAgathionMaxEnergy();
+		final int currentEnergy = _agathionEnergy;
+		final int spaceAvailable = maxEnergy - currentEnergy;
+		
+		if (spaceAvailable <= 0)
+		{
+			return 0;
+		}
+		
+		final int actualIncrease = Math.min(amount, spaceAvailable);
+		_agathionEnergy = currentEnergy + actualIncrease;
+		_storedInDb = false;
+		
+		final Player player = asPlayer();
+		if (player != null)
+		{
+			// Send energy info packet to client
+			player.sendPacket(new ExBrAgathionEnergyInfo(Collections.singletonList(this)));
+			
+			if (_loc != ItemLocation.WAREHOUSE)
+			{
+				final InventoryUpdate iu = new InventoryUpdate();
+				iu.addModifiedItem(this);
+				player.sendInventoryUpdate(iu);
+			}
+		}
+		
+		return actualIncrease;
+	}
+	
+	/**
 	 * Decreases the agathion energy of this item.
 	 * @param resetConsumingEnergy if true forces a new consumption task if item is equipped
 	 */
