@@ -1555,10 +1555,21 @@
 		<!-- Increases the power of and Resistance to water attacks by 10 each. Continuously consumes energy. -->
 		<set name="icon" val="BranchSys2.icon.br_soulavatar_attr_i00" />
 		<set name="operateType" val="T" />
-		<set name="targetType" val="NONE" />
+		<set name="targetType" val="SELF" />
 		<set name="abnormalVisualEffect" val="BR_SOUL_AVATAR" />
 		<set name="blockedInOlympiad" val="true" />
 		<set name="magicLevel" val="1" />
+		<set name="energyConsume" val="100" />
+		<conditions msgId="2292">
+			<player hasAgathion="true" />
+		</conditions>
+		<effects>
+			<effect name="EnergyDamOverTime" />
+			<effect name="Buff">
+				<add stat="windPower" val="10" />
+				<add stat="windRes" val="10" />
+			</effect>
+		</effects>
 	</skill>
 	<skill id="21180" levels="1" name="Divine Protection - Earth">
 		<!-- Increases the power of and Resistance to earth attacks by 10 each. Continuously consumes energy. -->
@@ -1647,24 +1658,39 @@
 		<!-- Increases Resistance to stun by 40%. Continuously consumes energy. -->
 		<set name="icon" val="BranchSys2.icon.br_soulavatar_resist_i00" />
 		<set name="operateType" val="T" />
-		<set name="targetType" val="NONE" />
+		<set name="targetType" val="SELF" />
 		<set name="abnormalVisualEffect" val="BR_SOUL_AVATAR" />
 		<set name="blockedInOlympiad" val="true" />
 		<set name="magicLevel" val="1" />
+		<set name="energyConsume" val="200" />
+		<conditions msgId="2292">
+			<player hasAgathion="true" />
+		</conditions>
 		<effects>
+			<effect name="EnergyDamOverTime" />
 			<effect name="DefenceTrait">
 				<param SHOCK="40" />
 			</effect>
 		</effects>
 	</skill>
-	<skill id="21188" levels="1" name="Recovery Power - HP">
+	<skill id="21188" levels="1" name="Recovery Ability - HP">
 		<!-- Increases HP Recovery Bonus by 20%. Continuously consumes energy. -->
 		<set name="icon" val="BranchSys2.icon.br_soulavatar_regen_i00" />
 		<set name="operateType" val="T" />
-		<set name="targetType" val="NONE" />
+		<set name="targetType" val="SELF" />
 		<set name="abnormalVisualEffect" val="BR_SOUL_AVATAR" />
 		<set name="blockedInOlympiad" val="true" />
 		<set name="magicLevel" val="1" />
+		<set name="energyConsume" val="100" />
+		<conditions msgId="2292">
+			<player hasAgathion="true" />
+		</conditions>		
+		<effects>
+			<effect name="EnergyDamOverTime" />
+			<effect name="Buff">
+				<mul stat="regHp" val="20" />
+			</effect>
+		</effects>
 	</skill>
 	<skill id="21189" levels="1" name="Recovery Power - MP">
 		<!-- Increases MP Recovery Bonus by 20%. Continuously consumes energy. -->
@@ -1679,7 +1705,7 @@
 		<!-- For 10 seconds, increases P. Def. and M. Def. by 60%. Consumes 500 energy. Reuse delay 20 minutes. -->
 		<set name="icon" val="BranchSys2.icon.br_soulavatar_active_i00" />
 		<set name="operateType" val="A2" />
-		<set name="targetType" val="NONE" />
+		<set name="targetType" val="SELF" />
 		<set name="abnormalLevel" val="26" />
 		<set name="abnormalTime" val="10" />
 		<set name="abnormalType" val="PD_UP_SPECIAL" />
@@ -1688,6 +1714,16 @@
 		<set name="magicLevel" val="-1" />
 		<set name="reuseDelay" val="1200000" />
 		<set name="staticReuse" val="true" />
+		<set name="energyConsume" val="500" />
+		<conditions msgId="2292">
+			<player hasAgathion="true" />
+		</conditions>
+		<effects>
+			<effect name="Buff">
+				<mul stat="pDef" val="1.6" />
+				<mul stat="mDef" val="1.6" />
+			</effect>
+		</effects>
 	</skill>
 	<skill id="21191" levels="1" name="Agathion Seal Cancel - Phoenix">
 		<!-- Removes the seal of Agathion. -->

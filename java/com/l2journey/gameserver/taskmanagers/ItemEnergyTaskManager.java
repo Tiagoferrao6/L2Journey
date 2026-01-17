@@ -31,14 +31,13 @@ import com.l2journey.gameserver.model.actor.Player;
 import com.l2journey.gameserver.model.item.instance.Item;
 
 /**
- * Task manager for agathion energy consumption.
- * Handles the periodic energy decrease for equipped agathion bracelet items
- * when an agathion is actively summoned.
+ * Task manager for agathion energy consumption. Handles the periodic energy decrease for equipped agathion bracelet items when an agathion is actively summoned.
  * @author KingHanker
  */
 public class ItemEnergyTaskManager implements Runnable
 {
 	private static final Map<Item, Long> ITEMS = new ConcurrentHashMap<>();
+	private static final Map<Item, Integer> ENERGY_MULTIPLIERS = new ConcurrentHashMap<>();
 	private static final int ENERGY_CONSUMPTION_RATE = 60000; // 1 minute
 	private static boolean _working = false;
 	
@@ -79,12 +78,16 @@ public class ItemEnergyTaskManager implements Runnable
 					// Only consume energy if agathion is still active
 					if (player.getAgathionId() > 0)
 					{
-						item.decreaseAgathionEnergy(item.isEquipped());
+						// Calculate total energy consumption: 1 (base agathion) + extra from active toggle skills
+						final int extraFromToggles = ENERGY_MULTIPLIERS.getOrDefault(item, 0);
+						final int totalConsumption = 1 + extraFromToggles;
+						item.decreaseAgathionEnergy(item.isEquipped(), totalConsumption);
 					}
 					else
 					{
 						// Agathion was dismissed, stop consuming energy
 						item.stopConsumeEnergyTask();
+						ENERGY_MULTIPLIERS.remove(item);
 					}
 				}
 			}
@@ -112,6 +115,37 @@ public class ItemEnergyTaskManager implements Runnable
 	public void remove(Item item)
 	{
 		ITEMS.remove(item);
+		ENERGY_MULTIPLIERS.remove(item);
+	}
+	
+	/**
+	 * Increases the energy consumption multiplier for an item.<br>
+	 * Used when toggle skills that consume energy are activated.
+	 * @param item the agathion bracelet item
+	 */
+	public void increaseEnergyMultiplier(Item item)
+	{
+		ENERGY_MULTIPLIERS.merge(item, 1, Integer::sum);
+	}
+	
+	/**
+	 * Decreases the energy consumption multiplier for an item.<br>
+	 * Used when toggle skills that consume energy are deactivated.
+	 * @param item the agathion bracelet item
+	 */
+	public void decreaseEnergyMultiplier(Item item)
+	{
+		ENERGY_MULTIPLIERS.computeIfPresent(item, (k, v) -> (v <= 1) ? null : (v - 1));
+	}
+	
+	/**
+	 * Gets the current energy consumption multiplier for an item.
+	 * @param item the agathion bracelet item
+	 * @return the multiplier value (default 1)
+	 */
+	public int getEnergyMultiplier(Item item)
+	{
+		return ENERGY_MULTIPLIERS.getOrDefault(item, 1);
 	}
 	
 	public static ItemEnergyTaskManager getInstance()

@@ -164,6 +164,7 @@
 													<xs:attribute name="agathionId" type="xs:unsignedShort" use="optional" />
 													<xs:attribute name="hasAgathion" type="xs:boolean" use="optional" />
 													<xs:attribute name="agathionEnergy" type="xs:boolean" use="optional" />
+													<xs:attribute name="agathionItems" type="xs:string" use="optional" />
 													<xs:attribute name="active_effect_id" type="xs:unsignedShort" use="optional" />
 													<xs:attribute name="checkAbnormal" type="xs:string" use="optional" />
 													<xs:attribute name="class_id_restriction" type="xs:string" use="optional" />
@@ -242,6 +243,7 @@
 																	<xs:attribute name="agathionId" type="xs:unsignedShort" use="optional" />
 																	<xs:attribute name="hasAgathion" type="xs:boolean" use="optional" />
 																	<xs:attribute name="agathionEnergy" type="xs:boolean" use="optional" />
+																	<xs:attribute name="agathionItems" type="xs:string" use="optional" />
 																</xs:complexType>
 															</xs:element>
 															<xs:element name="not">
@@ -540,6 +542,7 @@
 																<xs:attribute name="isSummonSpawn" type="xs:boolean" use="optional" />
 																<xs:attribute name="grade" type="xs:string" use="optional" />
 																<xs:attribute name="randomOffset" type="xs:unsignedByte" use="optional" />
+																<xs:attribute name="energy" type="xs:unsignedInt" use="optional" />
 															</xs:complexType>
 														</xs:element>
 														<xs:element name="set">
@@ -749,6 +752,7 @@
 																<xs:attribute name="dispel" type="xs:string" use="optional" />
 																<xs:attribute name="time" type="xs:unsignedByte" use="optional" />
 																<xs:attribute name="fullLethal" type="xs:string" use="optional" />
+																<xs:attribute name="energy" type="xs:unsignedInt" use="optional" />
 															</xs:complexType>
 														</xs:element>
 														<xs:element name="set">
@@ -999,6 +1003,7 @@
 																<xs:attribute name="SHOCK" type="xs:string" use="optional" />
 																<xs:attribute name="type" type="xs:string" use="optional" />
 																<xs:attribute name="heal" type="xs:boolean" use="optional" />
+																<xs:attribute name="energy" type="xs:unsignedInt" use="optional" />
 															</xs:complexType>
 														</xs:element>
 														<xs:element maxOccurs="unbounded" name="mul">
