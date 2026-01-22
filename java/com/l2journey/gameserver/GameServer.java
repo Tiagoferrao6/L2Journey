@@ -115,6 +115,7 @@ import com.l2journey.gameserver.managers.ClanHallAuctionManager;
 import com.l2journey.gameserver.managers.CoupleManager;
 import com.l2journey.gameserver.managers.CursedWeaponsManager;
 import com.l2journey.gameserver.managers.CustomMailManager;
+import com.l2journey.gameserver.managers.DailyRewardManager;
 import com.l2journey.gameserver.managers.DayNightSpawnManager;
 import com.l2journey.gameserver.managers.DimensionalRiftManager;
 import com.l2journey.gameserver.managers.EventDropManager;
@@ -323,6 +324,10 @@ public class GameServer
 		if (Config.SELLBUFF_ENABLED)
 		{
 			SellBuffsManager.getInstance();
+		}
+		if (Config.DAILY_REWARD_ENABLED)
+		{
+			DailyRewardManager.getInstance();
 		}
 		if (Config.MULTILANG_ENABLE)
 		{

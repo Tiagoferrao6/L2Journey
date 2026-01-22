@@ -262,6 +262,7 @@ public class Config
 	public static int COMMUNITY_PREMIUM_PRICE_PER_DAY;
 	public static Set<Integer> COMMUNITY_AVAILABLE_BUFFS;
 	public static Map<String, Location> COMMUNITY_AVAILABLE_TELEPORTS;
+	public static boolean DAILY_REWARD_ENABLED;
 	
 	// --------------------------------------------------
 	// Custom Mail Manager
@@ -1855,6 +1856,8 @@ public class Config
 			final String[] splitInfo = s.split(",");
 			COMMUNITY_AVAILABLE_TELEPORTS.put(splitInfo[0], new Location(Integer.parseInt(splitInfo[1]), Integer.parseInt(splitInfo[2]), Integer.parseInt(splitInfo[3])));
 		}
+		
+		DAILY_REWARD_ENABLED = communityBoardConfig.getBoolean("DailyRewardEnabled", true);
 	}
 	
 	/**

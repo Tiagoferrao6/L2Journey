@@ -31,4 +31,10 @@
 			<height normal="20" />
 		</collision>
 	</npc>
+	<npc id="50005" displayId="18599" level="70" type="Folk" usingServerSideName="true" name="Van Gogh" usingServerSideTitle="true" title="Painter">
+		<collision>
+			<radius normal="21" />
+			<height normal="25" />
+		</collision>
+	</npc>
 </list>

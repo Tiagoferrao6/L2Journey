@@ -157,6 +157,7 @@ import handlers.bypasshandlers.Buy;
 import handlers.bypasshandlers.BuyShadowItem;
 import handlers.bypasshandlers.ChatLink;
 import handlers.bypasshandlers.ClanWarehouse;
+import handlers.bypasshandlers.DailyReward;
 import handlers.bypasshandlers.Festival;
 import handlers.bypasshandlers.FindPvP;
 import handlers.bypasshandlers.Freight;
@@ -294,6 +295,7 @@ import handlers.voicedcommandhandlers.Banking;
 import handlers.voicedcommandhandlers.ChangePassword;
 import handlers.voicedcommandhandlers.ChatAdmin;
 import handlers.voicedcommandhandlers.CombineTalismans;
+import handlers.voicedcommandhandlers.DailyRewardVCmd;
 import handlers.voicedcommandhandlers.DressMeVCmd;
 import handlers.voicedcommandhandlers.Epic;
 import handlers.voicedcommandhandlers.Lang;
@@ -463,6 +465,7 @@ public class MasterHandler
 			PrivateWarehouse.class,
 			QuestList.class,
 			ReceivePremium.class,
+			Config.DAILY_REWARD_ENABLED ? DailyReward.class : null,
 			ReleaseAttribute.class,
 			RentPet.class,
 			Rift.class,
@@ -570,6 +573,7 @@ public class MasterHandler
 			Config.CHAT_ADMIN ? ChatAdmin.class : null,
 			Config.COMBINETALISMANS_COMMAND ? CombineTalismans.class : null,
 			Config.DRESSME_ENABLE ? DressMeVCmd.class : null,
+			Config.DAILY_REWARD_ENABLED ? DailyRewardVCmd.class : null,
 			Config.EPIC_COMMAND ? Epic.class : null,
 			Config.MULTILANG_ENABLE && Config.MULTILANG_VOICED_ALLOW ? Lang.class : null,
 			Config.ALLOW_CHANGE_PASSWORD ? ChangePassword.class : null,

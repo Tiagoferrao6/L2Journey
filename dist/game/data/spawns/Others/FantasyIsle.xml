@@ -22,5 +22,6 @@
 		<npc id="50001" x="-76220" y="-57821" z="-3666" heading="64246" respawnDelay="60" /> <!-- Fallen Dragon -->
 		<npc id="50003" x="-56472" y="-72324" z="-3140" heading="11614" respawnDelay="60" /> <!-- Eleanor -->
 		<npc id="50004" x="-76509" y="-59284" z="-3559" heading="9024" respawnDelay="60" /> <!-- Fire - Elemental -->
+		<npc id="50005" x="-59484" y="-69861" z="-2881" heading="57472" respawnDelay="60" /> <!-- Van Gogh - painter -->
 	</spawn>
 </list>
