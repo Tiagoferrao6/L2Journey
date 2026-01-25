@@ -125,6 +125,7 @@ import com.l2journey.gameserver.managers.FortManager;
 import com.l2journey.gameserver.managers.FortSiegeManager;
 import com.l2journey.gameserver.managers.GlobalVariablesManager;
 import com.l2journey.gameserver.managers.GrandBossManager;
+import com.l2journey.gameserver.managers.HitmanManager;
 import com.l2journey.gameserver.managers.IdManager;
 import com.l2journey.gameserver.managers.InstanceManager;
 import com.l2journey.gameserver.managers.ItemAuctionManager;
@@ -328,6 +329,10 @@ public class GameServer
 		if (Config.DAILY_REWARD_ENABLED)
 		{
 			DailyRewardManager.getInstance();
+		}
+		if (EventsConfig.HITMAN_ENABLED)
+		{
+			HitmanManager.getInstance();
 		}
 		if (Config.MULTILANG_ENABLE)
 		{

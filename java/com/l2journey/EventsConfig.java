@@ -51,6 +51,7 @@ public class EventsConfig
 	
 	private static final String ELPIES_EVENT_CONFIG_FILE = "./config/events/elpies.ini";
 	private static final String FACTION_SYSTEM_CONFIG_FILE = "./config/events/factionsystem.ini";
+	private static final String HITMAN_CONFIG_FILE = "./config/events/hitman.ini";
 	private static final String LUCKY_PIG_EVENT_CONFIG_FILE = "./config/events/luckypig.ini";
 	private static final String OLYMPIAD_CONFIG_FILE = "./config/events/olympiad.ini";
 	private static final String PC_BANG_EVENT_CONFIG_FILE = "./config/events/pcbangpoints.ini";
@@ -64,6 +65,19 @@ public class EventsConfig
 	public static int ELPY_ID;
 	public static int ELPY_AMOUNT;
 	public static int ELPY_DURATION_MINUTES;
+	
+	// --------------------------------------------------
+	// Hitman Event
+	// --------------------------------------------------
+	public static boolean HITMAN_ENABLED;
+	public static boolean HITMAN_TAKE_KARMA;
+	public static int HITMAN_TARGETS_LIMIT;
+	public static boolean HITMAN_ANNOUNCE;
+	public static int HITMAN_MAX_PER_PAGE;
+	public static List<Integer> HITMAN_CURRENCY;
+	public static long HITMAN_MIN_BOUNTY;
+	public static boolean HITMAN_SAME_TEAM;
+	public static int HITMAN_SAVE_INTERVAL;
 	
 	// --------------------------------------------------
 	// Custom - Faction System
@@ -200,6 +214,7 @@ public class EventsConfig
 	{
 		loadElpiesEvent();
 		loadFactionSystem();
+		loadHitmanEvent();
 		loadLuckyPig();
 		loadOlympiadConfig();
 		loadPcBangPoints();
@@ -217,6 +232,37 @@ public class EventsConfig
 		ELPY_ID = elpiesEventConfig.getInt("ElpyId", 900100);
 		ELPY_AMOUNT = elpiesEventConfig.getInt("ElpyAmount", 100);
 		ELPY_DURATION_MINUTES = elpiesEventConfig.getInt("ElpyEventDuration", 2);
+	}
+	
+	/**
+	 * Load Hitman Event file (if exists).
+	 */
+	private static void loadHitmanEvent()
+	{
+		final ConfigReader hitmanConfig = new ConfigReader(HITMAN_CONFIG_FILE);
+		HITMAN_ENABLED = hitmanConfig.getBoolean("HitmanEnabled", false);
+		HITMAN_TAKE_KARMA = hitmanConfig.getBoolean("HitmanTakeKarma", true);
+		HITMAN_TARGETS_LIMIT = hitmanConfig.getInt("HitmanTargetsLimit", 5);
+		HITMAN_ANNOUNCE = hitmanConfig.getBoolean("HitmanAnnounce", false);
+		HITMAN_MAX_PER_PAGE = hitmanConfig.getInt("HitmanMaxPerPage", 20);
+		HITMAN_MIN_BOUNTY = hitmanConfig.getLong("HitmanMinBounty", 100000);
+		HITMAN_SAME_TEAM = hitmanConfig.getBoolean("HitmanSameTeam", false);
+		HITMAN_SAVE_INTERVAL = hitmanConfig.getInt("HitmanSaveInterval", 15);
+		
+		// Parse currency list
+		HITMAN_CURRENCY = new ArrayList<>();
+		final String currencyList = hitmanConfig.getString("HitmanCurrency", "57");
+		for (String id : currencyList.split(","))
+		{
+			try
+			{
+				HITMAN_CURRENCY.add(Integer.parseInt(id.trim()));
+			}
+			catch (NumberFormatException e)
+			{
+				LOGGER.warning("Invalid hitman currency ID: " + id);
+			}
+		}
 	}
 	
 	/**

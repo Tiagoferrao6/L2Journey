@@ -51,6 +51,7 @@ import com.l2journey.gameserver.managers.CursedWeaponsManager;
 import com.l2journey.gameserver.managers.DimensionalRiftManager;
 import com.l2journey.gameserver.managers.FortManager;
 import com.l2journey.gameserver.managers.FortSiegeManager;
+import com.l2journey.gameserver.managers.HitmanManager;
 import com.l2journey.gameserver.managers.InstanceManager;
 import com.l2journey.gameserver.managers.MailManager;
 import com.l2journey.gameserver.managers.PcCafePointsManager;
@@ -480,6 +481,12 @@ public class EnterWorld extends ClientPacket
 				player.sendPacket(new ExShowScreenMessage("Welcome " + player.getName() + ", you are fighting for the " + EventsConfig.FACTION_EVIL_TEAM_NAME + " faction.", 10000));
 				player.updateUserInfo(); // for seeing self name color
 			}
+		}
+		
+		// Hitman Event - notify player about bounties
+		if (EventsConfig.HITMAN_ENABLED)
+		{
+			HitmanManager.getInstance().onEnterWorld(player);
 		}
 		
 		player.sendPacket(new QuestList(player));

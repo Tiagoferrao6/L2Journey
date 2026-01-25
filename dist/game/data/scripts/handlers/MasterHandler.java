@@ -161,6 +161,7 @@ import handlers.bypasshandlers.DailyReward;
 import handlers.bypasshandlers.Festival;
 import handlers.bypasshandlers.FindPvP;
 import handlers.bypasshandlers.Freight;
+import handlers.bypasshandlers.Hitman;
 import handlers.bypasshandlers.ItemAuctionLink;
 import handlers.bypasshandlers.Link;
 import handlers.bypasshandlers.Loto;
@@ -298,6 +299,7 @@ import handlers.voicedcommandhandlers.CombineTalismans;
 import handlers.voicedcommandhandlers.DailyRewardVCmd;
 import handlers.voicedcommandhandlers.DressMeVCmd;
 import handlers.voicedcommandhandlers.Epic;
+import handlers.voicedcommandhandlers.HitmanVCmd;
 import handlers.voicedcommandhandlers.Lang;
 import handlers.voicedcommandhandlers.Offline;
 import handlers.voicedcommandhandlers.OfflinePlay;
@@ -452,6 +454,7 @@ public class MasterHandler
 			Festival.class,
 			FindPvP.class,
 			Freight.class,
+			EventsConfig.HITMAN_ENABLED ? Hitman.class : null,
 			ItemAuctionLink.class,
 			Link.class,
 			Loto.class,
@@ -575,6 +578,7 @@ public class MasterHandler
 			Config.DRESSME_ENABLE ? DressMeVCmd.class : null,
 			Config.DAILY_REWARD_ENABLED ? DailyRewardVCmd.class : null,
 			Config.EPIC_COMMAND ? Epic.class : null,
+			EventsConfig.HITMAN_ENABLED ? HitmanVCmd.class : null,
 			Config.MULTILANG_ENABLE && Config.MULTILANG_VOICED_ALLOW ? Lang.class : null,
 			Config.ALLOW_CHANGE_PASSWORD ? ChangePassword.class : null,
 			Config.ENABLE_OFFLINE_PLAY_COMMAND ? OfflinePlay.class : null,

@@ -105,6 +105,7 @@ import com.l2journey.gameserver.managers.FortManager;
 import com.l2journey.gameserver.managers.FortSiegeManager;
 import com.l2journey.gameserver.managers.GrandBossManager;
 import com.l2journey.gameserver.managers.HandysBlockCheckerManager;
+import com.l2journey.gameserver.managers.HitmanManager;
 import com.l2journey.gameserver.managers.IdManager;
 import com.l2journey.gameserver.managers.InstanceManager;
 import com.l2journey.gameserver.managers.ItemManager;
@@ -668,6 +669,9 @@ public class Player extends Playable
 	/** Faction System */
 	private boolean _isGood = false;
 	private boolean _isEvil = false;
+
+	/** Hitman Event - List of players this player has contracts on */
+	private List<Integer> _hitmanTargets = null;
 
 	/** The Npc corresponding to the last Folk which one the player talked. */
 	private Npc _lastFolkNpc = null;
@@ -5360,6 +5364,12 @@ public class Player extends Playable
 						EventDispatcher.getInstance().notifyEventAsync(new OnPlayerPvPKill(pk, this), this);
 					}
 
+					// Hitman Event - check if victim is a target
+					if (EventsConfig.HITMAN_ENABLED)
+					{
+						HitmanManager.getInstance().onPlayerKill(pk, this);
+					}
+
 					// pvp/pk item rewards
 					if (!(Config.DISABLE_REWARDS_IN_INSTANCES && (getInstanceId() != 0)) && //
 						!(Config.DISABLE_REWARDS_IN_PVP_ZONES && isInsideZone(ZoneId.PVP)))
@@ -5780,6 +5790,21 @@ public class Player extends Playable
 		if ((target == null) || !target.isPlayable())
 		{
 			return;
+		}
+		
+		// Hitman Event - if target is a hitman target and config says no karma, skip karma gain
+		if (EventsConfig.HITMAN_ENABLED && !EventsConfig.HITMAN_TAKE_KARMA && target.isPlayer())
+		{
+			if (HitmanManager.getInstance().isTarget(target.getObjectId()))
+			{
+				// Skip karma, but still increase PK count
+				if (target.isPlayer())
+				{
+					setPkKills(_pkKills + 1);
+				}
+				updateUserInfo();
+				return;
+			}
 		}
 
 		// Calculate new karma. (calculate karma before incrase pk count!)
@@ -6748,7 +6773,6 @@ public class Player extends Playable
 			else if (_inventory.getItemByItemId(9819) != null)
 			{
 				sendPacket(ActionFailed.STATIC_PACKET);
-				// FIXME: Wrong Message
 				sendMessage("You cannot mount a steed while holding a flag.");
 				return false;
 			}
@@ -15047,6 +15071,56 @@ public class Player extends Playable
 	{
 		_isGood = false;
 		_isEvil = true;
+	}
+
+	// ================================================
+	// Hitman Event Methods
+	// ================================================
+	/**
+	 * Get the list of hitman targets (players this player has contracts on).
+	 * @return list of target object IDs, or null if none
+	 */
+	public List<Integer> getHitmanTargets()
+	{
+		return _hitmanTargets;
+	}
+	
+	/**
+	 * Add a hitman target.
+	 * @param objectId the target's object ID
+	 */
+	public void addHitmanTarget(int objectId)
+	{
+		if (_hitmanTargets == null)
+		{
+			_hitmanTargets = new ArrayList<>();
+		}
+		if (!_hitmanTargets.contains(objectId))
+		{
+			_hitmanTargets.add(objectId);
+		}
+	}
+	
+	/**
+	 * Remove a hitman target.
+	 * @param objectId the target's object ID
+	 */
+	public void removeHitmanTarget(int objectId)
+	{
+		if (_hitmanTargets != null)
+		{
+			_hitmanTargets.remove(Integer.valueOf(objectId));
+		}
+	}
+	
+	/**
+	 * Check if player has a contract on the specified target.
+	 * @param objectId the target's object ID
+	 * @return true if has contract
+	 */
+	public boolean hasHitmanTarget(int objectId)
+	{
+		return _hitmanTargets != null && _hitmanTargets.contains(objectId);
 	}
 
 	/**
