@@ -33,6 +33,7 @@ import com.l2journey.gameserver.model.skill.Skill;
 import com.l2journey.gameserver.model.stats.BaseStat;
 import com.l2journey.gameserver.model.stats.Stat;
 import com.l2journey.gameserver.model.stats.functions.AbstractFunction;
+import com.l2journey.gameserver.model.stats.modulators.Modulators;
 
 /**
  * @author UnAfraid
@@ -54,6 +55,6 @@ public class FuncAtkCritical extends AbstractFunction
 	@Override
 	public double calc(Creature effector, Creature effected, Skill skill, double initVal)
 	{
-		return initVal * BaseStat.DEX.calcBonus(effector) * 10;
+		return initVal * BaseStat.DEX.calcBonus(effector) * (10 - Modulators.CRIT_REDUCE);
 	}
 }

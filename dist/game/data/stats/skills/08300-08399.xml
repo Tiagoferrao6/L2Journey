@@ -442,10 +442,13 @@
 		<!-- Notifies about the Agathion's New Year's gift resupply time. -->
 		<set name="icon" val="icon.skill5239" />
 		<set name="operateType" val="A1" />
-		<set name="targetType" val="NONE" />
+		<set name="targetType" val="SELF" />
 		<set name="isMagic" val="2" /> <!-- Static Skill -->
 		<set name="magicLevel" val="85" />
 		<set name="reuseDelay" val="15000" />
+		<conditions msgId="2292">
+			<player agathionId="16063" />
+		</conditions>
 	</skill>
 	<skill id="8324" levels="1" name="Warrior's Shirt">
 		<!-- Increases Max CP. -->

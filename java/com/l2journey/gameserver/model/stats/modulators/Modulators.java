@@ -36,6 +36,7 @@ package com.l2journey.gameserver.model.stats.modulators;
 public class Modulators
 {
 	public static double MCRIT_REDUCE = 0.7; // 30% reduction for magic critical damage
+	public static int CRIT_REDUCE = 3; // 30% reduction for critical rate
 	
 	public static final double SWORD_VS_HEAVY = 0.8; // -20%
 	public static final double SWORD_VS_LIGHT = 1.1; // +10%

@@ -1343,7 +1343,6 @@
 		<set name="is_sellable" val="false" />
 		<set name="unequip_skill" val="3267-1" />
 		<set name="item_skill" val="8314-1;6124-1;8323-1;3267-1" /> <!-- Release Seal on Agathion - Neolithica -->
-		<set name="time" val="47520" />
 	</item>
 	<item id="14676" type="EtcItem" name="Agathion's New Year's Gift">
 		<!-- Agathion's New Year's gift. You can receive Agathion's gift by double clicking. -->
