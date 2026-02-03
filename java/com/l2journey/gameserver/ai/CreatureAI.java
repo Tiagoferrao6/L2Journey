@@ -48,6 +48,7 @@ import com.l2journey.gameserver.model.effects.EffectType;
 import com.l2journey.gameserver.model.events.EventDispatcher;
 import com.l2journey.gameserver.model.events.EventType;
 import com.l2journey.gameserver.model.events.holders.actor.npc.OnNpcMoveFinished;
+import com.l2journey.gameserver.model.zone.ZoneId;
 import com.l2journey.gameserver.model.interfaces.ILocational;
 import com.l2journey.gameserver.model.item.Weapon;
 import com.l2journey.gameserver.model.item.enums.ItemLocation;
@@ -1028,6 +1029,19 @@ public class CreatureAI extends AbstractAI
 		if ((target == null) || (offsetValue < 0))
 		{
 			return false; // skill radius -1
+		}
+		
+		// Check if actor and target are on different floors - prevent movement/attack across floors
+		// Skip this check if inside castle/siege zone (castles have multiple floors that should be accessible)
+		if (!_actor.isInsideZone(ZoneId.SIEGE) && target.isCreature() && GeoData.getInstance().areOnDifferentFloors(_actor.getX(), _actor.getY(), _actor.getZ(), target.getX(), target.getY(), target.getZ()))
+		{
+			// Cannot reach target on different floor - stop any action
+			if (_actor.isPlayer())
+			{
+				_actor.sendPacket(SystemMessageId.CANNOT_SEE_TARGET);
+			}
+			setIntention(Intention.IDLE);
+			return false;
 		}
 		
 		int offsetWithCollision = offsetValue + _actor.getTemplate().getCollisionRadius();

@@ -28,6 +28,7 @@
  */
 package com.l2journey.gameserver.ai;
 
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.model.WorldObject;
 import com.l2journey.gameserver.model.actor.Creature;
 import com.l2journey.gameserver.model.actor.Player;
@@ -36,6 +37,7 @@ import com.l2journey.gameserver.model.actor.instance.StaticObject;
 import com.l2journey.gameserver.model.interfaces.ILocational;
 import com.l2journey.gameserver.model.skill.Skill;
 import com.l2journey.gameserver.model.skill.targets.TargetType;
+import com.l2journey.gameserver.model.zone.ZoneId;
 import com.l2journey.gameserver.network.SystemMessageId;
 import com.l2journey.gameserver.network.serverpackets.SystemMessage;
 
@@ -259,6 +261,24 @@ public class PlayerAI extends PlayableAI
 		{
 			// Notify the target
 			setAttackTarget(null);
+			return;
+		}
+		
+		// Check if player and target are on different floors (e.g., different building levels)
+		// This uses geodata layers to detect actual floors, not just Z difference
+		// Skip this check if inside castle/siege zone (castles have multiple floors that should be accessible)
+		if (!_actor.isInsideZone(ZoneId.SIEGE) && GeoData.getInstance().areOnDifferentFloors(_actor.getX(), _actor.getY(), _actor.getZ(), target.getX(), target.getY(), target.getZ()))
+		{
+			_actor.sendPacket(SystemMessageId.CANNOT_SEE_TARGET);
+			setIntention(Intention.IDLE);
+			return;
+		}
+		
+		// Check if player can see the target (line of sight through walls)
+		if (!GeoData.getInstance().canSeeTarget(_actor, target))
+		{
+			_actor.sendPacket(SystemMessageId.CANNOT_SEE_TARGET);
+			setIntention(Intention.IDLE);
 			return;
 		}
 		

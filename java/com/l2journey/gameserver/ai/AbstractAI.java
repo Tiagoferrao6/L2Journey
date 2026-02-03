@@ -20,6 +20,7 @@
  */
 package com.l2journey.gameserver.ai;
 
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.model.Location;
 import com.l2journey.gameserver.model.WorldObject;
 import com.l2journey.gameserver.model.WorldRegion;
@@ -28,6 +29,7 @@ import com.l2journey.gameserver.model.actor.Player;
 import com.l2journey.gameserver.model.actor.Summon;
 import com.l2journey.gameserver.model.interfaces.ILocational;
 import com.l2journey.gameserver.model.skill.Skill;
+import com.l2journey.gameserver.model.zone.ZoneId;
 import com.l2journey.gameserver.network.serverpackets.ActionFailed;
 import com.l2journey.gameserver.network.serverpackets.AutoAttackStart;
 import com.l2journey.gameserver.network.serverpackets.AutoAttackStop;
@@ -470,6 +472,14 @@ public abstract class AbstractAI
 		// Check if actor can move.
 		if (!_actor.isMovementDisabled() && !_actor.isAttackingNow() && !_actor.isCastingNow())
 		{
+			// Check if actor and pawn are on different floors - prevent movement across floors
+			// Skip this check if inside castle/siege zone (castles have multiple floors that should be accessible)
+			if (!_actor.isInsideZone(ZoneId.SIEGE) && (pawn != null) && pawn.isCreature() && GeoData.getInstance().areOnDifferentFloors(_actor.getX(), _actor.getY(), _actor.getZ(), pawn.getX(), pawn.getY(), pawn.getZ()))
+			{
+				clientActionFailed();
+				return;
+			}
+			
 			int offset = offsetValue;
 			if (offset < 10)
 			{

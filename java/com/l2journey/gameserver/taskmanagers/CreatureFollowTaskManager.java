@@ -34,9 +34,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.l2journey.commons.threads.ThreadPool;
 import com.l2journey.commons.util.Rnd;
+import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.ai.CreatureAI;
 import com.l2journey.gameserver.ai.Intention;
 import com.l2journey.gameserver.model.WorldObject;
+import com.l2journey.gameserver.model.zone.ZoneId;
 import com.l2journey.gameserver.model.actor.Creature;
 
 /**
@@ -112,6 +114,18 @@ public class CreatureFollowTaskManager
 				{
 					final WorldObject followTarget = ai.getFollowTarget();
 					if (followTarget == null)
+					{
+						if (creature.isSummon())
+						{
+							creature.asSummon().setFollowStatus(false);
+						}
+						ai.setIntention(Intention.IDLE);
+						return;
+					}
+					
+					// Check if creature and target are on different floors - stop following if so
+					// Skip this check if inside castle/siege zone (castles have multiple floors that should be accessible)
+					if (!creature.isInsideZone(ZoneId.SIEGE) && followTarget.isCreature() && GeoData.getInstance().areOnDifferentFloors(creature.getX(), creature.getY(), creature.getZ(), followTarget.getX(), followTarget.getY(), followTarget.getZ()))
 					{
 						if (creature.isSummon())
 						{
