@@ -28,14 +28,22 @@
  */
 package ai.bosses.Core;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Logger;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 import com.l2journey.Config;
 import com.l2journey.commons.time.TimeUtil;
+import com.l2journey.commons.util.IXmlReader;
 import com.l2journey.gameserver.managers.GlobalVariablesManager;
 import com.l2journey.gameserver.managers.GrandBossManager;
 import com.l2journey.gameserver.model.Location;
@@ -53,48 +61,70 @@ import ai.AbstractNpcAI;
 
 /**
  * Core AI.
- * @author DrLecter, Emperorc, Mobius
+ * @author DrLecter, Emperorc, Mobius, KingHanker
  */
-public class Core extends AbstractNpcAI
+public class Core extends AbstractNpcAI implements IXmlReader
 {
+	final Logger LOGGER = Logger.getLogger(Core.class.getName());
+	
 	// NPCs
 	private static final int CORE = 29006;
-	private static final int DEATH_KNIGHT = 29007;
-	private static final int DOOM_WRAITH = 29008;
-	private static final int SUSCEPTOR = 29011;
-	// Spawns
-	private static final Map<Integer, Location> MINNION_SPAWNS = new HashMap<>();
-	static
-	{
-		MINNION_SPAWNS.put(DEATH_KNIGHT, new Location(17191, 109298, -6488));
-		MINNION_SPAWNS.put(DEATH_KNIGHT, new Location(17564, 109548, -6488));
-		MINNION_SPAWNS.put(DEATH_KNIGHT, new Location(17855, 109552, -6488));
-		MINNION_SPAWNS.put(DEATH_KNIGHT, new Location(18280, 109202, -6488));
-		MINNION_SPAWNS.put(DEATH_KNIGHT, new Location(18784, 109253, -6488));
-		MINNION_SPAWNS.put(DEATH_KNIGHT, new Location(18059, 108314, -6488));
-		MINNION_SPAWNS.put(DEATH_KNIGHT, new Location(17300, 108444, -6488));
-		MINNION_SPAWNS.put(DEATH_KNIGHT, new Location(17148, 110071, -6648));
-		MINNION_SPAWNS.put(DEATH_KNIGHT, new Location(18318, 110077, -6648));
-		MINNION_SPAWNS.put(DEATH_KNIGHT, new Location(17726, 110391, -6648));
-		MINNION_SPAWNS.put(DOOM_WRAITH, new Location(17113, 110970, -6648));
-		MINNION_SPAWNS.put(DOOM_WRAITH, new Location(17496, 110880, -6648));
-		MINNION_SPAWNS.put(DOOM_WRAITH, new Location(18061, 110990, -6648));
-		MINNION_SPAWNS.put(DOOM_WRAITH, new Location(18384, 110698, -6648));
-		MINNION_SPAWNS.put(DOOM_WRAITH, new Location(17993, 111458, -6584));
-		MINNION_SPAWNS.put(SUSCEPTOR, new Location(17297, 111470, -6584));
-		MINNION_SPAWNS.put(SUSCEPTOR, new Location(17893, 110198, -6648));
-		MINNION_SPAWNS.put(SUSCEPTOR, new Location(17706, 109423, -6488));
-		MINNION_SPAWNS.put(SUSCEPTOR, new Location(17849, 109388, -6480));
-	}
+	// Minion data holder
+	private static final List<MinionSpawn> MINION_SPAWNS = new ArrayList<>();
+	private static final Set<Integer> MINION_IDS = new HashSet<>();
 	// Misc
 	private static final byte ALIVE = 0;
 	private static final byte DEAD = 1;
 	private static final Collection<Attackable> _minions = ConcurrentHashMap.newKeySet();
 	private static boolean _firstAttacked;
 	
+	/**
+	 * Holds minion spawn data loaded from XML.
+	 */
+	private static class MinionSpawn
+	{
+		private final int _npcId;
+		private final Location _location;
+		private final int _respawnTime;
+		
+		public MinionSpawn(int npcId, int x, int y, int z, int respawnTime)
+		{
+			_npcId = npcId;
+			_location = new Location(x, y, z);
+			_respawnTime = respawnTime;
+		}
+		
+		public int getNpcId()
+		{
+			return _npcId;
+		}
+		
+		public Location getLocation()
+		{
+			return _location;
+		}
+		
+		public int getRespawnTime()
+		{
+			return _respawnTime;
+		}
+	}
+	
 	private Core()
 	{
-		registerMobs(CORE, DEATH_KNIGHT, DOOM_WRAITH, SUSCEPTOR);
+		// Load minions from XML first
+		load();
+		
+		// Register Core and all minion IDs
+		final int[] mobs = new int[MINION_IDS.size() + 1];
+		mobs[0] = CORE;
+		int i = 1;
+		for (int minionId : MINION_IDS)
+		{
+			mobs[i++] = minionId;
+		}
+		registerMobs(mobs);
+		
 		_firstAttacked = false;
 		final StatSet info = GrandBossManager.getInstance().getStatSet(CORE);
 		if (GrandBossManager.getInstance().getStatus(CORE) == DEAD)
@@ -139,17 +169,50 @@ public class Core extends AbstractNpcAI
 		GlobalVariablesManager.getInstance().set("Core_Attacked", _firstAttacked);
 	}
 	
+	@Override
+	public void load()
+	{
+		MINION_SPAWNS.clear();
+		MINION_IDS.clear();
+		parseDatapackFile("data/scripts/ai/bosses/Core/Core.xml");
+		LOGGER.info(getClass().getSimpleName() + ": Loaded " + MINION_SPAWNS.size() + " minion spawns.");
+	}
+	
+	@Override
+	public void parseDocument(Document doc, File f)
+	{
+		for (Node node = doc.getFirstChild(); node != null; node = node.getNextSibling())
+		{
+			if ("list".equalsIgnoreCase(node.getNodeName()))
+			{
+				for (Node minionNode = node.getFirstChild(); minionNode != null; minionNode = minionNode.getNextSibling())
+				{
+					if ("minion".equalsIgnoreCase(minionNode.getNodeName()))
+					{
+						final NamedNodeMap attrs = minionNode.getAttributes();
+						final int npcId = parseInteger(attrs, "npcId");
+						final int x = parseInteger(attrs, "x");
+						final int y = parseInteger(attrs, "y");
+						final int z = parseInteger(attrs, "z");
+						final int respawnTime = parseInteger(attrs, "respawnTime", 60);
+						
+						MINION_SPAWNS.add(new MinionSpawn(npcId, x, y, z, respawnTime));
+						MINION_IDS.add(npcId);
+					}
+				}
+			}
+		}
+	}
+	
 	public void spawnBoss(GrandBoss npc)
 	{
 		GrandBossManager.getInstance().addBoss(npc);
 		npc.broadcastPacket(new PlaySound(1, "BS01_A", 1, npc.getObjectId(), npc.getX(), npc.getY(), npc.getZ()));
-		// Spawn minions
-		Attackable mob;
-		Location spawnLocation;
-		for (Entry<Integer, Location> spawn : MINNION_SPAWNS.entrySet())
+		// Spawn minions from XML data
+		for (MinionSpawn spawn : MINION_SPAWNS)
 		{
-			spawnLocation = spawn.getValue();
-			mob = addSpawn(spawn.getKey(), spawnLocation.getX(), spawnLocation.getY(), spawnLocation.getZ(), getRandom(61794), false, 0).asAttackable();
+			final Location loc = spawn.getLocation();
+			final Attackable mob = addSpawn(spawn.getNpcId(), loc.getX(), loc.getY(), loc.getZ(), getRandom(61794), false, 0).asAttackable();
 			mob.setIsRaidMinion(true);
 			_minions.add(mob);
 		}
@@ -210,8 +273,6 @@ public class Core extends AbstractNpcAI
 			npc.broadcastPacket(new NpcSay(objId, ChatType.NPC_GENERAL, npc.getId(), NpcStringId.SYSTEM_IS_BEING_SHUT_DOWN));
 			npc.broadcastPacket(new NpcSay(objId, ChatType.NPC_GENERAL, npc.getId(), NpcStringId.EMPTY));
 			_firstAttacked = false;
-			addSpawn(900103, 16502, 110165, -6394, 0, false, 900000);
-			addSpawn(900103, 18948, 110166, -6397, 0, false, 900000);
 			GrandBossManager.getInstance().setStatus(CORE, DEAD);
 			
 			final long baseIntervalMillis = Config.CORE_SPAWN_INTERVAL * 3600000;
@@ -227,13 +288,24 @@ public class Core extends AbstractNpcAI
 			final StatSet info = GrandBossManager.getInstance().getStatSet(CORE);
 			info.set("respawn_time", System.currentTimeMillis() + respawnTime);
 			GrandBossManager.getInstance().setStatSet(CORE, info);
-			startQuestTimer("despawn_minions", 20000, null, null);
+			// Despawn minions after 10 seconds
+			startQuestTimer("despawn_minions", 10000, null, null);
 			cancelQuestTimers("spawn_minion");
 		}
 		else if ((GrandBossManager.getInstance().getStatus(CORE) == ALIVE) && _minions.contains(npc))
 		{
 			_minions.remove(npc);
-			startQuestTimer("spawn_minion", 60000, npc, null);
+			// Find respawn time from XML data
+			int respawnTime = 60000; // default 60 seconds
+			for (MinionSpawn spawn : MINION_SPAWNS)
+			{
+				if (spawn.getNpcId() == npc.getId())
+				{
+					respawnTime = spawn.getRespawnTime() * 1000;
+					break;
+				}
+			}
+			startQuestTimer("spawn_minion", respawnTime, npc, null);
 		}
 	}
 	

@@ -288,14 +288,6 @@
 		</collision>
 	</npc>
 	<npc id="29006" level="50" type="GrandBoss" name="Core">
-		<!-- Confirmed CT2.5 -->
-		<parameters>
-			<minions name="Privates">
-				<npc id="29008" count="3" respawnTime="360" weightPoint="1" />
-				<npc id="29011" count="4" respawnTime="360" weightPoint="1" />
-				<npc id="29007" count="10" respawnTime="360" weightPoint="1" />
-			</minions>
-		</parameters>
 		<race>CONSTRUCT</race>
 		<sex>MALE</sex>
 		<acquire exp="2041407" sp="153786" raidPoints="1508" />
