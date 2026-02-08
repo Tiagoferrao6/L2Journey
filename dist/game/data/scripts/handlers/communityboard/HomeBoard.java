@@ -55,21 +55,16 @@ import com.l2journey.gameserver.data.sql.ClanTable;
 import com.l2journey.gameserver.data.xml.BuyListData;
 import com.l2journey.gameserver.data.xml.ExperienceData;
 import com.l2journey.gameserver.data.xml.MultisellData;
-import com.l2journey.gameserver.data.xml.SkillData;
 import com.l2journey.gameserver.handler.CommunityBoardHandler;
 import com.l2journey.gameserver.handler.IParseBoardHandler;
 import com.l2journey.gameserver.managers.PcCafePointsManager;
 import com.l2journey.gameserver.managers.PremiumManager;
-import com.l2journey.gameserver.model.actor.Creature;
 import com.l2journey.gameserver.model.actor.Player;
-import com.l2journey.gameserver.model.actor.Summon;
 import com.l2journey.gameserver.model.item.enums.ItemProcessType;
-import com.l2journey.gameserver.model.skill.Skill;
 import com.l2journey.gameserver.model.zone.ZoneId;
 import com.l2journey.gameserver.network.SystemMessageId;
 import com.l2journey.gameserver.network.serverpackets.BuyList;
 import com.l2journey.gameserver.network.serverpackets.ExBuySellList;
-import com.l2journey.gameserver.network.serverpackets.MagicSkillUse;
 import com.l2journey.gameserver.network.serverpackets.ShowBoard;
 
 /**
@@ -95,8 +90,6 @@ public class HomeBoard implements IParseBoardHandler
 		Config.COMMUNITYBOARD_ENABLE_MULTISELLS ? "_bbsmultisell" : null,
 		Config.COMMUNITYBOARD_ENABLE_MULTISELLS ? "_bbssell" : null,
 		Config.COMMUNITYBOARD_ENABLE_TELEPORTS ? "_bbsteleport" : null,
-		Config.COMMUNITYBOARD_ENABLE_BUFFS ? "_bbsbuff" : null,
-		Config.COMMUNITYBOARD_ENABLE_HEAL ? "_bbsheal" : null,
 		Config.COMMUNITYBOARD_ENABLE_DELEVEL ? "_bbsdelevel" : null
 	};
 	
@@ -303,72 +296,6 @@ public class HomeBoard implements IParseBoardHandler
 				player.teleToLocation(Config.COMMUNITY_AVAILABLE_TELEPORTS.get(teleBuypass), 0);
 				ThreadPool.schedule(player::enableAllSkills, 3000);
 			}
-		}
-		else if (command.startsWith("_bbsbuff"))
-		{
-			final String fullBypass = command.replace("_bbsbuff;", "");
-			final String[] buypassOptions = fullBypass.split(";");
-			final int buffCount = buypassOptions.length - 1;
-			final String page = buypassOptions[buffCount];
-			if (player.getInventory().getInventoryItemCount(Config.COMMUNITYBOARD_CURRENCY, -1) < (Config.COMMUNITYBOARD_BUFF_PRICE * buffCount))
-			{
-				player.sendMessage("Not enough currency!");
-			}
-			else
-			{
-				player.destroyItemByItemId(ItemProcessType.FEE, Config.COMMUNITYBOARD_CURRENCY, Config.COMMUNITYBOARD_BUFF_PRICE * buffCount, player, true);
-				final Summon pet = player.getSummon();
-				final List<Creature> targets = new ArrayList<>(4);
-				targets.add(player);
-				if (pet != null)
-				{
-					targets.add(pet);
-				}
-				
-				for (int i = 0; i < buffCount; i++)
-				{
-					final Skill skill = SkillData.getInstance().getSkill(Integer.parseInt(buypassOptions[i].split(",")[0]), Integer.parseInt(buypassOptions[i].split(",")[1]));
-					if (!Config.COMMUNITY_AVAILABLE_BUFFS.contains(skill.getId()))
-					{
-						continue;
-					}
-					
-					for (Creature target : targets)
-					{
-						skill.applyEffects(player, target);
-						player.sendPacket(new MagicSkillUse(player, target, skill.getId(), skill.getLevel(), skill.getHitTime(), skill.getReuseDelay()));
-					}
-				}
-			}
-			
-			returnHtml = HtmCache.getInstance().getHtm(player, "data/html/CommunityBoard/Custom/" + page + ".html");
-		}
-		else if (command.startsWith("_bbsheal"))
-		{
-			final String page = command.replace("_bbsheal;", "");
-			if (player.getInventory().getInventoryItemCount(Config.COMMUNITYBOARD_CURRENCY, -1) < (Config.COMMUNITYBOARD_HEAL_PRICE))
-			{
-				player.sendMessage("Not enough currency!");
-			}
-			else
-			{
-				player.destroyItemByItemId(ItemProcessType.FEE, Config.COMMUNITYBOARD_CURRENCY, Config.COMMUNITYBOARD_HEAL_PRICE, player, true);
-				player.setCurrentHp(player.getMaxHp());
-				player.setCurrentMp(player.getMaxMp());
-				player.setCurrentCp(player.getMaxCp());
-				
-				if (player.hasSummon())
-				{
-					player.getSummon().setCurrentHp(player.getSummon().getMaxHp());
-					player.getSummon().setCurrentMp(player.getSummon().getMaxMp());
-					player.getSummon().setCurrentCp(player.getSummon().getMaxCp());
-				}
-				
-				player.updateUserInfo();
-				player.sendMessage("You used heal!");
-			}
-			
-			returnHtml = HtmCache.getInstance().getHtm(player, "data/html/CommunityBoard/Custom/" + page + ".html");
 		}
 		else if (command.equals("_bbsdelevel"))
 		{
