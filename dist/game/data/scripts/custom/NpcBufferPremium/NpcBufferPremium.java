@@ -75,7 +75,7 @@ public class NpcBufferPremium extends Quest
 	private static final boolean DEBUG = false;
 	
 	private static final String QUEST_LOADING_INFO = "NpcBufferPremium";
-	private static final int NPC_ID = 12;
+	private static final int NPC_ID = 15;
 	
 	private static final String TITLE_NAME = "Scheme Buffer";
 	private static final int MAX_SCHEME_BUFFS = Config.BUFFS_MAX_AMOUNT;
