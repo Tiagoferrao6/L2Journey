@@ -83,15 +83,6 @@ public class BufferBoard implements IParseBoardHandler
 	private static final int SKILL_BUFF_1 = 1411;
 	private static final int SKILL_BUFF_2 = 6662;
 	
-	// Table row helpers for 2-column grid layout
-	private static final String[] TRS =
-	{
-		"<tr><td height=25>",
-		"</td>",
-		"<td height=25>",
-		"</td></tr>"
-	};
-	
 	// Per-player pet buff mode
 	private static final Map<Integer, Boolean> PET_MODE = new ConcurrentHashMap<>();
 	
@@ -284,169 +275,197 @@ public class BufferBoard implements IParseBoardHandler
 	
 	private String buildMainPage(Player player)
 	{
-		final StringBuilder html = new StringBuilder();
-		html.append("<html noscrollbar><title>").append(TITLE).append("</title><body><center>");
-		html.append("<img src=\"L2UI_CH3.herotower_deco\" width=256 height=32><br>");
-		
 		final boolean petMode = isPetMode(player);
+		final String targetName = petMode && (player.getSummon() != null) ? player.getSummon().getName() : player.getName();
+		final List<String[]> schemes = Config.ENABLE_SCHEME_SYSTEM ? getPlayerSchemes(player) : new ArrayList<>();
 		
-		// Pet toggle
-		html.append(button(petMode ? "Player Options" : "Pet Options", "_bbsbuffer;togglePet", 130));
+		final StringBuilder html = new StringBuilder();
+		html.append("<html noscrollbar><title>").append(TITLE).append("</title><body><br>");
+		html.append("<table width=755><tr><td align=center>");
+		html.append("<table border=0 cellpadding=0 cellspacing=0 width=769 height=492 background=\"l2ui_ct1.SlideShow_DF_Credit_05\">");
 		
-		// ---- Buff Categories Section ----
-		if (Config.ENABLE_BUFF_SECTION)
+		// === HEADER ===
+		html.append("<tr><td height=50 align=center><br>");
+		html.append("<table border=0 width=745 height=50><tr><td align=center>");
+		html.append("<table border=0 width=745 height=46 cellspacing=4 cellpadding=3 background=\"l2ui_ct1.ComboBox_DF_Dropmenu_Bg\">");
+		html.append("<tr>");
+		html.append("<td width=40 align=right valign=top><img src=\"icon.skill6319\" width=32 height=32></td>");
+		html.append("<td width=260 align=left valign=top>");
+		html.append("<font name=hs12 color=\"LEVEL\">Community Buffer</font><br1>");
+		if (!Config.FREE_BUFFS)
 		{
-			final StringBuilder cats = new StringBuilder();
-			int td = 0;
-			
-			if (Config.ENABLE_BUFFS)
-			{
-				cats.append(gridCell(td, button("Buffs", "_bbsbuffer;view;buff", 120)));
-				td += 2;
-				if (td > 2)
-				{
-					td = 0;
-				}
-			}
-			if (Config.ENABLE_RESIST)
-			{
-				cats.append(gridCell(td, button("Resist", "_bbsbuffer;view;resist", 120)));
-				td += 2;
-				if (td > 2)
-				{
-					td = 0;
-				}
-			}
-			if (Config.ENABLE_SONGS)
-			{
-				cats.append(gridCell(td, button("Songs", "_bbsbuffer;view;song", 120)));
-				td += 2;
-				if (td > 2)
-				{
-					td = 0;
-				}
-			}
-			if (Config.ENABLE_DANCES)
-			{
-				cats.append(gridCell(td, button("Dances", "_bbsbuffer;view;dance", 120)));
-				td += 2;
-				if (td > 2)
-				{
-					td = 0;
-				}
-			}
-			if (Config.ENABLE_CHANTS)
-			{
-				cats.append(gridCell(td, button("Chants", "_bbsbuffer;view;chant", 120)));
-				td += 2;
-				if (td > 2)
-				{
-					td = 0;
-				}
-			}
-			if (Config.ENABLE_SPECIAL)
-			{
-				cats.append(gridCell(td, button("Special", "_bbsbuffer;view;special", 120)));
-				td += 2;
-				if (td > 2)
-				{
-					td = 0;
-				}
-			}
-			if (Config.ENABLE_OTHERS)
-			{
-				cats.append(gridCell(td, button("Others", "_bbsbuffer;view;others", 120)));
-				td += 2;
-				if (td > 2)
-				{
-					td = 0;
-				}
-			}
-			if (Config.ENABLE_CUBIC)
-			{
-				cats.append(gridCell(td, button("Cubics", "_bbsbuffer;view;cubic", 120)));
-				td += 2;
-				if (td > 2)
-				{
-					td = 0;
-				}
-			}
-			
-			if (cats.length() > 0)
-			{
-				html.append("<BR1><table width=100% border=0 cellspacing=0 cellpadding=1 bgcolor=444444><tr><td><font color=00FFFF>Buffs:</font></td>");
-				if (!Config.FREE_BUFFS)
-				{
-					html.append("<td align=right><font color=LEVEL>").append(formatAdena(Config.BUFF_PRICE)).append("</font> adena</td>");
-				}
-				html.append("</tr></table><BR1>");
-				html.append("<table cellspacing=0 cellpadding=0>").append(cats).append("</table>");
-			}
+			html.append("<font color=FFFFFF name=__SYSTEMWORLDFONT>Buff Price: ").append(formatAdena(Config.BUFF_PRICE)).append(" Adena</font>");
 		}
-		
-		// ---- Preset Section ----
+		else
 		{
-			final StringBuilder presets = new StringBuilder();
-			int td = 0;
-			
-			if (Config.ENABLE_BUFF_SET)
-			{
-				presets.append(gridCell(td, button(petMode ? "Auto Buff Pet" : "Auto Buff", "_bbsbuffer;castSet", 120)));
-				td += 2;
-				if (td > 2)
-				{
-					td = 0;
-				}
-			}
-			if (Config.ENABLE_HEAL)
-			{
-				presets.append(gridCell(td, button(petMode ? "Heal My Pet" : "Heal", "_bbsbuffer;heal", 120)));
-				td += 2;
-				if (td > 2)
-				{
-					td = 0;
-				}
-			}
-			if (Config.ENABLE_BUFF_REMOVE)
-			{
-				presets.append(gridCell(td, button(petMode ? "Remove Pet Buffs" : "Remove Buffs", "_bbsbuffer;removeBuffs", 120)));
-				td += 2;
-				if (td > 2)
-				{
-					td = 0;
-				}
-			}
-			
-			if (presets.length() > 0)
-			{
-				html.append("<BR1><table width=100% border=0 cellspacing=0 cellpadding=1 bgcolor=444444><tr><td><font color=00FFFF>Preset:</font></td>");
-				if (!Config.FREE_BUFFS)
-				{
-					html.append("<td align=right><font color=LEVEL>").append(formatAdena(Config.BUFF_SET_PRICE)).append("</font> adena</td>");
-				}
-				html.append("</tr></table><BR1>");
-				html.append("<table cellspacing=0 cellpadding=0>").append(presets).append("</table>");
-			}
+			html.append("<font color=FFFFFF name=__SYSTEMWORLDFONT>All buffs are free!</font>");
 		}
+		html.append("</td>");
+		html.append("<td width=130 align=center valign=center>");
+		html.append("<button value=\"").append(petMode ? "To Player" : "To Pet").append("\" action=\"bypass _bbsbuffer;togglePet\" width=90 height=37 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\">");
+		html.append("</td>");
+		html.append("<td width=60 align=right><font name=hs12 color=99BBFF>Target:</font></td>");
+		html.append("<td width=120 align=left><font name=hs12 color=LEVEL> ").append(targetName).append("</font></td>");
+		html.append("</tr></table>");
+		html.append("</td></tr></table>");
+		html.append("</td></tr>");
 		
-		// ---- Scheme Section ----
+		// === MAIN CONTENT (3 columns) ===
+		html.append("<tr><td height=400 align=center><br><br>");
+		html.append("<table border=0 cellspacing=0 cellpadding=0 width=760><tr>");
+		
+		// ---- LEFT COLUMN: Manage Scheme ----
+		html.append("<td width=240 height=410 align=center>");
+		html.append("<table border=0 cellspacing=2 cellpadding=0 width=240 height=400 background=\"l2ui_ct1.ComboBox_DF_Dropmenu_Bg\">");
+		html.append("<tr><td width=240 height=55 align=center><table>");
+		html.append("<tr><td width=240 height=40 align=center background=\"l2ui_ct1.ComboBox_DF_Dropmenu_Bg\"><br>");
+		html.append("<font color=99BBFF name=hs12>Manage Scheme</font></td></tr>");
 		if (Config.ENABLE_SCHEME_SYSTEM)
 		{
-			html.append(generateSchemeSection(player));
+			if (schemes.size() < Config.SCHEMES_PER_PLAYER)
+			{
+				html.append(menuItem("Icon.skill6439", "New Scheme", null, "_bbsbuffer;create_1"));
+			}
+			if (!schemes.isEmpty())
+			{
+				html.append(menuItem("Icon.skill6440", "Edit Scheme", null, "_bbsbuffer;edit_1"));
+				html.append(menuItem("Icon.skill0928", "Delete Scheme", null, "_bbsbuffer;delete_1"));
+			}
 		}
-		
-		if (Config.FREE_BUFFS)
+		// Your Schemes sub-header
+		html.append("<tr><td width=240 height=40 align=center valign=top>");
+		html.append("<table border=0 width=240 height=40><tr>");
+		html.append("<td width=240 align=center valign=center background=\"l2ui_ct1.ComboBox_DF_Dropmenu_Bg\">");
+		html.append("<font name=hs12 color=99BBFF>Your Schemes</font>");
+		html.append("</td></tr></table></td></tr>");
+		if (Config.ENABLE_SCHEME_SYSTEM)
 		{
-			html.append("<BR1><font color=LEVEL>All buffs are for free!</font>");
+			final String schemePrice = Config.FREE_BUFFS ? "Free" : formatAdena(Config.SCHEME_BUFF_PRICE) + " Adena";
+			if (schemes.isEmpty())
+			{
+				html.append("<tr><td align=center><br><font color=999999>No schemes created yet.</font><br></td></tr>");
+			}
+			else
+			{
+				for (String[] scheme : schemes)
+				{
+					html.append(menuItem("Icon.skill1374", scheme[1], "Price: " + schemePrice, "_bbsbuffer;cast;" + scheme[0]));
+				}
+			}
 		}
+		html.append("</table></td></tr></table>");
+		html.append("</td>");
 		
-		// ---- GM Management Button (admin only) ----
+		// ---- MIDDLE COLUMN: Individual Buffs ----
+		html.append("<td width=250 height=400 align=center valign=top>");
+		html.append("<table border=0 cellspacing=2 cellpadding=0 width=250 height=300 background=\"l2ui_ct1.ComboBox_DF_Dropmenu_Bg\">");
+		html.append("<tr><td width=250 height=55 align=center><table>");
+		html.append("<tr><td width=240 height=40 align=center background=\"l2ui_ct1.ComboBox_DF_Dropmenu_Bg\"><br>");
+		html.append("<font color=99BBFF name=hs12>Individual Buffs</font></td></tr>");
+		if (Config.ENABLE_BUFF_SECTION)
+		{
+			// Row: Buffs | Resists
+			if (Config.ENABLE_BUFFS || Config.ENABLE_RESIST)
+			{
+				html.append("<tr><td align=center><br1><table><tr>");
+				if (Config.ENABLE_BUFFS)
+				{
+					html.append(buffCategoryLeft("Icon.skill1500", "Buffs", "_bbsbuffer;view;buff"));
+				}
+				if (Config.ENABLE_RESIST)
+				{
+					html.append(buffCategoryRight("Icon.skill4333", "Resists", "_bbsbuffer;view;resist"));
+				}
+				html.append("</tr></table></td></tr>");
+			}
+			// Row: Songs | Dances
+			if (Config.ENABLE_SONGS || Config.ENABLE_DANCES)
+			{
+				html.append("<tr><td align=center><table><tr>");
+				if (Config.ENABLE_SONGS)
+				{
+					html.append(buffCategoryLeft("Icon.skill0364", "Songs", "_bbsbuffer;view;song"));
+				}
+				if (Config.ENABLE_DANCES)
+				{
+					html.append(buffCategoryRight("Icon.skill0273", "Dances", "_bbsbuffer;view;dance"));
+				}
+				html.append("</tr></table></td></tr>");
+			}
+			// Row: Chant | Special
+			if (Config.ENABLE_CHANTS || Config.ENABLE_SPECIAL)
+			{
+				html.append("<tr><td align=center><table><tr>");
+				if (Config.ENABLE_CHANTS)
+				{
+					html.append(buffCategoryLeft("Icon.skill1460", "Chant", "_bbsbuffer;view;chant"));
+				}
+				if (Config.ENABLE_SPECIAL)
+				{
+					html.append(buffCategoryRight("Icon.skill0825", "Special", "_bbsbuffer;view;special"));
+				}
+				html.append("</tr></table></td></tr>");
+			}
+			// Row: Others | Cubics
+			if (Config.ENABLE_OTHERS || Config.ENABLE_CUBIC)
+			{
+				html.append("<tr><td align=center><table><tr>");
+				if (Config.ENABLE_OTHERS)
+				{
+					html.append(buffCategoryLeft("Icon.skill1303", "Others", "_bbsbuffer;view;others"));
+				}
+				if (Config.ENABLE_CUBIC)
+				{
+					html.append(buffCategoryRight("Icon.skill0278", "Cubics", "_bbsbuffer;view;cubic"));
+				}
+				html.append("</tr></table></td></tr>");
+			}
+		}
 		if (player.isGM())
 		{
-			html.append("<BR1>").append(button("GM Manage Buffs", "_bbsbuffer;gmManage", 130));
+			html.append(menuItem("Icon.skill0487", "Admin Edit buffs", null, "_bbsbuffer;gmManage"));
 		}
+		html.append("</table></td></tr></table>");
+		html.append("</td>");
 		
-		html.append("<br1><br><font color=303030>").append(TITLE).append("</font></center></body></html>");
+		// ---- RIGHT COLUMN: Fast Actions ----
+		html.append("<td width=230 height=400 valign=top align=center>");
+		html.append("<table border=0 cellspacing=2 cellpadding=0 width=235 background=\"l2ui_ct1.ComboBox_DF_Dropmenu_Bg\">");
+		// Fast Actions sub-header
+		html.append("<tr><td width=235 height=40 align=center valign=top>");
+		html.append("<table border=0 width=235 height=40><tr>");
+		html.append("<td width=235 align=center valign=center background=\"l2ui_ct1.ComboBox_DF_Dropmenu_Bg\">");
+		html.append("<font name=hs12 color=99BBFF>Fast Actions</font>");
+		html.append("</td></tr></table></td></tr>");
+		if (Config.ENABLE_BUFF_SET)
+		{
+			final String autoLabel = petMode ? "Auto Buff Pet" : "Auto Buff";
+			final String autoPrice = Config.FREE_BUFFS ? "Free" : formatAdena(Config.BUFF_SET_PRICE) + " Adena";
+			html.append(menuItem("Icon.skill1411", autoLabel, "Price: " + autoPrice, "_bbsbuffer;castSet"));
+		}
+		if (Config.ENABLE_HEAL)
+		{
+			final String healLabel = petMode ? "Heal My Pet" : "Heal HP / CP / MP";
+			final String healPrice = Config.FREE_BUFFS ? "Free" : formatAdena(Config.HEAL_PRICE) + " Adena";
+			html.append(menuItem("Icon.skill0440", healLabel, "Price: " + healPrice, "_bbsbuffer;heal"));
+		}
+		if (Config.ENABLE_BUFF_REMOVE)
+		{
+			final String cancelLabel = petMode ? "Remove Pet Buffs" : "Cancel Your Buffs";
+			final String cancelPrice = Config.FREE_BUFFS ? "Free" : formatAdena(Config.BUFF_REMOVE_PRICE) + " Adena";
+			html.append(menuItem("Icon.skill1056", cancelLabel, "Price: " + cancelPrice, "_bbsbuffer;removeBuffs"));
+		}
+		html.append("</table>");
+		html.append("</td>");
+		
+		// Close 3-column layout
+		html.append("</tr></table>");
+		html.append("</td></tr>");
+		
+		// Close outer frame
+		html.append("</table>");
+		html.append("</td></tr></table>");
+		html.append("</body></html>");
 		return html.toString();
 	}
 	
@@ -802,11 +821,14 @@ public class BufferBoard implements IParseBoardHandler
 	// SCHEME MANAGEMENT
 	// =========================================================
 	
-	private String generateSchemeSection(Player player)
+	/**
+	 * Returns list of [id, name] pairs for a player's schemes.
+	 * @param player
+	 * @return
+	 */
+	private List<String[]> getPlayerSchemes(Player player)
 	{
-		final List<String> schemeNames = new ArrayList<>();
-		final List<String> schemeIds = new ArrayList<>();
-		
+		final List<String[]> schemes = new ArrayList<>();
 		try (Connection con = DatabaseFactory.getConnection())
 		{
 			final PreparedStatement ps = con.prepareStatement("SELECT id, scheme_name FROM npcbuffer_scheme_list WHERE player_id=?");
@@ -814,54 +836,20 @@ public class BufferBoard implements IParseBoardHandler
 			final ResultSet rs = ps.executeQuery();
 			while (rs.next())
 			{
-				schemeIds.add(rs.getString("id"));
-				schemeNames.add(rs.getString("scheme_name"));
+				schemes.add(new String[]
+				{
+					rs.getString("id"),
+					rs.getString("scheme_name")
+				});
 			}
 			rs.close();
 			ps.close();
 		}
 		catch (SQLException e)
 		{
-			LOG.warning("BufferBoard generateSchemeSection error: " + e.getMessage());
+			LOG.warning("BufferBoard getPlayerSchemes error: " + e.getMessage());
 		}
-		
-		final StringBuilder html = new StringBuilder();
-		html.append("<BR1><table width=100% border=0 cellspacing=0 cellpadding=1 bgcolor=444444><tr><td><font color=00FFFF>Scheme:</font></td>");
-		if (!Config.FREE_BUFFS)
-		{
-			html.append("<td align=right><font color=LEVEL>").append(formatAdena(Config.SCHEME_BUFF_PRICE)).append("</font> adena</td>");
-		}
-		html.append("</tr></table><BR1>");
-		
-		if (!schemeNames.isEmpty())
-		{
-			html.append("<table cellspacing=0 cellpadding=0>");
-			int td = 0;
-			for (int i = 0; i < schemeNames.size(); i++)
-			{
-				if (td > 2)
-				{
-					td = 0;
-				}
-				html.append(gridCell(td, button(schemeNames.get(i), "_bbsbuffer;cast;" + schemeIds.get(i), 120)));
-				td += 2;
-			}
-			html.append("</table>");
-		}
-		
-		html.append("<BR1><table><tr>");
-		if (schemeNames.size() < Config.SCHEMES_PER_PLAYER)
-		{
-			html.append("<td>").append(button("Create", "_bbsbuffer;create_1", 85)).append("</td>");
-		}
-		if (!schemeNames.isEmpty())
-		{
-			html.append("<td>").append(button("Edit", "_bbsbuffer;edit_1", 85)).append("</td>");
-			html.append("<td>").append(button("Delete", "_bbsbuffer;delete_1", 85)).append("</td>");
-		}
-		html.append("</tr></table>");
-		
-		return html.toString();
+		return schemes;
 	}
 	
 	private String createSchemeForm()
@@ -1716,9 +1704,64 @@ public class BufferBoard implements IParseBoardHandler
 		return "<button value=\"" + label + "\" action=\"bypass " + bypass + "\" width=" + width + " height=25 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\">";
 	}
 	
-	private String gridCell(int td, String content)
+	/**
+	 * Creates an icon with a clickable frame overlay, following the L2 UI pattern.
+	 * @param icon
+	 * @param bypass
+	 * @return
+	 */
+	private String iconFrame(String icon, String bypass)
 	{
-		return TRS[td] + content + TRS[td + 1];
+		return "<table border=0 cellspacing=0 cellpadding=0 width=32 height=32 background=\"" + icon + "\">" + "<tr><td width=32 height=32 align=center valign=top>" + "<button action=\"bypass " + bypass + "\" width=34 height=34 back=\"L2UI_CT1.ItemWindow_DF_Frame_Down\" fore=\"L2UI_CT1.ItemWindow_DF_Frame\"/>" + "</td></tr></table>";
+	}
+	
+	/**
+	 * Creates a menu item row with icon, label, optional subtitle, and bypass action.
+	 * @param icon
+	 * @param label
+	 * @param subtitle
+	 * @param bypass
+	 * @return
+	 */
+	private String menuItem(String icon, String label, String subtitle, String bypass)
+	{
+		final StringBuilder sb = new StringBuilder();
+		sb.append("<tr><td width=240 height=50 align=center>");
+		sb.append("<table border=0 width=240 height=50 cellspacing=4 cellpadding=3 bgcolor=10100E>");
+		sb.append("<tr><td align=right valign=top>");
+		sb.append(iconFrame(icon, bypass));
+		sb.append("</td><td width=150 align=left valign=").append(subtitle != null ? "top" : "center").append(">");
+		sb.append("<font name=hs12 color=\"ADA71B\">").append(label).append("</font>");
+		if (subtitle != null)
+		{
+			sb.append("<br1><font color=FFFFFF name=__SYSTEMWORLDFONT>").append(subtitle).append("</font>");
+		}
+		sb.append("</td></tr></table><br></td></tr>");
+		return sb.toString();
+	}
+	
+	/**
+	 * Left-side buff category cell: icon on left, text on right.
+	 * @param icon
+	 * @param label
+	 * @param bypass
+	 * @return
+	 */
+	private String buffCategoryLeft(String icon, String label, String bypass)
+	{
+		return "<td width=110 height=50 align=center>" + "<table border=0 width=110 height=50 cellspacing=4 cellpadding=3 bgcolor=10100E>" + "<tr><td align=right valign=top>" + iconFrame(icon, bypass) + "</td><td width=70 align=left valign=center>" + "<font name=hs12 color=\"ADA71B\">" + label + "</font>" + "</td></tr></table></td>";
+	}
+	
+	/**
+	 * Right-side buff category cell: text on left, icon on right.
+	 * @param icon
+	 * @param label
+	 * @param bypass
+	 * @return
+	 */
+	private String buffCategoryRight(String icon, String label, String bypass)
+	{
+		return "<td width=110 height=50 align=center>" + "<table border=0 width=110 height=50 cellspacing=4 cellpadding=3 bgcolor=10100E>" + "<tr><td width=70 align=right valign=center>" + "<font name=hs12 color=\"ADA71B\">" + label + "</font>" + "</td><td align=right valign=top>" + iconFrame(icon, bypass) + "</td></tr></table><br></td>";
 	}
 	
 	private String showInfo(String title, String message)
