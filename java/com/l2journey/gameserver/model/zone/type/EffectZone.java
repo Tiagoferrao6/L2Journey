@@ -249,6 +249,49 @@ public class EffectZone extends ZoneType
 		return _skills.get(skillId);
 	}
 	
+	/**
+	 * Atomically increments the skill level and returns the new value.
+	 * Thread-safe for concurrent access from multiple scripts.
+	 * @param skillId the skill ID to increment
+	 * @return the new skill level after incrementing
+	 */
+	public int incrementSkillLevel(int skillId)
+	{
+		if (_skills == null)
+		{
+			synchronized (this)
+			{
+				if (_skills == null)
+				{
+					_skills = new ConcurrentHashMap<>(3);
+				}
+			}
+		}
+		return _skills.merge(skillId, 1, Integer::sum);
+	}
+	
+	/**
+	 * Atomically decrements the skill level and returns the new value.
+	 * If the level reaches 0 or below, the skill is removed.
+	 * Thread-safe for concurrent access from multiple scripts.
+	 * @param skillId the skill ID to decrement
+	 * @return the new skill level after decrementing (0 if removed)
+	 */
+	public int decrementSkillLevel(int skillId)
+	{
+		if ((_skills == null) || !_skills.containsKey(skillId))
+		{
+			return 0;
+		}
+		final int newLevel = _skills.merge(skillId, -1, Integer::sum);
+		if (newLevel < 1)
+		{
+			_skills.remove(skillId);
+			return 0;
+		}
+		return newLevel;
+	}
+	
 	private class ApplySkill implements Runnable
 	{
 		protected ApplySkill()

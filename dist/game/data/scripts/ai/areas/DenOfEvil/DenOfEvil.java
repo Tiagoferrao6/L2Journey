@@ -28,7 +28,17 @@
  */
 package ai.areas.DenOfEvil;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+
 import com.l2journey.commons.threads.ThreadPool;
+import com.l2journey.commons.util.IXmlReader;
 import com.l2journey.gameserver.data.xml.SkillData;
 import com.l2journey.gameserver.managers.ZoneManager;
 import com.l2journey.gameserver.model.Location;
@@ -39,19 +49,20 @@ import com.l2journey.gameserver.model.skill.Skill;
 import com.l2journey.gameserver.model.zone.type.EffectZone;
 import com.l2journey.gameserver.network.SystemMessageId;
 import com.l2journey.gameserver.network.serverpackets.SystemMessage;
-import com.l2journey.gameserver.scripting.annotations.Disabled;
 import com.l2journey.gameserver.util.ArrayUtil;
 
 import ai.AbstractNpcAI;
 
 /**
- * Dummy AI for spawns/respawns only for testing.
- * @author Gnacik
+ * Den of Evil area AI.<br>
+ * Manages Kasha's Eye spawns and the zone destruction mechanic.<br>
+ * When 4 Eyes of the same type accumulate in a zone, it triggers a Kasha Destruction after 10 seconds.
+ * @author Gnacik, KingHanker
  */
-@Disabled // Mobius: this needs to be rewritten.
-public class DenOfEvil extends AbstractNpcAI
+public class DenOfEvil extends AbstractNpcAI implements IXmlReader
 {
-	// private static final int _buffer_id = 32656;
+	private static final Logger LOGGER = Logger.getLogger(DenOfEvil.class.getName());
+	
 	protected static final int[] EYE_IDS =
 	{
 		18812,
@@ -59,62 +70,53 @@ public class DenOfEvil extends AbstractNpcAI
 		18814
 	};
 	private static final int SKILL_ID = 6150; // others +2
+	private static final int KASHA_DESTRUCTION_SKILL_ID = 6149;
+	private static final int KASHA_DESTRUCTION_SKILL_LEVEL = 1;
+	private static final int DESTRUCTION_DELAY = 5000; // 5 seconds
+	private static final int RESPAWN_DELAY = 15000; // 15 seconds
+	private static final int MAX_SKILL_LEVEL = 4;
 	
-	private static final Location[] EYE_SPAWNS =
-	{
-		new Location(71544, -129400, -3360, 16472),
-		new Location(70954, -128854, -3360, 16),
-		new Location(72145, -128847, -3368, 32832),
-		new Location(76147, -128372, -3144, 16152),
-		new Location(71573, -128309, -3360, 49152),
-		new Location(75211, -127441, -3152, 0),
-		new Location(77005, -127406, -3144, 32784),
-		new Location(75965, -126486, -3144, 49120),
-		new Location(70972, -126429, -3016, 19208),
-		new Location(69916, -125838, -3024, 2840),
-		new Location(71658, -125459, -3016, 35136),
-		new Location(70605, -124646, -3040, 52104),
-		new Location(67283, -123237, -2912, 12376),
-		new Location(68383, -122754, -2912, 27904),
-		new Location(74137, -122733, -3024, 13272),
-		new Location(66736, -122007, -2896, 60576),
-		new Location(73289, -121769, -3024, 1024),
-		new Location(67894, -121491, -2912, 43872),
-		new Location(75530, -121477, -3008, 34424),
-		new Location(74117, -120459, -3024, 52344),
-		new Location(69608, -119855, -2534, 17251),
-		new Location(71014, -119027, -2520, 31904),
-		new Location(68944, -118964, -2527, 59874),
-		new Location(62261, -118263, -3072, 12888),
-		new Location(70300, -117942, -2528, 46208),
-		new Location(74312, -117583, -2272, 15280),
-		new Location(63276, -117409, -3064, 24760),
-		new Location(68104, -117192, -2168, 15888),
-		new Location(73758, -116945, -2216, 0),
-		new Location(74944, -116858, -2220, 30892),
-		new Location(61715, -116623, -3064, 59888),
-		new Location(69140, -116464, -2168, 28952),
-		new Location(67311, -116374, -2152, 1280),
-		new Location(62459, -116370, -3064, 48624),
-		new Location(74475, -116260, -2216, 47456),
-		new Location(68333, -115015, -2168, 45136),
-		new Location(68280, -108129, -1160, 17992),
-		new Location(62983, -107259, -2384, 12552),
-		new Location(67062, -107125, -1144, 64008),
-		new Location(68893, -106954, -1160, 36704),
-		new Location(63848, -106771, -2384, 32784),
-		new Location(62372, -106514, -2384, 0),
-		new Location(67838, -106143, -1160, 51232),
-		new Location(62905, -106109, -2384, 51288)
-	};
+	private final List<Location> _eyeSpawns = new ArrayList<>();
 	
 	private DenOfEvil()
 	{
 		addKillId(EYE_IDS);
 		addSpawnId(EYE_IDS);
-		for (Location loc : EYE_SPAWNS)
+		load();
+	}
+	
+	@Override
+	public void load()
+	{
+		_eyeSpawns.clear();
+		parseDatapackFile("data/scripts/ai/areas/DenOfEvil/DenOfEvil.xml");
+		LOGGER.info("[Den of Evil] Loaded " + _eyeSpawns.size() + " eye spawn locations.");
+		for (Location loc : _eyeSpawns)
 		{
 			addSpawn(getRandomEntry(EYE_IDS), loc, false, 0);
+		}
+	}
+	
+	@Override
+	public void parseDocument(Document document, File file)
+	{
+		for (Node node = document.getFirstChild(); node != null; node = node.getNextSibling())
+		{
+			if ("list".equals(node.getNodeName()))
+			{
+				for (Node minion = node.getFirstChild(); minion != null; minion = minion.getNextSibling())
+				{
+					if ("minion".equals(minion.getNodeName()))
+					{
+						final NamedNodeMap attrs = minion.getAttributes();
+						final int x = parseInteger(attrs, "x");
+						final int y = parseInteger(attrs, "y");
+						final int z = parseInteger(attrs, "z");
+						final int heading = parseInteger(attrs, "heading", 0);
+						_eyeSpawns.add(new Location(x, y, z, heading));
+					}
+				}
+			}
 		}
 	}
 	
@@ -138,14 +140,13 @@ public class DenOfEvil extends AbstractNpcAI
 		}
 		
 		final int skillId = getSkillIdByNpcId(npc.getId());
-		final int skillLevel = zone.getSkillLevel(skillId);
-		zone.addSkill(skillId, skillLevel + 1);
-		if (skillLevel == 3) // 3+1=4
+		final int newLevel = zone.incrementSkillLevel(skillId);
+		if (newLevel >= MAX_SKILL_LEVEL)
 		{
-			ThreadPool.schedule(new KashaDestruction(zone), 2 * 60 * 1000);
 			zone.broadcastPacket(new SystemMessage(SystemMessageId.KASHA_S_EYE_PITCHES_AND_TOSSES_LIKE_IT_S_ABOUT_TO_EXPLODE));
+			ThreadPool.schedule(new KashaDestruction(zone), DESTRUCTION_DELAY);
 		}
-		else if (skillLevel == 2)
+		else if (newLevel == 3)
 		{
 			zone.broadcastPacket(new SystemMessage(SystemMessageId.I_CAN_FEEL_THAT_THE_ENERGY_BEING_FLOWN_IN_THE_KASHA_S_EYE_IS_GETTING_STRONGER_RAPIDLY));
 		}
@@ -154,7 +155,7 @@ public class DenOfEvil extends AbstractNpcAI
 	@Override
 	public void onKill(Npc npc, Player killer, boolean isSummon)
 	{
-		ThreadPool.schedule(new RespawnNewEye(npc.getLocation()), 15000);
+		ThreadPool.schedule(new RespawnNewEye(npc.getLocation()), RESPAWN_DELAY);
 		final EffectZone zone = ZoneManager.getInstance().getZone(npc, EffectZone.class);
 		if (zone == null)
 		{
@@ -163,8 +164,7 @@ public class DenOfEvil extends AbstractNpcAI
 		}
 		
 		final int skillId = getSkillIdByNpcId(npc.getId());
-		final int skillLevel = zone.getSkillLevel(skillId);
-		zone.addSkill(skillId, skillLevel - 1);
+		zone.decrementSkillLevel(skillId);
 	}
 	
 	private class RespawnNewEye implements Runnable
@@ -185,7 +185,7 @@ public class DenOfEvil extends AbstractNpcAI
 	
 	private class KashaDestruction implements Runnable
 	{
-		EffectZone _zone;
+		private final EffectZone _zone;
 		
 		public KashaDestruction(EffectZone zone)
 		{
@@ -197,17 +197,24 @@ public class DenOfEvil extends AbstractNpcAI
 		{
 			for (int i = SKILL_ID; i <= (SKILL_ID + 4); i += 2)
 			{
-				// test 3 skills if some is level 4
-				if (_zone.getSkillLevel(i) > 3)
+				if (_zone.getSkillLevel(i) >= MAX_SKILL_LEVEL)
 				{
 					destroyZone();
-					break;
+					return;
 				}
 			}
 		}
 		
 		private void destroyZone()
 		{
+			// Cache the skill lookup outside the loop — single lookup instead of one per player.
+			final Skill destructionSkill = SkillData.getInstance().getSkill(KASHA_DESTRUCTION_SKILL_ID, KASHA_DESTRUCTION_SKILL_LEVEL);
+			if (destructionSkill == null)
+			{
+				LOGGER.severe("[Den of Evil] Skill " + KASHA_DESTRUCTION_SKILL_ID + " level " + KASHA_DESTRUCTION_SKILL_LEVEL + " not found! Kasha Destruction cannot apply debuff to players.");
+				return;
+			}
+			
 			for (Creature creature : _zone.getCharactersInside())
 			{
 				if (creature == null)
@@ -216,25 +223,19 @@ public class DenOfEvil extends AbstractNpcAI
 				}
 				if (creature.isPlayable())
 				{
-					final Skill skill = SkillData.getInstance().getSkill(6149, 1);
-					skill.applyEffects(creature, creature);
+					destructionSkill.applyEffects(creature, creature);
 				}
-				else
+				else if (creature.isNpc())
 				{
-					if (creature.doDie(null)) // mobs die
+					final Npc npc = creature.asNpc();
+					if (npc.doDie(null) && ArrayUtil.contains(EYE_IDS, npc.getId()))
 					{
-						if (creature.isNpc())
-						{
-							// respawn eye
-							final Npc npc = creature.asNpc();
-							if (ArrayUtil.contains(EYE_IDS, npc.getId()))
-							{
-								ThreadPool.schedule(new RespawnNewEye(npc.getLocation()), 15000);
-							}
-						}
+						ThreadPool.schedule(new RespawnNewEye(npc.getLocation()), RESPAWN_DELAY);
 					}
 				}
 			}
+			
+			// Clear all zone skills.
 			for (int i = SKILL_ID; i <= (SKILL_ID + 4); i += 2)
 			{
 				_zone.removeSkill(i);

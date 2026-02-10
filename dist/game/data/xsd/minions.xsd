@@ -25,6 +25,11 @@
 								<xs:documentation>Coordenada Z de spawn</xs:documentation>
 							</xs:annotation>
 						</xs:attribute>
+						<xs:attribute name="heading" type="xs:int" use="optional" default="0">
+							<xs:annotation>
+								<xs:documentation>Direção (heading) do NPC ao spawnar (padrão: 0)</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
 						<xs:attribute name="respawnTime" type="xs:positiveInteger" use="optional" default="60">
 							<xs:annotation>
 								<xs:documentation>Tempo de respawn em segundos (padrão: 60)</xs:documentation>
