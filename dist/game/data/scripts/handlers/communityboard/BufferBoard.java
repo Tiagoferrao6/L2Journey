@@ -29,9 +29,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 
 import com.l2journey.Config;
@@ -47,6 +50,10 @@ import com.l2journey.gameserver.model.actor.instance.Servitor;
 import com.l2journey.gameserver.model.actor.stat.PlayerStat;
 import com.l2journey.gameserver.model.actor.status.PlayerStatus;
 import com.l2journey.gameserver.model.effects.EffectType;
+import com.l2journey.gameserver.model.events.Containers;
+import com.l2journey.gameserver.model.events.EventType;
+import com.l2journey.gameserver.model.events.holders.actor.player.OnPlayerLogout;
+import com.l2journey.gameserver.model.events.listeners.ConsumerEventListener;
 import com.l2journey.gameserver.model.item.enums.ItemProcessType;
 import com.l2journey.gameserver.model.skill.Skill;
 import com.l2journey.gameserver.model.skill.skillVariation.ServitorShareConditions;
@@ -86,8 +93,24 @@ public class BufferBoard implements IParseBoardHandler
 	// Per-player pet buff mode
 	private static final Map<Integer, Boolean> PET_MODE = new ConcurrentHashMap<>();
 	
+	// Per-player flag to show 'no pet summoned' message in place of To Pet button
+	private static final Map<Integer, Boolean> SHOW_NO_PET = new ConcurrentHashMap<>();
+	
 	// Skill cache for performance
 	private static final Map<Integer, Skill> SKILL_CACHE = new ConcurrentHashMap<>();
+	
+	// Cleanup listener for player logout
+	private static final Consumer<OnPlayerLogout> ON_PLAYER_LOGOUT = event ->
+	{
+		final int objId = event.getPlayer().getObjectId();
+		PET_MODE.remove(objId);
+		SHOW_NO_PET.remove(objId);
+	};
+	
+	public BufferBoard()
+	{
+		Containers.Players().addListener(new ConsumerEventListener(Containers.Players(), EventType.ON_PLAYER_LOGOUT, ON_PLAYER_LOGOUT, this));
+	}
 	
 	@Override
 	public String[] getCommunityBoardCommands()
@@ -147,12 +170,22 @@ public class BufferBoard implements IParseBoardHandler
 		{
 			if (params.isEmpty())
 			{
+				SHOW_NO_PET.remove(player.getObjectId());
 				html = buildMainPage(player);
 			}
 			else if (params.equals("togglePet"))
 			{
-				PET_MODE.put(player.getObjectId(), !isPetMode(player));
-				html = buildMainPage(player);
+				if (player.getSummon() == null)
+				{
+					SHOW_NO_PET.put(player.getObjectId(), true);
+					html = buildMainPage(player);
+				}
+				else
+				{
+					SHOW_NO_PET.remove(player.getObjectId());
+					PET_MODE.put(player.getObjectId(), !isPetMode(player));
+					html = buildMainPage(player);
+				}
 			}
 			else if (params.startsWith("view;"))
 			{
@@ -205,25 +238,25 @@ public class BufferBoard implements IParseBoardHandler
 			}
 			else if (params.startsWith("manage;"))
 			{
-				html = getSchemeOptions(params.substring(7));
+				html = getSchemeOptions(player, params.substring(7));
 			}
 			else if (params.startsWith("addView;"))
 			{
 				final String[] ap = params.substring(8).split(";", 2);
-				html = viewSchemeBuffs(ap[0], ap.length > 1 ? ap[1] : "1", "add");
+				html = viewSchemeBuffs(player, ap[0], ap.length > 1 ? ap[1] : "1", "add");
 			}
 			else if (params.startsWith("removeView;"))
 			{
 				final String[] rp = params.substring(11).split(";", 2);
-				html = viewSchemeBuffs(rp[0], rp.length > 1 ? rp[1] : "1", "remove");
+				html = viewSchemeBuffs(player, rp[0], rp.length > 1 ? rp[1] : "1", "remove");
 			}
 			else if (params.startsWith("addBuff;"))
 			{
-				html = handleAddBuffToScheme(params.substring(8));
+				html = handleAddBuffToScheme(player, params.substring(8));
 			}
 			else if (params.startsWith("removeBuff;"))
 			{
-				html = handleRemoveBuffFromScheme(params.substring(11));
+				html = handleRemoveBuffFromScheme(player, params.substring(11));
 			}
 			// GM Management routes
 			else if (params.equals("gmManage") && player.isGM())
@@ -275,8 +308,26 @@ public class BufferBoard implements IParseBoardHandler
 	
 	private String buildMainPage(Player player)
 	{
-		final boolean petMode = isPetMode(player);
-		final String targetName = petMode && (player.getSummon() != null) ? player.getSummon().getName() : player.getName();
+		final boolean hasSummon = player.getSummon() != null;
+		boolean petMode = isPetMode(player);
+		
+		// Auto-reset pet mode if summon is no longer active
+		if (petMode && !hasSummon)
+		{
+			PET_MODE.put(player.getObjectId(), false);
+			petMode = false;
+		}
+		
+		final String targetName;
+		if (petMode && hasSummon)
+		{
+			final String summonName = player.getSummon().getName();
+			targetName = ((summonName == null) || summonName.trim().isEmpty()) ? "No Name" : summonName;
+		}
+		else
+		{
+			targetName = player.getName();
+		}
 		final List<String[]> schemes = Config.ENABLE_SCHEME_SYSTEM ? getPlayerSchemes(player) : new ArrayList<>();
 		
 		final StringBuilder html = new StringBuilder();
@@ -301,8 +352,28 @@ public class BufferBoard implements IParseBoardHandler
 			html.append("<font color=FFFFFF name=__SYSTEMWORLDFONT>All buffs are free!</font>");
 		}
 		html.append("</td>");
-		html.append("<td width=130 align=center valign=center>");
-		html.append("<button value=\"").append(petMode ? "To Player" : "To Pet").append("\" action=\"bypass _bbsbuffer;togglePet\" width=90 height=37 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\">");
+		html.append("<td width=170 align=center valign=center>");
+		html.append("<table border=0 cellspacing=2 cellpadding=0><tr>");
+		final boolean showNoPetMsg = SHOW_NO_PET.getOrDefault(player.getObjectId(), false);
+		if (showNoPetMsg && !hasSummon)
+		{
+			html.append("<td><button value=\"\" action=\"bypass _bbsbuffer;togglePet\" width=35 height=35 back=\"L2UI_CT1.SystemMenuWnd_df_ReStart\" fore=\"L2UI_CT1.SystemMenuWnd_df_ReStart\"></td>");
+			html.append("<td width=90 align=center><font color=FF6666 name=__SYSTEMWORLDFONT>No pet summoned!</font></td>");
+		}
+		else
+		{
+			SHOW_NO_PET.remove(player.getObjectId());
+			if (hasSummon)
+			{
+				html.append("<td><button value=\"").append(petMode ? "To Player" : "To Pet").append("\" action=\"bypass _bbsbuffer;togglePet\" width=90 height=37 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td>");
+			}
+			else
+			{
+				html.append("<td><button value=\"To Pet\" action=\"bypass _bbsbuffer;togglePet\" width=90 height=37 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td>");
+			}
+		}
+		
+		html.append("</tr></table>");
 		html.append("</td>");
 		html.append("<td width=60 align=right><font name=hs12 color=99BBFF>Target:</font></td>");
 		html.append("<td width=120 align=left><font name=hs12 color=LEVEL> ").append(targetName).append("</font></td>");
@@ -518,11 +589,11 @@ public class BufferBoard implements IParseBoardHandler
 			html.append("<BR1><table>");
 			for (String buff : availableBuffs)
 			{
-				buff = buff.replace("_", " ");
-				final String[] parts = buff.split(" ");
-				final String name = parts[0].replace("+", " ");
-				final int id = Integer.parseInt(parts[1]);
-				final int level = Integer.parseInt(parts[2]);
+				final int lastSep = buff.lastIndexOf('_');
+				final int secondSep = buff.lastIndexOf('_', lastSep - 1);
+				final String name = buff.substring(0, secondSep).replace("+", " ");
+				final int id = Integer.parseInt(buff.substring(secondSep + 1, lastSep));
+				final int level = Integer.parseInt(buff.substring(lastSep + 1));
 				html.append("<tr><td>").append(getSkillIconHtml(id, level)).append("</td>");
 				html.append("<td>").append(button(name, "_bbsbuffer;give;" + id + ";" + level + ";" + buffType, 190)).append("</td></tr>");
 			}
@@ -546,8 +617,17 @@ public class BufferBoard implements IParseBoardHandler
 			return buildMainPage(player);
 		}
 		
-		final int skillId = Integer.parseInt(parts[0]);
-		final int skillLevel = Integer.parseInt(parts[1]);
+		final int skillId;
+		final int skillLevel;
+		try
+		{
+			skillId = Integer.parseInt(parts[0]);
+			skillLevel = Integer.parseInt(parts[1]);
+		}
+		catch (NumberFormatException e)
+		{
+			return buildMainPage(player);
+		}
 		final String buffType = parts[2];
 		
 		if (!Config.FREE_BUFFS)
@@ -604,6 +684,13 @@ public class BufferBoard implements IParseBoardHandler
 	
 	private String handleHeal(Player player)
 	{
+		final boolean petMode = isPetMode(player);
+		
+		if (petMode && (player.getSummon() == null))
+		{
+			return showInfo("Info", "You can't use the Pet's options.<br>Summon your pet first!");
+		}
+		
 		if (!Config.FREE_BUFFS)
 		{
 			if (player.getInventory().getInventoryItemCount(Config.CONSUMABLE_ID, -1) < Config.HEAL_PRICE)
@@ -613,7 +700,6 @@ public class BufferBoard implements IParseBoardHandler
 			player.destroyItemByItemId(ItemProcessType.FEE, Config.CONSUMABLE_ID, Config.HEAL_PRICE, player, true);
 		}
 		
-		final boolean petMode = isPetMode(player);
 		if (petMode)
 		{
 			final Summon target = player.getSummon();
@@ -653,6 +739,13 @@ public class BufferBoard implements IParseBoardHandler
 	
 	private String handleRemoveBuffs(Player player)
 	{
+		final boolean petMode = isPetMode(player);
+		
+		if (petMode && (player.getSummon() == null))
+		{
+			return showInfo("Info", "You can't use the Pet's options.<br>Summon your pet first!");
+		}
+		
 		if (!Config.FREE_BUFFS)
 		{
 			if (player.getInventory().getInventoryItemCount(Config.CONSUMABLE_ID, -1) < Config.BUFF_REMOVE_PRICE)
@@ -662,13 +755,8 @@ public class BufferBoard implements IParseBoardHandler
 			player.destroyItemByItemId(ItemProcessType.FEE, Config.CONSUMABLE_ID, Config.BUFF_REMOVE_PRICE, player, true);
 		}
 		
-		final boolean petMode = isPetMode(player);
 		if (petMode)
 		{
-			if (player.getSummon() == null)
-			{
-				return showInfo("Info", "You can't use the Pet's options.<br>Summon your pet first!");
-			}
 			player.getSummon().stopAllEffects();
 		}
 		else
@@ -681,6 +769,13 @@ public class BufferBoard implements IParseBoardHandler
 	
 	private String handleCastBuffSet(Player player)
 	{
+		final boolean petMode = isPetMode(player);
+		
+		if (petMode && (player.getSummon() == null))
+		{
+			return showInfo("Info", "You can't use the Pet's options.<br>Summon your pet first!");
+		}
+		
 		if (!Config.FREE_BUFFS)
 		{
 			if (player.getInventory().getInventoryItemCount(Config.CONSUMABLE_ID, -1) < Config.BUFF_SET_PRICE)
@@ -690,7 +785,6 @@ public class BufferBoard implements IParseBoardHandler
 			player.destroyItemByItemId(ItemProcessType.FEE, Config.CONSUMABLE_ID, Config.BUFF_SET_PRICE, player, true);
 		}
 		
-		final boolean petMode = isPetMode(player);
 		final int playerClass = player.isMageClass() ? 1 : 0;
 		final List<int[]> buffSets = new ArrayList<>();
 		
@@ -741,21 +835,27 @@ public class BufferBoard implements IParseBoardHandler
 	
 	private String handleCastScheme(Player player, String schemeId)
 	{
+		if (!isSchemeOwner(player.getObjectId(), schemeId))
+		{
+			return buildMainPage(player);
+		}
+		
 		final List<Integer> buffs = new ArrayList<>();
 		final List<Integer> levels = new ArrayList<>();
 		
 		try (Connection con = DatabaseFactory.getConnection())
 		{
-			final PreparedStatement ps = con.prepareStatement("SELECT skill_id, skill_level FROM npcbuffer_scheme_contents WHERE scheme_id=? ORDER BY id");
+			final PreparedStatement ps = con.prepareStatement("SELECT sc.skill_id, sc.skill_level, bl.buffType, bl.canUse FROM npcbuffer_scheme_contents sc LEFT JOIN npcbuffer_buff_list bl ON sc.skill_id = bl.buffId AND sc.skill_level = bl.buffLevel WHERE sc.scheme_id=? ORDER BY sc.id");
 			ps.setString(1, schemeId);
 			final ResultSet rs = ps.executeQuery();
 			while (rs.next())
 			{
 				final int id = rs.getInt("skill_id");
 				final int level = rs.getInt("skill_level");
-				final String type = getBuffType(id);
+				final String type = rs.getString("buffType");
+				final String canUse = rs.getString("canUse");
 				
-				if (isBuffTypeEnabled(type) && isEnabled(id, level))
+				if ((type != null) && isBuffTypeEnabled(type) && "1".equals(canUse))
 				{
 					buffs.add(id);
 					levels.add(level);
@@ -771,7 +871,7 @@ public class BufferBoard implements IParseBoardHandler
 		
 		if (buffs.isEmpty())
 		{
-			return viewSchemeBuffs(schemeId, "1", "add");
+			return viewSchemeBuffs(player, schemeId, "1", "add");
 		}
 		
 		if (!Config.FREE_BUFFS)
@@ -866,6 +966,11 @@ public class BufferBoard implements IParseBoardHandler
 			return showInfo("Info", "Please enter a valid scheme name!<br>Max 36 characters, no special chars.");
 		}
 		
+		if (getPlayerSchemes(player).size() >= Config.SCHEMES_PER_PLAYER)
+		{
+			return showInfo("Info", "You have reached the maximum number of schemes!");
+		}
+		
 		try (Connection con = DatabaseFactory.getConnection())
 		{
 			final PreparedStatement ps = con.prepareStatement("INSERT INTO npcbuffer_scheme_list (player_id, scheme_name) VALUES (?, ?)");
@@ -949,6 +1054,11 @@ public class BufferBoard implements IParseBoardHandler
 	
 	private String handleDeleteScheme(Player player, String schemeId)
 	{
+		if (!isSchemeOwner(player.getObjectId(), schemeId))
+		{
+			return buildMainPage(player);
+		}
+		
 		try (Connection con = DatabaseFactory.getConnection())
 		{
 			PreparedStatement ps = con.prepareStatement("DELETE FROM npcbuffer_scheme_list WHERE id=? LIMIT 1");
@@ -969,8 +1079,13 @@ public class BufferBoard implements IParseBoardHandler
 		return buildMainPage(player);
 	}
 	
-	private String getSchemeOptions(String schemeId)
+	private String getSchemeOptions(Player player, String schemeId)
 	{
+		if (!isSchemeOwner(player.getObjectId(), schemeId))
+		{
+			return buildMainPage(player);
+		}
+		
 		final int buffCount = getBuffCount(schemeId);
 		final StringBuilder html = new StringBuilder();
 		html.append("<html noscrollbar><title>").append(TITLE).append("</title><body><center>");
@@ -996,8 +1111,13 @@ public class BufferBoard implements IParseBoardHandler
 	// SCHEME BUFF ADD/REMOVE VIEW (PAGINATED)
 	// =========================================================
 	
-	private String viewSchemeBuffs(String scheme, String page, String mode)
+	private String viewSchemeBuffs(Player player, String scheme, String page, String mode)
 	{
+		if (!isSchemeOwner(player.getObjectId(), scheme))
+		{
+			return buildMainPage(player);
+		}
+		
 		final List<String> buffList = new ArrayList<>();
 		final StringBuilder html = new StringBuilder();
 		html.append("<html noscrollbar><title>").append(TITLE).append("</title><body><center><br>");
@@ -1058,7 +1178,19 @@ public class BufferBoard implements IParseBoardHandler
 		
 		// Pagination
 		final int pageCount = Math.max(1, ((buffList.size() - 1) / BUFFS_PER_PAGE) + 1);
-		final int currentPage = Integer.parseInt(page);
+		int currentPage;
+		try
+		{
+			currentPage = Integer.parseInt(page);
+		}
+		catch (NumberFormatException e)
+		{
+			currentPage = 1;
+		}
+		if ((currentPage < 1) || (currentPage > pageCount))
+		{
+			currentPage = 1;
+		}
 		final String pageName = pageCount > 5 ? "P" : "Page ";
 		final String width = pageCount > 5 ? "25" : "50";
 		
@@ -1077,6 +1209,28 @@ public class BufferBoard implements IParseBoardHandler
 		}
 		html.append("</tr></table>");
 		
+		// Pre-load used buffs to avoid N+1 queries
+		final Set<String> usedBuffs = new HashSet<>();
+		if ("add".equals(mode))
+		{
+			try (Connection con = DatabaseFactory.getConnection())
+			{
+				final PreparedStatement ps = con.prepareStatement("SELECT skill_id, skill_level FROM npcbuffer_scheme_contents WHERE scheme_id=?");
+				ps.setString(1, scheme);
+				final ResultSet rs = ps.executeQuery();
+				while (rs.next())
+				{
+					usedBuffs.add(rs.getInt("skill_id") + "_" + rs.getInt("skill_level"));
+				}
+				rs.close();
+				ps.close();
+			}
+			catch (SQLException e)
+			{
+				LOG.warning("BufferBoard preload usedBuffs error: " + e.getMessage());
+			}
+		}
+		
 		// Buff list
 		final int start = Math.max(0, (BUFFS_PER_PAGE * currentPage) - BUFFS_PER_PAGE);
 		final int end = Math.min(BUFFS_PER_PAGE * currentPage, buffList.size());
@@ -1085,13 +1239,13 @@ public class BufferBoard implements IParseBoardHandler
 		for (int i = start; i < end; i++)
 		{
 			final String original = buffList.get(i);
-			final String cleaned = original.replace("_", " ");
-			final String[] parts = cleaned.split(" ");
-			final String name = parts[0].replace("+", " ");
-			final int id = Integer.parseInt(parts[1]);
-			final int level = Integer.parseInt(parts[2]);
+			final int lastSep = original.lastIndexOf('_');
+			final int secondSep = original.lastIndexOf('_', lastSep - 1);
+			final String name = original.substring(0, secondSep).replace("+", " ");
+			final int id = Integer.parseInt(original.substring(secondSep + 1, lastSep));
+			final int level = Integer.parseInt(original.substring(lastSep + 1));
 			
-			if ("add".equals(mode) && isUsed(scheme, id, level))
+			if ("add".equals(mode) && usedBuffs.contains(id + "_" + level))
 			{
 				continue;
 			}
@@ -1119,23 +1273,65 @@ public class BufferBoard implements IParseBoardHandler
 		return html.toString();
 	}
 	
-	private String handleAddBuffToScheme(String data)
+	private String handleAddBuffToScheme(Player player, String data)
 	{
 		final String[] parts = data.split(";");
 		final String[] buffParts = parts[0].split("_");
+		if (buffParts.length < 3)
+		{
+			return buildMainPage(player);
+		}
+		
 		final String scheme = buffParts[0];
+		if (!isSchemeOwner(player.getObjectId(), scheme))
+		{
+			return buildMainPage(player);
+		}
+		
 		final String skill = buffParts[1];
 		final String level = buffParts[2];
 		final String page = parts.length > 1 ? parts[1] : "1";
-		final int total = parts.length > 2 ? Integer.parseInt(parts[2]) : 0;
+		
+		// Validate skill/level are numeric
+		final int skillId;
+		final int skillLevel;
+		try
+		{
+			skillId = Integer.parseInt(skill);
+			skillLevel = Integer.parseInt(level);
+		}
+		catch (NumberFormatException e)
+		{
+			return buildMainPage(player);
+		}
+		
+		// Server-side capacity check (never trust client total)
+		final String[] counts = getSchemeBuffCounts(scheme).split(" ");
+		final int currentTotal = Integer.parseInt(counts[0]);
+		if (currentTotal >= (MAX_SCHEME_BUFFS + MAX_SCHEME_DANCES))
+		{
+			return getSchemeOptions(player, scheme);
+		}
+		
+		// Validate buff exists and is enabled in the buff list
+		if (!isBuffAvailable(skillId, skillLevel))
+		{
+			return buildMainPage(player);
+		}
+		
+		// Check for duplicate buff in scheme
+		if (isBuffInScheme(scheme, skillId, skillLevel))
+		{
+			return viewSchemeBuffs(player, scheme, page, "add");
+		}
 		
 		final int buffClass = getClassBuff(skill);
 		try (Connection con = DatabaseFactory.getConnection())
 		{
 			final PreparedStatement ps = con.prepareStatement("INSERT INTO npcbuffer_scheme_contents (scheme_id, skill_id, skill_level, buff_class) VALUES (?, ?, ?, ?)");
 			ps.setString(1, scheme);
-			ps.setString(2, skill);
-			ps.setString(3, level);
+			ps.setInt(2, skillId);
+			ps.setInt(3, skillLevel);
 			ps.setInt(4, buffClass);
 			ps.executeUpdate();
 			ps.close();
@@ -1145,29 +1341,47 @@ public class BufferBoard implements IParseBoardHandler
 			LOG.warning("BufferBoard addBuff error: " + e.getMessage());
 		}
 		
-		if ((total + 1) >= (MAX_SCHEME_BUFFS + MAX_SCHEME_DANCES))
+		if ((currentTotal + 1) >= (MAX_SCHEME_BUFFS + MAX_SCHEME_DANCES))
 		{
-			return getSchemeOptions(scheme);
+			return getSchemeOptions(player, scheme);
 		}
-		return viewSchemeBuffs(scheme, page, "add");
+		return viewSchemeBuffs(player, scheme, page, "add");
 	}
 	
-	private String handleRemoveBuffFromScheme(String data)
+	private String handleRemoveBuffFromScheme(Player player, String data)
 	{
 		final String[] parts = data.split(";");
 		final String[] buffParts = parts[0].split("_");
+		if (buffParts.length < 3)
+		{
+			return buildMainPage(player);
+		}
+		
 		final String scheme = buffParts[0];
-		final String skill = buffParts[1];
-		final String level = buffParts[2];
+		if (!isSchemeOwner(player.getObjectId(), scheme))
+		{
+			return buildMainPage(player);
+		}
+		
+		final int skillId;
+		final int skillLevel;
+		try
+		{
+			skillId = Integer.parseInt(buffParts[1]);
+			skillLevel = Integer.parseInt(buffParts[2]);
+		}
+		catch (NumberFormatException e)
+		{
+			return buildMainPage(player);
+		}
 		final String page = parts.length > 1 ? parts[1] : "1";
-		final int total = parts.length > 2 ? Integer.parseInt(parts[2]) : 0;
 		
 		try (Connection con = DatabaseFactory.getConnection())
 		{
 			final PreparedStatement ps = con.prepareStatement("DELETE FROM npcbuffer_scheme_contents WHERE scheme_id=? AND skill_id=? AND skill_level=? LIMIT 1");
 			ps.setString(1, scheme);
-			ps.setString(2, skill);
-			ps.setString(3, level);
+			ps.setInt(2, skillId);
+			ps.setInt(3, skillLevel);
 			ps.executeUpdate();
 			ps.close();
 		}
@@ -1176,16 +1390,72 @@ public class BufferBoard implements IParseBoardHandler
 			LOG.warning("BufferBoard removeBuff error: " + e.getMessage());
 		}
 		
-		if ((total - 1) <= 0)
+		// Use server-side count instead of trusting client total
+		final int remaining = getBuffCount(scheme);
+		if (remaining <= 0)
 		{
-			return getSchemeOptions(scheme);
+			return getSchemeOptions(player, scheme);
 		}
-		return viewSchemeBuffs(scheme, page, "remove");
+		return viewSchemeBuffs(player, scheme, page, "remove");
 	}
 	
 	// =========================================================
 	// DATABASE HELPERS
 	// =========================================================
+	
+	/**
+	 * Checks if a buff with the given id/level exists and is enabled (canUse=1) in the buff list.
+	 * @param skillId
+	 * @param skillLevel
+	 * @return
+	 */
+	private boolean isBuffAvailable(int skillId, int skillLevel)
+	{
+		try (Connection con = DatabaseFactory.getConnection())
+		{
+			final PreparedStatement ps = con.prepareStatement("SELECT buffId FROM npcbuffer_buff_list WHERE buffId=? AND buffLevel=? AND canUse=1 LIMIT 1");
+			ps.setInt(1, skillId);
+			ps.setInt(2, skillLevel);
+			final ResultSet rs = ps.executeQuery();
+			final boolean exists = rs.next();
+			rs.close();
+			ps.close();
+			return exists;
+		}
+		catch (SQLException e)
+		{
+			LOG.warning("BufferBoard isBuffAvailable error: " + e.getMessage());
+		}
+		return false;
+	}
+	
+	/**
+	 * Checks if a buff is already present in the given scheme.
+	 * @param schemeId
+	 * @param skillId
+	 * @param skillLevel
+	 * @return
+	 */
+	private boolean isBuffInScheme(String schemeId, int skillId, int skillLevel)
+	{
+		try (Connection con = DatabaseFactory.getConnection())
+		{
+			final PreparedStatement ps = con.prepareStatement("SELECT skill_id FROM npcbuffer_scheme_contents WHERE scheme_id=? AND skill_id=? AND skill_level=? LIMIT 1");
+			ps.setString(1, schemeId);
+			ps.setInt(2, skillId);
+			ps.setInt(3, skillLevel);
+			final ResultSet rs = ps.executeQuery();
+			final boolean exists = rs.next();
+			rs.close();
+			ps.close();
+			return exists;
+		}
+		catch (SQLException e)
+		{
+			LOG.warning("BufferBoard isBuffInScheme error: " + e.getMessage());
+		}
+		return false;
+	}
 	
 	private int getBuffCount(String scheme)
 	{
@@ -1207,6 +1477,32 @@ public class BufferBoard implements IParseBoardHandler
 			LOG.warning("BufferBoard getBuffCount error: " + e.getMessage());
 		}
 		return count;
+	}
+	
+	/**
+	 * Checks if the given scheme belongs to the specified player.
+	 * @param playerId
+	 * @param schemeId
+	 * @return
+	 */
+	private boolean isSchemeOwner(int playerId, String schemeId)
+	{
+		try (Connection con = DatabaseFactory.getConnection())
+		{
+			final PreparedStatement ps = con.prepareStatement("SELECT id FROM npcbuffer_scheme_list WHERE id=? AND player_id=? LIMIT 1");
+			ps.setString(1, schemeId);
+			ps.setInt(2, playerId);
+			final ResultSet rs = ps.executeQuery();
+			final boolean owns = rs.next();
+			rs.close();
+			ps.close();
+			return owns;
+		}
+		catch (SQLException e)
+		{
+			LOG.warning("BufferBoard isSchemeOwner error: " + e.getMessage());
+		}
+		return false;
 	}
 	
 	/**
@@ -1245,75 +1541,6 @@ public class BufferBoard implements IParseBoardHandler
 			LOG.warning("BufferBoard getSchemeBuffCounts error: " + e.getMessage());
 		}
 		return total + " " + buffCount + " " + danceSongCount;
-	}
-	
-	private String getBuffType(int id)
-	{
-		String val = "none";
-		try (Connection con = DatabaseFactory.getConnection())
-		{
-			final PreparedStatement ps = con.prepareStatement("SELECT buffType FROM npcbuffer_buff_list WHERE buffId=? LIMIT 1");
-			ps.setInt(1, id);
-			final ResultSet rs = ps.executeQuery();
-			if (rs.next())
-			{
-				val = rs.getString("buffType");
-			}
-			rs.close();
-			ps.close();
-		}
-		catch (SQLException e)
-		{
-			LOG.warning("BufferBoard getBuffType error: " + e.getMessage());
-		}
-		return val;
-	}
-	
-	private boolean isEnabled(int id, int level)
-	{
-		boolean val = false;
-		try (Connection con = DatabaseFactory.getConnection())
-		{
-			final PreparedStatement ps = con.prepareStatement("SELECT canUse FROM npcbuffer_buff_list WHERE buffId=? AND buffLevel=? LIMIT 1");
-			ps.setInt(1, id);
-			ps.setInt(2, level);
-			final ResultSet rs = ps.executeQuery();
-			if (rs.next())
-			{
-				val = "1".equals(rs.getString("canUse"));
-			}
-			rs.close();
-			ps.close();
-		}
-		catch (SQLException e)
-		{
-			LOG.warning("BufferBoard isEnabled error: " + e.getMessage());
-		}
-		return val;
-	}
-	
-	private boolean isUsed(String scheme, int id, int level)
-	{
-		boolean used = false;
-		try (Connection con = DatabaseFactory.getConnection())
-		{
-			final PreparedStatement ps = con.prepareStatement("SELECT id FROM npcbuffer_scheme_contents WHERE scheme_id=? AND skill_id=? AND skill_level=? LIMIT 1");
-			ps.setString(1, scheme);
-			ps.setInt(2, id);
-			ps.setInt(3, level);
-			final ResultSet rs = ps.executeQuery();
-			if (rs.next())
-			{
-				used = true;
-			}
-			rs.close();
-			ps.close();
-		}
-		catch (SQLException e)
-		{
-			LOG.warning("BufferBoard isUsed error: " + e.getMessage());
-		}
-		return used;
 	}
 	
 	private int getClassBuff(String id)
@@ -1489,12 +1716,18 @@ public class BufferBoard implements IParseBoardHandler
 		
 		for (int i = start; i < end; i++)
 		{
-			String value = buffList.get(i).replace("_", " ");
-			final String[] extr = value.split(" ");
-			final String name = extr[0].replace("+", " ");
-			final int forClass = Integer.parseInt(extr[1]);
-			final int usable = Integer.parseInt(extr[3]);
-			final String skillPos = extr[4] + "_" + extr[5];
+			// Encoded as: name_forClass_page_canUse_buffId_buffLevel
+			// Extract trailing numeric fields safely using lastIndexOf
+			final String raw = buffList.get(i);
+			final int sep5 = raw.lastIndexOf('_');
+			final int sep4 = raw.lastIndexOf('_', sep5 - 1);
+			final int sep3 = raw.lastIndexOf('_', sep4 - 1);
+			final int sep2 = raw.lastIndexOf('_', sep3 - 1);
+			final int sep1 = raw.lastIndexOf('_', sep2 - 1);
+			final String name = raw.substring(0, sep1).replace("+", " ");
+			final int forClass = Integer.parseInt(raw.substring(sep1 + 1, sep2));
+			final int usable = Integer.parseInt(raw.substring(sep3 + 1, sep4));
+			final String skillPos = raw.substring(sep4 + 1);
 			
 			final String bgColor = ((i % 2) != 0) ? "333333" : "292929";
 			html.append("<BR1><table border=0 bgcolor=").append(bgColor).append(">");
