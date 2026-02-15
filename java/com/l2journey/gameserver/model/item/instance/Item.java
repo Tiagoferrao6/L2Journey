@@ -2204,7 +2204,7 @@ public class Item extends WorldObject
 	
 	public boolean hasPassiveSkills()
 	{
-		return (_itemTemplate.getItemType() == EtcItemType.RUNE) && (_loc == ItemLocation.INVENTORY) && (_ownerId > 0) && _itemTemplate.hasSkills();
+		return ((_itemTemplate.getItemType() == EtcItemType.RUNE) || (_itemTemplate.getItemType() == EtcItemType.RUNE_SELECT)) && (_loc == ItemLocation.INVENTORY) && (_ownerId > 0) && _itemTemplate.hasSkills();
 	}
 	
 	public void giveSkillsToOwner()
