@@ -215,7 +215,7 @@ public class BufferBoard implements IParseBoardHandler
 			{
 				html = createSchemeForm();
 			}
-			else if (params.startsWith("create;"))
+			else if (params.startsWith("create "))
 			{
 				html = handleCreateScheme(player, params.substring(7));
 			}
@@ -273,15 +273,37 @@ public class BufferBoard implements IParseBoardHandler
 				final String[] gp = params.substring(11).split(";", 3);
 				final String actionPage = gp.length > 1 ? gp[1] : "1-1";
 				final String[] ap = actionPage.split("-", 2);
-				gmManageSelectedBuff(gp[0], ap[0]);
-				final String page = ap.length > 1 ? ap[1] : "1";
-				final String type = gp.length > 2 ? gp[2] : "buff";
-				html = gmViewAllBuffs(type, type, page);
+				if (!gmManageSelectedBuff(gp[0], ap[0]))
+				{
+					html = showInfo("Error", "Failed to update buff. Please try again later.");
+				}
+				else
+				{
+					final String page = ap.length > 1 ? ap[1] : "1";
+					final String type = gp.length > 2 ? gp[2] : "buff";
+					html = gmViewAllBuffs(type, type, page);
+				}
 			}
 			else if (params.startsWith("gmChangeSet;") && player.isGM())
 			{
-				final String[] gp = params.substring(12).split(";", 3);
-				html = gmManageSelectedSet(gp[0], gp.length > 1 ? gp[1] : "3", gp.length > 2 ? gp[2] : "1");
+				final String[] gp = params.substring(12).split(";", 2);
+				final String skillPos = gp[0];
+				// Format: "PAGE SELECTED_VALUE" (space-separated for client $var substitution)
+				final String pageAndValue = gp.length > 1 ? gp[1] : "1 3";
+				final int spaceIdx = pageAndValue.indexOf(' ');
+				final String page;
+				final String newVal;
+				if (spaceIdx != -1)
+				{
+					page = pageAndValue.substring(0, spaceIdx);
+					newVal = pageAndValue.substring(spaceIdx + 1);
+				}
+				else
+				{
+					page = "1";
+					newVal = pageAndValue;
+				}
+				html = gmManageSelectedSet(skillPos, newVal, page);
 			}
 			else
 			{
@@ -954,7 +976,7 @@ public class BufferBoard implements IParseBoardHandler
 	
 	private String createSchemeForm()
 	{
-		return "<html noscrollbar><title>" + TITLE + "</title><body><center>" + "<img src=\"L2UI_CH3.herotower_deco\" width=256 height=32><br><br>" + "You MUST separate new words with a dot (.)<br><br>" + "Scheme name: <edit var=\"sname\" width=120><br><br>" + button("Create Scheme", "_bbsbuffer;create;$sname", 130) + "<br>" + button("Back", "_bbsbuffer", 100) + "<br><font color=303030>" + TITLE + "</font></center></body></html>";
+		return "<html noscrollbar><title>" + TITLE + "</title><body><center>" + "<img src=\"L2UI_CH3.herotower_deco\" width=256 height=32><br><br>" + "You MUST separate new words with a dot (.)<br><br>" + "Scheme name: <edit var=\"sname\" width=120><br><br>" + button("Create Scheme", "_bbsbuffer;create $sname", 130) + "<br>" + button("Back", "_bbsbuffer", 100) + "<br><font color=303030>" + TITLE + "</font></center></body></html>";
 	}
 	
 	private String handleCreateScheme(Player player, String rawName)
@@ -982,6 +1004,7 @@ public class BufferBoard implements IParseBoardHandler
 		catch (SQLException e)
 		{
 			LOG.warning("BufferBoard createScheme error: " + e.getMessage());
+			return showInfo("Error", "Failed to create scheme. Please try again later.");
 		}
 		
 		return buildMainPage(player);
@@ -1074,6 +1097,7 @@ public class BufferBoard implements IParseBoardHandler
 		catch (SQLException e)
 		{
 			LOG.warning("BufferBoard deleteScheme error: " + e.getMessage());
+			return showInfo("Error", "Failed to delete scheme. Please try again later.");
 		}
 		
 		return buildMainPage(player);
@@ -1339,6 +1363,7 @@ public class BufferBoard implements IParseBoardHandler
 		catch (SQLException e)
 		{
 			LOG.warning("BufferBoard addBuff error: " + e.getMessage());
+			return showInfo("Error", "Failed to add buff to scheme. Please try again later.");
 		}
 		
 		if ((currentTotal + 1) >= (MAX_SCHEME_BUFFS + MAX_SCHEME_DANCES))
@@ -1388,6 +1413,7 @@ public class BufferBoard implements IParseBoardHandler
 		catch (SQLException e)
 		{
 			LOG.warning("BufferBoard removeBuff error: " + e.getMessage());
+			return showInfo("Error", "Failed to remove buff from scheme. Please try again later.");
 		}
 		
 		// Use server-side count instead of trusting client total
@@ -1752,7 +1778,7 @@ public class BufferBoard implements IParseBoardHandler
 					listOrder = "List=\"" + SET_NONE + ";" + SET_FIGHTER + ";" + SET_MAGE + ";" + SET_ALL + ";\"";
 				}
 				html.append("<tr><td fixwidth=145>").append(name).append("</td><td width=70><combobox var=\"newSet").append(i).append("\" width=70 ").append(listOrder).append("></td><td width=50>");
-				html.append(button("Update", "_bbsbuffer;gmChangeSet;" + skillPos + ";$newSet" + i + ";" + page, 50));
+				html.append(button("Update", "_bbsbuffer;gmChangeSet;" + skillPos + ";" + page + " $newSet" + i, 50));
 				html.append("</td></tr>");
 			}
 			else
@@ -1777,7 +1803,7 @@ public class BufferBoard implements IParseBoardHandler
 		return html.toString();
 	}
 	
-	private void gmManageSelectedBuff(String buffPosId, String canUseBuff)
+	private boolean gmManageSelectedBuff(String buffPosId, String canUseBuff)
 	{
 		final String[] bpid = buffPosId.split("_");
 		final String buffId = bpid[0];
@@ -1790,10 +1816,12 @@ public class BufferBoard implements IParseBoardHandler
 			ps.setString(3, buffLevel);
 			ps.executeUpdate();
 			ps.close();
+			return true;
 		}
 		catch (SQLException e)
 		{
 			LOG.warning("BufferBoard gmManageSelectedBuff error: " + e.getMessage());
+			return false;
 		}
 	}
 	
@@ -1833,6 +1861,7 @@ public class BufferBoard implements IParseBoardHandler
 		catch (SQLException e)
 		{
 			LOG.warning("BufferBoard gmManageSelectedSet error: " + e.getMessage());
+			return showInfo("Error", "Failed to update buff set. Please try again later.");
 		}
 		return gmViewAllBuffs("set", "Buff_Sets", page);
 	}
