@@ -421,8 +421,8 @@ public class BufferBoard implements IParseBoardHandler
 			}
 			if (!schemes.isEmpty())
 			{
-				html.append(menuItem("Icon.skill6440", "Edit Scheme", null, "_bbsbuffer;edit_1"));
-				html.append(menuItem("Icon.skill0928", "Delete Scheme", null, "_bbsbuffer;delete_1"));
+				html.append(menuItem("Icon.color_name_i00", "Edit Scheme", null, "_bbsbuffer;edit_1"));
+				html.append(menuItem("Icon.etc_ssq_i00", "Delete Scheme", null, "_bbsbuffer;delete_1"));
 			}
 		}
 		// Your Schemes sub-header
@@ -477,11 +477,11 @@ public class BufferBoard implements IParseBoardHandler
 				html.append("<tr><td align=center><table><tr>");
 				if (Config.ENABLE_SONGS)
 				{
-					html.append(buffCategoryLeft("Icon.skill0364", "Songs", "_bbsbuffer;view;song"));
+					html.append(buffCategoryLeft("Icon.skill0269", "Songs", "_bbsbuffer;view;song"));
 				}
 				if (Config.ENABLE_DANCES)
 				{
-					html.append(buffCategoryRight("Icon.skill0273", "Dances", "_bbsbuffer;view;dance"));
+					html.append(buffCategoryRight("Icon.skill0275", "Dances", "_bbsbuffer;view;dance"));
 				}
 				html.append("</tr></table></td></tr>");
 			}
@@ -491,11 +491,11 @@ public class BufferBoard implements IParseBoardHandler
 				html.append("<tr><td align=center><table><tr>");
 				if (Config.ENABLE_CHANTS)
 				{
-					html.append(buffCategoryLeft("Icon.skill1460", "Chant", "_bbsbuffer;view;chant"));
+					html.append(buffCategoryLeft("Icon.skill1007", "Chant", "_bbsbuffer;view;chant"));
 				}
 				if (Config.ENABLE_SPECIAL)
 				{
-					html.append(buffCategoryRight("Icon.skill0825", "Special", "_bbsbuffer;view;special"));
+					html.append(buffCategoryRight("Icon.skill1331", "Special", "_bbsbuffer;view;special"));
 				}
 				html.append("</tr></table></td></tr>");
 			}
@@ -983,11 +983,13 @@ public class BufferBoard implements IParseBoardHandler
 	{
 		if (!rawName.matches("[a-zA-Z0-9]+"))
 		{
+			//player.sendPacket(SystemMessageId.INCORRECT_NAME_PLEASE_TRY_AGAIN);
 			return showInfo("Info", "The scheme name contains invalid characters!<br>Only letters (a-z) and numbers (0-9) are allowed.");
 		}
 		
 		if (rawName.length() > 36)
 		{
+			//player.sendPacket(SystemMessageId.INCORRECT_NAME_PLEASE_TRY_AGAIN);
 			return showInfo("Info", "The scheme name is too long!<br>Max 36 characters.");
 		}
 		
