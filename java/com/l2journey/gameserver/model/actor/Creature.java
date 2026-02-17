@@ -4853,8 +4853,9 @@ public abstract class Creature extends WorldObject
 				// Players use pathfinding only in peace zones.
 				// Monsters (Attackable) use pathfinding only when in combat (attacking or being attacked).
 				final boolean usePathfinding = (isPlayer() && isInsideZone(ZoneId.PEACE)) || (isAttackable() && isInCombat());
+				final boolean isMonsterInAttack = (!isPlayer() && isInCombat());
 				
-				if (!directMove && ((originalDistance - distance) > 30) && !isAfraid() && !isInVehicle && usePathfinding)
+				if (!directMove && (isMonsterInAttack || ((originalDistance - distance) > 30)) && !isAfraid() && !isInVehicle && usePathfinding)
 				{
 					// Path calculation -- overrides previous movement check
 					move.geoPath = PathFinding.getInstance().findPath(curX, curY, curZ, originalX, originalY, originalZ, getInstanceId(), isPlayer());
