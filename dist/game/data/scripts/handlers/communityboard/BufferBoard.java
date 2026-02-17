@@ -981,11 +981,14 @@ public class BufferBoard implements IParseBoardHandler
 	
 	private String handleCreateScheme(Player player, String rawName)
 	{
-		final String name = rawName.replaceAll("[ !\"#$%&'()*+,/:;<=>?@\\[\\\\\\]\\^`{|}~]", "");
-		if (name.isEmpty() || (name.length() > 36))
+		if (!rawName.matches("[a-zA-Z0-9]+"))
 		{
-			player.sendPacket(SystemMessageId.INCORRECT_NAME_PLEASE_TRY_AGAIN);
-			return showInfo("Info", "Please enter a valid scheme name!<br>Max 36 characters, no special chars.");
+			return showInfo("Info", "The scheme name contains invalid characters!<br>Only letters (a-z) and numbers (0-9) are allowed.");
+		}
+		
+		if (rawName.length() > 36)
+		{
+			return showInfo("Info", "The scheme name is too long!<br>Max 36 characters.");
 		}
 		
 		if (getPlayerSchemes(player).size() >= Config.SCHEMES_PER_PLAYER)
@@ -997,7 +1000,7 @@ public class BufferBoard implements IParseBoardHandler
 		{
 			final PreparedStatement ps = con.prepareStatement("INSERT INTO npcbuffer_scheme_list (player_id, scheme_name) VALUES (?, ?)");
 			ps.setInt(1, player.getObjectId());
-			ps.setString(2, name);
+			ps.setString(2, rawName);
 			ps.executeUpdate();
 			ps.close();
 		}
