@@ -62,25 +62,25 @@ import com.l2journey.gameserver.network.serverpackets.MagicSkillUse;
 import com.l2journey.gameserver.network.serverpackets.SetSummonRemainTime;
 
 /**
- * Complete Community Board Buffer with full scheme support. Uses the same database tables as NpcBuffer (npcbuffer_buff_list, npcbuffer_scheme_list, npcbuffer_scheme_contents). All configurations are read from NpcBuffer.ini via {@link Config}.
+ * Complete Community Board Buffer Premium with full scheme support. Uses the same database tables as NpcBufferPremium (npcbufferpremium_buff_list, npcbufferpremium_scheme_list, npcbufferpremium_scheme_contents). All configurations are read from NpcBufferPremium.ini via {@link Config}.
  * @author KingHanker
  */
-public class BufferBoard implements IParseBoardHandler
+public class BufferBoardPremium implements IParseBoardHandler
 {
-	private static final Logger LOG = Logger.getLogger(BufferBoard.class.getName());
+	private static final Logger LOG = Logger.getLogger(BufferBoardPremium.class.getName());
 	
-	private static final String TITLE = "Community Buffer";
+	private static final String TITLE = "Community Buffer Premium";
 	private static final String[] COMMANDS =
 	{
-		"_bbsbuffer"
+		"_cbbbuffer"
 	};
 	
 	private static final int MAX_SCHEME_BUFFS = Config.BUFFS_MAX_AMOUNT;
 	private static final int MAX_SCHEME_DANCES = Config.DANCES_MAX_AMOUNT;
 	private static final int BUFFS_PER_PAGE = 20;
 	
-	//Setting up buff timing
-	private static final int BUFFTIME = Config.BUFF_TIME * 60; // 60 min.
+	//Setting up Premium buff timing
+	private static final int BUFFTIME_PREMIUM = Config.PREMIUM_BUFF_TIME * 60; // 60 min.
 	
 	// Buff Set class labels (GM management)
 	private static final String SET_FIGHTER = "Fighter";
@@ -110,7 +110,7 @@ public class BufferBoard implements IParseBoardHandler
 		SHOW_NO_PET.remove(objId);
 	};
 	
-	public BufferBoard()
+	public BufferBoardPremium()
 	{
 		Containers.Players().addListener(new ConsumerEventListener(Containers.Players(), EventType.ON_PLAYER_LOGOUT, ON_PLAYER_LOGOUT, this));
 	}
@@ -128,6 +128,11 @@ public class BufferBoard implements IParseBoardHandler
 	@Override
 	public boolean parseCommunityBoardCommand(String command, Player player)
 	{
+		if (!player.hasPremiumStatus())
+		{
+			sendHtml(player, showInfo("Info", "This buffer is available to players with a  <font color=FF0000>premium account.</font>"));
+			return false;
+		}
 		if (!Config.COMMUNITYBOARD_ENABLED)
 		{
 			player.sendPacket(SystemMessageId.THE_COMMUNITY_SERVER_IS_CURRENTLY_OFFLINE);
@@ -135,7 +140,7 @@ public class BufferBoard implements IParseBoardHandler
 		}
 		
 		// Access validations
-		if (!Config.BUFF_WITH_KARMA && (player.getKarma() > 0))
+		if (!Config.PREMIUM_BUFF_WITH_KARMA && (player.getKarma() > 0))
 		{
 			sendHtml(player, showInfo("Info", "You have too much <font color=FF0000>karma!</font><br>Come back when you don't have any karma!"));
 			return false;
@@ -150,12 +155,12 @@ public class BufferBoard implements IParseBoardHandler
 			sendHtml(player, showInfo("Info", "You can't use the buffer while in an <font color=FF0000>Event!</font>"));
 			return false;
 		}
-		if (player.getLevel() < Config.MIN_LEVEL)
+		if (player.getLevel() < Config.PREMIUM_MIN_LEVEL)
 		{
-			sendHtml(player, showInfo("Info", "Your level is too low!<br>You need at least level <font color=LEVEL>" + Config.MIN_LEVEL + "</font>."));
+			sendHtml(player, showInfo("Info", "Your level is too low!<br>You need at least level <font color=LEVEL>" + Config.PREMIUM_MIN_LEVEL + "</font>."));
 			return false;
 		}
-		if (!Config.BUFF_WITH_FLAG && (player.getPvpFlag() > 0))
+		if (!Config.PREMIUM_BUFF_WITH_FLAG && (player.getPvpFlag() > 0))
 		{
 			sendHtml(player, showInfo("Info", "You can't use the buffer while <font color=800080>flagged!</font>"));
 			return false;
@@ -166,7 +171,7 @@ public class BufferBoard implements IParseBoardHandler
 			return false;
 		}
 		
-		final String params = command.startsWith("_bbsbuffer;") ? command.substring(11) : "";
+		final String params = command.startsWith("_cbbbuffer;") ? command.substring(11) : "";
 		String html = null;
 		
 		try
@@ -282,10 +287,10 @@ public class BufferBoard implements IParseBoardHandler
 				}
 				else
 				{
-					final String page = ap.length > 1 ? ap[1] : "1";
-					final String type = gp.length > 2 ? gp[2] : "buff";
-					html = gmViewAllBuffs(type, type, page);
-				}
+				final String page = ap.length > 1 ? ap[1] : "1";
+				final String type = gp.length > 2 ? gp[2] : "buff";
+				html = gmViewAllBuffs(type, type, page);
+			}
 			}
 			else if (params.startsWith("gmChangeSet;") && player.isGM())
 			{
@@ -315,7 +320,7 @@ public class BufferBoard implements IParseBoardHandler
 		}
 		catch (Exception e)
 		{
-			LOG.warning("BufferBoard error for " + player.getName() + ": " + e.getMessage());
+			LOG.warning("BufferBoardPremium error for " + player.getName() + ": " + e.getMessage());
 			html = buildMainPage(player);
 		}
 		
@@ -353,7 +358,7 @@ public class BufferBoard implements IParseBoardHandler
 		{
 			targetName = player.getName();
 		}
-		final List<String[]> schemes = Config.ENABLE_SCHEME_SYSTEM ? getPlayerSchemes(player) : new ArrayList<>();
+		final List<String[]> schemes = Config.PREMIUM_ENABLE_SCHEME_SYSTEM ? getPlayerSchemes(player) : new ArrayList<>();
 		
 		final StringBuilder html = new StringBuilder();
 		html.append("<html noscrollbar><title>").append(TITLE).append("</title><body><br>");
@@ -368,9 +373,9 @@ public class BufferBoard implements IParseBoardHandler
 		html.append("<td width=40 align=right valign=top><img src=\"icon.skill6319\" width=32 height=32></td>");
 		html.append("<td width=260 align=left valign=top>");
 		html.append("<font name=hs12 color=\"LEVEL\">Community Buffer</font><br1>");
-		if (!Config.FREE_BUFFS)
+		if (!Config.PREMIUM_FREE_BUFFS)
 		{
-			html.append("<font color=FFFFFF name=__SYSTEMWORLDFONT>Buff Price: ").append(formatAdena(Config.BUFF_PRICE)).append(" Adena</font>");
+			html.append("<font color=FFFFFF name=__SYSTEMWORLDFONT>Buff Price: ").append(formatAdena(Config.PREMIUM_BUFF_PRICE)).append(" Adena</font>");
 		}
 		else
 		{
@@ -382,7 +387,7 @@ public class BufferBoard implements IParseBoardHandler
 		final boolean showNoPetMsg = SHOW_NO_PET.getOrDefault(player.getObjectId(), false);
 		if (showNoPetMsg && !hasSummon)
 		{
-			html.append("<td><button value=\"\" action=\"bypass _bbsbuffer;togglePet\" width=35 height=35 back=\"L2UI_CT1.SystemMenuWnd_df_ReStart\" fore=\"L2UI_CT1.SystemMenuWnd_df_ReStart\"></td>");
+			html.append("<td><button value=\"\" action=\"bypass _cbbbuffer;togglePet\" width=35 height=35 back=\"L2UI_CT1.SystemMenuWnd_df_ReStart\" fore=\"L2UI_CT1.SystemMenuWnd_df_ReStart\"></td>");
 			html.append("<td width=90 align=center><font color=FF6666 name=__SYSTEMWORLDFONT>No pet summoned!</font></td>");
 		}
 		else
@@ -390,11 +395,11 @@ public class BufferBoard implements IParseBoardHandler
 			SHOW_NO_PET.remove(player.getObjectId());
 			if (hasSummon)
 			{
-				html.append("<td><button value=\"").append(petMode ? "To Player" : "To Pet").append("\" action=\"bypass _bbsbuffer;togglePet\" width=90 height=37 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td>");
+				html.append("<td><button value=\"").append(petMode ? "To Player" : "To Pet").append("\" action=\"bypass _cbbbuffer;togglePet\" width=90 height=37 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td>");
 			}
 			else
 			{
-				html.append("<td><button value=\"To Pet\" action=\"bypass _bbsbuffer;togglePet\" width=90 height=37 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td>");
+				html.append("<td><button value=\"To Pet\" action=\"bypass _cbbbuffer;togglePet\" width=90 height=37 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td>");
 			}
 		}
 		
@@ -416,16 +421,16 @@ public class BufferBoard implements IParseBoardHandler
 		html.append("<tr><td width=240 height=55 align=center><table>");
 		html.append("<tr><td width=240 height=40 align=center background=\"l2ui_ct1.ComboBox_DF_Dropmenu_Bg\"><br>");
 		html.append("<font color=99BBFF name=hs12>Manage Scheme</font></td></tr>");
-		if (Config.ENABLE_SCHEME_SYSTEM)
+		if (Config.PREMIUM_ENABLE_SCHEME_SYSTEM)
 		{
-			if (schemes.size() < Config.SCHEMES_PER_PLAYER)
+			if (schemes.size() < Config.PREMIUM_SCHEMES_PER_PLAYER)
 			{
-				html.append(menuItem("Icon.skill6439", "New Scheme", null, "_bbsbuffer;create_1"));
+				html.append(menuItem("Icon.skill6439", "New Scheme", null, "_cbbbuffer;create_1"));
 			}
 			if (!schemes.isEmpty())
 			{
-				html.append(menuItem("Icon.color_name_i00", "Edit Scheme", null, "_bbsbuffer;edit_1"));
-				html.append(menuItem("Icon.etc_ssq_i00", "Delete Scheme", null, "_bbsbuffer;delete_1"));
+				html.append(menuItem("Icon.color_name_i00", "Edit Scheme", null, "_cbbbuffer;edit_1"));
+				html.append(menuItem("Icon.etc_ssq_i00", "Delete Scheme", null, "_cbbbuffer;delete_1"));
 			}
 		}
 		// Your Schemes sub-header
@@ -434,9 +439,9 @@ public class BufferBoard implements IParseBoardHandler
 		html.append("<td width=240 align=center valign=center background=\"l2ui_ct1.ComboBox_DF_Dropmenu_Bg\">");
 		html.append("<font name=hs12 color=99BBFF>Your Schemes</font>");
 		html.append("</td></tr></table></td></tr>");
-		if (Config.ENABLE_SCHEME_SYSTEM)
+		if (Config.PREMIUM_ENABLE_SCHEME_SYSTEM)
 		{
-			final String schemePrice = Config.FREE_BUFFS ? "Free" : formatAdena(Config.SCHEME_BUFF_PRICE) + " Adena";
+			final String schemePrice = Config.PREMIUM_FREE_BUFFS ? "Free" : formatAdena(Config.PREMIUM_SCHEME_BUFF_PRICE) + " Adena";
 			if (schemes.isEmpty())
 			{
 				html.append("<tr><td align=center><br><font color=999999>No schemes created yet.</font><br></td></tr>");
@@ -445,7 +450,7 @@ public class BufferBoard implements IParseBoardHandler
 			{
 				for (String[] scheme : schemes)
 				{
-					html.append(menuItem("Icon.skill1374", scheme[1], "Price: " + schemePrice, "_bbsbuffer;cast;" + scheme[0]));
+					html.append(menuItem("Icon.skill1374", scheme[1], "Price: " + schemePrice, "_cbbbuffer;cast;" + scheme[0]));
 				}
 			}
 		}
@@ -458,68 +463,68 @@ public class BufferBoard implements IParseBoardHandler
 		html.append("<tr><td width=250 height=55 align=center><table>");
 		html.append("<tr><td width=240 height=40 align=center background=\"l2ui_ct1.ComboBox_DF_Dropmenu_Bg\"><br>");
 		html.append("<font color=99BBFF name=hs12>Individual Buffs</font></td></tr>");
-		if (Config.ENABLE_BUFF_SECTION)
+		if (Config.PREMIUM_ENABLE_BUFF_SECTION)
 		{
 			// Row: Buffs | Resists
-			if (Config.ENABLE_BUFFS || Config.ENABLE_RESIST)
+			if (Config.PREMIUM_ENABLE_BUFFS || Config.PREMIUM_ENABLE_RESIST)
 			{
 				html.append("<tr><td align=center><br1><table><tr>");
-				if (Config.ENABLE_BUFFS)
+				if (Config.PREMIUM_ENABLE_BUFFS)
 				{
-					html.append(buffCategoryLeft("Icon.skill1500", "Buffs", "_bbsbuffer;view;buff"));
+					html.append(buffCategoryLeft("Icon.skill1500", "Buffs", "_cbbbuffer;view;buff"));
 				}
-				if (Config.ENABLE_RESIST)
+				if (Config.PREMIUM_ENABLE_RESIST)
 				{
-					html.append(buffCategoryRight("Icon.skill4333", "Resists", "_bbsbuffer;view;resist"));
+					html.append(buffCategoryRight("Icon.skill4333", "Resists", "_cbbbuffer;view;resist"));
 				}
 				html.append("</tr></table></td></tr>");
 			}
 			// Row: Songs | Dances
-			if (Config.ENABLE_SONGS || Config.ENABLE_DANCES)
+			if (Config.PREMIUM_ENABLE_SONGS || Config.PREMIUM_ENABLE_DANCES)
 			{
 				html.append("<tr><td align=center><table><tr>");
-				if (Config.ENABLE_SONGS)
+				if (Config.PREMIUM_ENABLE_SONGS)
 				{
-					html.append(buffCategoryLeft("Icon.skill0269", "Songs", "_bbsbuffer;view;song"));
+					html.append(buffCategoryLeft("Icon.skill0364", "Songs", "_cbbbuffer;view;song"));
 				}
-				if (Config.ENABLE_DANCES)
+				if (Config.PREMIUM_ENABLE_DANCES)
 				{
-					html.append(buffCategoryRight("Icon.skill0275", "Dances", "_bbsbuffer;view;dance"));
+					html.append(buffCategoryRight("Icon.skill0273", "Dances", "_cbbbuffer;view;dance"));
 				}
 				html.append("</tr></table></td></tr>");
 			}
 			// Row: Chant | Special
-			if (Config.ENABLE_CHANTS || Config.ENABLE_SPECIAL)
+			if (Config.PREMIUM_ENABLE_CHANTS || Config.PREMIUM_ENABLE_SPECIAL)
 			{
 				html.append("<tr><td align=center><table><tr>");
-				if (Config.ENABLE_CHANTS)
+				if (Config.PREMIUM_ENABLE_CHANTS)
 				{
-					html.append(buffCategoryLeft("Icon.skill1007", "Chant", "_bbsbuffer;view;chant"));
+					html.append(buffCategoryLeft("Icon.skill1007", "Chant", "_cbbbuffer;view;chant"));
 				}
-				if (Config.ENABLE_SPECIAL)
+				if (Config.PREMIUM_ENABLE_SPECIAL)
 				{
-					html.append(buffCategoryRight("Icon.skill1331", "Special", "_bbsbuffer;view;special"));
+					html.append(buffCategoryRight("Icon.skill1331", "Special", "_cbbbuffer;view;special"));
 				}
 				html.append("</tr></table></td></tr>");
 			}
 			// Row: Others | Cubics
-			if (Config.ENABLE_OTHERS || Config.ENABLE_CUBIC)
+			if (Config.PREMIUM_ENABLE_OTHERS || Config.PREMIUM_ENABLE_CUBIC)
 			{
 				html.append("<tr><td align=center><table><tr>");
-				if (Config.ENABLE_OTHERS)
+				if (Config.PREMIUM_ENABLE_OTHERS)
 				{
-					html.append(buffCategoryLeft("Icon.skill1303", "Others", "_bbsbuffer;view;others"));
+					html.append(buffCategoryLeft("Icon.skill1303", "Others", "_cbbbuffer;view;others"));
 				}
-				if (Config.ENABLE_CUBIC)
+				if (Config.PREMIUM_ENABLE_CUBIC)
 				{
-					html.append(buffCategoryRight("Icon.skill0278", "Cubics", "_bbsbuffer;view;cubic"));
+					html.append(buffCategoryRight("Icon.skill0278", "Cubics", "_cbbbuffer;view;cubic"));
 				}
 				html.append("</tr></table></td></tr>");
 			}
 		}
 		if (player.isGM())
 		{
-			html.append(menuItem("Icon.skill0487", "Admin Edit buffs", null, "_bbsbuffer;gmManage"));
+			html.append(menuItem("Icon.skill0487", "Admin Edit buffs", null, "_cbbbuffer;gmManage"));
 		}
 		html.append("</table></td></tr></table>");
 		html.append("</td>");
@@ -533,23 +538,23 @@ public class BufferBoard implements IParseBoardHandler
 		html.append("<td width=235 align=center valign=center background=\"l2ui_ct1.ComboBox_DF_Dropmenu_Bg\">");
 		html.append("<font name=hs12 color=99BBFF>Fast Actions</font>");
 		html.append("</td></tr></table></td></tr>");
-		if (Config.ENABLE_BUFF_SET)
+		if (Config.PREMIUM_ENABLE_BUFF_SET)
 		{
 			final String autoLabel = petMode ? "Auto Buff Pet" : "Auto Buff";
-			final String autoPrice = Config.FREE_BUFFS ? "Free" : formatAdena(Config.BUFF_SET_PRICE) + " Adena";
-			html.append(menuItem("Icon.skill1411", autoLabel, "Price: " + autoPrice, "_bbsbuffer;castSet"));
+			final String autoPrice = Config.PREMIUM_FREE_BUFFS ? "Free" : formatAdena(Config.PREMIUM_BUFF_SET_PRICE) + " Adena";
+			html.append(menuItem("Icon.skill1411", autoLabel, "Price: " + autoPrice, "_cbbbuffer;castSet"));
 		}
-		if (Config.ENABLE_HEAL)
+		if (Config.PREMIUM_ENABLE_HEAL)
 		{
 			final String healLabel = petMode ? "Heal My Pet" : "Heal HP / CP / MP";
-			final String healPrice = Config.FREE_BUFFS ? "Free" : formatAdena(Config.HEAL_PRICE) + " Adena";
-			html.append(menuItem("Icon.skill0440", healLabel, "Price: " + healPrice, "_bbsbuffer;heal"));
+			final String healPrice = Config.PREMIUM_FREE_BUFFS ? "Free" : formatAdena(Config.PREMIUM_HEAL_PRICE) + " Adena";
+			html.append(menuItem("Icon.skill0440", healLabel, "Price: " + healPrice, "_cbbbuffer;heal"));
 		}
-		if (Config.ENABLE_BUFF_REMOVE)
+		if (Config.PREMIUM_ENABLE_BUFF_REMOVE)
 		{
 			final String cancelLabel = petMode ? "Remove Pet Buffs" : "Cancel Your Buffs";
-			final String cancelPrice = Config.FREE_BUFFS ? "Free" : formatAdena(Config.BUFF_REMOVE_PRICE) + " Adena";
-			html.append(menuItem("Icon.skill1056", cancelLabel, "Price: " + cancelPrice, "_bbsbuffer;removeBuffs"));
+			final String cancelPrice = Config.PREMIUM_FREE_BUFFS ? "Free" : formatAdena(Config.PREMIUM_BUFF_REMOVE_PRICE) + " Adena";
+			html.append(menuItem("Icon.skill1056", cancelLabel, "Price: " + cancelPrice, "_cbbbuffer;removeBuffs"));
 		}
 		html.append("</table>");
 		html.append("</td>");
@@ -577,7 +582,7 @@ public class BufferBoard implements IParseBoardHandler
 		final List<String> availableBuffs = new ArrayList<>();
 		try (Connection con = DatabaseFactory.getConnection())
 		{
-			final PreparedStatement ps = con.prepareStatement("SELECT buffId, buffLevel FROM npcbuffer_buff_list WHERE buffType=? AND canUse=1 ORDER BY Buff_Class ASC, id");
+			final PreparedStatement ps = con.prepareStatement("SELECT buffId, buffLevel FROM npcbufferpremium_buff_list WHERE buffType=? AND canUse=1 ORDER BY Buff_Class ASC, id");
 			ps.setString(1, buffType);
 			final ResultSet rs = ps.executeQuery();
 			while (rs.next())
@@ -593,7 +598,7 @@ public class BufferBoard implements IParseBoardHandler
 		}
 		catch (SQLException e)
 		{
-			LOG.warning("BufferBoard buildCategoryPage error: " + e.getMessage());
+			LOG.warning("BufferBoardPremium buildCategoryPage error: " + e.getMessage());
 		}
 		
 		if (availableBuffs.isEmpty())
@@ -602,7 +607,7 @@ public class BufferBoard implements IParseBoardHandler
 		}
 		else
 		{
-			if (Config.FREE_BUFFS)
+			if (Config.PREMIUM_FREE_BUFFS)
 			{
 				html.append("All buffs are for <font color=LEVEL>free</font>!");
 			}
@@ -620,12 +625,12 @@ public class BufferBoard implements IParseBoardHandler
 				final int id = Integer.parseInt(buff.substring(secondSep + 1, lastSep));
 				final int level = Integer.parseInt(buff.substring(lastSep + 1));
 				html.append("<tr><td>").append(getSkillIconHtml(id, level)).append("</td>");
-				html.append("<td>").append(button(name, "_bbsbuffer;give;" + id + ";" + level + ";" + buffType, 190)).append("</td></tr>");
+				html.append("<td>").append(button(name, "_cbbbuffer;give;" + id + ";" + level + ";" + buffType, 190)).append("</td></tr>");
 			}
 			html.append("</table>");
 		}
 		
-		html.append("<br>").append(button("Back", "_bbsbuffer", 100));
+		html.append("<br>").append(button("Back", "_cbbbuffer", 100));
 		html.append("<br><font color=303030>").append(TITLE).append("</font></center></body></html>");
 		return html.toString();
 	}
@@ -655,14 +660,14 @@ public class BufferBoard implements IParseBoardHandler
 		}
 		final String buffType = parts[2];
 		
-		if (!Config.FREE_BUFFS)
+		if (!Config.PREMIUM_FREE_BUFFS)
 		{
 			final int cost = getCategoryPrice(buffType);
-			if (player.getInventory().getInventoryItemCount(Config.CONSUMABLE_ID, -1) < cost)
+			if (player.getInventory().getInventoryItemCount(Config.PREMIUM_CONSUMABLE_ID, -1) < cost)
 			{
-				return showInfo("Sorry", "You don't have enough items:<br>You need: <font color=LEVEL>" + formatAdena(cost) + " " + getItemNameHtml(Config.CONSUMABLE_ID) + "!");
+				return showInfo("Sorry", "You don't have enough items:<br>You need: <font color=LEVEL>" + formatAdena(cost) + " " + getItemNameHtml(Config.PREMIUM_CONSUMABLE_ID) + "!");
 			}
-			player.destroyItemByItemId(ItemProcessType.FEE, Config.CONSUMABLE_ID, cost, player, true);
+			player.destroyItemByItemId(ItemProcessType.FEE, Config.PREMIUM_CONSUMABLE_ID, cost, player, true);
 		}
 		
 		final Skill skill = getSkillCached(skillId, skillLevel);
@@ -697,11 +702,11 @@ public class BufferBoard implements IParseBoardHandler
 			{
 				return showInfo("Info", "You can't use the Pet's options.<br>Summon your pet first!");
 			}
-			skill.applyEffects(summon, summon, true, BUFFTIME);
+			skill.applyEffects(summon, summon, true, BUFFTIME_PREMIUM);
 		}
 		else
 		{
-			skill.applyEffects(player, player, true, BUFFTIME);
+			skill.applyEffects(player, player, true, BUFFTIME_PREMIUM);
 		}
 		
 		return buildCategoryPage(buffType);
@@ -716,13 +721,13 @@ public class BufferBoard implements IParseBoardHandler
 			return showInfo("Info", "You can't use the Pet's options.<br>Summon your pet first!");
 		}
 		
-		if (!Config.FREE_BUFFS)
+		if (!Config.PREMIUM_FREE_BUFFS)
 		{
-			if (player.getInventory().getInventoryItemCount(Config.CONSUMABLE_ID, -1) < Config.HEAL_PRICE)
+			if (player.getInventory().getInventoryItemCount(Config.PREMIUM_CONSUMABLE_ID, -1) < Config.PREMIUM_HEAL_PRICE)
 			{
-				return showInfo("Sorry", "You don't have enough items:<br>You need: <font color=LEVEL>" + formatAdena(Config.HEAL_PRICE) + " " + getItemNameHtml(Config.CONSUMABLE_ID) + "!");
+				return showInfo("Sorry", "You don't have enough items:<br>You need: <font color=LEVEL>" + formatAdena(Config.PREMIUM_HEAL_PRICE) + " " + getItemNameHtml(Config.PREMIUM_CONSUMABLE_ID) + "!");
 			}
-			player.destroyItemByItemId(ItemProcessType.FEE, Config.CONSUMABLE_ID, Config.HEAL_PRICE, player, true);
+			player.destroyItemByItemId(ItemProcessType.FEE, Config.PREMIUM_CONSUMABLE_ID, Config.PREMIUM_HEAL_PRICE, player, true);
 		}
 		
 		if (petMode)
@@ -771,13 +776,13 @@ public class BufferBoard implements IParseBoardHandler
 			return showInfo("Info", "You can't use the Pet's options.<br>Summon your pet first!");
 		}
 		
-		if (!Config.FREE_BUFFS)
+		if (!Config.PREMIUM_FREE_BUFFS)
 		{
-			if (player.getInventory().getInventoryItemCount(Config.CONSUMABLE_ID, -1) < Config.BUFF_REMOVE_PRICE)
+			if (player.getInventory().getInventoryItemCount(Config.PREMIUM_CONSUMABLE_ID, -1) < Config.PREMIUM_BUFF_REMOVE_PRICE)
 			{
-				return showInfo("Sorry", "You don't have enough items:<br>You need: <font color=LEVEL>" + formatAdena(Config.BUFF_REMOVE_PRICE) + " " + getItemNameHtml(Config.CONSUMABLE_ID) + "!");
+				return showInfo("Sorry", "You don't have enough items:<br>You need: <font color=LEVEL>" + formatAdena(Config.PREMIUM_BUFF_REMOVE_PRICE) + " " + getItemNameHtml(Config.PREMIUM_CONSUMABLE_ID) + "!");
 			}
-			player.destroyItemByItemId(ItemProcessType.FEE, Config.CONSUMABLE_ID, Config.BUFF_REMOVE_PRICE, player, true);
+			player.destroyItemByItemId(ItemProcessType.FEE, Config.PREMIUM_CONSUMABLE_ID, Config.PREMIUM_BUFF_REMOVE_PRICE, player, true);
 		}
 		
 		if (petMode)
@@ -801,13 +806,13 @@ public class BufferBoard implements IParseBoardHandler
 			return showInfo("Info", "You can't use the Pet's options.<br>Summon your pet first!");
 		}
 		
-		if (!Config.FREE_BUFFS)
+		if (!Config.PREMIUM_FREE_BUFFS)
 		{
-			if (player.getInventory().getInventoryItemCount(Config.CONSUMABLE_ID, -1) < Config.BUFF_SET_PRICE)
+			if (player.getInventory().getInventoryItemCount(Config.PREMIUM_CONSUMABLE_ID, -1) < Config.PREMIUM_BUFF_SET_PRICE)
 			{
-				return showInfo("Sorry", "You don't have enough items:<br>You need: <font color=LEVEL>" + formatAdena(Config.BUFF_SET_PRICE) + " " + getItemNameHtml(Config.CONSUMABLE_ID) + "!");
+				return showInfo("Sorry", "You don't have enough items:<br>You need: <font color=LEVEL>" + formatAdena(Config.PREMIUM_BUFF_SET_PRICE) + " " + getItemNameHtml(Config.PREMIUM_CONSUMABLE_ID) + "!");
 			}
-			player.destroyItemByItemId(ItemProcessType.FEE, Config.CONSUMABLE_ID, Config.BUFF_SET_PRICE, player, true);
+			player.destroyItemByItemId(ItemProcessType.FEE, Config.PREMIUM_CONSUMABLE_ID, Config.PREMIUM_BUFF_SET_PRICE, player, true);
 		}
 		
 		final int playerClass = player.isMageClass() ? 1 : 0;
@@ -815,7 +820,7 @@ public class BufferBoard implements IParseBoardHandler
 		
 		try (Connection con = DatabaseFactory.getConnection())
 		{
-			final PreparedStatement ps = con.prepareStatement("SELECT buffId, buffLevel FROM npcbuffer_buff_list WHERE forClass IN (?, ?) ORDER BY id ASC");
+			final PreparedStatement ps = con.prepareStatement("SELECT buffId, buffLevel FROM npcbufferpremium_buff_list WHERE forClass IN (?, ?) ORDER BY id ASC");
 			ps.setInt(1, petMode ? 0 : playerClass);
 			ps.setString(2, "2");
 			final ResultSet rs = ps.executeQuery();
@@ -832,7 +837,7 @@ public class BufferBoard implements IParseBoardHandler
 		}
 		catch (SQLException e)
 		{
-			LOG.warning("BufferBoard castBuffSet error: " + e.getMessage());
+			LOG.warning("BufferBoardPremium castBuffSet error: " + e.getMessage());
 		}
 		
 		if (petMode)
@@ -870,7 +875,7 @@ public class BufferBoard implements IParseBoardHandler
 		
 		try (Connection con = DatabaseFactory.getConnection())
 		{
-			final PreparedStatement ps = con.prepareStatement("SELECT sc.skill_id, sc.skill_level, bl.buffType, bl.canUse FROM npcbuffer_scheme_contents sc LEFT JOIN npcbuffer_buff_list bl ON sc.skill_id = bl.buffId AND sc.skill_level = bl.buffLevel WHERE sc.scheme_id=? ORDER BY sc.id");
+			final PreparedStatement ps = con.prepareStatement("SELECT sc.skill_id, sc.skill_level, bl.buffType, bl.canUse FROM npcbufferpremium_scheme_contents sc LEFT JOIN npcbufferpremium_buff_list bl ON sc.skill_id = bl.buffId AND sc.skill_level = bl.buffLevel WHERE sc.scheme_id=? ORDER BY sc.id");
 			ps.setString(1, schemeId);
 			final ResultSet rs = ps.executeQuery();
 			while (rs.next())
@@ -891,7 +896,7 @@ public class BufferBoard implements IParseBoardHandler
 		}
 		catch (SQLException e)
 		{
-			LOG.warning("BufferBoard castScheme error: " + e.getMessage());
+			LOG.warning("BufferBoardPremium castScheme error: " + e.getMessage());
 		}
 		
 		if (buffs.isEmpty())
@@ -899,13 +904,13 @@ public class BufferBoard implements IParseBoardHandler
 			return viewSchemeBuffs(player, schemeId, "1", "add");
 		}
 		
-		if (!Config.FREE_BUFFS)
+		if (!Config.PREMIUM_FREE_BUFFS)
 		{
-			if (player.getInventory().getInventoryItemCount(Config.CONSUMABLE_ID, -1) < Config.SCHEME_BUFF_PRICE)
+			if (player.getInventory().getInventoryItemCount(Config.PREMIUM_CONSUMABLE_ID, -1) < Config.PREMIUM_SCHEME_BUFF_PRICE)
 			{
-				return showInfo("Sorry", "You don't have enough items:<br>You need: <font color=LEVEL>" + formatAdena(Config.SCHEME_BUFF_PRICE) + " " + getItemNameHtml(Config.CONSUMABLE_ID) + "!");
+				return showInfo("Sorry", "You don't have enough items:<br>You need: <font color=LEVEL>" + formatAdena(Config.PREMIUM_SCHEME_BUFF_PRICE) + " " + getItemNameHtml(Config.PREMIUM_CONSUMABLE_ID) + "!");
 			}
-			player.destroyItemByItemId(ItemProcessType.FEE, Config.CONSUMABLE_ID, Config.SCHEME_BUFF_PRICE, player, true);
+			player.destroyItemByItemId(ItemProcessType.FEE, Config.PREMIUM_CONSUMABLE_ID, Config.PREMIUM_SCHEME_BUFF_PRICE, player, true);
 		}
 		
 		final List<int[]> buffList = new ArrayList<>(buffs.size());
@@ -956,7 +961,7 @@ public class BufferBoard implements IParseBoardHandler
 		final List<String[]> schemes = new ArrayList<>();
 		try (Connection con = DatabaseFactory.getConnection())
 		{
-			final PreparedStatement ps = con.prepareStatement("SELECT id, scheme_name FROM npcbuffer_scheme_list WHERE player_id=?");
+			final PreparedStatement ps = con.prepareStatement("SELECT id, scheme_name FROM npcbufferpremium_scheme_list WHERE player_id=?");
 			ps.setInt(1, player.getObjectId());
 			final ResultSet rs = ps.executeQuery();
 			while (rs.next())
@@ -972,14 +977,14 @@ public class BufferBoard implements IParseBoardHandler
 		}
 		catch (SQLException e)
 		{
-			LOG.warning("BufferBoard getPlayerSchemes error: " + e.getMessage());
+			LOG.warning("BufferBoardPremium getPlayerSchemes error: " + e.getMessage());
 		}
 		return schemes;
 	}
 	
 	private String createSchemeForm()
 	{
-		return "<html noscrollbar><title>" + TITLE + "</title><body><center>" + "<img src=\"L2UI_CH3.herotower_deco\" width=256 height=32><br><br>" + "You MUST separate new words with a dot (.)<br><br>" + "Scheme name: <edit var=\"sname\" width=120><br><br>" + button("Create Scheme", "_bbsbuffer;create $sname", 130) + "<br>" + button("Back", "_bbsbuffer", 100) + "<br><font color=303030>" + TITLE + "</font></center></body></html>";
+		return "<html noscrollbar><title>" + TITLE + "</title><body><center>" + "<img src=\"L2UI_CH3.herotower_deco\" width=256 height=32><br><br>" + "You MUST separate new words with a dot (.)<br><br>" + "Scheme name: <edit var=\"sname\" width=120><br><br>" + button("Create Scheme", "_cbbbuffer;create $sname", 130) + "<br>" + button("Back", "_cbbbuffer", 100) + "<br><font color=303030>" + TITLE + "</font></center></body></html>";
 	}
 	
 	private String handleCreateScheme(Player player, String rawName)
@@ -996,14 +1001,14 @@ public class BufferBoard implements IParseBoardHandler
 			return showInfo("Info", "The scheme name is too long!<br>Max 36 characters.");
 		}
 		
-		if (getPlayerSchemes(player).size() >= Config.SCHEMES_PER_PLAYER)
+		if (getPlayerSchemes(player).size() >= Config.PREMIUM_SCHEMES_PER_PLAYER)
 		{
 			return showInfo("Info", "You have reached the maximum number of schemes!");
 		}
 		
 		try (Connection con = DatabaseFactory.getConnection())
 		{
-			final PreparedStatement ps = con.prepareStatement("INSERT INTO npcbuffer_scheme_list (player_id, scheme_name) VALUES (?, ?)");
+			final PreparedStatement ps = con.prepareStatement("INSERT INTO npcbufferpremium_scheme_list (player_id, scheme_name) VALUES (?, ?)");
 			ps.setInt(1, player.getObjectId());
 			ps.setString(2, rawName);
 			ps.executeUpdate();
@@ -1011,7 +1016,7 @@ public class BufferBoard implements IParseBoardHandler
 		}
 		catch (SQLException e)
 		{
-			LOG.warning("BufferBoard createScheme error: " + e.getMessage());
+			LOG.warning("BufferBoardPremium createScheme error: " + e.getMessage());
 			return showInfo("Error", "Failed to create scheme. Please try again later.");
 		}
 		
@@ -1027,22 +1032,22 @@ public class BufferBoard implements IParseBoardHandler
 		
 		try (Connection con = DatabaseFactory.getConnection())
 		{
-			final PreparedStatement ps = con.prepareStatement("SELECT id, scheme_name FROM npcbuffer_scheme_list WHERE player_id=?");
+			final PreparedStatement ps = con.prepareStatement("SELECT id, scheme_name FROM npcbufferpremium_scheme_list WHERE player_id=?");
 			ps.setInt(1, player.getObjectId());
 			final ResultSet rs = ps.executeQuery();
 			while (rs.next())
 			{
-				html.append(button(rs.getString("scheme_name"), "_bbsbuffer;manage;" + rs.getString("id"), 130));
+				html.append(button(rs.getString("scheme_name"), "_cbbbuffer;manage;" + rs.getString("id"), 130));
 			}
 			rs.close();
 			ps.close();
 		}
 		catch (SQLException e)
 		{
-			LOG.warning("BufferBoard editSchemeList error: " + e.getMessage());
+			LOG.warning("BufferBoardPremium editSchemeList error: " + e.getMessage());
 		}
 		
-		html.append("<br>").append(button("Back", "_bbsbuffer", 100));
+		html.append("<br>").append(button("Back", "_cbbbuffer", 100));
 		html.append("<br><font color=303030>").append(TITLE).append("</font></center></body></html>");
 		return html.toString();
 	}
@@ -1056,31 +1061,31 @@ public class BufferBoard implements IParseBoardHandler
 		
 		try (Connection con = DatabaseFactory.getConnection())
 		{
-			final PreparedStatement ps = con.prepareStatement("SELECT id, scheme_name FROM npcbuffer_scheme_list WHERE player_id=?");
+			final PreparedStatement ps = con.prepareStatement("SELECT id, scheme_name FROM npcbufferpremium_scheme_list WHERE player_id=?");
 			ps.setInt(1, player.getObjectId());
 			final ResultSet rs = ps.executeQuery();
 			while (rs.next())
 			{
 				final String id = rs.getString("id");
 				final String name = rs.getString("scheme_name");
-				html.append(button(name, "_bbsbuffer;delete_c;" + id + ";" + name, 130));
+				html.append(button(name, "_cbbbuffer;delete_c;" + id + ";" + name, 130));
 			}
 			rs.close();
 			ps.close();
 		}
 		catch (SQLException e)
 		{
-			LOG.warning("BufferBoard deleteSchemeList error: " + e.getMessage());
+			LOG.warning("BufferBoardPremium deleteSchemeList error: " + e.getMessage());
 		}
 		
-		html.append("<br>").append(button("Back", "_bbsbuffer", 100));
+		html.append("<br>").append(button("Back", "_cbbbuffer", 100));
 		html.append("<br><font color=303030>").append(TITLE).append("</font></center></body></html>");
 		return html.toString();
 	}
 	
 	private String confirmDeleteScheme(String id, String name)
 	{
-		return "<html noscrollbar><title>" + TITLE + "</title><body><center>" + "<img src=\"L2UI_CH3.herotower_deco\" width=256 height=32><br>" + "Do you really want to delete '<font color=LEVEL>" + name + "</font>'?<br><br>" + button("Yes", "_bbsbuffer;delete;" + id, 50) + button("No", "_bbsbuffer;delete_1", 50) + "<br><font color=303030>" + TITLE + "</font></center></body></html>";
+		return "<html noscrollbar><title>" + TITLE + "</title><body><center>" + "<img src=\"L2UI_CH3.herotower_deco\" width=256 height=32><br>" + "Do you really want to delete '<font color=LEVEL>" + name + "</font>'?<br><br>" + button("Yes", "_cbbbuffer;delete;" + id, 50) + button("No", "_cbbbuffer;delete_1", 50) + "<br><font color=303030>" + TITLE + "</font></center></body></html>";
 	}
 	
 	private String handleDeleteScheme(Player player, String schemeId)
@@ -1092,19 +1097,19 @@ public class BufferBoard implements IParseBoardHandler
 		
 		try (Connection con = DatabaseFactory.getConnection())
 		{
-			PreparedStatement ps = con.prepareStatement("DELETE FROM npcbuffer_scheme_list WHERE id=? LIMIT 1");
+			PreparedStatement ps = con.prepareStatement("DELETE FROM npcbufferpremium_scheme_list WHERE id=? LIMIT 1");
 			ps.setString(1, schemeId);
 			ps.executeUpdate();
 			ps.close();
 			
-			ps = con.prepareStatement("DELETE FROM npcbuffer_scheme_contents WHERE scheme_id=?");
+			ps = con.prepareStatement("DELETE FROM npcbufferpremium_scheme_contents WHERE scheme_id=?");
 			ps.setString(1, schemeId);
 			ps.executeUpdate();
 			ps.close();
 		}
 		catch (SQLException e)
 		{
-			LOG.warning("BufferBoard deleteScheme error: " + e.getMessage());
+			LOG.warning("BufferBoardPremium deleteScheme error: " + e.getMessage());
 			return showInfo("Error", "Failed to delete scheme. Please try again later.");
 		}
 		
@@ -1126,15 +1131,15 @@ public class BufferBoard implements IParseBoardHandler
 		
 		if (buffCount < (MAX_SCHEME_BUFFS + MAX_SCHEME_DANCES))
 		{
-			html.append(button("Add buffs", "_bbsbuffer;addView;" + schemeId + ";1", 130));
+			html.append(button("Add buffs", "_cbbbuffer;addView;" + schemeId + ";1", 130));
 		}
 		if (buffCount > 0)
 		{
-			html.append(button("Remove buffs", "_bbsbuffer;removeView;" + schemeId + ";1", 130));
+			html.append(button("Remove buffs", "_cbbbuffer;removeView;" + schemeId + ";1", 130));
 		}
 		
-		html.append("<br>").append(button("Back", "_bbsbuffer;edit_1", 100));
-		html.append(button("Home", "_bbsbuffer", 100));
+		html.append("<br>").append(button("Back", "_cbbbuffer;edit_1", 100));
+		html.append(button("Home", "_cbbbuffer", 100));
 		html.append("<br><font color=303030>").append(TITLE).append("</font></center></body></html>");
 		return html.toString();
 	}
@@ -1169,13 +1174,13 @@ public class BufferBoard implements IParseBoardHandler
 				if (typeQuery.isEmpty())
 				{
 					html.append("<br>No more buff slots available!");
-					html.append("<br>").append(button("Back", "_bbsbuffer;manage;" + scheme, 100));
-					html.append(button("Home", "_bbsbuffer", 100));
+					html.append("<br>").append(button("Back", "_cbbbuffer;manage;" + scheme, 100));
+					html.append(button("Home", "_cbbbuffer", 100));
 					html.append("<br><font color=303030>").append(TITLE).append("</font></center></body></html>");
 					return html.toString();
 				}
 				
-				final PreparedStatement ps = con.prepareStatement("SELECT * FROM npcbuffer_buff_list WHERE buffType IN (" + typeQuery + ") AND canUse=1 ORDER BY Buff_Class ASC, id");
+				final PreparedStatement ps = con.prepareStatement("SELECT * FROM npcbufferpremium_buff_list WHERE buffType IN (" + typeQuery + ") AND canUse=1 ORDER BY Buff_Class ASC, id");
 				final ResultSet rs = ps.executeQuery();
 				while (rs.next())
 				{
@@ -1190,7 +1195,7 @@ public class BufferBoard implements IParseBoardHandler
 			{
 				html.append("You have <font color=LEVEL>").append(buffCount).append("</font> Buffs and <font color=LEVEL>").append(danceSongCount).append("</font> Dances");
 				
-				final PreparedStatement ps = con.prepareStatement("SELECT skill_id, skill_level FROM npcbuffer_scheme_contents WHERE scheme_id=? ORDER BY Buff_Class ASC, id");
+				final PreparedStatement ps = con.prepareStatement("SELECT skill_id, skill_level FROM npcbufferpremium_scheme_contents WHERE scheme_id=? ORDER BY Buff_Class ASC, id");
 				ps.setString(1, scheme);
 				final ResultSet rs = ps.executeQuery();
 				while (rs.next())
@@ -1205,7 +1210,7 @@ public class BufferBoard implements IParseBoardHandler
 		}
 		catch (SQLException e)
 		{
-			LOG.warning("BufferBoard viewSchemeBuffs error: " + e.getMessage());
+			LOG.warning("BufferBoardPremium viewSchemeBuffs error: " + e.getMessage());
 		}
 		
 		// Pagination
@@ -1236,7 +1241,7 @@ public class BufferBoard implements IParseBoardHandler
 			else
 			{
 				final String viewCmd = "add".equals(mode) ? "addView" : "removeView";
-				html.append("<td width=").append(width).append(">").append(button(pageName + i, "_bbsbuffer;" + viewCmd + ";" + scheme + ";" + i, Integer.parseInt(width))).append("</td>");
+				html.append("<td width=").append(width).append(">").append(button(pageName + i, "_cbbbuffer;" + viewCmd + ";" + scheme + ";" + i, Integer.parseInt(width))).append("</td>");
 			}
 		}
 		html.append("</tr></table>");
@@ -1247,7 +1252,7 @@ public class BufferBoard implements IParseBoardHandler
 		{
 			try (Connection con = DatabaseFactory.getConnection())
 			{
-				final PreparedStatement ps = con.prepareStatement("SELECT skill_id, skill_level FROM npcbuffer_scheme_contents WHERE scheme_id=?");
+				final PreparedStatement ps = con.prepareStatement("SELECT skill_id, skill_level FROM npcbufferpremium_scheme_contents WHERE scheme_id=?");
 				ps.setString(1, scheme);
 				final ResultSet rs = ps.executeQuery();
 				while (rs.next())
@@ -1259,7 +1264,7 @@ public class BufferBoard implements IParseBoardHandler
 			}
 			catch (SQLException e)
 			{
-				LOG.warning("BufferBoard preload usedBuffs error: " + e.getMessage());
+				LOG.warning("BufferBoardPremium preload usedBuffs error: " + e.getMessage());
 			}
 		}
 		
@@ -1288,19 +1293,19 @@ public class BufferBoard implements IParseBoardHandler
 			
 			if ("add".equals(mode))
 			{
-				html.append(button("Add", "_bbsbuffer;addBuff;" + scheme + "_" + id + "_" + level + ";" + page + ";" + totalBuffs, 65));
+				html.append(button("Add", "_cbbbuffer;addBuff;" + scheme + "_" + id + "_" + level + ";" + page + ";" + totalBuffs, 65));
 			}
 			else
 			{
-				html.append(button("Remove", "_bbsbuffer;removeBuff;" + scheme + "_" + id + "_" + level + ";" + page + ";" + totalBuffs, 65));
+				html.append(button("Remove", "_cbbbuffer;removeBuff;" + scheme + "_" + id + "_" + level + ";" + page + ";" + totalBuffs, 65));
 			}
 			
 			html.append("</td></tr></table>");
 			k++;
 		}
 		
-		html.append("<br><br>").append(button("Back", "_bbsbuffer;manage;" + scheme, 100));
-		html.append(button("Home", "_bbsbuffer", 100));
+		html.append("<br><br>").append(button("Back", "_cbbbuffer;manage;" + scheme, 100));
+		html.append(button("Home", "_cbbbuffer", 100));
 		html.append("<br><font color=303030>").append(TITLE).append("</font></center></body></html>");
 		return html.toString();
 	}
@@ -1360,7 +1365,7 @@ public class BufferBoard implements IParseBoardHandler
 		final int buffClass = getClassBuff(skill);
 		try (Connection con = DatabaseFactory.getConnection())
 		{
-			final PreparedStatement ps = con.prepareStatement("INSERT INTO npcbuffer_scheme_contents (scheme_id, skill_id, skill_level, buff_class) VALUES (?, ?, ?, ?)");
+			final PreparedStatement ps = con.prepareStatement("INSERT INTO npcbufferpremium_scheme_contents (scheme_id, skill_id, skill_level, buff_class) VALUES (?, ?, ?, ?)");
 			ps.setString(1, scheme);
 			ps.setInt(2, skillId);
 			ps.setInt(3, skillLevel);
@@ -1370,7 +1375,7 @@ public class BufferBoard implements IParseBoardHandler
 		}
 		catch (SQLException e)
 		{
-			LOG.warning("BufferBoard addBuff error: " + e.getMessage());
+			LOG.warning("BufferBoardPremium addBuff error: " + e.getMessage());
 			return showInfo("Error", "Failed to add buff to scheme. Please try again later.");
 		}
 		
@@ -1411,7 +1416,7 @@ public class BufferBoard implements IParseBoardHandler
 		
 		try (Connection con = DatabaseFactory.getConnection())
 		{
-			final PreparedStatement ps = con.prepareStatement("DELETE FROM npcbuffer_scheme_contents WHERE scheme_id=? AND skill_id=? AND skill_level=? LIMIT 1");
+			final PreparedStatement ps = con.prepareStatement("DELETE FROM npcbufferpremium_scheme_contents WHERE scheme_id=? AND skill_id=? AND skill_level=? LIMIT 1");
 			ps.setString(1, scheme);
 			ps.setInt(2, skillId);
 			ps.setInt(3, skillLevel);
@@ -1420,7 +1425,7 @@ public class BufferBoard implements IParseBoardHandler
 		}
 		catch (SQLException e)
 		{
-			LOG.warning("BufferBoard removeBuff error: " + e.getMessage());
+			LOG.warning("BufferBoardPremium removeBuff error: " + e.getMessage());
 			return showInfo("Error", "Failed to remove buff from scheme. Please try again later.");
 		}
 		
@@ -1447,7 +1452,7 @@ public class BufferBoard implements IParseBoardHandler
 	{
 		try (Connection con = DatabaseFactory.getConnection())
 		{
-			final PreparedStatement ps = con.prepareStatement("SELECT buffId FROM npcbuffer_buff_list WHERE buffId=? AND buffLevel=? AND canUse=1 LIMIT 1");
+			final PreparedStatement ps = con.prepareStatement("SELECT buffId FROM npcbufferpremium_buff_list WHERE buffId=? AND buffLevel=? AND canUse=1 LIMIT 1");
 			ps.setInt(1, skillId);
 			ps.setInt(2, skillLevel);
 			final ResultSet rs = ps.executeQuery();
@@ -1458,7 +1463,7 @@ public class BufferBoard implements IParseBoardHandler
 		}
 		catch (SQLException e)
 		{
-			LOG.warning("BufferBoard isBuffAvailable error: " + e.getMessage());
+			LOG.warning("BufferBoardPremium isBuffAvailable error: " + e.getMessage());
 		}
 		return false;
 	}
@@ -1474,7 +1479,7 @@ public class BufferBoard implements IParseBoardHandler
 	{
 		try (Connection con = DatabaseFactory.getConnection())
 		{
-			final PreparedStatement ps = con.prepareStatement("SELECT skill_id FROM npcbuffer_scheme_contents WHERE scheme_id=? AND skill_id=? AND skill_level=? LIMIT 1");
+			final PreparedStatement ps = con.prepareStatement("SELECT skill_id FROM npcbufferpremium_scheme_contents WHERE scheme_id=? AND skill_id=? AND skill_level=? LIMIT 1");
 			ps.setString(1, schemeId);
 			ps.setInt(2, skillId);
 			ps.setInt(3, skillLevel);
@@ -1486,7 +1491,7 @@ public class BufferBoard implements IParseBoardHandler
 		}
 		catch (SQLException e)
 		{
-			LOG.warning("BufferBoard isBuffInScheme error: " + e.getMessage());
+			LOG.warning("BufferBoardPremium isBuffInScheme error: " + e.getMessage());
 		}
 		return false;
 	}
@@ -1496,7 +1501,7 @@ public class BufferBoard implements IParseBoardHandler
 		int count = 0;
 		try (Connection con = DatabaseFactory.getConnection())
 		{
-			final PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) AS cnt FROM npcbuffer_scheme_contents WHERE scheme_id=?");
+			final PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) AS cnt FROM npcbufferpremium_scheme_contents WHERE scheme_id=?");
 			ps.setString(1, scheme);
 			final ResultSet rs = ps.executeQuery();
 			if (rs.next())
@@ -1508,7 +1513,7 @@ public class BufferBoard implements IParseBoardHandler
 		}
 		catch (SQLException e)
 		{
-			LOG.warning("BufferBoard getBuffCount error: " + e.getMessage());
+			LOG.warning("BufferBoardPremium getBuffCount error: " + e.getMessage());
 		}
 		return count;
 	}
@@ -1523,7 +1528,7 @@ public class BufferBoard implements IParseBoardHandler
 	{
 		try (Connection con = DatabaseFactory.getConnection())
 		{
-			final PreparedStatement ps = con.prepareStatement("SELECT id FROM npcbuffer_scheme_list WHERE id=? AND player_id=? LIMIT 1");
+			final PreparedStatement ps = con.prepareStatement("SELECT id FROM npcbufferpremium_scheme_list WHERE id=? AND player_id=? LIMIT 1");
 			ps.setString(1, schemeId);
 			ps.setInt(2, playerId);
 			final ResultSet rs = ps.executeQuery();
@@ -1534,7 +1539,7 @@ public class BufferBoard implements IParseBoardHandler
 		}
 		catch (SQLException e)
 		{
-			LOG.warning("BufferBoard isSchemeOwner error: " + e.getMessage());
+			LOG.warning("BufferBoardPremium isSchemeOwner error: " + e.getMessage());
 		}
 		return false;
 	}
@@ -1551,7 +1556,7 @@ public class BufferBoard implements IParseBoardHandler
 		int danceSongCount = 0;
 		try (Connection con = DatabaseFactory.getConnection())
 		{
-			final PreparedStatement ps = con.prepareStatement("SELECT buff_class FROM npcbuffer_scheme_contents WHERE scheme_id=?");
+			final PreparedStatement ps = con.prepareStatement("SELECT buff_class FROM npcbufferpremium_scheme_contents WHERE scheme_id=?");
 			ps.setString(1, scheme);
 			final ResultSet rs = ps.executeQuery();
 			while (rs.next())
@@ -1572,7 +1577,7 @@ public class BufferBoard implements IParseBoardHandler
 		}
 		catch (SQLException e)
 		{
-			LOG.warning("BufferBoard getSchemeBuffCounts error: " + e.getMessage());
+			LOG.warning("BufferBoardPremium getSchemeBuffCounts error: " + e.getMessage());
 		}
 		return total + " " + buffCount + " " + danceSongCount;
 	}
@@ -1582,7 +1587,7 @@ public class BufferBoard implements IParseBoardHandler
 		int val = 0;
 		try (Connection con = DatabaseFactory.getConnection())
 		{
-			final PreparedStatement ps = con.prepareStatement("SELECT buff_class FROM npcbuffer_buff_list WHERE buffId=?");
+			final PreparedStatement ps = con.prepareStatement("SELECT buff_class FROM npcbufferpremium_buff_list WHERE buffId=?");
 			ps.setString(1, id);
 			final ResultSet rs = ps.executeQuery();
 			if (rs.next())
@@ -1594,7 +1599,7 @@ public class BufferBoard implements IParseBoardHandler
 		}
 		catch (SQLException e)
 		{
-			LOG.warning("BufferBoard getClassBuff error: " + e.getMessage());
+			LOG.warning("BufferBoardPremium getClassBuff error: " + e.getMessage());
 		}
 		return val;
 	}
@@ -1602,31 +1607,31 @@ public class BufferBoard implements IParseBoardHandler
 	private String generateQuery(int buffsCount, int dancesCount)
 	{
 		final StringBuilder query = new StringBuilder();
-		if (Config.ENABLE_BUFFS && (buffsCount < MAX_SCHEME_BUFFS))
+		if (Config.PREMIUM_ENABLE_BUFFS && (buffsCount < MAX_SCHEME_BUFFS))
 		{
 			query.append(",\"buff\"");
 		}
-		if (Config.ENABLE_RESIST && (buffsCount < MAX_SCHEME_BUFFS))
+		if (Config.PREMIUM_ENABLE_RESIST && (buffsCount < MAX_SCHEME_BUFFS))
 		{
 			query.append(",\"resist\"");
 		}
-		if (Config.ENABLE_SONGS && (dancesCount < MAX_SCHEME_DANCES))
+		if (Config.PREMIUM_ENABLE_SONGS && (dancesCount < MAX_SCHEME_DANCES))
 		{
 			query.append(",\"song\"");
 		}
-		if (Config.ENABLE_DANCES && (dancesCount < MAX_SCHEME_DANCES))
+		if (Config.PREMIUM_ENABLE_DANCES && (dancesCount < MAX_SCHEME_DANCES))
 		{
 			query.append(",\"dance\"");
 		}
-		if (Config.ENABLE_CHANTS && (buffsCount < MAX_SCHEME_BUFFS))
+		if (Config.PREMIUM_ENABLE_CHANTS && (buffsCount < MAX_SCHEME_BUFFS))
 		{
 			query.append(",\"chant\"");
 		}
-		if (Config.ENABLE_OTHERS && (buffsCount < MAX_SCHEME_BUFFS))
+		if (Config.PREMIUM_ENABLE_OTHERS && (buffsCount < MAX_SCHEME_BUFFS))
 		{
 			query.append(",\"others\"");
 		}
-		if (Config.ENABLE_SPECIAL && (buffsCount < MAX_SCHEME_BUFFS))
+		if (Config.PREMIUM_ENABLE_SPECIAL && (buffsCount < MAX_SCHEME_BUFFS))
 		{
 			query.append(",\"special\"");
 		}
@@ -1648,44 +1653,44 @@ public class BufferBoard implements IParseBoardHandler
 		html.append("<img src=\"L2UI_CH3.herotower_deco\" width=256 height=32><br>");
 		html.append("<font color=LEVEL>[GM Buff Management]</font><br>");
 		
-		if (Config.ENABLE_BUFFS)
+		if (Config.PREMIUM_ENABLE_BUFFS)
 		{
-			html.append(button("Buffs", "_bbsbuffer;gmEditList;buff;Buffs;1", 118));
+			html.append(button("Buffs", "_cbbbuffer;gmEditList;buff;Buffs;1", 118));
 		}
-		if (Config.ENABLE_RESIST)
+		if (Config.PREMIUM_ENABLE_RESIST)
 		{
-			html.append(button("Resist Buffs", "_bbsbuffer;gmEditList;resist;Resists;1", 118));
+			html.append(button("Resist Buffs", "_cbbbuffer;gmEditList;resist;Resists;1", 118));
 		}
-		if (Config.ENABLE_SONGS)
+		if (Config.PREMIUM_ENABLE_SONGS)
 		{
-			html.append(button("Songs", "_bbsbuffer;gmEditList;song;Songs;1", 118));
+			html.append(button("Songs", "_cbbbuffer;gmEditList;song;Songs;1", 118));
 		}
-		if (Config.ENABLE_DANCES)
+		if (Config.PREMIUM_ENABLE_DANCES)
 		{
-			html.append(button("Dances", "_bbsbuffer;gmEditList;dance;Dances;1", 118));
+			html.append(button("Dances", "_cbbbuffer;gmEditList;dance;Dances;1", 118));
 		}
-		if (Config.ENABLE_CHANTS)
+		if (Config.PREMIUM_ENABLE_CHANTS)
 		{
-			html.append(button("Chants", "_bbsbuffer;gmEditList;chant;Chants;1", 118));
+			html.append(button("Chants", "_cbbbuffer;gmEditList;chant;Chants;1", 118));
 		}
-		if (Config.ENABLE_SPECIAL)
+		if (Config.PREMIUM_ENABLE_SPECIAL)
 		{
-			html.append(button("Special Buffs", "_bbsbuffer;gmEditList;special;Special_Buffs;1", 118));
+			html.append(button("Special Buffs", "_cbbbuffer;gmEditList;special;Special_Buffs;1", 118));
 		}
-		if (Config.ENABLE_OTHERS)
+		if (Config.PREMIUM_ENABLE_OTHERS)
 		{
-			html.append(button("Others Buffs", "_bbsbuffer;gmEditList;others;Others_Buffs;1", 118));
+			html.append(button("Others Buffs", "_cbbbuffer;gmEditList;others;Others_Buffs;1", 118));
 		}
-		if (Config.ENABLE_CUBIC)
+		if (Config.PREMIUM_ENABLE_CUBIC)
 		{
-			html.append(button("Cubics", "_bbsbuffer;gmEditList;cubic;Cubics;1", 118));
+			html.append(button("Cubics", "_cbbbuffer;gmEditList;cubic;Cubics;1", 118));
 		}
-		if (Config.ENABLE_BUFF_SET)
+		if (Config.PREMIUM_ENABLE_BUFF_SET)
 		{
-			html.append("<br1>").append(button("Buff Sets", "_bbsbuffer;gmEditList;set;Buff_Sets;1", 118));
+			html.append("<br1>").append(button("Buff Sets", "_cbbbuffer;gmEditList;set;Buff_Sets;1", 118));
 		}
 		
-		html.append("<br>").append(button("Back", "_bbsbuffer", 100));
+		html.append("<br>").append(button("Back", "_cbbbuffer", 100));
 		html.append("<br><font color=303030>").append(TITLE).append("</font></center></body></html>");
 		return html.toString();
 	}
@@ -1702,11 +1707,11 @@ public class BufferBoard implements IParseBoardHandler
 			final PreparedStatement ps;
 			if ("set".equals(type))
 			{
-				ps = con.prepareStatement("SELECT * FROM npcbuffer_buff_list WHERE buffType IN (" + generateQuery(0, 0) + ") AND canUse=1");
+				ps = con.prepareStatement("SELECT * FROM npcbufferpremium_buff_list WHERE buffType IN (" + generateQuery(0, 0) + ") AND canUse=1");
 			}
 			else
 			{
-				ps = con.prepareStatement("SELECT * FROM npcbuffer_buff_list WHERE buffType=?");
+				ps = con.prepareStatement("SELECT * FROM npcbufferpremium_buff_list WHERE buffType=?");
 				ps.setString(1, type);
 			}
 			final ResultSet rs = ps.executeQuery();
@@ -1721,7 +1726,7 @@ public class BufferBoard implements IParseBoardHandler
 		}
 		catch (SQLException e)
 		{
-			LOG.warning("BufferBoard gmViewAllBuffs error: " + e.getMessage());
+			LOG.warning("BufferBoardPremium gmViewAllBuffs error: " + e.getMessage());
 		}
 		Collections.sort(buffList);
 		
@@ -1740,7 +1745,7 @@ public class BufferBoard implements IParseBoardHandler
 			}
 			else
 			{
-				html.append("<td width=").append(pWidth).append(">").append(button(pName + i, "_bbsbuffer;gmEditList;" + type + ";" + typeName + ";" + i, Integer.parseInt(pWidth))).append("</td>");
+				html.append("<td width=").append(pWidth).append(">").append(button(pName + i, "_cbbbuffer;gmEditList;" + type + ";" + typeName + ";" + i, Integer.parseInt(pWidth))).append("</td>");
 			}
 		}
 		html.append("</tr></table><br>");
@@ -1786,7 +1791,7 @@ public class BufferBoard implements IParseBoardHandler
 					listOrder = "List=\"" + SET_NONE + ";" + SET_FIGHTER + ";" + SET_MAGE + ";" + SET_ALL + ";\"";
 				}
 				html.append("<tr><td fixwidth=145>").append(name).append("</td><td width=70><combobox var=\"newSet").append(i).append("\" width=70 ").append(listOrder).append("></td><td width=50>");
-				html.append(button("Update", "_bbsbuffer;gmChangeSet;" + skillPos + ";" + page + " $newSet" + i, 50));
+				html.append(button("Update", "_cbbbuffer;gmChangeSet;" + skillPos + ";" + page + " $newSet" + i, 50));
 				html.append("</td></tr>");
 			}
 			else
@@ -1794,19 +1799,19 @@ public class BufferBoard implements IParseBoardHandler
 				html.append("<tr><td fixwidth=170>").append(name).append("</td><td width=80>");
 				if (usable == 1)
 				{
-					html.append(button("Disable", "_bbsbuffer;gmEditBuff;" + skillPos + ";0-" + page + ";" + type, 80));
+					html.append(button("Disable", "_cbbbuffer;gmEditBuff;" + skillPos + ";0-" + page + ";" + type, 80));
 				}
 				else
 				{
-					html.append(button("Enable", "_bbsbuffer;gmEditBuff;" + skillPos + ";1-" + page + ";" + type, 80));
+					html.append(button("Enable", "_cbbbuffer;gmEditBuff;" + skillPos + ";1-" + page + ";" + type, 80));
 				}
 				html.append("</td></tr>");
 			}
 			html.append("</table>");
 		}
 		
-		html.append("<br><br>").append(button("Back", "_bbsbuffer;gmManage", 100));
-		html.append(button("Home", "_bbsbuffer", 100));
+		html.append("<br><br>").append(button("Back", "_cbbbuffer;gmManage", 100));
+		html.append(button("Home", "_cbbbuffer", 100));
 		html.append("<br><font color=303030>").append(TITLE).append("</font></center></body></html>");
 		return html.toString();
 	}
@@ -1818,7 +1823,7 @@ public class BufferBoard implements IParseBoardHandler
 		final String buffLevel = bpid[1];
 		try (Connection con = DatabaseFactory.getConnection())
 		{
-			final PreparedStatement ps = con.prepareStatement("UPDATE npcbuffer_buff_list SET canUse=? WHERE buffId=? AND buffLevel=? LIMIT 1");
+			final PreparedStatement ps = con.prepareStatement("UPDATE npcbufferpremium_buff_list SET canUse=? WHERE buffId=? AND buffLevel=? LIMIT 1");
 			ps.setString(1, canUseBuff);
 			ps.setString(2, buffId);
 			ps.setString(3, buffLevel);
@@ -1828,7 +1833,7 @@ public class BufferBoard implements IParseBoardHandler
 		}
 		catch (SQLException e)
 		{
-			LOG.warning("BufferBoard gmManageSelectedBuff error: " + e.getMessage());
+			LOG.warning("BufferBoardPremium gmManageSelectedBuff error: " + e.getMessage());
 			return false;
 		}
 	}
@@ -1859,7 +1864,7 @@ public class BufferBoard implements IParseBoardHandler
 		final String buffLevel = bpid[1];
 		try (Connection con = DatabaseFactory.getConnection())
 		{
-			final PreparedStatement ps = con.prepareStatement("UPDATE npcbuffer_buff_list SET forClass=? WHERE buffId=? AND buffLevel=?");
+			final PreparedStatement ps = con.prepareStatement("UPDATE npcbufferpremium_buff_list SET forClass=? WHERE buffId=? AND buffLevel=?");
 			ps.setString(1, dbVal);
 			ps.setString(2, buffId);
 			ps.setString(3, buffLevel);
@@ -1868,7 +1873,7 @@ public class BufferBoard implements IParseBoardHandler
 		}
 		catch (SQLException e)
 		{
-			LOG.warning("BufferBoard gmManageSelectedSet error: " + e.getMessage());
+			LOG.warning("BufferBoardPremium gmManageSelectedSet error: " + e.getMessage());
 			return showInfo("Error", "Failed to update buff set. Please try again later.");
 		}
 		return gmViewAllBuffs("set", "Buff_Sets", page);
@@ -1896,7 +1901,7 @@ public class BufferBoard implements IParseBoardHandler
 			final Skill skill = getSkillCached(buff[0], buff[1]);
 			if (skill != null)
 			{
-				skill.applyEffects(target, target, true, BUFFTIME);
+				skill.applyEffects(target, target, true, BUFFTIME_PREMIUM);
 			}
 		}
 	}
@@ -1910,21 +1915,21 @@ public class BufferBoard implements IParseBoardHandler
 		switch (type)
 		{
 			case "buff":
-				return Config.ENABLE_BUFFS;
+				return Config.PREMIUM_ENABLE_BUFFS;
 			case "resist":
-				return Config.ENABLE_RESIST;
+				return Config.PREMIUM_ENABLE_RESIST;
 			case "song":
-				return Config.ENABLE_SONGS;
+				return Config.PREMIUM_ENABLE_SONGS;
 			case "dance":
-				return Config.ENABLE_DANCES;
+				return Config.PREMIUM_ENABLE_DANCES;
 			case "chant":
-				return Config.ENABLE_CHANTS;
+				return Config.PREMIUM_ENABLE_CHANTS;
 			case "others":
-				return Config.ENABLE_OTHERS;
+				return Config.PREMIUM_ENABLE_OTHERS;
 			case "special":
-				return Config.ENABLE_SPECIAL;
+				return Config.PREMIUM_ENABLE_SPECIAL;
 			case "cubic":
-				return Config.ENABLE_CUBIC;
+				return Config.PREMIUM_ENABLE_CUBIC;
 			default:
 				return false;
 		}
@@ -1935,21 +1940,21 @@ public class BufferBoard implements IParseBoardHandler
 		switch (buffType)
 		{
 			case "buff":
-				return Config.BUFF_PRICE;
+				return Config.PREMIUM_BUFF_PRICE;
 			case "resist":
-				return Config.RESIST_PRICE;
+				return Config.PREMIUM_RESIST_PRICE;
 			case "song":
-				return Config.SONG_PRICE;
+				return Config.PREMIUM_SONG_PRICE;
 			case "dance":
-				return Config.DANCE_PRICE;
+				return Config.PREMIUM_DANCE_PRICE;
 			case "chant":
-				return Config.CHANT_PRICE;
+				return Config.PREMIUM_CHANT_PRICE;
 			case "others":
-				return Config.OTHERS_PRICE;
+				return Config.PREMIUM_OTHERS_PRICE;
 			case "special":
-				return Config.SPECIAL_PRICE;
+				return Config.PREMIUM_SPECIAL_PRICE;
 			case "cubic":
-				return Config.CUBIC_PRICE;
+				return Config.PREMIUM_CUBIC_PRICE;
 			default:
 				return 0;
 		}

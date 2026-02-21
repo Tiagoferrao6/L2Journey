@@ -66,6 +66,15 @@ import com.l2journey.gameserver.network.SystemMessageId;
 import com.l2journey.gameserver.network.serverpackets.BuyList;
 import com.l2journey.gameserver.network.serverpackets.ExBuySellList;
 import com.l2journey.gameserver.network.serverpackets.ShowBoard;
+import com.l2journey.gameserver.network.serverpackets.ActionFailed;
+import com.l2journey.gameserver.network.serverpackets.WareHouseDepositList;
+import com.l2journey.gameserver.network.serverpackets.WareHouseWithdrawalList;
+import com.l2journey.gameserver.model.clan.ClanAccess;
+import com.l2journey.gameserver.network.serverpackets.ExShowVariationMakeWindow;
+import com.l2journey.gameserver.network.serverpackets.ExShowVariationCancelWindow;
+import com.l2journey.gameserver.network.serverpackets.HennaEquipList;
+import com.l2journey.gameserver.model.item.Henna;
+import com.l2journey.gameserver.network.serverpackets.HennaRemoveList;
 
 /**
  * Home board.
@@ -90,7 +99,10 @@ public class HomeBoard implements IParseBoardHandler
 		Config.COMMUNITYBOARD_ENABLE_MULTISELLS ? "_bbsmultisell" : null,
 		Config.COMMUNITYBOARD_ENABLE_MULTISELLS ? "_bbssell" : null,
 		Config.COMMUNITYBOARD_ENABLE_TELEPORTS ? "_bbsteleport" : null,
-		Config.COMMUNITYBOARD_ENABLE_DELEVEL ? "_bbsdelevel" : null
+		Config.COMMUNITYBOARD_ENABLE_DELEVEL ? "_bbsdelevel" : null,
+		Config.COMMUNITYBOARD_ENABLE_WAREHOUSE ? "_bbswarhouse" : null,
+		Config.COMMUNITYBOARD_ENABLE_AUGMENT ? "_bbsaugment" : null,
+		Config.COMMUNITYBOARD_ENABLE_DRAW ? "_bbsdraw" : null
 	};
 	
 	private static final BiPredicate<String, Player> COMBAT_CHECK = (command, player) ->
@@ -260,7 +272,7 @@ public class HomeBoard implements IParseBoardHandler
 			final String[] buypassOptions = fullBypass.split(",");
 			final int multisellId = Integer.parseInt(buypassOptions[0]);
 			final String page = buypassOptions[1];
-			returnHtml = HtmCache.getInstance().getHtm(player, "data/html/CommunityBoard/Custom/" + page + ".html");
+			returnHtml = HtmCache.getInstance().getHtm(player, "data/html/CommunityBoard/" + page + ".html");
 			MultisellData.getInstance().separateAndSend(multisellId, player, null, false);
 		}
 		else if (command.startsWith("_bbsexcmultisell"))
@@ -269,15 +281,135 @@ public class HomeBoard implements IParseBoardHandler
 			final String[] buypassOptions = fullBypass.split(",");
 			final int multisellId = Integer.parseInt(buypassOptions[0]);
 			final String page = buypassOptions[1];
-			returnHtml = HtmCache.getInstance().getHtm(player, "data/html/CommunityBoard/Custom/" + page + ".html");
+			returnHtml = HtmCache.getInstance().getHtm(player, "data/html/CommunityBoard/" + page + ".html");
 			MultisellData.getInstance().separateAndSend(multisellId, player, null, true);
 		}
 		else if (command.startsWith("_bbssell"))
 		{
 			final String page = command.replace("_bbssell;", "");
-			returnHtml = HtmCache.getInstance().getHtm(player, "data/html/CommunityBoard/Custom/" + page + ".html");
+			returnHtml = HtmCache.getInstance().getHtm(player, "data/html/CommunityBoard/" + page + ".html");
 			player.sendPacket(new BuyList(BuyListData.getInstance().getBuyList(423), player.getAdena(), 0));
 			player.sendPacket(new ExBuySellList(player, false));
+		}
+		else if (command.startsWith("_bbswarhouse"))
+		{
+			if (command.equals("_bbswarhouse:chardeposit"))
+			{
+				player.sendPacket(ActionFailed.STATIC_PACKET);
+				player.setActiveWarehouse(player.getWarehouse());
+				if (player.getWarehouse().getSize() == player.getWareHouseLimit())
+				{
+					player.sendPacket(SystemMessageId.YOUR_WAREHOUSE_IS_FULL);
+					return false;
+				}
+				
+				player.setInventoryBlockingStatus(true);
+				player.sendPacket(new WareHouseDepositList(player, 1));
+				returnHtml = HtmCache.getInstance().getHtm(player, "data/html/CommunityBoard/merchant/warehouse.html");
+			}
+			else if (command.equals("_bbswarhouse:clandeposit"))
+			{
+				if (player.isEnchanting())
+				{
+					return false;
+				}
+				
+				if (player.getClan() == null)
+				{
+					player.sendPacket(SystemMessageId.YOU_ARE_NOT_A_CLAN_MEMBER_AND_CANNOT_PERFORM_THIS_ACTION);
+					return false;
+				}
+				
+				player.sendPacket(ActionFailed.STATIC_PACKET);
+				player.setActiveWarehouse(player.getClan().getWarehouse());
+				if (player.getClan().getLevel() == 0)
+				{
+					player.sendPacket(SystemMessageId.ONLY_CLANS_OF_CLAN_LEVEL_1_OR_HIGHER_CAN_USE_A_CLAN_WAREHOUSE);
+					return false;
+				}
+				
+				player.setActiveWarehouse(player.getClan().getWarehouse());
+				player.setInventoryBlockingStatus(true);
+				player.sendPacket(new WareHouseDepositList(player, 4));
+			}
+			else if (command.equals("_bbswarhouse:charwithdraw"))
+			{
+				player.sendPacket(ActionFailed.STATIC_PACKET);
+				player.setActiveWarehouse(player.getWarehouse());
+				if (player.getActiveWarehouse().getSize() == 0)
+				{
+					player.sendPacket(SystemMessageId.YOU_HAVE_NOT_DEPOSITED_ANY_ITEMS_IN_YOUR_WAREHOUSE);
+					return false;
+				}
+				
+				player.sendPacket(new WareHouseWithdrawalList(player, 1));
+			}
+			else if (command.equals("_bbswarhouse:clanwithdraw"))
+			{
+				if (player.isEnchanting())
+				{
+					return false;
+				}
+				
+				if (player.getClan() == null)
+				{
+					player.sendPacket(SystemMessageId.YOU_DO_NOT_HAVE_THE_RIGHT_TO_USE_THE_CLAN_WAREHOUSE);
+					return false;
+				}
+				
+				player.sendPacket(ActionFailed.STATIC_PACKET);
+				if (!player.hasAccess(ClanAccess.ACCESS_WAREHOUSE))
+				{
+					player.sendPacket(SystemMessageId.YOU_DO_NOT_HAVE_THE_RIGHT_TO_USE_THE_CLAN_WAREHOUSE);
+					return false;
+				}
+				
+				if (player.getClan().getLevel() == 0)
+				{
+					player.sendPacket(SystemMessageId.ONLY_CLANS_OF_CLAN_LEVEL_1_OR_HIGHER_CAN_USE_A_CLAN_WAREHOUSE);
+					return false;
+				}
+				
+				player.setActiveWarehouse(player.getClan().getWarehouse());
+				player.setInventoryBlockingStatus(true);
+				
+				player.sendPacket(new WareHouseWithdrawalList(player, 4));
+			}
+		}
+		else if (command.startsWith("_bbsaugment"))
+		{
+			if (command.equals("_bbsaugment;add"))
+			{
+				player.sendPacket(SystemMessageId.SELECT_THE_ITEM_TO_BE_AUGMENTED);
+				player.sendPacket(ExShowVariationMakeWindow.STATIC_PACKET);
+				player.cancelActiveTrade();
+				returnHtml = HtmCache.getInstance().getHtm(player, "data/html/CommunityBoard/merchant/blacksmith.html");
+			}
+			else if (command.equals("_bbsaugment;remove"))
+			{
+				player.sendPacket(SystemMessageId.SELECT_THE_ITEM_FROM_WHICH_YOU_WISH_TO_REMOVE_AUGMENTATION);
+				player.sendPacket(ExShowVariationCancelWindow.STATIC_PACKET);
+				player.cancelActiveTrade();
+			}
+		}
+		else if (command.startsWith("_bbsdraw"))
+		{
+			if (command.equals("_bbsdraw:add"))
+			{
+				player.sendPacket(new HennaEquipList(player));
+			}
+			else if (command.equals("_bbsdraw:remove"))
+			{
+				for (Henna henna : player.getHennaList())
+				{
+					if (henna != null)
+					{
+						returnHtml = HtmCache.getInstance().getHtm(player, "data/html/CommunityBoard/merchant/symbolMaker.html");
+						player.sendPacket(new HennaRemoveList(player));
+						break;
+					}
+				}
+			}
 		}
 		else if (command.startsWith("_bbsteleport"))
 		{
@@ -317,7 +449,7 @@ public class HomeBoard implements IParseBoardHandler
 				player.setCurrentCp(player.getMaxCp());
 				player.broadcastUserInfo();
 				player.checkPlayerSkills(); // Adjust skills according to new level.
-				returnHtml = HtmCache.getInstance().getHtm(player, "data/html/CommunityBoard/Custom/delevel/complete.html");
+				returnHtml = HtmCache.getInstance().getHtm(player, "data/html/CommunityBoard/delevel/complete.html");
 			}
 		}
 		else if (command.startsWith("_bbspremium"))
@@ -339,7 +471,7 @@ public class HomeBoard implements IParseBoardHandler
 					PcCafePointsManager.getInstance().run(player);
 				}
 				
-				returnHtml = HtmCache.getInstance().getHtm(player, "data/html/CommunityBoard/Custom/premium/thankyou.html");
+				returnHtml = HtmCache.getInstance().getHtm(player, "data/html/CommunityBoard/premium/thankyou.html");
 			}
 		}
 		

@@ -247,12 +247,8 @@ public class Config
 	public static int COMMUNITYBOARD_CURRENCY;
 	public static boolean COMMUNITYBOARD_ENABLE_MULTISELLS;
 	public static boolean COMMUNITYBOARD_ENABLE_TELEPORTS;
-	public static boolean COMMUNITYBOARD_ENABLE_BUFFS;
-	public static boolean COMMUNITYBOARD_ENABLE_HEAL;
 	public static boolean COMMUNITYBOARD_ENABLE_DELEVEL;
 	public static int COMMUNITYBOARD_TELEPORT_PRICE;
-	public static int COMMUNITYBOARD_BUFF_PRICE;
-	public static int COMMUNITYBOARD_HEAL_PRICE;
 	public static int COMMUNITYBOARD_DELEVEL_PRICE;
 	public static boolean COMMUNITYBOARD_PEACE_ONLY;
 	public static boolean COMMUNITYBOARD_COMBAT_DISABLED;
@@ -260,9 +256,11 @@ public class Config
 	public static boolean COMMUNITY_PREMIUM_SYSTEM_ENABLED;
 	public static int COMMUNITY_PREMIUM_COIN_ID;
 	public static int COMMUNITY_PREMIUM_PRICE_PER_DAY;
-	public static Set<Integer> COMMUNITY_AVAILABLE_BUFFS;
 	public static Map<String, Location> COMMUNITY_AVAILABLE_TELEPORTS;
 	public static boolean DAILY_REWARD_ENABLED;
+	public static boolean COMMUNITYBOARD_ENABLE_WAREHOUSE;
+	public static boolean COMMUNITYBOARD_ENABLE_AUGMENT;
+	public static boolean COMMUNITYBOARD_ENABLE_DRAW;
 	
 	// --------------------------------------------------
 	// Custom Mail Manager
@@ -772,6 +770,7 @@ public class Config
 	public static int SCHEME_BUFF_PRICE;
 	public static int SCHEMES_PER_PLAYER;
 	public static int CONSUMABLE_ID;
+	public static int BUFF_TIME;
 	
 	// ----------------------------------------------
 	// PremiumBuffer [NPC]
@@ -812,6 +811,7 @@ public class Config
 	public static int PREMIUM_SCHEME_BUFF_PRICE;
 	public static int PREMIUM_SCHEMES_PER_PLAYER;
 	public static int PREMIUM_CONSUMABLE_ID;
+	public static int PREMIUM_BUFF_TIME;
 	
 	// --------------------------------------------------
 	// Npc Stat Multipliers
@@ -1830,12 +1830,11 @@ public class Config
 		COMMUNITYBOARD_CURRENCY = communityBoardConfig.getInt("CommunityCurrencyId", 57);
 		COMMUNITYBOARD_ENABLE_MULTISELLS = communityBoardConfig.getBoolean("CommunityEnableMultisells", true);
 		COMMUNITYBOARD_ENABLE_TELEPORTS = communityBoardConfig.getBoolean("CommunityEnableTeleports", true);
-		COMMUNITYBOARD_ENABLE_BUFFS = communityBoardConfig.getBoolean("CommunityEnableBuffs", true);
-		COMMUNITYBOARD_ENABLE_HEAL = communityBoardConfig.getBoolean("CommunityEnableHeal", true);
 		COMMUNITYBOARD_ENABLE_DELEVEL = communityBoardConfig.getBoolean("CommunityEnableDelevel", false);
+		COMMUNITYBOARD_ENABLE_WAREHOUSE = communityBoardConfig.getBoolean("CommunityEnableWarhouse", true);
+		COMMUNITYBOARD_ENABLE_AUGMENT = communityBoardConfig.getBoolean("CommunityEnableAugment", true);
+		COMMUNITYBOARD_ENABLE_DRAW = communityBoardConfig.getBoolean("CommunityEnableDraw", true);
 		COMMUNITYBOARD_TELEPORT_PRICE = communityBoardConfig.getInt("CommunityTeleportPrice", 0);
-		COMMUNITYBOARD_BUFF_PRICE = communityBoardConfig.getInt("CommunityBuffPrice", 0);
-		COMMUNITYBOARD_HEAL_PRICE = communityBoardConfig.getInt("CommunityHealPrice", 0);
 		COMMUNITYBOARD_DELEVEL_PRICE = communityBoardConfig.getInt("CommunityDelevelPrice", 0);
 		COMMUNITYBOARD_PEACE_ONLY = communityBoardConfig.getBoolean("CommunityBoardPeaceOnly", false);
 		COMMUNITYBOARD_COMBAT_DISABLED = communityBoardConfig.getBoolean("CommunityCombatDisabled", true);
@@ -1843,12 +1842,6 @@ public class Config
 		COMMUNITY_PREMIUM_SYSTEM_ENABLED = communityBoardConfig.getBoolean("CommunityPremiumSystem", false);
 		COMMUNITY_PREMIUM_COIN_ID = communityBoardConfig.getInt("CommunityPremiumBuyCoinId", 57);
 		COMMUNITY_PREMIUM_PRICE_PER_DAY = communityBoardConfig.getInt("CommunityPremiumPricePerDay", 1000000);
-		final String[] allowedBuffs = communityBoardConfig.getString("CommunityAvailableBuffs", "").split(",");
-		COMMUNITY_AVAILABLE_BUFFS = new HashSet<>(allowedBuffs.length);
-		for (String s : allowedBuffs)
-		{
-			COMMUNITY_AVAILABLE_BUFFS.add(Integer.parseInt(s));
-		}
 		final String[] availableTeleports = communityBoardConfig.getString("CommunityTeleportList", "").split(";");
 		COMMUNITY_AVAILABLE_TELEPORTS = new HashMap<>(availableTeleports.length);
 		for (String s : availableTeleports)
@@ -2610,6 +2603,7 @@ public class Config
 		SCHEME_BUFF_PRICE = npcbufferSettings.getInt("SchemePrice", 10000000);
 		SCHEMES_PER_PLAYER = npcbufferSettings.getInt("MaxScheme", 4);
 		CONSUMABLE_ID = npcbufferSettings.getInt("ConsumableID", 57);
+		BUFF_TIME = npcbufferSettings.getInt("BuffTime", 60);
 	}
 	
 	/**
@@ -2653,6 +2647,7 @@ public class Config
 		PREMIUM_SCHEME_BUFF_PRICE = PremimumBufferSettings.getInt("SchemePrice", 10000000);
 		PREMIUM_SCHEMES_PER_PLAYER = PremimumBufferSettings.getInt("MaxScheme", 4);
 		PREMIUM_CONSUMABLE_ID = PremimumBufferSettings.getInt("ConsumableID", 57);
+		PREMIUM_BUFF_TIME = PremimumBufferSettings.getInt("BuffTimePremium", 60);
 	}
 	
 	/**

@@ -77,6 +77,9 @@ public class NpcBuffer extends Quest
 	private static final String QUEST_LOADING_INFO = "NpcBuffer";
 	private static final int NPC_ID = 12;
 	
+	//Setting up buff timing
+	private static final int BUFFTIME = Config.BUFF_TIME * 60; // 60 min.
+	
 	private static final String TITLE_NAME = "Scheme Buffer";
 	private static final int MAX_SCHEME_BUFFS = Config.BUFFS_MAX_AMOUNT;
 	private static final int MAX_SCHEME_DANCES = Config.DANCES_MAX_AMOUNT;
@@ -2113,7 +2116,7 @@ public class NpcBuffer extends Quest
 		for (Skill skill : skills)
 		{
 			// Direct application - no threading, no delays, maximum performance
-			skill.applyEffects(target, target);
+			skill.applyEffects(target, target, true, BUFFTIME);
 		}
 	}
 	
@@ -2138,7 +2141,7 @@ public class NpcBuffer extends Quest
 			// Broadcast animation packet for visual feedback
 			npc.broadcastPacket(new MagicSkillUse(npc, target, skillId, skillLevel, 1000, 0));
 			// Direct application for optimal performance
-			skill.applyEffects(target, target);
+			skill.applyEffects(target, target, true, BUFFTIME);
 		}
 	}
 	

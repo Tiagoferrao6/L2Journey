@@ -77,7 +77,10 @@ public class NpcBufferPremium extends Quest
 	private static final String QUEST_LOADING_INFO = "NpcBufferPremium";
 	private static final int NPC_ID = 15;
 	
-	private static final String TITLE_NAME = "Scheme Buffer";
+	//Setting up Premium buff timing
+	private static final int BUFFTIME_PREMIUM = Config.PREMIUM_BUFF_TIME * 60; // 60 min.
+	
+	private static final String TITLE_NAME = "Scheme Buffer Premium";
 	private static final int MAX_SCHEME_BUFFS = Config.BUFFS_MAX_AMOUNT;
 	private static final int MAX_SCHEME_DANCES = Config.DANCES_MAX_AMOUNT;
 	
@@ -302,7 +305,7 @@ public class NpcBufferPremium extends Quest
 		String html = "";
 		try (Connection con = DatabaseFactory.getConnection())
 		{
-			final PreparedStatement statement = con.prepareStatement("SELECT * FROM NpcBufferPremium_scheme_list WHERE player_id=?");
+			final PreparedStatement statement = con.prepareStatement("SELECT * FROM npcbufferpremium_scheme_list WHERE player_id=?");
 			statement.setInt(1, st.getPlayer().getObjectId());
 			final ResultSet rss = statement.executeQuery();
 			while (rss.next())
@@ -382,7 +385,7 @@ public class NpcBufferPremium extends Quest
 		int count = 0;
 		try (Connection con = DatabaseFactory.getConnection())
 		{
-			final PreparedStatement statement = con.prepareStatement("SELECT buff_class FROM NpcBufferPremium_scheme_contents WHERE scheme_id=?");
+			final PreparedStatement statement = con.prepareStatement("SELECT buff_class FROM npcbufferpremium_scheme_contents WHERE scheme_id=?");
 			statement.setString(1, scheme);
 			final ResultSet rss = statement.executeQuery();
 			while (rss.next())
@@ -404,7 +407,7 @@ public class NpcBufferPremium extends Quest
 		String val = "none";
 		try (Connection con = DatabaseFactory.getConnection())
 		{
-			final PreparedStatement statement = con.prepareStatement("SELECT buffType FROM NpcBufferPremium_buff_list WHERE buffId=? LIMIT 1");
+			final PreparedStatement statement = con.prepareStatement("SELECT buffType FROM npcbufferpremium_buff_list WHERE buffId=? LIMIT 1");
 			statement.setInt(1, id);
 			final ResultSet rss = statement.executeQuery();
 			if (rss.next())
@@ -426,7 +429,7 @@ public class NpcBufferPremium extends Quest
 		boolean val = false;
 		try (Connection con = DatabaseFactory.getConnection())
 		{
-			final PreparedStatement statement = con.prepareStatement("SELECT canUse FROM NpcBufferPremium_buff_list WHERE buffId=? AND buffLevel=? LIMIT 1");
+			final PreparedStatement statement = con.prepareStatement("SELECT canUse FROM npcbufferpremium_buff_list WHERE buffId=? AND buffLevel=? LIMIT 1");
 			statement.setInt(1, id);
 			statement.setInt(2, level);
 			final ResultSet rss = statement.executeQuery();
@@ -449,7 +452,7 @@ public class NpcBufferPremium extends Quest
 		boolean used = false;
 		try (Connection con = DatabaseFactory.getConnection())
 		{
-			final PreparedStatement statement = con.prepareStatement("SELECT id FROM NpcBufferPremium_scheme_contents WHERE scheme_id=? AND skill_id=? AND skill_level=? LIMIT 1");
+			final PreparedStatement statement = con.prepareStatement("SELECT id FROM npcbufferpremium_scheme_contents WHERE scheme_id=? AND skill_id=? AND skill_level=? LIMIT 1");
 			statement.setString(1, scheme);
 			statement.setInt(2, id);
 			statement.setInt(3, level);
@@ -473,7 +476,7 @@ public class NpcBufferPremium extends Quest
 		int val = 0;
 		try (Connection con = DatabaseFactory.getConnection())
 		{
-			final PreparedStatement statement = con.prepareStatement("SELECT buff_class FROM NpcBufferPremium_buff_list WHERE buffId=?");
+			final PreparedStatement statement = con.prepareStatement("SELECT buff_class FROM npcbufferpremium_buff_list WHERE buffId=?");
 			statement.setString(1, id);
 			final ResultSet rss = statement.executeQuery();
 			if (rss.next())
@@ -541,7 +544,7 @@ public class NpcBufferPremium extends Quest
 		String html = "<html><head><title>" + TITLE_NAME + "</title></head><body><center><img src=\"L2UI_CH3.herotower_deco\" width=256 height=32><br>Available schemes:<br><br>";
 		try (Connection con = DatabaseFactory.getConnection())
 		{
-			final PreparedStatement statement = con.prepareStatement("SELECT * FROM NpcBufferPremium_scheme_list WHERE player_id=?");
+			final PreparedStatement statement = con.prepareStatement("SELECT * FROM npcbufferpremium_scheme_list WHERE player_id=?");
 			statement.setInt(1, player.getObjectId());
 			final ResultSet rss = statement.executeQuery();
 			while (rss.next())
@@ -564,7 +567,7 @@ public class NpcBufferPremium extends Quest
 		String html = "<html><head><title>" + TITLE_NAME + "</title></head><body><center><img src=\"L2UI_CH3.herotower_deco\" width=256 height=32><br>Select a scheme that you would like to manage:<br><br>";
 		try (Connection con = DatabaseFactory.getConnection())
 		{
-			final PreparedStatement statement = con.prepareStatement("SELECT * FROM NpcBufferPremium_scheme_list WHERE player_id=?");
+			final PreparedStatement statement = con.prepareStatement("SELECT * FROM npcbufferpremium_scheme_list WHERE player_id=?");
 			statement.setInt(1, player.getObjectId());
 			final ResultSet rss = statement.executeQuery();
 			while (rss.next())
@@ -607,7 +610,7 @@ public class NpcBufferPremium extends Quest
 		final List<String> availableBuffs = new ArrayList<>();
 		try (Connection con = DatabaseFactory.getConnection())
 		{
-			final PreparedStatement statement = con.prepareStatement("SELECT buffId,buffLevel FROM NpcBufferPremium_buff_list WHERE buffType=\"" + buffType + "\" AND canUse=1  ORDER BY Buff_Class ASC, id");
+			final PreparedStatement statement = con.prepareStatement("SELECT buffId,buffLevel FROM npcbufferpremium_buff_list WHERE buffType=\"" + buffType + "\" AND canUse=1  ORDER BY Buff_Class ASC, id");
 			final ResultSet rss = statement.executeQuery();
 			while (rss.next())
 			{
@@ -738,7 +741,7 @@ public class NpcBufferPremium extends Quest
 		int buffCount = 0;
 		try (Connection con = DatabaseFactory.getConnection())
 		{
-			final PreparedStatement statement = con.prepareStatement("SELECT buff_class FROM NpcBufferPremium_scheme_contents WHERE scheme_id=?");
+			final PreparedStatement statement = con.prepareStatement("SELECT buff_class FROM npcbufferpremium_scheme_contents WHERE scheme_id=?");
 			statement.setString(1, scheme);
 			final ResultSet rss = statement.executeQuery();
 			while (rss.next())
@@ -778,7 +781,7 @@ public class NpcBufferPremium extends Quest
 			if ("add".equals(addOrRemove))
 			{
 				html += "You can add <font color=LEVEL>" + (MAX_SCHEME_BUFFS - buffCount) + "</font> Buffs and <font color=LEVEL>" + (MAX_SCHEME_DANCES - danceSongCount) + "</font> Dances more!";
-				final String query = "SELECT * FROM NpcBufferPremium_buff_list WHERE buffType IN (" + generateQuery(buffCount, danceSongCount) + ") AND canUse=1 ORDER BY Buff_Class ASC, id";
+				final String query = "SELECT * FROM npcbufferpremium_buff_list WHERE buffType IN (" + generateQuery(buffCount, danceSongCount) + ") AND canUse=1 ORDER BY Buff_Class ASC, id";
 				final PreparedStatement statement = con.prepareStatement(query);
 				final ResultSet rss = statement.executeQuery();
 				while (rss.next())
@@ -793,7 +796,7 @@ public class NpcBufferPremium extends Quest
 			else if ("remove".equals(addOrRemove))
 			{
 				html += "You have <font color=LEVEL>" + buffCount + "</font> Buffs and <font color=LEVEL>" + danceSongCount + "</font> Dances";
-				final String query = "SELECT * FROM NpcBufferPremium_scheme_contents WHERE scheme_id=? ORDER BY Buff_Class ASC, id";
+				final String query = "SELECT * FROM npcbufferpremium_scheme_contents WHERE scheme_id=? ORDER BY Buff_Class ASC, id";
 				final PreparedStatement statement = con.prepareStatement(query);
 				statement.setString(1, scheme);
 				final ResultSet rss = statement.executeQuery();
@@ -956,11 +959,11 @@ public class NpcBufferPremium extends Quest
 			final PreparedStatement statement;
 			if ("set".equals(type))
 			{
-				statement = con.prepareStatement("SELECT * FROM NpcBufferPremium_buff_list WHERE buffType IN (" + generateQuery(0, 0) + ") AND canUse=1");
+				statement = con.prepareStatement("SELECT * FROM npcbufferpremium_buff_list WHERE buffType IN (" + generateQuery(0, 0) + ") AND canUse=1");
 			}
 			else
 			{
-				statement = con.prepareStatement("SELECT * FROM NpcBufferPremium_buff_list WHERE buffType=?");
+				statement = con.prepareStatement("SELECT * FROM npcbufferpremium_buff_list WHERE buffType=?");
 				statement.setString(1, type);
 			}
 			final ResultSet rss = statement.executeQuery();
@@ -1090,7 +1093,7 @@ public class NpcBufferPremium extends Quest
 		final String buffLevel = bpid[1];
 		try (Connection con = DatabaseFactory.getConnection())
 		{
-			final PreparedStatement statement = con.prepareStatement("UPDATE NpcBufferPremium_buff_list SET canUse=? WHERE buffId=? AND buffLevel=? LIMIT 1");
+			final PreparedStatement statement = con.prepareStatement("UPDATE npcbufferpremium_buff_list SET canUse=? WHERE buffId=? AND buffLevel=? LIMIT 1");
 			statement.setString(1, canUseBuff);
 			statement.setString(2, buffId);
 			statement.setString(3, buffLevel);
@@ -1110,7 +1113,7 @@ public class NpcBufferPremium extends Quest
 		final String buffLevel = bpid[1];
 		try (Connection con = DatabaseFactory.getConnection())
 		{
-			final PreparedStatement statement = con.prepareStatement("UPDATE NpcBufferPremium_buff_list SET forClass=? WHERE buffId=? AND bufflevel=?");
+			final PreparedStatement statement = con.prepareStatement("UPDATE npcbufferpremium_buff_list SET forClass=? WHERE buffId=? AND bufflevel=?");
 			statement.setString(1, newVal);
 			statement.setString(2, buffId);
 			statement.setString(3, buffLevel);
@@ -1284,7 +1287,7 @@ public class NpcBufferPremium extends Quest
 				}
 				try (Connection con = DatabaseFactory.getConnection())
 				{
-					final PreparedStatement statement = con.prepareStatement("INSERT INTO NpcBufferPremium_scheme_list (player_id,scheme_name) VALUES (?,?)");
+					final PreparedStatement statement = con.prepareStatement("INSERT INTO npcbufferpremium_scheme_list (player_id,scheme_name) VALUES (?,?)");
 					statement.setInt(1, player.getObjectId());
 					statement.setString(2, param);
 					statement.executeUpdate();
@@ -1301,12 +1304,12 @@ public class NpcBufferPremium extends Quest
 			{
 				try (Connection con = DatabaseFactory.getConnection())
 				{
-					PreparedStatement statement = con.prepareStatement("DELETE FROM NpcBufferPremium_scheme_list WHERE id=? LIMIT 1");
+					PreparedStatement statement = con.prepareStatement("DELETE FROM npcbufferpremium_scheme_list WHERE id=? LIMIT 1");
 					statement.setString(1, eventParam1);
 					statement.executeUpdate();
 					statement.close();
 					
-					statement = con.prepareStatement("DELETE FROM NpcBufferPremium_scheme_contents WHERE scheme_id=?");
+					statement = con.prepareStatement("DELETE FROM npcbufferpremium_scheme_contents WHERE scheme_id=?");
 					statement.setString(1, eventParam1);
 					statement.executeUpdate();
 					statement.close();
@@ -1344,7 +1347,7 @@ public class NpcBufferPremium extends Quest
 				final String level = split[2];
 				try (Connection con = DatabaseFactory.getConnection())
 				{
-					final PreparedStatement statement = con.prepareStatement("DELETE FROM NpcBufferPremium_scheme_contents WHERE scheme_id=? AND skill_id=? AND skill_level=? LIMIT 1");
+					final PreparedStatement statement = con.prepareStatement("DELETE FROM npcbufferpremium_scheme_contents WHERE scheme_id=? AND skill_id=? AND skill_level=? LIMIT 1");
 					statement.setString(1, scheme);
 					statement.setString(2, skill);
 					statement.setString(3, level);
@@ -1377,7 +1380,7 @@ public class NpcBufferPremium extends Quest
 				final int buffClass = getClassBuff(skill);
 				try (Connection con = DatabaseFactory.getConnection())
 				{
-					final PreparedStatement statement = con.prepareStatement("INSERT INTO NpcBufferPremium_scheme_contents (scheme_id,skill_id,skill_level,buff_class) VALUES (?,?,?,?)");
+					final PreparedStatement statement = con.prepareStatement("INSERT INTO npcbufferpremium_scheme_contents (scheme_id,skill_id,skill_level,buff_class) VALUES (?,?,?,?)");
 					statement.setString(1, scheme);
 					statement.setString(2, skill);
 					statement.setString(3, level);
@@ -1559,7 +1562,7 @@ public class NpcBufferPremium extends Quest
 					final List<Integer> levels = new ArrayList<>();
 					try (Connection con = DatabaseFactory.getConnection())
 					{
-						final PreparedStatement statement = con.prepareStatement("SELECT * FROM NpcBufferPremium_scheme_contents WHERE scheme_id=? ORDER BY id");
+						final PreparedStatement statement = con.prepareStatement("SELECT * FROM npcbufferpremium_scheme_contents WHERE scheme_id=? ORDER BY id");
 						statement.setString(1, eventParam1);
 						final ResultSet rss = statement.executeQuery();
 						while (rss.next())
@@ -1812,7 +1815,7 @@ public class NpcBufferPremium extends Quest
 					{
 						try (Connection con = DatabaseFactory.getConnection())
 						{
-							final PreparedStatement statement = con.prepareStatement("SELECT buffId,buffLevel FROM NpcBufferPremium_buff_list WHERE forClass IN (?,?) ORDER BY id ASC");
+							final PreparedStatement statement = con.prepareStatement("SELECT buffId,buffLevel FROM npcbufferpremium_buff_list WHERE forClass IN (?,?) ORDER BY id ASC");
 							statement.setInt(1, playerClass);
 							statement.setString(2, "2");
 							final ResultSet rss = statement.executeQuery();
@@ -1845,7 +1848,7 @@ public class NpcBufferPremium extends Quest
 						{
 							try (Connection con = DatabaseFactory.getConnection())
 							{
-								final PreparedStatement statement = con.prepareStatement("SELECT buffId,buffLevel FROM NpcBufferPremium_buff_list WHERE forClass IN (?,?) ORDER BY id ASC");
+								final PreparedStatement statement = con.prepareStatement("SELECT buffId,buffLevel FROM npcbufferpremium_buff_list WHERE forClass IN (?,?) ORDER BY id ASC");
 								statement.setString(1, "0");
 								statement.setString(2, "2");
 								final ResultSet rss = statement.executeQuery();
@@ -1898,6 +1901,10 @@ public class NpcBufferPremium extends Quest
 		if (st == null)
 		{
 			st = newQuestState(player);
+		}
+		if (!player.hasPremiumStatus())
+		{
+			return showText(st, "Info", "This buffer is available to players with a premium account.", false, "Return", "main");
 		}
 		
 		if (player.isGM())
@@ -2114,7 +2121,7 @@ public class NpcBufferPremium extends Quest
 		for (Skill skill : skills)
 		{
 			// Direct application - no threading, no delays, maximum performance
-			skill.applyEffects(target, target);
+			skill.applyEffects(target, target, true, BUFFTIME_PREMIUM);
 		}
 	}
 	
@@ -2139,7 +2146,7 @@ public class NpcBufferPremium extends Quest
 			// Broadcast animation packet for visual feedback
 			npc.broadcastPacket(new MagicSkillUse(npc, target, skillId, skillLevel, 1000, 0));
 			// Direct application for optimal performance
-			skill.applyEffects(target, target);
+			skill.applyEffects(target, target, true, BUFFTIME_PREMIUM);
 		}
 	}
 	
