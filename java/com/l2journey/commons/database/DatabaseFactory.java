@@ -85,7 +85,7 @@ public class DatabaseFactory
 			// Timeout Settings.
 			config.setConnectionTimeout(60000); // 1 minute.
 			config.setIdleTimeout(300000); // 5 minutes.
-			config.setMaxLifetime(600000); // 10 minutes.
+			config.setMaxLifetime(480000); // 8 minutes (must be less than MySQL wait_timeout).
 			
 			// Leak Detection.
 			config.setLeakDetectionThreshold(60000); // 1 minute.

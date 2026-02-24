@@ -443,15 +443,27 @@ public class KrateisCubeManager implements IXmlReader
 		final int time = (int) ((lastTime / 1000) / 60);
 		if (time >= 5)
 		{
-			_msgTask = ThreadPool.schedule(() -> getManagerMessage(KrateiMsgType.REGISTRATION_5), lastTime - 300000);
+			final long delay5 = lastTime - 300000;
+			if (delay5 > 0)
+			{
+				_msgTask = ThreadPool.schedule(() -> getManagerMessage(KrateiMsgType.REGISTRATION_5), delay5);
+			}
 		}
 		else if ((time >= 3) && (time < 5))
 		{
-			_msgTask = ThreadPool.schedule(() -> getManagerMessage(KrateiMsgType.REGISTRATION_3), lastTime - 180000);
+			final long delay3 = lastTime - 180000;
+			if (delay3 > 0)
+			{
+				_msgTask = ThreadPool.schedule(() -> getManagerMessage(KrateiMsgType.REGISTRATION_3), delay3);
+			}
 		}
 		else if ((time >= 1) && (time < 3))
 		{
-			_msgTask = ThreadPool.schedule(() -> getManagerMessage(KrateiMsgType.REGISTRATION_1), lastTime - 60000);
+			final long delay1 = lastTime - 60000;
+			if (delay1 > 0)
+			{
+				_msgTask = ThreadPool.schedule(() -> getManagerMessage(KrateiMsgType.REGISTRATION_1), delay1);
+			}
 		}
 		
 		if (_state != EventState.STARTED)
@@ -489,13 +501,21 @@ public class KrateisCubeManager implements IXmlReader
 			case REGISTRATION_5:
 			{
 				_manager.broadcastPacket(new CreatureSay(_manager, ChatType.NPC_SHOUT, NpcStringId.THERE_ARE_5_MINUTES_REMAINING_TO_REGISTER_FOR_KRATEI_S_CUBE_MATCH));
-				_msgTask = ThreadPool.schedule(() -> getManagerMessage(KrateiMsgType.REGISTRATION_3), lastTime - 180000);
+				final long delay3 = lastTime - 180000;
+				if (delay3 > 0)
+				{
+					_msgTask = ThreadPool.schedule(() -> getManagerMessage(KrateiMsgType.REGISTRATION_3), delay3);
+				}
 				break;
 			}
 			case REGISTRATION_3:
 			{
 				_manager.broadcastPacket(new CreatureSay(_manager, ChatType.NPC_SHOUT, NpcStringId.THERE_ARE_3_MINUTES_REMAINING_TO_REGISTER_FOR_KRATEI_S_CUBE_MATCH));
-				_msgTask = ThreadPool.schedule(() -> getManagerMessage(KrateiMsgType.REGISTRATION_1), lastTime - 60000);
+				final long delay1 = lastTime - 60000;
+				if (delay1 > 0)
+				{
+					_msgTask = ThreadPool.schedule(() -> getManagerMessage(KrateiMsgType.REGISTRATION_1), delay1);
+				}
 				break;
 			}
 			case REGISTRATION_1:
