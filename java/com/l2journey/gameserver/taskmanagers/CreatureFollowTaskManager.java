@@ -123,9 +123,8 @@ public class CreatureFollowTaskManager
 						return;
 					}
 					
-					// Check if creature and target are on different floors - stop following if so
-					// Skip this check if inside castle/siege zone (castles have multiple floors that should be accessible)
-					if (!creature.isInsideZone(ZoneId.SIEGE) && followTarget.isCreature() && GeoData.getInstance().areOnDifferentFloors(creature.getX(), creature.getY(), creature.getZ(), followTarget.getX(), followTarget.getY(), followTarget.getZ()))
+					// Check if creature and target are on different floors inside multi-floor zones (e.g., Tower of Insolence)
+					if (creature.isInsideZone(ZoneId.MULTI_FLOOR) && followTarget.isCreature() && GeoData.getInstance().areOnDifferentFloors(creature.getX(), creature.getY(), creature.getZ(), followTarget.getX(), followTarget.getY(), followTarget.getZ()))
 					{
 						if (creature.isSummon())
 						{

@@ -48,7 +48,6 @@ import com.l2journey.gameserver.model.effects.EffectType;
 import com.l2journey.gameserver.model.events.EventDispatcher;
 import com.l2journey.gameserver.model.events.EventType;
 import com.l2journey.gameserver.model.events.holders.actor.npc.OnNpcMoveFinished;
-import com.l2journey.gameserver.model.zone.ZoneId;
 import com.l2journey.gameserver.model.interfaces.ILocational;
 import com.l2journey.gameserver.model.item.Weapon;
 import com.l2journey.gameserver.model.item.enums.ItemLocation;
@@ -56,6 +55,7 @@ import com.l2journey.gameserver.model.item.instance.Item;
 import com.l2journey.gameserver.model.item.type.WeaponType;
 import com.l2journey.gameserver.model.skill.Skill;
 import com.l2journey.gameserver.model.skill.targets.TargetType;
+import com.l2journey.gameserver.model.zone.ZoneId;
 import com.l2journey.gameserver.network.SystemMessageId;
 import com.l2journey.gameserver.network.serverpackets.ActionFailed;
 import com.l2journey.gameserver.network.serverpackets.AutoAttackStop;
@@ -1031,17 +1031,15 @@ public class CreatureAI extends AbstractAI
 			return false; // skill radius -1
 		}
 		
-		// Check if actor and target are on different floors - prevent movement/attack across floors
-		// Skip this check if inside castle/siege zone (castles have multiple floors that should be accessible)
-		if (!_actor.isInsideZone(ZoneId.SIEGE) && target.isCreature() && GeoData.getInstance().areOnDifferentFloors(_actor.getX(), _actor.getY(), _actor.getZ(), target.getX(), target.getY(), target.getZ()))
+		// Check if actor and target are on different floors inside multi-floor zones (e.g., Tower of Insolence)
+		if (_actor.isInsideZone(ZoneId.MULTI_FLOOR) && target.isCreature() && GeoData.getInstance().areOnDifferentFloors(_actor.getX(), _actor.getY(), _actor.getZ(), target.getX(), target.getY(), target.getZ()))
 		{
-			// Cannot reach target on different floor - stop any action
 			if (_actor.isPlayer())
 			{
 				_actor.sendPacket(SystemMessageId.CANNOT_SEE_TARGET);
 			}
 			setIntention(Intention.IDLE);
-			return false;
+			return true;
 		}
 		
 		int offsetWithCollision = offsetValue + _actor.getTemplate().getCollisionRadius();
@@ -1063,12 +1061,6 @@ public class CreatureAI extends AbstractAI
 				
 				// Inside extended range - allow attack with tolerance.
 				stopFollow();
-				return false;
-			}
-			
-			// Not following - check if already inside extended range to allow attack.
-			if (_actor.isInsideRadius2D(target, offsetWithCollision + 100))
-			{
 				return false;
 			}
 			

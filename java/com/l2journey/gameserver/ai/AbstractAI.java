@@ -472,9 +472,8 @@ public abstract class AbstractAI
 		// Check if actor can move.
 		if (!_actor.isMovementDisabled() && !_actor.isAttackingNow() && !_actor.isCastingNow())
 		{
-			// Check if actor and pawn are on different floors - prevent movement across floors
-			// Skip this check if inside castle/siege zone (castles have multiple floors that should be accessible)
-			if (!_actor.isInsideZone(ZoneId.SIEGE) && (pawn != null) && pawn.isCreature() && GeoData.getInstance().areOnDifferentFloors(_actor.getX(), _actor.getY(), _actor.getZ(), pawn.getX(), pawn.getY(), pawn.getZ()))
+			// Check if actor and pawn are on different floors inside multi-floor zones (e.g., Tower of Insolence)
+			if (_actor.isInsideZone(ZoneId.MULTI_FLOOR) && (pawn != null) && pawn.isCreature() && GeoData.getInstance().areOnDifferentFloors(_actor.getX(), _actor.getY(), _actor.getZ(), pawn.getX(), pawn.getY(), pawn.getZ()))
 			{
 				clientActionFailed();
 				return;

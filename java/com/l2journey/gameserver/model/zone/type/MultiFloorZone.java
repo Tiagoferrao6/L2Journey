@@ -18,53 +18,35 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
- * 
- * ---
- * 
- * Portions of this software are derived from the L2JMobius Project, 
- * shared under the MIT License. The original license terms are preserved where 
- * applicable..
- * 
  */
-package com.l2journey.gameserver.model.zone;
+package com.l2journey.gameserver.model.zone.type;
+
+import com.l2journey.gameserver.model.actor.Creature;
+import com.l2journey.gameserver.model.zone.ZoneId;
+import com.l2journey.gameserver.model.zone.ZoneType;
 
 /**
- * Zone Ids.
- * @author Zoey76
+ * Zone type for areas with multiple floors where cross-floor attacks should be prevented.
+ * Used in locations like Tower of Insolence where players on different floors
+ * could otherwise attack each other through the floor/ceiling.
+ * @author L2Journey
  */
-public enum ZoneId
+public class MultiFloorZone extends ZoneType
 {
-	PVP,
-	PEACE,
-	SIEGE,
-	MOTHER_TREE,
-	CLAN_HALL,
-	LANDING,
-	NO_LANDING,
-	WATER,
-	JAIL,
-	MONSTER_TRACK,
-	CASTLE,
-	SWAMP,
-	NO_SUMMON_FRIEND,
-	FORT,
-	NO_STORE,
-	NO_PVP,
-	TOWN,
-	SCRIPT,
-	HQ,
-	DANGER_AREA,
-	ALTERED,
-	NO_BOOKMARK,
-	NO_ITEM_DROP,
-	HOTSPRING_GREEN_SPA,
-	HOTSPRING_RED_SPA,
-	HOTSPRING_YELLOW_SPA,
-	NO_RESTART,
-	MULTI_FLOOR;
-	
-	public static int getZoneCount()
+	public MultiFloorZone(int id)
 	{
-		return values().length;
+		super(id);
+	}
+	
+	@Override
+	protected void onEnter(Creature creature)
+	{
+		creature.setInsideZone(ZoneId.MULTI_FLOOR, true);
+	}
+	
+	@Override
+	protected void onExit(Creature creature)
+	{
+		creature.setInsideZone(ZoneId.MULTI_FLOOR, false);
 	}
 }
