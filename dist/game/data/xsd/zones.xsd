@@ -139,6 +139,7 @@
 									<xs:enumeration value="NoSummonFriendZone" />
 									<xs:enumeration value="NoPvPZone" />
 									<xs:enumeration value="NpcSpawnTerritory" />
+									<xs:enumeration value="MultiFloorZone" />
 									<xs:enumeration value="OlympiadStadiumZone" />
 									<xs:enumeration value="PeaceZone" />
 									<xs:enumeration value="ResidenceHallTeleportZone" />
