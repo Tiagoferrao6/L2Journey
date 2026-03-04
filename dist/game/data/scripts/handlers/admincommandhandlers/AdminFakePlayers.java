@@ -41,6 +41,11 @@ public class AdminFakePlayers implements IAdminCommandHandler
 	{
 		if (command.startsWith("admin_fakechat"))
 		{
+			if (command.length() <= 15)
+			{
+				activeChar.sendSysMessage("Usage: //fakechat playername fpcname message");
+				return false;
+			}
 			final String[] words = command.substring(15).split(" ");
 			if (words.length < 3)
 			{
