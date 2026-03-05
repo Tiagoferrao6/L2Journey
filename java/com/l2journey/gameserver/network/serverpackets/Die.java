@@ -68,8 +68,7 @@ public class Die extends ServerPacket
 			_clan = player.getClan();
 			_isJailed = player.isJailed();
 		}
-		// Suppress "To Village" button when player is participating in an event.
-		_canTeleport = creature.canRevive() && !creature.isPendingRevive() && !(creature.isPlayer() && creature.asPlayer().isOnEvent());
+		_canTeleport = creature.canRevive() && !creature.isPendingRevive();
 		_sweepable = creature.isSweepActive();
 	}
 	
