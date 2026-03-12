@@ -97,31 +97,6 @@
 		<npc id="21547" x="50016" y="-57245" z="-2660" heading="11095" respawnDelay="30" periodOfDay="night" /> <!-- Corrupted Knight -->
 		<npc id="21547" x="51171" y="-56611" z="-3099" heading="0" respawnDelay="30" periodOfDay="night" /> <!-- Corrupted Knight -->
 		<npc id="21547" x="51271" y="-56433" z="-3099" heading="0" respawnDelay="30" periodOfDay="night" /> <!-- Corrupted Knight -->
-		<npc id="21548" x="47300" y="-58346" z="-2336" heading="29655" respawnDelay="30" periodOfDay="night" /> <!-- Resurrected Knight -->
-		<npc id="21548" x="47822" y="-57091" z="-2822" heading="0" respawnDelay="30" periodOfDay="night" /> <!-- Resurrected Knight -->
-		<npc id="21548" x="48426" y="-57447" z="-2822" heading="0" respawnDelay="30" periodOfDay="night" /> <!-- Resurrected Knight -->
-		<npc id="21548" x="48729" y="-57625" z="-2822" heading="0" respawnDelay="30" periodOfDay="night" /> <!-- Resurrected Knight -->
-		<npc id="21548" x="49051" y="-57981" z="-2728" heading="13613" respawnDelay="30" periodOfDay="night" /> <!-- Resurrected Knight -->
-		<npc id="21548" x="50668" y="-56789" z="-3099" heading="0" respawnDelay="30" periodOfDay="night" /> <!-- Resurrected Knight -->
-		<npc id="21548" x="50750" y="-56306" z="-2635" heading="14089" respawnDelay="30" periodOfDay="night" /> <!-- Resurrected Knight -->
-		<npc id="21548" x="50828" y="-54706" z="-3071" heading="11121" respawnDelay="30" periodOfDay="night" /> <!-- Resurrected Knight -->
-		<npc id="21548" x="51070" y="-56789" z="-3099" heading="0" respawnDelay="30" periodOfDay="night" /> <!-- Resurrected Knight -->
-		<npc id="21548" x="51170" y="-57323" z="-3099" heading="0" respawnDelay="30" periodOfDay="night" /> <!-- Resurrected Knight -->
-		<npc id="21549" x="48085" y="-57568" z="-2578" heading="16933" respawnDelay="30" periodOfDay="night" /> <!-- Corrupted Guard -->
-		<npc id="21549" x="48280" y="-58502" z="-2700" heading="45039" respawnDelay="30" periodOfDay="night" /> <!-- Corrupted Guard -->
-		<npc id="21549" x="48426" y="-56525" z="-2671" heading="32552" respawnDelay="30" periodOfDay="night" /> <!-- Corrupted Guard -->
-		<npc id="21549" x="49330" y="-61979" z="-2885" heading="0" respawnDelay="30" periodOfDay="night" /> <!-- Corrupted Guard -->
-		<npc id="21549" x="49550" y="-56382" z="-2612" heading="45542" respawnDelay="30" periodOfDay="night" /> <!-- Corrupted Guard -->
-		<npc id="21549" x="49971" y="-55948" z="-2643" heading="9114" respawnDelay="30" periodOfDay="night" /> <!-- Corrupted Guard -->
-		<npc id="21549" x="50883" y="-59952" z="-3364" heading="0" respawnDelay="30" periodOfDay="night" /> <!-- Corrupted Guard -->
-		<npc id="21549" x="51150" y="-61008" z="-2746" heading="13444" respawnDelay="30" periodOfDay="night" /> <!-- Corrupted Guard -->
-		<npc id="21549" x="51271" y="-56789" z="-3099" heading="0" respawnDelay="30" periodOfDay="night" /> <!-- Corrupted Guard -->
-		<npc id="21549" x="51647" y="-58538" z="-3020" heading="34169" respawnDelay="30" periodOfDay="night" /> <!-- Corrupted Guard -->
-		<npc id="21549" x="52499" y="-60914" z="-3394" heading="0" respawnDelay="30" periodOfDay="night" /> <!-- Corrupted Guard -->
-		<npc id="21549" x="52608" y="-58211" z="-3106" heading="3125" respawnDelay="30" periodOfDay="night" /> <!-- Corrupted Guard -->
-		<npc id="21549" x="53507" y="-60558" z="-3016" heading="46424" respawnDelay="30" periodOfDay="night" /> <!-- Corrupted Guard -->
-		<npc id="21549" x="54408" y="-59942" z="-3734" heading="0" respawnDelay="30" periodOfDay="night" /> <!-- Corrupted Guard -->
-		<npc id="21549" x="54642" y="-60557" z="-3145" heading="45247" respawnDelay="30" periodOfDay="night" /> <!-- Corrupted Guard -->
 		<npc id="21550" x="49774" y="-59182" z="-2686" heading="42477" respawnDelay="30" periodOfDay="night" /> <!-- Corrupted Guard -->
 		<npc id="21550" x="50036" y="-61089" z="-2885" heading="0" respawnDelay="30" periodOfDay="night" /> <!-- Corrupted Guard -->
 		<npc id="21550" x="50438" y="-58711" z="-2770" heading="29198" respawnDelay="30" periodOfDay="night" /> <!-- Corrupted Guard -->
@@ -131,17 +106,6 @@
 		<npc id="21550" x="54309" y="-58991" z="-3380" heading="64487" respawnDelay="30" periodOfDay="night" /> <!-- Corrupted Guard -->
 		<npc id="21550" x="54658" y="-59387" z="-3339" heading="48082" respawnDelay="30" periodOfDay="night" /> <!-- Corrupted Guard -->
 		<npc id="21550" x="55313" y="-59408" z="-3734" heading="0" respawnDelay="30" periodOfDay="night" /> <!-- Corrupted Guard -->
-		<npc id="21551" x="51035" y="-53627" z="-3195" heading="0" respawnDelay="30" periodOfDay="night" /> <!-- Resurrected Guard -->
-		<npc id="21551" x="51075" y="-52419" z="-2904" heading="22954" respawnDelay="30" periodOfDay="night" /> <!-- Resurrected Guard -->
-		<npc id="21551" x="51083" y="-51510" z="-2968" heading="30518" respawnDelay="30" periodOfDay="night" /> <!-- Resurrected Guard -->
-		<npc id="21551" x="52463" y="-54323" z="-3099" heading="2331" respawnDelay="30" periodOfDay="night" /> <!-- Resurrected Guard -->
-		<npc id="21551" x="53070" y="-53773" z="-3095" heading="47201" respawnDelay="30" periodOfDay="night" /> <!-- Resurrected Guard -->
-		<npc id="21551" x="53294" y="-54403" z="-3009" heading="50176" respawnDelay="30" periodOfDay="night" /> <!-- Resurrected Guard -->
-		<npc id="21551" x="56563" y="-58159" z="-3540" heading="5448" respawnDelay="30" periodOfDay="night" /> <!-- Resurrected Guard -->
-		<npc id="21551" x="56972" y="-57588" z="-3607" heading="0" respawnDelay="30" periodOfDay="night" /> <!-- Resurrected Guard -->
-		<npc id="21551" x="57307" y="-55905" z="-3256" heading="23233" respawnDelay="30" periodOfDay="night" /> <!-- Resurrected Guard -->
-		<npc id="21551" x="58504" y="-54981" z="-3217" heading="22538" respawnDelay="30" periodOfDay="night" /> <!-- Resurrected Guard -->
-		<npc id="21551" x="59463" y="-56381" z="-3050" heading="13029" respawnDelay="30" periodOfDay="night" /> <!-- Resurrected Guard -->
 		<npc id="21552" x="50414" y="-59533" z="-2707" heading="61441" respawnDelay="30" periodOfDay="night" /> <!-- Resurrected Guard -->
 		<npc id="21552" x="51009" y="-61728" z="-2600" heading="47703" respawnDelay="30" periodOfDay="night" /> <!-- Resurrected Guard -->
 		<npc id="21552" x="51622" y="-60391" z="-2857" heading="19094" respawnDelay="30" periodOfDay="night" /> <!-- Resurrected Guard -->
@@ -172,15 +136,6 @@
 		<npc id="21553" x="51849" y="-60206" z="-2883" heading="0" respawnDelay="240" periodOfDay="day" /> <!-- Trampled Man -->
 		<npc id="21553" x="52404" y="-59630" z="-2947" heading="0" respawnDelay="240" periodOfDay="day" /> <!-- Trampled Man -->
 		<npc id="21553" x="53574" y="-59686" z="-3168" heading="0" respawnDelay="240" periodOfDay="day" /> <!-- Trampled Man -->
-		<npc id="21555" x="47509" y="-57360" z="-2408" heading="28536" respawnDelay="30" periodOfDay="night" /> <!-- Slaughter Executioner -->
-		<npc id="21555" x="48628" y="-57803" z="-2822" heading="0" respawnDelay="30" periodOfDay="night" /> <!-- Slaughter Executioner -->
-		<npc id="21555" x="49632" y="-62157" z="-2885" heading="0" respawnDelay="30" periodOfDay="night" /> <!-- Slaughter Executioner -->
-		<npc id="21555" x="50086" y="-56500" z="-2595" heading="12913" respawnDelay="30" periodOfDay="night" /> <!-- Slaughter Executioner -->
-		<npc id="21555" x="50461" y="-55869" z="-2680" heading="55456" respawnDelay="30" periodOfDay="night" /> <!-- Slaughter Executioner -->
-		<npc id="21555" x="50840" y="-56068" z="-2626" heading="44585" respawnDelay="30" periodOfDay="night" /> <!-- Slaughter Executioner -->
-		<npc id="21555" x="50969" y="-60527" z="-2771" heading="3585" respawnDelay="30" periodOfDay="night" /> <!-- Slaughter Executioner -->
-		<npc id="21555" x="53308" y="-57909" z="-3321" heading="17049" respawnDelay="30" periodOfDay="night" /> <!-- Slaughter Executioner -->
-		<npc id="21555" x="54108" y="-61270" z="-3394" heading="0" respawnDelay="30" periodOfDay="night" /> <!-- Slaughter Executioner -->
 		<npc id="21556" x="49717" y="-61364" z="-2581" heading="54698" respawnDelay="30" periodOfDay="night" /> <!-- Slaughter Executioner -->
 		<npc id="21556" x="50289" y="-61741" z="-2523" heading="46168" respawnDelay="30" periodOfDay="night" /> <!-- Slaughter Executioner -->
 		<npc id="21556" x="51002" y="-58912" z="-2835" heading="45596" respawnDelay="30" periodOfDay="night" /> <!-- Slaughter Executioner -->
