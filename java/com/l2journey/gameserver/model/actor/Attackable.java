@@ -86,7 +86,7 @@ import com.l2journey.gameserver.taskmanagers.DecayTaskManager;
 
 public class Attackable extends Npc
 {
-	// Raid
+	// Raide
 	private boolean _isRaid = false;
 	private boolean _isRaidMinion = false;
 	//
@@ -94,32 +94,32 @@ public class Attackable extends Npc
 	private final Map<Creature, AggroInfo> _aggroList = new ConcurrentHashMap<>();
 	private boolean _canReturnToSpawnPoint = true;
 	private boolean _seeThroughSilentMove = false;
-	// Manor
+	// Plantacao
 	private boolean _seeded = false;
 	private Seed _seed = null;
 	private int _seederObjId = 0;
 	private final AtomicReference<ItemHolder> _harvestItem = new AtomicReference<>();
-	// Spoil
+	// Saque
 	private int _spoilerObjectId;
 	private final AtomicReference<Collection<ItemHolder>> _sweepItems = new AtomicReference<>();
-	// Over-hit
+	// Dano excessivo
 	private boolean _overhit;
 	private double _overhitDamage;
 	private Creature _overhitAttacker;
-	// Command channel
+	// Canal de comando
 	private CommandChannel _firstCommandChannelAttacked = null;
 	private CommandChannelTimer _commandChannelTimer = null;
 	private long _commandChannelLastAttack = 0;
-	// Soul crystal
+	// Cristal de alma
 	private boolean _absorbed;
 	private final Map<Integer, AbsorberInfo> _absorbersList = new ConcurrentHashMap<>();
-	// Misc
+	// Diversos
 	private boolean _mustGiveExpSp;
-	protected int _onKillDelay = 2500; // L2J uses 5000
+	protected int _onKillDelay = 2500; // L2J usa 5000
 	
 	/**
-	 * Creates an attackable NPC.
-	 * @param template the attackable NPC template
+	 * Cria um NPC atacavel.
+	 * @param template o template do NPC atacavel
 	 */
 	public Attackable(NpcTemplate template)
 	{
@@ -173,8 +173,8 @@ public class Attackable extends Npc
 	}
 	
 	/**
-	 * Use the skill if minimum checks are pass.
-	 * @param skill the skill
+	 * Usa a habilidade se as verificacoes minimas forem aprovadas.
+	 * @param skill a habilidade
 	 */
 	public void useMagic(Skill skill)
 	{
@@ -211,9 +211,9 @@ public class Attackable extends Npc
 	}
 	
 	/**
-	 * Reduce the current HP of the Attackable.
-	 * @param damage The HP decrease value
-	 * @param attacker The Creature who attacks
+	 * Reduz o HP atual do Atacavel.
+	 * @param damage O valor de reducao de HP
+	 * @param attacker A Criatura que ataca
 	 */
 	@Override
 	public void reduceCurrentHp(double damage, Creature attacker, Skill skill)
@@ -222,10 +222,10 @@ public class Attackable extends Npc
 	}
 	
 	/**
-	 * Reduce the current HP of the Attackable, update its _aggroList and launch the doDie Task if necessary.
-	 * @param damage The HP decrease value
-	 * @param attacker The Creature who attacks
-	 * @param awake The awake state (If True : stop sleeping)
+	 * Reduz o HP atual do Atacavel, atualiza sua _aggroList e lanca a tarefa doDie se necessario.
+	 * @param damage O valor de reducao de HP
+	 * @param attacker A Criatura que ataca
+	 * @param awake O estado de despertar (Se True: para de dormir)
 	 * @param isDOT
 	 * @param skill
 	 */
@@ -234,7 +234,7 @@ public class Attackable extends Npc
 	{
 		if (_isRaid && !isMinion() && (attacker != null) && (attacker.getParty() != null) && attacker.getParty().isInCommandChannel() && attacker.getParty().getCommandChannel().meetRaidWarCondition(this))
 		{
-			if (_firstCommandChannelAttacked == null) // looting right isn't set
+			if (_firstCommandChannelAttacked == null) // direito de saque nao definido
 			{
 				synchronized (this)
 				{
@@ -245,25 +245,25 @@ public class Attackable extends Npc
 						{
 							_commandChannelTimer = new CommandChannelTimer(this);
 							_commandChannelLastAttack = System.currentTimeMillis();
-							ThreadPool.schedule(_commandChannelTimer, 10000); // check for last attack
+							ThreadPool.schedule(_commandChannelTimer, 10000); // verifica ultimo ataque
 							_firstCommandChannelAttacked.broadcastPacket(new CreatureSay(null, ChatType.PARTYROOM_ALL, "", "You have looting rights!")); // TODO: retail msg
 						}
 					}
 				}
 			}
-			else if (attacker.getParty().getCommandChannel().equals(_firstCommandChannelAttacked)) // is in same channel
+			else if (attacker.getParty().getCommandChannel().equals(_firstCommandChannelAttacked)) // esta no mesmo canal
 			{
-				_commandChannelLastAttack = System.currentTimeMillis(); // update last attack time
+				_commandChannelLastAttack = System.currentTimeMillis(); // atualiza tempo do ultimo ataque
 			}
 		}
 		
-		// Add damage and hate to the attacker AggroInfo of the Attackable _aggroList
+		// Adiciona dano e odio ao AggroInfo do atacante na _aggroList do Atacavel
 		if (attacker != null)
 		{
 			addDamage(attacker, (int) damage, skill);
 		}
 		
-		// If this Attackable is a Monster and it has spawned minions, call its minions to battle
+		// Se este Atacavel e um Monstro e gerou lacaios, chama seus lacaios para a batalha
 		if (isMonster())
 		{
 			Monster master = asMonster();
@@ -280,7 +280,7 @@ public class Attackable extends Npc
 			}
 		}
 		
-		// Reduce the current HP of the Attackable and launch the doDie Task if necessary
+		// Reduz o HP atual do Atacavel e lanca a tarefa doDie se necessario
 		super.reduceCurrentHp(damage, attacker, awake, isDOT, skill);
 	}
 	
@@ -295,24 +295,24 @@ public class Attackable extends Npc
 	}
 	
 	/**
-	 * Kill the Attackable (the corpse disappeared after 7 seconds), distribute rewards (EXP, SP, Drops...) and notify Quest Engine.<br>
-	 * Actions:<br>
-	 * Distribute Exp and SP rewards to Player (including Summon owner) that hit the Attackable and to their Party members<br>
-	 * Notify the Quest Engine of the Attackable death if necessary.<br>
-	 * Kill the Npc (the corpse disappeared after 7 seconds)<br>
-	 * Caution: This method DOESN'T GIVE rewards to Pet.
-	 * @param killer The Creature that has killed the Attackable
+	 * Mata o Atacavel (o corpo desaparece apos 7 segundos), distribui recompensas (EXP, SP, Drops...) e notifica o Motor de Quests.<br>
+	 * Acoes:<br>
+	 * Distribui recompensas de Exp e SP ao jogador (incluindo dono do Summon) que atingiu o Atacavel e aos membros do grupo.<br>
+	 * Notifica o Motor de Quests sobre a morte do Atacavel se necessario.<br>
+	 * Mata o Npc (o corpo desaparece apos 7 segundos)<br>
+	 * Cuidado: Este metodo NAO DA recompensas ao Pet.
+	 * @param killer A Criatura que matou o Atacavel
 	 */
 	@Override
 	public boolean doDie(Creature killer)
 	{
-		// Kill the Npc (the corpse disappeared after 7 seconds)
+		// Mata o Npc (o corpo desaparece apos 7 segundos)
 		if (!super.doDie(killer))
 		{
 			return false;
 		}
 		
-		// Delayed notification.
+		// Notificacao atrasada.
 		if (killer != null)
 		{
 			final Player player = killer.asPlayer();
@@ -322,7 +322,7 @@ public class Attackable extends Npc
 			}
 		}
 		
-		// Notify to minions if there are.
+		// Notifica os lacaios se houver.
 		if (isMonster())
 		{
 			final Monster mob = asMonster();
@@ -367,13 +367,13 @@ public class Attackable extends Npc
 	}
 	
 	/**
-	 * Distribute Exp and SP rewards to Player (including Summon owner) that hit the Attackable and to their Party members.<br>
-	 * Actions:<br>
-	 * Get the Player owner of the Servitor (if necessary) and Party in progress.<br>
-	 * Calculate the Experience and SP rewards in function of the level difference.<br>
-	 * Add Exp and SP rewards to Player (including Summon penalty) and to Party members in the known area of the last attacker.<br>
-	 * Caution : This method DOESN'T GIVE rewards to Pet.
-	 * @param lastAttacker The Creature that has killed the Attackable
+	 * Distribui recompensas de Exp e SP ao jogador (incluindo dono do Summon) que atingiu o Atacavel e aos membros do grupo.<br>
+	 * Acoes:<br>
+	 * Obtem o jogador dono do Servitor (se necessario) e o Grupo em andamento.<br>
+	 * Calcula as recompensas de Experiencia e SP em funcao da diferenca de nivel.<br>
+	 * Adiciona recompensas de Exp e SP ao jogador (incluindo penalidade do Summon) e aos membros do grupo na area conhecida do ultimo atacante.<br>
+	 * Cuidado: Este metodo NAO DA recompensas ao Pet.
+	 * @param lastAttacker A Criatura que matou o Atacavel
 	 */
 	@Override
 	protected void calculateRewards(Creature lastAttacker)
@@ -385,15 +385,15 @@ public class Attackable extends Npc
 				return;
 			}
 			
-			// NOTE: Concurrent-safe map is used because while iterating to verify all conditions sometimes an entry must be removed.
+			// NOTA: Mapa thread-safe e usado porque durante a iteracao para verificar todas as condicoes, as vezes uma entrada deve ser removida.
 			final Map<Player, DamageDoneInfo> rewards = new ConcurrentHashMap<>();
 			
 			Player maxDealer = null;
 			long maxDamage = 0;
 			long totalDamage = 0;
 			
-			// While Iterating over This Map Removing Object is Not Allowed
-			// Go through the _aggroList of the Attackable
+			// Enquanto Iterando sobre Este Mapa, Remover Objeto Nao e Permitido
+			// Percorre a _aggroList do Atacavel
 			for (AggroInfo info : _aggroList.values())
 			{
 				if (info == null)
@@ -401,20 +401,20 @@ public class Attackable extends Npc
 					continue;
 				}
 				
-				// Get the Creature corresponding to this attacker
+				// Obtem a Criatura correspondente a este atacante
 				final Player attacker = info.getAttacker().asPlayer();
 				if (attacker == null)
 				{
 					continue;
 				}
 				
-				// Get damages done by this attacker
+				// Obtem danos causados por este atacante
 				final long damage = info.getDamage();
 				
-				// Prevent unwanted behavior
+				// Previne comportamento indesejado
 				if (damage > 1)
 				{
-					// Check if damage dealer isn't too far from this (killed monster)
+					// Verifica se o causador de dano nao esta muito longe deste (monstro morto)
 					if (calculateDistance3D(attacker) > Config.ALT_PARTY_RANGE)
 					{
 						continue;
@@ -422,7 +422,7 @@ public class Attackable extends Npc
 					
 					totalDamage += damage;
 					
-					// Calculate real damages (Summoners should get own damage plus summon's damage)
+					// Calcula danos reais (Invocadores devem receber seu proprio dano mais o dano do invocado)
 					final DamageDoneInfo reward = rewards.computeIfAbsent(attacker, DamageDoneInfo::new);
 					reward.addDamage(damage);
 					
@@ -489,7 +489,7 @@ public class Attackable extends Npc
 			damagingParties.sort(Comparator.comparingLong(c -> c.damage));
 			mostDamageParty = !damagingParties.isEmpty() ? damagingParties.get(0) : null;
 			
-			// Manage Base, Quests and Sweep drops of the Attackable
+			// Gerencia drops de Base, Quests e Varredura do Atacavel
 			if ((mostDamageParty != null) && (mostDamageParty.damage > maxDamage))
 			{
 				Player leader = mostDamageParty.party.getLeader();
@@ -516,29 +516,29 @@ public class Attackable extends Npc
 						continue;
 					}
 					
-					// Attacker to be rewarded
+					// Atacante a ser recompensado
 					final Player attacker = reward.getAttacker();
 					
-					// Total amount of damage done
+					// Quantidade total de dano causado
 					final long damage = reward.getDamage();
 					
-					// Get party
+					// Obtem grupo
 					final Party attackerParty = attacker.getParty();
 					
-					// Penalty applied to the attacker's XP
-					// If this attacker have servitor, get Exp Penalty applied for the servitor.
+					// Penalidade aplicada ao XP do atacante
+					// Se este atacante tiver servitor, obtem a Penalidade de Exp aplicada ao servitor.
 					final float penalty = attacker.hasServitor() ? attacker.getSummon().asServitor().getExpMultiplier() : 1;
 					
-					// If there's NO party in progress
+					// Se NAO ha grupo em andamento
 					if (attackerParty == null)
 					{
-						// Calculate Exp and SP rewards
+						// Calcula recompensas de Exp e SP
 						if (isInSurroundingRegion(attacker))
 						{
-							// Calculate the difference of level between this attacker (player or servitor owner) and the Attackable
-							// mob = 24, atk = 10, diff = -14 (full xp)
-							// mob = 24, atk = 28, diff = 4 (some xp)
-							// mob = 24, atk = 50, diff = 26 (no xp)
+							// Calcula a diferenca de nivel entre este atacante (jogador ou dono do servitor) e o Atacavel
+							// mob = 24, atk = 10, diff = -14 (xp completo)
+							// mob = 24, atk = 28, diff = 4 (algum xp)
+							// mob = 24, atk = 50, diff = 26 (sem xp)
 							final double[] expSp = calculateExpAndSp(attacker.getLevel(), damage, totalDamage);
 							double exp = expSp[0];
 							double sp = expSp[1];
@@ -551,7 +551,7 @@ public class Attackable extends Npc
 							
 							exp *= penalty;
 							
-							// Check for an over-hit enabled strike
+							// Verifica se houve um golpe com dano excessivo habilitado
 							final Creature overhitAttacker = _overhitAttacker;
 							if (_overhit && (overhitAttacker != null))
 							{
@@ -563,13 +563,13 @@ public class Attackable extends Npc
 								}
 							}
 							
-							// Distribute the Exp and SP between the Player and its Summon
+							// Distribui o Exp e SP entre o Jogador e seu Summon
 							if (!attacker.isDead())
 							{
 								long addExp = Math.round(attacker.calcStat(Stat.EXPSP_RATE, exp, null, null));
 								int addSp = (int) attacker.calcStat(Stat.EXPSP_RATE, sp, null, null);
 								
-								// Premium rates
+								// Taxas premium
 								if (attacker.hasPremiumStatus())
 								{
 									addExp *= Config.PREMIUM_RATE_XP;
@@ -587,14 +587,14 @@ public class Attackable extends Npc
 					}
 					else
 					{
-						// share with party members
+						// compartilhar com membros do grupo
 						long partyDmg = 0;
 						double partyMul = 1;
 						int partyLvl = 0;
 						
-						// Get all Creature that can be rewarded in the party
+						// Obtem todas as Criaturas que podem ser recompensadas no grupo
 						final List<Player> rewardedMembers = new ArrayList<>();
-						// Go through all Player in the party
+						// Percorre todos os jogadores no grupo
 						final List<Player> groupMembers = attackerParty.isInCommandChannel() ? attackerParty.getCommandChannel().getMembers() : attackerParty.getMembers();
 						for (Player partyPlayer : groupMembers)
 						{
@@ -603,10 +603,10 @@ public class Attackable extends Npc
 								continue;
 							}
 							
-							// Get the RewardInfo of this Player from Attackable rewards
+							// Obtem o RewardInfo deste jogador das recompensas do Atacavel
 							final DamageDoneInfo reward2 = rewards.get(partyPlayer);
 							
-							// If the Player is in the Attackable rewards add its damages to party damages
+							// Se o jogador esta nas recompensas do Atacavel adiciona seus danos aos danos do grupo
 							if (reward2 != null)
 							{
 								if (calculateDistance3D(partyPlayer) < Config.ALT_PARTY_RANGE)
@@ -627,7 +627,7 @@ public class Attackable extends Npc
 									}
 								}
 								
-								rewards.remove(partyPlayer); // Remove the Player from the Attackable rewards
+								rewards.remove(partyPlayer); // Remove o jogador das recompensas do Atacavel
 							}
 							else if (calculateDistance3D(partyPlayer) < Config.ALT_PARTY_RANGE)
 							{
@@ -646,13 +646,13 @@ public class Attackable extends Npc
 							}
 						}
 						
-						// If the party didn't killed this Attackable alone
+						// Se o grupo nao matou este Atacavel sozinho
 						if (partyDmg < totalDamage)
 						{
 							partyMul = ((double) partyDmg / totalDamage);
 						}
 						
-						// Calculate Exp and SP rewards
+						// Calcula recompensas de Exp e SP
 						final double[] expSp = calculateExpAndSp(partyLvl, partyDmg, totalDamage);
 						double exp = expSp[0];
 						double sp = expSp[1];
@@ -666,8 +666,8 @@ public class Attackable extends Npc
 						exp *= partyMul;
 						sp *= partyMul;
 						
-						// Check for an over-hit enabled strike
-						// (When in party, the over-hit exp bonus is given to the whole party and splitted proportionally through the party members)
+						// Verifica se houve um golpe com dano excessivo habilitado
+						// (Quando em grupo, o bonus de exp por dano excessivo e dado ao grupo inteiro e dividido proporcionalmente entre os membros)
 						final Creature overhitAttacker = _overhitAttacker;
 						if (_overhit && (overhitAttacker != null))
 						{
@@ -679,7 +679,7 @@ public class Attackable extends Npc
 							}
 						}
 						
-						// Distribute Experience and SP rewards to Player Party members in the known area of the last attacker
+						// Distribui recompensas de Experiencia e SP aos membros do grupo do jogador na area conhecida do ultimo atacante
 						if (partyDmg > 0)
 						{
 							attackerParty.distributeXpAndSp(exp, sp, rewardedMembers, partyLvl, partyDmg, this);
@@ -727,9 +727,9 @@ public class Attackable extends Npc
 	}
 	
 	/**
-	 * Add damage and hate to the attacker AggroInfo of the Attackable _aggroList.
-	 * @param attacker The Creature that gave damages to this Attackable
-	 * @param damage The number of damages given by the attacker Creature
+	 * Adiciona dano e odio ao AggroInfo do atacante na _aggroList do Atacavel.
+	 * @param attacker A Criatura que causou danos a este Atacavel
+	 * @param damage O numero de danos causados pela Criatura atacante
 	 * @param skill
 	 */
 	public void addDamage(Creature attacker, int damage, Skill skill)
@@ -739,12 +739,12 @@ public class Attackable extends Npc
 			return;
 		}
 		
-		// Notify the Attackable AI with ATTACKED
+		// Notifica a IA do Atacavel com ATTACKED
 		if (!isDead())
 		{
 			try
 			{
-				// If monster is on walk - stop it
+				// Se o monstro esta andando - para-o
 				if (isWalker() && !isCoreAIDisabled() && WalkingManager.getInstance().isOnWalk(this))
 				{
 					WalkingManager.getInstance().stopMoving(this, false, true);
@@ -752,7 +752,7 @@ public class Attackable extends Npc
 				
 				getAI().notifyAction(Action.ATTACKED, attacker);
 				
-				// Calculate the amount of hate this attackable receives from this attack.
+				// Calcula a quantidade de odio que este atacavel recebe deste ataque.
 				final long hateValue = ((long) damage * 100) / (getLevel() + 7);
 				addDamageHate(attacker, damage, (int) hateValue);
 				
@@ -770,10 +770,10 @@ public class Attackable extends Npc
 	}
 	
 	/**
-	 * Adds damage and hate to the attacker aggression list for this character.
-	 * @param attacker The Creature that gave damages to this Attackable
-	 * @param damage The number of damages given by the attacker Creature
-	 * @param aggroValue The hate (=damage) given by the attacker Creature
+	 * Adiciona dano e odio a lista de agressao do atacante para este personagem.
+	 * @param attacker A Criatura que causou danos a este Atacavel
+	 * @param damage O numero de danos causados pela Criatura atacante
+	 * @param aggroValue O odio (=dano) causado pela Criatura atacante
 	 */
 	public void addDamageHate(Creature attacker, long damage, long aggroValue)
 	{
@@ -782,19 +782,19 @@ public class Attackable extends Npc
 			return;
 		}
 		
-		// Check if fake players should aggro each other.
+		// Verifica se jogadores falsos devem agredir uns aos outros.
 		if (isFakePlayer() && !Config.FAKE_PLAYER_AGGRO_FPC && attacker.isFakePlayer())
 		{
 			return;
 		}
 		
-		// Get the AggroInfo of the attacker Creature from the _aggroList of the Attackable
+		// Obtem o AggroInfo da Criatura atacante da _aggroList do Atacavel
 		final AggroInfo ai = _aggroList.computeIfAbsent(attacker, AggroInfo::new);
 		ai.addDamage(damage);
 		
-		// Traps does not cause aggro
-		// making this hack because not possible to determine if damage made by trap
-		// so just check for triggered trap here
+		// Armadilhas nao causam agressao
+		// fazendo esse hack porque nao e possivel determinar se o dano foi feito por armadilha
+		// entao apenas verifica por armadilha ativada aqui
 		long aggro = aggroValue;
 		final Player targetPlayer = attacker.asPlayer();
 		if ((targetPlayer == null) || (targetPlayer.getTrap() == null) || !targetPlayer.getTrap().isTriggered())
@@ -806,13 +806,13 @@ public class Attackable extends Npc
 		{
 			addDamageHate(attacker, 0, 1);
 			
-			// Set the intention to the Attackable to ACTIVE
+			// Define a intencao do Atacavel para ACTIVE
 			if (getAI().getIntention() == Intention.IDLE)
 			{
 				getAI().setIntention(Intention.ACTIVE);
 			}
 			
-			// Notify to scripts
+			// Notifica os scripts
 			if (EventDispatcher.getInstance().hasListener(EventType.ON_ATTACKABLE_AGGRO_RANGE_ENTER, this))
 			{
 				EventDispatcher.getInstance().notifyEventAsync(new OnAttackableAggroRangeEnter(this, targetPlayer, attacker.isSummon()), this);
@@ -824,7 +824,7 @@ public class Attackable extends Npc
 			ai.addHate(1);
 		}
 		
-		// Set the intention to the Attackable to ACTIVE
+		// Define a intencao do Atacavel para ACTIVE
 		if ((aggro != 0) && (getAI().getIntention() == Intention.IDLE))
 		{
 			getAI().setIntention(Intention.ACTIVE);
@@ -835,17 +835,17 @@ public class Attackable extends Npc
 	{
 		if ((getAI() instanceof SiegeGuardAI) || (getAI() instanceof FortSiegeGuardAI))
 		{
-			// TODO: this just prevents error until siege guards are handled properly
+			// TODO: isso apenas previne erro ate que os guardas de cerco sejam tratados corretamente
 			stopHating(target);
 			setTarget(null);
 			getAI().setIntention(Intention.IDLE);
 			return;
 		}
 		
-		if (target == null) // whole aggrolist
+		if (target == null) // lista de agressao inteira
 		{
 			final Creature mostHated = getMostHated();
-			if (mostHated == null) // makes target passive for a moment more
+			if (mostHated == null) // torna o alvo passivo por mais um momento
 			{
 				((AttackableAI) getAI()).setGlobalAggro(-25);
 				return;
@@ -890,7 +890,7 @@ public class Attackable extends Npc
 	}
 	
 	/**
-	 * Clears _aggroList hate of the Creature without removing from the list.
+	 * Limpa o odio da _aggroList da Criatura sem remover da lista.
 	 * @param target
 	 */
 	public void stopHating(Creature target)
@@ -908,7 +908,7 @@ public class Attackable extends Npc
 	}
 	
 	/**
-	 * @return the most hated Creature of the Attackable _aggroList.
+	 * @return a Criatura mais odiada da _aggroList do Atacavel.
 	 */
 	public Creature getMostHated()
 	{
@@ -920,8 +920,8 @@ public class Attackable extends Npc
 		Creature mostHated = null;
 		long maxHate = 0;
 		
-		// While Interacting over This Map Removing Object is Not Allowed
-		// Go through the aggroList of the Attackable
+		// Enquanto Interagindo sobre Este Mapa, Remover Objeto Nao e Permitido
+		// Percorre a aggroList do Atacavel
 		for (AggroInfo ai : _aggroList.values())
 		{
 			if (ai == null)
@@ -940,7 +940,7 @@ public class Attackable extends Npc
 	}
 	
 	/**
-	 * @return the 2 most hated Creature of the Attackable _aggroList.
+	 * @return as 2 Criaturas mais odiadas da _aggroList do Atacavel.
 	 */
 	public List<Creature> get2MostHated()
 	{
@@ -954,8 +954,8 @@ public class Attackable extends Npc
 		long maxHate = 0;
 		final List<Creature> result = new ArrayList<>();
 		
-		// While iterating over this map removing objects is not allowed
-		// Go through the aggroList of the Attackable
+		// Enquanto iterando sobre este mapa, remover objetos nao e permitido
+		// Percorre a aggroList do Atacavel
 		for (AggroInfo ai : _aggroList.values())
 		{
 			if (ai == null)
@@ -1008,8 +1008,8 @@ public class Attackable extends Npc
 	}
 	
 	/**
-	 * @param target The Creature whose hate level must be returned
-	 * @return the hate level of the Attackable against this Creature contained in _aggroList.
+	 * @param target A Criatura cujo nivel de odio deve ser retornado
+	 * @return o nivel de odio do Atacavel contra esta Criatura contido na _aggroList.
 	 */
 	public long getHating(Creature target)
 	{
@@ -1029,7 +1029,7 @@ public class Attackable extends Npc
 			final Player act = ai.getAttacker().asPlayer();
 			if (act.isInvisible() || act.isInvul() || act.isSpawnProtected())
 			{
-				// Remove Object Should Use This Method and Can be Blocked While Interacting
+				// Remover Objeto Deveria Usar Este Metodo e Pode Ser Bloqueado Enquanto Interage
 				_aggroList.remove(target);
 				return 0;
 			}
@@ -1056,19 +1056,19 @@ public class Attackable extends Npc
 	}
 	
 	/**
-	 * Manage Base, Quests and Special Events drops of Attackable (called by calculateRewards).<br>
-	 * Concept:<br>
-	 * During a Special Event all Attackable can drop extra Items.<br>
-	 * Those extra Items are defined in the table allNpcDateDrops of the EventDroplist.<br>
-	 * Each Special Event has a start and end date to stop to drop extra Items automatically.<br>
-	 * Actions:<br>
-	 * Manage drop of Special Events created by GM for a defined period.<br>
-	 * Get all possible drops of this Attackable from NpcTemplate and add it Quest drops.<br>
-	 * For each possible drops (base + quests), calculate which one must be dropped (random).<br>
-	 * Get each Item quantity dropped (random).<br>
-	 * Create this or these Item corresponding to each Item Identifier dropped.<br>
-	 * If the autoLoot mode is actif and if the Creature that has killed the Attackable is a Player, Give the item(s) to the Player that has killed the Attackable.<br>
-	 * If the autoLoot mode isn't actif or if the Creature that has killed the Attackable is not a Player, add this or these item(s) in the world as a visible object at the position where mob was last.
+	 * Gerencia drops de Base, Quests e Eventos Especiais do Atacavel (chamado por calculateRewards).<br>
+	 * Conceito:<br>
+	 * Durante um Evento Especial todos os Atacaveis podem dropar Itens extras.<br>
+	 * Esses Itens extras sao definidos na tabela allNpcDateDrops do EventDroplist.<br>
+	 * Cada Evento Especial tem uma data de inicio e fim para parar de dropar Itens extras automaticamente.<br>
+	 * Acoes:<br>
+	 * Gerencia drop de Eventos Especiais criados pelo GM por um periodo definido.<br>
+	 * Obtem todos os drops possiveis deste Atacavel do NpcTemplate e adiciona drops de Quest.<br>
+	 * Para cada drop possivel (base + quests), calcula qual deve ser dropado (aleatorio).<br>
+	 * Obtem a quantidade de cada Item dropado (aleatorio).<br>
+	 * Cria este ou estes Itens correspondentes a cada Identificador de Item dropado.<br>
+	 * Se o modo autoLoot estiver ativo e se a Criatura que matou o Atacavel for um jogador, da o(s) item(ns) ao jogador que matou o Atacavel.<br>
+	 * Se o modo autoLoot nao estiver ativo ou se a Criatura que matou o Atacavel nao for um jogador, adiciona este ou estes item(ns) no mundo como objeto visivel na posicao onde o mob estava por ultimo.
 	 * @param npcTemplate
 	 * @param mainDamageDealer
 	 */
@@ -1081,10 +1081,10 @@ public class Attackable extends Npc
 		
 		final Player player = mainDamageDealer.asPlayer();
 		
-		// Don't drop anything if the last attacker or owner isn't Player
+		// Nao dropa nada se o ultimo atacante ou dono nao for jogador
 		if (player == null)
 		{
-			// unless its a fake player and they can drop items
+			// a menos que seja um jogador falso e eles possam dropar itens
 			if (mainDamageDealer.isFakePlayer() && Config.FAKE_PLAYER_CAN_DROP_ITEMS)
 			{
 				final Collection<ItemHolder> deathItems = npcTemplate.calculateDrops(DropType.DROP, this, mainDamageDealer);
@@ -1093,10 +1093,10 @@ public class Attackable extends Npc
 					for (ItemHolder drop : deathItems)
 					{
 						final ItemTemplate item = ItemData.getInstance().getTemplate(drop.getId());
-						// Check if the autoLoot mode is active
+						// Verifica se o modo autoLoot esta ativo
 						if (Config.AUTO_LOOT_ITEM_IDS.contains(item.getId()) || isFlying() || (!item.hasExImmediateEffect() && ((!_isRaid && Config.AUTO_LOOT) || (_isRaid && Config.AUTO_LOOT_RAIDS))))
 						{
-							// do nothing
+							// nao faz nada
 						}
 						else if (Config.AUTO_LOOT_HERBS && item.hasExImmediateEffect())
 						{
@@ -1104,11 +1104,11 @@ public class Attackable extends Npc
 							{
 								doSimultaneousCast(skillHolder.getSkill());
 							}
-							mainDamageDealer.broadcastInfo(); // ? check if this is necessary
+							mainDamageDealer.broadcastInfo(); // ? verificar se isso e necessario
 						}
 						else
 						{
-							final Item droppedItem = dropItem(mainDamageDealer, drop); // drop the item on the ground
+							final Item droppedItem = dropItem(mainDamageDealer, drop); // dropa o item no chao
 							if (Config.FAKE_PLAYER_CAN_PICKUP)
 							{
 								mainDamageDealer.getFakePlayerDrops().add(droppedItem);
@@ -1135,17 +1135,17 @@ public class Attackable extends Npc
 			for (ItemHolder drop : deathItems)
 			{
 				final ItemTemplate item = ItemData.getInstance().getTemplate(drop.getId());
-				// Check if the autoLoot mode is active
+				// Verifica se o modo autoLoot esta ativo
 				if (Config.AUTO_LOOT_ITEM_IDS.contains(item.getId()) || isFlying() || (!item.hasExImmediateEffect() && ((!_isRaid && Config.AUTO_LOOT) || (_isRaid && Config.AUTO_LOOT_RAIDS))) || (item.hasExImmediateEffect() && Config.AUTO_LOOT_HERBS))
 				{
-					player.doAutoLoot(this, drop); // Give the item(s) to the Player that has killed the Attackable
+					player.doAutoLoot(this, drop); // Da o(s) item(ns) ao jogador que matou o Atacavel
 				}
 				else
 				{
-					dropItem(player, drop); // drop the item on the ground
+					dropItem(player, drop); // dropa o item no chao
 				}
 				
-				// Broadcast message if RaidBoss was defeated
+				// Transmite mensagem se o RaidBoss foi derrotado
 				if (_isRaid && !_isRaidMinion && (drop.getCount() > 0))
 				{
 					final SystemMessage sm = new SystemMessage(SystemMessageId.C1_DIED_AND_DROPPED_S3_S2);
@@ -1161,7 +1161,7 @@ public class Attackable extends Npc
 	}
 	
 	/**
-	 * @return the active weapon of this Attackable (= null).
+	 * @return a arma ativa deste Atacavel (= nulo).
 	 */
 	public Item getActiveWeapon()
 	{
@@ -1169,9 +1169,9 @@ public class Attackable extends Npc
 	}
 	
 	/**
-	 * Verifies if the creature is in the aggro list.
-	 * @param creature the creature
-	 * @return {@code true} if the creature is in the aggro list, {@code false} otherwise
+	 * Verifica se a criatura esta na lista de agressao.
+	 * @param creature a criatura
+	 * @return {@code true} se a criatura estiver na lista de agressao, {@code false} caso contrario
 	 */
 	public boolean isInAggroList(Creature creature)
 	{
@@ -1179,20 +1179,20 @@ public class Attackable extends Npc
 	}
 	
 	/**
-	 * Clear the _aggroList of the Attackable.
+	 * Limpa a _aggroList do Atacavel.
 	 */
 	public void clearAggroList()
 	{
 		_aggroList.clear();
 		
-		// clear overhit values
+		// limpa valores de dano excessivo
 		_overhit = false;
 		_overhitDamage = 0;
 		_overhitAttacker = null;
 	}
 	
 	/**
-	 * @return {@code true} if there is a loot to sweep, {@code false} otherwise.
+	 * @return {@code true} se houver saque para varrer, {@code false} caso contrario.
 	 */
 	@Override
 	public boolean isSweepActive()
@@ -1201,7 +1201,7 @@ public class Attackable extends Npc
 	}
 	
 	/**
-	 * @return a copy of dummy items for the spoil loot.
+	 * @return uma copia de itens ficticios para o saque de varredura.
 	 */
 	public List<ItemTemplate> getSpoilLootItems()
 	{
@@ -1219,7 +1219,7 @@ public class Attackable extends Npc
 	}
 	
 	/**
-	 * @return table containing all Item that can be spoiled.
+	 * @return tabela contendo todos os Itens que podem ser saqueados.
 	 */
 	public Collection<ItemHolder> takeSweep()
 	{
@@ -1227,7 +1227,7 @@ public class Attackable extends Npc
 	}
 	
 	/**
-	 * @return table containing all Item that can be harvested.
+	 * @return tabela contendo todos os Itens que podem ser colhidos.
 	 */
 	public ItemHolder takeHarvest()
 	{
@@ -1235,11 +1235,11 @@ public class Attackable extends Npc
 	}
 	
 	/**
-	 * Checks if the corpse is too old.
-	 * @param attacker the player to validate
-	 * @param remainingTime the time to check
-	 * @param sendMessage if {@code true} will send a message of corpse too old
-	 * @return {@code true} if the corpse is too old
+	 * Verifica se o corpo esta muito velho.
+	 * @param attacker o jogador a validar
+	 * @param remainingTime o tempo a verificar
+	 * @param sendMessage se {@code true} enviara uma mensagem de corpo muito velho
+	 * @return {@code true} se o corpo estiver muito velho
 	 */
 	public boolean isOldCorpse(Player attacker, int remainingTime, boolean sendMessage)
 	{
@@ -1256,9 +1256,9 @@ public class Attackable extends Npc
 	}
 	
 	/**
-	 * @param sweeper the player to validate.
-	 * @param sendMessage sendMessage if {@code true} will send a message of sweep not allowed.
-	 * @return {@code true} if is the spoiler or is in the spoiler party.
+	 * @param sweeper o jogador a validar.
+	 * @param sendMessage sendMessage se {@code true} enviara uma mensagem de varredura nao permitida.
+	 * @return {@code true} se for o saqueador ou estiver no grupo do saqueador.
 	 */
 	public boolean checkSpoilOwner(Player sweeper, boolean sendMessage)
 	{
@@ -1275,8 +1275,8 @@ public class Attackable extends Npc
 	}
 	
 	/**
-	 * Set the over-hit flag on the Attackable.
-	 * @param status The status of the over-hit flag
+	 * Define a flag de dano excessivo no Atacavel.
+	 * @param status O status da flag de dano excessivo
 	 */
 	public void overhitEnabled(boolean status)
 	{
@@ -1284,19 +1284,19 @@ public class Attackable extends Npc
 	}
 	
 	/**
-	 * Set the over-hit values like the attacker who did the strike and the amount of damage done by the skill.
-	 * @param attacker The Creature who hit on the Attackable using the over-hit enabled skill
-	 * @param damage The amount of damage done by the over-hit enabled skill on the Attackable
+	 * Define os valores de dano excessivo como o atacante que desferiu o golpe e a quantidade de dano causada pela habilidade.
+	 * @param attacker A Criatura que atingiu o Atacavel usando a habilidade de dano excessivo habilitada
+	 * @param damage A quantidade de dano causada pela habilidade de dano excessivo habilitada no Atacavel
 	 */
 	public void setOverhitValues(Creature attacker, double damage)
 	{
-		// Calculate the over-hit damage
-		// Ex: mob had 10 HP left, over-hit skill did 50 damage total, over-hit damage is 40
+		// Calcula o dano excessivo
+		// Ex: mob tinha 10 HP restantes, habilidade de dano excessivo causou 50 de dano total, dano excessivo e 40
 		final double overhitDmg = -(getCurrentHp() - damage);
 		if (overhitDmg < 0)
 		{
-			// we didn't killed the mob with the over-hit strike. (it wasn't really an over-hit strike)
-			// let's just clear all the over-hit related values
+			// nao matamos o mob com o golpe de dano excessivo. (nao foi realmente um golpe de dano excessivo)
+			// vamos apenas limpar todos os valores relacionados ao dano excessivo
 			overhitEnabled(false);
 			_overhitDamage = 0;
 			_overhitAttacker = null;
@@ -1309,8 +1309,8 @@ public class Attackable extends Npc
 	}
 	
 	/**
-	 * Return the Creature who hit on the Attackable using an over-hit enabled skill.
-	 * @return Creature attacker
+	 * Retorna a Criatura que atingiu o Atacavel usando uma habilidade de dano excessivo habilitada.
+	 * @return Criatura atacante
 	 */
 	public Creature getOverhitAttacker()
 	{
@@ -1318,8 +1318,8 @@ public class Attackable extends Npc
 	}
 	
 	/**
-	 * Return the amount of damage done on the Attackable using an over-hit enabled skill.
-	 * @return double damage
+	 * Retorna a quantidade de dano causada no Atacavel usando uma habilidade de dano excessivo habilitada.
+	 * @return double dano
 	 */
 	public double getOverhitDamage()
 	{
@@ -1327,7 +1327,7 @@ public class Attackable extends Npc
 	}
 	
 	/**
-	 * @return True if the Attackable was hit by an over-hit enabled skill.
+	 * @return True se o Atacavel foi atingido por uma habilidade de dano excessivo habilitada.
 	 */
 	public boolean isOverhit()
 	{
@@ -1335,7 +1335,7 @@ public class Attackable extends Npc
 	}
 	
 	/**
-	 * Activate the absorbed soul condition on the Attackable.
+	 * Ativa a condicao de alma absorvida no Atacavel.
 	 */
 	public void absorbSoul()
 	{
@@ -1343,7 +1343,7 @@ public class Attackable extends Npc
 	}
 	
 	/**
-	 * @return True if the Attackable had his soul absorbed.
+	 * @return True se o Atacavel teve sua alma absorvida.
 	 */
 	public boolean isAbsorbed()
 	{
@@ -1351,15 +1351,15 @@ public class Attackable extends Npc
 	}
 	
 	/**
-	 * Adds an attacker that successfully absorbed the soul of this Attackable into the _absorbersList.
+	 * Adiciona um atacante que absorveu com sucesso a alma deste Atacavel na _absorbersList.
 	 * @param attacker
 	 */
 	public void addAbsorber(Player attacker)
 	{
-		// If we have no _absorbersList initiated, do it
+		// Se nao temos _absorbersList iniciada, faca-o
 		final AbsorberInfo ai = _absorbersList.get(attacker.getObjectId());
 		
-		// If the Creature attacker isn't already in the _absorbersList of this Attackable, add it
+		// Se a Criatura atacante ainda nao esta na _absorbersList deste Atacavel, adicione-a
 		if (ai == null)
 		{
 			_absorbersList.put(attacker.getObjectId(), new AbsorberInfo(attacker.getObjectId(), getCurrentHp()));
@@ -1369,7 +1369,7 @@ public class Attackable extends Npc
 			ai.setAbsorbedHp(getCurrentHp());
 		}
 		
-		// Set this Attackable as absorbed
+		// Define este Atacavel como absorvido
 		absorbSoul();
 	}
 	
@@ -1385,10 +1385,10 @@ public class Attackable extends Npc
 	}
 	
 	/**
-	 * Calculate the Experience and SP to distribute to attacker (Player, Servitor or Party) of the Attackable.
-	 * @param charLevel The killer level
-	 * @param damage The damages given by the attacker (Player, Servitor or Party)
-	 * @param totalDamage The total damage done
+	 * Calcula a Experiencia e SP a distribuir ao atacante (Jogador, Servitor ou Grupo) do Atacavel.
+	 * @param charLevel O nivel do matador
+	 * @param damage Os danos causados pelo atacante (Jogador, Servitor ou Grupo)
+	 * @param totalDamage O dano total causado
 	 * @return
 	 */
 	private double[] calculateExpAndSp(int charLevel, long damage, long totalDamage)
@@ -1397,7 +1397,7 @@ public class Attackable extends Npc
 		double xp = 0;
 		double sp = 0;
 		
-		if ((levelDiff < Config.MONSTER_EXP_MAX_LEVEL_DIFFERENCE) && (levelDiff > -Config.MONSTER_EXP_MAX_LEVEL_DIFFERENCE))
+		if (levelDiff < Config.MONSTER_EXP_MAX_LEVEL_DIFFERENCE)
 		{
 			xp = Math.max(0, (getExpReward(charLevel) * damage) / totalDamage);
 			sp = Math.max(0, (getSpReward(charLevel) * damage) / totalDamage);
@@ -1468,22 +1468,22 @@ public class Attackable extends Npc
 	
 	public double calculateOverhitExp(double exp)
 	{
-		// Get the percentage based on the total of extra (over-hit) damage done relative to the total (maximum) ammount of HP on the Attackable
+		// Obtem a porcentagem baseada no total de dano extra (dano excessivo) causado em relacao a quantidade total (maxima) de HP do Atacavel
 		double overhitPercentage = ((_overhitDamage * 100) / getMaxHp());
 		
-		// Over-hit damage percentages are limited to 25% max
+		// Porcentagens de dano excessivo sao limitadas a 25% no maximo
 		if (overhitPercentage > 25)
 		{
 			overhitPercentage = 25;
 		}
 		
-		// Get the overhit exp bonus according to the above over-hit damage percentage
-		// (1/1 basis - 13% of over-hit damage, 13% of extra exp is given, and so on...)
+		// Obtem o bonus de exp por dano excessivo de acordo com a porcentagem de dano excessivo acima
+		// (base 1/1 - 13% de dano excessivo, 13% de exp extra e dado, e assim por diante...)
 		return (overhitPercentage / 100) * exp;
 	}
 	
 	/**
-	 * Return True.
+	 * Retorna True.
 	 */
 	@Override
 	public boolean canBeAttacked()
@@ -1496,33 +1496,33 @@ public class Attackable extends Npc
 	{
 		super.onSpawn();
 		
-		// Clear mob spoil, seed
+		// Limpa saque e semente do mob
 		setSpoilerObjectId(0);
 		
-		// Clear all aggro char from list
+		// Limpa toda lista de agressao
 		clearAggroList();
 		
-		// Clear Harvester reward
+		// Limpa recompensa do Colhedor
 		_harvestItem.set(null);
 		
-		// fake players
+		// jogadores falsos
 		if (isFakePlayer())
 		{
-			getFakePlayerDrops().clear(); // Clear existing fake player drops
-			setKarma(0); // reset karma
-			setScriptValue(0); // remove pvp flag
-			setRunning(); // don't walk
+			getFakePlayerDrops().clear(); // Limpa drops existentes de jogador falso
+			setKarma(0); // reseta karma
+			setScriptValue(0); // remove flag pvp
+			setRunning(); // nao andar
 		}
 		else
 		{
 			setWalking();
 		}
 		
-		// Clear mod Seeded stat
+		// Limpa estado de Semeado modificado
 		_seeded = false;
 		_seed = null;
 		_seederObjId = 0;
-		// Clear overhit value
+		// Limpa valor de dano excessivo
 		overhitEnabled(false);
 		
 		_sweepItems.set(null);
@@ -1530,13 +1530,13 @@ public class Attackable extends Npc
 		
 		setWalking();
 		
-		// Check the region where this mob is, do not activate the AI if region is inactive.
+		// Verifica a regiao onde este mob esta, nao ativa a IA se a regiao estiver inativa.
 		if (hasAI())
 		{
-			// Set the intention of the Attackable to ACTIVE
+			// Define a intencao do Atacavel para ACTIVE
 			getAI().setIntention(Intention.ACTIVE);
 			
-			// Check the region where this mob is, do not activate the AI if region is inactive.
+			// Verifica a regiao onde este mob esta, nao ativa a IA se a regiao estiver inativa.
 			if (!isInActiveRegion())
 			{
 				getAI().stopAITask();
@@ -1545,8 +1545,8 @@ public class Attackable extends Npc
 	}
 	
 	/**
-	 * Checks if it is spoiled.
-	 * @return {@code true} if it is spoiled, {@code false} otherwise
+	 * Verifica se esta saqueado.
+	 * @return {@code true} se estiver saqueado, {@code false} caso contrario
 	 */
 	public boolean isSpoiled()
 	{
@@ -1554,8 +1554,8 @@ public class Attackable extends Npc
 	}
 	
 	/**
-	 * Gets the spoiler object ID.
-	 * @return the spoiler object ID if it is spoiled, 0 otherwise
+	 * Obtem o ID do objeto do saqueador.
+	 * @return o ID do objeto do saqueador se estiver saqueado, 0 caso contrario
 	 */
 	public int getSpoilerObjectId()
 	{
@@ -1563,8 +1563,8 @@ public class Attackable extends Npc
 	}
 	
 	/**
-	 * Sets the spoiler object ID.
-	 * @param spoilerObjectId spoilerObjectId the spoiler object ID
+	 * Define o ID do objeto do saqueador.
+	 * @param spoilerObjectId spoilerObjectId o ID do objeto do saqueador
 	 */
 	public void setSpoilerObjectId(int spoilerObjectId)
 	{
@@ -1572,7 +1572,7 @@ public class Attackable extends Npc
 	}
 	
 	/**
-	 * Sets state of the mob to seeded. Parameters needed to be set before.
+	 * Define o estado do mob como semeado. Parametros precisam ser definidos antes.
 	 * @param seeder
 	 */
 	public void setSeeded(Player seeder)
@@ -1631,7 +1631,7 @@ public class Attackable extends Npc
 			}
 		}
 		
-		// hi-level mobs bonus
+		// bonus de mobs de alto nivel
 		final int diff = getLevel() - _seed.getLevel() - 5;
 		if (diff > 0)
 		{
@@ -1642,9 +1642,9 @@ public class Attackable extends Npc
 	}
 	
 	/**
-	 * Sets the seed parameters, but not the seed state
-	 * @param seed - instance {@link Seed} of used seed
-	 * @param seeder - player who sows the seed
+	 * Define os parametros da semente, mas nao o estado de semeado
+	 * @param seed - instancia {@link Seed} da semente usada
+	 * @param seeder - jogador que semeia
 	 */
 	public void setSeeded(Seed seed, Player seeder)
 	{
@@ -1673,7 +1673,7 @@ public class Attackable extends Npc
 	}
 	
 	/**
-	 * Set delay for onKill() call, in ms Default: 5000 ms
+	 * Define atraso para chamada onKill(), em ms Padrao: 5000 ms
 	 * @param delay
 	 */
 	public void setOnKillDelay(int delay)
@@ -1687,9 +1687,9 @@ public class Attackable extends Npc
 	}
 	
 	/**
-	 * Check if the server allows Random Animation.
+	 * Verifica se o servidor permite Animacao Aleatoria.
 	 */
-	// This is located here because Monster and FriendlyMob both extend this class. The other non-pc instances extend either Npc or Monster.
+	// Isso esta localizado aqui porque Monster e FriendlyMob ambos estendem esta classe. As outras instancias nao-pc estendem ou Npc ou Monster.
 	@Override
 	public boolean hasRandomAnimation()
 	{
@@ -1717,7 +1717,7 @@ public class Attackable extends Npc
 	}
 	
 	/**
-	 * @return the _commandChannelLastAttack
+	 * @return o _commandChannelLastAttack
 	 */
 	public long getCommandChannelLastAttack()
 	{
@@ -1725,7 +1725,7 @@ public class Attackable extends Npc
 	}
 	
 	/**
-	 * @param channelLastAttack the _commandChannelLastAttack to set
+	 * @param channelLastAttack o _commandChannelLastAttack a definir
 	 */
 	public void setCommandChannelLastAttack(long channelLastAttack)
 	{
@@ -1743,11 +1743,11 @@ public class Attackable extends Npc
 	}
 	
 	/*
-	 * Return vitality points decrease (if positive) or increase (if negative) based on damage. Maximum for damage = maxHp.
+	 * Retorna diminuicao (se positivo) ou aumento (se negativo) de pontos de vitalidade baseado no dano. Maximo para dano = maxHp.
 	 */
 	public float getVitalityPoints(int level, long damage)
 	{
-		// sanity check
+		// verificacao de sanidade
 		if (damage <= 0)
 		{
 			return 0;
@@ -1760,19 +1760,19 @@ public class Attackable extends Npc
 			return 0;
 		}
 		
-		// negative value - vitality will be consumed
+		// valor negativo - vitalidade sera consumida
 		return -Math.min(damage, getMaxHp()) / divider;
 	}
 	
 	/*
-	 * True if vitality rate for exp and sp should be applied
+	 * True se a taxa de vitalidade para exp e sp deve ser aplicada
 	 */
 	public boolean useVitalityRate()
 	{
 		return !_champion || Config.CHAMPION_ENABLE_VITALITY;
 	}
 	
-	/** Return True if the Creature is RaidBoss or his minion. */
+	/** Retorna True se a Criatura for RaidBoss ou seu lacaio. */
 	@Override
 	public boolean isRaid()
 	{
@@ -1780,7 +1780,7 @@ public class Attackable extends Npc
 	}
 	
 	/**
-	 * Set this Npc as a Raid instance.
+	 * Define este Npc como uma instancia de Raide.
 	 * @param isRaid
 	 */
 	public void setIsRaid(boolean isRaid)
@@ -1789,7 +1789,7 @@ public class Attackable extends Npc
 	}
 	
 	/**
-	 * Set this Npc as a Minion instance.
+	 * Define este Npc como uma instancia de Lacaio.
 	 * @param value
 	 */
 	public void setIsRaidMinion(boolean value)
@@ -1811,7 +1811,7 @@ public class Attackable extends Npc
 	}
 	
 	/**
-	 * @return leader of this minion or null.
+	 * @return lider deste lacaio ou nulo.
 	 */
 	public Attackable getLeader()
 	{
