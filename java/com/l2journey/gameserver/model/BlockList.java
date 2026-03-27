@@ -175,6 +175,11 @@ public class BlockList
 		return _blockList;
 	}
 	
+	public Set<Integer> getBlockedIds()
+	{
+		return java.util.Collections.unmodifiableSet(_blockList);
+	}
+	
 	public static void addToBlockList(Player listOwner, int targetId)
 	{
 		if (listOwner == null)

@@ -131,6 +131,12 @@ public class RequestBypassToServer extends ClientPacket
 			{
 				AdminCommandHandler.getInstance().useAdminCommand(player, _command, true);
 			}
+			else if (_command.startsWith("_friendlist_0_"))
+			{
+				// The L2 client sends "_friendlist_0_" when clicking the Friends tab in the community board,
+				// instead of the bypass "_bbsfriends". Redirect it to the community board handler.
+				CommunityBoardHandler.getInstance().handleParseCommand("_bbsfriends", player);
+			}
 			else if (CommunityBoardHandler.getInstance().isCommunityBoardCommand(_command))
 			{
 				CommunityBoardHandler.getInstance().handleParseCommand(_command, player);

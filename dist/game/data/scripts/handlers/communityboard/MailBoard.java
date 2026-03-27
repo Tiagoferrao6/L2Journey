@@ -29,6 +29,7 @@ public class MailBoard implements IWriteBoardHandler
 {
 	private static final String[] COMMANDS =
 	{
+		"_bbsmail",
 		"_maillist"
 	};
 	
