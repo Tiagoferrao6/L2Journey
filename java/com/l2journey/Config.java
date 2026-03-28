@@ -85,9 +85,9 @@ import com.l2journey.gameserver.network.enums.ChatType;
 import com.l2journey.gameserver.util.FloodProtectorConfig;
 
 /**
- * This class loads all the game server related configurations from files.<br>
- * The files are usually located in config folder in server root folder.<br>
- * Each configuration has a default value (that should reflect retail behavior).
+ * Esta classe carrega todas as configuracoes do servidor de jogo a partir de arquivos.<br>
+ * Os arquivos geralmente estao localizados na pasta config na raiz do servidor.<br>
+ * Cada configuracao possui um valor padrao (que deve refletir o comportamento retail).
  * @author KingHanker, Zoinha
  */
 public class Config
@@ -95,7 +95,7 @@ public class Config
 	private static final Logger LOGGER = Logger.getLogger(Config.class.getName());
 	
 	// --------------------------------------------------
-	// Server Files
+	// Arquivos do Servidor
 	// --------------------------------------------------
 	private static final String SERVER_CONFIG_FILE = "./config/server.ini";
 	private static final String GENERAL_CONFIG_FILE = "./config/general.ini";
@@ -104,7 +104,7 @@ public class Config
 	private static final String CUSTOM_MAIL_MANAGER_CONFIG_FILE = "./config/custommailmanager.ini";
 	
 	// --------------------------------------------------
-	// Admin folder -
+	// Pasta Admin -
 	// --------------------------------------------------
 	private static final String ADMINISTRATOR_CONFIG_FILE = "./config/admin/administrator.ini";
 	private static final String DEVELOPMENT_CONFIG_FILE = "./config/admin/development.ini";
@@ -113,13 +113,13 @@ public class Config
 	private static final String RATES_CONFIG_FILE = "./config/admin/rates.ini";
 	
 	// --------------------------------------------------
-	// IPConfig folder -
+	// Pasta IPConfig -
 	// --------------------------------------------------
 	private static final String HEXID_FILE = "./config/ipconfig/hexid.txt";
 	private static final String IPCONFIG_FILE = "./config/ipconfig/ipconfig.xml";
 	
 	// --------------------------------------------------
-	// Npcs folder -
+	// Pasta Npcs -
 	// --------------------------------------------------
 	private static final String BOSS_ANNOUNCEMENTS_CONFIG_FILE = "./config/npcs/bossannouncements.ini";
 	private static final String CHAMPION_MONSTERS_CONFIG_FILE = "./config/npcs/championmonsters.ini";
@@ -138,7 +138,7 @@ public class Config
 	private static final String TRANSMOG_CONFIG_FILE = "./config/npcs/transmog.ini";
 	
 	// --------------------------------------------------
-	// Player folder -
+	// Pasta Player -
 	// --------------------------------------------------
 	private static final String ALLOWED_PLAYER_RACES_CONFIG_FILE = "./config/player/allowedplayerraces.ini";
 	private static final String AUTO_POTIONS_CONFIG_FILE = "./config/player/autopotions.ini";
@@ -165,7 +165,7 @@ public class Config
 	private static final String WAREHOUSE_SORTING_CONFIG_FILE = "./config/player/warehousesorting.ini";
 	
 	// --------------------------------------------------
-	// Security folder -
+	// Pasta Security -
 	// --------------------------------------------------
 	private static final String CAPTCHA_CONFIG_FILE = "./config/security/captcha.ini";
 	private static final String CHAT_FILTER_FILE = "./config/security/chatfilter.txt";
@@ -175,7 +175,7 @@ public class Config
 	private static final String WALKER_BOT_PROTECTION_CONFIG_FILE = "./config/security/walkerbotprotection.ini";
 	
 	// --------------------------------------------------
-	// Siege folder -
+	// Pasta Siege -
 	// --------------------------------------------------
 	private static final String CONQUERABLE_HALL_SIEGE_CONFIG_FILE = "./config/siege/conquerablehallsiege.ini";
 	public static final String FORTSIEGE_CONFIG_FILE = "./config/siege/fortsiege.ini";
@@ -184,19 +184,19 @@ public class Config
 	public static final String TW_CONFIG_FILE = "./config/siege/territorywar.ini";
 	
 	// --------------------------------------------------
-	// Login Files
+	// Arquivos de Login
 	// --------------------------------------------------
 	private static final String LOGIN_CONFIG_FILE = "./config/loginserver.ini";
 	
 	public static final String EOL = System.getProperty("line.separator");
 	
 	// --------------------------------------------------
-	// Variable Definitions
+	// Definicoes de Variaveis
 	// --------------------------------------------------
 	public static ServerMode SERVER_MODE = ServerMode.NONE;
 	
 	// --------------------------------------------------
-	// Server Config
+	// Configuracao do Servidor
 	// --------------------------------------------------
 	public static String GAMESERVER_HOSTNAME;
 	public static int PORT_GAME;
@@ -241,7 +241,7 @@ public class Config
 	public static List<String> GAME_SERVER_HOSTS;
 	
 	// --------------------------------------------------
-	// Community Board
+	// Painel da Comunidade
 	// --------------------------------------------------
 	public static boolean COMMUNITYBOARD_ENABLED;
 	public static int COMMUNITYBOARD_CURRENCY;
@@ -263,13 +263,13 @@ public class Config
 	public static boolean COMMUNITYBOARD_ENABLE_DRAW;
 	
 	// --------------------------------------------------
-	// Custom Mail Manager
+	// Gerenciador de Email Customizado
 	// --------------------------------------------------
 	public static boolean CUSTOM_MAIL_MANAGER_ENABLED;
 	public static int CUSTOM_MAIL_MANAGER_DELAY;
 	
 	// --------------------------------------------------
-	// Database
+	// Banco de Dados
 	// --------------------------------------------------
 	public static String DATABASE_DRIVER;
 	public static String DATABASE_URL;
@@ -283,7 +283,7 @@ public class Config
 	public static int BACKUP_DAYS;
 	
 	// --------------------------------------------------
-	// General
+	// Geral
 	// --------------------------------------------------
 	public static boolean LOG_CHAT;
 	public static boolean LOG_ITEMS;
@@ -420,9 +420,9 @@ public class Config
 	public static boolean ENABLE_FALLING_DAMAGE;
 	
 	// --------------------------------------------------
-	// Admin Folder -
+	// Pasta Admin -
 	// --------------------------------------------------
-	// Administrator
+	// Administrador
 	// --------------------------------------------------
 	public static boolean EVERYBODY_HAS_ADMIN_RIGHTS;
 	public static boolean SERVER_GMONLY;
@@ -438,7 +438,6 @@ public class Config
 	public static boolean GM_TRADE_RESTRICTED_ITEMS;
 	public static boolean GM_RESTART_FIGHTING;
 	public static boolean GM_ANNOUNCER_NAME;
-	public static boolean GM_CRITANNOUNCER_NAME;
 	public static boolean GM_GIVE_SPECIAL_SKILLS;
 	public static boolean GM_GIVE_SPECIAL_AURA_SKILLS;
 	public static boolean GM_DEBUG_HTML_PATHS;
@@ -446,7 +445,7 @@ public class Config
 	public static boolean CHAT_ADMIN;
 	
 	// --------------------------------------------------
-	// Development
+	// Desenvolvimento
 	// --------------------------------------------------
 	public static boolean DEVELOPER;
 	public static boolean HTML_ACTION_CACHE_DEBUG;
@@ -480,7 +479,7 @@ public class Config
 	public static Map<String, Boolean> GEODATA_REGIONS;
 	
 	// --------------------------------------------------
-	// Id Manager
+	// Gerenciador de Id
 	// --------------------------------------------------
 	public static boolean DATABASE_CLEAN_UP;
 	public static int FIRST_OBJECT_ID;
@@ -490,7 +489,7 @@ public class Config
 	public static double RESIZE_MULTIPLIER;
 	
 	// --------------------------------------------------
-	// Rates
+	// Taxas
 	// --------------------------------------------------
 	public static float RATE_XP;
 	public static float RATE_SP;
@@ -560,9 +559,9 @@ public class Config
 	public static List<DropHolder> BOSS_DROP_LIST = new ArrayList<>();
 	
 	// --------------------------------------------------
-	// Npcs Folder
+	// Pasta Npcs
 	// --------------------------------------------------
-	// Boss Announcements
+	// Anuncios de Boss
 	// --------------------------------------------------
 	public static boolean RAIDBOSS_SPAWN_ANNOUNCEMENTS;
 	public static boolean RAIDBOSS_DEFEAT_ANNOUNCEMENTS;
@@ -574,7 +573,7 @@ public class Config
 	public static Set<Integer> RAIDBOSSES_EXCLUDED_FROM_DEFEAT_ANNOUNCEMENTS = new HashSet<>();
 	
 	// --------------------------------------------------
-	// Champion Monsters
+	// Monstros Campeoes
 	// --------------------------------------------------
 	public static boolean CHAMPION_ENABLE;
 	public static boolean CHAMPION_PASSIVE;
@@ -599,7 +598,7 @@ public class Config
 	public static boolean CHAMPION_ENABLE_IN_INSTANCES;
 	
 	// --------------------------------------------------
-	// Delevel Manager
+	// Gerenciador de Delevel
 	// --------------------------------------------------
 	public static boolean DELEVEL_MANAGER_ENABLED;
 	public static int DELEVEL_MANAGER_NPCID;
@@ -608,7 +607,7 @@ public class Config
 	public static int DELEVEL_MANAGER_MINIMUM_DELEVEL;
 	
 	// --------------------------------------------------
-	// Fake Players
+	// Jogadores Falsos
 	// --------------------------------------------------
 	public static boolean FAKE_PLAYERS_ENABLED;
 	public static boolean FAKE_PLAYER_CHAT;
@@ -623,7 +622,7 @@ public class Config
 	public static boolean FAKE_PLAYER_CAN_PICKUP;
 	
 	// --------------------------------------------------
-	// Gracia Seeds
+	// Sementes de Gracia
 	// --------------------------------------------------
 	public static int SOD_TIAT_KILL_COUNT;
 	public static long SOD_STAGE_2_LENGTH;
@@ -665,12 +664,12 @@ public class Config
 	public static int BELETH_MIN_PLAYERS;
 	
 	// --------------------------------------------------
-	// Merchant Zero Sell Price
+	// Preco Zero do Mercador
 	// --------------------------------------------------
 	public static boolean MERCHANT_ZERO_SELL_PRICE;
 	
 	// --------------------------------------------------
-	// Nobless Master
+	// Mestre Nobless
 	// --------------------------------------------------
 	public static boolean NOBLESS_MASTER_ENABLED;
 	public static int NOBLESS_MASTER_NPCID;
@@ -773,7 +772,7 @@ public class Config
 	public static int BUFF_TIME;
 	
 	// ----------------------------------------------
-	// PremiumBuffer [NPC]
+	// BufferPremium [NPC]
 	// ----------------------------------------------
 	public static boolean PREMIUM_SCRIPT_RELOAD;
 	public static boolean PREMIUM_SMART_WINDOW;
@@ -814,7 +813,7 @@ public class Config
 	public static int PREMIUM_BUFF_TIME;
 	
 	// --------------------------------------------------
-	// Npc Stat Multipliers
+	// Multiplicadores de Status do Npc
 	// --------------------------------------------------
 	public static boolean ENABLE_NPC_STAT_MULTIPLIERS;
 	public static double MONSTER_HP_MULTIPLIER;
@@ -851,7 +850,7 @@ public class Config
 	public static double DEFENDER_CLAN_HELP_RANGE_MULTIPLIER;
 	
 	// --------------------------------------------------
-	// Random Spawns
+	// Spawns Aleatorios
 	// --------------------------------------------------
 	public static boolean ENABLE_RANDOM_MONSTER_SPAWNS;
 	public static int MOB_MAX_SPAWN_RANGE;
@@ -859,7 +858,7 @@ public class Config
 	public static Set<Integer> MOBS_LIST_NOT_RANDOM;
 	
 	// --------------------------------------------------
-	// Scheme Buffer
+	// Buffer de Esquemas
 	// --------------------------------------------------
 	public static int BUFFER_MAX_SCHEMES;
 	public static int BUFFER_ITEM_ID;
@@ -875,9 +874,9 @@ public class Config
 	public static Set<Integer> TRANSMOG_BANNED_ITEM_IDS = new HashSet<>();
 	
 	// --------------------------------------------------
-	// Player Folder -
+	// Pasta Player -
 	// --------------------------------------------------
-	// Allowed Player Races
+	// Racas de Jogador Permitidas
 	// --------------------------------------------------
 	public static boolean ALLOW_HUMAN;
 	public static boolean ALLOW_ELF;
@@ -887,7 +886,7 @@ public class Config
 	public static boolean ALLOW_KAMAEL;
 	
 	// --------------------------------------------------
-	// Auto Potions
+	// Pocoes Automaticas
 	// --------------------------------------------------
 	public static boolean AUTO_POTIONS_ENABLED;
 	public static boolean AUTO_POTIONS_IN_OLYMPIAD;
@@ -903,14 +902,14 @@ public class Config
 	public static Set<Integer> AUTO_MP_ITEM_IDS;
 	
 	// --------------------------------------------------
-	// Banking
+	// Banco
 	// --------------------------------------------------
 	public static boolean BANKING_SYSTEM_ENABLED;
 	public static int BANKING_SYSTEM_GOLDBARS;
 	public static int BANKING_SYSTEM_ADENA;
 	
 	// --------------------------------------------------
-	// Character
+	// Personagem
 	// --------------------------------------------------
 	public static boolean PLAYER_DELEVEL;
 	public static boolean DECREASE_SKILL_LEVEL;
@@ -1104,7 +1103,7 @@ public class Config
 	public static boolean NEVIT_IGNORE_ADVENT_TIME;
 	
 	// ----------------------------------------------
-	// Clan Definitions
+	// Definicoes de Cla
 	// ----------------------------------------------
 	public static int ALT_CLAN_LEADER_DATE_CHANGE;
 	public static String ALT_CLAN_LEADER_HOUR_CHANGE;
@@ -1126,17 +1125,17 @@ public class Config
 	public static int ACADEMY_REWARD_COUNT;
 	
 	// --------------------------------------------------
-	// Find PvP
+	// Encontrar PvP
 	// --------------------------------------------------
 	public static boolean ENABLE_FIND_PVP;
 	
 	// --------------------------------------------------
-	// Hellbound Status
+	// Status do Hellbound
 	// --------------------------------------------------
 	public static boolean HELLBOUND_STATUS;
 	
 	// --------------------------------------------------
-	// Offline Play
+	// Jogo Offline
 	// --------------------------------------------------
 	public static boolean ENABLE_OFFLINE_PLAY_COMMAND;
 	public static boolean OFFLINE_PLAY_PREMIUM;
@@ -1148,7 +1147,7 @@ public class Config
 	public static List<AbnormalVisualEffect> OFFLINE_PLAY_ABNORMAL_EFFECTS = new ArrayList<>();
 	
 	// --------------------------------------------------
-	// Offline Trade
+	// Comercio Offline
 	// --------------------------------------------------
 	public static boolean OFFLINE_TRADE_ENABLE;
 	public static boolean OFFLINE_CRAFT_ENABLE;
@@ -1166,12 +1165,12 @@ public class Config
 	public static List<AbnormalVisualEffect> OFFLINE_ABNORMAL_EFFECTS = new ArrayList<>();
 	
 	// --------------------------------------------------
-	// Online Info
+	// Informacoes Online
 	// --------------------------------------------------
 	public static boolean ENABLE_ONLINE_COMMAND;
 	
 	// ----------------------------------------------
-	// Player Control
+	// Controle de Jogador
 	// ----------------------------------------------
 	public static boolean DISARM_RETURNS_WEAPON;
 	public static boolean BLOCK_AUGMENT_IN_OLY;
@@ -1181,7 +1180,7 @@ public class Config
 	public static boolean BLOCK_MANA_IN_SIEGE_ZONE;
 	
 	// --------------------------------------------------
-	// Premium System
+	// Sistema Premium
 	// --------------------------------------------------
 	public static boolean PREMIUM_SYSTEM_ENABLED;
 	public static float PREMIUM_RATE_XP;
@@ -1215,7 +1214,7 @@ public class Config
 	public static int RETURN_CANCEL_TIME;
 	
 	// --------------------------------------------------
-	// PvP Announce
+	// Anuncio de PvP
 	// --------------------------------------------------
 	public static boolean ANNOUNCE_PK_PVP;
 	public static boolean ANNOUNCE_PK_PVP_NORMAL_MESSAGE;
@@ -1223,7 +1222,7 @@ public class Config
 	public static String ANNOUNCE_PVP_MSG;
 	
 	// --------------------------------------------------
-	// PvP Reward Item
+	// Item de Recompensa PvP
 	// --------------------------------------------------
 	public static boolean REWARD_PVP_ITEM;
 	public static int REWARD_PVP_ITEM_ID;
@@ -1237,7 +1236,7 @@ public class Config
 	public static boolean DISABLE_REWARDS_IN_PVP_ZONES;
 	
 	// --------------------------------------------------
-	// PvP Title Color
+	// Cor de Titulo PvP
 	// --------------------------------------------------
 	public static boolean PVP_COLOR_SYSTEM_ENABLED;
 	public static int PVP_AMOUNT1;
@@ -1257,14 +1256,14 @@ public class Config
 	public static String TITLE_FOR_PVP_AMOUNT5;
 	
 	// --------------------------------------------------
-	// Screen Welcome Message
+	// Mensagem de Boas-Vindas na Tela
 	// --------------------------------------------------
 	public static boolean WELCOME_MESSAGE_ENABLED;
 	public static String WELCOME_MESSAGE_TEXT;
 	public static int WELCOME_MESSAGE_TIME;
 	
 	// --------------------------------------------------
-	// Sell Buffs
+	// Vender Buffs
 	// --------------------------------------------------
 	public static boolean SELLBUFF_ENABLED;
 	public static int SELLBUFF_MP_MULTIPLER;
@@ -1274,12 +1273,12 @@ public class Config
 	public static int SELLBUFF_MAX_BUFFS;
 	
 	// --------------------------------------------------
-	// Server Time
+	// Horario do Servidor
 	// --------------------------------------------------
 	public static boolean DISPLAY_SERVER_TIME;
 	
 	// --------------------------------------------------
-	// Starting Location
+	// Localizacao Inicial
 	// --------------------------------------------------
 	public static boolean CUSTOM_STARTING_LOC;
 	public static int CUSTOM_STARTING_LOC_X;
@@ -1287,7 +1286,7 @@ public class Config
 	public static int CUSTOM_STARTING_LOC_Z;
 	
 	// --------------------------------------------------
-	// Starting title
+	// Titulo Inicial
 	// --------------------------------------------------
 	public static boolean ENABLE_CUSTOM_STARTING_TITLE;
 	public static String CUSTOM_STARTING_TITLE;
@@ -1320,13 +1319,13 @@ public class Config
 	public static String AUTO_PLAY_LOGIN_MESSAGE;
 	
 	// --------------------------------------------------
-	// Warehouse Sorting
+	// Ordenacao de Armazem
 	// --------------------------------------------------
 	public static boolean ENABLE_WAREHOUSESORTING_CLAN;
 	public static boolean ENABLE_WAREHOUSESORTING_PRIVATE;
 	
 	// --------------------------------------------------
-	// Security Folder -
+	// Pasta Security -
 	// --------------------------------------------------
 	// Captcha
 	// --------------------------------------------------
@@ -1342,12 +1341,12 @@ public class Config
 	public static boolean DOUBLE_JAIL_TIME;
 	
 	// --------------------------------------------------
-	// Chatfilter
+	// Filtro de Chat
 	// --------------------------------------------------
 	public static List<String> FILTER_LIST;
 	
 	// --------------------------------------------------
-	// Dualbox Check
+	// Verificacao de Dualbox
 	// --------------------------------------------------
 	public static int DUALBOX_CHECK_MAX_PLAYERS_PER_IP;
 	public static int DUALBOX_CHECK_MAX_OLYMPIAD_PARTICIPANTS_PER_IP;
@@ -1358,7 +1357,7 @@ public class Config
 	public static Map<Integer, Integer> DUALBOX_CHECK_WHITELIST;
 	
 	// --------------------------------------------------
-	// Flood Protector
+	// Protetor de Flood
 	// --------------------------------------------------
 	public static FloodProtectorConfig FLOOD_PROTECTOR_USE_ITEM;
 	public static FloodProtectorConfig FLOOD_PROTECTOR_ROLL_DICE;
@@ -1377,20 +1376,20 @@ public class Config
 	public static FloodProtectorConfig FLOOD_PROTECTOR_PLAYER_ACTION;
 	
 	// --------------------------------------------------
-	// Private Store Range
+	// Alcance de Loja Privada
 	// --------------------------------------------------
 	public static int SHOP_MIN_RANGE_FROM_PLAYER;
 	public static int SHOP_MIN_RANGE_FROM_NPC;
 	
 	// --------------------------------------------------
-	// Walker Bot Protection
+	// Protecao contra Walker Bot
 	// --------------------------------------------------
 	public static boolean L2WALKER_PROTECTION;
 	
 	// --------------------------------------------------
-	// Siege Folder -
+	// Pasta Siege -
 	// --------------------------------------------------
-	// Conquerable Hall Siege
+	// Cerco de Hall Conquistavel
 	// --------------------------------------------------
 	public static int CHS_MAX_ATTACKERS;
 	public static int CHS_CLAN_MINLEVEL;
@@ -1400,7 +1399,7 @@ public class Config
 	public static int CHS_FAME_FREQUENCY;
 	
 	// --------------------------------------------------
-	// Residences
+	// Residencias
 	// --------------------------------------------------
 	public static long CH_TELE_FEE_RATIO;
 	public static int CH_TELE1_FEE;
@@ -1574,7 +1573,7 @@ public class Config
 	public static boolean ALLOW_MOUNTS_DURING_SIEGE;
 	
 	// --------------------------------------------------
-	// Login Server
+	// Servidor de Login
 	// --------------------------------------------------
 	public static String LOGIN_BIND_ADDRESS;
 	public static int PORT_LOGIN;
@@ -1592,7 +1591,7 @@ public class Config
 	public static int MAX_CONNECTION_PER_IP;
 	
 	// --------------------------------------------------
-	// Other
+	// Outros
 	// --------------------------------------------------
 	public static boolean MOVE_BASED_KNOWNLIST;
 	public static long KNOWNLIST_UPDATE_INTERVAL;
@@ -1609,16 +1608,16 @@ public class Config
 	public static boolean DARK_THEME;
 	
 	/**
-	 * This class initializes all global variables for configuration.<br>
-	 * If the key doesn't appear in properties file, a default value is set by this class.
-	 * @param serverMode specifies the operational mode of the server.
+	 * Esta classe inicializa todas as variaveis globais para configuracao.<br>
+	 * Se a chave nao aparecer no arquivo de propriedades, um valor padrao e definido por esta classe.
+	 * @param serverMode especifica o modo operacional do servidor.
 	 */
 	public static void load(ServerMode serverMode)
 	{
 		SERVER_MODE = serverMode;
 		if (SERVER_MODE == ServerMode.GAME)
 		{
-			// Config folder -
+			// Pasta Config -
 			loadServerConfig();
 			
 			loadIpConfigData();
@@ -1628,14 +1627,14 @@ public class Config
 			loadDatabaseConfig();
 			loadGeneralConfig();
 			
-			// Admin folder -
+			// Pasta Admin -
 			loadAdministratorConfig();
 			loadDevelopmentConfig();
 			loadGeoDataConfig();
 			loadIdManagerConfig();
 			loadRatesConfig();
 			
-			// Npcs folder -
+			// Pasta Npcs -
 			loadBossAnnouncementsConfig();
 			loadChampionMonsterConfig();
 			loadDelevelManagerConfig();
@@ -1652,7 +1651,7 @@ public class Config
 			loadSchemeBufferConfig();
 			loadTransmogConfig();
 			
-			// Player Folder -
+			// Pasta Player -
 			loadAllowedPlayerRacesConfig();
 			loadAutoPotionsConfig();
 			loadBankingConfig();
@@ -1677,7 +1676,7 @@ public class Config
 			loadUserPanel();
 			loadWarehouseSortingConfig();
 			
-			// Security Folder -
+			// Pasta Security -
 			loadCaptchaConfig();
 			loadChatFilter();
 			loadDualboxCheckConfigConfig();
@@ -1685,11 +1684,11 @@ public class Config
 			loadPrivateStoreRangeConfig();
 			loadWalkerBotProtectionConfig();
 			
-			// Siege Folder -
+			// Pasta Siege -
 			loadConquerableHallSiegeConfig();
 			loadResidencesConfig();
 			
-			// Load hexid.txt file.
+			// Carrega o arquivo hexid.txt.
 			loadHexid();
 		}
 		else if (SERVER_MODE == ServerMode.LOGIN)
@@ -1704,10 +1703,10 @@ public class Config
 	}
 	
 	// --------------------------------------------------
-	// Config Folder -
+	// Pasta Config -
 	// --------------------------------------------------
 	/**
-	 * Load serverConfig file (if exists).
+	 * Carrega o arquivo serverConfig (se existir).
 	 */
 	private static void loadServerConfig()
 	{
@@ -1811,7 +1810,7 @@ public class Config
 	}
 	
 	/**
-	 * Load ipConfigData file (if exists).
+	 * Carrega o arquivo ipConfigData (se existir).
 	 */
 	private static void loadIpConfigData()
 	{
@@ -1821,7 +1820,7 @@ public class Config
 	}
 	
 	/**
-	 * Load communityBoardConfig file (if exists).
+	 * Carrega o arquivo communityBoardConfig (se existir).
 	 */
 	private static void loadCommunityBoardConfig()
 	{
@@ -1854,7 +1853,7 @@ public class Config
 	}
 	
 	/**
-	 * Load customMailManagerConfig file (if exists).
+	 * Carrega o arquivo customMailManagerConfig (se existir).
 	 */
 	private static void loadCustomMailManagerConfig()
 	{
@@ -1864,7 +1863,7 @@ public class Config
 	}
 	
 	/**
-	 * Load databaseConfig file (if exists).
+	 * Carrega o arquivo databaseConfig (se existir).
 	 */
 	private static void loadDatabaseConfig()
 	{
@@ -1882,7 +1881,7 @@ public class Config
 	}
 	
 	/**
-	 * Load generalConfig file (if exists).
+	 * Carrega o arquivo generalConfig (se existir).
 	 */
 	private static void loadGeneralConfig()
 	{
@@ -2015,7 +2014,7 @@ public class Config
 		DEFAULT_PUNISH_PARAM = generalConfig.getLong("DefaultPunishParam", 0);
 		if (DEFAULT_PUNISH_PARAM == 0)
 		{
-			DEFAULT_PUNISH_PARAM = 3155695200L; // One hundred years in seconds.
+			DEFAULT_PUNISH_PARAM = 3155695200L; // Cem anos em segundos.
 		}
 		ONLY_GM_ITEMS_FREE = generalConfig.getBoolean("OnlyGMItemsFree", true);
 		JAIL_IS_PVP = generalConfig.getBoolean("JailIsPvp", false);
@@ -2057,10 +2056,10 @@ public class Config
 	}
 	
 	// --------------------------------------------------
-	// Admin Folder -
+	// Pasta Admin -
 	// --------------------------------------------------
 	/**
-	 * Load administratorConfig file (if exists).
+	 * Carrega o arquivo administratorConfig (se existir).
 	 */
 	private static void loadAdministratorConfig()
 	{
@@ -2079,7 +2078,6 @@ public class Config
 		GM_TRADE_RESTRICTED_ITEMS = administratorConfig.getBoolean("GMTradeRestrictedItems", false);
 		GM_RESTART_FIGHTING = administratorConfig.getBoolean("GMRestartFighting", true);
 		GM_ANNOUNCER_NAME = administratorConfig.getBoolean("GMShowAnnouncerName", false);
-		GM_CRITANNOUNCER_NAME = administratorConfig.getBoolean("GMShowCritAnnouncerName", false);
 		GM_GIVE_SPECIAL_SKILLS = administratorConfig.getBoolean("GMGiveSpecialSkills", false);
 		GM_GIVE_SPECIAL_AURA_SKILLS = administratorConfig.getBoolean("GMGiveSpecialAuraSkills", false);
 		GM_DEBUG_HTML_PATHS = administratorConfig.getBoolean("GMDebugHtmlPaths", true);
@@ -2088,7 +2086,7 @@ public class Config
 	}
 	
 	/**
-	 * Load developmentConfig file (if exists).
+	 * Carrega o arquivo developmentConfig (se existir).
 	 */
 	private static void loadDevelopmentConfig()
 	{
@@ -2112,7 +2110,7 @@ public class Config
 	}
 	
 	/**
-	 * Load GeoDataConfig file (if exists).
+	 * Carrega o arquivo GeoDataConfig (se existir).
 	 */
 	private static void loadGeoDataConfig()
 	{
@@ -2155,7 +2153,7 @@ public class Config
 	}
 	
 	/**
-	 * Load idManagerConfig file (if exists).
+	 * Carrega o arquivo idManagerConfig (se existir).
 	 */
 	private static void loadIdManagerConfig()
 	{
@@ -2169,7 +2167,7 @@ public class Config
 	}
 	
 	/**
-	 * Load ratesConfig file (if exists).
+	 * Carrega o arquivo ratesConfig (se existir).
 	 */
 	private static void loadRatesConfig()
 	{
@@ -2310,7 +2308,7 @@ public class Config
 	// Npcs -
 	// ----------------------------------------------
 	/**
-	 * Load bossAnnouncementsConfig file (if exists).
+	 * Carrega o arquivo bossAnnouncementsConfig (se existir).
 	 */
 	private static void loadBossAnnouncementsConfig()
 	{
@@ -2340,7 +2338,7 @@ public class Config
 	}
 	
 	/**
-	 * Load championMonsterConfig file (if exists).
+	 * Carrega o arquivo championMonsterConfig (se existir).
 	 */
 	private static void loadChampionMonsterConfig()
 	{
@@ -2377,7 +2375,7 @@ public class Config
 	}
 	
 	/**
-	 * Load delevelManagerConfig file (if exists).
+	 * Carrega o arquivo delevelManagerConfig (se existir).
 	 */
 	private static void loadDelevelManagerConfig()
 	{
@@ -2390,7 +2388,7 @@ public class Config
 	}
 	
 	/**
-	 * Load fakePlayerConfig file (if exists).
+	 * Carrega o arquivo fakePlayerConfig (se existir).
 	 */
 	private static void loadFakePlayerConfig()
 	{
@@ -2409,7 +2407,7 @@ public class Config
 	}
 	
 	/**
-	 * Load graciaSeedsConfig file (if exists).
+	 * Carrega o arquivo graciaSeedsConfig (se existir).
 	 */
 	private static void loadGraciaSeedsConfig()
 	{
@@ -2431,7 +2429,7 @@ public class Config
 	}
 	
 	/**
-	 * Load grandBossConfig file (if exists).
+	 * Carrega o arquivo grandBossConfig (se existir).
 	 */
 	private static void loadGrandBossConfig()
 	{
@@ -2459,7 +2457,7 @@ public class Config
 	}
 	
 	/**
-	 * Load merchantZeroSellPriceConfig file (if exists).
+	 * Carrega o arquivo merchantZeroSellPriceConfig (se existir).
 	 */
 	private static void loadMerchantZeroSellPriceConfig()
 	{
@@ -2468,7 +2466,7 @@ public class Config
 	}
 	
 	/**
-	 * Load noblessMasterConfig file (if exists).
+	 * Carrega o arquivo noblessMasterConfig (se existir).
 	 */
 	private static void loadNoblessMasterConfig()
 	{
@@ -2482,7 +2480,7 @@ public class Config
 	}
 	
 	/**
-	 * Load npcConfig file (if exists).
+	 * Carrega o arquivo npcConfig (se existir).
 	 */
 	private static void loadNpcConfig()
 	{
@@ -2563,7 +2561,7 @@ public class Config
 	}
 	
 	/**
-	 * Load npcbufferSettings file (if exists).
+	 * Carrega o arquivo npcbufferSettings (se existir).
 	 */
 	private static void loadNpcbufferSettings()
 	{
@@ -2607,7 +2605,7 @@ public class Config
 	}
 	
 	/**
-	 * Load PremimumBufferSettings file (if exists).
+	 * Carrega o arquivo PremimumBufferSettings (se existir).
 	 */
 	private static void loadPremimumBufferSettings()
 	{
@@ -2651,7 +2649,7 @@ public class Config
 	}
 	
 	/**
-	 * Load boostNpcStatConfig file (if exists).
+	 * Carrega o arquivo boostNpcStatConfig (se existir).
 	 */
 	private static void loadBoostNpcStatConfig()
 	{
@@ -2692,7 +2690,7 @@ public class Config
 	}
 	
 	/**
-	 * Load randomSpawnsConfig file (if exists).
+	 * Carrega o arquivo randomSpawnsConfig (se existir).
 	 */
 	private static void loadRandomSpawnsConfig()
 	{
@@ -2712,7 +2710,7 @@ public class Config
 	}
 	
 	/**
-	 * Load schemeBufferConfig file (if exists).
+	 * Carrega o arquivo schemeBufferConfig (se existir).
 	 */
 	private static void loadSchemeBufferConfig()
 	{
@@ -2723,7 +2721,7 @@ public class Config
 	}
 	
 	/**
-	 * Load transmogConfig file (if exists).
+	 * Carrega o arquivo transmogConfig (se existir).
 	 */
 	private static void loadTransmogConfig()
 	{
@@ -2744,10 +2742,10 @@ public class Config
 	}
 	
 	// --------------------------------------------------
-	// Player Folder -
+	// Pasta Player -
 	// --------------------------------------------------
 	/**
-	 * Load allowedPlayerRacesConfig file (if exists).
+	 * Carrega o arquivo allowedPlayerRacesConfig (se existir).
 	 */
 	private static void loadAllowedPlayerRacesConfig()
 	{
@@ -2761,7 +2759,7 @@ public class Config
 	}
 	
 	/**
-	 * Load autoPotionsConfig file (if exists).
+	 * Carrega o arquivo autoPotionsConfig (se existir).
 	 */
 	private static void loadAutoPotionsConfig()
 	{
@@ -2793,7 +2791,7 @@ public class Config
 	}
 	
 	/**
-	 * Load bankingConfig file (if exists).
+	 * Carrega o arquivo bankingConfig (se existir).
 	 */
 	private static void loadBankingConfig()
 	{
@@ -2804,7 +2802,7 @@ public class Config
 	}
 	
 	/**
-	 * Load characterConfig file (if exists).
+	 * Carrega o arquivo characterConfig (se existir).
 	 */
 	private static void loadCharacterConfig()
 	{
@@ -3127,7 +3125,7 @@ public class Config
 	}
 	
 	/**
-	 * Load clanDefinitions file (if exists).
+	 * Carrega o arquivo clanDefinitions (se existir).
 	 */
 	private static void loadClanDefinitions()
 	{
@@ -3159,7 +3157,7 @@ public class Config
 	}
 	
 	/**
-	 * Load findPvpConfig file (if exists).
+	 * Carrega o arquivo findPvpConfig (se existir).
 	 */
 	private static void loadFindPvpConfig()
 	{
@@ -3168,7 +3166,7 @@ public class Config
 	}
 	
 	/**
-	 * Load hellboundStatusConfig file (if exists).
+	 * Carrega o arquivo hellboundStatusConfig (se existir).
 	 */
 	private static void loadHellboundStatusConfig()
 	{
@@ -3177,7 +3175,7 @@ public class Config
 	}
 	
 	/**
-	 * Load offlinePlayConfig file (if exists).
+	 * Carrega o arquivo offlinePlayConfig (se existir).
 	 */
 	private static void loadOfflinePlayConfig()
 	{
@@ -3201,7 +3199,7 @@ public class Config
 	}
 	
 	/**
-	 * Load offlineTradeConfig file (if exists).
+	 * Carrega o arquivo offlineTradeConfig (se existir).
 	 */
 	private static void loadOfflineTradeConfig()
 	{
@@ -3231,7 +3229,7 @@ public class Config
 	}
 	
 	/**
-	 * Load onlineInfoConfig file (if exists).
+	 * Carrega o arquivo onlineInfoConfig (se existir).
 	 */
 	private static void loadOnlineInfoConfig()
 	{
@@ -3240,7 +3238,7 @@ public class Config
 	}
 	
 	/**
-	 * Load playerControl file (if exists).
+	 * Carrega o arquivo playerControl (se existir).
 	 */
 	private static void loadPlayerControl()
 	{
@@ -3254,7 +3252,7 @@ public class Config
 	}
 	
 	/**
-	 * Load premiumSystemConfig file (if exists).
+	 * Carrega o arquivo premiumSystemConfig (se existir).
 	 */
 	private static void loadPremiumSystemConfig()
 	{
@@ -3325,7 +3323,7 @@ public class Config
 	}
 	
 	/**
-	 * Load pvpConfig file (if exists).
+	 * Carrega o arquivo pvpConfig (se existir).
 	 */
 	private static void loadPvpConfig()
 	{
@@ -3360,7 +3358,7 @@ public class Config
 	}
 	
 	/**
-	 * Load pvpAnnounceConfig file (if exists).
+	 * Carrega o arquivo pvpAnnounceConfig (se existir).
 	 */
 	private static void loadPvpAnnounceConfig()
 	{
@@ -3372,7 +3370,7 @@ public class Config
 	}
 	
 	/**
-	 * Load pvpRewardItemConfig file (if exists).
+	 * Carrega o arquivo pvpRewardItemConfig (se existir).
 	 */
 	private static void loadPvpRewardItemConfig()
 	{
@@ -3390,7 +3388,7 @@ public class Config
 	}
 	
 	/**
-	 * Load pvpTitleColorConfig file (if exists).
+	 * Carrega o arquivo pvpTitleColorConfig (se existir).
 	 */
 	private static void loadPvpTitleColorConfig()
 	{
@@ -3414,7 +3412,7 @@ public class Config
 	}
 	
 	/**
-	 * Load screenWelcomeMessageConfig file (if exists).
+	 * Carrega o arquivo screenWelcomeMessageConfig (se existir).
 	 */
 	private static void loadScreenWelcomeMessageConfig()
 	{
@@ -3425,7 +3423,7 @@ public class Config
 	}
 	
 	/**
-	 * Load sellBuffConfig file (if exists).
+	 * Carrega o arquivo sellBuffConfig (se existir).
 	 */
 	private static void loadSellBuffConfig()
 	{
@@ -3439,7 +3437,7 @@ public class Config
 	}
 	
 	/**
-	 * Load serverTimeConfig file (if exists).
+	 * Carrega o arquivo serverTimeConfig (se existir).
 	 */
 	private static void loadServerTimeConfig()
 	{
@@ -3448,7 +3446,7 @@ public class Config
 	}
 	
 	/**
-	 * Load startingLocationConfig file (if exists).
+	 * Carrega o arquivo startingLocationConfig (se existir).
 	 */
 	private static void loadStartingLocationConfig()
 	{
@@ -3460,7 +3458,7 @@ public class Config
 	}
 	
 	/**
-	 * Load startingTitleConfig file (if exists).
+	 * Carrega o arquivo startingTitleConfig (se existir).
 	 */
 	private static void loadStartingTitleConfig()
 	{
@@ -3470,7 +3468,7 @@ public class Config
 	}
 	
 	/**
-	 * Load UserPanel file (if exists).
+	 * Carrega o arquivo UserPanel (se existir).
 	 */
 	private static void loadUserPanel()
 	{
@@ -3532,7 +3530,7 @@ public class Config
 	}
 	
 	/**
-	 * Load warehouseSortingConfig file (if exists).
+	 * Carrega o arquivo warehouseSortingConfig (se existir).
 	 */
 	private static void loadWarehouseSortingConfig()
 	{
@@ -3542,10 +3540,10 @@ public class Config
 	}
 	
 	// ----------------------------------------------
-	// Security Folder -
+	// Pasta Security -
 	// ----------------------------------------------
 	/**
-	 * Load captchaConfig file (if exists).
+	 * Carrega o arquivo captchaConfig (se existir).
 	 */
 	private static void loadCaptchaConfig()
 	{
@@ -3563,9 +3561,9 @@ public class Config
 	}
 	
 	/**
-	 * Loads the chat filter words from the specified file.<br>
-	 * This method reads lines from the {@code CHAT_FILTER_FILE}, trims whitespace and ignores empty lines or lines starting with a '#' character.<br>
-	 * The filtered words are collected into the {@code FILTER_LIST}. If an error occurs during file reading, a warning message is logged.
+	 * Carrega as palavras do filtro de chat a partir do arquivo especificado.<br>
+	 * Este metodo le linhas do {@code CHAT_FILTER_FILE}, remove espacos e ignora linhas vazias ou linhas que comecam com o caractere '#'.<br>
+	 * As palavras filtradas sao coletadas em {@code FILTER_LIST}. Se ocorrer um erro durante a leitura do arquivo, uma mensagem de aviso e registrada.
 	 */
 	private static void loadChatFilter()
 	{
@@ -3581,7 +3579,7 @@ public class Config
 	}
 	
 	/**
-	 * Load dualboxCheckConfig file (if exists).
+	 * Carrega o arquivo dualboxCheckConfig (se existir).
 	 */
 	private static void loadDualboxCheckConfigConfig()
 	{
@@ -3622,7 +3620,7 @@ public class Config
 	}
 	
 	/**
-	 * Load floodProtectorConfig file (if exists).
+	 * Carrega o arquivo floodProtectorConfig (se existir).
 	 */
 	private static void loadFloodProtectorConfig()
 	{
@@ -3646,8 +3644,8 @@ public class Config
 	}
 	
 	/**
-	 * Loads flood protector configurations.
-	 * @param configs the ConfigReader parser containing the actual values of the flood protector
+	 * Carrega as configuracoes dos protetores de flood.
+	 * @param configs o parser ConfigReader contendo os valores reais do protetor de flood
 	 */
 	private static void loadFloodProtectorConfigs(ConfigReader configs)
 	{
@@ -3669,11 +3667,11 @@ public class Config
 	}
 	
 	/**
-	 * Loads single flood protector configuration.
-	 * @param configs the ConfigReader parser
-	 * @param config flood protector configuration instance
-	 * @param configString flood protector configuration string that determines for which flood protector configuration should be read
-	 * @param defaultInterval default flood protector interval
+	 * Carrega a configuracao de um unico protetor de flood.
+	 * @param configs o parser ConfigReader
+	 * @param config instancia de configuracao do protetor de flood
+	 * @param configString string de configuracao do protetor de flood que determina qual configuracao deve ser lida
+	 * @param defaultInterval intervalo padrao do protetor de flood
 	 */
 	private static void loadFloodProtectorConfig(ConfigReader configs, FloodProtectorConfig config, String configString, int defaultInterval)
 	{
@@ -3685,7 +3683,7 @@ public class Config
 	}
 	
 	/**
-	 * Load privateStoreRangeConfig file (if exists).
+	 * Carrega o arquivo privateStoreRangeConfig (se existir).
 	 */
 	private static void loadPrivateStoreRangeConfig()
 	{
@@ -3695,7 +3693,7 @@ public class Config
 	}
 	
 	/**
-	 * Load walkerBotProtectionConfig file (if exists).
+	 * Carrega o arquivo walkerBotProtectionConfig (se existir).
 	 */
 	private static void loadWalkerBotProtectionConfig()
 	{
@@ -3704,10 +3702,10 @@ public class Config
 	}
 	
 	// --------------------------------------------------
-	// Siege Folder -
+	// Pasta Siege -
 	// --------------------------------------------------
 	/**
-	 * Load conquerableHallSiegeConfig file (if exists).
+	 * Carrega o arquivo conquerableHallSiegeConfig (se existir).
 	 */
 	private static void loadConquerableHallSiegeConfig()
 	{
@@ -3721,7 +3719,7 @@ public class Config
 	}
 	
 	/**
-	 * Load featureConfig file (if exists).
+	 * Carrega o arquivo featureConfig (se existir).
 	 */
 	private static void loadResidencesConfig()
 	{
@@ -3906,10 +3904,10 @@ public class Config
 	}
 	
 	// ----------------------------------------------
-	// LoginServer
+	// ServidorLogin
 	// ----------------------------------------------
 	/**
-	 * Load loginConfig file (if exists).
+	 * Carrega o arquivo loginConfig (se existir).
 	 */
 	private static void loadLoginConfig()
 	{
@@ -3953,11 +3951,11 @@ public class Config
 	}
 	
 	/**
-	 * Loads the HexID configuration from a properties file.<br>
-	 * This method reads the {@code HEXID_FILE} and attempts to load the server ID and hexadecimal ID if available.<br>
-	 * If the file exists, it parses the properties to retrieve the {@code ServerID} and {@code HexID} values.<br>
-	 * The {@code ServerID} is stored as an integer, while the {@code HexID} is converted from a hexadecimal string to a byte array.<br>
-	 * If the file does not contain valid data or cannot be loaded, a warning is logged and the system attempts to retrieve the HexID from another source.
+	 * Carrega a configuracao do HexID a partir de um arquivo de propriedades.<br>
+	 * Este metodo le o {@code HEXID_FILE} e tenta carregar o ID do servidor e o ID hexadecimal, se disponiveis.<br>
+	 * Se o arquivo existir, ele analisa as propriedades para obter os valores de {@code ServerID} e {@code HexID}.<br>
+	 * O {@code ServerID} e armazenado como inteiro, enquanto o {@code HexID} e convertido de uma string hexadecimal para um array de bytes.<br>
+	 * Se o arquivo nao contiver dados validos ou nao puder ser carregado, um aviso e registrado e o sistema tenta obter o HexID de outra fonte.
 	 */
 	private static void loadHexid()
 	{
@@ -3985,10 +3983,10 @@ public class Config
 	}
 	
 	/**
-	 * Save hexadecimal ID of the server in the config file.<br>
-	 * Check {@link #HEXID_FILE}.
-	 * @param serverId the ID of the server whose hexId to save
-	 * @param hexId the hexadecimal ID to store
+	 * Salva o ID hexadecimal do servidor no arquivo de configuracao.<br>
+	 * Veja {@link #HEXID_FILE}.
+	 * @param serverId o ID do servidor cujo hexId sera salvo
+	 * @param hexId o ID hexadecimal a ser armazenado
 	 */
 	public static void saveHexid(int serverId, String hexId)
 	{
@@ -3996,10 +3994,10 @@ public class Config
 	}
 	
 	/**
-	 * Save hexadecimal ID of the server in the config file.
-	 * @param serverId the ID of the server whose hexId to save
-	 * @param hexId the hexadecimal ID to store
-	 * @param fileName name of the config file
+	 * Salva o ID hexadecimal do servidor no arquivo de configuracao.
+	 * @param serverId o ID do servidor cujo hexId sera salvo
+	 * @param hexId o ID hexadecimal a ser armazenado
+	 * @param fileName nome do arquivo de configuracao
 	 */
 	private static void saveHexid(int serverId, String hexId, String fileName)
 	{
@@ -4007,15 +4005,19 @@ public class Config
 		{
 			final Properties hexSetting = new Properties();
 			final File file = new File(fileName);
-			// Create a new empty file only if it doesn't exist.
-			if (!file.exists())
+			boolean shouldSave = !file.exists();
+			if (!shouldSave)
+			{
+				final ConfigReader existingSettings = new ConfigReader(fileName);
+				shouldSave = (existingSettings.getInt("ServerID", -1) != serverId) || !hexId.equals(existingSettings.getString("HexID", null));
+			}
+			if (shouldSave)
 			{
 				try (OutputStream out = new FileOutputStream(file))
 				{
 					hexSetting.setProperty("ServerID", String.valueOf(serverId));
 					hexSetting.setProperty("HexID", hexId);
 					hexSetting.store(out, "The HexId to Auth into LoginServer");
-					LOGGER.log(Level.INFO, "Gameserver: Generated new HexID file for server id " + serverId + ".");
 				}
 			}
 		}
@@ -4027,9 +4029,9 @@ public class Config
 	}
 	
 	/**
-	 * Calculates a bitwise ID representing the types of servers specified. Each server type is associated with a unique bit position, allowing multiple types to be combined in a single integer using bitwise OR.
-	 * @param serverTypes An array of server type names as strings. Any unrecognized types are ignored.
-	 * @return An integer representing the combined server types, where each bit corresponds to a specific server type. The result is 0 if no recognized types are provided.
+	 * Calcula um ID bitwise representando os tipos de servidores especificados. Cada tipo de servidor e associado a uma posicao de bit unica, permitindo que multiplos tipos sejam combinados em um unico inteiro usando OR bitwise.
+	 * @param serverTypes Um array de nomes de tipos de servidor como strings. Quaisquer tipos nao reconhecidos sao ignorados.
+	 * @return Um inteiro representando os tipos de servidor combinados, onde cada bit corresponde a um tipo de servidor especifico. O resultado e 0 se nenhum tipo reconhecido for fornecido.
 	 */
 	public static int getServerTypeId(String[] serverTypes)
 	{
@@ -4103,12 +4105,12 @@ public class Config
 			final StringTokenizer st = new StringTokenizer(configLine, ";");
 			while (st.hasMoreTokens())
 			{
-				// get allowed class change
+				// obtem a mudanca de classe permitida
 				final int job = Integer.parseInt(st.nextToken());
 				_allowedClassChange.put(job, true);
 				
 				final List<ItemHolder> requiredItems = new ArrayList<>();
-				// parse items needed for class change
+				// analisa itens necessarios para mudanca de classe
 				if (st.hasMoreTokens())
 				{
 					final StringTokenizer st2 = new StringTokenizer(st.nextToken(), "[],");
@@ -4124,7 +4126,7 @@ public class Config
 				_claimItems.put(job, requiredItems);
 				
 				final List<ItemHolder> rewardItems = new ArrayList<>();
-				// parse gifts after class change
+				// analisa presentes apos mudanca de classe
 				if (st.hasMoreTokens())
 				{
 					final StringTokenizer st2 = new StringTokenizer(st.nextToken(), "[],");
@@ -4158,9 +4160,9 @@ public class Config
 	}
 	
 	/**
-	 * Parses a configuration line into an array of floating-point values. The input line is expected to contain comma-separated numeric values, which are converted to floats and stored in an array.
-	 * @param line A comma-separated string of numeric values, such as "1.0,2.5,3.3".
-	 * @return A float array containing the parsed values in the order they appear in the input line.
+	 * Analisa uma linha de configuracao em um array de valores de ponto flutuante. A linha de entrada deve conter valores numericos separados por virgula, que sao convertidos para floats e armazenados em um array.
+	 * @param line Uma string de valores numericos separados por virgula, como "1.0,2.5,3.3".
+	 * @return Um array float contendo os valores analisados na ordem em que aparecem na linha de entrada.
 	 */
 	private static float[] parseConfigLine(String line)
 	{
@@ -4175,9 +4177,10 @@ public class Config
 	}
 	
 	/**
-	 * A configuration class for managing server IP and subnet settings. This class loads network configuration settings from an XML file or performs automatic configuration if the file is unavailable.<br>
+	 * Uma classe de configuracao para gerenciar configuracoes de IP e sub-rede do servidor. Esta classe carrega configuracoes de rede de um arquivo XML ou realiza configuracao automatica se o arquivo nao estiver disponivel.<br>
 	 * <p>
-	 * If the configuration file exists, it parses the file to define subnets and hosts manually. If the file is missing, it attempts automatic configuration by retrieving the external IP address and identifying local network interfaces to configure internal IP addresses and subnets.
+	 * Se o arquivo de configuracao existir, ele analisa o arquivo para definir sub-redes e hosts manualmente. Se o arquivo estiver ausente, ele tenta a configuracao automatica recuperando o endereco IP externo e identificando interfaces de rede locais para configurar enderecos IP internos e
+	 * sub-redes.
 	 * </p>
 	 */
 	private static class IPConfigData implements IXmlReader
@@ -4199,7 +4202,7 @@ public class Config
 				LOGGER.info("Network Config: ipconfig.xml exists, using manual configuration...");
 				parseFile(new File(IPCONFIG_FILE));
 			}
-			else // Auto configuration...
+			else // Configuracao automatica...
 			{
 				LOGGER.info("Network Config: ipconfig.xml does not exist, using automatic configuration...");
 				autoIpConfig();
@@ -4303,7 +4306,7 @@ public class Config
 					}
 				}
 				
-				// External host and subnet.
+				// Host externo e sub-rede.
 				_hosts.add(externalIp);
 				_subnets.add("0.0.0.0/0");
 				LOGGER.info("Network Config: Adding new subnet: 0.0.0.0/0 address: " + externalIp);

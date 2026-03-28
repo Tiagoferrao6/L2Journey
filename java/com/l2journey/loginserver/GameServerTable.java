@@ -40,6 +40,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,23 +57,23 @@ import com.l2journey.loginserver.network.LoginClient;
 import com.l2journey.loginserver.network.gameserverpackets.ServerStatus;
 
 /**
- * The Class GameServerTable loads the game server names and initialize the game server tables.
+ * A classe GameServerTable carrega os nomes dos game servers e inicializa as tabelas de game servers.
  * @author KenM
  */
 public class GameServerTable implements IXmlReader
 {
 	private static final Logger LOGGER = Logger.getLogger(GameServerTable.class.getName());
 	
-	// Map for storing server names with their corresponding IDs.
+	// Mapa para armazenar os nomes dos servidores com seus IDs correspondentes.
 	private static final Map<Integer, String> SERVER_NAMES = new HashMap<>();
-	// Table for storing game server information.
+	// Tabela para armazenar informacoes dos game servers.
 	private static final Map<Integer, GameServerInfo> GAME_SERVER_TABLE = new HashMap<>();
-	// Configuration for RSA key pairs.
+	// Configuracao para pares de chaves RSA.
 	private static final int KEYS_SIZE = 10;
 	private KeyPair[] _keyPairs;
 	
 	/**
-	 * Instantiates a new game server table.
+	 * Instancia uma nova tabela de game servers.
 	 */
 	public GameServerTable()
 	{
@@ -104,7 +105,7 @@ public class GameServerTable implements IXmlReader
 	}
 	
 	/**
-	 * Inits the RSA keys.
+	 * Inicializa as chaves RSA.
 	 */
 	private void initRSAKeys()
 	{
@@ -125,19 +126,26 @@ public class GameServerTable implements IXmlReader
 	}
 	
 	/**
-	 * Load registered game servers.
+	 * Carrega os game servers registrados.
 	 */
 	private void loadRegisteredGameServers()
 	{
+		GAME_SERVER_TABLE.clear();
 		try (Connection con = DatabaseFactory.getConnection();
 			Statement ps = con.createStatement();
-			ResultSet rs = ps.executeQuery("SELECT * FROM gameservers"))
+			ResultSet rs = ps.executeQuery("SELECT * FROM gameservers ORDER BY server_id ASC"))
 		{
-			int id;
 			while (rs.next())
 			{
-				id = rs.getInt("server_id");
-				GAME_SERVER_TABLE.put(id, new GameServerInfo(id, stringToHex(rs.getString("hexid"))));
+				final int id = rs.getInt("server_id");
+				final byte[] hexId = stringToHex(rs.getString("hexid"));
+				final GameServerInfo existingServer = getRegisteredGameServerByHexId(hexId);
+				if (existingServer != null)
+				{
+					LOGGER.warning("Skipped duplicate gameserver registration for server id " + id + " because hexid is already assigned to server id " + existingServer.getId() + ".");
+					continue;
+				}
+				GAME_SERVER_TABLE.put(id, new GameServerInfo(id, hexId));
 			}
 		}
 		catch (Exception e)
@@ -146,9 +154,28 @@ public class GameServerTable implements IXmlReader
 		}
 	}
 	
+	public GameServerInfo getRegisteredGameServerByHexId(byte[] hexId)
+	{
+		if (hexId == null)
+		{
+			return null;
+		}
+		synchronized (GAME_SERVER_TABLE)
+		{
+			for (GameServerInfo gsi : GAME_SERVER_TABLE.values())
+			{
+				if (Arrays.equals(gsi.getHexId(), hexId))
+				{
+					return gsi;
+				}
+			}
+		}
+		return null;
+	}
+	
 	/**
-	 * Gets the registered game servers.
-	 * @return the registered game servers
+	 * Obtem os game servers registrados.
+	 * @return os game servers registrados
 	 */
 	public Map<Integer, GameServerInfo> getRegisteredGameServers()
 	{
@@ -156,9 +183,9 @@ public class GameServerTable implements IXmlReader
 	}
 	
 	/**
-	 * Gets the registered game server by id.
-	 * @param id the game server Id
-	 * @return the registered game server by id
+	 * Obtem o game server registrado pelo id.
+	 * @param id o id do game server
+	 * @return o game server registrado pelo id
 	 */
 	public GameServerInfo getRegisteredGameServerById(int id)
 	{
@@ -166,9 +193,9 @@ public class GameServerTable implements IXmlReader
 	}
 	
 	/**
-	 * Checks for registered game server on id.
-	 * @param id the id
-	 * @return true, if successful
+	 * Verifica se existe game server registrado no id.
+	 * @param id o id
+	 * @return true em caso positivo
 	 */
 	public boolean hasRegisteredGameServerOnId(int id)
 	{
@@ -176,13 +203,13 @@ public class GameServerTable implements IXmlReader
 	}
 	
 	/**
-	 * Register with first available id.
-	 * @param gsi the game server information DTO
-	 * @return true, if successful
+	 * Registra com o primeiro id disponivel.
+	 * @param gsi o DTO com informacoes do game server
+	 * @return true em caso positivo
 	 */
 	public boolean registerWithFirstAvailableId(GameServerInfo gsi)
 	{
-		// Avoid two servers registering with the same "free" id.
+		// Evita que dois servidores se registrem com o mesmo id "livre".
 		synchronized (GAME_SERVER_TABLE)
 		{
 			for (Integer serverId : SERVER_NAMES.keySet())
@@ -199,14 +226,14 @@ public class GameServerTable implements IXmlReader
 	}
 	
 	/**
-	 * Register a game server.
-	 * @param id the id
-	 * @param gsi the gsi
-	 * @return true, if successful
+	 * Registra um game server.
+	 * @param id o id
+	 * @param gsi o gsi
+	 * @return true em caso positivo
 	 */
 	public boolean register(int id, GameServerInfo gsi)
 	{
-		// Avoid two servers registering with the same id.
+		// Evita que dois servidores se registrem com o mesmo id.
 		synchronized (GAME_SERVER_TABLE)
 		{
 			if (!GAME_SERVER_TABLE.containsKey(id))
@@ -219,8 +246,8 @@ public class GameServerTable implements IXmlReader
 	}
 	
 	/**
-	 * Wrapper method.
-	 * @param gsi the game server info DTO.
+	 * Metodo auxiliar.
+	 * @param gsi o DTO de informacoes do game server.
 	 */
 	public void registerServerOnDB(GameServerInfo gsi)
 	{
@@ -228,10 +255,10 @@ public class GameServerTable implements IXmlReader
 	}
 	
 	/**
-	 * Register server on db.
-	 * @param hexId the hex id
-	 * @param id the id
-	 * @param externalHost the external host
+	 * Registra o servidor no banco de dados.
+	 * @param hexId o hex id
+	 * @param id o id
+	 * @param externalHost o host externo
 	 */
 	public void registerServerOnDB(byte[] hexId, int id, String externalHost)
 	{
@@ -251,9 +278,9 @@ public class GameServerTable implements IXmlReader
 	}
 	
 	/**
-	 * Gets the server name by id.
-	 * @param id the id
-	 * @return the server name by id
+	 * Obtem o nome do servidor pelo id.
+	 * @param id o id
+	 * @return o nome do servidor pelo id
 	 */
 	public String getServerNameById(int id)
 	{
@@ -261,8 +288,8 @@ public class GameServerTable implements IXmlReader
 	}
 	
 	/**
-	 * Gets the server names.
-	 * @return the game server names map.
+	 * Obtem os nomes dos servidores.
+	 * @return o mapa de nomes dos game servers
 	 */
 	public Map<Integer, String> getServerNames()
 	{
