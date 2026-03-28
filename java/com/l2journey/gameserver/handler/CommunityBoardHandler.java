@@ -184,6 +184,11 @@ public class CommunityBoardHandler implements IHandler<IParseBoardHandler, Strin
 				cmd = "_friendblockadd";
 				break;
 			}
+			case "Friends":
+			{
+				cmd = "_friendinfo";
+				break;
+			}
 			default:
 			{
 				separateAndSend("<html><body><br><br><center>The command: " + url + " is not implemented yet.</center><br><br></body></html>", player);
