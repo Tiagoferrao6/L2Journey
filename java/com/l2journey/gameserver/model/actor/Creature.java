@@ -182,7 +182,7 @@ import com.l2journey.gameserver.util.Broadcast;
 import com.l2journey.gameserver.util.LocationUtil;
 
 /**
- * Mother class of all character objects of the world (PC, NPC...)<br>
+ * Classe mae de todos os objetos de personagem do mundo (PC, NPC...)<br>
  * Creature:<br>
  * <ul>
  * <li>Door</li>
@@ -192,12 +192,12 @@ import com.l2journey.gameserver.util.LocationUtil;
  * <li>Trap</li>
  * <li>Vehicle</li>
  * </ul>
- * <b>Concept of CreatureTemplate:</b><br>
- * Each Creature owns generic and static properties (ex : all Keltir have the same number of HP...).<br>
- * All of those properties are stored in a different template for each type of Creature.<br>
- * Each template is loaded once in the server cache memory (reduce memory use).<br>
- * When a new instance of Creature is spawned, server just create a link between the instance and the template.<br>
- * This link is stored in {@link #_template}
+ * <b>Conceito de CreatureTemplate:</b><br>
+ * Cada Creature possui propriedades genericas e estaticas (ex: todos os Keltir tem o mesmo numero de HP...).<br>
+ * Todas essas propriedades sao armazenadas em um template diferente para cada tipo de Creature.<br>
+ * Cada template e carregado uma vez na memoria cache do servidor (reduz uso de memoria).<br>
+ * Quando uma nova instancia de Creature e criada, o servidor apenas cria um link entre a instancia e o template.<br>
+ * Esse link e armazenado em {@link #_template}
  * @version $Revision: 1.53.2.45.2.34 $ $Date: 2005/04/11 10:06:08 $
  */
 public abstract class Creature extends WorldObject
@@ -212,19 +212,19 @@ public abstract class Creature extends WorldObject
 	
 	private boolean _isDead = false;
 	private boolean _isImmobilized = false;
-	private boolean _isOverloaded = false; // the char is carrying too much
+	private boolean _isOverloaded = false; // o personagem esta carregando peso demais
 	private boolean _isParalyzed = false;
 	private boolean _isPendingRevive = false;
 	private boolean _isRunning = false;
 	protected boolean _showSummonAnimation = false;
 	protected boolean _isTeleporting = false;
 	private boolean _isInvul = false;
-	private boolean _isMortal = true; // Char will die when HP decreased to 0
+	private boolean _isMortal = true; // Personagem morre quando HP chega a 0
 	private boolean _isFlying = false;
 	
 	private CreatureStat _stat;
 	private CreatureStatus _status;
-	private CreatureTemplate _template; // The link on the CreatureTemplate object containing generic and static properties of this Creature type (ex : Max HP, Speed...)
+	private CreatureTemplate _template; // O link para o objeto CreatureTemplate contendo propriedades genericas e estaticas deste tipo de Creature (ex: Max HP, Speed...)
 	private String _title;
 	
 	public static final double MAX_HP_BAR_PX = 352.0;
@@ -235,15 +235,15 @@ public abstract class Creature extends WorldObject
 	
 	private int _karma = 0;
 	
-	/** Table of Calculators containing all used calculator */
+	/** Tabela de Calculators contendo todos os calculadores utilizados */
 	private Calculator[] _calculators;
-	/** Map containing all skills of this character. */
+	/** Map contendo todas as skills deste personagem. */
 	private final Map<Integer, Skill> _skills = new ConcurrentHashMap<>();
-	/** Map containing the skill reuse time stamps. */
+	/** Map contendo os timestamps de reuso de skills. */
 	private final Map<Integer, TimeStamp> _reuseTimeStampsSkills = new ConcurrentHashMap<>();
-	/** Map containing the item reuse time stamps. */
+	/** Map contendo os timestamps de reuso de itens. */
 	private final Map<Integer, TimeStamp> _reuseTimeStampsItems = new ConcurrentHashMap<>();
-	/** Map containing all the disabled skills. */
+	/** Map contendo todas as skills desabilitadas. */
 	private final Map<Integer, Long> _disabledSkills = new ConcurrentHashMap<>();
 	private boolean _allSkillsDisabled;
 	
@@ -263,9 +263,9 @@ public abstract class Creature extends WorldObject
 	private final Map<Integer, OptionSkillHolder> _triggerSkills = new ConcurrentHashMap<>(1);
 	
 	private final Map<Integer, InvulSkillHolder> _invulAgainst = new ConcurrentHashMap<>(1);
-	/** Creatures effect list. */
+	/** Lista de efeitos da Creature. */
 	private final EffectList _effectList = new EffectList(this);
-	/** The creature that summons this character. */
+	/** A criatura que invocou este personagem. */
 	private Creature _summoner = null;
 	
 	private SkillChannelizer _channelizer = null;
@@ -274,31 +274,31 @@ public abstract class Creature extends WorldObject
 	
 	private final BuffFinishTask _buffFinishTask = new BuffFinishTask();
 	
-	/** Map 32 bits, containing all abnormal visual effects in progress. */
+	/** Mapa de 32 bits, contendo todos os efeitos visuais anormais em andamento. */
 	private int _abnormalVisualEffects;
-	/** Map 32 bits, containing all special abnormal visual effects in progress. */
+	/** Mapa de 32 bits, contendo todos os efeitos visuais anormais especiais em andamento. */
 	private int _abnormalVisualEffectsSpecial;
-	/** Map 32 bits, containing all event abnormal visual effects in progress. */
+	/** Mapa de 32 bits, contendo todos os efeitos visuais anormais de evento em andamento. */
 	private int _abnormalVisualEffectsEvent;
 	
-	/** Movement data of this Creature */
+	/** Dados de movimento desta Creature */
 	protected MoveData _move;
 	private boolean _cursorKeyMovement = false;
 	
-	/** This creature's target. */
+	/** O alvo desta criatura. */
 	private WorldObject _target;
-	/** Represents the time where the attack should end, in nanoseconds. */
+	/** Representa o momento em que o ataque deve terminar, em nanossegundos. */
 	private volatile long _attackEndTime;
 	private int _disableBowAttackEndTime;
 	
 	private int _castInterruptTime;
 	
-	/** Table of calculators containing all standard NPC calculator (ex : ACCURACY_COMBAT, EVASION_RATE) */
+	/** Tabela de calculadores contendo todos os calculadores padrao de NPC (ex: ACCURACY_COMBAT, EVASION_RATE) */
 	private static final Calculator[] NPC_STD_CALCULATOR = Formulas.getStdNPCCalculators();
 	
 	private volatile CreatureAI _ai = null;
 	
-	/** Future Skill Cast */
+	/** Futuro do Cast de Skill */
 	protected Future<?> _skillCast;
 	protected Future<?> _skillCast2;
 	
@@ -307,7 +307,7 @@ public abstract class Creature extends WorldObject
 	private Set<Creature> _seenCreatures = null;
 	private int _seenCreatureRange = Config.ALT_PARTY_RANGE;
 	
-	/** A list containing the dropped items of this fake player. */
+	/** Uma lista contendo os itens dropados deste fake player. */
 	private final List<Item> _fakePlayerDrops = new CopyOnWriteArrayList<>();
 	
 	private OnCreatureAttack _onCreatureAttack = null;
@@ -318,8 +318,8 @@ public abstract class Creature extends WorldObject
 	private OnCreatureSkillUse _onCreatureSkillUse = null;
 	
 	/**
-	 * Creates a creature.
-	 * @param template the creature template
+	 * Cria uma criatura.
+	 * @param template o template da criatura
 	 */
 	public Creature(CreatureTemplate template)
 	{
@@ -327,25 +327,25 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Constructor of Creature.<br>
+	 * Construtor de Creature.<br>
 	 * <br>
-	 * <b><u>Concept</u>:</b><br>
+	 * <b><u>Conceito</u>:</b><br>
 	 * <br>
-	 * Each Creature owns generic and static properties (ex : all Keltir have the same number of HP...).<br>
-	 * All of those properties are stored in a different template for each type of Creature. Each template is loaded once in the server cache memory (reduce memory use).<br>
-	 * When a new instance of Creature is spawned, server just create a link between the instance and the template This link is stored in <b>_template</b><br>
+	 * Cada Creature possui propriedades genericas e estaticas (ex: todos os Keltir tem o mesmo numero de HP...).<br>
+	 * Todas essas propriedades sao armazenadas em um template diferente para cada tipo de Creature. Cada template e carregado uma vez na memoria cache do servidor (reduz uso de memoria).<br>
+	 * Quando uma nova instancia de Creature e criada, o servidor apenas cria um link entre a instancia e o template. Esse link e armazenado em <b>_template</b><br>
 	 * <br>
-	 * <b><u>Actions</u>:</b>
+	 * <b><u>Acoes</u>:</b>
 	 * <ul>
-	 * <li>Set the _template of the Creature</li>
-	 * <li>Set _overloaded to false (the character can take more items)</li>
-	 * <li>If Creature is a Npc, copy skills from template to object</li>
-	 * <li>If Creature is a Npc, link _calculators to NPC_STD_CALCULATOR</li>
-	 * <li>If Creature is NOT a Npc, create an empty _skills slot</li>
-	 * <li>If Creature is a Player or Summon, copy basic Calculator set to object</li>
+	 * <li>Define o _template da Creature</li>
+	 * <li>Define _overloaded como false (o personagem pode carregar mais itens)</li>
+	 * <li>Se a Creature for um Npc, copia as skills do template para o objeto</li>
+	 * <li>Se a Creature for um Npc, vincula _calculators ao NPC_STD_CALCULATOR</li>
+	 * <li>Se a Creature NAO for um Npc, cria um slot vazio de _skills</li>
+	 * <li>Se a Creature for um Player ou Summon, copia o conjunto basico de Calculator para o objeto</li>
 	 * </ul>
-	 * @param objectId Identifier of the object to initialized
-	 * @param template The CreatureTemplate to apply to the object
+	 * @param objectId Identificador do objeto a ser inicializado
+	 * @param template O CreatureTemplate a ser aplicado ao objeto
 	 */
 	public Creature(int objectId, CreatureTemplate template)
 	{
@@ -359,7 +359,7 @@ public abstract class Creature extends WorldObject
 		initCharStat();
 		initCharStatus();
 		
-		// Set its template to the new Creature
+		// Define seu template para a nova Creature
 		_template = template;
 		if (isDoor())
 		{
@@ -367,12 +367,12 @@ public abstract class Creature extends WorldObject
 		}
 		else if (isNpc())
 		{
-			// Copy the Standard Calculators of the Npc in _calculators
+			// Copia os Calculators padrao do Npc em _calculators
 			_calculators = NPC_STD_CALCULATOR;
 			
-			// Copy the skills of the Npc from its template to the Creature Instance
-			// The skills list can be affected by spell effects so it's necessary to make a copy
-			// to avoid that a spell affecting a Npc, affects others Npc of the same type too.
+			// Copia as skills do Npc de seu template para a instancia de Creature
+			// A lista de skills pode ser afetada por efeitos de magia, entao e necessario fazer uma copia
+			// para evitar que uma magia afetando um Npc afete outros Npc do mesmo tipo tambem.
 			for (Skill skill : template.getSkills().values())
 			{
 				addSkill(skill);
@@ -380,13 +380,13 @@ public abstract class Creature extends WorldObject
 		}
 		else
 		{
-			// If Creature is a Player or a Summon, create the basic calculator set
+			// Se a Creature for um Player ou Summon, cria o conjunto basico de calculadores
 			_calculators = new Calculator[Stat.NUM_STATS];
 			if (isSummon())
 			{
-				// Copy the skills of the Summon from its template to the Creature Instance
-				// The skills list can be affected by spell effects so it's necessary to make a copy
-				// to avoid that a spell affecting a Summon, affects others Summon of the same type too.
+				// Copia as skills do Summon de seu template para a instancia de Creature
+				// A lista de skills pode ser afetada por efeitos de magia, entao e necessario fazer uma copia
+				// para evitar que uma magia afetando um Summon afete outros Summon do mesmo tipo tambem.
 				for (Skill skill : template.getSkills().values())
 				{
 					addSkill(skill);
@@ -405,7 +405,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * @return character inventory, default null, overridden in Playable types and in Npc
+	 * @return inventario do personagem, padrao null, sobrescrito em tipos Playable e em Npc
 	 */
 	public Inventory getInventory()
 	{
@@ -414,22 +414,22 @@ public abstract class Creature extends WorldObject
 	
 	public boolean destroyItemByItemId(ItemProcessType process, int itemId, long count, WorldObject reference, boolean sendMessage)
 	{
-		// Default: NPCs consume virtual items for their skills
-		// TODO: should be logged if even happens.. should be false
+		// Padrao: NPCs consomem itens virtuais para suas skills
+		// TODO: deveria ser registrado em log se acontecer.. deveria ser false
 		return true;
 	}
 	
 	public boolean destroyItem(ItemProcessType process, int objectId, long count, WorldObject reference, boolean sendMessage)
 	{
-		// Default: NPCs consume virtual items for their skills
-		// TODO: should be logged if even happens.. should be false
+		// Padrao: NPCs consomem itens virtuais para suas skills
+		// TODO: deveria ser registrado em log se acontecer.. deveria ser false
 		return true;
 	}
 	
 	/**
-	 * Check if the character is in the given zone Id.
-	 * @param zone the zone Id to check
-	 * @return {code true} if the character is in that zone
+	 * Verifica se o personagem esta na zona com o Id informado.
+	 * @param zone o Id da zona a verificar
+	 * @return {code true} se o personagem estiver nessa zona
 	 */
 	@Override
 	public boolean isInsideZone(ZoneId zone)
@@ -478,9 +478,9 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * This will return true if the player is transformed,<br>
-	 * but if the player is not transformed it will return false.
-	 * @return transformation status
+	 * Isso retornara true se o jogador estiver transformado,<br>
+	 * mas se o jogador nao estiver transformado retornara false.
+	 * @return status de transformacao
 	 */
 	public boolean isTransformed()
 	{
@@ -493,17 +493,17 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * This will untransform a player if they are an instance of Player and if they are transformed.
+	 * Isso ira destransformar um jogador se ele for uma instancia de Player e estiver transformado.
 	 */
 	public void untransform()
 	{
-		// Just a place holder
+		// Apenas um placeholder
 	}
 	
 	/**
-	 * This will return true if the player is GM,<br>
-	 * but if the player is not GM it will return false.
-	 * @return GM status
+	 * Isso retornara true se o jogador for GM,<br>
+	 * mas se o jogador nao for GM retornara false.
+	 * @return status de GM
 	 */
 	public boolean isGM()
 	{
@@ -511,8 +511,8 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Overridden in Player.
-	 * @return the access level.
+	 * Sobrescrito em Player.
+	 * @return o nivel de acesso.
 	 */
 	public AccessLevel getAccessLevel()
 	{
@@ -527,9 +527,9 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Remove the Creature from the world when the decay task is launched.<br>
-	 * <font color=#FF0000><b><u>Caution</u>: This method DOESN'T REMOVE the object from _allObjects of World </b></font><br>
-	 * <font color=#FF0000><b><u>Caution</u>: This method DOESN'T SEND Server->Client packets to players</b></font>
+	 * Remove a Creature do mundo quando a tarefa de decay e executada.<br>
+	 * <font color=#FF0000><b><u>Cuidado</u>: Este metodo NAO REMOVE o objeto de _allObjects do World </b></font><br>
+	 * <font color=#FF0000><b><u>Cuidado</u>: Este metodo NAO ENVIA pacotes Server->Client para jogadores</b></font>
 	 */
 	public void onDecay()
 	{
@@ -561,7 +561,7 @@ public abstract class Creature extends WorldObject
 		
 		revalidateZone(true);
 		
-		// Custom boss announcements configuration.
+		// Configuracao customizada de anuncios de boss.
 		if (this instanceof GrandBoss)
 		{
 			if (Config.GRANDBOSS_SPAWN_ANNOUNCEMENTS && ((getInstanceId() == 0) || Config.GRANDBOSS_INSTANCE_ANNOUNCEMENTS) && !isMinion() && !isRaidMinion())
@@ -602,26 +602,26 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Add Creature instance that is attacking to the attacker list.
-	 * @param creature The Creature that attacks this one
+	 * Adiciona a instancia de Creature que esta atacando a lista de atacantes.
+	 * @param creature A Creature que ataca esta
 	 */
 	public void addAttackerToAttackByList(Creature creature)
 	{
-		// DS: moved to Attackable
+		// DS: movido para Attackable
 	}
 	
 	/**
-	 * Send a packet to the Creature AND to all Player in the _KnownPlayers of the Creature.<br>
+	 * Envia um pacote para a Creature E para todos os Player em _KnownPlayers da Creature.<br>
 	 * <br>
-	 * <b><u>Concept</u>:</b><br>
+	 * <b><u>Conceito</u>:</b><br>
 	 * <br>
-	 * Player in the detection area of the Creature are identified in <b>_knownPlayers</b>.<br>
-	 * In order to inform other players of state modification on the Creature, server just need to go through _knownPlayers to send Server->Client Packet
+	 * Players na area de deteccao da Creature sao identificados em <b>_knownPlayers</b>.<br>
+	 * Para informar outros jogadores sobre modificacao de estado na Creature, o servidor apenas precisa percorrer _knownPlayers para enviar pacotes Server->Client
 	 * @param packet
 	 */
 	public void broadcastPacket(ServerPacket packet)
 	{
-		// TODO: Maybe add some nearby player count logic here.
+		// TODO: Talvez adicionar alguma logica de contagem de jogadores proximos aqui.
 		packet.sendInBroadcast();
 		
 		World.getInstance().forEachVisibleObject(this, Player.class, player ->
@@ -634,12 +634,12 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Send a packet to the Creature AND to all Player in the radius (max knownlist radius) from the Creature.<br>
+	 * Envia um pacote para a Creature E para todos os Player no raio (raio maximo da knownlist) a partir da Creature.<br>
 	 * <br>
-	 * <b><u>Concept</u>:</b><br>
+	 * <b><u>Conceito</u>:</b><br>
 	 * <br>
-	 * Player in the detection area of the Creature are identified in <b>_knownPlayers</b>.<br>
-	 * In order to inform other players of state modification on the Creature, server just need to go through _knownPlayers to send Server->Client Packet
+	 * Players na area de deteccao da Creature sao identificados em <b>_knownPlayers</b>.<br>
+	 * Para informar outros jogadores sobre modificacao de estado na Creature, o servidor apenas precisa percorrer _knownPlayers para enviar pacotes Server->Client
 	 * @param packet
 	 * @param radiusInKnownlist
 	 */
@@ -669,7 +669,7 @@ public abstract class Creature extends WorldObject
 			return;
 		}
 		
-		// Broadcast MoveToLocation when forced or once per second.
+		// Broadcast MoveToLocation quando forcado ou uma vez por segundo.
 		final int gameTicks = GameTimeTaskManager.getInstance().getGameTicks();
 		if (!force && (move.moveTimestamp > 0) && ((gameTicks - move.lastBroadcastTime) < 10))
 		{
@@ -726,7 +726,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * @return true if hp update should be done, false if not.
+	 * @return true se a atualizacao de hp deve ser feita, false se nao.
 	 */
 	protected boolean needHpUpdate()
 	{
@@ -759,14 +759,14 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Send the Server->Client packet StatusUpdate with current HP and MP to all other Player to inform.<br>
+	 * Envia o pacote Server->Client StatusUpdate com HP e MP atuais para todos os outros Players para informar.<br>
 	 * <br>
-	 * <b><u>Actions</u>:</b>
+	 * <b><u>Acoes</u>:</b>
 	 * <ul>
-	 * <li>Create the Server->Client packet StatusUpdate with current HP and MP</li>
-	 * <li>Send the Server->Client packet StatusUpdate with current HP and MP to all Creature called _statusListener that must be informed of HP/MP updates of this Creature</li>
+	 * <li>Cria o pacote Server->Client StatusUpdate com HP e MP atuais</li>
+	 * <li>Envia o pacote Server->Client StatusUpdate com HP e MP atuais para todas as Creatures chamadas _statusListener que devem ser informadas sobre atualizacoes de HP/MP desta Creature</li>
 	 * </ul>
-	 * <font color=#FF0000><b><u>Caution</u>: This method DOESN'T SEND CP information</b></font>
+	 * <font color=#FF0000><b><u>Cuidado</u>: Este metodo NAO ENVIA informacao de CP</b></font>
 	 */
 	public void broadcastStatusUpdate()
 	{
@@ -775,13 +775,13 @@ public abstract class Creature extends WorldObject
 			return;
 		}
 		
-		// Create the Server->Client packet StatusUpdate with current HP
+		// Cria o pacote Server->Client StatusUpdate com HP atual
 		final StatusUpdate su = new StatusUpdate(this);
 		su.addAttribute(StatusUpdate.MAX_HP, _stat.getMaxHp());
 		su.addAttribute(StatusUpdate.CUR_HP, (int) _status.getCurrentHp());
 		
-		// Go through the StatusListener
-		// Send the Server->Client packet StatusUpdate with current HP and MP
+		// Percorre os StatusListener
+		// Envia o pacote Server->Client StatusUpdate com HP e MP atuais
 		for (Creature temp : _status.getStatusListener())
 		{
 			if (temp != null)
@@ -796,18 +796,18 @@ public abstract class Creature extends WorldObject
 	 */
 	public void sendMessage(String text)
 	{
-		// default implementation
+		// implementacao padrao
 	}
 	
 	/**
-	 * Teleport a Creature and its pet if necessary.<br>
+	 * Teleporta uma Creature e seu pet se necessario.<br>
 	 * <br>
-	 * <b><u>Actions</u>:</b>
+	 * <b><u>Acoes</u>:</b>
 	 * <ul>
-	 * <li>Stop the movement of the Creature</li>
-	 * <li>Set the x,y,z position of the WorldObject and if necessary modify its _worldRegion</li>
-	 * <li>Send a Server->Client packet TeleportToLocationt to the Creature AND to all Player in its _KnownPlayers</li>
-	 * <li>Modify the position of the pet if necessary</li>
+	 * <li>Para o movimento da Creature</li>
+	 * <li>Define a posicao x,y,z do WorldObject e se necessario modifica sua _worldRegion</li>
+	 * <li>Envia um pacote Server->Client TeleportToLocation para a Creature E para todos os Players em seus _KnownPlayers</li>
+	 * <li>Modifica a posicao do pet se necessario</li>
 	 * </ul>
 	 * @param xValue
 	 * @param yValue
@@ -818,7 +818,7 @@ public abstract class Creature extends WorldObject
 	 */
 	public void teleToLocation(int xValue, int yValue, int zValue, int headingValue, int instanceId, int randomOffset)
 	{
-		// Prevent teleporting for players that disconnected unexpectedly.
+		// Previne teleporte para jogadores que desconectaram inesperadamente.
 		if (isPlayer() && !asPlayer().isOnline())
 		{
 			return;
@@ -829,13 +829,13 @@ public abstract class Creature extends WorldObject
 		int z = _isFlying ? zValue : GeoData.getInstance().getHeight(x, y, zValue);
 		int heading = headingValue;
 		
-		// Prepare creature for teleport.
+		// Prepara a criatura para teleporte.
 		if (_isPendingRevive)
 		{
 			doRevive();
 		}
 		
-		// Abort any client actions, casting and remove target.
+		// Aborta acoes do cliente, cast e remove alvo.
 		stopMove(null);
 		abortAttack();
 		abortCast();
@@ -845,10 +845,10 @@ public abstract class Creature extends WorldObject
 		
 		getAI().setIntention(Intention.ACTIVE);
 		
-		// Remove the object from its old location.
+		// Remove o objeto de sua localizacao antiga.
 		decayMe();
 		
-		// Adjust position a bit.
+		// Ajusta a posicao um pouco.
 		if (Config.OFFSET_ON_TELEPORT_ENABLED && (randomOffset > 0))
 		{
 			x += Rnd.get(-randomOffset, randomOffset);
@@ -856,22 +856,22 @@ public abstract class Creature extends WorldObject
 		}
 		z += 5;
 		
-		// Send teleport packet where needed.
+		// Envia pacote de teleporte onde necessario.
 		broadcastPacket(new TeleportToLocation(this, x, y, z, heading));
 		
-		// Change instance id.
+		// Muda o id da instancia.
 		setInstanceId(instanceId);
 		
-		// Set the x,y,z position of the WorldObject and if necessary modify its _worldRegion.
+		// Define a posicao x,y,z do WorldObject e se necessario modifica sua _worldRegion.
 		setXYZ(x, y, z);
 		
-		// Also adjust heading.
+		// Tambem ajusta o heading.
 		if (heading != 0)
 		{
 			setHeading(heading);
 		}
 		
-		// Allow recall of the detached characters.
+		// Permite recall de personagens desconectados.
 		if (isPlayer())
 		{
 			final Player player = asPlayer();
@@ -957,7 +957,7 @@ public abstract class Creature extends WorldObject
 			return true;
 		}
 		
-		// Check for arrows and MP
+		// Verifica flechas e MP
 		if (isPlayer())
 		{
 			final Weapon weaponItem = getActiveWeaponItem();
@@ -966,20 +966,20 @@ public abstract class Creature extends WorldObject
 				return false;
 			}
 			
-			// Equip arrows needed in left hand and send a Server->Client packet ItemList to the Player then return True
+			// Equipa flechas necessarias na mao esquerda e envia um pacote Server->Client ItemList ao Player, depois retorna True
 			if (!checkAndEquipArrows())
 			{
-				// Cancel the action because the Player have no arrow
+				// Cancela a acao porque o Player nao tem flechas
 				getAI().setIntention(Intention.IDLE);
 				sendPacket(ActionFailed.STATIC_PACKET);
 				sendPacket(weaponItem.isBow() ? SystemMessageId.YOU_HAVE_RUN_OUT_OF_ARROWS : SystemMessageId.NOT_ENOUGH_BOLTS);
 				return false;
 			}
 			
-			// Verify if the bow can be use
+			// Verifica se o arco pode ser usado
 			if (_disableBowAttackEndTime <= GameTimeTaskManager.getInstance().getGameTicks())
 			{
-				// Verify if Player owns enough MP
+				// Verifica se o Player possui MP suficiente
 				int mpConsume = weaponItem.getMpConsume();
 				if ((weaponItem.getReducedMpConsume() > 0) && (Rnd.get(100) < weaponItem.getReducedMpConsumeChance()))
 				{
@@ -989,25 +989,25 @@ public abstract class Creature extends WorldObject
 				mpConsume = (int) calcStat(Stat.BOW_MP_CONSUME_RATE, mpConsume, null, null);
 				if (_status.getCurrentMp() < mpConsume)
 				{
-					// If Player doesn't have enough MP, stop the attack
+					// Se o Player nao tiver MP suficiente, para o ataque
 					ThreadPool.schedule(new NotifyAITask(this, Action.READY_TO_ACT), 1000);
 					sendPacket(SystemMessageId.NOT_ENOUGH_MP);
 					sendPacket(ActionFailed.STATIC_PACKET);
 					return false;
 				}
 				
-				// If Player have enough MP, the bow consumes it
+				// Se o Player tiver MP suficiente, o arco consome
 				if (mpConsume > 0)
 				{
 					_status.reduceMp(mpConsume);
 				}
 				
-				// Set the period of bow no re-use
+				// Define o periodo de nao reutilizacao do arco
 				_disableBowAttackEndTime = (5 * GameTimeTaskManager.TICKS_PER_SECOND) + GameTimeTaskManager.getInstance().getGameTicks();
 			}
 			else
 			{
-				// Cancel the action because the bow can't be re-use at this moment
+				// Cancela a acao porque o arco nao pode ser reutilizado neste momento
 				ThreadPool.schedule(new NotifyAITask(this, Action.READY_TO_ACT), 1000);
 				sendPacket(ActionFailed.STATIC_PACKET);
 				return false;
@@ -1025,19 +1025,19 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Launch a physical attack against a target (Simple, Bow, Pole or Dual).<br>
+	 * Executa um ataque fisico contra um alvo (Simples, Arco, Lanca ou Dual).<br>
 	 * <br>
-	 * <b><u>Actions</u>:</b>
+	 * <b><u>Acoes</u>:</b>
 	 * <ul>
-	 * <li>Get the active weapon (always equipped in the right hand)</li>
-	 * <li>If weapon is a bow, check for arrows, MP and bow re-use delay (if necessary, equip the Player with arrows in left hand)</li>
-	 * <li>If weapon is a bow, consume MP and set the new period of bow non re-use</li>
-	 * <li>Get the Attack Speed of the Creature (delay (in milliseconds) before next attack)</li>
-	 * <li>Select the type of attack to start (Simple, Bow, Pole or Dual) and verify if SoulShot are charged then start calculation</li>
-	 * <li>If the Server->Client packet Attack contains at least 1 hit, send the Server->Client packet Attack to the Creature AND to all Player in the _KnownPlayers of the Creature</li>
-	 * <li>Notify AI with READY_TO_ACT</li>
+	 * <li>Obtem a arma ativa (sempre equipada na mao direita)</li>
+	 * <li>Se a arma for um arco, verifica flechas, MP e delay de reutilizacao do arco (se necessario, equipa o Player com flechas na mao esquerda)</li>
+	 * <li>Se a arma for um arco, consome MP e define o novo periodo de nao reutilizacao do arco</li>
+	 * <li>Obtem a Velocidade de Ataque da Creature (delay em milissegundos antes do proximo ataque)</li>
+	 * <li>Seleciona o tipo de ataque a iniciar (Simples, Arco, Lanca ou Dual) e verifica se SoulShots estao carregados, entao inicia o calculo</li>
+	 * <li>Se o pacote Server->Client Attack contiver pelo menos 1 hit, envia o pacote Server->Client Attack para a Creature E para todos os Players em _KnownPlayers da Creature</li>
+	 * <li>Notifica a AI com READY_TO_ACT</li>
 	 * </ul>
-	 * @param target The Creature targeted
+	 * @param target A Creature alvo
 	 */
 	public void doAttack(Creature target)
 	{
@@ -1054,7 +1054,7 @@ public abstract class Creature extends WorldObject
 				return;
 			}
 			
-			// Notify to scripts
+			// Notifica scripts
 			if (EventDispatcher.getInstance().hasListener(EventType.ON_CREATURE_ATTACK, this))
 			{
 				if (_onCreatureAttack == null)
@@ -1116,7 +1116,7 @@ public abstract class Creature extends WorldObject
 				}
 			}
 			
-			// Check if attacker's weapon can attack
+			// Verifica se a arma do atacante pode atacar
 			if (getActiveWeaponItem() != null)
 			{
 				final Weapon wpn = getActiveWeaponItem();
@@ -1159,7 +1159,7 @@ public abstract class Creature extends WorldObject
 					sendPacket(ActionFailed.STATIC_PACKET);
 					return;
 				}
-				// Checking if target has moved to peace zone
+				// Verificando se o alvo se moveu para zona de paz
 				else if (target.isInsidePeaceZone(player) && !isInTownWarEvent())
 				{
 					getAI().setIntention(Intention.ACTIVE);
@@ -1176,7 +1176,7 @@ public abstract class Creature extends WorldObject
 			
 			stopEffectsOnAction();
 			
-			// GeoData Los Check here (or dz > 1000)
+			// Verificacao GeoData de Linha de Visao aqui (ou dz > 1000)
 			if (!GeoData.getInstance().canSeeTarget(this, target))
 			{
 				sendPacket(SystemMessageId.CANNOT_SEE_TARGET);
@@ -1185,7 +1185,7 @@ public abstract class Creature extends WorldObject
 				return;
 			}
 			
-			// Mobius: Do not move when attack is launched.
+			// Mobius: Nao se mover quando o ataque e lancado.
 			if (isMoving())
 			{
 				stopMove(getLocation());
@@ -1255,7 +1255,7 @@ public abstract class Creature extends WorldObject
 				}
 			}
 			
-			// Precaution. It has happened in the past. Probably impossible to happen now, but will not risk it.
+			// Precaucao. Ja aconteceu no passado. Provavelmente impossivel de acontecer agora, mas nao vamos arriscar.
 			if (_attackEndTime < currentTime)
 			{
 				_attackEndTime = currentTime + TimeUnit.MILLISECONDS.toNanos(Integer.MAX_VALUE);
@@ -1272,8 +1272,8 @@ public abstract class Creature extends WorldObject
 				}
 			}
 			
-			// Flag the attacker if it's a Player outside a PvP area
-			if ((player != null) && !player.isInsideZone(ZoneId.PVP) && (player != target)) // Prevent players from flagging in PvP Zones.
+			// Marca o atacante se for um Player fora de area PvP
+			if ((player != null) && !player.isInsideZone(ZoneId.PVP) && (player != target)) // Previne jogadores de serem marcados em Zonas PvP.
 			{
 				AttackStanceTaskManager.getInstance().addAttackStanceTask(player);
 				if (player.getSummon() != target)
@@ -1282,26 +1282,26 @@ public abstract class Creature extends WorldObject
 				}
 			}
 			
-			// Check if hit isn't missed
+			// Verifica se o hit nao errou
 			if (!hitted)
 			{
-				abortAttack(); // Abort the attack of the Creature and send Server->Client ActionFailed packet
+				abortAttack(); // Aborta o ataque da Creature e envia pacote Server->Client ActionFailed
 			}
 			else
 			{
-				// If we didn't miss the hit, discharge the shoulshots, if any
+				// Se nao erramos o hit, descarrega os soulshots, se houver
 				setChargedShot(ShotType.SOULSHOTS, false);
 				if (player != null)
 				{
 					if (player.isCursedWeaponEquipped())
 					{
-						// If hit by a cursed weapon, CP is reduced to 0
+						// Se atingido por uma arma amaldicoada, CP e reduzido a 0
 						if (!target.isInvul())
 						{
 							target.setCurrentCp(0);
 						}
 					}
-					// If a cursed weapon is hit by a Hero, CP is reduced to 0
+					// Se uma arma amaldicoada e atingida por um Hero, CP e reduzido a 0
 					else if (player.isHero() && target.isPlayer() && target.asPlayer().isCursedWeaponEquipped())
 					{
 						target.setCurrentCp(0);
@@ -1309,14 +1309,14 @@ public abstract class Creature extends WorldObject
 				}
 			}
 			
-			// If the Server->Client packet Attack contains at least 1 hit, send the Server->Client packet Attack
-			// to the Creature AND to all Player in the _KnownPlayers of the Creature
+			// Se o pacote Server->Client Attack contiver pelo menos 1 hit, envia o pacote Server->Client Attack
+			// para a Creature E para todos os Players em _KnownPlayers da Creature
 			if (attack.hasHits())
 			{
 				broadcastPacket(attack);
 			}
 			
-			// Notify AI with READY_TO_ACT
+			// Notifica AI com READY_TO_ACT
 			ThreadPool.schedule(new NotifyAITask(this, Action.READY_TO_ACT), timeAtk + reuse);
 		}
 		finally
@@ -1326,25 +1326,25 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Launch a Bow attack.<br>
+	 * Executa um ataque de Arco.<br>
 	 * <br>
-	 * <b><u>Actions</u>:</b>
+	 * <b><u>Acoes</u>:</b>
 	 * <ul>
-	 * <li>Calculate if hit is missed or not</li>
-	 * <li>Consume arrows</li>
-	 * <li>If hit isn't missed, calculate if shield defense is efficient</li>
-	 * <li>If hit isn't missed, calculate if hit is critical</li>
-	 * <li>If hit isn't missed, calculate physical damages</li>
-	 * <li>If the Creature is a Player, Send a Server->Client packet SetupGauge</li>
-	 * <li>Create a new hit task with Medium priority</li>
-	 * <li>Calculate and set the disable delay of the bow in function of the Attack Speed</li>
-	 * <li>Add this hit to the Server-Client packet Attack</li>
+	 * <li>Calcula se o hit errou ou nao</li>
+	 * <li>Consome flechas</li>
+	 * <li>Se o hit nao errou, calcula se a defesa de escudo e eficiente</li>
+	 * <li>Se o hit nao errou, calcula se o hit e critico</li>
+	 * <li>Se o hit nao errou, calcula danos fisicos</li>
+	 * <li>Se a Creature for um Player, envia um pacote Server->Client SetupGauge</li>
+	 * <li>Cria uma nova tarefa de hit com prioridade Media</li>
+	 * <li>Calcula e define o delay de desabilitacao do arco em funcao da Velocidade de Ataque</li>
+	 * <li>Adiciona este hit ao pacote Server-Client Attack</li>
 	 * </ul>
-	 * @param attack Server->Client packet Attack in which the hit will be added
-	 * @param target The Creature targeted
-	 * @param sAtk The Attack Speed of the attacker
+	 * @param attack Pacote Server->Client Attack no qual o hit sera adicionado
+	 * @param target A Creature alvo
+	 * @param sAtk A Velocidade de Ataque do atacante
 	 * @param reuse
-	 * @return True if the hit isn't missed
+	 * @return True se o hit nao errou
 	 */
 	private boolean doAttackHitByBow(Attack attack, Creature target, int sAtk, int reuse)
 	{
@@ -1352,79 +1352,79 @@ public abstract class Creature extends WorldObject
 		byte shld1 = 0;
 		boolean crit1 = false;
 		
-		// Calculate if hit is missed or not.
+		// Calcula se o hit errou ou nao.
 		final boolean miss1 = Formulas.calcHitMiss(this, target);
 		
-		// Consume arrows.
+		// Consome flechas.
 		reduceArrowCount(false);
 		
 		_move = null;
 		
-		// Check if hit isn't missed.
+		// Verifica se o hit nao errou.
 		if (!miss1)
 		{
-			// Calculate if shield defense is efficient.
+			// Calcula se a defesa de escudo e eficiente.
 			shld1 = Formulas.calcShldUse(this, target);
 			
-			// Calculate if hit is critical.
+			// Calcula se o hit e critico.
 			crit1 = Formulas.calcCrit(this, target);
 			
-			// Calculate physical damages.
+			// Calcula danos fisicos.
 			damage1 = (int) Formulas.calcPhysDam(this, target, null, shld1, crit1, attack.hasSoulshot());
 			
-			// Bows Ranged Damage Formula (Damage gradually decreases when 60% or lower than full hit range, and increases when 60% or higher).
-			// Full hit range is 500 which is the base bow range, and the 60% of this is 800.
+			// Formula de Dano a Distancia de Arcos (Dano diminui gradualmente quando 60% ou menos do alcance maximo, e aumenta quando 60% ou mais).
+			// O alcance maximo e 500 que e o alcance base do arco, e 60% disso e 800.
 			if (Config.CALCULATE_DISTANCE_BOW_DAMAGE)
 			{
 				damage1 *= (calculateDistance3D(target) / 4000) + 0.8;
 			}
 		}
 		
-		// Check if the Creature is a Player.
+		// Verifica se a Creature e um Player.
 		if (isPlayer())
 		{
 			sendPacket(new SetupGauge(getObjectId(), SetupGauge.RED, sAtk + reuse));
 		}
 		
-		// Create a new hit task with Medium priority.
+		// Cria uma nova tarefa de hit com prioridade Media.
 		ThreadPool.schedule(new HitTask(this, target, damage1, crit1, miss1, shld1, attack.hasSoulshot(), true), sAtk);
 		
-		// Calculate and set the disable delay of the bow in function of the Attack Speed.
+		// Calcula e define o delay de desabilitacao do arco em funcao da Velocidade de Ataque.
 		final int gameTime = GameTimeTaskManager.getInstance().getGameTicks();
 		_disableBowAttackEndTime = gameTime + ((sAtk + reuse) / GameTimeTaskManager.MILLIS_IN_TICK);
 		
-		// Precaution. It happened in the past for _attackEndTime. Will not risk it.
+		// Precaucao. Aconteceu no passado com _attackEndTime. Nao vamos arriscar.
 		if (_disableBowAttackEndTime < gameTime)
 		{
 			_disableBowAttackEndTime = Integer.MAX_VALUE;
 		}
 		
-		// Add this hit to the Server-Client packet Attack.
+		// Adiciona este hit ao pacote Server-Client Attack.
 		attack.addHit(target, damage1, miss1, crit1, shld1);
 		
-		// Return true if hit isn't missed.
+		// Retorna true se o hit nao errou.
 		return !miss1;
 	}
 	
 	/**
-	 * Launch a CrossBow attack.<br>
+	 * Executa um ataque de Besta.<br>
 	 * <br>
-	 * <b><u>Actions</u>:</b>
+	 * <b><u>Acoes</u>:</b>
 	 * <ul>
-	 * <li>Calculate if hit is missed or not</li>
-	 * <li>Consume bolts</li>
-	 * <li>If hit isn't missed, calculate if shield defense is efficient</li>
-	 * <li>If hit isn't missed, calculate if hit is critical</li>
-	 * <li>If hit isn't missed, calculate physical damages</li>
-	 * <li>If the Creature is a Player, Send a Server->Client packet SetupGauge</li>
-	 * <li>Create a new hit task with Medium priority</li>
-	 * <li>Calculate and set the disable delay of the crossbow in function of the Attack Speed</li>
-	 * <li>Add this hit to the Server-Client packet Attack</li><br>
-	 * @param attack Server->Client packet Attack in which the hit will be added
-	 * @param target The Creature targeted
-	 * @param sAtk The Attack Speed of the attacker
+	 * <li>Calcula se o hit errou ou nao</li>
+	 * <li>Consome virotes</li>
+	 * <li>Se o hit nao errou, calcula se a defesa de escudo e eficiente</li>
+	 * <li>Se o hit nao errou, calcula se o hit e critico</li>
+	 * <li>Se o hit nao errou, calcula danos fisicos</li>
+	 * <li>Se a Creature for um Player, envia um pacote Server->Client SetupGauge</li>
+	 * <li>Cria uma nova tarefa de hit com prioridade Media</li>
+	 * <li>Calcula e define o delay de desabilitacao da besta em funcao da Velocidade de Ataque</li>
+	 * <li>Adiciona este hit ao pacote Server-Client Attack</li><br>
+	 * @param attack Pacote Server->Client Attack no qual o hit sera adicionado
+	 * @param target A Creature alvo
+	 * @param sAtk A Velocidade de Ataque do atacante
 	 * @param reuse
-	 * @return True if the hit isn't missed
+	 * @return True se o hit nao errou
 	 */
 	private boolean doAttackHitByCrossBow(Attack attack, Creature target, int sAtk, int reuse)
 	{
@@ -1432,73 +1432,73 @@ public abstract class Creature extends WorldObject
 		byte shld1 = 0;
 		boolean crit1 = false;
 		
-		// Calculate if hit is missed or not.
+		// Calcula se o hit errou ou nao.
 		final boolean miss1 = Formulas.calcHitMiss(this, target);
 		
-		// Consume bolts.
+		// Consome virotes.
 		reduceArrowCount(true);
 		
 		_move = null;
 		
-		// Check if hit isn't missed.
+		// Verifica se o hit nao errou.
 		if (!miss1)
 		{
-			// Calculate if shield defense is efficient.
+			// Calcula se a defesa de escudo e eficiente.
 			shld1 = Formulas.calcShldUse(this, target);
 			
-			// Calculate if hit is critical.
+			// Calcula se o hit e critico.
 			crit1 = Formulas.calcCrit(this, target);
 			
-			// Calculate physical damages.
+			// Calcula danos fisicos.
 			damage1 = (int) Formulas.calcPhysDam(this, target, null, shld1, crit1, attack.hasSoulshot());
 		}
 		
-		// Check if the Creature is a Player.
+		// Verifica se a Creature e um Player.
 		if (isPlayer())
 		{
-			// Send a system message.
+			// Envia uma mensagem de sistema.
 			sendPacket(SystemMessageId.YOUR_CROSSBOW_IS_PREPARING_TO_FIRE);
 			
-			// Send a Server->Client packet SetupGauge.
+			// Envia um pacote Server->Client SetupGauge.
 			sendPacket(new SetupGauge(getObjectId(), SetupGauge.RED, sAtk + reuse));
 		}
 		
-		// Create a new hit task with Medium priority.
+		// Cria uma nova tarefa de hit com prioridade Media.
 		ThreadPool.schedule(new HitTask(this, target, damage1, crit1, miss1, shld1, attack.hasSoulshot(), true), sAtk);
 		
-		// Calculate and set the disable delay of the bow in function of the Attack Speed.
+		// Calcula e define o delay de desabilitacao da besta em funcao da Velocidade de Ataque.
 		final int gameTime = GameTimeTaskManager.getInstance().getGameTicks();
 		_disableBowAttackEndTime = gameTime + ((sAtk + reuse) / GameTimeTaskManager.MILLIS_IN_TICK);
 		
-		// Precaution. It happened in the past for _attackEndTime. Will not risk it.
+		// Precaucao. Aconteceu no passado com _attackEndTime. Nao vamos arriscar.
 		if (_disableBowAttackEndTime < gameTime)
 		{
 			_disableBowAttackEndTime = Integer.MAX_VALUE;
 		}
 		
-		// Add this hit to the Server-Client packet Attack.
+		// Adiciona este hit ao pacote Server-Client Attack.
 		attack.addHit(target, damage1, miss1, crit1, shld1);
 		
-		// Return true if hit isn't missed.
+		// Retorna true se o hit nao errou.
 		return !miss1;
 	}
 	
 	/**
-	 * Launch a Dual attack.<br>
+	 * Executa um ataque Dual.<br>
 	 * <br>
-	 * <b><u>Actions</u>:</b>
+	 * <b><u>Acoes</u>:</b>
 	 * <ul>
-	 * <li>Calculate if hits are missed or not</li>
-	 * <li>If hits aren't missed, calculate if shield defense is efficient</li>
-	 * <li>If hits aren't missed, calculate if hit is critical</li>
-	 * <li>If hits aren't missed, calculate physical damages</li>
-	 * <li>Create 2 new hit tasks with Medium priority</li>
-	 * <li>Add those hits to the Server-Client packet Attack</li>
+	 * <li>Calcula se os hits erraram ou nao</li>
+	 * <li>Se os hits nao erraram, calcula se a defesa de escudo e eficiente</li>
+	 * <li>Se os hits nao erraram, calcula se o hit e critico</li>
+	 * <li>Se os hits nao erraram, calcula danos fisicos</li>
+	 * <li>Cria 2 novas tarefas de hit com prioridade Media</li>
+	 * <li>Adiciona esses hits ao pacote Server-Client Attack</li>
 	 * </ul>
-	 * @param attack Server->Client packet Attack in which the hit will be added
-	 * @param target The Creature targeted
+	 * @param attack Pacote Server->Client Attack no qual o hit sera adicionado
+	 * @param target A Creature alvo
 	 * @param sAtk
-	 * @return True if hit 1 or hit 2 isn't missed
+	 * @return True se o hit 1 ou hit 2 nao errou
 	 */
 	private boolean doAttackHitByDual(Attack attack, Creature target, int sAtk)
 	{
@@ -1509,74 +1509,74 @@ public abstract class Creature extends WorldObject
 		boolean crit1 = false;
 		boolean crit2 = false;
 		
-		// Calculate if hits are missed or not
+		// Calcula se os hits erraram ou nao
 		final boolean miss1 = Formulas.calcHitMiss(this, target);
 		final boolean miss2 = Formulas.calcHitMiss(this, target);
 		
-		// Check if hit 1 isn't missed
+		// Verifica se o hit 1 nao errou
 		if (!miss1)
 		{
-			// Calculate if shield defense is efficient against hit 1
+			// Calcula se a defesa de escudo e eficiente contra o hit 1
 			shld1 = Formulas.calcShldUse(this, target);
 			
-			// Calculate if hit 1 is critical
+			// Calcula se o hit 1 e critico
 			crit1 = Formulas.calcCrit(this, target);
 			
-			// Calculate physical damages of hit 1
+			// Calcula danos fisicos do hit 1
 			damage1 = (int) Formulas.calcPhysDam(this, target, null, shld1, crit1, attack.hasSoulshot());
 			damage1 /= 2;
 		}
 		
-		// Check if hit 2 isn't missed
+		// Verifica se o hit 2 nao errou
 		if (!miss2)
 		{
-			// Calculate if shield defense is efficient against hit 2
+			// Calcula se a defesa de escudo e eficiente contra o hit 2
 			shld2 = Formulas.calcShldUse(this, target);
 			
-			// Calculate if hit 2 is critical
+			// Calcula se o hit 2 e critico
 			crit2 = Formulas.calcCrit(this, target);
 			
-			// Calculate physical damages of hit 2
+			// Calcula danos fisicos do hit 2
 			damage2 = (int) Formulas.calcPhysDam(this, target, null, shld2, crit2, attack.hasSoulshot());
 			damage2 /= 2;
 		}
 		
-		// Create a new hit task with Medium priority for hit 1
+		// Cria uma nova tarefa de hit com prioridade Media para o hit 1
 		ThreadPool.schedule(new HitTask(this, target, damage1, crit1, miss1, shld1, attack.hasSoulshot(), true), sAtk / 2);
 		
-		// Create a new hit task with Medium priority for hit 2 with a higher delay
+		// Cria uma nova tarefa de hit com prioridade Media para o hit 2 com delay maior
 		ThreadPool.schedule(new HitTask(this, target, damage2, crit2, miss2, shld2, attack.hasSoulshot(), false), sAtk);
 		
-		// Add those hits to the Server-Client packet Attack
+		// Adiciona estes hits ao pacote Server-Client Attack
 		attack.addHit(target, damage1, miss1, crit1, shld1);
 		attack.addHit(target, damage2, miss2, crit2, shld2);
 		
-		// Return true if hit 1 or hit 2 isn't missed
+		// Retorna true se o hit 1 ou hit 2 nao errou
 		return !miss1 || !miss2;
 	}
 	
 	/**
-	 * Launch a Pole attack.<br>
+	 * Executa um ataque de Lanca.<br>
 	 * <br>
-	 * <b><u>Actions</u>:</b>
+	 * <b><u>Acoes</u>:</b>
 	 * <ul>
-	 * <li>Get all visible objects in a spherical area near the Creature to obtain possible targets</li>
-	 * <li>If possible target is the Creature targeted, launch a simple attack against it</li>
-	 * <li>If possible target isn't the Creature targeted but is attackable, launch a simple attack against it</li>
+	 * <li>Obtem todos os objetos visiveis em uma area esferica perto da Creature para obter alvos possiveis</li>
+	 * <li>Se o alvo possivel e a Creature alvo, executa um ataque simples contra ela</li>
+	 * <li>Se o alvo possivel nao e a Creature alvo mas e atacavel, executa um ataque simples contra ele</li>
 	 * </ul>
-	 * @param attack Server->Client packet Attack in which the hit will be added
+	 * @param attack Pacote Server->Client Attack no qual o hit sera adicionado
 	 * @param target
 	 * @param sAtk
-	 * @return True if one hit isn't missed
+	 * @return True se um hit nao errou
 	 */
 	private boolean doAttackHitByPole(Attack attack, Creature target, int sAtk)
 	{
-		// Perform the main target hit.
+		// Executa o hit no alvo principal.
 		boolean hitted = doAttackHitSimple(attack, target, 100, sAtk, true);
 		
 		if (!isAffected(EffectFlag.POLEARM_SINGLE_TARGET))
 		{
-			// Without Polearm Mastery (skill 216) max simultaneous attacks is 3 (1 by default + 2 in skill 3599).
+			// Sem Polearm Mastery (skill 216) o maximo de ataques simultaneos e 3 (1 por padrao + 2 na skill 3599).
 			int attackCountMax = (int) _stat.calcStat(Stat.ATTACK_COUNT_MAX, 1, null, null);
 			if (attackCountMax > 1)
 			{
@@ -1586,25 +1586,25 @@ public abstract class Creature extends WorldObject
 				double attackpercent = 85;
 				for (Creature obj : World.getInstance().getVisibleObjectsInRange(this, Creature.class, maxRadius))
 				{
-					// Skip main target.
+					// Pula o alvo principal.
 					if (obj == target)
 					{
 						continue;
 					}
 					
-					// Skip dead or fake dead target.
+					// Pula alvo morto ou fingindo de morto.
 					if (obj.isAlikeDead())
 					{
 						continue;
 					}
 					
-					// Check if target is auto attackable.
+					// Verifica se o alvo e auto atacavel.
 					if (!obj.isAutoAttackable(this))
 					{
 						continue;
 					}
 					
-					// Check if target is within attack angle.
+					// Verifica se o alvo esta dentro do angulo de ataque.
 					if (Math.abs(calculateDirectionTo(obj) - headingAngle) > physicalAttackAngle)
 					{
 						continue;
@@ -1625,7 +1625,7 @@ public abstract class Creature extends WorldObject
 						continue;
 					}
 					
-					// Launch a simple attack against the additional target.
+					// Executa um ataque simples contra o alvo adicional.
 					hitted |= doAttackHitSimple(attack, obj, attackpercent, sAtk, false);
 					attackpercent /= 1.15;
 					if (--attackCountMax <= 0)
@@ -1636,26 +1636,26 @@ public abstract class Creature extends WorldObject
 			}
 		}
 		
-		// Return true if one hit isn't missed
+		// Retorna true se um hit nao errou
 		return hitted;
 	}
 	
 	/**
-	 * Launch a simple attack.<br>
+	 * Executa um ataque simples.<br>
 	 * <br>
-	 * <b><u>Actions</u>:</b>
+	 * <b><u>Acoes</u>:</b>
 	 * <ul>
-	 * <li>Calculate if hit is missed or not</li>
-	 * <li>If hit isn't missed, calculate if shield defense is efficient</li>
-	 * <li>If hit isn't missed, calculate if hit is critical</li>
-	 * <li>If hit isn't missed, calculate physical damages</li>
-	 * <li>Create a new hit task with Medium priority</li>
-	 * <li>Add this hit to the Server-Client packet Attack</li>
+	 * <li>Calcula se o hit errou ou nao</li>
+	 * <li>Se o hit nao errou, calcula se a defesa de escudo e eficiente</li>
+	 * <li>Se o hit nao errou, calcula se o hit e critico</li>
+	 * <li>Se o hit nao errou, calcula danos fisicos</li>
+	 * <li>Cria uma nova tarefa de hit com prioridade Media</li>
+	 * <li>Adiciona este hit ao pacote Server-Client Attack</li>
 	 * </ul>
-	 * @param attack Server->Client packet Attack in which the hit will be added
-	 * @param target The Creature targeted
+	 * @param attack Pacote Server->Client Attack no qual o hit sera adicionado
+	 * @param target A Creature alvo
 	 * @param sAtk
-	 * @return True if the hit isn't missed
+	 * @return True se o hit nao errou
 	 */
 	private boolean doAttackHitSimple(Attack attack, Creature target, int sAtk)
 	{
@@ -1668,19 +1668,19 @@ public abstract class Creature extends WorldObject
 		byte shld1 = 0;
 		boolean crit1 = false;
 		
-		// Calculate if hit is missed or not
+		// Calcula se o hit errou ou nao
 		final boolean miss1 = Formulas.calcHitMiss(this, target);
 		
-		// Check if hit isn't missed
+		// Verifica se o hit nao errou
 		if (!miss1)
 		{
-			// Calculate if shield defense is efficient
+			// Calcula se a defesa de escudo e eficiente
 			shld1 = Formulas.calcShldUse(this, target);
 			
-			// Calculate if hit is critical
+			// Calcula se o hit e critico
 			crit1 = Formulas.calcCrit(this, target);
 			
-			// Calculate physical damages
+			// Calcula danos fisicos
 			damage1 = (int) Formulas.calcPhysDam(this, target, null, shld1, crit1, attack.hasSoulshot());
 			if (attackpercent != 100)
 			{
@@ -1688,30 +1688,30 @@ public abstract class Creature extends WorldObject
 			}
 		}
 		
-		// Create a new hit task with Medium priority
+		// Cria uma nova tarefa de hit com prioridade Media
 		ThreadPool.schedule(new HitTask(this, target, damage1, crit1, miss1, shld1, attack.hasSoulshot(), rechargeShots), sAtk);
 		
-		// Add this hit to the Server-Client packet Attack
+		// Adiciona este hit ao pacote Server-Client Attack
 		attack.addHit(target, damage1, miss1, crit1, shld1);
 		
-		// Return true if hit isn't missed
+		// Retorna true se o hit nao errou
 		return !miss1;
 	}
 	
 	/**
-	 * Manage the casting task (casting and interrupt time, re-use delay...) and display the casting bar and animation on client.<br>
+	 * Gerencia a tarefa de conjuracao (tempo de conjuracao e interrupcao, delay de reuso...) e exibe a barra de conjuracao e animacao no cliente.<br>
 	 * <br>
-	 * <b><u>Actions</u>:</b>
+	 * <b><u>Acoes</u>:</b>
 	 * <ul>
-	 * <li>Verify the possibility of the the cast : skill is a spell, caster isn't muted...</li>
-	 * <li>Get the list of all targets (ex : area effects) and define the Creature targeted (its stats will be used in calculation)</li>
-	 * <li>Calculate the casting time (base + modifier of MAtkSpd), interrupt time and re-use delay</li>
-	 * <li>Send a Server->Client packet MagicSkillUser (to display casting animation), a packet SetupGauge (to display casting bar) and a system message</li>
-	 * <li>Disable all skills during the casting time (create a task EnableAllSkills)</li>
-	 * <li>Disable the skill during the re-use delay (create a task EnableSkill)</li>
-	 * <li>Create a task MagicUseTask (that will call method onMagicUseTimer) to launch the Magic Skill at the end of the casting time</li>
+	 * <li>Verifica a possibilidade da conjuracao: skill e uma magia, conjurador nao esta silenciado...</li>
+	 * <li>Obtem a lista de todos os alvos (ex: efeitos em area) e define a Creature alvo (suas estatisticas serao usadas no calculo)</li>
+	 * <li>Calcula o tempo de conjuracao (base + modificador de MAtkSpd), tempo de interrupcao e delay de reuso</li>
+	 * <li>Envia um pacote Server->Client MagicSkillUser (para exibir animacao de conjuracao), um pacote SetupGauge (para exibir barra de conjuracao) e uma mensagem de sistema</li>
+	 * <li>Desabilita todas as skills durante o tempo de conjuracao (cria uma tarefa EnableAllSkills)</li>
+	 * <li>Desabilita a skill durante o delay de reuso (cria uma tarefa EnableSkill)</li>
+	 * <li>Cria uma tarefa MagicUseTask (que chamara o metodo onMagicUseTimer) para executar a Skill Magica ao final do tempo de conjuracao</li>
 	 * </ul>
-	 * @param skill The Skill to use
+	 * @param skill A Skill a ser usada
 	 */
 	public void doCast(Skill skill)
 	{
@@ -1760,7 +1760,7 @@ public abstract class Creature extends WorldObject
 	
 	private void beginCast(Skill skill, boolean isSimultaneous)
 	{
-		// Attackables cannot cast while moving.
+		// Atacaveis nao podem conjurar enquanto se movem.
 		if (isAttackable() && isMoving())
 		{
 			return;
@@ -1784,7 +1784,7 @@ public abstract class Creature extends WorldObject
 			return;
 		}
 		
-		// Override casting type
+		// Sobrescreve o tipo de conjuracao
 		boolean simultaneously = isSimultaneous;
 		if (skill.isSimultaneousCast() && !simultaneously)
 		{
@@ -1793,17 +1793,17 @@ public abstract class Creature extends WorldObject
 		
 		stopEffectsOnAction();
 		
-		// Set the target of the skill in function of Skill Type and Target Type
+		// Define o alvo da skill em funcao do Tipo de Skill e Tipo de Alvo
 		Creature target = null;
 		
-		// Get all possible targets of the skill in a table in function of the skill target type
+		// Obtem todos os alvos possiveis da skill em uma tabela em funcao do tipo de alvo da skill
 		final List<WorldObject> targets = skill.getTargetList(this);
 		boolean doit = false;
 		
-		// AURA skills should always be using caster as target
+		// Skills AURA devem sempre usar o conjurador como alvo
 		switch (skill.getTargetType())
 		{
-			case AREA_SUMMON: // We need it to correct facing
+			case AREA_SUMMON: // Precisamos disso para corrigir a direcao
 			{
 				target = isPlayer() ? asPlayer().getSummon() : null;
 				break;
@@ -1844,7 +1844,7 @@ public abstract class Creature extends WorldObject
 						setCastingNow(false);
 					}
 					
-					// Send a Server->Client packet ActionFailed to the Player
+					// Envia um pacote Server->Client ActionFailed para o Player
 					if (isPlayer())
 					{
 						sendPacket(ActionFailed.STATIC_PACKET);
@@ -1929,11 +1929,11 @@ public abstract class Creature extends WorldObject
 			}
 		}
 		
-		// TODO: Unhardcode using event listeners!
+		// TODO: Remover hardcode usando event listeners!
 		if (skill.hasEffectType(EffectType.RESURRECTION) && (isResurrectionBlocked() || target.isResurrectionBlocked()))
 		{
-			sendPacket(SystemMessageId.REJECT_RESURRECTION); // Reject resurrection
-			target.sendPacket(SystemMessageId.REJECT_RESURRECTION); // Reject resurrection
+			sendPacket(SystemMessageId.REJECT_RESURRECTION); // Rejeitar ressurreicao
+			target.sendPacket(SystemMessageId.REJECT_RESURRECTION); // Rejeitar ressurreicao
 			if (simultaneously)
 			{
 				setCastingSimultaneouslyNow(false);
@@ -1952,43 +1952,43 @@ public abstract class Creature extends WorldObject
 			return;
 		}
 		
-		// Get the Base Casting Time of the Skills.
+		// Obtem o Tempo Base de Conjuracao das Skills.
 		int skillTime = (skill.getHitTime() + skill.getCoolTime());
 		if (!skill.isChanneling() || (skill.getChannelingSkillId() == 0))
 		{
-			// Calculate the Casting Time of the "Non-Static" Skills (with caster PAtk/MAtkSpd).
+			// Calcula o Tempo de Conjuracao das Skills "Nao-Estaticas" (com PAtk/MAtkSpd do conjurador).
 			if (!skill.isStatic())
 			{
 				skillTime = Formulas.calcAtkSpd(this, skill, skillTime);
 			}
 			
-			// Calculate the Casting Time of Magic Skills (reduced in 40% if using SPS/BSPS)
+			// Calcula o Tempo de Conjuracao de Skills Magicas (reduzido em 40% se usando SPS/BSPS)
 			if (skill.isMagic() && (isChargedShot(ShotType.SPIRITSHOTS) || isChargedShot(ShotType.BLESSED_SPIRITSHOTS)))
 			{
 				skillTime = (int) (0.6 * skillTime);
 			}
 		}
 		
-		// Avoid broken Casting Animation.
-		// Client can't handle less than 550ms Casting Animation in Magic Skills with more than 550ms base.
+		// Evita Animacao de Conjuracao quebrada.
+		// Cliente nao consegue lidar com menos de 550ms de Animacao de Conjuracao em Skills Magicas com mais de 550ms de base.
 		if (skill.isMagic() && ((skill.getHitTime() + skill.getCoolTime()) > 550) && (skillTime < 550))
 		{
 			skillTime = 550;
 		}
-		// Client can't handle less than 500ms Casting Animation in Physical Skills with 500ms base or more.
+		// Cliente nao consegue lidar com menos de 500ms de Animacao de Conjuracao em Skills Fisicas com 500ms de base ou mais.
 		else if (!skill.isStatic() && ((skill.getHitTime() + skill.getCoolTime()) >= 500) && (skillTime < 500))
 		{
 			skillTime = 500;
 		}
 		
-		// queue herbs and potions
+		// enfileira ervas e pocoes
 		if (_isCastingSimultaneouslyNow && simultaneously)
 		{
 			ThreadPool.schedule(() -> beginCast(skill, simultaneously, target, targets), 100);
 			return;
 		}
 		
-		// Set the _castInterruptTime and casting status (Player already has this true)
+		// Define o _castInterruptTime e status de conjuracao (Player ja tem isso como true)
 		if (simultaneously)
 		{
 			setCastingSimultaneouslyNow(true);
@@ -2008,7 +2008,7 @@ public abstract class Creature extends WorldObject
 			setLastSimultaneousSkillCast(skill);
 		}
 		
-		// Calculate the Reuse Time of the Skill
+		// Calcula o Tempo de Reuso da Skill
 		int reuseDelay;
 		if (skill.isStaticReuse() || skill.isStatic())
 		{
@@ -2027,7 +2027,7 @@ public abstract class Creature extends WorldObject
 			reuseDelay = (int) (skill.getReuseDelay() * calcStat(Stat.DANCE_REUSE, 1, null, null));
 		}
 		
-		// Check if this skill consume mp on start casting
+		// Verifica se esta skill consome mp ao iniciar a conjuracao
 		final int initmpcons = _stat.getMpInitialConsume(skill);
 		if (initmpcons > 0)
 		{
@@ -2037,7 +2037,7 @@ public abstract class Creature extends WorldObject
 			sendPacket(su);
 		}
 		
-		// Disable the skill during the re-use delay and create a task EnableSkill with Medium priority to enable it at the end of the re-use delay
+		// Desabilita a skill durante o delay de reuso e cria uma tarefa EnableSkill com prioridade Media para habilita-la ao final do delay de reuso
 		if (reuseDelay > 10)
 		{
 			if (Formulas.calcSkillMastery(this, skill))
@@ -2059,7 +2059,7 @@ public abstract class Creature extends WorldObject
 			}
 		}
 		
-		// Make sure that char is facing selected target
+		// Garante que o personagem esta virado para o alvo selecionado
 		if (target != this)
 		{
 			setHeading(LocationUtil.calculateHeadingFrom(this, target));
@@ -2075,7 +2075,7 @@ public abstract class Creature extends WorldObject
 				return;
 			}
 			
-			// Reduce talisman mana on skill use.
+			// Reduz mana do talisma ao usar skill.
 			if ((skill.getReferenceItemId() > 0) && (ItemData.getInstance().getTemplate(skill.getReferenceItemId()).getBodyPart() == ItemTemplate.SLOT_DECO))
 			{
 				for (Item item : getInventory().getAllItemsByItemId(skill.getReferenceItemId()))
@@ -2095,7 +2095,7 @@ public abstract class Creature extends WorldObject
 			}
 		}
 		
-		// Broadcast fly effect if needed.
+		// Transmite efeito de voo se necessario.
 		if (skill.getFlyType() != null)
 		{
 			broadcastPacket(new FlyToLocation(this, target, skill.getFlyType()));
@@ -2104,24 +2104,24 @@ public abstract class Creature extends WorldObject
 		
 		if (!skill.isToggle())
 		{
-			// Send a Server->Client packet MagicSkillUser with target, displayId, level, skillTime, reuseDelay
-			// to the Creature AND to all Player in the _KnownPlayers of the Creature
+			// Envia um pacote Server->Client MagicSkillUser com alvo, displayId, level, skillTime, reuseDelay
+			// para a Creature E para todos os Players em _KnownPlayers da Creature
 			broadcastPacket(new MagicSkillUse(this, target, skill.getDisplayId(), skill.getDisplayLevel(), skillTime, reuseDelay));
 			broadcastPacket(new MagicSkillLaunched(this, skill.getDisplayId(), skill.getDisplayLevel(), targets));
 		}
 		
-		// Send a system message to the player.
+		// Envia uma mensagem de sistema para o jogador.
 		if (isPlayer() && !skill.isAbnormalInstant())
 		{
 			SystemMessage sm = null;
 			switch (skill.getId())
 			{
-				case 1312: // Fishing
+				case 1312: // Pesca
 				{
-					// Done in Player.startFishing()
+					// Feito em Player.startFishing()
 					break;
 				}
-				case 2046: // Wolf Collar
+				case 2046: // Coleira de Lobo
 				{
 					sm = new SystemMessage(SystemMessageId.SUMMONING_YOUR_PET);
 					break;
@@ -2147,10 +2147,10 @@ public abstract class Creature extends WorldObject
 		
 		final MagicUseTask mut = new MagicUseTask(this, targets, skill, skillTime, simultaneously);
 		
-		// launch the magic in skillTime milliseconds
+		// executa a magia em skillTime milissegundos
 		if (skillTime > 0)
 		{
-			// Send a Server->Client packet SetupGauge with the color of the gauge and the casting time
+			// Envia um pacote Server->Client SetupGauge com a cor do medidor e o tempo de conjuracao
 			if (isPlayer() && !simultaneously)
 			{
 				sendPacket(new SetupGauge(getObjectId(), SetupGauge.BLUE, skillTime));
@@ -2170,8 +2170,8 @@ public abstract class Creature extends WorldObject
 					_skillCast2 = null;
 				}
 				
-				// Create a task MagicUseTask to launch the MagicSkill at the end of the casting time (skillTime)
-				// For client animation reasons (party buffs especially) 400 ms before!
+				// Cria uma tarefa MagicUseTask para executar a MagicSkill ao final do tempo de conjuracao (skillTime)
+				// Por razoes de animacao do cliente (buffs de grupo especialmente) 400 ms antes!
 				_skillCast2 = ThreadPool.schedule(mut, Math.max(0, skillTime - 400));
 			}
 			else
@@ -2183,8 +2183,8 @@ public abstract class Creature extends WorldObject
 					_skillCast = null;
 				}
 				
-				// Create a task MagicUseTask to launch the MagicSkill at the end of the casting time (skillTime)
-				// For client animation reasons (party buffs especially) 400 ms before!
+				// Cria uma tarefa MagicUseTask para executar a MagicSkill ao final do tempo de conjuracao (skillTime)
+				// Por razoes de animacao do cliente (buffs de grupo especialmente) 400 ms antes!
 				_skillCast = ThreadPool.schedule(mut, Math.max(0, skillTime - 400));
 			}
 		}
@@ -2196,67 +2196,67 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Check if casting of skill is possible
+	 * Verifica se a conjuracao da skill e possivel
 	 * @param skill
-	 * @return True if casting is possible
+	 * @return True se a conjuracao e possivel
 	 */
 	public boolean checkDoCastConditions(Skill skill)
 	{
 		if ((skill == null) || isSkillDisabled(skill) || ((skill.getFlyType() == FlyType.CHARGE) && isMovementDisabled()))
 		{
-			// Send a Server->Client packet ActionFailed to the Player
+			// Envia um pacote Server->Client ActionFailed para o Player
 			sendPacket(ActionFailed.STATIC_PACKET);
 			return false;
 		}
 		
-		// Check if the caster has enough MP
+		// Verifica se o conjurador tem MP suficiente
 		if (_status.getCurrentMp() < (_stat.getMpConsume(skill) + _stat.getMpInitialConsume(skill)))
 		{
-			// Send a System Message to the caster
+			// Envia uma Mensagem de Sistema para o conjurador
 			sendPacket(SystemMessageId.NOT_ENOUGH_MP);
 			
-			// Send a Server->Client packet ActionFailed to the Player
+			// Envia um pacote Server->Client ActionFailed para o Player
 			sendPacket(ActionFailed.STATIC_PACKET);
 			return false;
 		}
 		
-		// Check if the caster has enough HP
+		// Verifica se o conjurador tem HP suficiente
 		if (_status.getCurrentHp() <= skill.getHpConsume())
 		{
-			// Send a System Message to the caster
+			// Envia uma Mensagem de Sistema para o conjurador
 			sendPacket(SystemMessageId.NOT_ENOUGH_HP);
 			
-			// Send a Server->Client packet ActionFailed to the Player
+			// Envia um pacote Server->Client ActionFailed para o Player
 			sendPacket(ActionFailed.STATIC_PACKET);
 			return false;
 		}
 		
-		// Skill mute checks.
+		// Verificacoes de silenciamento de skill.
 		if (!skill.isStatic())
 		{
-			// Check if the skill is a magic spell and if the Creature is not muted
+			// Verifica se a skill e uma magia e se a Creature nao esta silenciada
 			if (skill.isMagic())
 			{
 				if (isMuted())
 				{
-					// Send a Server->Client packet ActionFailed to the Player
+					// Envia um pacote Server->Client ActionFailed para o Player
 					sendPacket(ActionFailed.STATIC_PACKET);
 					return false;
 				}
 			}
 			else
 			{
-				// Check if the skill is physical and if the Creature is not physical_muted
+				// Verifica se a skill e fisica e se a Creature nao esta silenciada fisicamente
 				if (isPhysicalMuted())
 				{
-					// Send a Server->Client packet ActionFailed to the Player
+					// Envia um pacote Server->Client ActionFailed para o Player
 					sendPacket(ActionFailed.STATIC_PACKET);
 					return false;
 				}
 			}
 		}
 		
-		// prevent casting signets to peace zone
+		// previne conjuracao de signets em zona de paz
 		if (skill.isChanneling() && (skill.getChannelingSkillId() > 0) && (getInstanceId() == 0) && !isInTownWarEvent())
 		{
 			final ZoneRegion zoneRegion = ZoneManager.getInstance().getRegion(this);
@@ -2283,7 +2283,7 @@ public abstract class Creature extends WorldObject
 			}
 		}
 		
-		// Check if the caster's weapon is limited to use only its own skills
+		// Verifica se a arma do conjurador e limitada a usar apenas suas proprias skills
 		if (getActiveWeaponItem() != null)
 		{
 			final Weapon wep = getActiveWeaponItem();
@@ -2310,17 +2310,17 @@ public abstract class Creature extends WorldObject
 			}
 		}
 		
-		// Check if the spell consumes an Item
-		// TODO: combine check and consume
+		// Verifica se a magia consome um Item
+		// TODO: combinar verificacao e consumo
 		if ((skill.getItemConsumeId() > 0) && (getInventory() != null))
 		{
-			// Get the Item consumed by the spell
+			// Obtem o Item consumido pela magia
 			final Item requiredItems = getInventory().getItemByItemId(skill.getItemConsumeId());
 			
-			// Check if the caster owns enough consumed Item to cast
+			// Verifica se o conjurador possui Items consumidos suficientes para conjurar
 			if ((requiredItems == null) || (requiredItems.getCount() < skill.getItemConsumeCount()))
 			{
-				// Checked: when a summon skill failed, server show required consume item count
+				// Verificado: quando uma skill de summon falha, servidor mostra a quantidade de item consumido necessaria
 				if (skill.hasEffectType(EffectType.SUMMON))
 				{
 					final SystemMessage sm = new SystemMessage(SystemMessageId.SUMMONING_A_SERVITOR_COSTS_S2_S1);
@@ -2330,7 +2330,7 @@ public abstract class Creature extends WorldObject
 				}
 				else
 				{
-					// Send a System Message to the caster
+					// Envia uma Mensagem de Sistema para o conjurador
 					sendPacket(SystemMessageId.THERE_ARE_NOT_ENOUGH_NECESSARY_ITEMS_TO_USE_THE_SKILL);
 				}
 				
@@ -2342,8 +2342,8 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Gets the item reuse time stamps map.
-	 * @return the item reuse time stamps map
+	 * Obtem o mapa de timestamps de reuso de itens.
+	 * @return o mapa de timestamps de reuso de itens
 	 */
 	public Map<Integer, TimeStamp> getItemReuseTimeStamps()
 	{
@@ -2351,9 +2351,9 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Adds a item reuse time stamp.
-	 * @param item the item
-	 * @param reuse the reuse
+	 * Adiciona um timestamp de reuso de item.
+	 * @param item o item
+	 * @param reuse o reuso
 	 */
 	public void addTimeStampItem(Item item, long reuse)
 	{
@@ -2361,11 +2361,11 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Adds a item reuse time stamp.<br>
-	 * Used for restoring purposes.
-	 * @param item the item
-	 * @param reuse the reuse
-	 * @param systime the system time
+	 * Adiciona um timestamp de reuso de item.<br>
+	 * Usado para propositos de restauracao.
+	 * @param item o item
+	 * @param reuse o reuso
+	 * @param systime o tempo do sistema
 	 */
 	public void addTimeStampItem(Item item, long reuse, long systime)
 	{
@@ -2373,9 +2373,9 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Gets the item remaining reuse time for a given item object ID.
-	 * @param itemObjId the item object ID
-	 * @return if the item has a reuse time stamp, the remaining time, otherwise -1
+	 * Obtem o tempo de reuso restante do item para um dado ID de objeto de item.
+	 * @param itemObjId o ID do objeto do item
+	 * @return se o item tiver um timestamp de reuso, o tempo restante, caso contrario -1
 	 */
 	public long getItemRemainingReuseTime(int itemObjId)
 	{
@@ -2384,9 +2384,9 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Gets the item remaining reuse time for a given shared reuse item group.
-	 * @param group the shared reuse item group
-	 * @return if the shared reuse item group has a reuse time stamp, the remaining time, otherwise -1
+	 * Obtem o delay de reuso restante para um dado grupo de reuso compartilhado de itens.
+	 * @param group o grupo de reuso compartilhado de itens
+	 * @return se o grupo de reuso compartilhado tiver um timestamp de reuso, o tempo restante, caso contrario -1
 	 */
 	public long getReuseDelayOnGroup(int group)
 	{
@@ -2410,8 +2410,8 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Gets the skill reuse time stamps map.
-	 * @return the skill reuse time stamps map
+	 * Obtem o mapa de timestamps de reuso de skills.
+	 * @return o mapa de timestamps de reuso de skills
 	 */
 	public Map<Integer, TimeStamp> getSkillReuseTimeStamps()
 	{
@@ -2419,9 +2419,9 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Adds the skill reuse time stamp.
-	 * @param skill the skill
-	 * @param reuse the delay
+	 * Adiciona o timestamp de reuso da skill.
+	 * @param skill a skill
+	 * @param reuse o delay
 	 */
 	public void addTimeStamp(Skill skill, long reuse)
 	{
@@ -2429,11 +2429,11 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Adds the skill reuse time stamp.<br>
-	 * Used for restoring purposes.
-	 * @param skill the skill
-	 * @param reuse the reuse
-	 * @param systime the system time
+	 * Adiciona o timestamp de reuso da skill.<br>
+	 * Usado para propositos de restauracao.
+	 * @param skill a skill
+	 * @param reuse o reuso
+	 * @param systime o tempo do sistema
 	 */
 	public void addTimeStamp(Skill skill, long reuse, long systime)
 	{
@@ -2441,8 +2441,8 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Removes a skill reuse time stamp.
-	 * @param skill the skill to remove
+	 * Remove um timestamp de reuso de skill.
+	 * @param skill a skill a ser removida
 	 */
 	public void removeTimeStamp(Skill skill)
 	{
@@ -2450,7 +2450,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Removes all skill reuse time stamps.
+	 * Remove todos os timestamps de reuso de skills.
 	 */
 	public void resetTimeStamps()
 	{
@@ -2458,9 +2458,9 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Gets the skill remaining reuse time for a given skill hash code.
-	 * @param hashCode the skill hash code
-	 * @return if the skill has a reuse time stamp, the remaining time, otherwise -1
+	 * Obtem o tempo de reuso restante da skill para um dado hash code de skill.
+	 * @param hashCode o hash code da skill
+	 * @return se a skill tiver um timestamp de reuso, o tempo restante, caso contrario -1
 	 */
 	public long getSkillRemainingReuseTime(int hashCode)
 	{
@@ -2469,9 +2469,9 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Verifies if the skill is under reuse time.
-	 * @param hashCode the skill hash code
-	 * @return {@code true} if the skill is under reuse time, {@code false} otherwise
+	 * Verifica se a skill esta sob tempo de reuso.
+	 * @param hashCode o hash code da skill
+	 * @return {@code true} se a skill esta sob tempo de reuso, {@code false} caso contrario
 	 */
 	public boolean hasSkillReuse(int hashCode)
 	{
@@ -2480,9 +2480,9 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Gets the skill reuse time stamp.
-	 * @param hashCode the skill hash code
-	 * @return if the skill has a reuse time stamp, the skill reuse time stamp, otherwise {@code null}
+	 * Obtem o timestamp de reuso da skill.
+	 * @param hashCode o hash code da skill
+	 * @return se a skill tiver um timestamp de reuso, o timestamp de reuso da skill, caso contrario {@code null}
 	 */
 	public TimeStamp getSkillReuseTimeStamp(int hashCode)
 	{
@@ -2490,8 +2490,8 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Gets the disabled skills map.
-	 * @return the disabled skills map
+	 * Obtem o mapa de skills desabilitadas.
+	 * @return o mapa de skills desabilitadas
 	 */
 	public Map<Integer, Long> getDisabledSkills()
 	{
@@ -2499,8 +2499,8 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Enables a skill.
-	 * @param skill the skill to enable
+	 * Habilita uma skill.
+	 * @param skill a skill a ser habilitada
 	 */
 	public void enableSkill(Skill skill)
 	{
@@ -2513,10 +2513,10 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Disables a skill for a given time.<br>
-	 * If delay is lesser or equal than zero, skill will be disabled "forever".
-	 * @param skill the skill to disable
-	 * @param delay delay in milliseconds
+	 * Desabilita uma skill por um tempo determinado.<br>
+	 * Se o delay for menor ou igual a zero, a skill sera desabilitada "para sempre".
+	 * @param skill a skill a ser desabilitada
+	 * @param delay delay em milissegundos
 	 */
 	public void disableSkill(Skill skill, long delay)
 	{
@@ -2529,7 +2529,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Removes all the disabled skills.
+	 * Remove todas as skills desabilitadas.
 	 */
 	public void resetDisabledSkills()
 	{
@@ -2537,9 +2537,9 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Verifies if the skill is disabled.
-	 * @param skill the skill
-	 * @return {@code true} if the skill is disabled, {@code false} otherwise
+	 * Verifica se a skill esta desabilitada.
+	 * @param skill a skill
+	 * @return {@code true} se a skill esta desabilitada, {@code false} caso contrario
 	 */
 	public boolean isSkillDisabled(Skill skill)
 	{
@@ -2580,7 +2580,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Disables all skills.
+	 * Desabilita todas as skills.
 	 */
 	public void disableAllSkills()
 	{
@@ -2588,7 +2588,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Enables all skills, except those under reuse time or previously disabled.
+	 * Habilita todas as skills, exceto aquelas sob tempo de reuso ou previamente desabilitadas.
 	 */
 	public void enableAllSkills()
 	{
@@ -2596,19 +2596,19 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Kill the Creature.<br>
+	 * Mata a Creature.<br>
 	 * <br>
-	 * <b><u>Actions</u>:</b>
+	 * <b><u>Acoes</u>:</b>
 	 * <ul>
-	 * <li>Set target to null and cancel Attack or Cast</li>
-	 * <li>Stop movement</li>
-	 * <li>Stop HP/MP/CP Regeneration task</li>
-	 * <li>Stop all active skills effects in progress on the Creature</li>
-	 * <li>Send the Server->Client packet StatusUpdate with current HP and MP to all other Player to inform</li>
-	 * <li>Notify Creature AI</li>
+	 * <li>Define alvo como null e cancela Ataque ou Conjuracao</li>
+	 * <li>Para o movimento</li>
+	 * <li>Para a tarefa de Regeneracao de HP/MP/CP</li>
+	 * <li>Para todos os efeitos de skills ativos em progresso na Creature</li>
+	 * <li>Envia o pacote Server->Client StatusUpdate com HP e MP atuais para todos os outros Players para informar</li>
+	 * <li>Notifica a AI da Creature</li>
 	 * </ul>
-	 * @param killer The Creature who killed it
-	 * @return false if the player is already dead.
+	 * @param killer A Creature que a matou
+	 * @return false se o jogador ja estiver morto.
 	 */
 	public boolean doDie(Creature killer)
 	{
@@ -2617,7 +2617,7 @@ public abstract class Creature extends WorldObject
 			CaptchaManager.getInstance().updateCounter(killer, this);
 		}
 		
-		// killing is only possible one time
+		// matar so e possivel uma vez
 		synchronized (this)
 		{
 			if (_isDead)
@@ -2625,7 +2625,7 @@ public abstract class Creature extends WorldObject
 				return false;
 			}
 			
-			// now reset currentHp to zero
+			// agora reseta currentHp para zero
 			setCurrentHp(0);
 			setDead(true);
 		}
@@ -2644,17 +2644,17 @@ public abstract class Creature extends WorldObject
 			}
 		}
 		
-		// Calculate rewards for main damage dealer.
+		// Calcula recompensas para o causador de dano principal.
 		final Creature mainDamageDealer = isMonster() ? asMonster().getMainDamageDealer() : null;
 		calculateRewards(mainDamageDealer != null ? mainDamageDealer : killer);
 		
-		// Set target to null and cancel Attack or Cast
+		// Define alvo como null e cancela Ataque ou Conjuracao
 		setTarget(null);
 		
-		// Stop movement
+		// Para o movimento
 		stopMove(null);
 		
-		// Stop HP/MP/CP Regeneration task
+		// Para a tarefa de Regeneracao de HP/MP/CP
 		_status.stopHpMpRegeneration();
 		
 		if (isAttackable())
@@ -2669,7 +2669,7 @@ public abstract class Creature extends WorldObject
 				_effectList.stopAllEffectsWithoutExclusions(true, true);
 			}
 			
-			// Clan help range aggro on kill.
+			// Ajuda de cla por alcance de aggro ao matar.
 			if ((killer != null) && killer.isPlayable() && !killer.asPlayer().isGM())
 			{
 				final NpcTemplate template = asAttackable().getTemplate();
@@ -2678,25 +2678,25 @@ public abstract class Creature extends WorldObject
 				{
 					World.getInstance().forEachVisibleObjectInRange(this, Attackable.class, template.getClanHelpRange(), called ->
 					{
-						// Don't call dead npcs, npcs without ai or npcs which are too far away.
+						// Nao chama npcs mortos, npcs sem ai ou npcs que estao muito longe.
 						if (called.isDead() || !called.hasAI() || (Math.abs(killer.getZ() - called.getZ()) > 600))
 						{
 							return;
 						}
 						
-						// Don't call npcs who are already doing some action (e.g. attacking, casting).
+						// Nao chama npcs que ja estao realizando alguma acao (ex: atacando, conjurando).
 						if ((called.getAI().getIntention() != Intention.IDLE) && (called.getAI().getIntention() != Intention.ACTIVE))
 						{
 							return;
 						}
 						
-						// Don't call npcs who aren't in the same clan.
+						// Nao chama npcs que nao sao do mesmo cla.
 						if (!template.isClan(called.getTemplate().getClans()))
 						{
 							return;
 						}
 						
-						// By default, when a faction member calls for help, attack the caller's attacker.
+						// Por padrao, quando um membro da faccao pede ajuda, ataca o atacante do que chamou.
 						called.getAI().notifyAction(Action.AGGRESSION, killer, 1);
 						
 						if (EventDispatcher.getInstance().hasListener(EventType.ON_ATTACKABLE_FACTION_CALL, called))
@@ -2712,10 +2712,10 @@ public abstract class Creature extends WorldObject
 			stopAllEffectsExceptThoseThatLastThroughDeath();
 		}
 		
-		// Send the Server->Client packet StatusUpdate with current HP and MP to all other Player to inform
+		// Envia o pacote Server->Client StatusUpdate com HP e MP atuais para todos os outros Players para informar
 		broadcastStatusUpdate();
 		
-		// Notify Creature AI
+		// Notifica a AI da Creature
 		if (hasAI())
 		{
 			getAI().notifyAction(Action.DEATH);
@@ -2771,7 +2771,7 @@ public abstract class Creature extends WorldObject
 			getAI().stopAITask();
 		}
 		
-		// Enable AI.
+		// Habilita AI.
 		_disabledAI = false;
 		
 		_onCreatureAttack = null;
@@ -2791,20 +2791,20 @@ public abstract class Creature extends WorldObject
 			getAI().stopAITask();
 		}
 		
-		// Remove all effects, do not broadcast changes.
+		// Remove todos os efeitos, nao transmite mudancas.
 		_effectList.stopAllEffectsWithoutExclusions(false, false);
 		
-		// Forget all seen creatures.
+		// Esquece todas as criaturas vistas.
 		if (_seenCreatures != null)
 		{
 			CreatureSeeTaskManager.getInstance().remove(this);
 			_seenCreatures.clear();
 		}
 		
-		// Cancel the BuffFinishTask related to this creature.
+		// Cancela a BuffFinishTask relacionada a esta criatura.
 		_buffFinishTask.stop();
 		
-		// Set world region to null.
+		// Define world region como null.
 		setWorldRegion(null);
 		
 		return true;
@@ -2824,7 +2824,7 @@ public abstract class Creature extends WorldObject
 	{
 	}
 	
-	/** Sets HP, MP and CP and revives the Creature. */
+	/** Define HP, MP e CP e revive a Creature. */
 	public void doRevive()
 	{
 		if (!_isDead)
@@ -2852,7 +2852,7 @@ public abstract class Creature extends WorldObject
 				_status.setCurrentMp(_stat.getMaxMp() * Config.RESPAWN_RESTORE_MP);
 			}
 			
-			// Start broadcast status
+			// Inicia transmissao de status
 			broadcastPacket(new Revive(this));
 			ZoneManager.getInstance().getRegion(this).onRevive(this);
 		}
@@ -2863,7 +2863,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Revives the Creature using skill.
+	 * Revive a Creature usando skill.
 	 * @param revivePower
 	 */
 	public void doRevive(double revivePower)
@@ -2872,8 +2872,8 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Gets this creature's AI.
-	 * @return the AI
+	 * Obtem a AI desta criatura.
+	 * @return a AI
 	 */
 	public CreatureAI getAI()
 	{
@@ -2894,9 +2894,9 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Initialize this creature's AI.<br>
-	 * OOP approach to be overridden in child classes.
-	 * @return the new AI
+	 * Inicializa a AI desta criatura.<br>
+	 * Abordagem OOP para ser sobrescrita em classes filhas.
+	 * @return a nova AI
 	 */
 	protected CreatureAI initAI()
 	{
@@ -2915,8 +2915,8 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Verifies if this creature has an AI,
-	 * @return {@code true} if this creature has an AI, {@code false} otherwise
+	 * Verifica se esta criatura tem uma AI.
+	 * @return {@code true} se esta criatura tem uma AI, {@code false} caso contrario
 	 */
 	public boolean hasAI()
 	{
@@ -2924,7 +2924,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * @return True if the Creature is RaidBoss or his minion.
+	 * @return True se a Creature e RaidBoss ou seu lacaio.
 	 */
 	public boolean isRaid()
 	{
@@ -2932,7 +2932,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * @return True if the Creature is minion.
+	 * @return True se a Creature e lacaio.
 	 */
 	public boolean isMinion()
 	{
@@ -2940,7 +2940,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * @return True if the Creature is minion of RaidBoss.
+	 * @return True se a Creature e lacaio de RaidBoss.
 	 */
 	public boolean isRaidMinion()
 	{
@@ -2948,7 +2948,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * @return a list of Creature that attacked.
+	 * @return uma lista de Creatures que atacaram.
 	 */
 	public Set<Creature> getAttackByList()
 	{
@@ -2981,7 +2981,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * @return True if the Creature can't use its skills (ex : stun, sleep...).
+	 * @return True se a Creature nao pode usar suas skills (ex: stun, sleep...).
 	 */
 	public boolean isAllSkillsDisabled()
 	{
@@ -2989,7 +2989,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * @return True if the Creature can't attack (attackEndTime, attackMute, fake death, stun, sleep, paralyze).
+	 * @return True se a Creature nao pode atacar (attackEndTime, attackMute, fake death, stun, sleep, paralyze).
 	 */
 	public boolean isAttackDisabled()
 	{
@@ -2997,7 +2997,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * @return True if the Creature is disabled (attackMute, fake death, stun, sleep, paralyze).
+	 * @return True se a Creature esta desabilitada (attackMute, fake death, stun, sleep, paralyze).
 	 */
 	public boolean isDisabled()
 	{
@@ -3015,7 +3015,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * @return True if the Creature is dead or use fake death.
+	 * @return True se a Creature esta morta ou usando fake death.
 	 */
 	public boolean isAlikeDead()
 	{
@@ -3023,7 +3023,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * @return True if the Creature is dead.
+	 * @return True se a Creature esta morta.
 	 */
 	public boolean isDead()
 	{
@@ -3061,7 +3061,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * @return True if the Creature can't move (stun, root, sleep, overload, paralyzed).
+	 * @return True se a Creature nao pode se mover (stun, root, sleep, overload, paralyzed).
 	 */
 	public boolean isMovementDisabled()
 	{
@@ -3070,7 +3070,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * @return True if the Creature can not be controlled by the player (confused, afraid).
+	 * @return True se a Creature nao pode ser controlada pelo jogador (confused, afraid).
 	 */
 	public boolean isOutOfControl()
 	{
@@ -3083,7 +3083,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Set the overloaded status of the Creature is overloaded (if True, the Player can't take more item).
+	 * Define o status de sobrecarregado da Creature (se True, o Player nao pode pegar mais itens).
 	 * @param value
 	 */
 	public void setOverloaded(boolean value)
@@ -3122,7 +3122,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * @return True if the Creature is running.
+	 * @return True se a Creature esta correndo.
 	 */
 	public boolean isRunning()
 	{
@@ -3175,7 +3175,7 @@ public abstract class Creature extends WorldObject
 		}
 	}
 	
-	/** Set the Creature movement type to run and send Server->Client packet ChangeMoveType to all others Player. */
+	/** Define o tipo de movimento da Creature para corrida e envia pacote Server->Client ChangeMoveType para todos os outros Players. */
 	public void setRunning()
 	{
 		setRunning(true);
@@ -3252,8 +3252,8 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Initializes the CharStat class of the WorldObject, is overwritten in classes that require a different CharStat Type.<br>
-	 * Removes the need for instanceof checks.
+	 * Inicializa a classe CharStat do WorldObject, e sobrescrita em classes que requerem um tipo CharStat diferente.<br>
+	 * Remove a necessidade de verificacoes instanceof.
 	 */
 	public void initCharStat()
 	{
@@ -3271,8 +3271,8 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Initializes the CharStatus class of the WorldObject, is overwritten in classes that require a different CharStatus Type.<br>
-	 * Removes the need for instanceof checks.
+	 * Inicializa a classe CharStatus do WorldObject, e sobrescrita em classes que requerem um tipo CharStatus diferente.<br>
+	 * Remove a necessidade de verificacoes instanceof.
 	 */
 	public void initCharStatus()
 	{
@@ -3290,14 +3290,14 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Set the template of the Creature.<br>
+	 * Define o template da Creature.<br>
 	 * <br>
-	 * <b><u>Concept</u>:</b><br>
+	 * <b><u>Conceito</u>:</b><br>
 	 * <br>
-	 * Each Creature owns generic and static properties (ex : all Keltir have the same number of HP...).<br>
-	 * All of those properties are stored in a different template for each type of Creature.<br>
-	 * Each template is loaded once in the server cache memory (reduce memory use).<br>
-	 * When a new instance of Creature is spawned, server just create a link between the instance and the template This link is stored in <b>_template</b>.
+	 * Cada Creature possui propriedades genericas e estaticas (ex: todos os Keltir tem o mesmo numero de HP...).<br>
+	 * Todas essas propriedades sao armazenadas em um template diferente para cada tipo de Creature.<br>
+	 * Cada template e carregado uma vez na memoria cache do servidor (reduz uso de memoria).<br>
+	 * Quando uma nova instancia de Creature e criada, o servidor apenas cria um link entre a instancia e o template. Esse link e armazenado em <b>_template</b>.
 	 * @param template
 	 */
 	protected void setTemplate(CreatureTemplate template)
@@ -3306,7 +3306,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * @return the Title of the Creature.
+	 * @return o Titulo da Creature.
 	 */
 	public String getTitle()
 	{
@@ -3314,7 +3314,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Set the Title of the Creature.
+	 * Define o Titulo da Creature.
 	 * @param value
 	 */
 	public void setTitle(String value)
@@ -3330,7 +3330,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Set the Creature movement type to walk and send Server->Client packet ChangeMoveType to all others Player.
+	 * Define o tipo de movimento da Creature para andar e envia pacote Server->Client ChangeMoveType para todos os outros Players.
 	 */
 	public void setWalking()
 	{
@@ -3338,8 +3338,8 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Gets the abnormal visual effects affecting this character.
-	 * @return a map of 32 bits containing all abnormal visual effects in progress for this character
+	 * Obtem os efeitos visuais anormais que afetam este personagem.
+	 * @return um mapa de 32 bits contendo todos os efeitos visuais anormais em progresso para este personagem
 	 */
 	public int getAbnormalVisualEffects()
 	{
@@ -3347,8 +3347,8 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Gets the special abnormal visual effects affecting this character.
-	 * @return a map of 32 bits containing all special effect in progress for this character
+	 * Obtem os efeitos visuais anormais especiais que afetam este personagem.
+	 * @return um mapa de 32 bits contendo todos os efeitos especiais em progresso para este personagem
 	 */
 	public int getAbnormalVisualEffectSpecial()
 	{
@@ -3356,8 +3356,8 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Gets the event abnormal visual effects affecting this character.
-	 * @return a map of 32 bits containing all event abnormal visual effects in progress for this character
+	 * Obtem os efeitos visuais anormais de evento que afetam este personagem.
+	 * @return um mapa de 32 bits contendo todos os efeitos visuais anormais de evento em progresso para este personagem
 	 */
 	public int getAbnormalVisualEffectEvent()
 	{
@@ -3365,9 +3365,9 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Verify if this creature is affected by the given abnormal visual effect.
-	 * @param ave the abnormal visual effect
-	 * @return {@code true} if the creature is affected by the abnormal visual effect, {@code false} otherwise
+	 * Verifica se esta criatura e afetada pelo efeito visual anormal dado.
+	 * @param ave o efeito visual anormal
+	 * @return {@code true} se a criatura e afetada pelo efeito visual anormal, {@code false} caso contrario
 	 */
 	public boolean hasAbnormalVisualEffect(AbnormalVisualEffect ave)
 	{
@@ -3385,9 +3385,9 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Adds the abnormal visual effect flags in the binary mask and send Server->Client UserInfo/CharInfo packet.
-	 * @param update if {@code true} update packets will be sent
-	 * @param aves the abnormal visual effects
+	 * Adiciona as flags de efeito visual anormal na mascara binaria e envia pacote Server->Client UserInfo/CharInfo.
+	 * @param update se {@code true} pacotes de atualizacao serao enviados
+	 * @param aves os efeitos visuais anormais
 	 */
 	public void startAbnormalVisualEffect(boolean update, AbnormalVisualEffect... aves)
 	{
@@ -3414,9 +3414,9 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Removes the abnormal visual effect flags from the binary mask and send Server->Client UserInfo/CharInfo packet.
-	 * @param update if {@code true} update packets will be sent
-	 * @param aves the abnormal visual effects
+	 * Remove as flags de efeito visual anormal da mascara binaria e envia pacote Server->Client UserInfo/CharInfo.
+	 * @param update se {@code true} pacotes de atualizacao serao enviados
+	 * @param aves os efeitos visuais anormais
 	 */
 	public void stopAbnormalVisualEffect(boolean update, AbnormalVisualEffect... aves)
 	{
@@ -3443,7 +3443,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Active the abnormal effect Fake Death flag, notify the Creature AI and send Server->Client UserInfo/CharInfo packet.
+	 * Ativa a flag de efeito anormal Fake Death, notifica a AI da Creature e envia pacote Server->Client UserInfo/CharInfo.
 	 */
 	public void startFakeDeath()
 	{
@@ -3454,14 +3454,14 @@ public abstract class Creature extends WorldObject
 		
 		asPlayer().setFakeDeath(true);
 		
-		// Aborts any attacks/casts if fake dead
+		// Aborta quaisquer ataques/conjuracoes se fingindo de morto
 		abortAttack();
 		abortCast();
 		stopMove(null);
 		getAI().notifyAction(Action.FAKE_DEATH);
 		broadcastPacket(new ChangeWaitType(this, ChangeWaitType.WT_START_FAKEDEATH));
 		
-		// Remove target from those that have the untargetable creature on target.
+		// Remove alvo daqueles que tem a criatura nao alvo-avel no alvo.
 		if (Config.FAKE_DEATH_UNTARGET)
 		{
 			World.getInstance().forEachVisibleObject(this, Creature.class, c ->
@@ -3475,18 +3475,18 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Launch a Stun Abnormal Effect on the Creature.<br>
+	 * Executa um Efeito Anormal de Stun na Creature.<br>
 	 * <br>
-	 * <b><u>Actions</u>:</b>
+	 * <b><u>Acoes</u>:</b>
 	 * <ul>
-	 * <li>Calculate the success rate of the Stun Abnormal Effect on this Creature</li>
-	 * <li>If Stun succeed, active the abnormal effect Stun flag, notify the Creature AI and send Server->Client UserInfo/CharInfo packet</li>
-	 * <li>If Stun NOT succeed, send a system message Failed to the Player attacker</li>
+	 * <li>Calcula a taxa de sucesso do Efeito Anormal de Stun nesta Creature</li>
+	 * <li>Se Stun tiver sucesso, ativa a flag de efeito anormal de Stun, notifica a AI da Creature e envia pacote Server->Client UserInfo/CharInfo</li>
+	 * <li>Se Stun NAO tiver sucesso, envia uma mensagem de sistema Falhou para o Player atacante</li>
 	 * </ul>
 	 */
 	public void startStunning()
 	{
-		// Aborts any attacks/casts if stunned
+		// Aborta quaisquer ataques/conjuracoes se atordoado
 		abortAttack();
 		abortCast();
 		stopMove(null);
@@ -3501,7 +3501,7 @@ public abstract class Creature extends WorldObject
 	
 	public void startParalyze()
 	{
-		// Aborts any attacks/casts if paralyzed
+		// Aborta quaisquer ataques/conjuracoes se paralisado
 		abortAttack();
 		abortCast();
 		stopMove(null);
@@ -3509,7 +3509,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Stop all active skills effects in progress on the Creature.
+	 * Para todos os efeitos de skills ativos em progresso na Creature.
 	 */
 	public void stopAllEffects()
 	{
@@ -3517,7 +3517,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Stops all effects, except those that last through death.
+	 * Para todos os efeitos, exceto aqueles que persistem apos a morte.
 	 */
 	public void stopAllEffectsExceptThoseThatLastThroughDeath()
 	{
@@ -3525,9 +3525,9 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Stop and remove the effects corresponding to the skill ID.
-	 * @param type determines the system message that will be sent.
-	 * @param skillId the skill Id
+	 * Para e remove os efeitos correspondentes ao ID da skill.
+	 * @param type determina a mensagem de sistema que sera enviada.
+	 * @param skillId o Id da skill
 	 */
 	public void stopSkillEffects(SkillFinishType type, int skillId)
 	{
@@ -3540,8 +3540,8 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Exits all buffs effects of the skills with "removedOnAnyAction" set.<br>
-	 * Called on any action except movement (attack, cast).
+	 * Encerra todos os efeitos de buff das skills com "removedOnAnyAction" definido.<br>
+	 * Chamado em qualquer acao exceto movimento (ataque, conjuracao).
 	 */
 	public void stopEffectsOnAction()
 	{
@@ -3549,8 +3549,8 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Exits all buffs effects of the skills with "removedOnDamage" set.<br>
-	 * Called on decreasing HP and mana burn.
+	 * Encerra todos os efeitos de buff das skills com "removedOnDamage" definido.<br>
+	 * Chamado ao diminuir HP e queima de mana.
 	 * @param awake
 	 */
 	public void stopEffectsOnDamage(boolean awake)
@@ -3559,13 +3559,13 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Stop a specified/all Fake Death abnormal Effect.<br>
+	 * Para um/todos os Efeitos Anormais de Fake Death especificados.<br>
 	 * <br>
-	 * <b><u>Actions</u>:</b>
+	 * <b><u>Acoes</u>:</b>
 	 * <ul>
-	 * <li>Delete a specified/all (if effect=null) Fake Death abnormal Effect from Creature and update client magic icon</li>
-	 * <li>Set the abnormal effect flag _fake_death to False</li>
-	 * <li>Notify the Creature AI</li>
+	 * <li>Deleta um/todos (se effect=null) Efeitos Anormais de Fake Death da Creature e atualiza icone magico do cliente</li>
+	 * <li>Define a flag de efeito anormal _fake_death para False</li>
+	 * <li>Notifica a AI da Creature</li>
 	 * </ul>
 	 * @param removeEffects
 	 */
@@ -3576,7 +3576,7 @@ public abstract class Creature extends WorldObject
 			stopEffects(EffectType.FAKE_DEATH);
 		}
 		
-		// if this is a player instance, start the grace period for this character (grace from mobs only)!
+		// se esta for uma instancia de player, inicia o periodo de graca para este personagem (graca apenas de mobs)!
 		if (isPlayer())
 		{
 			final Player player = asPlayer();
@@ -3586,20 +3586,20 @@ public abstract class Creature extends WorldObject
 		
 		broadcastPacket(new ChangeWaitType(this, ChangeWaitType.WT_STOP_FAKEDEATH));
 		
-		// TODO: Temp hack: players see FD on ppl that are moving: Teleport to someone who uses FD - if he gets up he will fall down again for that client -
-		// even tho he is actually standing... Probably bad info in CharInfo packet?
+		// TODO: Hack temporario: jogadores veem FD em pessoas que estao se movendo: Teleporte para alguem que usa FD - se ele se levantar ele caira novamente para aquele cliente -
+		// mesmo que ele esteja realmente de pe... Provavelmente informacao errada no pacote CharInfo?
 		broadcastPacket(new Revive(this));
 	}
 	
 	/**
-	 * Stop a specified/all Stun abnormal Effect.<br>
+	 * Para um/todos os Efeitos Anormais de Stun especificados.<br>
 	 * <br>
-	 * <b><u>Actions</u>:</b>
+	 * <b><u>Acoes</u>:</b>
 	 * <ul>
-	 * <li>Delete a specified/all (if effect=null) Stun abnormal Effect from Creature and update client magic icon</li>
-	 * <li>Set the abnormal effect flag _stuned to False</li>
-	 * <li>Notify the Creature AI</li>
-	 * <li>Send Server->Client UserInfo/CharInfo packet</li>
+	 * <li>Deleta um/todos (se effect=null) Efeitos Anormais de Stun da Creature e atualiza icone magico do cliente</li>
+	 * <li>Define a flag de efeito anormal _stuned para False</li>
+	 * <li>Notifica a AI da Creature</li>
+	 * <li>Envia pacote Server->Client UserInfo/CharInfo</li>
 	 * </ul>
 	 * @param removeEffects
 	 */
@@ -3619,13 +3619,13 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Stop Effect: Transformation.<br>
+	 * Para Efeito: Transformacao.<br>
 	 * <br>
-	 * <b><u>Actions</u>:</b>
+	 * <b><u>Acoes</u>:</b>
 	 * <ul>
-	 * <li>Remove Transformation Effect</li>
-	 * <li>Notify the Creature AI</li>
-	 * <li>Send Server->Client UserInfo/CharInfo packet</li>
+	 * <li>Remove Efeito de Transformacao</li>
+	 * <li>Notifica a AI da Creature</li>
+	 * <li>Envia pacote Server->Client UserInfo/CharInfo</li>
 	 * </ul>
 	 * @param removeEffects
 	 */
@@ -3636,7 +3636,7 @@ public abstract class Creature extends WorldObject
 			_effectList.stopSkillEffects(SkillFinishType.NORMAL, AbnormalType.TRANSFORM);
 		}
 		
-		// if this is a player instance, then untransform, also set the transform_id column equal to 0 if not cursed.
+		// se esta for uma instancia de player, entao destransforma, tambem define a coluna transform_id igual a 0 se nao for amaldicoado.
 		if (isPlayer() && (getTransformation() != null))
 		{
 			untransform();
@@ -3653,12 +3653,12 @@ public abstract class Creature extends WorldObject
 	public abstract void updateAbnormalEffect();
 	
 	/**
-	 * Update active skills in progress (In Use and Not In Use because stacked) icons on client.<br>
+	 * Atualiza icones de skills ativas em progresso (Em Uso e Nao Em Uso por estarem empilhadas) no cliente.<br>
 	 * <br>
-	 * <b><u>Concept</u>:</b><br>
+	 * <b><u>Conceito</u>:</b><br>
 	 * <br>
-	 * All active skills effects in progress (In Use and Not In Use because stacked) are represented by an icon on the client.<br>
-	 * <font color=#FF0000><b><u>Caution</u>: This method ONLY UPDATE the client of the player and not clients of all players in the party.</b></font>
+	 * Todos os efeitos de skills ativas em progresso (Em Uso e Nao Em Uso por estarem empilhadas) sao representados por um icone no cliente.<br>
+	 * <font color=#FF0000><b><u>Cuidado</u>: Este metodo APENAS ATUALIZA o cliente do jogador e nao clientes de todos os jogadores no grupo.</b></font>
 	 */
 	public void updateEffectIcons()
 	{
@@ -3666,12 +3666,12 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Updates Effect Icons for this character(player/summon) and his party if any.
+	 * Atualiza Icones de Efeitos para este personagem(player/summon) e seu grupo se houver.
 	 * @param partyOnly
 	 */
 	public void updateEffectIcons(boolean partyOnly)
 	{
-		// overridden
+		// sobrescrito
 	}
 	
 	public boolean isAffectedBySkill(int skillId)
@@ -3680,18 +3680,18 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * This class groups all movement data.
+	 * Esta classe agrupa todos os dados de movimento.
 	 */
 	public static class MoveData
 	{
-		// When we retrieve x/y/z we use GameTimeControl.getGameTicks()
-		// If we are moving, but move timestamp==gameticks, we don't need to recalculate position.
+		// Quando recuperamos x/y/z usamos GameTimeControl.getGameTicks()
+		// Se estamos nos movendo, mas move timestamp==gameticks, nao precisamos recalcular a posicao.
 		public int moveStartTime;
-		public int moveTimestamp; // Last movement update.
+		public int moveTimestamp; // Ultima atualizacao de movimento.
 		public int xDestination;
 		public int yDestination;
 		public int zDestination;
-		public double xAccurate; // Otherwise there would be rounding errors.
+		public double xAccurate; // Caso contrario haveria erros de arredondamento.
 		public double yAccurate;
 		public double zAccurate;
 		public int heading;
@@ -3708,20 +3708,20 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Add a Func to the Calculator set of the Creature.<br>
+	 * Adiciona uma Func ao conjunto de Calculators da Creature.<br>
 	 * <br>
-	 * <b><u>Concept</u>:</b> A Creature owns a table of Calculators called <b>_calculators</b>.<br>
-	 * Each Calculator (a calculator per state) own a table of Func object.<br>
-	 * A Func object is a mathematical function that permit to calculate the modifier of a state (ex : REGENERATE_HP_RATE...).<br>
-	 * To reduce cache memory use, Npcs who don't have skills share the same Calculator set called <b>NPC_STD_CALCULATOR</b>.<br>
-	 * That's why, if a Npc is under a skill/spell effect that modify one of its state, a copy of the NPC_STD_CALCULATOR must be create in its _calculators before adding new Func object.<br>
+	 * <b><u>Conceito</u>:</b> Uma Creature possui uma tabela de Calculators chamada <b>_calculators</b>.<br>
+	 * Cada Calculator (um calculator por estado) possui uma tabela de objetos Func.<br>
+	 * Um objeto Func e uma funcao matematica que permite calcular o modificador de um estado (ex: REGENERATE_HP_RATE...).<br>
+	 * Para reduzir uso de memoria cache, Npcs que nao tem skills compartilham o mesmo conjunto de Calculators chamado <b>NPC_STD_CALCULATOR</b>.<br>
+	 * Por isso, se um Npc esta sob um efeito de skill/magia que modifica um de seus estados, uma copia do NPC_STD_CALCULATOR deve ser criada em seus _calculators antes de adicionar novos objetos Func.<br>
 	 * <br>
-	 * <b><u>Actions</u>:</b>
+	 * <b><u>Acoes</u>:</b>
 	 * <ul>
-	 * <li>If _calculators is linked to NPC_STD_CALCULATOR, create a copy of NPC_STD_CALCULATOR in _calculators</li>
-	 * <li>Add the Func object to _calculators</li>
+	 * <li>Se _calculators esta vinculado ao NPC_STD_CALCULATOR, cria uma copia do NPC_STD_CALCULATOR em _calculators</li>
+	 * <li>Adiciona o objeto Func a _calculators</li>
 	 * </ul>
-	 * @param function The Func object to add to the Calculator corresponding to the state affected
+	 * @param function O objeto Func a ser adicionado ao Calculator correspondente ao estado afetado
 	 */
 	public void addStatFunc(AbstractFunction function)
 	{
@@ -3732,10 +3732,10 @@ public abstract class Creature extends WorldObject
 		
 		synchronized (this)
 		{
-			// Check if Calculator set is linked to the standard Calculator set of NPC
+			// Verifica se o conjunto de Calculators esta vinculado ao conjunto padrao de NPC
 			if (_calculators == NPC_STD_CALCULATOR)
 			{
-				// Create a copy of the standard NPC Calculator set
+				// Cria uma copia do conjunto padrao de NPC Calculator
 				_calculators = new Calculator[Stat.NUM_STATS];
 				for (int i = 0; i < Stat.NUM_STATS; i++)
 				{
@@ -3746,35 +3746,35 @@ public abstract class Creature extends WorldObject
 				}
 			}
 			
-			// Select the Calculator of the affected state in the Calculator set
+			// Seleciona o Calculator do estado afetado no conjunto de Calculators
 			final int stat = function.getStat().ordinal();
 			if (_calculators[stat] == null)
 			{
 				_calculators[stat] = new Calculator();
 			}
 			
-			// Add the Func to the calculator corresponding to the state
+			// Adiciona a Func ao calculator correspondente ao estado
 			_calculators[stat].addFunc(function);
 		}
 	}
 	
 	/**
-	 * Add a list of Funcs to the Calculator set of the Creature.<br>
+	 * Adiciona uma lista de Funcs ao conjunto de Calculators da Creature.<br>
 	 * <br>
-	 * <b><u>Concept</u>:</b><br>
+	 * <b><u>Conceito</u>:</b><br>
 	 * <br>
-	 * A Creature owns a table of Calculators called <b>_calculators</b>.<br>
-	 * Each Calculator (a calculator per state) own a table of Func object.<br>
-	 * A Func object is a mathematic function that permit to calculate the modifier of a state (ex : REGENERATE_HP_RATE...).<br>
-	 * <font color=#FF0000><b><u>Caution</u>: This method is ONLY for Player</b></font><br>
+	 * Uma Creature possui uma tabela de Calculators chamada <b>_calculators</b>.<br>
+	 * Cada Calculator (um calculator por estado) possui uma tabela de objetos Func.<br>
+	 * Um objeto Func e uma funcao matematica que permite calcular o modificador de um estado (ex: REGENERATE_HP_RATE...).<br>
+	 * <font color=#FF0000><b><u>Cuidado</u>: Este metodo e APENAS para Player</b></font><br>
 	 * <br>
-	 * <b><u>Example of use</u>:</b>
+	 * <b><u>Exemplo de uso</u>:</b>
 	 * <ul>
-	 * <li>Equip an item from inventory</li>
-	 * <li>Learn a new passive skill</li>
-	 * <li>Use an active skill</li>
+	 * <li>Equipar um item do inventario</li>
+	 * <li>Aprender uma nova skill passiva</li>
+	 * <li>Usar uma skill ativa</li>
 	 * </ul>
-	 * @param functions The list of Func objects to add to the Calculator corresponding to the state affected
+	 * @param functions A lista de objetos Func a serem adicionados ao Calculator correspondente ao estado afetado
 	 */
 	public void addStatFuncs(List<AbstractFunction> functions)
 	{
@@ -3797,14 +3797,14 @@ public abstract class Creature extends WorldObject
 	 * Each Calculator (a calculator per state) own a table of Func object.<br>
 	 * A Func object is a mathematic function that permit to calculate the modifier of a state (ex : REGENERATE_HP_RATE...).<br>
 	 * To reduce cache memory use, Npcs who don't have skills share the same Calculator set called <b>NPC_STD_CALCULATOR</b>.<br>
-	 * That's why, if a Npc is under a skill/spell effect that modify one of its state, a copy of the NPC_STD_CALCULATOR must be create in its _calculators before addind new Func object.<br>
+	 * Por isso, se um Npc esta sob um efeito de skill/magia que modifica um de seus estados, uma copia do NPC_STD_CALCULATOR deve ser criada em seus _calculators antes de adicionar novos objetos Func.<br>
 	 * <br>
-	 * <b><u>Actions</u>:</b>
+	 * <b><u>Acoes</u>:</b>
 	 * <ul>
-	 * <li>Remove the Func object from _calculators</li>
-	 * <li>If Creature is a Npc and _calculators is equal to NPC_STD_CALCULATOR, free cache memory and just create a link on NPC_STD_CALCULATOR in _calculators</li>
+	 * <li>Remove o objeto Func de _calculators</li>
+	 * <li>Se a Creature for um Npc e _calculators for igual a NPC_STD_CALCULATOR, libera memoria cache e apenas cria um link para NPC_STD_CALCULATOR em _calculators</li>
 	 * </ul>
-	 * @param function The Func object to remove from the Calculator corresponding to the state affected
+	 * @param function O objeto Func a ser removido do Calculator correspondente ao estado afetado
 	 */
 	public void removeStatFunc(AbstractFunction function)
 	{
@@ -3813,7 +3813,7 @@ public abstract class Creature extends WorldObject
 			return;
 		}
 		
-		// Select the Calculator of the affected state in the Calculator set
+		// Seleciona o Calculator do estado afetado no conjunto de Calculators
 		final int stat = function.getStat().ordinal();
 		
 		synchronized (this)
@@ -3823,7 +3823,7 @@ public abstract class Creature extends WorldObject
 				return;
 			}
 			
-			// Remove the Func object from the Calculator
+			// Remove o objeto Func do Calculator
 			_calculators[stat].removeFunc(function);
 			
 			if (_calculators[stat].size() == 0)
@@ -3831,7 +3831,7 @@ public abstract class Creature extends WorldObject
 				_calculators[stat] = null;
 			}
 			
-			// If possible, free the memory and just create a link on NPC_STD_CALCULATOR
+			// Se possivel, libera a memoria e apenas cria um link para NPC_STD_CALCULATOR
 			if (isNpc())
 			{
 				int i = 0;
@@ -3852,21 +3852,21 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Remove a list of Funcs from the Calculator set of the Player.<br>
+	 * Remove uma lista de Funcs do conjunto de Calculators do Player.<br>
 	 * <br>
-	 * <b><u>Concept</u>:</b><br>
+	 * <b><u>Conceito</u>:</b><br>
 	 * <br>
-	 * A Creature owns a table of Calculators called <b>_calculators</b>.<br>
-	 * Each Calculator (a calculator per state) own a table of Func object.<br>
-	 * A Func object is a mathematic function that permit to calculate the modifier of a state (ex : REGENERATE_HP_RATE...).<br>
-	 * <font color=#FF0000><b><u>Caution</u>: This method is ONLY for Player</b></font><br>
+	 * Uma Creature possui uma tabela de Calculators chamada <b>_calculators</b>.<br>
+	 * Cada Calculator (um calculator por estado) possui uma tabela de objetos Func.<br>
+	 * Um objeto Func e uma funcao matematica que permite calcular o modificador de um estado (ex: REGENERATE_HP_RATE...).<br>
+	 * <font color=#FF0000><b><u>Cuidado</u>: Este metodo e APENAS para Player</b></font><br>
 	 * <br>
-	 * <b><u>Example of use</u>:</b>
+	 * <b><u>Exemplo de uso</u>:</b>
 	 * <ul>
-	 * <li>Unequip an item from inventory</li>
-	 * <li>Stop an active skill</li>
+	 * <li>Desequipar um item do inventario</li>
+	 * <li>Parar uma skill ativa</li>
 	 * </ul>
-	 * @param functions The list of Func objects to add to the Calculator corresponding to the state affected
+	 * @param functions A lista de objetos Func a serem adicionados ao Calculator correspondente ao estado afetado
 	 */
 	public void removeStatFuncs(AbstractFunction[] functions)
 	{
@@ -3881,42 +3881,42 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Remove all Func objects with the selected owner from the Calculator set of the Creature.<br>
+	 * Remove todos os objetos Func com o proprietario selecionado do conjunto de Calculators da Creature.<br>
 	 * <br>
-	 * <b><u>Concept</u>:</b><br>
+	 * <b><u>Conceito</u>:</b><br>
 	 * <br>
-	 * A Creature owns a table of Calculators called <b>_calculators</b>.<br>
-	 * Each Calculator (a calculator per state) own a table of Func object.<br>
-	 * A Func object is a mathematic function that permit to calculate the modifier of a state (ex : REGENERATE_HP_RATE...).<br>
-	 * To reduce cache memory use, Npcs who don't have skills share the same Calculator set called <b>NPC_STD_CALCULATOR</b>.<br>
-	 * That's why, if a Npc is under a skill/spell effect that modify one of its state, a copy of the NPC_STD_CALCULATOR must be create in its _calculators before addind new Func object.<br>
+	 * Uma Creature possui uma tabela de Calculators chamada <b>_calculators</b>.<br>
+	 * Cada Calculator (um calculator por estado) possui uma tabela de objetos Func.<br>
+	 * Um objeto Func e uma funcao matematica que permite calcular o modificador de um estado (ex: REGENERATE_HP_RATE...).<br>
+	 * Para reduzir uso de memoria cache, Npcs que nao tem skills compartilham o mesmo conjunto de Calculators chamado <b>NPC_STD_CALCULATOR</b>.<br>
+	 * Por isso, se um Npc esta sob um efeito de skill/magia que modifica um de seus estados, uma copia do NPC_STD_CALCULATOR deve ser criada em seus _calculators antes de adicionar novos objetos Func.<br>
 	 * <br>
-	 * <b><u>Actions</u>:</b>
+	 * <b><u>Acoes</u>:</b>
 	 * <ul>
-	 * <li>Remove all Func objects of the selected owner from _calculators</li>
-	 * <li>If Creature is a Npc and _calculators is equal to NPC_STD_CALCULATOR, free cache memory and just create a link on NPC_STD_CALCULATOR in _calculators</li>
+	 * <li>Remove todos os objetos Func do proprietario selecionado de _calculators</li>
+	 * <li>Se a Creature for um Npc e _calculators for igual a NPC_STD_CALCULATOR, libera memoria cache e apenas cria um link para NPC_STD_CALCULATOR em _calculators</li>
 	 * </ul>
 	 * <br>
-	 * <b><u>Example of use</u>:</b>
+	 * <b><u>Exemplo de uso</u>:</b>
 	 * <ul>
-	 * <li>Unequip an item from inventory</li>
-	 * <li>Stop an active skill</li>
+	 * <li>Desequipar um item do inventario</li>
+	 * <li>Parar uma skill ativa</li>
 	 * </ul>
-	 * @param owner The Object(Skill, Item...) that has created the effect
+	 * @param owner O Objeto(Skill, Item...) que criou o efeito
 	 */
 	public void removeStatsOwner(Object owner)
 	{
 		List<Stat> modifiedStats = null;
 		int i = 0;
 		
-		// Go through the Calculator set
+		// Percorre o conjunto de Calculators
 		synchronized (this)
 		{
 			for (Calculator calc : _calculators)
 			{
 				if (calc != null)
 				{
-					// Delete all Func objects of the selected owner
+					// Deleta todos os objetos Func do proprietario selecionado
 					if (modifiedStats != null)
 					{
 						modifiedStats.addAll(calc.removeOwner(owner));
@@ -3935,7 +3935,7 @@ public abstract class Creature extends WorldObject
 				i++;
 			}
 			
-			// If possible, free the memory and just create a link on NPC_STD_CALCULATOR
+			// Se possivel, libera a memoria e apenas cria um link para NPC_STD_CALCULATOR
 			if (isNpc())
 			{
 				i = 0;
@@ -4069,7 +4069,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * @return the X destination of the Creature or the X position if not in movement.
+	 * @return o destino X da Creature ou a posicao X se nao estiver em movimento.
 	 */
 	public int getXdestination()
 	{
@@ -4083,7 +4083,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * @return the Y destination of the Creature or the Y position if not in movement.
+	 * @return o destino Y da Creature ou a posicao Y se nao estiver em movimento.
 	 */
 	public int getYdestination()
 	{
@@ -4097,7 +4097,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * @return the Z destination of the Creature or the Z position if not in movement.
+	 * @return o destino Z da Creature ou a posicao Z se nao estiver em movimento.
 	 */
 	public int getZdestination()
 	{
@@ -4111,7 +4111,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * @return True if the Creature is in combat.
+	 * @return True se a Creature esta em combate.
 	 */
 	public boolean isInCombat()
 	{
@@ -4119,7 +4119,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * @return True if the Creature is moving.
+	 * @return True se a Creature esta se movendo.
 	 */
 	public boolean isMoving()
 	{
@@ -4127,7 +4127,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * @return True if the Creature is traveling a calculated path.
+	 * @return True se a Creature esta viajando por um caminho calculado.
 	 */
 	public boolean isOnGeodataPath()
 	{
@@ -4141,8 +4141,8 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * @param move the MoveData to check (must not be null).
-	 * @return True if the Creature is traveling a calculated path.
+	 * @param move o MoveData a verificar (nao deve ser null).
+	 * @return True se a Creature esta viajando por um caminho calculado.
 	 */
 	public boolean isOnGeodataPath(MoveData move)
 	{
@@ -4160,9 +4160,9 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * This method returns a list of pathfinding nodes representing the movement path.<br>
-	 * If movement operation is set (not null), returns the path from the 'geoPath' field of the movement.<br>
-	 * Otherwise, returns null.
+	 * Este metodo retorna uma lista de nos de pathfinding representando o caminho de movimento.<br>
+	 * Se a operacao de movimento estiver definida (nao null), retorna o caminho do campo 'geoPath' do movimento.<br>
+	 * Caso contrario, retorna null.
 	 * @return Lista de AbstractNodeLoc representando o caminho, ou null se indefinido.
 	 */
 	public List<AbstractNodeLoc> getGeoPath()
@@ -4176,7 +4176,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * @return True if the Creature is casting.
+	 * @return True se a Creature esta conjurando.
 	 */
 	public boolean isCastingNow()
 	{
@@ -4199,7 +4199,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * @return True if the cast of the Creature can be aborted.
+	 * @return True se a conjuracao da Creature pode ser abortada.
 	 */
 	public boolean canAbortCast()
 	{
@@ -4212,8 +4212,8 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Verifies if the creature is attacking or casting now.
-	 * @return {@code true} if the creature is attacking or casting now, {@code false} otherwise
+	 * Verifica se a criatura esta atacando ou conjurando agora.
+	 * @return {@code true} se a criatura esta atacando ou conjurando agora, {@code false} caso contrario
 	 */
 	public boolean isAttackingOrCastingNow()
 	{
@@ -4221,8 +4221,8 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Verifies if the creature is attacking now.
-	 * @return {@code true} if the creature is attacking now, {@code false} otherwise
+	 * Verifica se a criatura esta atacando agora.
+	 * @return {@code true} se a criatura esta atacando agora, {@code false} caso contrario
 	 */
 	public boolean isAttackingNow()
 	{
@@ -4230,7 +4230,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * @return True if the Creature is attacking with a ranged weapon.
+	 * @return True se a Creature esta atacando com uma arma de longo alcance.
 	 */
 	public final boolean isRangeAttackingNow()
 	{
@@ -4238,7 +4238,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Abort the attack of the Creature and send Server->Client ActionFailed packet.
+	 * Aborta o ataque da Creature e envia pacote Server->Client ActionFailed.
 	 */
 	public void abortAttack()
 	{
@@ -4249,7 +4249,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Abort the cast of the Creature and send Server->Client MagicSkillCanceled/ActionFailed packet.
+	 * Aborta a conjuracao da Creature e envia pacote Server->Client MagicSkillCanceled/ActionFailed.
 	 */
 	public void abortCast()
 	{
@@ -4257,7 +4257,7 @@ public abstract class Creature extends WorldObject
 		{
 			Future<?> future = _skillCast;
 			
-			// cancels the skill hit scheduled task
+			// cancela a tarefa agendada de hit da skill
 			if (future != null)
 			{
 				future.cancel(true);
@@ -4271,7 +4271,7 @@ public abstract class Creature extends WorldObject
 				_skillCast2 = null;
 			}
 			
-			// TODO: Handle removing spawned npc.
+			// TODO: Lidar com remocao de npc spawnado.
 			if (isChanneling())
 			{
 				getSkillChannelizer().stopChanneling();
@@ -4279,39 +4279,39 @@ public abstract class Creature extends WorldObject
 			
 			if (_allSkillsDisabled)
 			{
-				enableAllSkills(); // this remains for forced skill use, e.g. scroll of escape
+				enableAllSkills(); // isto permanece para uso forcado de skill, ex: scroll of escape
 			}
 			
 			setCastingNow(false);
 			setCastingSimultaneouslyNow(false);
 			
-			// safeguard for cannot be interrupt any more
+			// protecao para nao poder ser interrompido mais
 			_castInterruptTime = 0;
 			if (isPlayer())
 			{
-				getAI().notifyAction(Action.FINISH_CASTING); // setting back previous intention
+				getAI().notifyAction(Action.FINISH_CASTING); // restaurando a intencao anterior
 			}
 			
-			broadcastPacket(new MagicSkillCanceled(getObjectId())); // broadcast packet to stop animations client-side
-			sendPacket(ActionFailed.STATIC_PACKET); // send an "action failed" packet to the caster
+			broadcastPacket(new MagicSkillCanceled(getObjectId())); // envia pacote para parar animacoes no lado do cliente
+			sendPacket(ActionFailed.STATIC_PACKET); // envia um pacote de "acao falhou" para o conjurador
 		}
 	}
 	
 	/**
-	 * Update the position of the Creature during a movement and return True if the movement is finished.<br>
+	 * Atualiza a posicao da Creature durante um movimento e retorna True se o movimento terminou.<br>
 	 * <br>
-	 * <b><u>Concept</u>:</b><br>
+	 * <b><u>Conceito</u>:</b><br>
 	 * <br>
-	 * At the beginning of the move action, all properties of the movement are stored in the MoveData object called <b>_move</b> of the Creature.<br>
-	 * The position of the start point and of the destination permit to estimated in function of the movement speed the time to achieve the destination.<br>
-	 * When the movement is started (ex : by MovetoLocation), this method will be called each 0.1 sec to estimate and update the Creature position on the server.<br>
-	 * Note, that the current server position can differe from the current client position even if each movement is straight foward.<br>
-	 * That's why, client send regularly a Client->Server ValidatePosition packet to eventually correct the gap on the server.<br>
-	 * But, it's always the server position that is used in range calculation. At the end of the estimated movement time,<br>
-	 * the Creature position is automatically set to the destination position even if the movement is not finished.<br>
-	 * <font color=#FF0000><b><u>Caution</u>: The current Z position is obtained FROM THE CLIENT by the Client->Server ValidatePosition Packet.<br>
-	 * But x and y positions must be calculated to avoid that players try to modify their movement speed.</b></font>
-	 * @return True if the movement is finished
+	 * No inicio da acao de movimento, todas as propriedades do movimento sao armazenadas no objeto MoveData chamado <b>_move</b> da Creature.<br>
+	 * A posicao do ponto inicial e do destino permitem estimar em funcao da velocidade de movimento o tempo para alcancar o destino.<br>
+	 * Quando o movimento e iniciado (ex: por MovetoLocation), este metodo sera chamado a cada 0.1 seg para estimar e atualizar a posicao da Creature no servidor.<br>
+	 * Note que a posicao atual do servidor pode diferir da posicao atual do cliente mesmo se cada movimento for em linha reta.<br>
+	 * Por isso, o cliente envia regularmente um pacote Client->Server ValidatePosition para eventualmente corrigir a diferenca no servidor.<br>
+	 * Mas, e sempre a posicao do servidor que e usada no calculo de alcance. Ao final do tempo estimado de movimento,<br>
+	 * a posicao da Creature e automaticamente definida para a posicao de destino mesmo se o movimento nao terminou.<br>
+	 * <font color=#FF0000><b><u>Cuidado</u>: A posicao Z atual e obtida DO CLIENTE pelo pacote Client->Server ValidatePosition.<br>
+	 * Mas as posicoes x e y devem ser calculadas para evitar que jogadores tentem modificar sua velocidade de movimento.</b></font>
+	 * @return True se o movimento terminou
 	 */
 	public boolean updatePosition()
 	{
@@ -4321,14 +4321,14 @@ public abstract class Creature extends WorldObject
 			return true;
 		}
 		
-		// Get movement data
+		// Obtem dados de movimento
 		final MoveData move = _move;
 		if (move == null)
 		{
 			return true;
 		}
 		
-		// Check if this is the first update
+		// Verifica se esta e a primeira atualizacao
 		if (move.moveTimestamp == 0)
 		{
 			move.moveTimestamp = move.moveStartTime;
@@ -4336,7 +4336,7 @@ public abstract class Creature extends WorldObject
 			move.yAccurate = getY();
 		}
 		
-		// Check if the position has already been calculated
+		// Verifica se a posicao ja foi calculada
 		final int gameTicks = GameTimeTaskManager.getInstance().getGameTicks();
 		if (move.moveTimestamp == gameTicks)
 		{
@@ -4345,14 +4345,14 @@ public abstract class Creature extends WorldObject
 		
 		final int xPrev = getX();
 		final int yPrev = getY();
-		final int zPrev = getZ(); // the z coordinate may be modified by coordinate synchronizations
+		final int zPrev = getZ(); // a coordenada z pode ser modificada por sincronizacoes de coordenadas
 		double dx = move.xDestination - move.xAccurate;
 		double dy = move.yDestination - move.yAccurate;
-		double dz = move.zDestination - zPrev; // Z coordinate will follow client values
+		double dz = move.zDestination - zPrev; // Coordenada Z seguira os valores do cliente
 		
 		if (isPlayer() && !_isFlying)
 		{
-			// In case of cursor movement, avoid moving through obstacles.
+			// No caso de movimento por cursor, evitar mover atraves de obstaculos.
 			if (_cursorKeyMovement)
 			{
 				final double angle = LocationUtil.convertHeadingToDegree(getHeading());
@@ -4370,9 +4370,9 @@ public abstract class Creature extends WorldObject
 					return true;
 				}
 			}
-			else // Mouse click movement.
+			else // Movimento por clique do mouse.
 			{
-				// Stop movement when player has clicked far away and intersected with an obstacle.
+				// Para o movimento quando o jogador clicou longe e intersectou com um obstaculo.
 				final double distance = Math.hypot(dx, dy);
 				if (distance > 3000)
 				{
@@ -4400,9 +4400,9 @@ public abstract class Creature extends WorldObject
 						return true;
 					}
 				}
-				else // Check for nearby doors or fences.
+				else // Verifica portas ou cercas proximas.
 				{
-					if (hasAI() && (getAI().getIntention() == Intention.ATTACK)) // Support for player attack with direct movement. Tested at retail on May 11th 2023.
+					if (hasAI() && (getAI().getIntention() == Intention.ATTACK)) // Suporte para ataque do jogador com movimento direto. Testado no retail em 11 de maio de 2023.
 					{
 						final double angle = LocationUtil.convertHeadingToDegree(getHeading());
 						final double radian = Math.toRadians(angle);
@@ -4419,7 +4419,7 @@ public abstract class Creature extends WorldObject
 							return true;
 						}
 					}
-					else // Check for nearby doors or fences.
+					else // Verifica portas ou cercas proximas.
 					{
 						final WorldRegion region = getWorldRegion();
 						if (region != null)
@@ -4460,10 +4460,10 @@ public abstract class Creature extends WorldObject
 			}
 		}
 		
-		// Distance from destination.
+		// Distancia do destino.
 		double delta = (dx * dx) + (dy * dy);
 		final boolean isFloating = _isFlying || (isInsideZone(ZoneId.WATER) && !isInsideZone(ZoneId.CASTLE));
-		if (!isFloating && (delta < 10000) && ((dz * dz) > 2500)) // Close enough, allows error between client and server geodata if it cannot be avoided.
+		if (!isFloating && (delta < 10000) && ((dz * dz) > 2500)) // Perto o suficiente, permite erro entre geodata do cliente e servidor se nao puder ser evitado.
 		{
 			delta = Math.sqrt(delta);
 		}
@@ -4472,22 +4472,22 @@ public abstract class Creature extends WorldObject
 			delta = Math.sqrt(delta + (dz * dz));
 		}
 		
-		// Prevent non playables teleporting to another ground layer while moving.
-		// Only apply if the destination Z is significantly different AND the creature would be floating in air.
-		// This allows natural ramp/slope movement while preventing layer teleportation.
+		// Previne que nao-jogaveis se teleportem para outra camada de terreno durante o movimento.
+		// Aplica apenas se o Z de destino e significativamente diferente E a criatura ficaria flutuando no ar.
+		// Isso permite movimento natural em rampas/inclinacoes enquanto previne teleporte de camada.
 		if (!isPlayer() && !isFloating && (Math.abs(move.zDestination - zPrev) > 300))
 		{
-			// Check if destination Z is valid ground level at that position
+			// Verifica se o Z de destino e nivel de solo valido naquela posicao
 			final int groundZ = GeoData.getInstance().getHeight(move.xDestination, move.yDestination, move.zDestination);
-			// If destination Z is close to ground level, it's likely a valid slope - allow it
-			// If destination Z is far from ground level, it's likely a layer issue - prevent it
+			// Se o Z de destino esta proximo do nivel do solo, e provavelmente uma inclinacao valida - permitir
+			// Se o Z de destino esta longe do nivel do solo, e provavelmente um problema de camada - prevenir
 			if (Math.abs(groundZ - move.zDestination) > 100)
 			{
 				move.zDestination = zPrev;
 			}
 		}
 		
-		// Target collision should be subtracted from current distance.
+		// Colisao do alvo deve ser subtraida da distancia atual.
 		final double collision;
 		final WorldObject target = _target;
 		if ((target != null) && target.isCreature() && hasAI() && (getAI().getIntention() == Intention.ATTACK))
@@ -4511,7 +4511,7 @@ public abstract class Creature extends WorldObject
 		final boolean arrived = distFraction > 1;
 		if (arrived)
 		{
-			// Set the position of the Creature to the destination.
+			// Define a posicao da Creature para o destino.
 			super.setXYZ(move.xDestination, move.yDestination, move.zDestination);
 		}
 		else
@@ -4519,21 +4519,21 @@ public abstract class Creature extends WorldObject
 			move.xAccurate += dx * distFraction;
 			move.yAccurate += dy * distFraction;
 			
-			// Set the position of the Creature to estimated after parcial move.
+			// Define a posicao da Creature para estimativa apos movimento parcial.
 			super.setXYZ((int) move.xAccurate, (int) move.yAccurate, zPrev + (int) ((dz * distFraction) + 0.5));
 		}
 		
 		revalidateZone(false);
 		
-		// Set the timer of last position update to now.
+		// Define o timer da ultima atualizacao de posicao para agora.
 		move.moveTimestamp = gameTicks;
 		
-		// Broadcast MoveToLocation on arrived.
+		// Envia MoveToLocation ao chegar.
 		if (arrived && !isOnGeodataPath())
 		{
 			broadcastMoveToLocation(true);
 		}
-		else if (isAttackable() && (target != null)) // Attackable with target.
+		else if (isAttackable() && (target != null)) // Attackable com alvo.
 		{
 			broadcastMoveToLocation();
 		}
@@ -4543,7 +4543,7 @@ public abstract class Creature extends WorldObject
 	
 	public void revalidateZone(boolean force)
 	{
-		// This function is called too often from movement code.
+		// Esta funcao e chamada com muita frequencia pelo codigo de movimento.
 		if (!force && (calculateDistance3D(_lastZoneValidateLocation) < (isNpc() && !isInCombat() ? Config.MAX_DRIFT_RANGE : 100)))
 		{
 			return;
@@ -4556,32 +4556,32 @@ public abstract class Creature extends WorldObject
 		{
 			region.revalidateZones(this);
 		}
-		else // Precaution. Moved at invalid region?
+		else // Precaucao. Moveu para regiao invalida?
 		{
 			World.getInstance().disposeOutOfBoundsObject(this);
 		}
 	}
 	
 	/**
-	 * Stop movement of the Creature (Called by AI Accessor only).<br>
+	 * Para o movimento da Creature (Chamado apenas pelo AI Accessor).<br>
 	 * <br>
-	 * <b><u>Actions</u>:</b>
+	 * <b><u>Acoes</u>:</b>
 	 * <ul>
-	 * <li>Delete movement data of the Creature</li>
-	 * <li>Set the current position (x,y,z), its current WorldRegion if necessary and its heading</li>
-	 * <li>Remove the WorldObject object from _gmList of GmListTable</li>
-	 * <li>Remove object from _knownObjects and _knownPlayer of all surrounding WorldRegion Creatures</li>
+	 * <li>Deleta dados de movimento da Creature</li>
+	 * <li>Define a posicao atual (x,y,z), sua WorldRegion atual se necessario e sua direcao</li>
+	 * <li>Remove o objeto WorldObject do _gmList do GmListTable</li>
+	 * <li>Remove o objeto do _knownObjects e _knownPlayer de todas as WorldRegion Creatures ao redor</li>
 	 * </ul>
-	 * <font color=#FF0000><b><u>Caution</u>: This method DOESN'T send Server->Client packet StopMove/StopRotation</b></font>
+	 * <font color=#FF0000><b><u>Cuidado</u>: Este metodo NAO envia pacote Server->Client StopMove/StopRotation</b></font>
 	 * @param loc
 	 */
 	public void stopMove(Location loc)
 	{
-		// Delete movement data of the Creature.
+		// Deleta dados de movimento da Creature.
 		_move = null;
 		_cursorKeyMovement = false;
 		
-		// All data are contained in a Location object.
+		// Todos os dados estao contidos em um objeto Location.
 		if (loc != null)
 		{
 			setXYZ(loc.getX(), loc.getY(), loc.getZ());
@@ -4593,7 +4593,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * @return Returns the showSummonAnimation.
+	 * @return Retorna o showSummonAnimation.
 	 */
 	public boolean isShowSummonAnimation()
 	{
@@ -4601,7 +4601,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * @param showSummonAnimation The showSummonAnimation to set.
+	 * @param showSummonAnimation O showSummonAnimation a definir.
 	 */
 	public void setShowSummonAnimation(boolean showSummonAnimation)
 	{
@@ -4609,20 +4609,20 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Target a WorldObject (add the target to the Creature _target, _knownObject and Creature to _KnownObject of the WorldObject).<br>
+	 * Define um WorldObject como alvo (adiciona o alvo ao _target, _knownObject da Creature e Creature ao _KnownObject do WorldObject).<br>
 	 * <br>
-	 * <b><u>Concept</u>:</b><br>
+	 * <b><u>Conceito</u>:</b><br>
 	 * <br>
-	 * The WorldObject (including Creature) targeted is identified in <b>_target</b> of the Creature.<br>
+	 * O WorldObject (incluindo Creature) alvo e identificado em <b>_target</b> da Creature.<br>
 	 * <br>
-	 * <b><u>Actions</u>:</b>
+	 * <b><u>Acoes</u>:</b>
 	 * <ul>
-	 * <li>Set the _target of Creature to WorldObject</li>
-	 * <li>If necessary, add WorldObject to _knownObject of the Creature</li>
-	 * <li>If necessary, add Creature to _KnownObject of the WorldObject</li>
-	 * <li>If object==null, cancel Attak or Cast</li>
+	 * <li>Define o _target da Creature para WorldObject</li>
+	 * <li>Se necessario, adiciona WorldObject ao _knownObject da Creature</li>
+	 * <li>Se necessario, adiciona Creature ao _KnownObject do WorldObject</li>
+	 * <li>Se object==null, cancela Ataque ou Conjuracao</li>
 	 * </ul>
-	 * @param object L2object to target
+	 * @param object L2object para definir como alvo
 	 */
 	public void setTarget(WorldObject object)
 	{
@@ -4636,7 +4636,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * @return the identifier of the WorldObject targeted or -1.
+	 * @return o identificador do WorldObject alvo ou -1.
 	 */
 	public int getTargetId()
 	{
@@ -4649,7 +4649,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * @return the WorldObject targeted or null.
+	 * @return o WorldObject alvo ou null.
 	 */
 	public WorldObject getTarget()
 	{
@@ -4657,34 +4657,34 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Calculate movement data for a move to location action and add the Creature to MOVING_OBJECTS of MovementTaskManager (only called by AI Accessor).<br>
+	 * Calcula dados de movimento para uma acao de mover para local e adiciona a Creature a MOVING_OBJECTS do MovementTaskManager (chamado apenas pelo AI Accessor).<br>
 	 * <br>
-	 * <b><u>Concept</u>:</b><br>
+	 * <b><u>Conceito</u>:</b><br>
 	 * <br>
-	 * At the beginning of the move action, all properties of the movement are stored in the MoveData object called <b>_move</b> of the Creature.<br>
-	 * The position of the start point and of the destination permit to estimated in function of the movement speed the time to achieve the destination.<br>
-	 * All Creature in movement are identified in <b>MOVING_OBJECTS</b> of MovementTaskManager that will call the updatePosition method of those Creature each 0.1s.<br>
+	 * No inicio da acao de movimento, todas as propriedades do movimento sao armazenadas no objeto MoveData chamado <b>_move</b> da Creature.<br>
+	 * A posicao do ponto inicial e do destino permitem estimar em funcao da velocidade de movimento o tempo para alcancar o destino.<br>
+	 * Todas as Creature em movimento sao identificadas em <b>MOVING_OBJECTS</b> do MovementTaskManager que chamara o metodo updatePosition dessas Creature a cada 0.1s.<br>
 	 * <br>
-	 * <b><u>Actions</u>:</b>
+	 * <b><u>Acoes</u>:</b>
 	 * <ul>
-	 * <li>Get current position of the Creature</li>
-	 * <li>Calculate distance (dx,dy) between current position and destination including offset</li>
-	 * <li>Create and Init a MoveData object</li>
-	 * <li>Set the Creature _move object to MoveData object</li>
-	 * <li>Add the Creature to MOVING_OBJECTS of the MovementTaskManager</li>
-	 * <li>Create a task to notify the AI that Creature arrives at a check point of the movement</li>
+	 * <li>Obtem a posicao atual da Creature</li>
+	 * <li>Calcula a distancia (dx,dy) entre a posicao atual e o destino incluindo offset</li>
+	 * <li>Cria e inicializa um objeto MoveData</li>
+	 * <li>Define o objeto _move da Creature para o objeto MoveData</li>
+	 * <li>Adiciona a Creature a MOVING_OBJECTS do MovementTaskManager</li>
+	 * <li>Cria uma tarefa para notificar a AI que a Creature chegou a um ponto de verificacao do movimento</li>
 	 * </ul>
-	 * <font color=#FF0000><b><u>Caution</u>: This method DOESN'T send Server->Client packet MoveToPawn/MoveToLocation.</b></font><br>
+	 * <font color=#FF0000><b><u>Cuidado</u>: Este metodo NAO envia pacote Server->Client MoveToPawn/MoveToLocation.</b></font><br>
 	 * <br>
-	 * <b><u>Example of use</u>:</b>
+	 * <b><u>Exemplo de uso</u>:</b>
 	 * <ul>
 	 * <li>AI : onIntentionMoveTo(Location), onIntentionPickUp(WorldObject), onIntentionInteract(WorldObject)</li>
 	 * <li>FollowTask</li>
 	 * </ul>
-	 * @param xValue The X position of the destination
-	 * @param yValue The Y position of the destination
-	 * @param zValue The Y position of the destination
-	 * @param offsetValue The size of the interaction area of the Creature targeted
+	 * @param xValue A posicao X do destino
+	 * @param yValue A posicao Y do destino
+	 * @param zValue A posicao Z do destino
+	 * @param offsetValue O tamanho da area de interacao da Creature alvo
 	 */
 	public void moveToLocation(int xValue, int yValue, int zValue, int offsetValue)
 	{
@@ -4706,8 +4706,8 @@ public abstract class Creature extends WorldObject
 		final int curY = getY();
 		final int curZ = getZ();
 		
-		// Calculate distance (dx,dy) between current position and destination
-		// TODO: improve Z axis move/follow support when dx,dy are small compared to dz
+		// Calcula a distancia (dx,dy) entre a posicao atual e o destino
+		// TODO: melhorar suporte de movimento/seguimento no eixo Z quando dx,dy sao pequenos comparados a dz
 		double dx = (x - curX);
 		double dy = (y - curY);
 		double dz = (z - curZ);
@@ -4719,7 +4719,7 @@ public abstract class Creature extends WorldObject
 			distance = Math.abs(dz);
 		}
 		
-		// Make water move short and use no geodata checks for swimming chars distance in a click can easily be over 3000.
+		// Faz movimento na agua curto e nao usa verificacoes de geodata para personagens nadando, distancia em um clique pode facilmente ter mais de 3000.
 		final boolean isInWater = isInsideZone(ZoneId.WATER) && !isInsideZone(ZoneId.CASTLE);
 		if (isInWater && (distance > 700))
 		{
@@ -4734,7 +4734,7 @@ public abstract class Creature extends WorldObject
 		}
 		
 		// @formatter:off
-		// Define movement angles needed
+		// Define angulos de movimento necessarios
 		// ^
 		// |    X (x,y)
 		// |   /
@@ -4748,49 +4748,49 @@ public abstract class Creature extends WorldObject
 		double cos;
 		double sin;
 		
-		// Check if a movement offset is defined or no distance to go through
+		// Verifica se um offset de movimento esta definido ou nao ha distancia a percorrer
 		if ((offset > 0) || (distance < 1))
 		{
-			// approximation for moving closer when z coordinates are different
-			// TODO: handle Z axis movement better
+			// aproximacao para mover mais perto quando coordenadas z sao diferentes
+			// TODO: lidar melhor com movimento no eixo Z
 			offset -= Math.abs(dz);
 			if (offset < 5)
 			{
 				offset = 5;
 			}
 			
-			// If no distance to go through, the movement is canceled
+			// Se nao ha distancia a percorrer, o movimento e cancelado
 			if ((distance < 1) || ((distance - offset) <= 0))
 			{
-				// Notify the AI that the Creature is arrived at destination
+				// Notifica a AI que a Creature chegou ao destino
 				getAI().notifyAction(Action.ARRIVED);
 				sendPacket(ActionFailed.STATIC_PACKET);
 				return;
 			}
 			
-			// Calculate movement angles needed
+			// Calcula angulos de movimento necessarios
 			sin = dy / distance;
 			cos = dx / distance;
-			distance -= (offset - 5); // due to rounding error, we have to move a bit closer to be in range
+			distance -= (offset - 5); // devido a erro de arredondamento, temos que mover um pouco mais perto para estar no alcance
 			
-			// Calculate the new destination with offset included
+			// Calcula o novo destino com offset incluido
 			x = curX + (int) (distance * cos);
 			y = curY + (int) (distance * sin);
 		}
 		else
 		{
-			// Calculate movement angles needed
+			// Calcula angulos de movimento necessarios
 			sin = dy / distance;
 			cos = dx / distance;
 		}
 		
-		// Create and Init a MoveData object
+		// Cria e inicializa um objeto MoveData
 		final MoveData move = new MoveData();
 		
-		// GEODATA MOVEMENT CHECKS AND PATHFINDING
+		// VERIFICACOES DE MOVIMENTO GEODATA E PATHFINDING
 		final WorldRegion region = getWorldRegion();
 		move.disregardingGeodata = (region == null) || !region.areNeighborsActive();
-		move.onGeodataPathIndex = -1; // Initialize not on geodata path
+		move.onGeodataPathIndex = -1; // Inicializa nao no caminho geodata
 		if (!move.disregardingGeodata && !_isFlying && !isInWater && !isVehicle() && !_cursorKeyMovement)
 		{
 			final boolean isInVehicle = isPlayer() && (asPlayer().getVehicle() != null);
@@ -4799,7 +4799,7 @@ public abstract class Creature extends WorldObject
 				move.disregardingGeodata = true;
 			}
 			
-			// Movement checks.
+			// Verificacoes de movimento.
 			if ((Config.PATHFINDING > 0) && !(this instanceof QuestGuard))
 			{
 				int originalX = x;
@@ -4818,50 +4818,56 @@ public abstract class Creature extends WorldObject
 							return;
 						}
 						
-						_move.onGeodataPathIndex = -1; // Set not on geodata path.
+						_move.onGeodataPathIndex = -1; // Define nao no caminho geodata.
 					}
 					catch (NullPointerException e)
 					{
 					}
 				}
 				
-				// Support for player attack with direct movement. Tested at retail on May 11th 2023.
+				// Suporte para ataque do jogador com movimento direto. Testado no retail em 11 de maio de 2023.
 				final boolean directMove = isPlayer() && hasAI() && (getAI().getIntention() == Intention.ATTACK);
 				
-				if (directMove //
-					|| (!isInVehicle // Not in vehicle.
-						&& !(isPlayer() && (distance > 3000)) // Should be able to click far away and move.
-						&& !(isMonster() && (Math.abs(dz) > 100)) // Monsters can move on ledges.
-						&& !(((curZ - z) > 300) && (distance < 300)))) // Prohibit correcting destination if character wants to fall.
+				final boolean needGeoCheck = !directMove && !isInVehicle && // Nao no veiculo.
+					!(isPlayer() && (distance > 3000)) && // Deve poder clicar longe e mover.
+					!(isMonster() && (Math.abs(dz) > 500)) && // Monstros podem mover em saliencias.
+					!(((curZ - z) > 300) && (distance < 300)); // Proibe corrigir destino se personagem quer cair.
+				
+				if (directMove || needGeoCheck)
 				{
-					// location different if destination wasn't reached (or just z coord is different)
-					final Location destiny = GeoData.getInstance().moveCheck(curX, curY, curZ, x, y, z, getInstanceId());
-					x = destiny.getX();
-					y = destiny.getY();
-					if (!isPlayer())
+					if (directMove || (distance > 70))
 					{
-						z = destiny.getZ();
+						// localizacao diferente se destino nao foi alcancado (ou apenas coordenada z e diferente)
+						final Location destiny = GeoData.getInstance().moveCheck(curX, curY, curZ, x, y, z, getInstanceId());
+						
+						x = destiny.getX();
+						y = destiny.getY();
+						
+						if (!isPlayer())
+						{
+							z = destiny.getZ();
+						}
 					}
 					
 					dx = x - curX;
 					dy = y - curY;
 					dz = z - curZ;
+					
 					distance = verticalMovementOnly ? Math.pow(dz, 2) : Math.hypot(dx, dy);
 				}
 				
-				// Pathfinding checks.
-				// Players use pathfinding only in peace zones.
-				// Monsters (Attackable) use pathfinding only when in combat (attacking or being attacked).
-				final boolean usePathfinding = (isPlayer() && isInsideZone(ZoneId.PEACE)) || (isAttackable() && isInCombat());
-				final boolean isMonsterInAttack = (!isPlayer() && isInCombat());
+				final int pathfindingThreshold = isPlayer() ? 30 : 15;
+				final boolean dangerousFall = isMonster() && (Math.abs(dz) > 100) && (distance < 500);
+				final boolean blockedInCombat = isAttackable() && isInCombat() && ((originalDistance - distance) > 5);
 				
-				if (!directMove && (isMonsterInAttack || ((originalDistance - distance) > 30)) && !isAfraid() && !isInVehicle && usePathfinding)
+				// Verificacao de Pathfinding.
+				if (!directMove && (((originalDistance - distance) > pathfindingThreshold) || dangerousFall || blockedInCombat) && !isAfraid() && !isInVehicle)
 				{
-					// Path calculation -- overrides previous movement check
+					// Calculo de caminho -- sobrescreve verificacao de movimento anterior
 					move.geoPath = PathFinding.getInstance().findPath(curX, curY, curZ, originalX, originalY, originalZ, getInstanceId(), isPlayer());
 					boolean found = (move.geoPath != null) && (move.geoPath.size() > 1);
 					
-					// If path not found and this is an Attackable, attempt to find closest path to destination.
+					// Se caminho nao encontrado e este e um Attackable, tenta encontrar caminho mais proximo ao destino.
 					if (!found && isAttackable())
 					{
 						int xMin = Math.min(curX, originalX);
@@ -4908,7 +4914,7 @@ public abstract class Creature extends WorldObject
 					
 					if (found)
 					{
-						move.onGeodataPathIndex = 0; // On first segment.
+						move.onGeodataPathIndex = 0; // No primeiro segmento.
 						move.geoPathGtx = gtx;
 						move.geoPathGty = gty;
 						move.geoPathAccurateTx = originalX;
@@ -4923,9 +4929,9 @@ public abstract class Creature extends WorldObject
 						sin = dy / distance;
 						cos = dx / distance;
 					}
-					else // No path found.
+					else // Nenhum caminho encontrado.
 					{
-						// When no move path was found, use direct movement. Tested at retail on October 21st 2024.
+						// Quando nenhum caminho de movimento foi encontrado, usa movimento direto. Testado no retail em 21 de outubro de 2024.
 						// if (isPlayer() && !_isFlying && !isInWater)
 						// {
 						// sendPacket(ActionFailed.STATIC_PACKET);
@@ -4940,7 +4946,7 @@ public abstract class Creature extends WorldObject
 					}
 				}
 				
-				// Verify destination when using mouse movement and no path is found.
+				// Verifica destino ao usar movimento com mouse e nenhum caminho e encontrado.
 				if (isPlayable() && !_cursorKeyMovement && (move.geoPath == null))
 				{
 					final Location destiny = GeoData.getInstance().moveCheck(curX, curY, curZ, x, y, z, getInstanceId());
@@ -4954,12 +4960,12 @@ public abstract class Creature extends WorldObject
 				}
 			}
 			
-			// If no distance to go through, the movement is canceled
+			// Se nao ha distancia a percorrer, o movimento e cancelado
 			if ((distance < 1) && ((Config.PATHFINDING > 0) || isPlayable()))
 			{
 				if (isSummon())
 				{
-					// Do not break following owner.
+					// Nao interromper seguindo o dono.
 					if (getAI().getFollowTarget() != asPlayer())
 					{
 						asSummon().setFollowStatus(false);
@@ -4976,22 +4982,22 @@ public abstract class Creature extends WorldObject
 			}
 		}
 		
-		// Apply Z distance for flying or swimming for correct timing calculations
+		// Aplica distancia Z para voar ou nadar para calculos de tempo corretos
 		if ((_isFlying || isInWater) && !verticalMovementOnly)
 		{
 			distance = Math.hypot(distance, dz);
 		}
 		
-		// Calculate the number of ticks between the current position and the destination.
+		// Calcula o numero de ticks entre a posicao atual e o destino.
 		final int ticksToMove = (int) ((GameTimeTaskManager.TICKS_PER_SECOND * distance) / speed);
 		move.xDestination = x;
 		move.yDestination = y;
-		move.zDestination = z; // this is what was requested from client
+		move.zDestination = z; // isso e o que foi solicitado pelo cliente
 		
-		// Calculate and set the heading of the Creature
-		move.heading = 0; // initial value for coordinate sync
+		// Calcula e define a direcao da Creature
+		move.heading = 0; // valor inicial para sincronizacao de coordenadas
 		
-		// Does not break heading on vertical movements
+		// Nao quebra a direcao em movimentos verticais
 		if (!verticalMovementOnly)
 		{
 			setHeading(LocationUtil.calculateHeadingFrom(cos, sin));
@@ -4999,11 +5005,11 @@ public abstract class Creature extends WorldObject
 		
 		move.moveStartTime = GameTimeTaskManager.getInstance().getGameTicks();
 		
-		// Set the Creature _move object to MoveData object
+		// Define o objeto _move da Creature para o objeto MoveData
 		_move = move;
 		
-		// Add the Creature to moving objects of the MovementTaskManager.
-		// The MovementTaskManager manages object movement.
+		// Adiciona a Creature aos objetos em movimento do MovementTaskManager.
+		// O MovementTaskManager gerencia o movimento de objetos.
 		MovementTaskManager.getInstance().registerMovingObject(this);
 		
 		// Create a task to notify the AI that Creature arrives at a check point of the movement
@@ -5016,8 +5022,8 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Move to next route point.
-	 * @return true, if successful
+	 * Mover para o proximo ponto da rota.
+	 * @return true, se bem sucedido
 	 */
 	public boolean moveToNextRoutePoint()
 	{
@@ -5029,29 +5035,29 @@ public abstract class Creature extends WorldObject
 		
 		if (!isOnGeodataPath(move))
 		{
-			// Cancel the move action
+			// Cancela a acao de movimento
 			_move = null;
 			return false;
 		}
 		
-		// Get the Move Speed of the Creature
+		// Obtem a Velocidade de Movimento da Creature
 		final double speed = _stat.getMoveSpeed();
 		if ((speed <= 0) || isMovementDisabled())
 		{
-			// Cancel the move action
+			// Cancela a acao de movimento
 			_move = null;
 			return false;
 		}
 		
-		// Get current position of the Creature
+		// Obtem a posicao atual da Creature
 		final int curX = getX();
 		final int curY = getY();
 		
-		// Create and Init a MoveData object
+		// Cria e inicializa um objeto MoveData
 		final MoveData newMove = new MoveData();
 		
-		// Update MoveData object
-		newMove.onGeodataPathIndex = move.onGeodataPathIndex + 1; // next segment
+		// Atualiza o objeto MoveData
+		newMove.onGeodataPathIndex = move.onGeodataPathIndex + 1; // proximo segmento
 		newMove.geoPath = move.geoPath;
 		newMove.geoPathGtx = move.geoPathGtx;
 		newMove.geoPathGty = move.geoPathGty;
@@ -5070,42 +5076,42 @@ public abstract class Creature extends WorldObject
 			newMove.zDestination = move.geoPath.get(newMove.onGeodataPathIndex).getZ();
 		}
 		
-		// Calculate and set the heading of the Creature.
+		// Calcula e define a direcao da Creature.
 		final double distance = Math.hypot(newMove.xDestination - curX, newMove.yDestination - curY);
 		if (distance != 0)
 		{
 			setHeading(LocationUtil.calculateHeadingFrom(curX, curY, newMove.xDestination, newMove.yDestination));
 		}
 		
-		// Calculate the number of ticks between the current position and the destination.
+		// Calcula o numero de ticks entre a posicao atual e o destino.
 		final int ticksToMove = (int) ((GameTimeTaskManager.TICKS_PER_SECOND * distance) / speed);
-		newMove.heading = 0; // initial value for coordinate sync
+		newMove.heading = 0; // valor inicial para sincronizacao de coordenadas
 		newMove.moveStartTime = GameTimeTaskManager.getInstance().getGameTicks();
 		
-		// Set the Creature _move object to MoveData object
+		// Define o objeto _move da Creature para o objeto MoveData
 		_move = newMove;
 		
-		// Add the Creature to moving objects of the MovementTaskManager.
-		// The MovementTaskManager manages object movement.
+		// Adiciona a Creature aos objetos em movimento do MovementTaskManager.
+		// O MovementTaskManager gerencia o movimento de objetos.
 		MovementTaskManager.getInstance().registerMovingObject(this);
 		
-		// Create a task to notify the AI that Creature arrives at a check point of the movement
+		// Cria uma tarefa para notificar a AI que a Creature chegou a um ponto de verificacao do movimento
 		if ((ticksToMove * GameTimeTaskManager.MILLIS_IN_TICK) > 3000)
 		{
 			ThreadPool.schedule(new NotifyAITask(this, Action.ARRIVED_REVALIDATE), 2000);
 		}
 		
-		// the Event.ARRIVED will be sent when the character will actually arrive to destination by MovementTaskManager
+		// o Event.ARRIVED sera enviado quando o personagem realmente chegar ao destino pelo MovementTaskManager
 		
-		// Send a Server->Client packet MoveToLocation to the actor and all Player in its _knownPlayers
+		// Envia um pacote Server->Client MoveToLocation para o ator e todos os Player em seus _knownPlayers
 		broadcastMoveToLocation(true);
 		return true;
 	}
 	
 	/**
-	 * Validate movement heading.
-	 * @param heading the heading
-	 * @return true, if successful
+	 * Valida a direcao do movimento.
+	 * @param heading a direcao
+	 * @return true, se bem sucedido
 	 */
 	public boolean validateMovementHeading(int heading)
 	{
@@ -5118,7 +5124,7 @@ public abstract class Creature extends WorldObject
 		boolean result = true;
 		if (move.heading != heading)
 		{
-			result = (move.heading == 0); // initial value or false
+			result = (move.heading == 0); // valor inicial ou falso
 			move.heading = heading;
 		}
 		
@@ -5126,10 +5132,10 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Check if this object is inside the given 2D radius around the given point.
-	 * @param loc Location of the target
-	 * @param radius the radius around the target
-	 * @return true if the Creature is inside the radius.
+	 * Verifica se este objeto esta dentro do raio 2D dado ao redor do ponto dado.
+	 * @param loc Localizacao do alvo
+	 * @param radius o raio ao redor do alvo
+	 * @return true se a Creature esta dentro do raio.
 	 */
 	public boolean isInsideRadius2D(ILocational loc, int radius)
 	{
@@ -5137,12 +5143,12 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Check if this object is inside the given 2D radius around the given point.
-	 * @param x X position of the target
-	 * @param y Y position of the target
-	 * @param z Z position of the target
-	 * @param radius the radius around the target
-	 * @return true if the Creature is inside the radius.
+	 * Verifica se este objeto esta dentro do raio 2D dado ao redor do ponto dado.
+	 * @param x Posicao X do alvo
+	 * @param y Posicao Y do alvo
+	 * @param z Posicao Z do alvo
+	 * @param radius o raio ao redor do alvo
+	 * @return true se a Creature esta dentro do raio.
 	 */
 	public boolean isInsideRadius2D(int x, int y, int z, int radius)
 	{
@@ -5150,10 +5156,10 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Check if this object is inside the given 3D radius around the given point.
-	 * @param loc Location of the target
-	 * @param radius the radius around the target
-	 * @return true if the Creature is inside the radius.
+	 * Verifica se este objeto esta dentro do raio 3D dado ao redor do ponto dado.
+	 * @param loc Localizacao do alvo
+	 * @param radius o raio ao redor do alvo
+	 * @return true se a Creature esta dentro do raio.
 	 */
 	public boolean isInsideRadius3D(ILocational loc, int radius)
 	{
@@ -5161,12 +5167,12 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Check if this object is inside the given 3D radius around the given point.
-	 * @param x X position of the target
-	 * @param y Y position of the target
-	 * @param z Z position of the target
-	 * @param radius the radius around the target
-	 * @return true if the Creature is inside the radius.
+	 * Verifica se este objeto esta dentro do raio 3D dado ao redor do ponto dado.
+	 * @param x Posicao X do alvo
+	 * @param y Posicao Y do alvo
+	 * @param z Posicao Z do alvo
+	 * @param radius o raio ao redor do alvo
+	 * @return true se a Creature esta dentro do raio.
 	 */
 	public boolean isInsideRadius3D(int x, int y, int z, int radius)
 	{
@@ -5174,9 +5180,9 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * <b><u>Overridden in</u>:</b>
+	 * <b><u>Sobrescrito em</u>:</b>
 	 * <li>Player</li>
-	 * @return True if arrows are available.
+	 * @return True se flechas estao disponiveis.
 	 */
 	protected boolean checkAndEquipArrows()
 	{
@@ -5184,9 +5190,9 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * <b><u>Overridden in</u>:</b>
+	 * <b><u>Sobrescrito em</u>:</b>
 	 * <li>Player</li>
-	 * @return True if bolts are available.
+	 * @return True se virotes estao disponiveis.
 	 */
 	protected boolean checkAndEquipBolts()
 	{
@@ -5194,9 +5200,9 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Add Exp and Sp to the Creature.<br>
+	 * Adiciona Exp e Sp a Creature.<br>
 	 * <br>
-	 * <b><u>Overridden in</u>:</b>
+	 * <b><u>Sobrescrito em</u>:</b>
 	 * <li>Player</li>
 	 * <li>Pet</li><br>
 	 * @param addToExp
@@ -5204,66 +5210,66 @@ public abstract class Creature extends WorldObject
 	 */
 	public synchronized void addExpAndSp(double addToExp, double addToSp)
 	{
-		// Dummy method (overridden by players and pets)
+		// Metodo vazio (sobrescrito por jogadores e pets)
 	}
 	
 	/**
-	 * <b><u>Overridden in</u>:</b>
+	 * <b><u>Sobrescrito em</u>:</b>
 	 * <li>Player</li>
-	 * @return the active weapon instance (always equipped in the right hand).
+	 * @return a instancia da arma ativa (sempre equipada na mao direita).
 	 */
 	public abstract Item getActiveWeaponInstance();
 	
 	/**
-	 * <b><u>Overridden in</u>:</b>
+	 * <b><u>Sobrescrito em</u>:</b>
 	 * <li>Player</li>
-	 * @return the active weapon item (always equipped in the right hand).
+	 * @return o item da arma ativa (sempre equipado na mao direita).
 	 */
 	public abstract Weapon getActiveWeaponItem();
 	
 	/**
-	 * <b><u>Overridden in</u>:</b>
+	 * <b><u>Sobrescrito em</u>:</b>
 	 * <li>Player</li>
-	 * @return the secondary weapon instance (always equipped in the left hand).
+	 * @return a instancia da arma secundaria (sempre equipada na mao esquerda).
 	 */
 	public abstract Item getSecondaryWeaponInstance();
 	
 	/**
-	 * <b><u>Overridden in</u>:</b>
+	 * <b><u>Sobrescrito em</u>:</b>
 	 * <li>Player</li>
-	 * @return the secondary {@link ItemTemplate} item (always equipped in the left hand).
+	 * @return o item secundario {@link ItemTemplate} (sempre equipado na mao esquerda).
 	 */
 	public abstract ItemTemplate getSecondaryWeaponItem();
 	
 	/**
-	 * Manage hit process (called by Hit Task).<br>
+	 * Gerencia o processo de hit (chamado pela Hit Task).<br>
 	 * <br>
-	 * <b><u>Actions</u>:</b>
+	 * <b><u>Acoes</u>:</b>
 	 * <ul>
-	 * <li>If the attacker/target is dead or use fake death, notify the AI with CANCEL and send a Server->Client packet ActionFailed (if attacker is a Player)</li>
-	 * <li>If attack isn't aborted, send a message system (critical hit, missed...) to attacker/target if they are Player</li>
-	 * <li>If attack isn't aborted and hit isn't missed, reduce HP of the target and calculate reflection damage to reduce HP of attacker if necessary</li>
-	 * <li>if attack isn't aborted and hit isn't missed, manage attack or cast break of the target (calculating rate, sending message...)</li>
+	 * <li>Se o atacante/alvo esta morto ou usa fake death, notifica a AI com CANCEL e envia um pacote Server->Client ActionFailed (se o atacante for um Player)</li>
+	 * <li>Se o ataque nao foi abortado, envia uma mensagem de sistema (golpe critico, errou...) para atacante/alvo se forem Player</li>
+	 * <li>Se o ataque nao foi abortado e o golpe nao errou, reduz HP do alvo e calcula dano refletido para reduzir HP do atacante se necessario</li>
+	 * <li>Se o ataque nao foi abortado e o golpe nao errou, gerencia interrupcao de ataque ou conjuracao do alvo (calculando taxa, enviando mensagem...)</li>
 	 * </ul>
-	 * @param target The Creature targeted
-	 * @param damageValue Number of HP to reduce
-	 * @param crit True if hit is critical
-	 * @param miss True if hit is missed
-	 * @param shld True if shield is efficient
-	 * @param soulshot True if SoulShot are charged
-	 * @param rechargeShots True if SoulShots are re-charged
+	 * @param target A Creature alvo
+	 * @param damageValue Numero de HP a reduzir
+	 * @param crit True se o golpe e critico
+	 * @param miss True se o golpe errou
+	 * @param shld True se o escudo e eficiente
+	 * @param soulshot True se SoulShot estao carregados
+	 * @param rechargeShots True se SoulShots sao recarregados
 	 */
 	public void onHitTimer(Creature target, int damageValue, boolean crit, boolean miss, byte shld, boolean soulshot, boolean rechargeShots)
 	{
-		// If the attacker/target is dead or use fake death, notify the AI with CANCEL
-		// and send a Server->Client packet ActionFailed (if attacker is a Player)
+		// Se o atacante/alvo esta morto ou usa fake death, notifica a AI com CANCEL
+		// e envia um pacote Server->Client ActionFailed (se o atacante for um Player)
 		if ((target == null) || isAlikeDead())
 		{
 			getAI().notifyAction(Action.CANCEL);
 			return;
 		}
 		
-		// Check if fake players should aggro each other.
+		// Verifica se fake players devem agredir uns aos outros.
 		if (isFakePlayer() && !Config.FAKE_PLAYER_AGGRO_FPC && target.isFakePlayer())
 		{
 			return;
@@ -5272,8 +5278,8 @@ public abstract class Creature extends WorldObject
 		if ((isNpc() && target.isAlikeDead()) || target.isDead() || (!isInSurroundingRegion(target) && !isDoor()))
 		{
 			// getAI().setIntention(Intention.ACTIVE, null);
-			// Some times attack is processed but target die before the hit
-			// So we need to recharge shot for next attack
+			// As vezes o ataque e processado mas o alvo morre antes do hit
+			// Entao precisamos recarregar shots para o proximo ataque
 			if (rechargeShots)
 			{
 				rechargeShots(true, false);
@@ -5296,15 +5302,15 @@ public abstract class Creature extends WorldObject
 		}
 		// else
 		// {
-		// If we didn't miss the hit, discharge the shoulshots, if any
+		// Se nao erramos o hit, descarrega os soulshots, se houver
 		// setChargedShot(ShotType.SOULSHOTS, false);
 		// }
 		
-		// Send message about damage/crit or miss
+		// Envia mensagem sobre dano/critico ou erro
 		int damage = damageValue;
 		sendDamageMessage(target, damage, false, crit, miss);
 		
-		// Check Raidboss attack Creature will be petrified if attacking a raid that's more than 8 levels lower
+		// Verifica Raidboss ataque Creature sera petrificada se atacar um raid que tem mais de 8 niveis abaixo
 		if (target.isRaid() && target.giveRaidCurse() && !Config.RAID_DISABLE_CURSE && (getLevel() > (target.getLevel() + 8)))
 		{
 			final Skill skill = CommonSkill.RAID_CURSE2.getSkill();
@@ -5320,10 +5326,10 @@ public abstract class Creature extends WorldObject
 				LOGGER.warning("Skill 4515 at level 1 is missing in DP.");
 			}
 			
-			damage = 0; // prevents messing up drop calculation
+			damage = 0; // previne estragar o calculo de drop
 		}
 		
-		// If Creature target is a Player, send a system message
+		// Se o alvo da Creature e um Player, envia uma mensagem de sistema
 		if (target.isPlayer())
 		{
 			final Player enemy = target.asPlayer();
@@ -5335,12 +5341,12 @@ public abstract class Creature extends WorldObject
 			final Weapon weapon = getActiveWeaponItem();
 			final boolean isBow = ((weapon != null) && ((weapon.getItemType() == WeaponType.BOW) || (weapon.getItemType() == WeaponType.CROSSBOW)));
 			int reflectedDamage = 0;
-			if (!isBow && !target.isInvul()) // Do not reflect if weapon is of type bow or target is invunlerable
+			if (!isBow && !target.isInvul()) // Nao reflete se a arma for do tipo arco ou alvo for invulneravel
 			{
-				// quick fix for no drop from raid if boss attack high-level char with damage reflection
+				// correcao rapida para sem drop de raid se boss ataca personagem de alto nivel com reflexao de dano
 				if (!target.isRaid() || (asPlayer() == null) || (asPlayer().getLevel() <= (target.getLevel() + 8)))
 				{
-					// Reduce HP of the target and calculate reflection damage to reduce HP of attacker if necessary
+					// Reduz HP do alvo e calcula dano refletido para reduzir HP do atacante se necessario
 					final double reflectPercent = target.getStat().calcStat(Stat.REFLECT_DAMAGE_PERCENT, 0, null, null);
 					if (reflectPercent > 0)
 					{
@@ -5353,7 +5359,7 @@ public abstract class Creature extends WorldObject
 				}
 			}
 			
-			// reduce targets HP
+			// reduz HP do alvo
 			target.reduceCurrentHp(damage, this, null);
 			target.notifyDamageReceived(damage, this, null, crit, false);
 			if (reflectedDamage > 0)
@@ -5362,9 +5368,9 @@ public abstract class Creature extends WorldObject
 				notifyDamageReceived(reflectedDamage, target, null, crit, false);
 			}
 			
-			if (!isBow) // Do not absorb if weapon is of type bow
+			if (!isBow) // Nao absorve se a arma for do tipo arco
 			{
-				// Absorb HP from the damage inflicted
+				// Absorve HP do dano infligido
 				double absorbPercent = _stat.calcStat(Stat.ABSORB_DAMAGE_PERCENT, 0, null, null);
 				if (absorbPercent > 0)
 				{
@@ -5372,7 +5378,7 @@ public abstract class Creature extends WorldObject
 					int absorbDamage = (int) ((absorbPercent / 100.) * damage);
 					if (absorbDamage > maxCanAbsorb)
 					{
-						absorbDamage = maxCanAbsorb; // Can't absord more than max hp
+						absorbDamage = maxCanAbsorb; // Nao pode absorver mais que o hp maximo
 					}
 					
 					if (absorbDamage > 0)
@@ -5381,7 +5387,7 @@ public abstract class Creature extends WorldObject
 					}
 				}
 				
-				// Absorb MP from the damage inflicted
+				// Absorve MP do dano infligido
 				absorbPercent = _stat.calcStat(Stat.ABSORB_MANA_DAMAGE_PERCENT, 0, null, null);
 				if (absorbPercent > 0)
 				{
@@ -5389,7 +5395,7 @@ public abstract class Creature extends WorldObject
 					int absorbDamage = (int) ((absorbPercent / 100.) * damage);
 					if (absorbDamage > maxCanAbsorb)
 					{
-						absorbDamage = maxCanAbsorb; // Can't absord more than max hp
+						absorbDamage = maxCanAbsorb; // Nao pode absorver mais que o mp maximo
 					}
 					
 					if (absorbDamage > 0)
@@ -5399,7 +5405,7 @@ public abstract class Creature extends WorldObject
 				}
 			}
 			
-			// Notify AI with ATTACKED
+			// Notifica a AI com ATTACKED
 			if (target.hasAI())
 			{
 				target.getAI().notifyAction(Action.ATTACKED, this);
@@ -5416,7 +5422,7 @@ public abstract class Creature extends WorldObject
 				}
 			}
 			
-			// Manage attack or cast break of the target (calculating rate, sending message...)
+			// Gerencia interrupcao de ataque ou conjuracao do alvo (calculando taxa, enviando mensagem...)
 			if (!target.isRaid() && Formulas.calcAtkBreak(target, damage))
 			{
 				target.breakAttack();
@@ -5434,14 +5440,14 @@ public abstract class Creature extends WorldObject
 				}
 			}
 			
-			// Launch weapon onCritical Special ability effect if available
+			// Executa efeito de habilidade especial onCritical da arma se disponivel
 			if (crit && (weapon != null))
 			{
 				weapon.castOnCriticalSkill(this, target);
 			}
 		}
 		
-		// Recharge any active auto-soulshot tasks for current creature.
+		// Recarrega quaisquer tarefas ativas de auto-soulshot para a criatura atual.
 		if (rechargeShots)
 		{
 			rechargeShots(true, false);
@@ -5449,72 +5455,72 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Break an attack and send Server->Client ActionFailed packet and a System Message to the Creature.
+	 * Interrompe um ataque e envia pacote Server->Client ActionFailed e uma Mensagem de Sistema para a Creature.
 	 */
 	public void breakAttack()
 	{
 		if (isAttackingNow())
 		{
-			// Abort the attack of the Creature and send Server->Client ActionFailed packet
+			// Aborta o ataque da Creature e envia pacote Server->Client ActionFailed
 			abortAttack();
 			
 			if (isPlayer())
 			{
-				// Send a system message
+				// Envia uma mensagem de sistema
 				sendPacket(SystemMessageId.YOUR_ATTACK_HAS_FAILED);
 			}
 		}
 	}
 	
 	/**
-	 * Break a cast and send Server->Client ActionFailed packet and a System Message to the Creature.
+	 * Interrompe uma conjuracao e envia pacote Server->Client ActionFailed e uma Mensagem de Sistema para a Creature.
 	 */
 	public void breakCast()
 	{
-		// damage can only cancel magical & static skills
+		// dano so pode cancelar skills magicas e estaticas
 		if (_isCastingNow && canAbortCast() && (_lastSkillCast != null) && (_lastSkillCast.isMagic() || _lastSkillCast.isStatic()))
 		{
-			// Abort the cast of the Creature and send Server->Client MagicSkillCanceled/ActionFailed packet.
+			// Aborta a conjuracao da Creature e envia pacote Server->Client MagicSkillCanceled/ActionFailed.
 			abortCast();
 			
 			if (isPlayer())
 			{
-				// Send a system message
+				// Envia uma mensagem de sistema
 				sendPacket(SystemMessageId.YOUR_CASTING_HAS_BEEN_INTERRUPTED);
 			}
 		}
 	}
 	
 	/**
-	 * Reduce the arrow number of the Creature.<br>
+	 * Reduz o numero de flechas da Creature.<br>
 	 * <br>
-	 * <b><u>Overridden in</u>:</b>
+	 * <b><u>Sobrescrito em</u>:</b>
 	 * <li>Player</li><br>
 	 * @param bolts
 	 */
 	protected void reduceArrowCount(boolean bolts)
 	{
-		// default is to do nothing
+		// padrao e nao fazer nada
 	}
 	
 	/**
-	 * Manage Forced attack (shift + select target).<br>
+	 * Gerencia ataque Forcado (shift + selecionar alvo).<br>
 	 * <br>
-	 * <b><u>Actions</u>:</b>
+	 * <b><u>Acoes</u>:</b>
 	 * <ul>
-	 * <li>If Creature or target is in a town area, send a system message TARGET_IN_PEACEZONE a Server->Client packet ActionFailed</li>
-	 * <li>If target is confused, send a Server->Client packet ActionFailed</li>
-	 * <li>If Creature is a Artefact, send a Server->Client packet ActionFailed</li>
-	 * <li>Send a Server->Client packet MyTargetSelected to start attack and Notify AI with ATTACK</li>
+	 * <li>Se a Creature ou alvo esta em area de cidade, envia mensagem de sistema TARGET_IN_PEACEZONE e pacote Server->Client ActionFailed</li>
+	 * <li>Se o alvo esta confuso, envia pacote Server->Client ActionFailed</li>
+	 * <li>Se a Creature e um Artefato, envia pacote Server->Client ActionFailed</li>
+	 * <li>Envia pacote Server->Client MyTargetSelected para iniciar ataque e Notifica AI com ATTACK</li>
 	 * </ul>
-	 * @param player The Player to attack
+	 * @param player O Player para atacar
 	 */
 	@Override
 	public void onForcedAttack(Player player)
 	{
 		if (isInsidePeaceZone(player) && !isInTownWarEvent())
 		{
-			// If Creature or target is in a peace zone, send a system message TARGET_IN_PEACEZONE a Server->Client packet ActionFailed
+			// Se a Creature ou alvo esta em zona de paz, envia mensagem de sistema TARGET_IN_PEACEZONE e pacote Server->Client ActionFailed
 			player.sendPacket(SystemMessageId.YOU_MAY_NOT_ATTACK_THIS_TARGET_IN_A_PEACEFUL_ZONE);
 			player.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
@@ -5531,7 +5537,7 @@ public abstract class Creature extends WorldObject
 			
 			if ((target == null) || (target.isInOlympiadMode() && (!player.isOlympiadStart() || (player.getOlympiadGameId() != target.getOlympiadGameId()))))
 			{
-				// if Player is in Olympia and the match isn't already start, send a Server->Client packet ActionFailed
+				// se o Player esta na Olimpiada e a partida ainda nao comecou, envia pacote Server->Client ActionFailed
 				player.sendPacket(ActionFailed.STATIC_PACKET);
 				return;
 			}
@@ -5539,19 +5545,19 @@ public abstract class Creature extends WorldObject
 		
 		if ((player.getTarget() != null) && !player.getTarget().canBeAttacked() && !player.getAccessLevel().allowPeaceAttack() && !player.isInTownWarEvent())
 		{
-			// If target is not attackable, send a Server->Client packet ActionFailed
+			// Se o alvo nao e atacavel, envia pacote Server->Client ActionFailed
 			player.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
 		
 		if (player.isConfused())
 		{
-			// If target is confused, send a Server->Client packet ActionFailed
+			// Se o alvo esta confuso, envia pacote Server->Client ActionFailed
 			player.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
 		
-		// GeoData Los Check or dz > 1000
+		// Verificacao de Linha de Visao GeoData ou dz > 1000
 		if (!GeoData.getInstance().canSeeTarget(player, this))
 		{
 			player.sendPacket(SystemMessageId.CANNOT_SEE_TARGET);
@@ -5565,13 +5571,13 @@ public abstract class Creature extends WorldObject
 			return;
 		}
 		
-		// Notify AI with ATTACK
+		// Notifica AI com ATTACK
 		player.getAI().setIntention(Intention.ATTACK, this);
 	}
 	
 	/**
 	 * @param attacker
-	 * @return True if inside peace zone.
+	 * @return True se dentro de zona de paz.
 	 */
 	public boolean isInsidePeaceZone(Player attacker)
 	{
@@ -5607,7 +5613,7 @@ public abstract class Creature extends WorldObject
 		
 		if (Config.ALT_GAME_KARMA_PLAYER_CAN_BE_KILLED_IN_PEACEZONE)
 		{
-			// Allows red to be attacked and red to attack flagged players.
+			// Permite red ser atacado e red atacar jogadores flagged.
 			final Player player = asPlayer();
 			if ((player != null) && (player.getKarma() > 0))
 			{
@@ -5625,7 +5631,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * @return true if this character is inside an active grid.
+	 * @return true se este personagem esta dentro de uma grid ativa.
 	 */
 	public boolean isInActiveRegion()
 	{
@@ -5634,7 +5640,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * @return True if the Creature has a Party in progress.
+	 * @return True se a Creature tem um Grupo em andamento.
 	 */
 	public boolean isInParty()
 	{
@@ -5642,7 +5648,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * @return the Party object of the Creature.
+	 * @return o objeto Party da Creature.
 	 */
 	public Party getParty()
 	{
@@ -5650,7 +5656,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * @return the Attack Speed of the Creature (delay (in milliseconds) before next attack).
+	 * @return a Velocidade de Ataque da Creature (atraso (em milissegundos) antes do proximo ataque).
 	 */
 	public int calculateTimeBetweenAttacks()
 	{
@@ -5659,7 +5665,7 @@ public abstract class Creature extends WorldObject
 	
 	/**
 	 * @param weapon
-	 * @return the Reuse Time of Attack (used for bow delay)
+	 * @return o Tempo de Reutilizacao do Ataque (usado para atraso de arco)
 	 */
 	public int calculateReuseTime(Weapon weapon)
 	{
@@ -5687,35 +5693,35 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Add a skill to the Creature _skills and its Func objects to the calculator set of the Creature.<br>
+	 * Adiciona uma skill ao _skills da Creature e seus objetos Func ao conjunto de calculadores da Creature.<br>
 	 * <br>
-	 * <b><u>Concept</u>:</b><br>
+	 * <b><u>Conceito</u>:</b><br>
 	 * <br>
-	 * All skills own by a Creature are identified in <b>_skills</b><br>
+	 * Todas as skills pertencentes a uma Creature sao identificadas em <b>_skills</b><br>
 	 * <br>
-	 * <b><u>Actions</u>:</b>
+	 * <b><u>Acoes</u>:</b>
 	 * <ul>
-	 * <li>Replace oldSkill by newSkill or Add the newSkill</li>
-	 * <li>If an old skill has been replaced, remove all its Func objects of Creature calculator set</li>
-	 * <li>Add Func objects of newSkill to the calculator set of the Creature</li>
+	 * <li>Substitui oldSkill por newSkill ou Adiciona a newSkill</li>
+	 * <li>Se uma skill antiga foi substituida, remove todos seus objetos Func do conjunto de calculadores da Creature</li>
+	 * <li>Adiciona objetos Func da newSkill ao conjunto de calculadores da Creature</li>
 	 * </ul>
 	 * <br>
-	 * <b><u>Overridden in</u>:</b>
+	 * <b><u>Sobrescrito em</u>:</b>
 	 * <ul>
-	 * <li>Player : Save update in the character_skills table of the database</li>
+	 * <li>Player : Salva atualizacao na tabela character_skills do banco de dados</li>
 	 * </ul>
-	 * @param newSkill The Skill to add to the Creature
-	 * @return The Skill replaced or null if just added a new Skill
+	 * @param newSkill A Skill para adicionar a Creature
+	 * @return A Skill substituida ou null se apenas adicionou uma nova Skill
 	 */
 	public Skill addSkill(Skill newSkill)
 	{
 		Skill oldSkill = null;
 		if (newSkill != null)
 		{
-			// Replace oldSkill by newSkill or Add the newSkill
+			// Substitui oldSkill por newSkill ou Adiciona a newSkill
 			oldSkill = _skills.put(newSkill.getId(), newSkill);
 			
-			// If an old skill has been replaced, remove all its Func objects
+			// Se uma skill antiga foi substituida, remove todos seus objetos Func
 			if (oldSkill != null)
 			{
 				removeStatsOwner(oldSkill);
@@ -5726,7 +5732,7 @@ public abstract class Creature extends WorldObject
 				}
 			}
 			
-			// Add Func objects of newSkill to the calculator set of the Creature
+			// Adiciona objetos Func da newSkill ao conjunto de calculadores da Creature
 			addStatFuncs(newSkill.getStatFuncs(null, this));
 			if (newSkill.isPassive())
 			{
@@ -5749,13 +5755,13 @@ public abstract class Creature extends WorldObject
 	
 	public Skill removeSkill(int skillId, boolean cancelEffect)
 	{
-		// Remove the skill from the Creature _skills
+		// Remove a skill do _skills da Creature
 		final Skill oldSkill = _skills.remove(skillId);
 		
-		// Remove all its Func objects from the Creature calculator set
+		// Remove todos seus objetos Func do conjunto de calculadores da Creature
 		if (oldSkill != null)
 		{
-			// Stop casting if this skill is used right now
+			// Para a conjuracao se esta skill esta sendo usada agora
 			if ((_lastSkillCast != null) && _isCastingNow && (oldSkill.getId() == _lastSkillCast.getId()))
 			{
 				abortCast();
@@ -5766,7 +5772,7 @@ public abstract class Creature extends WorldObject
 				abortCast();
 			}
 			
-			// Stop effects.
+			// Para os efeitos.
 			if (cancelEffect || oldSkill.isToggle() || oldSkill.isPassive())
 			{
 				removeStatsOwner(oldSkill);
@@ -5778,10 +5784,10 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * <b><u>Concept</u>:</b><br>
+	 * <b><u>Conceito</u>:</b><br>
 	 * <br>
-	 * All skills own by a Creature are identified in <b>_skills</b> the Creature
-	 * @return all skills own by the Creature in a table of Skill.
+	 * Todas as skills pertencentes a uma Creature sao identificadas em <b>_skills</b> da Creature
+	 * @return todas as skills da Creature em uma tabela de Skill.
 	 */
 	public Collection<Skill> getAllSkills()
 	{
@@ -5789,7 +5795,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * @return the map containing this character skills.
+	 * @return o mapa contendo as skills deste personagem.
 	 */
 	public Map<Integer, Skill> getSkills()
 	{
@@ -5797,9 +5803,9 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Return the level of a skill owned by the Creature.
-	 * @param skillId The identifier of the Skill whose level must be returned
-	 * @return The level of the Skill identified by skillId
+	 * Retorna o nivel de uma skill pertencente a Creature.
+	 * @param skillId O identificador da Skill cujo nivel deve ser retornado
+	 * @return O nivel da Skill identificada por skillId
 	 */
 	public int getSkillLevel(int skillId)
 	{
@@ -5808,8 +5814,8 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * @param skillId The identifier of the Skill to check the knowledge
-	 * @return the skill from the known skill.
+	 * @param skillId O identificador da Skill para verificar o conhecimento
+	 * @return a skill a partir da skill conhecida.
 	 */
 	public Skill getKnownSkill(int skillId)
 	{
@@ -5817,8 +5823,8 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Return the number of buffs affecting this Creature.
-	 * @return The number of Buffs affecting this Creature
+	 * Retorna o numero de buffs afetando esta Creature.
+	 * @return O numero de Buffs afetando esta Creature
 	 */
 	public int getBuffCount()
 	{
@@ -5831,18 +5837,18 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Manage the magic skill launching task (MP, HP, Item consumation...) and display the magic skill animation on client.<br>
+	 * Gerencia a tarefa de lancamento de skill magica (consumo de MP, HP, Item...) e exibe a animacao da skill magica no cliente.<br>
 	 * <br>
-	 * <b><u>Actions</u>:</b>
+	 * <b><u>Acoes</u>:</b>
 	 * <ul>
-	 * <li>Send a Server->Client packet MagicSkillLaunched (to display magic skill animation) to all Player of Creature _knownPlayers</li>
-	 * <li>Consumme MP, HP and Item if necessary</li>
-	 * <li>Send a Server->Client packet StatusUpdate with MP modification to the Player</li>
-	 * <li>Launch the magic skill in order to calculate its effects</li>
-	 * <li>If the skill type is PDAM, notify the AI of the target with ATTACK</li>
-	 * <li>Notify the AI of the Creature with FINISH_CASTING</li>
+	 * <li>Envia pacote Server->Client MagicSkillLaunched (para exibir animacao de skill magica) para todos os Player de _knownPlayers da Creature</li>
+	 * <li>Consome MP, HP e Item se necessario</li>
+	 * <li>Envia pacote Server->Client StatusUpdate com modificacao de MP para o Player</li>
+	 * <li>Executa a skill magica para calcular seus efeitos</li>
+	 * <li>Se o tipo da skill e PDAM, notifica a AI do alvo com ATTACK</li>
+	 * <li>Notifica a AI da Creature com FINISH_CASTING</li>
 	 * </ul>
-	 * <font color=#FF0000><b><u>Caution</u>: A magic skill casting MUST BE in progress</b></font>
+	 * <font color=#FF0000><b><u>Cuidado</u>: Uma conjuracao de skill magica DEVE estar em andamento</b></font>
 	 * @param mut
 	 */
 	public void onMagicLaunchedTimer(MagicUseTask mut)
@@ -5859,7 +5865,7 @@ public abstract class Creature extends WorldObject
 		{
 			switch (skill.getTargetType())
 			{
-				// only AURA-type skills can be cast without target
+				// apenas skills do tipo AURA podem ser conjuradas sem alvo
 				case AURA:
 				case FRONT_AURA:
 				case BEHIND_AURA:
@@ -5876,7 +5882,7 @@ public abstract class Creature extends WorldObject
 			}
 		}
 		
-		// Escaping from under skill's radius and peace zone check. First version, not perfect in AoE skills.
+		// Verificacao de escape do raio da skill e zona de paz. Primeira versao, nao perfeita em skills AoE.
 		int escapeRange = 0;
 		if (skill.getEffectRange() > escapeRange)
 		{
@@ -5903,7 +5909,7 @@ public abstract class Creature extends WorldObject
 						continue;
 					}
 					
-					// Healing party members should ignore LOS.
+					// Curar membros do grupo deve ignorar Linha de Visao.
 					if (((skill.getTargetType() != TargetType.PARTY) || !skill.hasEffectType(EffectType.HEAL)) //
 						&& (mut.getSkillTime() > 550) && !GeoData.getInstance().canSeeTarget(this, target))
 					{
@@ -5960,12 +5966,12 @@ public abstract class Creature extends WorldObject
 			mut.setTargets(targetList);
 		}
 		
-		// Ensure that a cast is in progress
-		// Check if player is using fake death.
-		// Static skills can be used while faking death.
+		// Garante que uma conjuracao esta em andamento
+		// Verifica se o jogador esta usando fake death.
+		// Skills estaticas podem ser usadas enquanto finge morte.
 		if ((mut.isSimultaneous() && !_isCastingSimultaneouslyNow) || (!mut.isSimultaneous() && !_isCastingNow) || (isAlikeDead() && !skill.isStatic()))
 		{
-			// now cancels both, simultaneous and normal
+			// agora cancela ambos, simultaneo e normal
 			getAI().notifyAction(Action.CANCEL);
 			return;
 		}
@@ -5981,7 +5987,7 @@ public abstract class Creature extends WorldObject
 		}
 	}
 	
-	// Runs in the end of skill casting
+	// Executa no final da conjuracao de skill
 	public void onMagicHitTimer(MagicUseTask mut)
 	{
 		final Skill skill = mut.getSkill();
@@ -5994,7 +6000,7 @@ public abstract class Creature extends WorldObject
 		
 		try
 		{
-			// Go through targets table
+			// Percorre a tabela de alvos
 			for (WorldObject tgt : targets)
 			{
 				if (tgt.isPlayable())
@@ -6023,7 +6029,7 @@ public abstract class Creature extends WorldObject
 			final StatusUpdate su = new StatusUpdate(this);
 			boolean isSendStatus = false;
 			
-			// Consume MP of the Creature and Send the Server->Client packet StatusUpdate with current HP and MP to all other Player to inform
+			// Consome MP da Creature e Envia pacote Server->Client StatusUpdate com HP e MP atuais para todos os outros Player para informar
 			final double mpConsume = _stat.getMpConsume(skill);
 			if (mpConsume > 0)
 			{
@@ -6039,7 +6045,7 @@ public abstract class Creature extends WorldObject
 				isSendStatus = true;
 			}
 			
-			// Consume HP if necessary and Send the Server->Client packet StatusUpdate with current HP and MP to all other Player to inform
+			// Consome HP se necessario e Envia pacote Server->Client StatusUpdate com HP e MP atuais para todos os outros Player para informar
 			if (skill.getHpConsume() > 0)
 			{
 				final double consumeHp = skill.getHpConsume();
@@ -6055,7 +6061,7 @@ public abstract class Creature extends WorldObject
 				isSendStatus = true;
 			}
 			
-			// Send a Server->Client packet StatusUpdate with MP modification to the Player
+			// Envia pacote Server->Client StatusUpdate com modificacao de MP para o Player
 			if (isSendStatus)
 			{
 				sendPacket(su);
@@ -6063,21 +6069,21 @@ public abstract class Creature extends WorldObject
 			
 			if (isPlayer())
 			{
-				// Consume Charges.
+				// Consome Cargas.
 				final Player player = asPlayer();
 				if (skill.getChargeConsumeCount() > 0)
 				{
 					player.decreaseCharges(skill.getChargeConsumeCount());
 				}
 				
-				// Consume Souls if necessary.
+				// Consome Almas se necessario.
 				if ((skill.getMaxSoulConsumeCount() > 0) && !player.decreaseSouls(skill.getMaxSoulConsumeCount()))
 				{
 					abortCast();
 					return;
 				}
 				
-				// Consume Agathion Energy if necessary.
+				// Consome Energia de Agathion se necessario.
 				if (skill.getEnergyConsume() > 0)
 				{
 					final Item bracelet = player.getInventory().getPaperdollItem(Inventory.PAPERDOLL_LBRACELET);
@@ -6096,7 +6102,7 @@ public abstract class Creature extends WorldObject
 				}
 			}
 			
-			// Launch the magic skill in order to calculate its effects
+			// Executa a skill magica para calcular seus efeitos
 			callSkill(mut.getSkill(), mut.getTargets());
 		}
 		catch (NullPointerException e)
@@ -6127,7 +6133,7 @@ public abstract class Creature extends WorldObject
 		}
 	}
 	
-	// Runs after skillTime
+	// Executa apos skillTime
 	public void onMagicFinalizer(MagicUseTask mut)
 	{
 		if (mut.isSimultaneous())
@@ -6137,24 +6143,24 @@ public abstract class Creature extends WorldObject
 			return;
 		}
 		
-		// Cleanup
+		// Limpeza
 		_skillCast = null;
 		_castInterruptTime = 0;
 		
-		// On each repeat recharge shots before cast.
+		// Em cada repeticao recarrega shots antes de conjurar.
 		if (mut.getCount() > 0)
 		{
 			rechargeShots(mut.getSkill().useSoulShot(), mut.getSkill().useSpiritShot());
 		}
 		
-		// Stop casting
+		// Para a conjuracao
 		setCastingNow(false);
 		setCastingSimultaneouslyNow(false);
 		
 		final Skill skill = mut.getSkill();
 		final WorldObject target = !mut.getTargets().isEmpty() ? mut.getTargets().get(0) : null;
 		
-		// Attack target after skill use.
+		// Ataca o alvo apos uso de skill.
 		if (skill.nextActionIsAttack() && (_target != this) && (target != null) && (_target == target) && _target.isCreature() && target.canBeAttacked() && (!isPlayer() || !asPlayer().isAutoPlaying()))
 		{
 			final IntentionCommand nextIntention = getAI().getNextIntention();
@@ -6196,14 +6202,14 @@ public abstract class Creature extends WorldObject
 			getAI().clientStartAutoAttack();
 		}
 		
-		// Notify the AI of the Creature with FINISH_CASTING
+		// Notifica a AI da Creature com FINISH_CASTING
 		getAI().notifyAction(Action.FINISH_CASTING);
 		
-		// Notify DP Scripts
+		// Notifica Scripts DP
 		notifyQuestEventSkillFinished(skill, target);
 		
-		// If character is a player, then wipe their current cast state and check if a skill is queued.
-		// If there is a queued skill, launch it and wipe the queue.
+		// Se o personagem e um jogador, limpa seu estado de conjuracao atual e verifica se uma skill esta na fila.
+		// Se ha uma skill na fila, executa-a e limpa a fila.
 		if (isPlayer())
 		{
 			final Player player = asPlayer();
@@ -6213,7 +6219,7 @@ public abstract class Creature extends WorldObject
 			{
 				player.setQueuedSkill(null, false, false);
 				
-				// DO NOT USE: Recursive call to useMagic() method.
+				// NAO USE: Chamada recursiva ao metodo useMagic().
 				// player.useMagic(queuedSkill.getSkill(), queuedSkill.isCtrlPressed(), queuedSkill.isShiftPressed());
 				ThreadPool.execute(new QueuedMagicUseTask(player, queuedSkill.getSkill(), queuedSkill.isCtrlPressed(), queuedSkill.isShiftPressed()));
 			}
@@ -6225,27 +6231,27 @@ public abstract class Creature extends WorldObject
 		}
 	}
 	
-	// Quest event ON_SPELL_FNISHED
+	// Evento de quest ON_SPELL_FNISHED
 	protected void notifyQuestEventSkillFinished(Skill skill, WorldObject target)
 	{
 	}
 	
 	/**
-	 * Launch the magic skill and calculate its effects on each target contained in the targets table.
-	 * @param skill The Skill to use
-	 * @param targets The table of WorldObject targets
+	 * Executa a skill magica e calcula seus efeitos em cada alvo contido na tabela de alvos.
+	 * @param skill A Skill a usar
+	 * @param targets A tabela de alvos WorldObject
 	 */
 	public void callSkill(Skill skill, List<WorldObject> targets)
 	{
 		try
 		{
-			// Check if the toggle skill effects are already in progress on the Creature
+			// Verifica se os efeitos de skill toggle ja estao em andamento na Creature
 			if (skill.isToggle() && isAffectedBySkill(skill.getId()))
 			{
 				return;
 			}
 			
-			// Initial checks
+			// Verificacoes iniciais
 			for (WorldObject obj : targets)
 			{
 				if ((obj == null) || !obj.isCreature())
@@ -6255,7 +6261,7 @@ public abstract class Creature extends WorldObject
 				
 				final Creature target = obj.asCreature();
 				
-				// Check raid monster attack and check buffing characters who attack raid monsters.
+				// Verifica ataque de monstro raid e verifica buff em personagens que atacam monstros raid.
 				Creature targetsAttackTarget = null;
 				Creature targetsCastTarget = null;
 				if (target.hasAI())
@@ -6283,16 +6289,16 @@ public abstract class Creature extends WorldObject
 					return;
 				}
 				
-				// Check if over-hit is possible
+				// Verifica se over-hit e possivel
 				if (skill.isOverhit() && target.isAttackable())
 				{
 					target.asAttackable().overhitEnabled(true);
 				}
 				
-				// Static skills not trigger any chance skills
+				// Skills estaticas nao ativam nenhuma skill de chance
 				if (!skill.isStatic())
 				{
-					// Launch weapon Special ability skill effect if available
+					// Executa efeito de habilidade especial da arma se disponivel
 					final Weapon activeWeapon = getActiveWeaponItem();
 					if ((activeWeapon != null) && !target.isDead())
 					{
@@ -6312,7 +6318,7 @@ public abstract class Creature extends WorldObject
 				}
 			}
 			
-			// Launch the magic skill and calculate its effects
+			// Executa a skill magica e calcula seus efeitos
 			skill.activateSkill(this, targets);
 			
 			final Player player = asPlayer();
@@ -6320,17 +6326,17 @@ public abstract class Creature extends WorldObject
 			{
 				for (WorldObject target : targets)
 				{
-					// ATTACKED and PvPStatus
+					// ATTACKED e PvPStatus
 					if (target.isCreature())
 					{
 						if (skill.getEffectPoint() <= 0)
 						{
 							if ((target.isPlayable() || target.isTrap()) && skill.isBad())
 							{
-								// Casted on target_self but don't harm self
+								// Conjurado no target_self mas nao prejudica a si mesmo
 								if (!target.equals(this))
 								{
-									// Combat-mode check
+									// Verificacao de modo de combate
 									if (target.isPlayer())
 									{
 										target.asPlayer().getAI().clientStartAutoAttack();
@@ -6344,8 +6350,8 @@ public abstract class Creature extends WorldObject
 										}
 									}
 									
-									// attack of the own pet does not flag player
-									// triggering trap not flag trap owner
+									// ataque do proprio pet nao flagra jogador
+									// ativar armadilha nao flagra dono da armadilha
 									if ((player.getSummon() != target) && !isTrap() && !((skill.getEffectPoint() == 0) && (skill.getAffectRange() > 0)))
 									{
 										player.updatePvPStatus(target.asCreature());
@@ -6363,13 +6369,13 @@ public abstract class Creature extends WorldObject
 									}
 									default:
 									{
-										// add attacker into list
+										// adiciona atacante na lista
 										target.asCreature().addAttackerToAttackByList(this);
 									}
 								}
 							}
 							
-							// notify target AI about the attack
+							// notifica a AI do alvo sobre o ataque
 							if (target.asCreature().hasAI() && skill.isBad() && !skill.hasEffectType(EffectType.HATE) && (skill.getAbnormalType() != AbnormalType.TURN_PASSIVE))
 							{
 								target.asCreature().getAI().notifyAction(Action.ATTACKED, this);
@@ -6379,7 +6385,7 @@ public abstract class Creature extends WorldObject
 						{
 							if (target.isPlayer())
 							{
-								// Casting non offensive skill on player with pvp flag set or with karma
+								// Conjurando skill nao ofensiva em jogador com flag pvp ou com karma
 								if (!(target.equals(this) || target.equals(player)) && ((target.asPlayer().getPvpFlag() > 0) || (target.asPlayer().getKarma() > 0)))
 								{
 									player.updatePvPStatus();
@@ -6398,7 +6404,7 @@ public abstract class Creature extends WorldObject
 					}
 				}
 				
-				// Mobs in range 1000 see spell
+				// Mobs no alcance 1000 veem a magia
 				World.getInstance().forEachVisibleObjectInRange(player, Npc.class, 1000, npcMob ->
 				{
 					if (EventDispatcher.getInstance().hasListener(EventType.ON_NPC_SKILL_SEE, npcMob))
@@ -6406,7 +6412,7 @@ public abstract class Creature extends WorldObject
 						EventDispatcher.getInstance().notifyEventAsync(new OnNpcSkillSee(npcMob, player, skill, targets, isSummon()), npcMob);
 					}
 					
-					// On Skill See logic
+					// Logica On Skill See
 					if (npcMob.isAttackable())
 					{
 						final Attackable attackable = npcMob.asAttackable();
@@ -6432,7 +6438,7 @@ public abstract class Creature extends WorldObject
 				});
 			}
 			
-			// Notify AI
+			// Notifica a AI
 			if (skill.isBad() && !skill.hasEffectType(EffectType.HATE))
 			{
 				for (WorldObject target : targets)
@@ -6442,12 +6448,12 @@ public abstract class Creature extends WorldObject
 						final Creature creature = target.asCreature();
 						if (creature.hasAI())
 						{
-							// Notify target AI about the attack
+							// Notifica a AI do alvo sobre o ataque
 							creature.getAI().notifyAction(Action.ATTACKED, this);
 						}
 					}
 					
-					if (isFakePlayer()) // fake player attacks player
+					if (isFakePlayer()) // fake player ataca jogador
 					{
 						if (target.isPlayable() || target.isFakePlayer())
 						{
@@ -6470,7 +6476,7 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * @return the Level Modifier ((level + 89) / 100).
+	 * @return o Modificador de Nivel ((level + 89) / 100).
 	 */
 	public double getLevelMod()
 	{
@@ -6483,14 +6489,14 @@ public abstract class Creature extends WorldObject
 	}
 	
 	/**
-	 * Sets _isCastingNow to true and _castInterruptTime is calculated from end time (ticks)
+	 * Define _isCastingNow como true e _castInterruptTime e calculado a partir do tempo final (ticks)
 	 * @param newSkillCastEndTick
 	 */
 	public void forceIsCasting(int newSkillCastEndTick)
 	{
 		setCastingNow(true);
 		
-		// for interrupt -400 ms
+		// para interrupcao -400 ms
 		_castInterruptTime = newSkillCastEndTick - 4;
 	}
 	
