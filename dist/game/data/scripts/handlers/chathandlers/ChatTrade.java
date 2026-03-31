@@ -64,9 +64,9 @@ public class ChatTrade implements IChatHandler
 			activeChar.sendPacket(SystemMessageId.CHATTING_IS_CURRENTLY_PROHIBITED);
 			return;
 		}
-		if (activeChar.getLevel() < 20)
+		if ((activeChar.getLevel() < Config.MINIMUM_CHAT_LEVEL) && !activeChar.isGM())
 		{
-			activeChar.sendMessage("Players can use Trade chat after Lv. 20.");
+			activeChar.sendMessage("Players can use Trade chat after Lv. " + Config.MINIMUM_CHAT_LEVEL + ".");
 			return;
 		}
 		
@@ -76,7 +76,7 @@ public class ChatTrade implements IChatHandler
 			final int region = MapRegionManager.getInstance().getMapRegionLocId(activeChar);
 			for (Player player : World.getInstance().getPlayers())
 			{
-				if ((region == MapRegionManager.getInstance().getMapRegionLocId(player)) && !BlockList.isBlocked(player, activeChar) && (player.getInstanceId() == activeChar.getInstanceId()))
+				if ((player != activeChar) && (region == MapRegionManager.getInstance().getMapRegionLocId(player)) && !BlockList.isBlocked(player, activeChar) && (player.getInstanceId() == activeChar.getInstanceId()))
 				{
 					if (EventsConfig.FACTION_SYSTEM_ENABLED)
 					{
@@ -109,7 +109,7 @@ public class ChatTrade implements IChatHandler
 			
 			for (Player player : World.getInstance().getPlayers())
 			{
-				if (!BlockList.isBlocked(player, activeChar))
+				if ((player != activeChar) && !BlockList.isBlocked(player, activeChar))
 				{
 					if (EventsConfig.FACTION_SYSTEM_ENABLED)
 					{
@@ -132,6 +132,7 @@ public class ChatTrade implements IChatHandler
 				}
 			}
 		}
+		activeChar.sendPacket(cs);
 	}
 	
 	@Override

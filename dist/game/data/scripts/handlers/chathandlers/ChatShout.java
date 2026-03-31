@@ -71,12 +71,12 @@ public class ChatShout implements IChatHandler
 		}
 		
 		final CreatureSay cs = new CreatureSay(activeChar, type, activeChar.getName(), text);
-		if ((Config.DEFAULT_TRADE_CHAT == ChatBroadcastType.ON) || ((Config.DEFAULT_TRADE_CHAT == ChatBroadcastType.GM) && activeChar.isGM()))
+		if ((Config.DEFAULT_GLOBAL_CHAT == ChatBroadcastType.ON) || ((Config.DEFAULT_GLOBAL_CHAT == ChatBroadcastType.GM) && activeChar.isGM()))
 		{
 			final int region = MapRegionManager.getInstance().getMapRegionLocId(activeChar);
 			for (Player player : World.getInstance().getPlayers())
 			{
-				if ((region == MapRegionManager.getInstance().getMapRegionLocId(player)) && !BlockList.isBlocked(player, activeChar) && (player.getInstanceId() == activeChar.getInstanceId()) && !BlockList.isBlocked(activeChar, player))
+				if ((player != activeChar) && (region == MapRegionManager.getInstance().getMapRegionLocId(player)) && !BlockList.isBlocked(player, activeChar) && (player.getInstanceId() == activeChar.getInstanceId()) && !BlockList.isBlocked(activeChar, player))
 				{
 					if (EventsConfig.FACTION_SYSTEM_ENABLED)
 					{
@@ -109,7 +109,7 @@ public class ChatShout implements IChatHandler
 			
 			for (Player player : World.getInstance().getPlayers())
 			{
-				if (!BlockList.isBlocked(player, activeChar))
+				if ((player != activeChar) && !BlockList.isBlocked(player, activeChar))
 				{
 					if (EventsConfig.FACTION_SYSTEM_ENABLED)
 					{
@@ -132,6 +132,7 @@ public class ChatShout implements IChatHandler
 				}
 			}
 		}
+		activeChar.sendPacket(cs);
 	}
 	
 	@Override
