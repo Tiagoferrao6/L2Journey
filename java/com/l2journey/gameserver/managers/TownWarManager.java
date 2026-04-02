@@ -89,7 +89,6 @@ public class TownWarManager
 		return SingletonHolder._instance;
 	}
 	
-	@SuppressWarnings("null")
 	public void scheduleEventStart()
 	{
 		try
@@ -112,6 +111,11 @@ public class TownWarManager
 				{
 					nextStartTime = testStartTime;
 				}
+			}
+			if (nextStartTime == null)
+			{
+				LOGGER.warning("TownWar Engine: No valid start times configured in TownWarEventInterval.");
+				return;
 			}
 			_task = new TownWarStartTask(nextStartTime.getTimeInMillis());
 			ThreadPool.execute(_task);
