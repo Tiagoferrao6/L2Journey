@@ -37,75 +37,82 @@ import com.l2journey.gameserver.model.skill.holders.SkillHolder;
 import ai.AbstractNpcAI;
 
 /**
- * Summon Pc AI.<br>
- * Summon the player to the NPC on attack.
- * @author Zoey76
+ * IA de Summon Pc.<br>
+ * Puxa o jogador para o NPC ao atacar.
+ * @author Zoey76, Mafias
  */
 public class SummonPc extends AbstractNpcAI
 {
 	// NPCs
-	private static final int PORTA = 20213;
-	private static final int PERUM = 20221;
+    private static final int PORTA = 20213;
+    private static final int PERUM = 20221;
 	// Skill
-	private static final SkillHolder SUMMON_PC = new SkillHolder(4161, 1);
-	
-	private SummonPc()
-	{
-		addAttackId(PORTA, PERUM);
-		addSpellFinishedId(PORTA, PERUM);
-	}
-	
-	@Override
-	public void onAttack(Npc npc, Player attacker, int damage, boolean isSummon)
-	{
-		final int chance = getRandom(100);
-		final boolean attacked = npc.getVariables().getBoolean("attacked", false);
-		if ((npc.calculateDistance3D(attacker) > 300) && !attacked)
-		{
-			if (chance < 50)
-			{
-				if ((SUMMON_PC.getSkill().getMpConsume() < npc.getCurrentMp()) && (SUMMON_PC.getSkill().getHpConsume() < npc.getCurrentHp()) && !npc.isSkillDisabled(SUMMON_PC.getSkill()))
-				{
-					npc.setTarget(attacker);
-					npc.doCast(SUMMON_PC.getSkill());
-				}
-				
-				if ((SUMMON_PC.getSkill().getMpConsume() < npc.getCurrentMp()) && (SUMMON_PC.getSkill().getHpConsume() < npc.getCurrentHp()) && !npc.isSkillDisabled(SUMMON_PC.getSkill()))
-				{
-					npc.setTarget(attacker);
-					npc.doCast(SUMMON_PC.getSkill());
-					npc.getVariables().set("attacked", true);
-				}
-			}
-		}
-		else if ((npc.calculateDistance3D(attacker) > 100) && !attacked)
-		{
-			final Attackable monster = npc.asAttackable();
-			if (monster.getMostHated() != null)
-			{
-				if ((((monster.getMostHated() == attacker) && (chance < 50)) || (chance < 10)) //
-					&& ((SUMMON_PC.getSkill().getMpConsume() < npc.getCurrentMp()) && (SUMMON_PC.getSkill().getHpConsume() < npc.getCurrentHp()) && !npc.isSkillDisabled(SUMMON_PC.getSkill())))
-				{
-					npc.setTarget(attacker);
-					npc.doCast(SUMMON_PC.getSkill());
-					npc.getVariables().set("attacked", true);
-				}
-			}
-		}
-	}
-	
-	@Override
-	public void onSpellFinished(Npc npc, Player player, Skill skill)
-	{
-		if ((skill.getId() == SUMMON_PC.getSkillId()) && !npc.isDead() && npc.getVariables().getBoolean("attacked", false))
-		{
-			player.teleToLocation(npc);
-			npc.getVariables().set("attacked", false);
-		}
-	}
-	
-	public static void main(String[] args)
-	{
-		new SummonPc();
-	}
+    private static final SkillHolder SUMMON_PC = new SkillHolder(4161, 1);
+
+    private SummonPc()
+    {
+        addAttackId(PORTA, PERUM);
+        addSpellFinishedId(PORTA, PERUM);
+    }
+
+    @Override
+    public void onAttack(Npc npc, Player attacker, int damage, boolean isSummon)
+    {
+        final Skill skill = SUMMON_PC.getSkill();
+        final boolean attacked = npc.getVariables().getBoolean("attacked", false);
+
+        if (attacked || npc.isDead())
+        {
+            return;
+        }
+
+        if ((skill.getMpConsume() >= npc.getCurrentMp()) ||
+            (skill.getHpConsume() >= npc.getCurrentHp()) ||
+            npc.isSkillDisabled(skill))
+        {
+            return;
+        }
+
+        final int chance = getRandom(100);
+        final double distance = npc.calculateDistance3D(attacker);
+
+        if ((distance > 300) && (chance < 50))
+        {
+            npc.setTarget(attacker);
+            npc.doCast(skill);
+            npc.getVariables().set("attacked", true);
+            return;
+        }
+
+        if (distance > 100)
+        {
+            final Attackable monster = npc.asAttackable();
+            if (monster.getMostHated() != null)
+            {
+                if (((monster.getMostHated() == attacker) && (chance < 50)) || (chance < 10))
+                {
+                    npc.setTarget(attacker);
+                    npc.doCast(skill);
+                    npc.getVariables().set("attacked", true);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onSpellFinished(Npc npc, Player player, Skill skill)
+    {
+        if ((skill.getId() == SUMMON_PC.getSkillId()) &&
+            !npc.isDead() &&
+            npc.getVariables().getBoolean("attacked", false))
+        {
+            player.teleToLocation(npc);
+            npc.getVariables().set("attacked", false);
+        }
+    }
+
+    public static void main(String[] args)
+    {
+        new SummonPc();
+    }
 }
