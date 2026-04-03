@@ -36,63 +36,76 @@ import com.l2journey.gameserver.model.events.ListenerRegisterType;
 import com.l2journey.gameserver.model.events.annotations.RegisterEvent;
 import com.l2journey.gameserver.model.events.annotations.RegisterType;
 import com.l2journey.gameserver.model.events.holders.OnDayNightChange;
+import com.l2journey.gameserver.network.enums.ChatType;
+import com.l2journey.gameserver.taskmanagers.GameTimeTaskManager;
 
 import ai.AbstractNpcAI;
 
 /**
- * @author Mobius
+ * Boss noturno Eilhalder Von Hellmann na Forest of the Dead.<br>
+ * Aparece ao anoitecer e desaparece ao amanhecer.
+ * @author Mobius, Mafias, KingHanker
  */
 public class EilhalderVonHellmann extends AbstractNpcAI
 {
+	// NPC
 	private static final int EILHALDER_VON_HELLMANN = 25328;
+	// Location
 	private static final Location SPAWN_LOCATION = new Location(59090, -42188, -3003);
-	private static Npc _npcInstance;
+	
+	private Npc _npcInstance;
 	
 	private EilhalderVonHellmann()
 	{
+		addAttackId(EILHALDER_VON_HELLMANN);
+		
+		if (GameTimeTaskManager.getInstance().isNight())
+		{
+			_npcInstance = addSpawn(EILHALDER_VON_HELLMANN, SPAWN_LOCATION);
+		}
 	}
 	
 	@Override
-	public String onEvent(String event, Npc npc, Player player)
+	public void onAttack(Npc npc, Player attacker, int damage, boolean isSummon)
 	{
-		if (npc != null)
+		if (!npc.getVariables().getBoolean("firstAttack", false))
 		{
-			if (npc.isInCombat())
-			{
-				startQuestTimer("despawn", 30000, _npcInstance, null);
-			}
-			else
-			{
-				npc.deleteMe();
-				_npcInstance = null;
-			}
+			npc.getVariables().set("firstAttack", true);
+			npc.broadcastSay(ChatType.NPC_GENERAL, "You dare challenge the son of Von Hellmann?");
 		}
-		return super.onEvent(event, npc, player);
+		
+		final double hpRatio = npc.getCurrentHp() / npc.getMaxHp();
+		
+		if (!npc.getVariables().getBoolean("talked50", false) && (hpRatio < 0.5))
+		{
+			npc.getVariables().set("talked50", true);
+			npc.broadcastSay(ChatType.NPC_GENERAL, "Your blood will stain this forest forever!");
+		}
+		
+		if (!npc.getVariables().getBoolean("talked10", false) && (hpRatio < 0.1))
+		{
+			npc.getVariables().set("talked10", true);
+			npc.broadcastSay(ChatType.NPC_GENERAL, "The Von Hellmann family will not be forgotten!");
+		}
 	}
 	
 	@RegisterEvent(EventType.ON_DAY_NIGHT_CHANGE)
 	@RegisterType(ListenerRegisterType.GLOBAL)
 	public void onDayNightChange(OnDayNightChange event)
 	{
-		if (!event.isNight())
-		{
-			if (_npcInstance != null)
-			{
-				if (!_npcInstance.isInCombat())
-				{
-					_npcInstance.deleteMe();
-					_npcInstance = null;
-				}
-				else
-				{
-					startQuestTimer("despawn", 30000, _npcInstance, null);
-				}
-			}
-		}
-		else if (_npcInstance == null)
+		if (event.isNight())
 		{
 			_npcInstance = addSpawn(EILHALDER_VON_HELLMANN, SPAWN_LOCATION);
+			return;
 		}
+		
+		final Npc instance = _npcInstance;
+		if ((instance != null) && !instance.isDead())
+		{
+			instance.broadcastSay(ChatType.NPC_GENERAL, "The sun... it burns! But my revenge is not over!");
+			instance.deleteMe();
+		}
+		_npcInstance = null;
 	}
 	
 	public static void main(String[] args)
