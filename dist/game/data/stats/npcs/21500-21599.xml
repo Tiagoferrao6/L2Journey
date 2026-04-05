@@ -9952,22 +9952,6 @@
 		</collision>
 	</npc>
 	<npc id="21585" level="72" type="Monster" name="Vampire Magician">
-		<!-- Confirmed CT2.5 -->
-		<parameters>
-			<param name="MoveAroundSocial" value="0" />
-			<param name="MoveAroundSocial1" value="0" />
-			<param name="MoveAroundSocial2" value="0" />
-			<param name="SoulShot" value="200" />
-			<param name="SoulShotRate" value="5" />
-			<param name="SpiritShot" value="100" />
-			<param name="SpiritShotRate" value="10" />
-			<skill name="W_LongRangeDDMagic" id="4590" level="7" /> <!-- Decrease Speed -->
-			<skill name="W_ShortRangeDDMagic" id="4561" level="7" /> <!-- NPC Fire Burn - Magic -->
-			<skill name="DDMagic" id="4664" level="7" /> <!-- NPC 100% HP Drain -->
-			<skill name="DeBuff" id="4596" level="7" /> <!-- Bleed -->
-			<skill name="DeBuff1" id="4047" level="6" /> <!-- Hold -->
-			<skill name="Cancel" id="4650" level="1" /> <!-- NPC AE - Dispel Hold -->
-		</parameters>
 		<race>DEMONIC</race>
 		<sex>FEMALE</sex>
 		<equipment rhand="946" /> <!-- rhand: Skeleton Dagger -->
@@ -10458,21 +10442,6 @@
 		</collision>
 	</npc>
 	<npc id="21589" level="73" type="Monster" name="Vampire Wizard">
-		<!-- Confirmed CT2.5 -->
-		<parameters>
-			<param name="MoveAroundSocial" value="0" />
-			<param name="MoveAroundSocial1" value="0" />
-			<param name="MoveAroundSocial2" value="0" />
-			<skill name="TeleportEffect" id="4671" level="1" /> <!-- AV - Teleport -->
-			<param name="SoulShot" value="200" />
-			<param name="SoulShotRate" value="5" />
-			<param name="SpiritShot" value="100" />
-			<param name="SpiritShotRate" value="10" />
-			<skill name="W_LongRangeDDMagic" id="4622" level="7" /> <!-- NPC AE - 80% HP Drain - Magic -->
-			<skill name="W_ShortRangeDDMagic" id="4561" level="7" /> <!-- NPC Fire Burn - Magic -->
-			<skill name="DDMagic" id="4664" level="7" /> <!-- NPC 100% HP Drain -->
-			<skill name="DeBuff" id="4596" level="7" /> <!-- Bleed -->
-		</parameters>
 		<race>DEMONIC</race>
 		<sex>FEMALE</sex>
 		<equipment rhand="946" /> <!-- rhand: Skeleton Dagger -->
