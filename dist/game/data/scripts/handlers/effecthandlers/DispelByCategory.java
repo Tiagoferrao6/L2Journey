@@ -102,7 +102,7 @@ public class DispelByCategory extends AbstractEffect
 			}
 			
 			// Schedule buff restoration with original remaining time
-			Skill.scheduleBuffRestore(effected, toRestore, remainingTimes);
+			Skill.scheduleBuffRestore(effector, effected, toRestore, remainingTimes);
 		}
 		else
 		{

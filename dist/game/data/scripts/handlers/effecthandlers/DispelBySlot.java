@@ -115,6 +115,6 @@ public class DispelBySlot extends AbstractEffect
 		}
 		
 		// Schedule buff restoration with original remaining time
-		Skill.scheduleBuffRestore(effected, removedBuffs, remainingTimes);
+		Skill.scheduleBuffRestore(effector, effected, removedBuffs, remainingTimes);
 	}
 }

@@ -83,7 +83,6 @@ public class OfflineTraderTable
 		{
 			stm1.execute();
 			stm2.execute();
-			con.setAutoCommit(false); // avoid halfway done
 			for (Player pc : World.getInstance().getPlayers())
 			{
 				try
@@ -103,6 +102,7 @@ public class OfflineTraderTable
 								{
 									continue;
 								}
+								
 								title = pc.getBuyList().getTitle();
 								for (TradeItem i : pc.getBuyList().getItems())
 								{
@@ -122,6 +122,7 @@ public class OfflineTraderTable
 								{
 									continue;
 								}
+								
 								title = pc.getSellList().getTitle();
 								if (pc.isSellingBuffs())
 								{
@@ -155,6 +156,7 @@ public class OfflineTraderTable
 								{
 									continue;
 								}
+								
 								title = pc.getStoreName();
 								for (ManufactureItem i : pc.getManufactureItems().values())
 								{
@@ -168,6 +170,7 @@ public class OfflineTraderTable
 								break;
 							}
 						}
+						
 						stm3.setString(4, title);
 						stm3.executeUpdate();
 						stm3.clearParameters();
@@ -179,6 +182,7 @@ public class OfflineTraderTable
 					LOGGER.log(Level.WARNING, getClass().getSimpleName() + ": Error while saving offline trader: " + pc.getObjectId() + " " + e, e);
 				}
 			}
+			
 			LOGGER.info(getClass().getSimpleName() + ": Offline traders stored.");
 		}
 		catch (Exception e)
@@ -259,6 +263,7 @@ public class OfflineTraderTable
 											// throw new NullPointerException();
 										}
 									}
+									
 									player.getBuyList().setTitle(rs.getString("title"));
 									break;
 								}
@@ -283,6 +288,7 @@ public class OfflineTraderTable
 											}
 										}
 									}
+									
 									player.getSellList().setTitle(rs.getString("title"));
 									player.getSellList().setPackaged(type == PrivateStoreType.PACKAGE_SELL);
 									break;
@@ -293,17 +299,20 @@ public class OfflineTraderTable
 									{
 										player.getManufactureItems().put(items.getInt(2), new ManufactureItem(items.getInt(2), items.getLong(4)));
 									}
+									
 									player.setStoreName(rs.getString("title"));
 									break;
 								}
 							}
 						}
 					}
+					
 					player.sitDown();
 					if (Config.OFFLINE_SET_NAME_COLOR)
 					{
 						player.getAppearance().setNameColor(Config.OFFLINE_NAME_COLOR);
 					}
+					
 					player.setPrivateStoreType(type);
 					player.setOnlineStatus(true, true);
 					player.restoreEffects();
@@ -311,6 +320,7 @@ public class OfflineTraderTable
 					{
 						player.startAbnormalVisualEffect(false, Config.OFFLINE_ABNORMAL_EFFECTS.get(Rnd.get(Config.OFFLINE_ABNORMAL_EFFECTS.size())));
 					}
+					
 					player.broadcastUserInfo();
 					nTraders++;
 				}
@@ -374,6 +384,7 @@ public class OfflineTraderTable
 								{
 									title = trader.getBuyList().getTitle();
 								}
+								
 								for (TradeItem i : trader.getBuyList().getItems())
 								{
 									stm3.setInt(1, trader.getObjectId());
@@ -392,6 +403,7 @@ public class OfflineTraderTable
 								{
 									title = trader.getSellList().getTitle();
 								}
+								
 								if (trader.isSellingBuffs())
 								{
 									for (SellBuffHolder holder : trader.getSellingBuffs())
@@ -424,6 +436,7 @@ public class OfflineTraderTable
 								{
 									title = trader.getStoreName();
 								}
+								
 								for (ManufactureItem i : trader.getManufactureItems().values())
 								{
 									stm3.setInt(1, trader.getObjectId());
@@ -436,6 +449,7 @@ public class OfflineTraderTable
 								break;
 							}
 						}
+						
 						if (firstCall)
 						{
 							stm4.setInt(1, trader.getObjectId()); // Char Id
@@ -548,6 +562,7 @@ public class OfflineTraderTable
 		{
 			AntiFeedManager.getInstance().onDisconnect(client);
 		}
+		
 		client.setDetached(true);
 		
 		player.leaveParty();

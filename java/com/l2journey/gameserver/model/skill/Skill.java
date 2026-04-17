@@ -78,58 +78,58 @@ public class Skill
 {
 	private static final Logger LOGGER = Logger.getLogger(Skill.class.getName());
 	
-	/** Skill ID. */
+	/** ID da Skill. */
 	private final int _id;
-	/** Skill level. */
+	/** Nivel da Skill. */
 	private final int _level;
-	/** Custom skill ID displayed by the client. */
+	/** ID de skill customizado exibido pelo cliente. */
 	private final int _displayId;
-	/** Custom skill level displayed by the client. */
+	/** Nivel de skill customizado exibido pelo cliente. */
 	private final int _displayLevel;
-	/** Skill client's name. */
+	/** Nome da skill no cliente. */
 	private final String _name;
-	/** Operative type: passive, active, toggle. */
+	/** Tipo operacional: passiva, ativa, toggle. */
 	private final SkillOperateType _operateType;
 	private final int _magic;
 	private final TraitType _traitType;
 	private final boolean _staticReuse;
-	/** MP consumption. */
+	/** Consumo de MP. */
 	private final int _mpConsume;
-	/** Initial MP consumption. */
+	/** Consumo inicial de MP. */
 	private final int _mpInitialConsume;
-	/** MP consumption per channeling. */
+	/** Consumo de MP por canalizacao. */
 	private final int _mpPerChanneling;
-	/** HP consumption. */
+	/** Consumo de HP. */
 	private final int _hpConsume;
-	/** Energy consumption (for agathion skills). */
+	/** Consumo de energia para skills de agathion. */
 	private final int _energyConsume;
-	/** Amount of items consumed by this skill from caster. */
+	/** Quantidade de itens consumidos por esta skill do conjurador. */
 	private final int _itemConsumeCount;
-	/** Id of item consumed by this skill from caster. */
+	/** ID do item consumido por esta skill do conjurador. */
 	private final int _itemConsumeId;
-	/** Cast range: how far can be the target. */
+	/** Alcance de cast: quao longe o alvo pode estar. */
 	private final int _castRange;
-	/** Effect range: how far the skill affect the target. */
+	/** Alcance de efeito: quao longe a skill afeta o alvo. */
 	private final int _effectRange;
-	/** Abnormal instant, used for herbs mostly. */
+	/** Abnormal instantaneo, usado principalmente para herbs. */
 	private final boolean _isAbnormalInstant;
-	/** Abnormal level, global effect level. */
+	/** Nivel abnormal, nivel global do efeito. */
 	private final int _abnormalLevel;
-	/** Abnormal type: global effect "group". */
+	/** Tipo abnormal: "grupo" global de efeito. */
 	private final AbnormalType _abnormalType;
-	/** Abnormal time: global effect duration time. */
+	/** Tempo abnormal: duracao global do efeito. */
 	private final int _abnormalTime;
-	/** Abnormal visual effect: the visual effect displayed ingame. */
+	/** Efeito visual abnormal: o efeito visual exibido no jogo. */
 	private AbnormalVisualEffect[] _abnormalVisualEffects = null;
-	/** Abnormal visual effect special: the visual effect displayed ingame. */
+	/** Efeito visual abnormal especial: o efeito visual exibido no jogo. */
 	private AbnormalVisualEffect[] _abnormalVisualEffectsSpecial = null;
-	/** Abnormal visual effect event: the visual effect displayed ingame. */
+	/** Efeito visual abnormal de evento: o efeito visual exibido no jogo. */
 	private AbnormalVisualEffect[] _abnormalVisualEffectsEvent = null;
-	/** If {@code true} this skill's effect should stay after death. */
+	/** Se {@code true}, o efeito desta skill deve permanecer apos a morte. */
 	private final boolean _stayAfterDeath;
-	/** If {@code true} this skill's effect should stay after class-subclass change. */
+	/** Se {@code true}, o efeito desta skill deve permanecer apos troca de classe-subclasse. */
 	private final boolean _stayOnSubclassChange;
-	/** If {@code true} this skill's effect recovery HP/MP or CP from herb. */
+	/** Se {@code true}, o efeito desta skill recupera HP/MP ou CP de herb. */
 	private final boolean _isRecoveryHerb;
 	
 	private int _refId;
@@ -140,7 +140,7 @@ public class Skill
 	private final int _reuseHashCode;
 	private final int _reuseDelay;
 	
-	/** Target type of the skill : SELF, PARTY, CLAN, PET... */
+	/** Tipo de alvo da skill: SELF, PARTY, CLAN, PET... */
 	private final TargetType _targetType;
 	private final int _feed;
 	// base success chance
@@ -1439,27 +1439,46 @@ public class Skill
 	
 	/**
 	 * Schedules the restoration of cancelled buffs after RETURN_CANCEL_TIME seconds.
+	 * @param effector the creature that cast the cancel skill
 	 * @param effected the target that had buffs removed
 	 * @param buffs list of removed BuffInfo
 	 * @param remainingTimes list with corresponding remaining times in seconds
 	 */
-	public static void scheduleBuffRestore(Creature effected, List<BuffInfo> buffs, List<Integer> remainingTimes)
+	public static void scheduleBuffRestore(Creature effector, Creature effected, List<BuffInfo> buffs, List<Integer> remainingTimes)
 	{
-		if (Config.RETURN_CANCEL && !buffs.isEmpty())
+		if (!Config.RETURN_CANCEL || buffs.isEmpty())
 		{
-			ThreadPool.schedule(() ->
-			{
-				for (int i = 0; i < buffs.size(); i++)
-				{
-					final BuffInfo buff = buffs.get(i);
-					final int remainingTime = remainingTimes.get(i);
-					if ((buff != null) && effected.isPlayer() && effected.asPlayer().isOnline() && !effected.isDead())
-					{
-						buff.getSkill().applyEffects(effected, effected, false, remainingTime);
-					}
-				}
-			}, Config.RETURN_CANCEL_TIME * 1000L);
+			return;
 		}
+		
+		// Filter by caster type.
+		if ((effector != null) && effector.isPlayer() && !Config.RETURN_CANCEL_PLAYER)
+		{
+			return;
+		}
+		if ((effector != null) && (effector.isMonster() || effector.isRaid()) && !Config.RETURN_CANCEL_MONSTER)
+		{
+			return;
+		}
+		
+		// Olympiad exception.
+		if (!Config.RETURN_CANCEL_PLAYER_OLYMPIAD && effected.isPlayer() && effected.asPlayer().isInOlympiadMode())
+		{
+			return;
+		}
+		
+		ThreadPool.schedule(() ->
+		{
+			for (int i = 0; i < buffs.size(); i++)
+			{
+				final BuffInfo buff = buffs.get(i);
+				final int remainingTime = remainingTimes.get(i);
+				if ((buff != null) && effected.isPlayer() && effected.asPlayer().isOnline() && !effected.isDead())
+				{
+					buff.getSkill().applyEffects(effected, effected, false, remainingTime);
+				}
+			}
+		}, Config.RETURN_CANCEL_TIME * 1000L);
 	}
 	
 	/**

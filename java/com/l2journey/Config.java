@@ -1211,6 +1211,9 @@ public class Config
 	public static int PVP_NORMAL_TIME;
 	public static int PVP_PVP_TIME;
 	public static boolean RETURN_CANCEL;
+	public static boolean RETURN_CANCEL_MONSTER;
+	public static boolean RETURN_CANCEL_PLAYER;
+	public static boolean RETURN_CANCEL_PLAYER_OLYMPIAD;
 	public static int RETURN_CANCEL_TIME;
 	
 	// --------------------------------------------------
@@ -3353,7 +3356,10 @@ public class Config
 		ANTIFEED_INTERVAL = pvpConfig.getInt("AntiFeedInterval", 120) * 1000;
 		PVP_NORMAL_TIME = pvpConfig.getInt("PvPVsNormalTime", 120000);
 		PVP_PVP_TIME = pvpConfig.getInt("PvPVsPvPTime", 60000);
-		RETURN_CANCEL = pvpConfig.getBoolean("ReturnCancel", true);
+		RETURN_CANCEL = pvpConfig.getBoolean("ReturnCancel", false);
+		RETURN_CANCEL_MONSTER = pvpConfig.getBoolean("ReturnCancelMonster", true);
+		RETURN_CANCEL_PLAYER = pvpConfig.getBoolean("ReturnCancelPlayer", true);
+		RETURN_CANCEL_PLAYER_OLYMPIAD = pvpConfig.getBoolean("ReturnCancelOlympiad", false);
 		RETURN_CANCEL_TIME = pvpConfig.getInt("ReturnCancelTime", 10);
 	}
 	

@@ -87,7 +87,7 @@ public class DispelAll extends AbstractEffect
 			effected.stopAllEffects();
 			
 			// Schedule buff restoration with original remaining time
-			Skill.scheduleBuffRestore(effected, removedBuffs, remainingTimes);
+			Skill.scheduleBuffRestore(effector, effected, removedBuffs, remainingTimes);
 		}
 		else
 		{

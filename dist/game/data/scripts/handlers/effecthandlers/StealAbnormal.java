@@ -136,28 +136,47 @@ public class StealAbnormal extends AbstractEffect
 		// Schedule restoration of stolen buffs to original owner and removal from stealer
 		if (Config.RETURN_CANCEL && !stolenBuffsForRestore.isEmpty())
 		{
-			ThreadPool.schedule(() ->
+			// Filter by caster type.
+			boolean shouldRestore = true;
+			if (effector.isPlayer() && !Config.RETURN_CANCEL_PLAYER)
 			{
-				// Restore buffs to the original owner (effected)
-				for (int i = 0; i < stolenBuffsForRestore.size(); i++)
+				shouldRestore = false;
+			}
+			if ((effector.isMonster() || effector.isRaid()) && !Config.RETURN_CANCEL_MONSTER)
+			{
+				shouldRestore = false;
+			}
+			// Olympiad exception.
+			if (!Config.RETURN_CANCEL_PLAYER_OLYMPIAD && effected.isPlayer() && effected.asPlayer().isInOlympiadMode())
+			{
+				shouldRestore = false;
+			}
+			
+			if (shouldRestore)
+			{
+				ThreadPool.schedule(() ->
 				{
-					final BuffInfo buff = stolenBuffsForRestore.get(i);
-					final int remainingTime = remainingTimes.get(i);
-					if ((buff != null) && effected.isPlayer() && effected.asPlayer().isOnline() && !effected.isDead())
+					// Restore buffs to the original owner (effected)
+					for (int i = 0; i < stolenBuffsForRestore.size(); i++)
 					{
-						buff.getSkill().applyEffects(effected, effected, false, remainingTime);
+						final BuffInfo buff = stolenBuffsForRestore.get(i);
+						final int remainingTime = remainingTimes.get(i);
+						if ((buff != null) && effected.isPlayer() && effected.asPlayer().isOnline() && !effected.isDead())
+						{
+							buff.getSkill().applyEffects(effected, effected, false, remainingTime);
+						}
 					}
-				}
-				
-				// Remove stolen buffs from the stealer (effector)
-				for (BuffInfo stolenBuff : buffsGivenToStealer)
-				{
-					if ((stolenBuff != null) && effector.isPlayer() && effector.asPlayer().isOnline())
+					
+					// Remove stolen buffs from the stealer (effector)
+					for (BuffInfo stolenBuff : buffsGivenToStealer)
 					{
-						effector.getEffectList().remove(SkillFinishType.REMOVED, stolenBuff);
+						if ((stolenBuff != null) && effector.isPlayer() && effector.asPlayer().isOnline())
+						{
+							effector.getEffectList().remove(SkillFinishType.REMOVED, stolenBuff);
+						}
 					}
-				}
-			}, Config.RETURN_CANCEL_TIME * 1000L);
+				}, Config.RETURN_CANCEL_TIME * 1000L);
+			}
 		}
 		
 		sendSuccessMessage(effector, effected);
