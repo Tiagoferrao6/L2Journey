@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Formatter;
@@ -38,6 +39,25 @@ public class DBDumper
 {
 	DBOutputInterface _frame;
 	String _db;
+
+	private static Statement createTablesStatement(Connection con)
+	{
+		try
+		{
+			return con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+		}
+		catch (SQLException e)
+		{
+			try
+			{
+				return con.createStatement();
+			}
+			catch (SQLException e2)
+			{
+				throw new RuntimeException(e2);
+			}
+		}
+	}
 	
 	public DBDumper(DBOutputInterface frame, String db, String dir)
 	{
@@ -51,23 +71,31 @@ public class DBDumper
 		try (Formatter form = new Formatter())
 		{
 			final Connection con = _frame.getConnection();
-			try (Statement s = con.createStatement();
+			try (Statement s = createTablesStatement(con);
 				ResultSet rset = s.executeQuery("SHOW TABLES"))
 			{
-				final File dump = new File(dir + "../../dumps", form.format("%1$s_dump_%2$tY%2$tm%2$td-%2$tH%2$tM%2$tS.sql", _db, new GregorianCalendar().getTime()).toString());
-				new File(dir + "../../dumps").mkdir();
+				final File dumpsDir = new File(dir + "../../dumps");
+				dumpsDir.mkdirs();
+				final File dump = new File(dumpsDir, form.format("%1$s_dump_%2$tY%2$tm%2$td-%2$tH%2$tM%2$tS.sql", _db, new GregorianCalendar().getTime()).toString());
 				dump.createNewFile();
 				
 				_frame.appendToProgressArea("Writing dump " + dump.getName());
-				if (rset.last())
+				try
 				{
-					final int rows = rset.getRow();
-					rset.beforeFirst();
-					if (rows > 0)
+					if (rset.last())
 					{
-						_frame.setProgressIndeterminate(false);
-						_frame.setProgressMaximum(rows);
+						final int rows = rset.getRow();
+						rset.beforeFirst();
+						if (rows > 0)
+						{
+							_frame.setProgressIndeterminate(false);
+							_frame.setProgressMaximum(rows);
+						}
 					}
+				}
+				catch (SQLException e)
+				{
+					// Ignore: MySQL JDBC may return TYPE_FORWARD_ONLY ResultSet; row counting is optional.
 				}
 				
 				try (FileWriter fileWriter = new FileWriter(dump);
