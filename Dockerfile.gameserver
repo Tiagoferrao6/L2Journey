@@ -1,0 +1,42 @@
+# ---------------------------------------------------------------------------
+# L2Journey Game Server - Multi-stage build from source
+# ---------------------------------------------------------------------------
+# Stage 1: Build with JDK 24 + Ant
+# ---------------------------------------------------------------------------
+FROM eclipse-temurin:24-jdk AS builder
+
+RUN apt-get update && apt-get install -y --no-install-recommends ant && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /build
+
+COPY build.xml .
+COPY java ./java
+COPY dist ./dist
+
+RUN ant compile jar
+
+# ---------------------------------------------------------------------------
+# Stage 2: Runtime with JDK (required for javax.tools.JavaCompiler)
+# ---------------------------------------------------------------------------
+FROM eclipse-temurin:24-jdk
+
+WORKDIR /opt/l2journey
+
+# Layout: game/ (server dir) and libs/ (dependency jars). Script expects CWD=game and -cp "../libs/*:Gameserver.jar"
+COPY --from=builder /build/dist/game ./game
+COPY --from=builder /build/dist/libs ./libs
+COPY --from=builder /build/build/dist/libs/GameServer.jar ./game/Gameserver.jar
+
+EXPOSE 7777
+
+ENV L2J_GAME_OPTS="-Xms2g -Xmx4g"
+
+CMD ["sh", "-c", "cd /opt/l2journey/game && exec java -server \
+  -Dfile.encoding=UTF-8 \
+  -Djava.util.logging.manager=com.l2journey.log.ServerLogManager \
+  -Dorg.slf4j.simpleLogger.log.com.zaxxer.hikari=warn \
+  -XX:+UseZGC \
+  $L2J_GAME_OPTS \
+  -Dlogback.configurationFile=./logback.xml \
+  -cp \"./../libs/*:Gameserver.jar\" \
+  com.l2journey.gameserver.GameServer"]
