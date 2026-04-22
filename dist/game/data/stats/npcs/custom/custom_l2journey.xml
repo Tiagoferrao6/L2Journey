@@ -6,11 +6,25 @@
 			<height normal="30" />
 		</collision>
 	</npc>
+	<!-- Delevel Manager -->
+	<npc id="36604" displayId="32534" name="Ammit" usingServerSideName="true" title="Experience Devourer" usingServerSideTitle="true" type="Folk">
+		<collision>
+			<radius normal="19" />
+			<height normal="44" />
+		</collision>
+	</npc>
 	<!-- Achievement NPC -->
 	<npc id="70000" displayId="31275" name="Drika" usingServerSideName="true" title="Achievement Master" usingServerSideTitle="true" type="Folk">
 		<collision>
 			<radius normal="8" />
 			<height normal="30" />
+		</collision>
+	</npc>
+	<!-- Collection NPC -->
+	<npc id="70001" displayId="32744" name="Lorenzo" usingServerSideName="true" title="Collectible Archives" usingServerSideTitle="true" type="Folk">
+		<collision>
+			<radius normal="8" />
+			<height normal="23" />
 		</collision>
 	</npc>
 </list>

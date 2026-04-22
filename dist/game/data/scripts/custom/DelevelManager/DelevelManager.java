@@ -38,7 +38,7 @@ import com.l2journey.gameserver.network.serverpackets.SystemMessage;
 import ai.AbstractNpcAI;
 
 /**
- * @author Mobius, KingHanker
+ * @author KingHanker
  */
 public class DelevelManager extends AbstractNpcAI
 {
@@ -53,33 +53,96 @@ public class DelevelManager extends AbstractNpcAI
 	public String onEvent(String event, Npc npc, Player player)
 	{
 		String htmltext = event;
+		
+		// Verificar se o sistema esta habilitado
 		if (!Config.DELEVEL_MANAGER_ENABLED)
 		{
-			return htmltext;
+			return "36604-disabled.htm";
 		}
 		
 		switch (event)
 		{
 			case "delevel":
 			{
-				if (!(player.getLevel() > Config.DELEVEL_MANAGER_MINIMUM_DELEVEL))
+				// Verificar se esta em combate
+				if (player.isInCombat())
 				{
-					return "1002000-2.htm";
+					return "36604-3.htm";
 				}
 				
-				if ((player.getLevel() > Config.DELEVEL_MANAGER_MINIMUM_DELEVEL) && (!(getQuestItemsCount(player, Config.DELEVEL_MANAGER_ITEMID) >= Config.DELEVEL_MANAGER_ITEMCOUNT)))
+				// Verificar nivel minimo
+				if (player.getLevel() <= Config.DELEVEL_MANAGER_MINIMUM_DELEVEL)
+				{
+					return "36604-2.htm";
+				}
+				
+				// Verifica level da Subclasse
+				if (player.isSubClassActive() && (player.getLevel() == Config.BASE_SUBCLASS_LEVEL))
+				{
+					return "36604-4.htm";
+				}
+				
+				// Verificar itens necessarios
+				if (getQuestItemsCount(player, Config.DELEVEL_MANAGER_ITEMID) < Config.DELEVEL_MANAGER_ITEMCOUNT)
 				{
 					final SystemMessage sm = new SystemMessage(SystemMessageId.S2_UNIT_S_OF_THE_ITEM_S1_IS_ARE_REQUIRED);
 					sm.addItemName(Config.DELEVEL_MANAGER_ITEMID);
 					sm.addLong(Config.DELEVEL_MANAGER_ITEMCOUNT);
 					player.sendPacket(sm);
-					return "1002000-1.htm";
+					return "36604-1.htm";
 				}
 				
+				// Mostrar informacoes antes de confirmar
+				final int targetLevel = player.getLevel() - 1;
+				final long currentExp = player.getExp();
+				final long targetExp = ExperienceData.getInstance().getExpForLevel(targetLevel);
+				
+				String preview = getHtm(player, "36604-preview.htm");
+				preview = preview.replace("%currentLevel%", String.valueOf(player.getLevel()));
+				preview = preview.replace("%currentExp%", String.format("%,d", currentExp));
+				preview = preview.replace("%targetLevel%", String.valueOf(targetLevel));
+				preview = preview.replace("%targetExp%", String.format("%,d", targetExp));
+				
+				return preview;
+			}
+			case "confirm_delevel":
+			{
+				// Revalidar condicoes basicas antes de executar
+				if (player.isInCombat())
+				{
+					return "36604.htm";
+				}
+				
+				if (player.getLevel() <= Config.DELEVEL_MANAGER_MINIMUM_DELEVEL)
+				{
+					return "36604-2.htm";
+				}
+				
+				if (player.isSubClassActive() && (player.getLevel() == Config.BASE_SUBCLASS_LEVEL))
+				{
+					return "36604-4.htm";
+				}
+				
+				if (getQuestItemsCount(player, Config.DELEVEL_MANAGER_ITEMID) < Config.DELEVEL_MANAGER_ITEMCOUNT)
+				{
+					final SystemMessage sm = new SystemMessage(SystemMessageId.S2_UNIT_S_OF_THE_ITEM_S1_IS_ARE_REQUIRED);
+					sm.addItemName(Config.DELEVEL_MANAGER_ITEMID);
+					sm.addLong(Config.DELEVEL_MANAGER_ITEMCOUNT);
+					player.sendPacket(sm);
+					return "36604-1.htm";
+				}
+				
+				// Remover itens
 				takeItems(player, Config.DELEVEL_MANAGER_ITEMID, Config.DELEVEL_MANAGER_ITEMCOUNT);
-				player.getStat().removeExpAndSp((player.getExp() - ExperienceData.getInstance().getExpForLevel(player.getLevel() - 1)), 0);
+				
+				// Calcular e remover experiencia
+				final long expToRemove = player.getExp() - ExperienceData.getInstance().getExpForLevel(player.getLevel() - 1);
+				player.getStat().removeExpAndSp(expToRemove, 0);
+				
+				// Atualizar informacoes do jogador
 				player.broadcastUserInfo();
-				return "1002000.htm";
+				
+				return "36604.htm";
 			}
 		}
 		
@@ -89,7 +152,7 @@ public class DelevelManager extends AbstractNpcAI
 	@Override
 	public String onFirstTalk(Npc npc, Player player)
 	{
-		return "1002000.htm";
+		return "36604.htm";
 	}
 	
 	public static void main(String[] args)

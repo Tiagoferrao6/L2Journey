@@ -2384,10 +2384,10 @@ public class Config
 	{
 		final ConfigReader delevelManagerConfig = new ConfigReader(DELEVEL_MANAGER_CONFIG_FILE);
 		DELEVEL_MANAGER_ENABLED = delevelManagerConfig.getBoolean("Enabled", false);
-		DELEVEL_MANAGER_NPCID = delevelManagerConfig.getInt("NpcId", 1002000);
+		DELEVEL_MANAGER_NPCID = delevelManagerConfig.getInt("NpcId", 36604);
 		DELEVEL_MANAGER_ITEMID = delevelManagerConfig.getInt("RequiredItemId", 4356);
 		DELEVEL_MANAGER_ITEMCOUNT = delevelManagerConfig.getInt("RequiredItemCount", 2);
-		DELEVEL_MANAGER_MINIMUM_DELEVEL = delevelManagerConfig.getInt("MimimumDelevel", 20);
+		DELEVEL_MANAGER_MINIMUM_DELEVEL = delevelManagerConfig.getInt("MinimumDelevel", 20);
 	}
 	
 	/**
