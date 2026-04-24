@@ -7,15 +7,6 @@ Geodata: https://drive.google.com/drive/folders/1-7pJRBCnmEGQZPE2Murd5sz2_q8cR3t
 
 
 ==================================================================================================
-Fix na system
-==================================================================================================
-Descrição e funcionamento da Mana Drug/Mana Potion
-Descrição da skill Bear Spirit Totem
-Animação das skills Silence e Sleep no monstro Eye of Watchman
-Icone de várias skills
-
-
-==================================================================================================
 Adições ao projeto
 ==================================================================================================
 Npc Buffer
@@ -35,11 +26,29 @@ Add mod para retorno de buffs
 Sistema de Energia dos Agathions (Soul Avatar)
 Mod Daily Reward (Premiações diarias)
 Evento Hitman
+Add support for Docker Compose
+CommunityBuffer propria do projeto
+
+
+==================================================================================================
+NPCs Custom
+==================================================================================================
+12 - Buffer
+15 - Buffer Premium
+36603 - GM Shop
+36604 - Delevel Manager
+70000 - Achievement Manager
+70001 - Collectible Archives (em construção)
+1003000 - Nobless
 
 
 ==================================================================================================
 Lista de fix (resumida)
 ==================================================================================================
+Monstros se buffam
+IA de varios monstros e bosses nao funcionavam(Cruma, Den of Evil, Forest of Dead)
+Chat global nao anunciava mensagens
+Validacao do HexId impede criacao automatica de outros mundos no menu
 Adicionado Skills dos agathions que faltavam
 Skill Chain Heal funcionando conforme descrição
 Movimentação dos monstros pelo geodata
@@ -62,6 +71,18 @@ Fix na posição de alguns NPCs no mapa
 Sistema PcBang/PcCafe usam Npcs Adventure Guildmans para trocar os pontos do evento
 Buffs aplicados individualmente e não duplicados no pet
 Range das mensagens do Sel Mahun foi limitada ao redor do Npc
-Fix em algumas quests que estavam quebradas (5 Quests)
-Fix em Vários itens (20 itens)
-Fix em várias skills (149 skills)
+Fix na movimentacao visual dos monstros contornando obstaculos
+Npc Delevel Manager refeito
+Abas da communityBoard retail reconstruidas
+Fix em algumas quests que estavam quebradas (14 Quests)
+Fix em Vários itens (38 itens)
+Fix em várias skills (152 skills)
+
+
+==================================================================================================
+Fix na system
+==================================================================================================
+Descrição e funcionamento da Mana Drug/Mana Potion
+Descrição da skill Bear Spirit Totem
+Animação das skills Silence e Sleep no monstro Eye of Watchman
+Icone de várias skills
