@@ -22,6 +22,7 @@ import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
 import java.util.Scanner;
 
 import javax.swing.JOptionPane;
@@ -52,6 +53,11 @@ public class ScriptExecutor
 		{
 			return;
 		}
+		
+		// Ordena os arquivos alfabeticamente para garantir uma ordem de execucao deterministica
+		// independente do sistema de arquivos. Isso e necessario porque tabelas pai (ex: characters)
+		// devem ser criadas antes das tabelas filhas que as referenciam via FOREIGN KEY.
+		Arrays.sort(allFiles, (a, b) -> a.getName().compareToIgnoreCase(b.getName()));
 		
 		_frame.setProgressIndeterminate(false);
 		_frame.setProgressMaximum(allFiles.length - 1);

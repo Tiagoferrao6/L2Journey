@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS `characters` (
   `account_name` VARCHAR(45) DEFAULT NULL,
-  `charId` INT UNSIGNED NOT NULL DEFAULT 0,
+  `charId` INT UNSIGNED NOT NULL,
   `char_name` VARCHAR(35) NOT NULL,
   `level` TINYINT UNSIGNED DEFAULT NULL,
   `maxHp` MEDIUMINT UNSIGNED DEFAULT NULL,
@@ -62,14 +62,9 @@ CREATE TABLE IF NOT EXISTS `characters` (
   KEY `char_name` (`char_name`),
   KEY `clanid` (`clanid`),
   KEY `online` (`online`)
-) DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-# Common
-CREATE INDEX idx_charId ON characters (charId);
-CREATE INDEX idx_char_name ON characters (char_name);
-CREATE INDEX idx_account_name ON characters (account_name);
-
-# CharSelectionInfo
+# CharSelectionInfo (composite index for SELECT * FROM characters WHERE account_name=? ORDER BY createDate)
 CREATE INDEX idx_accountName_createDate ON characters (account_name, createDate);
 
 # TaskBirthday
