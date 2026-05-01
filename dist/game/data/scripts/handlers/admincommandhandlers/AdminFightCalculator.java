@@ -25,6 +25,7 @@ import java.util.StringTokenizer;
 
 import com.l2journey.gameserver.data.xml.NpcData;
 import com.l2journey.gameserver.handler.IAdminCommandHandler;
+import com.l2journey.gameserver.model.WorldObject;
 import com.l2journey.gameserver.model.actor.Creature;
 import com.l2journey.gameserver.model.actor.Player;
 import com.l2journey.gameserver.model.actor.instance.Monster;
@@ -169,7 +170,8 @@ public class AdminFightCalculator implements IAdminCommandHandler
 		if (trimmedParams.isEmpty())
 		{
 			npc1 = activeChar;
-			npc2 = activeChar.getTarget().asCreature();
+			final WorldObject target = activeChar.getTarget();
+			npc2 = (target != null) ? target.asCreature() : null;
 			if (npc2 == null)
 			{
 				activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
