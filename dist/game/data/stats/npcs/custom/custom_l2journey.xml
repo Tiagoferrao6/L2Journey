@@ -13,6 +13,13 @@
 			<height normal="44" />
 		</collision>
 	</npc>
+	<!-- Nobless Manager -->
+	<npc id="36605" displayId="32138" name="Thranduil" usingServerSideName="true" title="Noblesse Master" usingServerSideTitle="true" type="Folk">
+		<collision>
+			<radius normal="18" />
+			<height normal="28" />
+		</collision>
+	</npc>
 	<!-- Achievement NPC -->
 	<npc id="70000" displayId="31275" name="Drika" usingServerSideName="true" title="Achievement Master" usingServerSideTitle="true" type="Folk">
 		<collision>

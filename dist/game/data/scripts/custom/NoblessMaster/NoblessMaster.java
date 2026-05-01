@@ -38,7 +38,7 @@ import com.l2journey.gameserver.network.serverpackets.SystemMessage;
 import ai.AbstractNpcAI;
 
 /**
- * @author Mobius, Zoinha, Kinghanker
+ * @author Kinghanker
  */
 public class NoblessMaster extends AbstractNpcAI
 {
@@ -58,29 +58,58 @@ public class NoblessMaster extends AbstractNpcAI
 		String htmltext = event;
 		if (!Config.NOBLESS_MASTER_ENABLED)
 		{
-			return htmltext;
+			return "36605-disabled.htm";
 		}
 		
 		if (event.equals("noblesse"))
 		{
 			if (player.isNoble())
 			{
-				return "1003000-1.htm";
+				return "36605-1.htm";
 			}
 			
-			if (((player.getLevel() >= Config.NOBLESS_MASTER_LEVEL_REQUIREMENT)) && (!(getQuestItemsCount(player, Config.NOBLESS_COIN) >= Config.NOBLESS_COIN_COUNT)))
+			if (player.getLevel() < Config.NOBLESS_MASTER_LEVEL_REQUIREMENT)
+			{
+				return "36605-3.htm";
+			}
+			
+			if (player.getPkKills() > 0)
+			{
+				player.sendMessage("You cannot become a Noblesse while flagged as a PK.");
+				return "36605-blocked.htm";
+			}
+			
+			if (player.isInCombat())
+			{
+				player.sendMessage("You cannot become a Noblesse while in combat.");
+				return "36605-blocked.htm";
+			}
+			
+			if (player.isOnEvent() || player.isRegisteredOnEvent() || player.isInOlympiadMode() || player.isInDuel())
+			{
+				player.sendMessage("You cannot become a Noblesse while participating in an event.");
+				return "36605-blocked.htm";
+			}
+			
+			if (player.isTransformed())
+			{
+				player.sendMessage("You cannot become a Noblesse while transformed.");
+				return "36605-blocked.htm";
+			}
+			
+			if (player.isSubClassActive())
+			{
+				player.sendMessage("You must be on your main class to become a Noblesse.");
+				return "36605-blocked.htm";
+			}
+			
+			if (getQuestItemsCount(player, Config.NOBLESS_COIN) < Config.NOBLESS_COIN_COUNT)
 			{
 				final SystemMessage sm = new SystemMessage(SystemMessageId.S2_UNIT_S_OF_THE_ITEM_S1_IS_ARE_REQUIRED);
 				sm.addItemName(Config.NOBLESS_COIN);
 				sm.addLong(Config.NOBLESS_COIN_COUNT);
 				player.sendPacket(sm);
-				return "1003000-2.htm";
-			}
-			
-			if (!(player.getLevel() >= Config.NOBLESS_MASTER_LEVEL_REQUIREMENT))
-			{
-				player.sendMessage("You are not yet at the level: " + Config.NOBLESS_MASTER_LEVEL_REQUIREMENT);
-				return "1003000-3.htm";
+				return "36605-2.htm";
 			}
 			
 			if (Config.NOBLESS_MASTER_REWARD_TIARA)
@@ -91,7 +120,7 @@ public class NoblessMaster extends AbstractNpcAI
 			takeItems(player, Config.NOBLESS_COIN, Config.NOBLESS_COIN_COUNT);
 			player.setNoble(true);
 			player.sendPacket(QuestSound.ITEMSOUND_QUEST_FINISH.getPacket());
-			return "1003000-4.htm";
+			return "36605-4.htm";
 		}
 		
 		return htmltext;
@@ -100,7 +129,11 @@ public class NoblessMaster extends AbstractNpcAI
 	@Override
 	public String onFirstTalk(Npc npc, Player player)
 	{
-		return "1003000.htm";
+		if (!Config.NOBLESS_MASTER_ENABLED)
+		{
+			return "36605-disabled.htm";
+		}
+		return "36605.htm";
 	}
 	
 	public static void main(String[] args)

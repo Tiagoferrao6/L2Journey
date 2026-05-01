@@ -2475,7 +2475,7 @@ public class Config
 	{
 		final ConfigReader noblessMasterConfig = new ConfigReader(NOBLESS_MASTER_CONFIG_FILE);
 		NOBLESS_MASTER_ENABLED = noblessMasterConfig.getBoolean("Enabled", false);
-		NOBLESS_MASTER_NPCID = noblessMasterConfig.getInt("NpcId", 1003000);
+		NOBLESS_MASTER_NPCID = noblessMasterConfig.getInt("NpcId", 36605);
 		NOBLESS_MASTER_LEVEL_REQUIREMENT = noblessMasterConfig.getInt("LevelRequirement", 80);
 		NOBLESS_COIN = noblessMasterConfig.getInt("NoblessCoin", 57);
 		NOBLESS_COIN_COUNT = noblessMasterConfig.getLong("NoblessCoinCount", 1000000000L);
