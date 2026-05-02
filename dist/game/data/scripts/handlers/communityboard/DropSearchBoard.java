@@ -181,25 +181,37 @@ public class DropSearchBoard implements IParseBoardHandler
 			}
 			case "_bbs_search_drop":
 			{
-				final DecimalFormat chanceFormat = new DecimalFormat("0.00##");
+				final DecimalFormat chanceFormat = new DecimalFormat("0.###");
 				final int itemId = Integer.parseInt(params[1]);
 				int page = Integer.parseInt(params[2]);
 				final List<CBDropHolder> list = DROP_INDEX_CACHE.get(itemId);
-				int pages = list.size() / 14;
+				final int perPage = 10;
+				int pages = (list.size() + perPage - 1) / perPage;
 				if (pages == 0)
 				{
 					pages++;
 				}
 				
-				final int start = (page - 1) * 14;
-				final int end = Math.min(list.size() - 1, start + 14);
+				final int start = (page - 1) * perPage;
+				final int end = Math.min(list.size(), start + perPage);
 				final StringBuilder builder = new StringBuilder();
+				
+				// Table header.
+				builder.append("<tr>");
+				builder.append("<td width=30 align=CENTER><font color=\"LEVEL\">Lvl</font></td>");
+				builder.append("<td width=160><font color=\"LEVEL\">Monster</font></td>");
+				builder.append("<td width=90 align=CENTER><font color=\"LEVEL\">Amount</font></td>");
+				builder.append("<td width=70 align=CENTER><font color=\"LEVEL\">Chance</font></td>");
+				builder.append("<td width=60 align=CENTER><font color=\"LEVEL\">Method</font></td>");
+				builder.append("<td width=70 align=CENTER><font color=\"LEVEL\">Type</font></td>");
+				builder.append("</tr>");
+				
 				final PlayerStat stat = player.getStat();
 				final double dropAmountAdenaEffectBonus = stat.getBonusDropAdenaMultiplier();
 				final double dropAmountEffectBonus = stat.getBonusDropAmountMultiplier();
 				final double dropRateEffectBonus = stat.getBonusDropRateMultiplier();
 				final double spoilRateEffectBonus = stat.getBonusSpoilRateMultiplier();
-				for (int index = start; index <= end; index++)
+				for (int index = start; index < end; index++)
 				{
 					final CBDropHolder cbDropHolder = list.get(index);
 					
@@ -310,12 +322,27 @@ public class DropSearchBoard implements IParseBoardHandler
 						rateChance *= dropRateEffectBonus;
 					}
 					
+					// Format min-max amounts (round to integer; if equal, show single value).
+					final long minAmount = Math.round(cbDropHolder.min * rateAmount);
+					final long maxAmount = Math.round(cbDropHolder.max * rateAmount);
+					final String amountStr = (minAmount == maxAmount) ? String.valueOf(minAmount) : (minAmount + "-" + maxAmount);
+					
+					// Format chance: ceiling rounding, max 3 decimal places.
+					final double chanceValue = cbDropHolder.chance * rateChance;
+					final double chanceRounded = Math.ceil(chanceValue * 1000.0) / 1000.0;
+					final String chanceStr = chanceFormat.format(chanceRounded);
+					
+					// Type column: Raid (highlighted) vs Monster.
+					final String typeStr = cbDropHolder.isRaid ? "<font color=\"FF6347\">Raid</font>" : "Monster";
+					final String dropTypeStr = cbDropHolder.isSpoil ? "<font color=\"6FA8DC\">Spoil</font>" : "<font color=\"B6D7A8\">Drop</font>";
+					
 					builder.append("<tr>");
-					builder.append("<td width=30>").append(cbDropHolder.npcLevel).append("</td>");
-					builder.append("<td width=170>").append("<a action=\"bypass _bbs_npc_trace " + cbDropHolder.npcId + "\">").append("&@").append(cbDropHolder.npcId).append(";").append("</a>").append("</td>");
-					builder.append("<td width=80 align=CENTER>").append(cbDropHolder.min * rateAmount).append("-").append(cbDropHolder.max * rateAmount).append("</td>");
-					builder.append("<td width=50 align=CENTER>").append(chanceFormat.format(cbDropHolder.chance * rateChance)).append("%").append("</td>");
-					builder.append("<td width=50 align=CENTER>").append(cbDropHolder.isSpoil ? "Spoil" : "Drop").append("</td>");
+					builder.append("<td width=30 align=CENTER>").append(cbDropHolder.npcLevel).append("</td>");
+					builder.append("<td width=160>").append("<a action=\"bypass _bbs_npc_trace " + cbDropHolder.npcId + "\">").append("&@").append(cbDropHolder.npcId).append(";").append("</a>").append("</td>");
+					builder.append("<td width=90 align=CENTER>").append(amountStr).append("</td>");
+					builder.append("<td width=70 align=CENTER>").append(chanceStr).append("%</td>");
+					builder.append("<td width=60 align=CENTER>").append(dropTypeStr).append("</td>");
+					builder.append("<td width=70 align=CENTER>").append(typeStr).append("</td>");
 					builder.append("</tr>");
 				}
 				
@@ -382,7 +409,7 @@ public class DropSearchBoard implements IParseBoardHandler
 				limit++;
 			}
 			
-			if (limit == 14)
+			if (limit == 18)
 			{
 				break;
 			}
@@ -431,9 +458,9 @@ public class DropSearchBoard implements IParseBoardHandler
 			builder.append("</tr>");
 		}
 		
-		if (line < 7)
+		if (line < 9)
 		{
-			for (i = 0; i < (7 - line); i++)
+			for (i = 0; i < (9 - line); i++)
 			{
 				builder.append("<tr><td height=36></td></tr>");
 			}
