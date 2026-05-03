@@ -147,7 +147,6 @@ public class DailyReward implements IBypassHandler
 		final DailyRewardManager manager = DailyRewardManager.getInstance();
 		final int currentDay = manager.getCurrentDay(player);
 		final int totalDays = manager.getTotalDays();
-		final boolean canClaim = manager.canClaimReward(player);
 		
 		final StringBuilder sb = new StringBuilder();
 		sb.append("<table width=750 cellspacing=2 cellpadding=2>");
@@ -177,8 +176,9 @@ public class DailyReward implements IBypassHandler
 				
 				sb.append("<td width=75 height=40 align=center valign=top>");
 				
-				// Determine the state of this day
-				if ((day < currentDay) || ((day == currentDay) && !canClaim))
+				// O 'currentDay' representa o PROXIMO dia a ser resgatado.
+				// Tudo abaixo dele ja foi entregue; o proprio currentDay e os subsequentes ainda nao.
+				if (day < currentDay)
 				{
 					// Already claimed - show claimed icon
 					sb.append("<img src=\"branchSys.PremiumItemBtn_disable\" width=32 height=32>");
