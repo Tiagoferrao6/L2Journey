@@ -62,7 +62,7 @@ import com.l2journey.gameserver.network.serverpackets.MagicSkillUse;
 import com.l2journey.gameserver.network.serverpackets.SetSummonRemainTime;
 
 /**
- * Complete Community Board Buffer with full scheme support. Uses the same database tables as NpcBuffer (npcbuffer_buff_list, npcbuffer_scheme_list, npcbuffer_scheme_contents). All configurations are read from NpcBuffer.ini via {@link Config}.
+ * Buffer completo da Community Board com suporte total a schemes. Usa as mesmas tabelas do banco do NpcBuffer (npcbuffer_buff_list, npcbuffer_scheme_list, npcbuffer_scheme_contents). Todas as configuracoes sao lidas de NpcBuffer.ini via {@link Config}.
  * @author KingHanker
  */
 public class BufferBoard implements IParseBoardHandler
@@ -79,30 +79,30 @@ public class BufferBoard implements IParseBoardHandler
 	private static final int MAX_SCHEME_DANCES = Config.DANCES_MAX_AMOUNT;
 	private static final int BUFFS_PER_PAGE = 20;
 	
-	//Setting up buff timing
+	// Configuracao do tempo dos buffs
 	private static final int BUFFTIME = Config.BUFF_TIME * 60; // 60 min.
 	
-	// Buff Set class labels (GM management)
+	// Rotulos de classe do conjunto de buffs (gerenciamento GM)
 	private static final String SET_FIGHTER = "Fighter";
 	private static final String SET_MAGE = "Mage";
 	private static final String SET_ALL = "All";
 	private static final String SET_NONE = "None";
 	
-	// Visual skill IDs for animations
+	// IDs de skills visuais para animacoes
 	private static final int SKILL_HEAL = 6696;
 	private static final int SKILL_BUFF_1 = 1411;
 	private static final int SKILL_BUFF_2 = 6662;
 	
-	// Per-player pet buff mode
+	// Modo de buff de pet por jogador
 	private static final Map<Integer, Boolean> PET_MODE = new ConcurrentHashMap<>();
 	
-	// Per-player flag to show 'no pet summoned' message in place of To Pet button
+	// Flag por jogador para exibir a mensagem de 'nenhum pet invocado' no lugar do botao To Pet
 	private static final Map<Integer, Boolean> SHOW_NO_PET = new ConcurrentHashMap<>();
 	
-	// Skill cache for performance
+	// Cache de skills para desempenho
 	private static final Map<Integer, Skill> SKILL_CACHE = new ConcurrentHashMap<>();
 	
-	// Cleanup listener for player logout
+	// Listener de limpeza para logout do jogador
 	private static final Consumer<OnPlayerLogout> ON_PLAYER_LOGOUT = event ->
 	{
 		final int objId = event.getPlayer().getObjectId();
@@ -122,7 +122,7 @@ public class BufferBoard implements IParseBoardHandler
 	}
 	
 	// =========================================================
-	// COMMAND ROUTING
+	// ROTEAMENTO DE COMANDOS
 	// =========================================================
 	
 	@Override
@@ -134,7 +134,7 @@ public class BufferBoard implements IParseBoardHandler
 			return false;
 		}
 		
-		// Access validations
+		// Validacoes de acesso
 		if (!Config.BUFF_WITH_KARMA && (player.getKarma() > 0))
 		{
 			sendHtml(player, showInfo("Info", "You have too much <font color=FF0000>karma!</font><br>Come back when you don't have any karma!"));

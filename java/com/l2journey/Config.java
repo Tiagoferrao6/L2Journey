@@ -244,8 +244,10 @@ public class Config
 	// Painel da Comunidade
 	// --------------------------------------------------
 	public static boolean COMMUNITYBOARD_ENABLED;
+	public static boolean COMMUNITYBOARD_BUFFER;
+	public static boolean COMMUNITYBOARD_BUFFER_PREMIUM;
+	public static boolean COMMUNITYBOARD_DROP_SEARCH;
 	public static int COMMUNITYBOARD_CURRENCY;
-	public static boolean COMMUNITYBOARD_ENABLE_MULTISELLS;
 	public static boolean COMMUNITYBOARD_ENABLE_TELEPORTS;
 	public static boolean COMMUNITYBOARD_ENABLE_DELEVEL;
 	public static int COMMUNITYBOARD_TELEPORT_PRICE;
@@ -261,6 +263,12 @@ public class Config
 	public static boolean COMMUNITYBOARD_ENABLE_WAREHOUSE;
 	public static boolean COMMUNITYBOARD_ENABLE_AUGMENT;
 	public static boolean COMMUNITYBOARD_ENABLE_DRAW;
+	public static boolean COMMUNITYBOARD_TIPS_ENABLED;
+	public static boolean COMMUNITYBOARD_EPIC_STATUS;
+	public static boolean COMMUNITYBOARD_HOT_FEATURES_ENABLED;
+	public static boolean COMMUNITYBOARD_PLAYER_RANKING;
+	public static boolean COMMUNITYBOARD_BLACKSMITH;
+	public static boolean COMMUNITYBOARD_MERCHANT;
 	
 	// --------------------------------------------------
 	// Gerenciador de Email Customizado
@@ -1829,18 +1837,23 @@ public class Config
 	{
 		final ConfigReader communityBoardConfig = new ConfigReader(COMMUNITY_BOARD_CONFIG_FILE);
 		COMMUNITYBOARD_ENABLED = communityBoardConfig.getBoolean("CommunityBoardEnable", false);
+		COMMUNITYBOARD_BUFFER = communityBoardConfig.getBoolean("CommunityBoardBuffer", true);
+		COMMUNITYBOARD_BUFFER_PREMIUM = communityBoardConfig.getBoolean("CommunityBoardBufferPremium", true);
+		COMMUNITYBOARD_DROP_SEARCH = communityBoardConfig.getBoolean("CommunityBoardDropSearch", true);
 		COMMUNITYBOARD_CURRENCY = communityBoardConfig.getInt("CommunityCurrencyId", 57);
-		COMMUNITYBOARD_ENABLE_MULTISELLS = communityBoardConfig.getBoolean("CommunityEnableMultisells", true);
 		COMMUNITYBOARD_ENABLE_TELEPORTS = communityBoardConfig.getBoolean("CommunityEnableTeleports", true);
 		COMMUNITYBOARD_ENABLE_DELEVEL = communityBoardConfig.getBoolean("CommunityEnableDelevel", false);
-		COMMUNITYBOARD_ENABLE_WAREHOUSE = communityBoardConfig.getBoolean("CommunityEnableWarhouse", true);
-		COMMUNITYBOARD_ENABLE_AUGMENT = communityBoardConfig.getBoolean("CommunityEnableAugment", true);
-		COMMUNITYBOARD_ENABLE_DRAW = communityBoardConfig.getBoolean("CommunityEnableDraw", true);
 		COMMUNITYBOARD_TELEPORT_PRICE = communityBoardConfig.getInt("CommunityTeleportPrice", 0);
 		COMMUNITYBOARD_DELEVEL_PRICE = communityBoardConfig.getInt("CommunityDelevelPrice", 0);
 		COMMUNITYBOARD_PEACE_ONLY = communityBoardConfig.getBoolean("CommunityBoardPeaceOnly", false);
 		COMMUNITYBOARD_COMBAT_DISABLED = communityBoardConfig.getBoolean("CommunityCombatDisabled", true);
 		COMMUNITYBOARD_KARMA_DISABLED = communityBoardConfig.getBoolean("CommunityKarmaDisabled", true);
+		COMMUNITYBOARD_TIPS_ENABLED = communityBoardConfig.getBoolean("CommunityTipsEnabled", true);
+		COMMUNITYBOARD_EPIC_STATUS = communityBoardConfig.getBoolean("CommunityBoardEpicStatus", true);
+		COMMUNITYBOARD_HOT_FEATURES_ENABLED = communityBoardConfig.getBoolean("CommunityHotFeaturesEnabled", false);
+		COMMUNITYBOARD_PLAYER_RANKING = communityBoardConfig.getBoolean("CommunityBoardPlayerRanking", true);
+		COMMUNITYBOARD_BLACKSMITH = communityBoardConfig.getBoolean("CommunityBoardBlacksmith", true);
+		COMMUNITYBOARD_MERCHANT = communityBoardConfig.getBoolean("CommunityBoardMerchant", true);
 		COMMUNITY_PREMIUM_SYSTEM_ENABLED = communityBoardConfig.getBoolean("CommunityPremiumSystem", false);
 		COMMUNITY_PREMIUM_COIN_ID = communityBoardConfig.getInt("CommunityPremiumBuyCoinId", 57);
 		COMMUNITY_PREMIUM_PRICE_PER_DAY = communityBoardConfig.getInt("CommunityPremiumPricePerDay", 1000000);

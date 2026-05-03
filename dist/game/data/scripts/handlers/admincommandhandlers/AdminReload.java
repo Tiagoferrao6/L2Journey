@@ -52,6 +52,8 @@ import com.l2journey.gameserver.network.NpcStringId;
 import com.l2journey.gameserver.network.SystemMessageId;
 import com.l2journey.gameserver.scripting.ScriptEngineManager;
 
+import handlers.communityboard.TipsBoard;
+
 /**
  * @author NosBit
  */
@@ -64,7 +66,7 @@ public class AdminReload implements IAdminCommandHandler
 		"admin_reload"
 	};
 	
-	private static final String RELOAD_USAGE = "Usage: //reload <config|access|npc|quest [quest_id|quest_name]|walker|htm[l] [file|directory]|multisell|buylist|teleport|skill|item|door|effect|handler|enchant>";
+	private static final String RELOAD_USAGE = "Usage: //reload <config|access|npc|quest [quest_id|quest_name]|walker|htm[l] [file|directory]|multisell|buylist|teleport|skill|item|door|effect|handler|enchant|tips>";
 	
 	@Override
 	public boolean useAdminCommand(String command, Player activeChar)
@@ -274,6 +276,12 @@ public class AdminReload implements IAdminCommandHandler
 					SendMessageLocalisationData.getInstance().load();
 					NpcNameLocalisationData.getInstance().load();
 					AdminData.getInstance().broadcastMessageToGMs(activeChar.getName() + ": Reloaded Localisation data.");
+					break;
+				}
+				case "tips":
+				{
+					TipsBoard.getInstance().load();
+					AdminData.getInstance().broadcastMessageToGMs(activeChar.getName() + ": Reloaded Community Board tips.");
 					break;
 				}
 				default:
