@@ -297,7 +297,7 @@ public class HomeBoard implements IParseBoardHandler
 		final int hotOuter = hotEnabled ? (epicEnabled ? 372 : 720) : 0;
 		
 		final StringBuilder sb = new StringBuilder(4096);
-		sb.append("<table width=732 height=220 cellpadding=2 cellspacing=2 border=0><tr>");
+		sb.append("<table width=732 height=210 cellpadding=2 cellspacing=2 border=0><tr>");
 		if (epicEnabled)
 		{
 			sb.append(buildBossWatchBlock(bossOuter));
@@ -377,8 +377,8 @@ public class HomeBoard implements IParseBoardHandler
 			{
 				"L2UI.Crystalize_active",
 				"BlackSmith",
-				"Acessar",
-				"bypass _bbstop;merchant/main.html"
+				"Access",
+				"bypass _bbstop;merchant/blacksmithMain.html"
 			});
 		}
 		if (Config.COMMUNITYBOARD_MERCHANT)
@@ -387,8 +387,8 @@ public class HomeBoard implements IParseBoardHandler
 			{
 				"Icon.skill0629",
 				"Merchant",
-				"Loja",
-				"bypass _bbstop;merchant/blacksmith.html"
+				"Shop",
+				"bypass _bbstop;merchant/gmshop.html"
 			});
 		}
 		if (Config.COMMUNITY_PREMIUM_SYSTEM_ENABLED)
@@ -397,7 +397,7 @@ public class HomeBoard implements IParseBoardHandler
 			{
 				"BranchSys2.br_spirit_rune_i00",
 				"Premium",
-				"Acessar",
+				"Access",
 				"bypass _bbstop;premium/main.html"
 			});
 		}
@@ -407,7 +407,7 @@ public class HomeBoard implements IParseBoardHandler
 			{
 				"icon.skill1411",
 				"Delevel",
-				"Acessar",
+				"Access",
 				"bypass _bbstop;delevel/main.html"
 			});
 		}
@@ -416,8 +416,8 @@ public class HomeBoard implements IParseBoardHandler
 			cells.add(new String[]
 			{
 				"BranchSys.br_bright_gold_box_i00",
-				"Recompensa",
-				"Coletar",
+				"Daily Reward",
+				"Colect",
 				"bypass -h voice .dailyreward"
 			});
 		}

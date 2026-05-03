@@ -183,7 +183,7 @@ public class TipsBoard implements IXmlReader
 		final String body = tip.text.replace("[b]", "</font><font color=\"" + tip.highlight + "\">").replace("[/b]", "</font><font color=\"" + tip.color + "\">");
 		
 		final StringBuilder sb = new StringBuilder(512);
-		sb.append("<table width=720 height=58 cellpadding=0 cellspacing=0 border=0 background=\"L2UI_CT1.Windows_DF_TooltipBG\">");
+		sb.append("<table width=720 height=55 cellpadding=0 cellspacing=0 border=0 background=\"L2UI_CT1.Windows_DF_TooltipBG\">");
 		sb.append("<tr><td height=12></td></tr>");
 		sb.append("<tr><td fixwidth=720 height=46 valign=center>");
 		sb.append("<table width=720 cellpadding=4 cellspacing=0 border=0><tr>");
