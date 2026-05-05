@@ -359,7 +359,8 @@ public abstract class Inventory extends ItemContainer
 							{
 								if (!player.hasSkillReuse(itemSkill.getReuseHashCode()))
 								{
-									final int equipDelay = item.getEquipReuseDelay();
+									// Use the equip-reuse delay of the item that owns the skill, not of the unequipped item.
+									final int equipDelay = itm.getEquipReuseDelay();
 									if (equipDelay > 0)
 									{
 										player.addTimeStamp(itemSkill, equipDelay);
@@ -486,97 +487,53 @@ public abstract class Inventory extends ItemContainer
 			return instance;
 		}
 		
-		@Override
-		public void notifyEquiped(int slot, Item item, Inventory inventory)
+		/**
+		 * Applies the full armor-set bonuses (set skills, shield skills if a shield from the set is equipped, and +6 enchant skills) to the player. Returns a 2-slot boolean array: [0]=any skill added, [1]=cooldown packet must be sent.
+		 * @param player the target player
+		 * @param armorSet the armor set definition
+		 * @param item the item that triggered the equip (used for equip reuse delay)
+		 * @return result flags
+		 */
+		private static boolean[] applySetBonuses(Player player, ArmorSet armorSet, Item item)
 		{
-			if (!inventory.getOwner().isPlayer())
-			{
-				return;
-			}
-			
-			final Player player = inventory.getOwner().asPlayer();
-			
-			// Checks if player is wearing a chest item
-			final Item chestItem = inventory.getPaperdollItem(PAPERDOLL_CHEST);
-			// Checks for armor set for the equipped chest.
-			if ((chestItem == null) || !ArmorSetData.getInstance().isArmorSet(chestItem.getId()))
-			{
-				return;
-			}
-			final ArmorSet armorSet = ArmorSetData.getInstance().getSet(chestItem.getId());
 			boolean update = false;
 			boolean updateTimeStamp = false;
-			// Checks if equipped item is part of set
-			if (armorSet.containItem(slot, item.getId()))
+			Skill itemSkill;
+			
+			final List<SkillHolder> skills = armorSet.getSkills();
+			if (skills != null)
 			{
-				if (armorSet.containAll(player))
+				for (SkillHolder holder : skills)
 				{
-					Skill itemSkill;
-					final List<SkillHolder> skills = armorSet.getSkills();
-					if (skills != null)
+					itemSkill = holder.getSkill();
+					if (itemSkill != null)
 					{
-						for (SkillHolder holder : skills)
+						player.addSkill(itemSkill, false);
+						if (itemSkill.isActive())
 						{
-							itemSkill = holder.getSkill();
-							if (itemSkill != null)
+							if (!player.hasSkillReuse(itemSkill.getReuseHashCode()))
 							{
-								player.addSkill(itemSkill, false);
-								if (itemSkill.isActive())
+								final int equipDelay = item.getEquipReuseDelay();
+								if (equipDelay > 0)
 								{
-									if (!player.hasSkillReuse(itemSkill.getReuseHashCode()))
-									{
-										final int equipDelay = item.getEquipReuseDelay();
-										if (equipDelay > 0)
-										{
-											player.addTimeStamp(itemSkill, equipDelay);
-											player.disableSkill(itemSkill, equipDelay);
-										}
-									}
-									updateTimeStamp = true;
+									player.addTimeStamp(itemSkill, equipDelay);
+									player.disableSkill(itemSkill, equipDelay);
 								}
-								update = true;
 							}
-							else
-							{
-								LOGGER.warning("Inventory.ArmorSetListener: Incorrect skill: " + holder + ".");
-							}
+							
+							updateTimeStamp = true;
 						}
+						
+						update = true;
 					}
-					
-					if (armorSet.containShield(player)) // has shield from set
+					else
 					{
-						for (SkillHolder holder : armorSet.getShieldSkillId())
-						{
-							if (holder.getSkill() != null)
-							{
-								player.addSkill(holder.getSkill(), false);
-								update = true;
-							}
-							else
-							{
-								LOGGER.warning("Inventory.ArmorSetListener: Incorrect skill: " + holder + ".");
-							}
-						}
-					}
-					
-					if (armorSet.isEnchanted6(player)) // has all parts of set enchanted to 6 or more
-					{
-						for (SkillHolder holder : armorSet.getEnchant6skillId())
-						{
-							if (holder.getSkill() != null)
-							{
-								player.addSkill(holder.getSkill(), false);
-								update = true;
-							}
-							else
-							{
-								LOGGER.warning("Inventory.ArmorSetListener: Incorrect skill: " + holder + ".");
-							}
-						}
+						LOGGER.warning("Inventory.ArmorSetListener: Incorrect skill: " + holder + ".");
 					}
 				}
 			}
-			else if (armorSet.containShield(item.getId()))
+			
+			if (armorSet.containShield(player)) // has shield from set
 			{
 				for (SkillHolder holder : armorSet.getShieldSkillId())
 				{
@@ -590,6 +547,69 @@ public abstract class Inventory extends ItemContainer
 						LOGGER.warning("Inventory.ArmorSetListener: Incorrect skill: " + holder + ".");
 					}
 				}
+			}
+			
+			if (armorSet.isEnchanted6(player)) // has all parts of set enchanted to 6 or more
+			{
+				for (SkillHolder holder : armorSet.getEnchant6skillId())
+				{
+					if (holder.getSkill() != null)
+					{
+						player.addSkill(holder.getSkill(), false);
+						update = true;
+					}
+					else
+					{
+						LOGGER.warning("Inventory.ArmorSetListener: Incorrect skill: " + holder + ".");
+					}
+				}
+			}
+			
+			return new boolean[]
+			{
+				update,
+				updateTimeStamp
+			};
+		}
+		
+		@Override
+		public void notifyEquiped(int slot, Item item, Inventory inventory)
+		{
+			if (!inventory.getOwner().isPlayer())
+			{
+				return;
+			}
+			
+			final Player player = inventory.getOwner().asPlayer();
+			
+			// Checks if player is wearing a chest item
+			final Item chestItem = inventory.getPaperdollItem(PAPERDOLL_CHEST);
+			if (chestItem == null)
+			{
+				return;
+			}
+			
+			// Checks for armor set for the equipped chest.
+			if (!ArmorSetData.getInstance().isArmorSet(chestItem.getId()))
+			{
+				return;
+			}
+			
+			final ArmorSet armorSet = ArmorSetData.getInstance().getSet(chestItem.getId());
+			boolean update = false;
+			boolean updateTimeStamp = false;
+			
+			// The equipped item may be a part of the set, or a shield belonging to the set.
+			// In either case the set may now be complete; apply bonuses through the same path
+			// so that shield skills, set skills and +6 skills are kept consistent and the
+			// shield bonuses are NEVER granted unless the full set is equipped.
+			final boolean isSetPart = armorSet.containItem(slot, item.getId());
+			final boolean isSetShield = (slot == PAPERDOLL_LHAND) && armorSet.containShield(item.getId());
+			if ((isSetPart || isSetShield) && armorSet.containAll(player))
+			{
+				final boolean[] result = applySetBonuses(player, armorSet, item);
+				update = result[0];
+				updateTimeStamp = result[1];
 			}
 			
 			if (update)
@@ -623,6 +643,7 @@ public abstract class Inventory extends ItemContainer
 				{
 					return;
 				}
+				
 				final ArmorSet armorSet = ArmorSetData.getInstance().getSet(item.getId());
 				remove = true;
 				skills = armorSet.getSkills();
@@ -725,8 +746,17 @@ public abstract class Inventory extends ItemContainer
 		@Override
 		public void notifyUnequiped(int slot, Item item, Inventory inventory)
 		{
-			final Player player = item.asPlayer();
-			if ((player != null) && player.isChangingClass())
+			// Resolve the player from the inventory owner; Item#asPlayer would always return null here
+			// and effectively disable the changing-class guard, leading to talismans being unequipped
+			// during a class change.
+			final Creature owner = inventory.getOwner();
+			if ((owner == null) || !owner.isPlayer())
+			{
+				return;
+			}
+			
+			final Player player = owner.asPlayer();
+			if (player.isChangingClass())
 			{
 				return;
 			}
