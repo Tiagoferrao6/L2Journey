@@ -62,19 +62,19 @@ import com.l2journey.gameserver.network.serverpackets.ServerPacket;
 import com.l2journey.gameserver.util.LocationUtil;
 
 /**
- * Base class for all interactive objects.
+ * Classe base para todos os objetos interativos.
  */
 public abstract class WorldObject extends ListenersContainer implements IPositionable
 {
-	/** Name */
+	/** Nome */
 	private String _name;
-	/** Object ID */
+	/** ID do objeto */
 	private int _objectId;
-	/** World Region */
+	/** Regiao do mundo */
 	private WorldRegion _worldRegion;
-	/** Location */
+	/** Localizacao */
 	private final Location _location = new Location(0, 0, -10000);
-	/** Instance type */
+	/** Tipo de instancia */
 	private InstanceType _instanceType;
 	private boolean _isSpawned;
 	private boolean _isInvisible;
@@ -87,8 +87,8 @@ public abstract class WorldObject extends ListenersContainer implements IPositio
 	}
 	
 	/**
-	 * Gets the instance type of object.
-	 * @return the instance type
+	 * Obtem o tipo de instancia do objeto.
+	 * @return o tipo de instancia
 	 */
 	public InstanceType getInstanceType()
 	{
@@ -96,8 +96,8 @@ public abstract class WorldObject extends ListenersContainer implements IPositio
 	}
 	
 	/**
-	 * Sets the instance type.
-	 * @param newInstanceType the instance type to set
+	 * Define o tipo de instancia.
+	 * @param newInstanceType o tipo de instancia a definir
 	 */
 	protected void setInstanceType(InstanceType newInstanceType)
 	{
@@ -105,9 +105,9 @@ public abstract class WorldObject extends ListenersContainer implements IPositio
 	}
 	
 	/**
-	 * Verifies if object is of any given instance types.
-	 * @param instanceTypes the instance types to verify
-	 * @return {@code true} if object is of any given instance types, {@code false} otherwise
+	 * Verifica se o objeto e de algum dos tipos de instancia informados.
+	 * @param instanceTypes os tipos de instancia a verificar
+	 * @return {@code true} se o objeto for de algum dos tipos de instancia informados, {@code false} caso contrario
 	 */
 	public boolean isInstanceTypes(InstanceType... instanceTypes)
 	{
@@ -169,19 +169,19 @@ public abstract class WorldObject extends ListenersContainer implements IPositio
 	{
 		synchronized (this)
 		{
-			// Set the x,y,z position of the WorldObject spawn and update its _worldregion
+			// Define a posicao x,y,z do spawn de WorldObject e atualiza sua _worldregion
 			_isSpawned = true;
 			setWorldRegion(World.getInstance().getRegion(this));
 			
-			// Add the WorldObject spawn in the _allobjects of World
+			// Adiciona o spawn do WorldObject em _allobjects de World
 			World.getInstance().addObject(this);
 			
-			// Add the WorldObject spawn to _visibleObjects and if necessary to _allplayers of its WorldRegion
+			// Adiciona o spawn do WorldObject a _visibleObjects e, se necessario, a _allplayers de sua WorldRegion
 			_worldRegion.addVisibleObject(this);
 		}
 		
-		// this can synchronize on others instances, so it's out of synchronized, to avoid deadlocks
-		// Add the WorldObject spawn in the world as a visible object
+		// Isto pode sincronizar em outras instancias, entao fica fora do synchronized para evitar deadlocks
+		// Adiciona o spawn do WorldObject ao mundo como um objeto visivel
 		World.getInstance().addVisibleObject(this, getWorldRegion());
 		
 		onSpawn();
@@ -213,17 +213,17 @@ public abstract class WorldObject extends ListenersContainer implements IPositio
 				spawnY = World.WORLD_Y_MIN + 5000;
 			}
 			
-			// Set the x,y,z position of the WorldObject. If flagged with _isSpawned, setXYZ will automatically update world region, so avoid that.
+			// Define a posicao x,y,z do WorldObject. Se marcado com _isSpawned, setXYZ atualizara automaticamente a world region, entao evite isso.
 			setXYZ(spawnX, spawnY, z);
 		}
 		
-		// Spawn and update its _worldregion
+		// Executa o spawn e atualiza sua _worldregion
 		spawnMe();
 	}
 	
 	/**
-	 * Verify if object can be attacked.
-	 * @return {@code true} if object can be attacked, {@code false} otherwise
+	 * Verifica se o objeto pode ser atacado.
+	 * @return {@code true} se o objeto puder ser atacado, {@code false} caso contrario
 	 */
 	public boolean canBeAttacked()
 	{

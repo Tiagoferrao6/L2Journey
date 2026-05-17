@@ -49,6 +49,7 @@ import com.l2journey.gameserver.model.actor.Player;
 import com.l2journey.gameserver.model.actor.Summon;
 import com.l2journey.gameserver.model.actor.instance.Pet;
 import com.l2journey.gameserver.network.Disconnection;
+import com.l2journey.gameserver.network.serverpackets.ActionFailed;
 import com.l2journey.gameserver.network.serverpackets.DeleteObject;
 import com.l2journey.gameserver.network.serverpackets.LeaveWorld;
 
@@ -197,16 +198,64 @@ public class World
 	 */
 	public void removeObject(WorldObject object)
 	{
-		_allObjects.remove(object.getObjectId());
+		if (object == null)
+		{
+			return;
+		}
+		
+		// 1. Tratamento especifico para Criaturas (NPCs, Monstros, Players)
+		if (object.isCreature())
+		{
+			final Creature creature = object.asCreature();
+			
+			// Criamos o pacote de delete com o parametro '1' (c2) para forcar limpeza de colisao no cliente.
+			// Isso impede que o monstro morto continue ocupando espaço fisico.
+			final DeleteObject deletePacket = new DeleteObject(creature, 1);
+			
+			// Notifica todos os players proximos e limpa estados de target.
+			forEachVisibleObject(creature, Player.class, player ->
+			{
+				// Se o player estava com target no monstro que esta sumindo, limpamos o target.
+				if (player.getTarget() == creature)
+				{
+					player.setTarget(null);
+					player.sendPacket(ActionFailed.STATIC_PACKET);
+				}
+				
+				// Envia o pacote de remocao forçada.
+				player.sendPacket(deletePacket);
+				
+			});
+		}
+		
+		// 2. Remove da Regiao do Mundo.
+		final WorldRegion region = object.getWorldRegion();
+		if (region != null)
+		{
+			region.removeVisibleObject(object);
+			object.setWorldRegion(null);
+		}
+		
+		// 3. Remove do mapa global de objetos.
+		if (_allObjects.remove(object.getObjectId()) == null)
+		{
+			return;
+		}
+		
+		// 4. Tratamento específico para remoção de Jogadores (Players) das listas globais.
 		if (object.isPlayer())
 		{
 			final Player player = object.asPlayer();
-			if (player.isTeleporting()) // TODO: Drop when we stop removing player from the world while teleporting.
+			
+			// Se o jogador estiver em processo de teleporte, evitamos a remocao completa aqui.
+			if (player.isTeleporting())
 			{
 				return;
 			}
-			_allPlayers.remove(object.getObjectId());
 			
+			_allPlayers.remove(player.getObjectId());
+			
+			// Gerenciamento do sistema de Facções (se habilitado).
 			if (EventsConfig.FACTION_SYSTEM_ENABLED)
 			{
 				if (player.isGood())
@@ -477,7 +526,15 @@ public class World
 					
 					if (wo.isPlayer())
 					{
-						wo.sendPacket(new DeleteObject(object));
+						// Se for um NPC/Monstro morrendo ou sumindo, limpa a colisão (1). Se for item/player, remoção normal (0).
+						if (object.isNpc())
+						{
+							wo.sendPacket(new DeleteObject(object, 1));
+						}
+						else
+						{
+							wo.sendPacket(new DeleteObject(object));
+						}
 					}
 				}
 			}
@@ -550,7 +607,15 @@ public class World
 					
 					if (wo.isPlayer())
 					{
-						wo.sendPacket(new DeleteObject(object));
+						// Se for um NPC/Monstro morrendo ou sumindo, limpa a colisão (1). Se for item/player, remoção normal (0).
+						if (object.isNpc())
+						{
+							wo.sendPacket(new DeleteObject(object, 1));
+						}
+						else
+						{
+							wo.sendPacket(new DeleteObject(object));
+						}
 					}
 				}
 			}

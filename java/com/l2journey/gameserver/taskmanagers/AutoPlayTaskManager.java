@@ -51,7 +51,8 @@ import com.l2journey.gameserver.model.zone.ZoneId;
 import com.l2journey.gameserver.util.LocationUtil;
 
 /**
- * @author Mobius
+ * AutoPlay task manager. Fixes: - Remove periodic ValidateLocation packet that caused visible character "reload"/rubberband. - Make party assist exclusive so followers do not pick independent targets while assisting leader.
+ * @author Mobius, KingHanker, Mafia
  */
 public class AutoPlayTaskManager
 {
@@ -98,11 +99,12 @@ public class AutoPlayTaskManager
 				// Next target mode.
 				final int targetMode = player.getAutoPlaySettings().getNextTargetMode();
 				
-				// Skip thinking.
+				// Current target handling.
 				final WorldObject target = player.getTarget();
 				if ((target != null) && target.isCreature())
 				{
 					final Creature creature = target.asCreature();
+					
 					if (creature.isAlikeDead() || !isTargetModeValid(targetMode, player, creature))
 					{
 						// Logic for Spoil (254) skill.
@@ -131,7 +133,7 @@ public class AutoPlayTaskManager
 							}
 						}
 						
-						// Clear target.
+						// Clear invalid target.
 						player.setTarget(null);
 					}
 					else if ((creature.getTarget() == player) || (creature.getTarget() == null))
@@ -175,6 +177,16 @@ public class AutoPlayTaskManager
 										continue PLAY;
 									}
 									
+									// Melee characters should close distance first if they are too far away.
+									if (!isMageCaster(player) && (player.calculateDistance2D(creature) > 150))
+									{
+										if (!player.isMoving())
+										{
+											player.getAI().setIntention(Intention.MOVE_TO, creature.getLocation());
+										}
+										continue PLAY;
+									}
+									
 									player.getAI().setIntention(Intention.ATTACK, creature);
 								}
 							}
@@ -194,6 +206,7 @@ public class AutoPlayTaskManager
 										final int x1 = (int) (Math.cos(Math.PI + radian + course) * distance);
 										final int y1 = (int) (Math.sin(Math.PI + radian + course) * distance);
 										final Location location;
+										
 										if (ranged)
 										{
 											location = new Location(player.getX() + x1, player.getY() + y1, player.getZ());
@@ -202,7 +215,11 @@ public class AutoPlayTaskManager
 										{
 											location = new Location(creature.getX() + x1, creature.getY() + y1, player.getZ());
 										}
-										player.getAI().setIntention(Intention.MOVE_TO, location);
+										
+										if (!player.isMoving())
+										{
+											player.getAI().setIntention(Intention.MOVE_TO, location);
+										}
 										IDLE_COUNT.remove(player);
 									}
 									else
@@ -216,7 +233,7 @@ public class AutoPlayTaskManager
 					}
 				}
 				
-				// Reset idle count.
+				// Reset idle count when no active target logic is being processed.
 				IDLE_COUNT.remove(player);
 				
 				// Pickup.
@@ -251,23 +268,58 @@ public class AutoPlayTaskManager
 					}
 				}
 				
-				// Find target.
+				// Party assist / target selection.
 				Creature creature = null;
 				final Party party = player.getParty();
-				final Player leader = party == null ? null : party.getLeader();
+				final Player leader = (party == null) ? null : party.getLeader();
+				
 				if (Config.ENABLE_AUTO_ASSIST && (party != null) && (leader != null) && (leader != player) && !leader.isDead())
 				{
-					if (leader.calculateDistance3D(player) < (Config.ALT_PARTY_RANGE * 2 /* 2? */))
+					if (leader.calculateDistance3D(player) < (Config.ALT_PARTY_RANGE * 2))
 					{
 						final WorldObject leaderTarget = leader.getTarget();
-						if ((leaderTarget != null) && (leaderTarget.isAttackable() || (leaderTarget.isPlayable() && !party.containsPlayer(leaderTarget.asPlayer()))))
+						if ((leaderTarget != null) && leaderTarget.isCreature())
 						{
-							creature = leaderTarget.asCreature();
+							final Creature leaderCreature = leaderTarget.asCreature();
+							final boolean validLeaderTarget = (leaderCreature.isAttackable() || (leaderCreature.isPlayable() && !party.containsPlayer(leaderCreature.asPlayer())));
+							
+							if (validLeaderTarget)
+							{
+								if (player.getTarget() != leaderCreature)
+								{
+									player.setTarget(leaderCreature);
+								}
+								
+								creature = leaderCreature;
+							}
+							else
+							{
+								// If assist is enabled and leader has no valid target, keep following leader instead of searching on its own.
+								if ((player.getAI().getIntention() != Intention.FOLLOW) && !player.isDisabled() && !player.isMoving())
+								{
+									player.getAI().setIntention(Intention.FOLLOW, leader);
+								}
+								continue PLAY;
+							}
 						}
-						else if ((player.getAI().getIntention() != Intention.FOLLOW) && !player.isDisabled())
+						else
+						{
+							// No leader target: follow leader, do not free-search a mob.
+							if ((player.getAI().getIntention() != Intention.FOLLOW) && !player.isDisabled() && !player.isMoving())
+							{
+								player.getAI().setIntention(Intention.FOLLOW, leader);
+							}
+							continue PLAY;
+						}
+					}
+					else
+					{
+						// Out of assist range: follow leader, do not pick independent targets.
+						if ((player.getAI().getIntention() != Intention.FOLLOW) && !player.isDisabled() && !player.isMoving())
 						{
 							player.getAI().setIntention(Intention.FOLLOW, leader);
 						}
+						continue PLAY;
 					}
 				}
 				else
@@ -403,6 +455,7 @@ public class AutoPlayTaskManager
 				{
 					player.getSummon().followOwner();
 				}
+				
 				IDLE_COUNT.remove(player);
 				return;
 			}
