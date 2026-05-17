@@ -275,56 +275,77 @@ public class AutoPlayTaskManager
 				
 				if (Config.ENABLE_AUTO_ASSIST && (party != null) && (leader != null) && (leader != player) && !leader.isDead())
 				{
+					// Leader inside assist range.
 					if (leader.calculateDistance3D(player) < (Config.ALT_PARTY_RANGE * 2))
 					{
 						final WorldObject leaderTarget = leader.getTarget();
+						
+						// Leader has target.
 						if ((leaderTarget != null) && leaderTarget.isCreature())
 						{
 							final Creature leaderCreature = leaderTarget.asCreature();
-							final boolean validLeaderTarget = (leaderCreature.isAttackable() || (leaderCreature.isPlayable() && !party.containsPlayer(leaderCreature.asPlayer())));
 							
-							if (validLeaderTarget)
+							boolean validAssistTarget = false;
+							
+							// Monsters / attackables.
+							if (leaderCreature.isAttackable())
 							{
-								if (player.getTarget() != leaderCreature)
-								{
-									player.setTarget(leaderCreature);
-								}
+								validAssistTarget = true;
+							}
+							// Playable targets.
+							else if (leaderCreature.isPlayable())
+							{
+								final Player targetPlayer = leaderCreature.asPlayer();
 								
+								// Only real PvP / PK targets.
+								if ((targetPlayer != null) && (targetPlayer != player) && !party.containsPlayer(targetPlayer) && ((targetPlayer.getPvpFlag() > 0) || (targetPlayer.getKarma() > 0)))
+								{
+									validAssistTarget = true;
+								}
+							}
+							
+							// Valid assist target.
+							if (validAssistTarget)
+							{
 								creature = leaderCreature;
 							}
 							else
 							{
-								// If assist is enabled and leader has no valid target, keep following leader instead of searching on its own.
+								// Invalid target: just follow leader.
 								if ((player.getAI().getIntention() != Intention.FOLLOW) && !player.isDisabled() && !player.isMoving())
 								{
 									player.getAI().setIntention(Intention.FOLLOW, leader);
 								}
+								
 								continue PLAY;
 							}
 						}
 						else
 						{
-							// No leader target: follow leader, do not free-search a mob.
+							// No leader target: follow leader only.
 							if ((player.getAI().getIntention() != Intention.FOLLOW) && !player.isDisabled() && !player.isMoving())
 							{
 								player.getAI().setIntention(Intention.FOLLOW, leader);
 							}
+							
 							continue PLAY;
 						}
 					}
 					else
 					{
-						// Out of assist range: follow leader, do not pick independent targets.
+						// Leader too far away.
 						if ((player.getAI().getIntention() != Intention.FOLLOW) && !player.isDisabled() && !player.isMoving())
 						{
 							player.getAI().setIntention(Intention.FOLLOW, leader);
 						}
+						
 						continue PLAY;
 					}
 				}
 				else
 				{
 					double closestDistance = Double.MAX_VALUE;
+					
 					TARGET: for (Creature nearby : World.getInstance().getVisibleObjectsInRange(player, Creature.class, player.getAutoPlaySettings().isShortRange() && (targetMode != 2 /* Characters */) ? Config.AUTO_PLAY_SHORT_RANGE : Config.AUTO_PLAY_LONG_RANGE))
 					{
 						// Skip unavailable creatures.
@@ -333,22 +354,23 @@ public class AutoPlayTaskManager
 							continue TARGET;
 						}
 						
-						// Check creature target.
+						// Respectful hunting.
 						if (player.getAutoPlaySettings().isRespectfulHunting() && !nearby.isPlayable() && (nearby.getTarget() != null) && (nearby.getTarget() != player) && !(player.hasSummon() && (player.getSummon().getObjectId() == nearby.getTarget().getObjectId())))
 						{
 							continue TARGET;
 						}
 						
-						// Check next target mode.
+						// Target mode validation.
 						if (!isTargetModeValid(targetMode, player, nearby))
 						{
 							continue TARGET;
 						}
 						
-						// Check if creature is reachable.
+						// Reachability checks.
 						if ((Math.abs(player.getZ() - nearby.getZ()) < 800) && GeoData.getInstance().canSeeTarget(player, nearby) && GeoData.getInstance().canMove(player.getX(), player.getY(), player.getZ(), nearby.getX(), nearby.getY(), nearby.getZ(), player.getInstanceId()))
 						{
 							final double creatureDistance = player.calculateDistance2D(nearby);
+							
 							if (creatureDistance < closestDistance)
 							{
 								creature = nearby;
