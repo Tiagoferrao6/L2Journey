@@ -44,6 +44,7 @@ public class AutoUseSettingsHolder
 	private final Collection<Integer> _autoBuffs = ConcurrentHashMap.newKeySet();
 	private final List<Integer> _autoSkills = new CopyOnWriteArrayList<>();
 	private final AtomicInteger _autoPotionItem = new AtomicInteger();
+	private final AtomicInteger _autoManaPotionItem = new AtomicInteger();
 	private int _skillIndex = 0;
 	
 	public AutoUseSettingsHolder()
@@ -79,6 +80,16 @@ public class AutoUseSettingsHolder
 	{
 		_autoPotionItem.set(itemId);
 	}
+
+    public int getAutoManaPotionItem()
+    {
+        return _autoManaPotionItem.get();
+    }
+
+    public void setAutoManaPotionItem(int itemId)
+    {
+        _autoManaPotionItem.set(itemId);
+    }
 	
 	public boolean isAutoSkill(int skillId)
 	{

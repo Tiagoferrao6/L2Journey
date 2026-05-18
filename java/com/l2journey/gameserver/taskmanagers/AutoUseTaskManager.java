@@ -149,6 +149,7 @@ public class AutoUseTaskManager
 					}
 				}
 				
+				// Checa HP
 				if (Config.ENABLE_AUTO_POTION && !isInPeaceZone && (player.getCurrentHpPercent() < player.getAutoPlaySettings().getAutoPotionPercent()))
 				{
 					final int itemId = player.getAutoUseSettings().getAutoPotionItem();
@@ -174,79 +175,132 @@ public class AutoUseTaskManager
 						}
 					}
 				}
+
+				// Checa MP (independente do HP)
+				if (Config.ENABLE_AUTO_POTION && !isInPeaceZone && (player.getCurrentMpPercent() < player.getAutoPlaySettings().getAutoManaPotionPercent()))
+				{
+					final int itemId = player.getAutoUseSettings().getAutoManaPotionItem();
+					if (itemId > 0)
+					{
+						final Item item = player.getInventory().getItemByItemId(itemId);
+						if (item == null)
+						{
+							player.getAutoUseSettings().setAutoManaPotionItem(0);
+						}
+						else
+						{
+							final int reuseDelay = item.getReuseDelay();
+							if ((reuseDelay <= 0) || (player.getItemRemainingReuseTime(item.getObjectId()) <= 0))
+							{
+								final EtcItem etcItem = item.getEtcItem();
+								final IItemHandler handler = ItemHandler.getInstance().getHandler(etcItem);
+								if ((handler != null) && handler.useItem(player, item, false) && (reuseDelay > 0))
+								{
+									player.addTimeStampItem(item, reuseDelay);
+								}
+							}
+						}
+					}
+				}
 				
 				if (Config.ENABLE_AUTO_SKILL)
 				{
-					BUFFS: for (Integer skillId : player.getAutoUseSettings().getAutoBuffs())
-					{
-						// Fixes start area issue.
-						// Already casting.
-						// Attacking.
-						// Player is teleporting.
-						if (isInPeaceZone || player.isCastingNow() || player.isAttackingNow() || player.isTeleporting())
-						{
-							break BUFFS;
-						}
-						
-						Playable pet = null;
-						Skill skill = player.getKnownSkill(skillId);
-						if (skill == null)
-						{
-							if (player.hasServitor() || player.hasPet())
-							{
-								final Summon summon = player.getSummon();
-								skill = summon.getKnownSkill(skillId);
-								if (skill == null)
-								{
-									skill = PetSkillData.getInstance().getKnownSkill(summon, skillId);
-								}
-								if (skill != null)
-								{
-									pet = summon;
-								}
-							}
-							if (skill == null)
-							{
-								player.getAutoUseSettings().getAutoBuffs().remove(skillId);
-								continue BUFFS;
-							}
-						}
-						
-						// Buff use check.
-						final WorldObject target = player.getTarget();
-						if (!canCastBuff(player, target, skill))
-						{
-							continue BUFFS;
-						}
-						
-						// Playable target cast.
-						final Playable caster = pet != null ? pet : player;
-						if ((target != null) && (target.isPlayable()))
-						{
-							final Player targetPlayer = target.asPlayer();
-							if (((targetPlayer.getPvpFlag() == 0) && (targetPlayer.getKarma() <= 0)) || (targetPlayer.getParty() == caster.getParty()))
-							{
-								caster.doCast(skill);
-							}
-							else
-							{
-								if (!caster.getEffectList().isAffectedBySkill(skill.getId()))
-								{
-									final WorldObject savedTarget = target;
-									caster.setTarget(caster);
-									caster.doCast(skill);
-									caster.setTarget(savedTarget);
-								}
-							}
-						}
-						else // Target self, cast and re-target.
-						{
-							final WorldObject savedTarget = target;
-							caster.setTarget(caster);
-							caster.doCast(skill);
-							caster.setTarget(savedTarget);
-						}
-					}
+					   BUFFS: for (Integer skillId : player.getAutoUseSettings().getAutoBuffs())
+					   {
+						   // Fixes start area issue.
+						   // Already casting.
+						   // Attacking.
+						   // Player is teleporting.
+						   if (isInPeaceZone || player.isCastingNow() || player.isAttackingNow() || player.isTeleporting())
+						   {
+							   break BUFFS;
+						   }
+
+						   Playable pet = null;
+						   Skill skill = player.getKnownSkill(skillId);
+						   if (skill == null)
+						   {
+							   if (player.hasServitor() || player.hasPet())
+							   {
+								   final Summon summon = player.getSummon();
+								   skill = summon.getKnownSkill(skillId);
+								   if (skill == null)
+								   {
+									   skill = PetSkillData.getInstance().getKnownSkill(summon, skillId);
+								   }
+								   if (skill != null)
+								   {
+									   pet = summon;
+								   }
+							   }
+							   if (skill == null)
+							   {
+								   player.getAutoUseSettings().getAutoBuffs().remove(skillId);
+								   continue BUFFS;
+							   }
+						   }
+
+						   // Se estiver em party, aplicar o buff em todos os membros próximos.
+						   if (player.getParty() != null)
+						   {
+							   for (Player member : player.getParty().getMembers())
+							   {
+								   if (member == null || member.isDead() || member.isAlikeDead())
+									   continue;
+								   // Checa distância (usar mesmo range do buff)
+								   if (player.calculateDistance3D(member) > skill.getCastRange())
+									   continue;
+								   // Checa se precisa do buff
+								   if (!canCastBuff(player, member, skill))
+									   continue;
+								   // Não interrompe ação do player
+								   if (player.isCastingNow() || player.isAttackingNow() || player.isTeleporting())
+									   break BUFFS;
+								   // Aplica o buff
+								   final WorldObject savedTarget = player.getTarget();
+								   player.setTarget(member);
+								   player.doCast(skill);
+								   player.setTarget(savedTarget);
+							   }
+						   }
+						   else
+						   {
+							   // Buff use check.
+							   final WorldObject target = player.getTarget();
+							   if (!canCastBuff(player, target, skill))
+							   {
+								   continue BUFFS;
+							   }
+
+							   // Playable target cast.
+							   final Playable caster = pet != null ? pet : player;
+							   if ((target != null) && (target.isPlayable()))
+							   {
+								   final Player targetPlayer = target.asPlayer();
+								   if (((targetPlayer.getPvpFlag() == 0) && (targetPlayer.getKarma() <= 0)) || (targetPlayer.getParty() == caster.getParty()))
+								   {
+									   caster.doCast(skill);
+								   }
+								   else
+								   {
+									   if (!caster.getEffectList().isAffectedBySkill(skill.getId()))
+									   {
+										   final WorldObject savedTarget = target;
+										   caster.setTarget(caster);
+										   caster.doCast(skill);
+										   caster.setTarget(savedTarget);
+									   }
+								   }
+							   }
+							   else // Target self, cast and re-target.
+							   {
+								   final WorldObject savedTarget = target;
+								   caster.setTarget(caster);
+								   caster.doCast(skill);
+								   caster.setTarget(savedTarget);
+							   }
+						   }
+					   }
 					
 					// Continue when auto play is not enabled.
 					if (!player.isAutoPlaying())
