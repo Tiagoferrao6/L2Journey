@@ -81,15 +81,15 @@ public class AutoUseSettingsHolder
 		_autoPotionItem.set(itemId);
 	}
 
-    public int getAutoManaPotionItem()
-    {
-        return _autoManaPotionItem.get();
-    }
-
-    public void setAutoManaPotionItem(int itemId)
-    {
-        _autoManaPotionItem.set(itemId);
-    }
+	public int getAutoManaPotionItem()
+	{
+		return _autoManaPotionItem.get();
+	}
+	
+	public void setAutoManaPotionItem(int itemId)
+	{
+		_autoManaPotionItem.set(itemId);
+	}
 	
 	public boolean isAutoSkill(int skillId)
 	{
@@ -128,6 +128,6 @@ public class AutoUseSettingsHolder
 	
 	public boolean isEmpty()
 	{
-		return _autoSupplyItems.isEmpty() && (_autoPotionItem.get() == 0) && _autoSkills.isEmpty() && _autoBuffs.isEmpty() && _autoActions.isEmpty();
+		return _autoSupplyItems.isEmpty() && (_autoPotionItem.get() == 0) && (_autoManaPotionItem.get() == 0) && _autoSkills.isEmpty() && _autoBuffs.isEmpty() && _autoActions.isEmpty();
 	}
 }

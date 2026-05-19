@@ -238,16 +238,22 @@ public class AutoPlay implements IVoicedCommandHandler
 							player.getAutoPlaySettings().setNextTargetMode(3);
 							break COMMAND;
 						case "percent":
-							if ((paramArray.length > 2) && StringUtil.isNumeric(paramArray[1]) && StringUtil.isNumeric(paramArray[2]))
-							{
-								player.getAutoPlaySettings().setAutoPotionPercent(Math.max(0, Math.min(100, Integer.parseInt(paramArray[1]))));
-								player.getAutoPlaySettings().setAutoManaPotionPercent(Math.max(0, Math.min(100, Integer.parseInt(paramArray[2]))));
-							}
-							else if ((paramArray.length > 1) && StringUtil.isNumeric(paramArray[1]))
+						{
+							if ((paramArray.length > 1) && StringUtil.isNumeric(paramArray[1]))
 							{
 								player.getAutoPlaySettings().setAutoPotionPercent(Math.max(0, Math.min(100, Integer.parseInt(paramArray[1]))));
 							}
 							break COMMAND;
+						}
+						
+						case "mppercent":
+						{
+							if ((paramArray.length > 1) && StringUtil.isNumeric(paramArray[1]))
+							{
+								player.getAutoPlaySettings().setAutoManaPotionPercent(Math.max(0, Math.min(100, Integer.parseInt(paramArray[1]))));
+							}
+							break COMMAND;
+						}
 						case "start":
 							AutoPlayTaskManager.getInstance().startAutoPlay(player);
 							AutoUseTaskManager.getInstance().startAutoUseTask(player);
@@ -274,22 +280,27 @@ public class AutoPlay implements IVoicedCommandHandler
 				
 				content = content.replace("%skill_button%", Config.ENABLE_AUTO_SKILL ? "<br1><table width=295><tr><td height=31><center><button action=\"bypass voice .playskills\" value=\"Select Skills\" width=200 height=31 back=\"L2UI_CT1.Button_DF_Down\" fore=\"L2UI_CT1.Button_DF\"></center></td></tr></table>" : "");
 				content = content.replace("%item_button%", Config.ENABLE_AUTO_ITEM ? "<br1><table width=295><tr><td height=31><center><button action=\"bypass voice .playitems\" value=\"Select Supply Items\" width=200 height=31 back=\"L2UI_CT1.Button_DF_Down\" fore=\"L2UI_CT1.Button_DF\"></center></td></tr></table>" : "");
-				content = content.replace("%potion_button%", Config.ENABLE_AUTO_POTION ?
-					"<br1><table width=295>"
+				content = content.replace("%potion_button%", Config.ENABLE_AUTO_POTION ? "<br1><table width=295>"
+					
 					+ "<tr><td height=31 colspan=2><center><button action=\"bypass voice .playpotion\" value=\"Selecionar Poção de HP\" width=200 height=31 back=\"L2UI_CT1.Button_DF_Down\" fore=\"L2UI_CT1.Button_DF\"></center></td></tr>"
+					
 					+ "<tr><td height=31 colspan=2><center><button action=\"bypass voice .plaympotion\" value=\"Selecionar Poção de MP\" width=200 height=31 back=\"L2UI_CT1.Button_DF_Down\" fore=\"L2UI_CT1.Button_DF\"></center></td></tr>"
-					+ "<tr><td colspan=2><center>"
-					+   "<table width=295><tr>"
-					+     "<td width=140 align=right><font color=\"CDB67F\">HP Percent (%percent%)</font></td>"
-					+     "<td width=40><edit var=\"percentbox\" width=30 height=15></td>"
-					+     "<td width=20></td>"
-					+     "<td width=140 align=left><font color=\"CDB67F\">MP Percent (%mppercent%)</font></td>"
-					+     "<td width=40><edit var=\"mppercentbox\" width=30 height=15></td>"
-					+   "</tr></table>"
-					+ "</center></td></tr>"
-					+ "<tr><td colspan=2><center><button value=\"Aplicar\" action=\"bypass voice .play percent $percentbox $mppercentbox\" width=90 height=22 back=\"L2UI_CT1.Button_DF_Down\" fore=\"L2UI_CT1.Button_DF\"></center></td></tr>"
-					+ "</table>"
-				: "");
+					
+					+ "<tr>" + "<td colspan=2>" + "<center>"
+					
+					+ "<table width=260 border=0 cellspacing=0 cellpadding=0>" + "<tr>"
+					
+					+ "<td width=120 align=center>" + "<font color=\"CDB67F\">HP Percent (%percent%)</font><br1>" + "<edit var=\"percentbox\" width=32 height=15>" + "<br>" + "<button value=\"Set HP\" action=\"bypass voice .play percent $percentbox\" width=70 height=22 back=\"L2UI_CT1.Button_DF_Down\" fore=\"L2UI_CT1.Button_DF\">" + "</td>"
+					
+					+ "<td width=20></td>"
+					
+					+ "<td width=120 align=center>" + "<font color=\"CDB67F\">MP Percent (%mppercent%)</font><br1>" + "<edit var=\"mppercentbox\" width=32 height=15>" + "<br>" + "<button value=\"Set MP\" action=\"bypass voice .play mppercent $mppercentbox\" width=70 height=22 back=\"L2UI_CT1.Button_DF_Down\" fore=\"L2UI_CT1.Button_DF\">" + "</td>"
+					
+					+ "</tr>" + "</table>"
+					
+					+ "</center>" + "</td>" + "</tr>"
+					
+					+ "</table>" : "");
 				
 				content = content.replace("%percent%", String.valueOf(player.getAutoPlaySettings().getAutoPotionPercent()));
 				content = content.replace("%mppercent%", String.valueOf(player.getAutoPlaySettings().getAutoManaPotionPercent()));
@@ -520,7 +531,7 @@ public class AutoPlay implements IVoicedCommandHandler
 						}
 					}
 				}
-
+				
 				final String[] paramArray = params == null ? new String[0] : params.split(" ");
 				if (paramArray.length > 1)
 				{
@@ -537,7 +548,7 @@ public class AutoPlay implements IVoicedCommandHandler
 						}
 					}
 				}
-
+				
 				final int max = HtmlUtil.countPageNumber(items.size(), PAGE_LIMIT);
 				int page = ((params == null) || paramArray[0].isEmpty()) ? 1 : Integer.parseInt(paramArray[0]);
 				if (page > max)
@@ -548,7 +559,7 @@ public class AutoPlay implements IVoicedCommandHandler
 				{
 					page = 1;
 				}
-
+				
 				final StringBuilder sb = new StringBuilder();
 				List<ItemTemplate> subList = items.subList(Math.max(0, (page - 1) * PAGE_LIMIT), Math.min(page * PAGE_LIMIT, items.size()));
 				if (subList.isEmpty())
@@ -603,7 +614,7 @@ public class AutoPlay implements IVoicedCommandHandler
 						}
 					}
 				}
-
+				
 				final String[] paramArray = params == null ? new String[0] : params.split(" ");
 				if (paramArray.length > 1)
 				{
@@ -620,7 +631,7 @@ public class AutoPlay implements IVoicedCommandHandler
 						}
 					}
 				}
-
+				
 				final int max = HtmlUtil.countPageNumber(items.size(), PAGE_LIMIT);
 				int page = ((params == null) || paramArray[0].isEmpty()) ? 1 : Integer.parseInt(paramArray[0]);
 				if (page > max)
@@ -631,7 +642,7 @@ public class AutoPlay implements IVoicedCommandHandler
 				{
 					page = 1;
 				}
-
+				
 				final StringBuilder sb = new StringBuilder();
 				List<ItemTemplate> subList = items.subList(Math.max(0, (page - 1) * PAGE_LIMIT), Math.min(page * PAGE_LIMIT, items.size()));
 				if (subList.isEmpty())
