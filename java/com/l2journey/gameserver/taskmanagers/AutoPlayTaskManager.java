@@ -52,7 +52,7 @@ import com.l2journey.gameserver.util.LocationUtil;
 
 /**
  * AutoPlay task manager. Fixes: - Remove periodic ValidateLocation packet that caused visible character "reload"/rubberband. - Make party assist exclusive so followers do not pick independent targets while assisting leader.
- * @author Mobius, KingHanker, Mafia
+ * @author Mobius, KingHanker, Mafias
  */
 public class AutoPlayTaskManager
 {

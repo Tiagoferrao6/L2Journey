@@ -35,7 +35,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * @author Mobius
+ * @author Mobius, KingHanker, Mafias
  */
 public class AutoUseSettingsHolder
 {
@@ -80,7 +80,7 @@ public class AutoUseSettingsHolder
 	{
 		_autoPotionItem.set(itemId);
 	}
-
+	
 	public int getAutoManaPotionItem()
 	{
 		return _autoManaPotionItem.get();

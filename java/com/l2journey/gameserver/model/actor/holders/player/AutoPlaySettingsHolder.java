@@ -32,7 +32,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * @author Mobius
+ * @author Mobius, KingHanker, Mafias
  */
 public class AutoPlaySettingsHolder
 {
@@ -107,14 +107,14 @@ public class AutoPlaySettingsHolder
 	{
 		_autoPotionPercent.set(value);
 	}
-
-    public int getAutoManaPotionPercent()
-    {
-        return _autoManaPotionPercent.get();
-    }
-
-    public void setAutoManaPotionPercent(int value)
-    {
-        _autoManaPotionPercent.set(value);
-    }
+	
+	public int getAutoManaPotionPercent()
+	{
+		return _autoManaPotionPercent.get();
+	}
+	
+	public void setAutoManaPotionPercent(int value)
+	{
+		_autoManaPotionPercent.set(value);
+	}
 }

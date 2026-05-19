@@ -64,8 +64,7 @@ import com.l2journey.gameserver.taskmanagers.AutoUseTaskManager;
 import com.l2journey.gameserver.util.HtmlUtil;
 
 /**
- * @author Mobius
- * @author L2Journey
+ * @author Mobius, L2Journey, KingHanker, Mafias
  */
 public class AutoPlay implements IVoicedCommandHandler
 {

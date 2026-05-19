@@ -779,11 +779,22 @@
 	</skill>
 	<skill id="6262" levels="1" name="EMP Power">
 		<set name="operateType" val="A1" />
-		<set name="targetType" val="NONE" />
+		<set name="abnormalTime" val="3" />
+		<set name="abnormalType" val="STUN" />
+		<set name="abnormalVisualEffect" val="STUN" />
+		<set name="targetType" val="ONE" />
 		<set name="coolTime" val="500" />
 		<set name="effectPoint" val="-100" />
 		<set name="magicLevel" val="76" />
 		<set name="reuseDelay" val="30000" />
+		<set name="power" val="1046" />
+		<set name="hitTime" val="2000" />
+		<set name="mpConsume" val="78" />
+		<set name="element" val="0" /> <!-- Fire -->
+		<set name="overHit" val="true" />
+		<effects>
+			<effect name="PhysicalDamage" />
+		</effects>
 	</skill>
 	<skill id="6263" levels="1" name="EMP Shock">
 		<!-- Momentarily causes shock and stuns the enemy for 2 seconds. -->

@@ -52,7 +52,7 @@ import com.l2journey.gameserver.model.skill.targets.TargetType;
 import com.l2journey.gameserver.model.zone.ZoneId;
 
 /**
- * @author Mobius
+ * @author Mobius, KingHanker, Mafias
  */
 public class AutoUseTaskManager
 {
@@ -175,7 +175,7 @@ public class AutoUseTaskManager
 						}
 					}
 				}
-
+				
 				// Checa MP (independente do HP)
 				if (Config.ENABLE_AUTO_POTION && !isInPeaceZone && (player.getCurrentMpPercent() < player.getAutoPlaySettings().getAutoManaPotionPercent()))
 				{
