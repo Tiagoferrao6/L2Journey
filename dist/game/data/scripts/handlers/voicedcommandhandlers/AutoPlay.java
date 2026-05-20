@@ -499,12 +499,26 @@ public class AutoPlay implements IVoicedCommandHandler
 					for (Skill skill : subSkills)
 					{
 						sb.append(((row % 2) == 0 ? "<table width=\"295\" bgcolor=\"000000\"><tr>" : "<table width=\"295\"><tr>"));
+						
 						boolean isSelected = player.getAutoUseSettings().getAutoBuffs().contains(skill.getId()) || player.getAutoUseSettings().getAutoSkills().contains(skill.getId());
+						
 						sb.append("<td height=40 width=40><img src=\"" + skill.getIcon() + "\" width=32 height=32></td><td width=190>" + (isSelected ? skill.getName() : "<font color=\"B09878\">" + skill.getName() + "</font>") + "</td><td><button value=\" \" action=\"bypass voice .playskills " + page + " " + skill.getId() + "\" width=32 height=32 back=\"" + (isSelected ? "L2UI_CH3.mapbutton_zoomout2" : "L2UI_CH3.mapbutton_zoomin2") + "\" fore=\"" + (isSelected ? "L2UI_CH3.mapbutton_zoomout1" : "L2UI_CH3.mapbutton_zoomin1") + "\"></td>");
+						
 						sb.append("</tr></table><img src=\"L2UI.SquareGray\" width=295 height=1>");
 						row++;
 					}
+					
+					sb.append("<br><img src=\"L2UI.SquareGray\" width=295 height=1><table width=\"100%\" bgcolor=000000><tr>");
+					
+					sb.append("<td align=left width=70>" + (page > 1 ? "<a action=\"bypass voice .playskills " + (page - 1) + "\"><font color=\"CDB67F\">Previous</font></a>" : "<font color=\"B09878\">Previous</font>") + "</td>");
+					
+					sb.append("<td align=center width=100>Page " + page + " of " + max + "</td>");
+					
+					sb.append("<td align=right width=70>" + (page < max ? "<a action=\"bypass voice .playskills " + (page + 1) + "\"><font color=\"CDB67F\">Next</font></a>" : "<font color=\"B09878\">Next</font>") + "</td>");
+					
+					sb.append("</tr></table><img src=\"L2UI.SquareGray\" width=295 height=1>");
 				}
+				
 				html.setHtml(content.replace("%skills%", sb.toString()));
 				player.sendPacket(html);
 				break;

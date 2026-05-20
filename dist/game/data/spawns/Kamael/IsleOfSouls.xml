@@ -45,6 +45,7 @@
 		<npc id="22232" x="-126513" y="60944" z="-2653" heading="11487" respawnDelay="60" />
 		<npc id="22232" x="-126428" y="61043" z="-2644" heading="8985" respawnDelay="60" />
 		<npc id="22233" x="-126422" y="61504" z="-2672" heading="30260" respawnDelay="60" />
+		<npc id="22232" x="-126366" y="60695" z="-2659" heading="37306" respawnDelay="60" />
 		<npc id="22234" x="-126363" y="76414" z="-3280" heading="31472" respawnDelay="60" />
 		<npc id="22232" x="-126313" y="61901" z="-2733" heading="54313" respawnDelay="60" />
 		<npc id="22232" x="-126296" y="60589" z="-2687" heading="23102" respawnDelay="60" />
@@ -58,6 +59,7 @@
 		<npc id="22234" x="-126044" y="83033" z="-3400" heading="21406" respawnDelay="60" />
 		<npc id="22232" x="-126038" y="60651" z="-2647" heading="64304" respawnDelay="60" />
 		<npc id="22234" x="-126029" y="75245" z="-3304" heading="34677" respawnDelay="60" />
+		<npc id="22232" x="-125998" y="60395" z="-2679" heading="59134" respawnDelay="60" />
 		<npc id="22235" x="-125996" y="75033" z="-3296" heading="59535" respawnDelay="60" />
 		<npc id="22232" x="-125958" y="60966" z="-2633" heading="39362" respawnDelay="60" />
 		<npc id="22234" x="-125958" y="83348" z="-3408" heading="15669" respawnDelay="60" />
@@ -160,6 +162,8 @@
 		<npc id="22232" x="-123691" y="68804" z="-3077" heading="50373" respawnDelay="60" />
 		<npc id="22232" x="-123687" y="57401" z="-2235" heading="50272" respawnDelay="60" />
 		<npc id="22232" x="-123673" y="69549" z="-3116" heading="38345" respawnDelay="60" />
+		<npc id="22230" x="-123655" y="54639" z="-1728" heading="45797" respawnDelay="60" />
+		<npc id="22231" x="-123643" y="54719" z="-1728" heading="4957" respawnDelay="60" />
 		<npc id="22232" x="-123629" y="64008" z="-2656" heading="42531" respawnDelay="60" />
 		<npc id="22235" x="-123628" y="80053" z="-3440" heading="26951" respawnDelay="60" />
 		<npc id="22235" x="-123610" y="77975" z="-3352" heading="57879" respawnDelay="60" />
@@ -193,6 +197,7 @@
 		<npc id="22232" x="-123278" y="63498" z="-2639" heading="55267" respawnDelay="60" />
 		<npc id="22232" x="-123275" y="69408" z="-3066" heading="58318" respawnDelay="60" />
 		<npc id="22229" x="-123246" y="44540" z="944" heading="28543" respawnDelay="60" />
+		<npc id="22229" x="-123243" y="54843" z="-1704" heading="10250" respawnDelay="60" />
 		<npc id="22233" x="-123236" y="69741" z="-3056" heading="30260" respawnDelay="60" />
 		<npc id="22231" x="-123217" y="62451" z="-2544" heading="40575" respawnDelay="60" />
 		<npc id="22229" x="-123215" y="44188" z="920" heading="45362" respawnDelay="60" />
@@ -204,6 +209,7 @@
 		<npc id="22235" x="-123084" y="79586" z="-3416" heading="18098" respawnDelay="60" />
 		<npc id="22228" x="-123068" y="44601" z="968" heading="30359" respawnDelay="60" />
 		<npc id="22232" x="-123012" y="71995" z="-2979" heading="44894" respawnDelay="60" />
+		<npc id="22231" x="-122981" y="54888" z="-1664" heading="64720" respawnDelay="60" />
 		<npc id="22232" x="-122972" y="63348" z="-2611" heading="12000" respawnDelay="60" />
 		<npc id="22232" x="-122958" y="62953" z="-2581" heading="37656" respawnDelay="60" />
 		<npc id="22233" x="-122958" y="72148" z="-2968" heading="5365" respawnDelay="60" />
@@ -259,6 +265,7 @@
 		<npc id="32183" x="-122254" y="73438" z="-2872" heading="16384" respawnDelay="60" />
 		<npc id="22233" x="-122241" y="62001" z="-2496" heading="32767" respawnDelay="60" />
 		<npc id="22233" x="-122237" y="71474" z="-2944" heading="45111" respawnDelay="60" />
+		<npc id="22231" x="-122230" y="54543" z="-1512" heading="27438" respawnDelay="60" />
 		<npc id="22232" x="-122227" y="62871" z="-2526" heading="44175" respawnDelay="60" />
 		<npc id="22232" x="-122188" y="63767" z="-2564" heading="29723" respawnDelay="60" />
 		<npc id="22230" x="-122179" y="54639" z="-1512" heading="8873" respawnDelay="60" />
@@ -286,6 +293,7 @@
 		<npc id="22232" x="-122015" y="63715" z="-2514" heading="30435" respawnDelay="60" />
 		<npc id="22236" x="-122009" y="89452" z="-3696" heading="53402" respawnDelay="60" />
 		<npc id="22234" x="-121982" y="77721" z="-3144" heading="44950" respawnDelay="60" />
+		<npc id="22229" x="-121979" y="54601" z="-1496" heading="36451" respawnDelay="60" />
 		<npc id="22232" x="-121977" y="62982" z="-2522" heading="5731" respawnDelay="60" />
 		<npc id="22236" x="-121973" y="90169" z="-3592" heading="12610" respawnDelay="60" />
 		<npc id="22234" x="-121895" y="78282" z="-3168" heading="26783" respawnDelay="60" />
@@ -293,7 +301,9 @@
 		<npc id="22232" x="-121876" y="60458" z="-2356" heading="59989" respawnDelay="60" />
 		<npc id="22234" x="-121841" y="80400" z="-3120" heading="13987" respawnDelay="60" />
 		<npc id="22235" x="-121818" y="79801" z="-3136" heading="25841" respawnDelay="60" />
+		<npc id="22230" x="-121814" y="54675" z="-1504" heading="64517" respawnDelay="60" />
 		<npc id="22235" x="-121809" y="78257" z="-3176" heading="59981" respawnDelay="60" />
+		<npc id="22232" x="-121804" y="63667" z="-2489" heading="21840" respawnDelay="60" />
 		<npc id="22232" x="-121788" y="63455" z="-2517" heading="9087" respawnDelay="60" />
 		<npc id="22232" x="-121752" y="72287" z="-2963" heading="6631" respawnDelay="60" />
 		<npc id="22235" x="-121723" y="78056" z="-3144" heading="44232" respawnDelay="60" />
@@ -308,12 +318,16 @@
 		<npc id="22232" x="-121566" y="60619" z="-2310" heading="2756" respawnDelay="60" />
 		<npc id="22235" x="-121560" y="90436" z="-3656" heading="33245" respawnDelay="60" />
 		<npc id="22228" x="-121558" y="37934" z="1416" heading="59770" respawnDelay="60" />
+		<npc id="22233" x="-121528" y="61687" z="-2336" heading="39931" respawnDelay="60" />
 		<npc id="22232" x="-121452" y="60719" z="-2296" heading="19570" respawnDelay="60" />
+		<npc id="22230" x="-121431" y="51625" z="-1048" heading="35862" respawnDelay="60" />
 		<npc id="22232" x="-121430" y="60385" z="-2278" heading="29753" respawnDelay="60" />
 		<npc id="22234" x="-121430" y="80768" z="-3096" heading="34072" respawnDelay="60" />
 		<npc id="22229" x="-121420" y="40354" z="1320" heading="53806" respawnDelay="60" />
 		<npc id="22232" x="-121417" y="60608" z="-2287" heading="35000" respawnDelay="60" />
+		<npc id="22230" x="-121364" y="51381" z="-1056" heading="52055" respawnDelay="60" />
 		<npc id="22229" x="-121338" y="52504" z="-1176" heading="43020" respawnDelay="60" />
+		<npc id="22230" x="-121304" y="51215" z="-1080" heading="49974" respawnDelay="60" />
 		<npc id="22234" x="-121292" y="86866" z="-3480" heading="59525" respawnDelay="60" />
 		<npc id="22232" x="-121272" y="60338" z="-2250" heading="13641" respawnDelay="60" />
 		<npc id="22235" x="-121224" y="80665" z="-3096" heading="3341" respawnDelay="60" />
@@ -331,6 +345,7 @@
 		<npc id="22230" x="-121031" y="52635" z="-1224" heading="36125" respawnDelay="60" />
 		<npc id="22230" x="-121025" y="58978" z="-2072" heading="42420" respawnDelay="60" />
 		<npc id="22230" x="-120992" y="57452" z="-1952" heading="21469" respawnDelay="60" />
+		<npc id="22229" x="-120973" y="53695" z="-1360" heading="28363" respawnDelay="60" />
 		<npc id="22236" x="-120967" y="91625" z="-3712" heading="12545" respawnDelay="60" />
 		<npc id="22236" x="-120936" y="86560" z="-3520" heading="260" respawnDelay="60" />
 		<npc id="22230" x="-120930" y="50334" z="-1096" heading="55681" respawnDelay="60" />
@@ -340,6 +355,7 @@
 		<npc id="22228" x="-120822" y="39995" z="1360" heading="55391" respawnDelay="60" />
 		<npc id="22230" x="-120803" y="59372" z="-2080" heading="51641" respawnDelay="60" />
 		<npc id="22235" x="-120803" y="81526" z="-3120" heading="1836" respawnDelay="60" />
+		<npc id="22230" x="-120802" y="53176" z="-1264" heading="38441" respawnDelay="60" />
 		<npc id="22232" x="-120738" y="60429" z="-2133" heading="11095" respawnDelay="60" />
 		<npc id="32154" x="-120706" y="45079" z="408" heading="6956" respawnDelay="60" />
 		<npc id="22229" x="-120706" y="50079" z="-1088" heading="28449" respawnDelay="60" />
@@ -359,6 +375,7 @@
 		<npc id="22230" x="-120529" y="56135" z="-1640" heading="47228" respawnDelay="60" />
 		<npc id="22229" x="-120496" y="52850" z="-1200" heading="45051" respawnDelay="60" />
 		<npc id="22229" x="-120493" y="40127" z="1376" heading="10250" respawnDelay="60" />
+		<npc id="22229" x="-120470" y="53759" z="-1272" heading="5566" respawnDelay="60" />
 		<npc id="22228" x="-120469" y="39799" z="1360" heading="23946" respawnDelay="60" />
 		<npc id="22230" x="-120466" y="50402" z="-1040" heading="45797" respawnDelay="60" />
 		<npc id="22228" x="-120460" y="39320" z="1408" heading="26880" respawnDelay="60" />
@@ -454,6 +471,7 @@
 		<npc id="32161" x="-118527" y="47955" z="464" heading="32936" respawnDelay="60" />
 		<npc id="22228" x="-118520" y="37335" z="1320" heading="710" respawnDelay="60" />
 		<npc id="22235" x="-118425" y="88325" z="-3576" heading="1226" respawnDelay="60" />
+		<npc id="22229" x="-118353" y="51024" z="-1080" heading="26490" respawnDelay="60" />
 		<npc id="22229" x="-118313" y="50686" z="-1056" heading="52748" respawnDelay="60" />
 		<npc id="32145" x="-118192" y="42384" z="824" heading="16400" respawnDelay="60" />
 		<npc id="22228" x="-118191" y="37783" z="1296" heading="7015" respawnDelay="60" />
@@ -474,6 +492,7 @@
 		<npc id="22229" x="-117921" y="37971" z="1296" heading="65434" respawnDelay="60" />
 		<npc id="32157" x="-117824" y="48080" z="464" heading="50060" respawnDelay="60" />
 		<npc id="22230" x="-117731" y="49735" z="-928" heading="63080" respawnDelay="60" />
+		<npc id="22230" x="-117658" y="51025" z="-784" heading="38759" respawnDelay="60" />
 		<npc id="22236" x="-117637" y="88689" z="-3680" heading="55191" respawnDelay="60" />
 		<npc id="32158" x="-117605" y="48079" z="456" heading="43644" respawnDelay="60" />
 		<npc id="22228" x="-117573" y="38437" z="1352" heading="13448" respawnDelay="60" />
@@ -504,6 +523,7 @@
 		<npc id="22229" x="-116616" y="50154" z="-784" heading="7681" respawnDelay="60" />
 		<npc id="22236" x="-116594" y="86133" z="-3552" heading="56913" respawnDelay="60" />
 		<npc id="22228" x="-116587" y="38543" z="1296" heading="6711" respawnDelay="60" />
+		<npc id="22229" x="-116557" y="49472" z="-856" heading="15138" respawnDelay="60" />
 		<npc id="22235" x="-116498" y="86327" z="-3552" heading="15180" respawnDelay="60" />
 		<npc id="22229" x="-116416" y="38799" z="1328" heading="33463" respawnDelay="60" />
 		<npc id="22228" x="-116350" y="38366" z="1296" heading="17145" respawnDelay="60" />
@@ -1402,20 +1422,63 @@
 		<npc id="22243" x="-74426" y="45176" z="-2992" heading="0" respawnDelay="60" />
 		<npc id="32189" x="-74016" y="51932" z="-3680" heading="0" respawnDelay="60" />
 		<npc id="32190" x="-74016" y="52896" z="-3680" heading="0" respawnDelay="60" />
-		<npc id="22229" x="-118292" y="51176" z="-1119" heading="23569" respawnDelay="60" /> <!-- Young Grey Keltir -->
-		<npc id="22229" x="-116637" y="49818" z="-876" heading="52833" respawnDelay="60" /> <!-- Young Grey Keltir -->
-		<npc id="22230" x="-117450" y="50372" z="-855" heading="35764" respawnDelay="60" /> <!-- Grey Keltir -->
-		<npc id="22231" x="-123592" y="55471" z="-1844" heading="48451" respawnDelay="60" /> <!-- Dominant Grey Keltir -->
-		<npc id="22230" x="-123506" y="55155" z="-1808" heading="35174" respawnDelay="60" /> <!-- Grey Keltir -->
-		<npc id="22229" x="-122741" y="55517" z="-1742" heading="6613" respawnDelay="60" /> <!-- Young Grey Keltir -->
-		<npc id="22231" x="-122801" y="55205" z="-1708" heading="36379" respawnDelay="60" /> <!-- Dominant Grey Keltir -->
-		<npc id="22229" x="-122134" y="55450" z="-1655" heading="8191" respawnDelay="60" /> <!-- Young Grey Keltir -->
-		<npc id="22230" x="-121206" y="54629" z="-1524" heading="60695" respawnDelay="60" /> <!-- Grey Keltir -->
-		<npc id="22231" x="-121565" y="53993" z="-1469" heading="41948" respawnDelay="60" /> <!-- Dominant Grey Keltir -->
-		<npc id="22229" x="-122013" y="53037" z="-1240" heading="32581" respawnDelay="60" /> <!-- Young Grey Keltir -->
-		<npc id="22230" x="-121794" y="53015" z="-1225" heading="64491" respawnDelay="60" /> <!-- Grey Keltir -->
-		<npc id="22229" x="-121839" y="53402" z="-1276" heading="17053" respawnDelay="60" /> <!-- Young Grey Keltir -->
-		<npc id="22230" x="-121238" y="51911" z="-1150" heading="50842" respawnDelay="60" /> <!-- Grey Keltir -->
-		<npc id="22230" x="-121547" y="52754" z="-1192" heading="22205" respawnDelay="60" /> <!-- Grey Keltir -->
+	</spawn>
+	<spawn zone="aden49_1719_11">
+		<territory minZ="-3035" maxZ="-2401">
+			<node x="-89083" y="46939" />
+			<node x="-87188" y="47790" />
+			<node x="-87305" y="48201" />
+			<node x="-89225" y="47403" />
+		</territory>
+		<npc id="22246" count="1" respawnDelay="15" /> <!-- Muertos Commander -->
+	</spawn>
+	<spawn zone="aden49_1719_12">
+		<territory minZ="-3035" maxZ="-2401">
+			<node x="-91111" y="44494" />
+			<node x="-89681" y="45443" />
+			<node x="-89512" y="46850" />
+			<node x="-89939" y="47295" />
+			<node x="-93199" y="46189" />
+		</territory>
+		<npc id="22246" count="2" respawnDelay="15" /> <!-- Muertos Commander -->
+	</spawn>
+	<spawn zone="aden49_1719_13">
+		<territory minZ="-2658" maxZ="-1645">
+			<node x="-93234" y="42915" />
+			<node x="-92114" y="42829" />
+			<node x="-90951" y="44143" />
+			<node x="-91944" y="45076" />
+			<node x="-93363" y="43383" />
+		</territory>
+		<npc id="22246" count="2" respawnDelay="15" /> <!-- Muertos Commander -->
+	</spawn>
+	<spawn zone="aden49_1719_14">
+		<territory minZ="-2658" maxZ="-1645">
+			<node x="-93931" y="43326" />
+			<node x="-92778" y="44344" />
+			<node x="-92283" y="44998" />
+			<node x="-93231" y="45561" />
+			<node x="-94817" y="44084" />
+		</territory>
+		<npc id="22246" count="2" respawnDelay="15" /> <!-- Muertos Commander -->
+	</spawn>
+	<spawn zone="aden49_1719_15">
+		<territory minZ="-2658" maxZ="-1645">
+			<node x="-94881" y="44564" />
+			<node x="-93088" y="45941" />
+			<node x="-93746" y="46534" />
+			<node x="-95375" y="45292" />
+		</territory>
+		<npc id="22246" count="2" respawnDelay="15" /> <!-- Muertos Commander -->
+	</spawn>
+	<spawn zone="aden49_1719_16">
+		<territory minZ="-2658" maxZ="-1645">
+			<node x="-98222" y="44553" />
+			<node x="-96535" y="44420" />
+			<node x="-95184" y="44921" />
+			<node x="-95473" y="45395" />
+			<node x="-98189" y="45473" />
+		</territory>
+		<npc id="22246" count="2" respawnDelay="15" /> <!-- Muertos Commander -->
 	</spawn>
 </list>
