@@ -9,7 +9,8 @@
 		<npc id="22139" x="-20105" y="-39783" z="-10783" heading="9483" respawnDelay="60" /> <!-- Old Aristocrat's Soldier -->
 		<npc id="22139" x="-19766" y="-43585" z="-10758" heading="33441" respawnDelay="60" /> <!-- Old Aristocrat's Soldier -->
 		<npc id="22139" x="-19345" y="-41780" z="-10725" heading="10251" respawnDelay="60" /> <!-- Old Aristocrat's Soldier -->
-		<npc id="22139" x="-19764" y="-37938" z="-10784" heading="32614" respawnDelay="60" /> <!-- Old Aristocrat's Soldier -->
+		<npc id="22139" x="-17886" y="-42848" z="-10725" heading="17100" respawnDelay="60" /> <!-- Old Aristocrat's Soldier -->
+		<npc id="22139" x="-17809" y="-37901" z="-10725" heading="47429" respawnDelay="60" /> <!-- Old Aristocrat's Soldier -->
 		<npc id="22139" x="-17619" y="-40821" z="-10725" heading="45039" respawnDelay="60" /> <!-- Old Aristocrat's Soldier -->
 		<npc id="22139" x="-13519" y="-43539" z="-10725" heading="817" respawnDelay="60" /> <!-- Old Aristocrat's Soldier -->
 		<npc id="22139" x="-12971" y="-39915" z="-10758" heading="35143" respawnDelay="60" /> <!-- Old Aristocrat's Soldier -->
@@ -41,7 +42,7 @@
 		<npc id="22140" x="-15171" y="-41568" z="-10725" heading="16535" respawnDelay="60" /> <!-- Zombie Worker -->
 		<npc id="22140" x="-15165" y="-40378" z="-10725" heading="57526" respawnDelay="60" /> <!-- Zombie Worker -->
 		<npc id="22140" x="-15135" y="-39452" z="-10725" heading="11376" respawnDelay="60" /> <!-- Zombie Worker -->
-		<npc id="22140" x="-12868" y="-37854" z="-10774" heading="469" respawnDelay="60" /> <!-- Zombie Worker -->
+		<npc id="22140" x="-14837" y="-37923" z="-10725" heading="15439" respawnDelay="60" /> <!-- Zombie Worker -->
 		<npc id="22140" x="-13164" y="-39841" z="-10736" heading="7405" respawnDelay="60" /> <!-- Zombie Worker -->
 		<npc id="22140" x="-13134" y="-37770" z="-10728" heading="6344" respawnDelay="60" /> <!-- Zombie Worker -->
 		<npc id="22140" x="-13098" y="-43422" z="-10784" heading="30495" respawnDelay="60" /> <!-- Zombie Worker -->
@@ -351,6 +352,7 @@
 		<npc id="22176" x="-16529" y="-46310" z="-10821" heading="17047" respawnDelay="60" /> <!-- Andreas' Royal Guards -->
 		<npc id="22176" x="-16513" y="-49019" z="-10917" heading="15756" respawnDelay="60" /> <!-- Andreas' Royal Guards -->
 		<npc id="22176" x="-16497" y="-48344" z="-10917" heading="16215" respawnDelay="60" /> <!-- Andreas' Royal Guards -->
+		<npc id="22176" x="-16198" y="-44753" z="-10725" heading="16583" respawnDelay="60" /> <!-- Andreas' Royal Guards -->
 		<npc id="22176" x="-16177" y="-49925" z="-10917" heading="16622" respawnDelay="60" /> <!-- Andreas' Royal Guards -->
 		<npc id="22176" x="-16166" y="-47732" z="-10821" heading="16430" respawnDelay="60" /> <!-- Andreas' Royal Guards -->
 		<npc id="22176" x="-16165" y="-49237" z="-10917" heading="16091" respawnDelay="60" /> <!-- Andreas' Royal Guards -->
@@ -370,11 +372,14 @@
 		<npc id="32037" x="-16629" y="-44290" z="-10725" heading="54566" respawnDelay="60" /> <!-- Temple Gatekeeper -->
 		<npc id="32040" x="-11986" y="-35903" z="-10857" heading="31655" respawnDelay="60" /> <!-- Triol's Mirror -->
 		<npc id="32068" x="-20229" y="-54359" z="-11114" heading="51269" respawnDelay="60" /> <!-- Triol's Revelation -->
+		<npc id="32068" x="-18161" y="-52778" z="-11013" heading="52976" respawnDelay="60" /> <!-- Triol's Revelation -->
+		<npc id="32068" x="-18079" y="-54816" z="-10603" heading="975" respawnDelay="60" /> <!-- Triol's Revelation -->
+		<npc id="32068" x="-17342" y="-54874" z="-10449" heading="12821" respawnDelay="60" /> <!-- Triol's Revelation -->
 		<npc id="32068" x="-16396" y="-56768" z="-10850" heading="12416" respawnDelay="60" /> <!-- Triol's Revelation -->
+		<npc id="32068" x="-15223" y="-54847" z="-10449" heading="11069" respawnDelay="60" /> <!-- Triol's Revelation -->
+		<npc id="32068" x="-14686" y="-54745" z="-10603" heading="19962" respawnDelay="60" /> <!-- Triol's Revelation -->
+		<npc id="32068" x="-14590" y="-52790" z="-11013" heading="54609" respawnDelay="60" /> <!-- Triol's Revelation -->
 		<npc id="32068" x="-12761" y="-52626" z="-10938" heading="58419" respawnDelay="60" /> <!-- Triol's Revelation -->
 		<npc id="32068" x="-12479" y="-54302" z="-11114" heading="20834" respawnDelay="60" /> <!-- Triol's Revelation -->
-		<npc id="32068" x="-20152" y="-52640" z="-10964" heading="64038" respawnDelay="60" /> <!-- Triol's Revelation -->
-		<npc id="22139" x="-19661" y="-43542" z="-10784" heading="32493" respawnDelay="60" /> <!-- Old Aristocrat's Soldier -->
-		<npc id="22176" x="-15260" y="-44953" z="-10751" heading="20555" respawnDelay="60" /> <!-- Andreas' Royal Guards -->
 	</spawn>
 </list>
