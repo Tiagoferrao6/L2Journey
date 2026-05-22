@@ -61,6 +61,7 @@ import com.l2journey.gameserver.model.item.type.EtcItemType;
 import com.l2journey.gameserver.model.item.type.WeaponType;
 import com.l2journey.gameserver.model.skill.Skill;
 import com.l2journey.gameserver.model.skill.holders.SkillHolder;
+import com.l2journey.gameserver.model.variables.ItemVariables;
 import com.l2journey.gameserver.network.serverpackets.SkillCoolTime;
 
 /**
@@ -1078,10 +1079,23 @@ public abstract class Inventory extends ItemContainer
 		final Item item = _paperdoll[slot];
 		if (item != null)
 		{
+			// Transmog tem prioridade: lê da ItemVariables
+			if (Config.ENABLE_TRANSMOG)
+			{
+				final ItemVariables vars = item.getVariables();
+				final int transmogId = vars.getInt(ItemVariables.TRANSMOG_ID, 0);
+				if (transmogId > 0)
+				{
+					return transmogId;
+				}
+			}
+			
+			// Fallback: dressme (visual_item_id)
 			if (item.getVisualItemId() > 0)
 			{
 				return item.getVisualItemId();
 			}
+			
 			return item.getDisplayId();
 		}
 		return 0;
