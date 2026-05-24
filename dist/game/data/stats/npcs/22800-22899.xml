@@ -2069,6 +2069,12 @@
 	<npc id="22827" level="84" type="Monster" name="Batwing Drake">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
+			<param name="MoveAroundSocial" value="140" />
+			<param name="MoveAroundSocial1" value="140" />
+			<param name="MoveAroundSocial2" value="140" />
+			<minions name="Privates">
+				<npc id="22828" count="2" respawnTime="150" weightPoint="1" /> <!-- Lost Guard -->
+			</minions>
 			<param name="IsAggressive" value="1" />
 			<skill name="Skill01_ID" id="6866" level="1" /> <!-- Vampiric Claw -->
 			<skill name="Skill02_ID" id="6866" level="1" /> <!-- Vampiric Claw -->
@@ -2145,6 +2151,10 @@
 	<npc id="22828" level="83" type="Monster" name="Parasitic Leech">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
+			<param name="MoveAroundSocial" value="80" />
+			<param name="MoveAroundSocial1" value="80" />
+			<param name="MoveAroundSocial2" value="80" />
+            <param name="LongRangeGuardRate" value="5" />
 			<param name="IsAggressive" value="1" />
 			<param name="Skill02_Probablity" value="1111" />
 			<skill name="Skill01_ID" id="6870" level="1" /> <!-- Vampiric Claw -->
