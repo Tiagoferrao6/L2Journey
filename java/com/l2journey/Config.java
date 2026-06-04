@@ -1099,6 +1099,8 @@ public class Config
 	public static boolean DISABLE_TUTORIAL;
 	public static boolean EXPERTISE_PENALTY;
 	public static boolean STORE_RECIPE_SHOPLIST;
+	public static boolean ANNOUNCE_CRAFT_SUCCESS;
+	public static Set<Integer> ANNOUNCE_CRAFT_SUCCESS_ITEMS;
 	public static boolean STORE_UI_SETTINGS;
 	public static String[] FORBIDDEN_NAMES;
 	public static boolean SILENCE_MODE_EXCLUDE;
@@ -3128,6 +3130,20 @@ public class Config
 		DISABLE_TUTORIAL = characterConfig.getBoolean("DisableTutorial", false);
 		EXPERTISE_PENALTY = characterConfig.getBoolean("ExpertisePenalty", true);
 		STORE_RECIPE_SHOPLIST = characterConfig.getBoolean("StoreRecipeShopList", false);
+		ANNOUNCE_CRAFT_SUCCESS = characterConfig.getBoolean("AnnounceCraftSuccess", false);
+		final String craftItemsRaw = characterConfig.getString("AnnounceCraftSuccessItems", "").trim();
+		ANNOUNCE_CRAFT_SUCCESS_ITEMS = new HashSet<>();
+		if (!craftItemsRaw.isEmpty())
+		{
+			for (String id : craftItemsRaw.split(","))
+			{
+				final String trimmed = id.trim();
+				if (!trimmed.isEmpty())
+				{
+					ANNOUNCE_CRAFT_SUCCESS_ITEMS.add(Integer.parseInt(trimmed));
+				}
+			}
+		}
 		STORE_UI_SETTINGS = characterConfig.getBoolean("StoreCharUiSettings", true);
 		FORBIDDEN_NAMES = characterConfig.getString("ForbiddenNames", "").split(",");
 		SILENCE_MODE_EXCLUDE = characterConfig.getBoolean("SilenceModeExclude", false);

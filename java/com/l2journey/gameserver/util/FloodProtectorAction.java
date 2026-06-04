@@ -82,7 +82,7 @@ public class FloodProtectorAction
 	 * Checks whether the request is flood protected or not.
 	 * @return true if action is allowed, otherwise false
 	 */
-	public boolean canPerformAction()
+	public synchronized boolean canPerformAction()
 	{
 		if ((_client.getPlayer() != null) && _client.getPlayer().isGM())
 		{
