@@ -344,7 +344,7 @@ public final class NewbieGuide extends AbstractNpcAI
 							}
 							else
 							{
-								npc.setTarget(talker);
+								npc.setTarget(summon);
 								npc.doCast(WIND_WALK_FOR_BEGINNERS.getSkill());
 								npc.doCast(SHIELD_FOR_BEGINNERS.getSkill());
 								npc.doCast(ADVENTURERS_MAGIC_BARRIER.getSkill());
