@@ -237,10 +237,11 @@ public class World
 		}
 		
 		// 3. Remove do mapa global de objetos.
-		if (_allObjects.remove(object.getObjectId()) == null)
-		{
-			return;
-		}
+		// Nao retornamos cedo caso o objeto ja tenha saido de _allObjects: a limpeza
+		// das listas globais de jogadores (passo 4) precisa ocorrer de qualquer forma,
+		// senao um player que saiu de _allObjects durante um teleporte e desconectou
+		// em seguida ficaria preso em _allPlayers, impedindo o relogin.
+		_allObjects.remove(object.getObjectId());
 		
 		// 4. Tratamento específico para remoção de Jogadores (Players) das listas globais.
 		if (object.isPlayer())

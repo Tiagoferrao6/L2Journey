@@ -530,6 +530,16 @@ public class GameClient extends Client<com.l2journey.commons.network.Connection<
 			{
 				player.storeMe();
 				player.deleteMe();
+				
+				// Rede de seguranca: se o player continuar registrado no mundo apos o
+				// deleteMe() (ex.: deleteMe abortou antes do decayMe, ou ficou preso em
+				// _allPlayers), forcamos a remocao para que o relogin nunca trave.
+				if (World.getInstance().getPlayer(objectId) != null)
+				{
+					LOGGER.warning("Ghost player still in world after deleteMe, forcing removal: " + player.getName() + "(" + objectId + ") " + _accountName);
+					player.setTeleporting(false);
+					player.decayMe();
+				}
 			}
 			
 			return null;
