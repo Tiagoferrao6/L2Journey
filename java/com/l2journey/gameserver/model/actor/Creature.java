@@ -4812,7 +4812,15 @@ public abstract class Creature extends WorldObject
 				{
 					try
 					{
-						if ((gtx == _move.geoPathGtx) && (gty == _move.geoPathGty))
+						// Player seguindo uma rota de contorno para atacar: o destino ajustado pelo
+						// offset (gtx/gty) deriva enquanto o player circula o obstaculo, mesmo com o
+						// alvo parado. Sem tolerancia a rota seria abandonada e recalculada a cada
+						// tick do follow, fazendo o moveCheck clampar de novo na borda do obstaculo e
+						// recomecar os "passinhos" no meio do caminho. Enquanto a rota ainda termina
+						// perto do destino pedido (alvo nao se moveu muito), mantemos a rota.
+						final boolean playerAttackPath = isPlayer() && hasAI() && (getAI().getIntention() == Intention.ATTACK);
+						if ((playerAttackPath && (Math.hypot(originalX - _move.geoPathAccurateTx, originalY - _move.geoPathAccurateTy) < 200)) //
+							|| ((gtx == _move.geoPathGtx) && (gty == _move.geoPathGty)))
 						{
 							sendPacket(ActionFailed.STATIC_PACKET);
 							return;
@@ -4860,8 +4868,19 @@ public abstract class Creature extends WorldObject
 				final boolean dangerousFall = isMonster() && (Math.abs(dz) > 100) && (distance < 500);
 				final boolean blockedInCombat = isAttackable() && isInCombat() && ((originalDistance - distance) > 5);
 				
+				// Player atacando alvo: com directMove o engine move em linha reta e PULA o pathfinding.
+				// Se a linha reta passa rente a um obstaculo, o CORPO do player (raio de colisao) raspa
+				// na quina e o movimento trava em "passinhos", mesmo quando o ponto central nao e bloqueado
+				// (o clamp e pequeno, abaixo do threshold). Em vez de medir o clamp, verificamos um CORREDOR
+				// com a largura do corpo + folga ao longo da rota ate o alvo: se qualquer lado do corredor
+				// encosta num obstaculo, forcamos o pathfinding para gerar a rota de contorno. Apos a rota
+				// ser criada, a proxima chamada cai no early-return de isOnGeodataPath() acima e o player
+				// segue a rota (via moveToNextRoutePoint disparado pelo ARRIVED), sem voltar a raspar/travar.
+				final int attackClearance = getTemplate().getCollisionRadius() + 50;
+				final boolean blockedPlayerAttack = directMove && !isOnGeodataPath() && !GeoData.getInstance().canMoveCorridor(curX, curY, curZ, originalX, originalY, originalZ, getInstanceId(), attackClearance);
+				
 				// Verificacao de Pathfinding.
-				if (!directMove && (((originalDistance - distance) > pathfindingThreshold) || dangerousFall || blockedInCombat) && !isAfraid() && !isInVehicle)
+				if ((blockedPlayerAttack || (!directMove && (((originalDistance - distance) > pathfindingThreshold) || dangerousFall || blockedInCombat))) && !isAfraid() && !isInVehicle)
 				{
 					// Calculo de caminho -- sobrescreve verificacao de movimento anterior
 					move.geoPath = PathFinding.getInstance().findPath(curX, curY, curZ, originalX, originalY, originalZ, getInstanceId(), isPlayer());
