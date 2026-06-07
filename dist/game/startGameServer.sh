@@ -9,6 +9,9 @@ while true; do
 
     java -server \
         -Dfile.encoding=UTF-8 \
+        -Djava.awt.headless=true \
+        -Dsun.java2d.d3d=false \
+        -Dsun.java2d.noddraw=true \
         -Djava.util.logging.manager=com.l2journey.log.ServerLogManager \
         -Dorg.slf4j.simpleLogger.log.com.zaxxer.hikari=warn \
         -XX:+UseZGC \

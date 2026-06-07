@@ -5,7 +5,7 @@ color 02
 echo Iniciando GameServer.
 echo ------------------------------------------------------------------------------
 
-java -server -Dfile.encoding=UTF-8 -Djava.util.logging.manager=com.l2journey.log.ServerLogManager -Dorg.slf4j.simpleLogger.log.com.zaxxer.hikari=warn -XX:+UseZGC -Xmx4g -Xms2g -Dlogback.configurationFile=./logback.xml -cp ./../libs/*;Gameserver.jar com.l2journey.gameserver.GameServer
+java -server -Dfile.encoding=UTF-8 -Djava.awt.headless=true -Dsun.java2d.d3d=false -Dsun.java2d.noddraw=true -Djava.util.logging.manager=com.l2journey.log.ServerLogManager -Dorg.slf4j.simpleLogger.log.com.zaxxer.hikari=warn -XX:+UseZGC -Xmx4g -Xms2g -Dlogback.configurationFile=./logback.xml -cp ./../libs/*;Gameserver.jar com.l2journey.gameserver.GameServer
 
 REM NOTE: If you have a powerful machine, you could modify/add some extra parameters for performance, like:
 REM -Xms1536m

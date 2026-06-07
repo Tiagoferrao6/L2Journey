@@ -28,7 +28,6 @@
  */
 package com.l2journey.gameserver;
 
-import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -472,8 +471,6 @@ public class GameServer
 		new ConnectionManager<>(new InetSocketAddress(Config.PORT_GAME), GameClient::new, new GamePacketHandler());
 		
 		LoginServerThread.getInstance().start();
-		
-		Toolkit.getDefaultToolkit().beep();
 	}
 	
 	private void printSection(String section)
