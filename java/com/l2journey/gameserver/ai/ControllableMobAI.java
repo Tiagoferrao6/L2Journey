@@ -373,13 +373,8 @@ public class ControllableMobAI extends AttackableAI
 		}
 		
 		final Attackable me = getActiveChar();
-		if (!me.isInsideRadius2D(target, me.getAggroRange()) || (Math.abs(_actor.getZ() - target.getZ()) > 100))
-		{
-			return false;
-		}
-		
 		// Check if the target isn't in silent move mode
-		if (target.isPlayable() && target.asPlayable().isSilentMovingAffected())
+		if (!me.isInsideRadius2D(target, me.getAggroRange()) || (Math.abs(_actor.getZ() - target.getZ()) > 100) || (target.isPlayable() && target.asPlayable().isSilentMovingAffected()))
 		{
 			return false;
 		}

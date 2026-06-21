@@ -77,7 +77,7 @@ public class NpcBufferPremium extends Quest
 	private static final String QUEST_LOADING_INFO = "NpcBufferPremium";
 	private static final int NPC_ID = 15;
 	
-	//Setting up Premium buff timing
+	// Setting up Premium buff timing
 	private static final int BUFFTIME_PREMIUM = Config.PREMIUM_BUFF_TIME * 60; // 60 min.
 	
 	private static final String TITLE_NAME = "Scheme Buffer Premium";

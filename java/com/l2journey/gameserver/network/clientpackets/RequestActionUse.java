@@ -1158,7 +1158,7 @@ public class RequestActionUse extends ClientPacket
 				}
 				return;
 			}
-						
+			
 			summon.setTarget(target);
 			summon.useMagic(skill, _ctrlPressed, _shiftPressed);
 		}

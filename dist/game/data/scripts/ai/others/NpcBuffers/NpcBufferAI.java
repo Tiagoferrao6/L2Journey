@@ -142,12 +142,7 @@ public class NpcBufferAI implements Runnable
 				return true;
 			}
 			
-			if (player.isInAllyWith(targetPlayer))
-			{
-				return true;
-			}
-			
-			if (player.isOnSameSiegeSideWith(targetPlayer))
+			if (player.isInAllyWith(targetPlayer) || player.isOnSameSiegeSideWith(targetPlayer))
 			{
 				return true;
 			}

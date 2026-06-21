@@ -237,12 +237,7 @@ public class Fishing extends AbstractEffect
 		
 		if (GeoData.getInstance().hasGeo(baitX, baitY))
 		{
-			if (GeoData.getInstance().getHeight(baitX, baitY, baitZ) > baitZ)
-			{
-				return Integer.MIN_VALUE;
-			}
-			
-			if (GeoData.getInstance().getHeight(baitX, baitY, player.getZ()) > baitZ)
+			if ((GeoData.getInstance().getHeight(baitX, baitY, baitZ) > baitZ) || (GeoData.getInstance().getHeight(baitX, baitY, player.getZ()) > baitZ))
 			{
 				return Integer.MIN_VALUE;
 			}

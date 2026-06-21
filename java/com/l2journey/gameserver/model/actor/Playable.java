@@ -219,22 +219,7 @@ public abstract class Playable extends Creature
 		}
 		
 		final Player targetPlayer = target.asPlayer();
-		if (targetPlayer == null)
-		{
-			return false; // Target player is null
-		}
-		
-		if (targetPlayer == this)
-		{
-			return false; // Target player is self
-		}
-		
-		if (targetPlayer.getKarma() != 0)
-		{
-			return false; // Target player has karma
-		}
-		
-		if (targetPlayer.getPvpFlag() == 0)
+		if ((targetPlayer == null) || (targetPlayer == this) || (targetPlayer.getKarma() != 0) || (targetPlayer.getPvpFlag() == 0))
 		{
 			return false; // Target player is not flagged
 		}

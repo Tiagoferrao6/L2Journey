@@ -26,9 +26,7 @@ import com.l2journey.gameserver.model.zone.ZoneId;
 import com.l2journey.gameserver.model.zone.ZoneType;
 
 /**
- * Zone type for areas with multiple floors where cross-floor attacks should be prevented.
- * Used in locations like Tower of Insolence where players on different floors
- * could otherwise attack each other through the floor/ceiling.
+ * Zone type for areas with multiple floors where cross-floor attacks should be prevented. Used in locations like Tower of Insolence where players on different floors could otherwise attack each other through the floor/ceiling.
  * @author L2Journey
  */
 public class MultiFloorZone extends ZoneType

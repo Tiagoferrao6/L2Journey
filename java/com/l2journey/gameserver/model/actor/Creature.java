@@ -1587,25 +1587,14 @@ public abstract class Creature extends WorldObject
 				for (Creature obj : World.getInstance().getVisibleObjectsInRange(this, Creature.class, maxRadius))
 				{
 					// Pula o alvo principal.
-					if (obj == target)
-					{
-						continue;
-					}
+					
 					
 					// Pula alvo morto ou fingindo de morto.
-					if (obj.isAlikeDead())
-					{
-						continue;
-					}
+					
 					
 					// Verifica se o alvo e auto atacavel.
-					if (!obj.isAutoAttackable(this))
-					{
-						continue;
-					}
-					
 					// Verifica se o alvo esta dentro do angulo de ataque.
-					if (Math.abs(calculateDirectionTo(obj) - headingAngle) > physicalAttackAngle)
+					if ((obj == target) || obj.isAlikeDead() || !obj.isAutoAttackable(this) || (Math.abs(calculateDirectionTo(obj) - headingAngle) > physicalAttackAngle))
 					{
 						continue;
 					}
@@ -2685,13 +2674,8 @@ public abstract class Creature extends WorldObject
 						}
 						
 						// Nao chama npcs que ja estao realizando alguma acao (ex: atacando, conjurando).
-						if ((called.getAI().getIntention() != Intention.IDLE) && (called.getAI().getIntention() != Intention.ACTIVE))
-						{
-							return;
-						}
-						
 						// Nao chama npcs que nao sao do mesmo cla.
-						if (!template.isClan(called.getTemplate().getClans()))
+						if (((called.getAI().getIntention() != Intention.IDLE) && (called.getAI().getIntention() != Intention.ACTIVE)) || !template.isClan(called.getTemplate().getClans()))
 						{
 							return;
 						}
@@ -3971,12 +3955,7 @@ public abstract class Creature extends WorldObject
 	
 	protected void broadcastModifiedStats(List<Stat> stats)
 	{
-		if (!isSpawned())
-		{
-			return;
-		}
-		
-		if ((stats == null) || stats.isEmpty())
+		if (!isSpawned() || (stats == null) || stats.isEmpty())
 		{
 			return;
 		}
@@ -4146,12 +4125,7 @@ public abstract class Creature extends WorldObject
 	 */
 	public boolean isOnGeodataPath(MoveData move)
 	{
-		if (move.onGeodataPathIndex == -1)
-		{
-			return false;
-		}
-		
-		if (move.onGeodataPathIndex == (move.geoPath.size() - 1))
+		if ((move.onGeodataPathIndex == -1) || (move.onGeodataPathIndex == (move.geoPath.size() - 1)))
 		{
 			return false;
 		}

@@ -40,12 +40,7 @@ import com.l2journey.gameserver.network.serverpackets.ValidateLocation;
 import ai.AbstractNpcAI;
 
 /**
- * Forest Of The Dead
- *
- * Behavior:
- * - On aggro range enter, the mob blinks next to the player.
- * - This version avoids API/classes that are not present in L2Journey.
- * - It uses only core-safe methods so it compiles more easily.
+ * Forest Of The Dead Behavior: - On aggro range enter, the mob blinks next to the player. - This version avoids API/classes that are not present in L2Journey. - It uses only core-safe methods so it compiles more easily.
  * @author Mafias, KingHanker
  */
 public class ShadowJump extends AbstractNpcAI
@@ -57,7 +52,7 @@ public class ShadowJump extends AbstractNpcAI
 	};
 	private static final String TP_LOCK = "SHADOW_JUMP_LOCK";
 	private static final long TELEPORT_REUSE = 8000L;
-
+	
 	public ShadowJump()
 	{
 		addAggroRangeEnterId(MOB_IDS);
@@ -72,12 +67,7 @@ public class ShadowJump extends AbstractNpcAI
 			return;
 		}
 		
-		if (npc.getVariables().getBoolean(TP_LOCK, false))
-		{
-			return;
-		}
-		
-		if (npc.calculateDistance3D(player) <= 30)
+		if (npc.getVariables().getBoolean(TP_LOCK, false) || (npc.calculateDistance3D(player) <= 30))
 		{
 			return;
 		}

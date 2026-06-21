@@ -25,8 +25,7 @@ import com.l2journey.gameserver.model.item.ItemTemplate;
 import com.l2journey.gameserver.model.skill.Skill;
 
 /**
- * The Class ConditionPlayerHasAgathion.
- * Checks if the player has an active Agathion summoned.
+ * The Class ConditionPlayerHasAgathion. Checks if the player has an active Agathion summoned.
  * @author Diego Martins
  */
 public class ConditionPlayerHasAgathion extends Condition

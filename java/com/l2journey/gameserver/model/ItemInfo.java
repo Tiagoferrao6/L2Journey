@@ -264,8 +264,7 @@ public class ItemInfo
 	}
 	
 	/**
-	 * Returns the mana value for this item.
-	 * For agathion items, returns agathion energy instead of shadow mana.
+	 * Returns the mana value for this item. For agathion items, returns agathion energy instead of shadow mana.
 	 * @return mana or agathion energy
 	 */
 	public int getMana()

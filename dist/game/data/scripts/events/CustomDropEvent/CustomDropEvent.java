@@ -25,8 +25,7 @@ import com.l2journey.gameserver.model.quest.LongTimeEvent;
 
 /**
  * Evento de drop customizado.<br>
- * Dropa itens configurados em config.xml de acordo com o level do monstro
- * e/ou monstros específicos definidos na droplist.
+ * Dropa itens configurados em config.xml de acordo com o level do monstro e/ou monstros específicos definidos na droplist.
  */
 public class CustomDropEvent extends LongTimeEvent
 {

@@ -1598,11 +1598,7 @@ public class SevenSigns
 		{
 			return true;
 		}
-		if ((itemId > 6294) && (itemId < 6307))
-		{
-			return true;
-		}
-		if ((itemId > 6831) && (itemId < 6834))
+		if (((itemId > 6294) && (itemId < 6307)) || ((itemId > 6831) && (itemId < 6834)))
 		{
 			return true;
 		}

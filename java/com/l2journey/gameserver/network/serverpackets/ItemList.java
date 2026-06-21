@@ -38,8 +38,7 @@ import com.l2journey.gameserver.network.GameClient;
 import com.l2journey.gameserver.network.ServerPackets;
 
 /**
- * Packet to send the full inventory item list to the player.
- * Also triggers sending of quest items and agathion energy information.
+ * Packet to send the full inventory item list to the player. Also triggers sending of quest items and agathion energy information.
  */
 public class ItemList extends AbstractItemPacket
 {

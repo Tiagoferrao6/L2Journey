@@ -27,8 +27,7 @@ import com.l2journey.gameserver.model.itemcontainer.Inventory;
 import com.l2journey.gameserver.model.skill.Skill;
 
 /**
- * Condition to check if the player's equipped agathion bracelet has enough energy.
- * Used to prevent summoning agathions when energy is depleted.
+ * Condition to check if the player's equipped agathion bracelet has enough energy. Used to prevent summoning agathions when energy is depleted.
  * @author KingHanker
  */
 public class ConditionPlayerAgathionEnergy extends Condition

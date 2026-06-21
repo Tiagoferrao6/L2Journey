@@ -38,8 +38,8 @@ import com.l2journey.gameserver.GeoData;
 import com.l2journey.gameserver.ai.CreatureAI;
 import com.l2journey.gameserver.ai.Intention;
 import com.l2journey.gameserver.model.WorldObject;
-import com.l2journey.gameserver.model.zone.ZoneId;
 import com.l2journey.gameserver.model.actor.Creature;
+import com.l2journey.gameserver.model.zone.ZoneId;
 
 /**
  * @author Mobius
@@ -113,18 +113,8 @@ public class CreatureFollowTaskManager
 				if (ai != null)
 				{
 					final WorldObject followTarget = ai.getFollowTarget();
-					if (followTarget == null)
-					{
-						if (creature.isSummon())
-						{
-							creature.asSummon().setFollowStatus(false);
-						}
-						ai.setIntention(Intention.IDLE);
-						return;
-					}
-					
 					// Check if creature and target are on different floors inside multi-floor zones (e.g., Tower of Insolence)
-					if (creature.isInsideZone(ZoneId.MULTI_FLOOR) && followTarget.isCreature() && GeoData.getInstance().areOnDifferentFloors(creature.getX(), creature.getY(), creature.getZ(), followTarget.getX(), followTarget.getY(), followTarget.getZ()))
+					if ((followTarget == null) || (creature.isInsideZone(ZoneId.MULTI_FLOOR) && followTarget.isCreature() && GeoData.getInstance().areOnDifferentFloors(creature.getX(), creature.getY(), creature.getZ(), followTarget.getX(), followTarget.getY(), followTarget.getZ())))
 					{
 						if (creature.isSummon())
 						{

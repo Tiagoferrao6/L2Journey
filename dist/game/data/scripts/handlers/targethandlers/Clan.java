@@ -97,12 +97,7 @@ public class Clan implements ITargetTypeHandler
 					}
 					
 					// Don't add this target if this is a Pc->Pc pvp casting and pvp condition not met
-					if (!player.checkPvpSkill(obj, skill))
-					{
-						continue;
-					}
-					
-					if (player.isOnEvent() && obj.isOnEvent() && (player.getTeam() != obj.getTeam()))
+					if (!player.checkPvpSkill(obj, skill) || (player.isOnEvent() && obj.isOnEvent() && (player.getTeam() != obj.getTeam())))
 					{
 						continue;
 					}

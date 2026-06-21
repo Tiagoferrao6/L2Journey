@@ -116,12 +116,7 @@ public class AreaFriendly implements ITargetTypeHandler
 		}
 		
 		// Cannot target NPCs, monsters, or raids
-		if (target.isMonster() || target.isNpc() || target.isRaid())
-		{
-			return false;
-		}
-		
-		if (!GeoData.getInstance().canSeeTarget(player, target))
+		if (target.isMonster() || target.isNpc() || target.isRaid() || !GeoData.getInstance().canSeeTarget(player, target))
 		{
 			return false;
 		}

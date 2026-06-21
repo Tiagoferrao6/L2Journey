@@ -81,11 +81,7 @@ public class CorpseClan implements ITargetTypeHandler
 					
 					if (player.isInDuel())
 					{
-						if (player.getDuelId() != obj.getDuelId())
-						{
-							continue;
-						}
-						if (player.isInParty() && obj.isInParty() && (player.getParty().getLeaderObjectId() != obj.getParty().getLeaderObjectId()))
+						if ((player.getDuelId() != obj.getDuelId()) || (player.isInParty() && obj.isInParty() && (player.getParty().getLeaderObjectId() != obj.getParty().getLeaderObjectId())))
 						{
 							continue;
 						}

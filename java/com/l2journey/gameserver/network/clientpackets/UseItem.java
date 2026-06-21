@@ -217,18 +217,7 @@ public class UseItem extends ClientPacket
 				case ItemTemplate.SLOT_R_HAND:
 				{
 					// Prevent players to equip weapon while wearing combat flag
-					if ((player.getActiveWeaponItem() != null) && (player.getActiveWeaponItem().getId() == 9819))
-					{
-						player.sendPacket(SystemMessageId.YOU_DO_NOT_MEET_THE_REQUIRED_CONDITION_TO_EQUIP_THAT_ITEM);
-						return;
-					}
-					
-					if (player.isMounted())
-					{
-						player.sendPacket(SystemMessageId.YOU_DO_NOT_MEET_THE_REQUIRED_CONDITION_TO_EQUIP_THAT_ITEM);
-						return;
-					}
-					if (player.isDisarmed())
+					if (((player.getActiveWeaponItem() != null) && (player.getActiveWeaponItem().getId() == 9819)) || player.isMounted() || player.isDisarmed())
 					{
 						player.sendPacket(SystemMessageId.YOU_DO_NOT_MEET_THE_REQUIRED_CONDITION_TO_EQUIP_THAT_ITEM);
 						return;

@@ -25,8 +25,7 @@ import java.util.Collections;
 import java.util.Map;
 
 /**
- * Holder for Daily Reward configuration data.
- * Stores reward information for a specific day in the daily reward cycle.
+ * Holder for Daily Reward configuration data. Stores reward information for a specific day in the daily reward cycle.
  * @author L2Journey
  */
 public class DailyRewardHolder

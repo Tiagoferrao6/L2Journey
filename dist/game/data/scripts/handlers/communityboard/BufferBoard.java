@@ -986,13 +986,13 @@ public class BufferBoard implements IParseBoardHandler
 	{
 		if (!rawName.matches("[a-zA-Z0-9]+"))
 		{
-			//player.sendPacket(SystemMessageId.INCORRECT_NAME_PLEASE_TRY_AGAIN);
+			// player.sendPacket(SystemMessageId.INCORRECT_NAME_PLEASE_TRY_AGAIN);
 			return showInfo("Info", "The scheme name contains invalid characters!<br>Only letters (a-z) and numbers (0-9) are allowed.");
 		}
 		
 		if (rawName.length() > 36)
 		{
-			//player.sendPacket(SystemMessageId.INCORRECT_NAME_PLEASE_TRY_AGAIN);
+			// player.sendPacket(SystemMessageId.INCORRECT_NAME_PLEASE_TRY_AGAIN);
 			return showInfo("Info", "The scheme name is too long!<br>Max 36 characters.");
 		}
 		

@@ -44,7 +44,8 @@ public class RequestPrivateStoreManageBuy extends ClientPacket
 	protected void runImpl()
 	{
 		final Player player = getPlayer();
-		if (player == null)
+		// Player shouldn't be able to set stores if he/she is alike dead (dead or fake death), or in olympiad.
+		if ((player == null) || player.isAlikeDead() || player.isInOlympiadMode())
 		{
 			return;
 		}

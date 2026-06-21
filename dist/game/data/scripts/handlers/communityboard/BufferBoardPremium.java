@@ -79,7 +79,7 @@ public class BufferBoardPremium implements IParseBoardHandler
 	private static final int MAX_SCHEME_DANCES = Config.DANCES_MAX_AMOUNT;
 	private static final int BUFFS_PER_PAGE = 20;
 	
-	//Setting up Premium buff timing
+	// Setting up Premium buff timing
 	private static final int BUFFTIME_PREMIUM = Config.PREMIUM_BUFF_TIME * 60; // 60 min.
 	
 	// Buff Set class labels (GM management)
@@ -287,10 +287,10 @@ public class BufferBoardPremium implements IParseBoardHandler
 				}
 				else
 				{
-				final String page = ap.length > 1 ? ap[1] : "1";
-				final String type = gp.length > 2 ? gp[2] : "buff";
-				html = gmViewAllBuffs(type, type, page);
-			}
+					final String page = ap.length > 1 ? ap[1] : "1";
+					final String type = gp.length > 2 ? gp[2] : "buff";
+					html = gmViewAllBuffs(type, type, page);
+				}
 			}
 			else if (params.startsWith("gmChangeSet;") && player.isGM())
 			{
@@ -991,13 +991,13 @@ public class BufferBoardPremium implements IParseBoardHandler
 	{
 		if (!rawName.matches("[a-zA-Z0-9]+"))
 		{
-			//player.sendPacket(SystemMessageId.INCORRECT_NAME_PLEASE_TRY_AGAIN);
+			// player.sendPacket(SystemMessageId.INCORRECT_NAME_PLEASE_TRY_AGAIN);
 			return showInfo("Info", "The scheme name contains invalid characters!<br>Only letters (a-z) and numbers (0-9) are allowed.");
 		}
 		
 		if (rawName.length() > 36)
 		{
-			//player.sendPacket(SystemMessageId.INCORRECT_NAME_PLEASE_TRY_AGAIN);
+			// player.sendPacket(SystemMessageId.INCORRECT_NAME_PLEASE_TRY_AGAIN);
 			return showInfo("Info", "The scheme name is too long!<br>Max 36 characters.");
 		}
 		

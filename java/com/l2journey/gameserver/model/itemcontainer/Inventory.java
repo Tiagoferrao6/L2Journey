@@ -585,13 +585,8 @@ public abstract class Inventory extends ItemContainer
 			
 			// Checks if player is wearing a chest item
 			final Item chestItem = inventory.getPaperdollItem(PAPERDOLL_CHEST);
-			if (chestItem == null)
-			{
-				return;
-			}
-			
 			// Checks for armor set for the equipped chest.
-			if (!ArmorSetData.getInstance().isArmorSet(chestItem.getId()))
+			if ((chestItem == null) || !ArmorSetData.getInstance().isArmorSet(chestItem.getId()))
 			{
 				return;
 			}

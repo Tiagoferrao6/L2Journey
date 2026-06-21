@@ -39,7 +39,7 @@ public class DBDumper
 {
 	DBOutputInterface _frame;
 	String _db;
-
+	
 	private static Statement createTablesStatement(Connection con)
 	{
 		try

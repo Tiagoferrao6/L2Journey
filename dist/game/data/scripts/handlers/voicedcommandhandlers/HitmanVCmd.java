@@ -28,8 +28,7 @@ import com.l2journey.gameserver.model.actor.Player;
 import handlers.bypasshandlers.Hitman;
 
 /**
- * Voiced command handler for the Hitman Event system.
- * Allows players to use .hitman command to open the hitman interface.
+ * Voiced command handler for the Hitman Event system. Allows players to use .hitman command to open the hitman interface.
  * @author L2Journey, KingHanker
  */
 public class HitmanVCmd implements IVoicedCommandHandler

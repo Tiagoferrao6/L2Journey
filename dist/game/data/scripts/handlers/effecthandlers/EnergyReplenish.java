@@ -65,13 +65,7 @@ public class EnergyReplenish extends AbstractEffect
 		final Player player = effected.asPlayer();
 		final Item bracelet = player.getInventory().getPaperdollItem(Inventory.PAPERDOLL_LBRACELET);
 		
-		if (bracelet == null)
-		{
-			player.sendPacket(SystemMessageId.YOU_CANNOT_REPLENISH_ENERGY_BECAUSE_YOU_DO_NOT_MEET_THE_REQUIREMENTS);
-			return;
-		}
-		
-		if (!bracelet.isAgathionItem())
+		if ((bracelet == null) || !bracelet.isAgathionItem())
 		{
 			player.sendPacket(SystemMessageId.YOU_CANNOT_REPLENISH_ENERGY_BECAUSE_YOU_DO_NOT_MEET_THE_REQUIREMENTS);
 			return;

@@ -238,12 +238,7 @@ public class HitmanManager
 	 */
 	public void onPlayerKill(Player killer, Player victim)
 	{
-		if (!EventsConfig.HITMAN_ENABLED || (killer == null) || (victim == null))
-		{
-			return;
-		}
-		
-		if (!_targets.containsKey(victim.getObjectId()))
+		if (!EventsConfig.HITMAN_ENABLED || (killer == null) || (victim == null) || !_targets.containsKey(victim.getObjectId()))
 		{
 			return;
 		}

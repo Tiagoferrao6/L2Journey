@@ -248,12 +248,8 @@ public class AutoUseTaskManager
 						{
 							for (Player member : player.getParty().getMembers())
 							{
-								if ((member == null) || member.isDead() || member.isAlikeDead())
-								{
-									continue;
-								}
 								// Checa distância (usar mesmo range do buff)
-								if (player.calculateDistance3D(member) > skill.getCastRange())
+								if ((member == null) || member.isDead() || member.isAlikeDead() || (player.calculateDistance3D(member) > skill.getCastRange()))
 								{
 									continue;
 								}

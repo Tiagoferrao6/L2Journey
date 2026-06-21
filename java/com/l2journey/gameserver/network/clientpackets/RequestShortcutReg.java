@@ -34,6 +34,7 @@ import com.l2journey.gameserver.model.actor.Summon;
 import com.l2journey.gameserver.model.actor.enums.player.ShortcutType;
 import com.l2journey.gameserver.model.actor.holders.player.Shortcut;
 import com.l2journey.gameserver.network.serverpackets.ShortcutRegister;
+
 /**
  * @author KingHanker
  */

@@ -87,15 +87,7 @@ public class PartyClan implements ITargetTypeHandler
 			// olympiad mode - adding only own side
 			if (player.isInOlympiadMode())
 			{
-				if (!obj.isInOlympiadMode())
-				{
-					continue;
-				}
-				if (player.getOlympiadGameId() != obj.getOlympiadGameId())
-				{
-					continue;
-				}
-				if (player.getOlympiadSide() != obj.getOlympiadSide())
+				if (!obj.isInOlympiadMode() || (player.getOlympiadGameId() != obj.getOlympiadGameId()) || (player.getOlympiadSide() != obj.getOlympiadSide()))
 				{
 					continue;
 				}
@@ -103,12 +95,7 @@ public class PartyClan implements ITargetTypeHandler
 			
 			if (player.isInDuel())
 			{
-				if (player.getDuelId() != obj.getDuelId())
-				{
-					continue;
-				}
-				
-				if (hasParty && obj.isInParty() && (player.getParty().getLeaderObjectId() != obj.getParty().getLeaderObjectId()))
+				if ((player.getDuelId() != obj.getDuelId()) || (hasParty && obj.isInParty() && (player.getParty().getLeaderObjectId() != obj.getParty().getLeaderObjectId())))
 				{
 					continue;
 				}

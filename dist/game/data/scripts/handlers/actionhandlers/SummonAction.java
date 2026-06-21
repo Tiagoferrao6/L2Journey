@@ -52,14 +52,14 @@ public class SummonAction implements IActionHandler
 			player.sendPacket(SystemMessageId.FAILED_TO_CHANGE_ATTACK_TARGET);
 			return false;
 		}
-
+		
 		if ((player == target.asSummon().getOwner()) && (player.getTarget() == target))
 		{
 			player.sendPacket(new PetStatusShow(target.asSummon()));
 			player.setPetStatusWindowOpen(true);
 			player.updateNotMoveUntil();
 			player.sendPacket(ActionFailed.STATIC_PACKET);
-
+			
 			// Notify to scripts
 			if (EventDispatcher.getInstance().hasListener(EventType.ON_PLAYER_SUMMON_TALK, target))
 			{
@@ -93,7 +93,7 @@ public class SummonAction implements IActionHandler
 		}
 		return true;
 	}
-
+	
 	@Override
 	public InstanceType getInstanceType()
 	{

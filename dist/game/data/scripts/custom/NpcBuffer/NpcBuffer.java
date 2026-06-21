@@ -77,7 +77,7 @@ public class NpcBuffer extends Quest
 	private static final String QUEST_LOADING_INFO = "NpcBuffer";
 	private static final int NPC_ID = 12;
 	
-	//Setting up buff timing
+	// Setting up buff timing
 	private static final int BUFFTIME = Config.BUFF_TIME * 60; // 60 min.
 	
 	private static final String TITLE_NAME = "Scheme Buffer";

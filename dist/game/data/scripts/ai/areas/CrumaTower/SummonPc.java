@@ -322,13 +322,8 @@ public class SummonPc extends AbstractNpcAI
 	
 	private boolean isValidSummonTarget(Player target)
 	{
-		if ((target == null) || target.isDead() || !target.isOnline())
-		{
-			return false;
-		}
-		
 		// Evita pulls desde ciudad o zonas peace.
-		if (target.isInsideZone(ZoneId.PEACE))
+		if ((target == null) || target.isDead() || !target.isOnline() || target.isInsideZone(ZoneId.PEACE))
 		{
 			return false;
 		}
@@ -361,12 +356,7 @@ public class SummonPc extends AbstractNpcAI
 	{
 		for (Npc assist : ACTIVE_MOBS)
 		{
-			if ((assist == null) || assist.isDead() || (assist == npc))
-			{
-				continue;
-			}
-			
-			if (assist.getInstanceId() != npc.getInstanceId())
+			if ((assist == null) || assist.isDead() || (assist == npc) || (assist.getInstanceId() != npc.getInstanceId()))
 			{
 				continue;
 			}

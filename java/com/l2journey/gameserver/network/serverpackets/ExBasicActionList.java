@@ -115,12 +115,8 @@ public class ExBasicActionList extends ServerPacket
 		NO_PET_ACTION_LIST = Arrays.stream(DEFAULT_ACTION_LIST).filter(id ->
 		{
 			// Filter out basic pet actions (15-19)
-			if ((id >= 15) && (id <= 19))
-			{
-				return false;
-			}
 			// Filter out basic servitor actions (21-23)
-			if ((id >= 21) && (id <= 23))
+			if (((id >= 15) && (id <= 19)) || ((id >= 21) && (id <= 23)))
 			{
 				return false;
 			}

@@ -174,7 +174,6 @@ public class SiegeGuards extends AbstractNpcAI
 			{
 				// Should never happen.
 				
-				
 				// Ignore dead guards.
 				// Skip if guard is currently attacking.
 				if ((guard == null) || !guard.isAttackable() || guard.isDead() || guard.isInCombat())

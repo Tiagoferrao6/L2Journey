@@ -42,9 +42,7 @@ import com.l2journey.gameserver.network.SystemMessageId;
 import com.l2journey.gameserver.network.serverpackets.SystemMessage;
 
 /**
- * Chain Heal effect implementation.
- * Heals targets with decreasing power based on their position in the target list.
- * The most injured target gets full power, subsequent targets get progressively less.
+ * Chain Heal effect implementation. Heals targets with decreasing power based on their position in the target list. The most injured target gets full power, subsequent targets get progressively less.
  * @author L2Journey, KingHanker
  */
 public class ChainHeal extends AbstractEffect

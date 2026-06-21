@@ -120,7 +120,7 @@ public class FriendsBoard implements IWriteBoardHandler
 	@Override
 	public boolean writeCommunityBoardCommand(Player player, String arg1, String arg2, String arg3, String arg4, String arg5)
 	{
-		if (arg1 != null && arg1.equals("PM"))
+		if ((arg1 != null) && arg1.equals("PM"))
 		{
 			// Send PM: arg2 = target name, arg3 = message field (var "pm")
 			final String targetName = (arg2 == null) ? "" : arg2.trim();
@@ -161,7 +161,7 @@ public class FriendsBoard implements IWriteBoardHandler
 		}
 		
 		// Block a player (from ignore list page)
-		if (arg1 != null && arg1.equals("AddBlock"))
+		if ((arg1 != null) && arg1.equals("AddBlock"))
 		{
 			final String name = (arg3 == null) ? "" : arg3.trim();
 			if (name.isEmpty())
@@ -260,7 +260,7 @@ public class FriendsBoard implements IWriteBoardHandler
 		
 		String html = HtmCache.getInstance().getHtm(player, "data/html/CommunityBoard/friends_info.html");
 		
-		if (friend != null && friend.isOnline())
+		if ((friend != null) && friend.isOnline())
 		{
 			final String className = ClassListData.getInstance().getClass(friend.getPlayerClass()).getClassName();
 			final String clanName = friend.getClan() != null ? friend.getClan().getName() : "None";
@@ -341,22 +341,16 @@ public class FriendsBoard implements IWriteBoardHandler
 	
 	private String buildPmSection(String friendName)
 	{
-		return "<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" width=\"280\">" +
-			"<tr><td><multiedit var=\"pm\" width=260 height=70></td></tr>" +
-			"<tr><td height=\"15\"></td></tr>" +
-			"<tr><td align=\"left\"><button value=\"Send PM\" action=\"Write Friends PM " + friendName + " pm pm pm\" " +
-			"back=\"l2ui_ct1.button.button_df_small_down\" width=\"100\" height=\"25\" " +
-			"fore=\"l2ui_ct1.button.button_df_small\"></td></tr>" +
-			"</table>";
+		return "<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" width=\"280\">" + "<tr><td><multiedit var=\"pm\" width=260 height=70></td></tr>" + "<tr><td height=\"15\"></td></tr>" + "<tr><td align=\"left\"><button value=\"Send PM\" action=\"Write Friends PM " + friendName + " pm pm pm\" " + "back=\"l2ui_ct1.button.button_df_small_down\" width=\"100\" height=\"25\" " + "fore=\"l2ui_ct1.button.button_df_small\"></td></tr>" + "</table>";
 	}
-
+	
 	private String getRaceIcon(Race race)
 	{
 		if (race == null)
 		{
 			return "icon.skill0000";
 		}
-
+		
 		switch (race)
 		{
 			case HUMAN:

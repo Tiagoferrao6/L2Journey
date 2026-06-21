@@ -50,7 +50,7 @@ public class PetAction implements IActionHandler
 			player.sendPacket(SystemMessageId.FAILED_TO_CHANGE_ATTACK_TARGET);
 			return false;
 		}
-
+		
 		final boolean isOwner = player.getObjectId() == target.asPet().getOwner().getObjectId();
 		if (isOwner && (player != target.asPet().getOwner()))
 		{
@@ -80,7 +80,7 @@ public class PetAction implements IActionHandler
 				{
 					player.sendPacket(new PetStatusShow(target.asPet()));
 					player.setPetStatusWindowOpen(true);
-
+					
 					// Notify to scripts
 					if (EventDispatcher.getInstance().hasListener(EventType.ON_PLAYER_SUMMON_TALK, target))
 					{
@@ -92,7 +92,7 @@ public class PetAction implements IActionHandler
 		}
 		return true;
 	}
-
+	
 	@Override
 	public InstanceType getInstanceType()
 	{

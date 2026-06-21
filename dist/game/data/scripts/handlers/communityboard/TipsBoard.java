@@ -44,9 +44,7 @@ import com.l2journey.commons.util.IXmlReader;
 /**
  * Carrega e fornece a dica exibida no banner "DICA DO DIA" do Community Board.
  * <p>
- * As dicas sao carregadas uma unica vez na inicializacao do servidor a partir de
- * {@code ./config/CommunityTips.xml} e uma delas e sorteada como a "dica ativa"
- * para todos os jogadores online (mesma dica para todos durante o uptime do servidor).
+ * As dicas sao carregadas uma unica vez na inicializacao do servidor a partir de {@code ./config/CommunityTips.xml} e uma delas e sorteada como a "dica ativa" para todos os jogadores online (mesma dica para todos durante o uptime do servidor).
  * <p>
  * Para mudar a dica em runtime, chame {@link #load()} novamente (sorteia outra).
  * @author KingHanker
@@ -169,8 +167,7 @@ public class TipsBoard implements IXmlReader
 	}
 	
 	/**
-	 * Returns the rendered HTML block of the currently active tip (same for every player).
-	 * Returns an empty string if the feature is disabled or there are no tips loaded.
+	 * Returns the rendered HTML block of the currently active tip (same for every player). Returns an empty string if the feature is disabled or there are no tips loaded.
 	 * @return the HTML block or an empty string
 	 */
 	public String getActiveTipHtml()

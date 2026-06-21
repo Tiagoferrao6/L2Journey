@@ -186,7 +186,7 @@ public class DropSearchBoard implements IParseBoardHandler
 				int page = Integer.parseInt(params[2]);
 				final List<CBDropHolder> list = DROP_INDEX_CACHE.get(itemId);
 				final int perPage = 10;
-				int pages = (list.size() + perPage - 1) / perPage;
+				int pages = ((list.size() + perPage) - 1) / perPage;
 				if (pages == 0)
 				{
 					pages++;

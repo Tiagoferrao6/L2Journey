@@ -265,15 +265,8 @@ public class PlayerAI extends PlayableAI
 		}
 		
 		// Check if player and target are on different floors inside multi-floor zones (e.g., Tower of Insolence)
-		if (_actor.isInsideZone(ZoneId.MULTI_FLOOR) && GeoData.getInstance().areOnDifferentFloors(_actor.getX(), _actor.getY(), _actor.getZ(), target.getX(), target.getY(), target.getZ()))
-		{
-			_actor.sendPacket(SystemMessageId.CANNOT_SEE_TARGET);
-			setIntention(Intention.IDLE);
-			return;
-		}
-		
 		// Check if player can see the target (line of sight through walls/floors)
-		if (!GeoData.getInstance().canSeeTarget(_actor, target))
+		if ((_actor.isInsideZone(ZoneId.MULTI_FLOOR) && GeoData.getInstance().areOnDifferentFloors(_actor.getX(), _actor.getY(), _actor.getZ(), target.getX(), target.getY(), target.getZ())) || !GeoData.getInstance().canSeeTarget(_actor, target))
 		{
 			_actor.sendPacket(SystemMessageId.CANNOT_SEE_TARGET);
 			setIntention(Intention.IDLE);

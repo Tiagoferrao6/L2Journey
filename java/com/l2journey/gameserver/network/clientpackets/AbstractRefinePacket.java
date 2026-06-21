@@ -264,12 +264,8 @@ public abstract class AbstractRefinePacket extends ClientPacket
 			return false;
 		}
 		// and accessory can't be augmented with weapon ls
-		if ((item.getTemplate() instanceof Armor) && (ls.getGrade() != GRADE_ACC))
-		{
-			return false;
-		}
 		// check for level of the lifestone
-		if (player.getLevel() < ls.getPlayerLevel())
+		if (((item.getTemplate() instanceof Armor) && (ls.getGrade() != GRADE_ACC)) || (player.getLevel() < ls.getPlayerLevel()))
 		{
 			return false;
 		}
@@ -295,11 +291,7 @@ public abstract class AbstractRefinePacket extends ClientPacket
 		{
 			return false;
 		}
-		if (item.isPvp() && !Config.ALT_ALLOW_AUGMENT_PVP_ITEMS)
-		{
-			return false;
-		}
-		if (item.getTemplate().getCrystalType().isLesser(CrystalType.C))
+		if ((item.isPvp() && !Config.ALT_ALLOW_AUGMENT_PVP_ITEMS) || item.getTemplate().getCrystalType().isLesser(CrystalType.C))
 		{
 			return false;
 		}
