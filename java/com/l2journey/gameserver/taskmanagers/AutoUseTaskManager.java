@@ -445,8 +445,8 @@ public class AutoUseTaskManager
 				return false;
 			}
 			
-			// Check if monster is spoiled to avoid Spoil (254) skill recast.
-			if ((skill.getId() == 254) && (target != null) && target.isMonster() && target.asMonster().isSpoiled())
+			// Check if monster is spoiled to avoid Spoil (254/302) skill recast.
+			if (((skill.getId() == 254) || (skill.getId() == 302)) && (target != null) && target.isMonster() && target.asMonster().isSpoiled())
 			{
 				return false;
 			}
