@@ -649,6 +649,7 @@ public class Player extends Playable
 	
 	private TradeList _activeTradeList;
 	private ItemContainer _activeWarehouse;
+	private boolean _warehouseOpenedViaCommunityBoard = false;
 	private Map<Integer, ManufactureItem> _manufactureItems;
 	private String _storeName = "";
 	private TradeList _sellList;
@@ -6215,6 +6216,7 @@ public class Player extends Playable
 	public void setActiveWarehouse(ItemContainer warehouse)
 	{
 		_activeWarehouse = warehouse;
+		_warehouseOpenedViaCommunityBoard = false;
 	}
 	
 	/**
@@ -6223,6 +6225,16 @@ public class Player extends Playable
 	public ItemContainer getActiveWarehouse()
 	{
 		return _activeWarehouse;
+	}
+	
+	public void setWarehouseOpenedViaCommunityBoard(boolean val)
+	{
+		_warehouseOpenedViaCommunityBoard = val;
+	}
+	
+	public boolean isWarehouseOpenedViaCommunityBoard()
+	{
+		return _warehouseOpenedViaCommunityBoard;
 	}
 	
 	/**

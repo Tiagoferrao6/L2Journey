@@ -106,9 +106,16 @@ public class SendWareHouseDepositList extends ClientPacket
 		}
 		
 		final Npc manager = player.getLastFolkNPC();
-		if (((manager == null) || !manager.isWarehouse() || !manager.canInteract(player)) && !player.isGM())
+		final boolean fromCommunityBoard = player.isWarehouseOpenedViaCommunityBoard();
+		if (((manager == null) || !manager.isWarehouse() || !manager.canInteract(player)) && !player.isGM() && !fromCommunityBoard)
 		{
 			player.sendPacket(SystemMessageId.YOU_FAILED_AT_SENDING_THE_PACKAGE_BECAUSE_YOU_ARE_TOO_FAR_FROM_THE_WAREHOUSE);
+			return;
+		}
+		
+		if (fromCommunityBoard && (player.isInCombat() || player.isCastingNow() || (player.getPvpFlag() > 0)))
+		{
+			player.sendMessage("You cannot use the warehouse while in combat.");
 			return;
 		}
 		

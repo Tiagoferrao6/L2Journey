@@ -583,6 +583,7 @@ public class HomeBoard implements IParseBoardHandler
 					return false;
 				}
 				
+				player.setWarehouseOpenedViaCommunityBoard(true);
 				player.setInventoryBlockingStatus(true);
 				player.sendPacket(new WareHouseDepositList(player, 1));
 				returnHtml = HtmCache.getInstance().getHtm(player, "data/html/CommunityBoard/merchant/warehouse.html");
@@ -609,6 +610,7 @@ public class HomeBoard implements IParseBoardHandler
 				}
 				
 				player.setActiveWarehouse(player.getClan().getWarehouse());
+				player.setWarehouseOpenedViaCommunityBoard(true);
 				player.setInventoryBlockingStatus(true);
 				player.sendPacket(new WareHouseDepositList(player, 4));
 			}
@@ -622,6 +624,7 @@ public class HomeBoard implements IParseBoardHandler
 					return false;
 				}
 				
+				player.setWarehouseOpenedViaCommunityBoard(true);
 				player.sendPacket(new WareHouseWithdrawalList(player, 1));
 			}
 			else if (command.equals("_bbswarhouse:clanwithdraw"))
@@ -651,6 +654,7 @@ public class HomeBoard implements IParseBoardHandler
 				}
 				
 				player.setActiveWarehouse(player.getClan().getWarehouse());
+				player.setWarehouseOpenedViaCommunityBoard(true);
 				player.setInventoryBlockingStatus(true);
 				
 				player.sendPacket(new WareHouseWithdrawalList(player, 4));
