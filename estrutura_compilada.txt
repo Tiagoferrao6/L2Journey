@@ -1,0 +1,6 @@
+Listagem de caminhos de pasta para o volume Windows
+O número de série do volume é 000001DA 003D:AB81
+C:\USERS\TIAGO.FERRAO\DOWNLOADS\L2JOURNEY-MAIN (3)\BUILD
+Caminho inválido - \USERS\TIAGO.FERRAO\DOWNLOADS\L2JOURNEY-MAIN (3)\BUILD
+Não existem subpastas 
+

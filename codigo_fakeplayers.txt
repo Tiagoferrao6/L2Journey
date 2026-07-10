@@ -1,0 +1,976 @@
+/*
+ * Copyright (c) 2013 L2jMobius
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
+ * IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+package handlers.admincommandhandlers;
+
+import com.l2journey.gameserver.data.xml.FakePlayerData;
+import com.l2journey.gameserver.handler.IAdminCommandHandler;
+import com.l2journey.gameserver.managers.FakePlayerChatManager;
+import com.l2journey.gameserver.model.World;
+import com.l2journey.gameserver.model.actor.Player;
+
+/**
+ * @author Mobius
+ */
+public class AdminFakePlayers implements IAdminCommandHandler
+{
+	private static final String[] ADMIN_COMMANDS =
+	{
+		"admin_fakechat"
+	};
+	
+	@Override
+	public boolean useAdminCommand(String command, Player activeChar)
+	{
+		if (command.startsWith("admin_fakechat"))
+		{
+			if (command.length() <= 15)
+			{
+				activeChar.sendSysMessage("Usage: //fakechat playername fpcname message");
+				return false;
+			}
+			final String[] words = command.substring(15).split(" ");
+			if (words.length < 3)
+			{
+				activeChar.sendSysMessage("Usage: //fakechat playername fpcname message");
+				return false;
+			}
+			final Player player = World.getInstance().getPlayer(words[0]);
+			if (player == null)
+			{
+				activeChar.sendSysMessage("Player not found.");
+				return false;
+			}
+			final String fpcName = FakePlayerData.getInstance().getProperName(words[1]);
+			if (fpcName == null)
+			{
+				activeChar.sendSysMessage("Fake player not found.");
+				return false;
+			}
+			String message = "";
+			for (int i = 0; i < words.length; i++)
+			{
+				if (i < 2)
+				{
+					continue;
+				}
+				message += (words[i] + " ");
+			}
+			FakePlayerChatManager.getInstance().sendChat(player, fpcName, message);
+			activeChar.sendSysMessage("Your message has been sent.");
+		}
+		return true;
+	}
+	
+	@Override
+	public String[] getAdminCommandList()
+	{
+		return ADMIN_COMMANDS;
+	}
+}
+/*
+ * Copyright (c) 2025 L2Journey Project
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * 
+ * ---
+ * 
+ * Portions of this software are derived from the L2JMobius Project, 
+ * shared under the MIT License. The original license terms are preserved where 
+ * applicable..
+ * 
+ */
+package com.l2journey.gameserver.data.holders;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * @author Mobius
+ */
+public class FakePlayerChatHolder
+{
+	private final String _fpcName;
+	private final String _searchMethod;
+	private final List<String> _searchText;
+	private final List<String> _answers;
+	
+	public FakePlayerChatHolder(String fpcName, String searchMethod, String searchText, String answers)
+	{
+		_fpcName = fpcName;
+		_searchMethod = searchMethod;
+		_searchText = new ArrayList<>(Arrays.asList(searchText.split(";")));
+		_answers = new ArrayList<>(Arrays.asList(answers.split(";")));
+	}
+	
+	public String getFpcName()
+	{
+		return _fpcName;
+	}
+	
+	public String getSearchMethod()
+	{
+		return _searchMethod;
+	}
+	
+	public List<String> getSearchText()
+	{
+		return _searchText;
+	}
+	
+	public List<String> getAnswers()
+	{
+		return _answers;
+	}
+}
+/*
+ * Copyright (c) 2013 L2jMobius
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
+ * IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+package com.l2journey.gameserver.data.xml;
+
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Logger;
+
+import com.l2journey.Config;
+
+/**
+ * @author Mobius
+ */
+public class FakePlayerData
+{
+	private static final Logger LOGGER = Logger.getLogger(FakePlayerData.class.getName());
+	
+	private final Map<String, String> _fakePlayerNames = new ConcurrentHashMap<>();
+	private final Map<String, Integer> _fakePlayerIds = new ConcurrentHashMap<>();
+	private final Set<String> _talkableFakePlayerNames = ConcurrentHashMap.newKeySet();
+	
+	protected FakePlayerData()
+	{
+	}
+	
+	public void report()
+	{
+		if (Config.FAKE_PLAYERS_ENABLED)
+		{
+			LOGGER.info(getClass().getSimpleName() + ": Loaded " + _fakePlayerIds.size() + " templates.");
+		}
+		else
+		{
+			LOGGER.info(getClass().getSimpleName() + ": Disabled.");
+		}
+	}
+	
+	/**
+	 * Adds a mapping between a fake player name and its corresponding NPC ID.
+	 * @param name the name of the fake player
+	 * @param npcId the NPC ID to associate with the fake player
+	 */
+	public void addFakePlayerId(String name, int npcId)
+	{
+		_fakePlayerIds.put(name, npcId);
+	}
+	
+	/**
+	 * Retrieves the NPC ID associated with the given fake player name.
+	 * @param name the name of the fake player
+	 * @return the NPC ID corresponding to the given name, or {@code null} if no match is found
+	 */
+	public int getNpcIdByName(String name)
+	{
+		return _fakePlayerIds.get(name);
+	}
+	
+	/**
+	 * Adds a mapping between a lowercase version of a fake player name and its properly formatted name.
+	 * @param lowercaseName the lowercase version of the fake player name
+	 * @param name the properly formatted name of the fake player
+	 */
+	public void addFakePlayerName(String lowercaseName, String name)
+	{
+		_fakePlayerNames.put(lowercaseName, name);
+	}
+	
+	/**
+	 * Retrieves the properly formatted name of a fake player, given a case-insensitive name lookup.
+	 * @param name the name of the fake player (case-insensitive)
+	 * @return the correctly formatted name of the fake player, or {@code null} if no match is found
+	 */
+	public String getProperName(String name)
+	{
+		return _fakePlayerNames.get(name.toLowerCase());
+	}
+	
+	/**
+	 * Adds a fake player name to the set of talkable fake player names.
+	 * @param lowercaseName the lowercase version of the fake player name
+	 */
+	public void addTalkableFakePlayerName(String lowercaseName)
+	{
+		_talkableFakePlayerNames.add(lowercaseName);
+	}
+	
+	/**
+	 * Checks if a fake player with the given name is marked as talkable.
+	 * @param name the name of the fake player (case-insensitive)
+	 * @return {@code true} if the fake player with the given name is talkable, {@code false} otherwise
+	 */
+	public boolean isTalkable(String name)
+	{
+		return _talkableFakePlayerNames.contains(name.toLowerCase());
+	}
+	
+	public static FakePlayerData getInstance()
+	{
+		return SingletonHolder.INSTANCE;
+	}
+	
+	private static class SingletonHolder
+	{
+		protected static final FakePlayerData INSTANCE = new FakePlayerData();
+	}
+}
+/*
+ * Copyright (c) 2025 L2Journey Project
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * 
+ * ---
+ * 
+ * Portions of this software are derived from the L2JMobius Project, 
+ * shared under the MIT License. The original license terms are preserved where 
+ * applicable..
+ * 
+ */
+package com.l2journey.gameserver.managers;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
+
+import org.w3c.dom.Document;
+
+import com.l2journey.Config;
+import com.l2journey.commons.threads.ThreadPool;
+import com.l2journey.commons.util.IXmlReader;
+import com.l2journey.commons.util.Rnd;
+import com.l2journey.gameserver.GeoData;
+import com.l2journey.gameserver.data.SpawnTable;
+import com.l2journey.gameserver.data.holders.FakePlayerChatHolder;
+import com.l2journey.gameserver.data.xml.FakePlayerData;
+import com.l2journey.gameserver.model.Spawn;
+import com.l2journey.gameserver.model.StatSet;
+import com.l2journey.gameserver.model.actor.Npc;
+import com.l2journey.gameserver.model.actor.Player;
+import com.l2journey.gameserver.network.enums.ChatType;
+import com.l2journey.gameserver.network.serverpackets.CreatureSay;
+
+/**
+ * @author Mobius
+ */
+public class FakePlayerChatManager implements IXmlReader
+{
+	private static final Logger LOGGER = Logger.getLogger(FakePlayerChatManager.class.getName());
+	
+	private static final List<FakePlayerChatHolder> MESSAGES = new ArrayList<>();
+	private static final int MIN_DELAY = 5000;
+	private static final int MAX_DELAY = 15000;
+	
+	protected FakePlayerChatManager()
+	{
+		load();
+	}
+	
+	@Override
+	public void load()
+	{
+		if (Config.FAKE_PLAYERS_ENABLED)
+		{
+			FakePlayerData.getInstance().report();
+			if (Config.FAKE_PLAYER_CHAT)
+			{
+				MESSAGES.clear();
+				parseDatapackFile("data/FakePlayerChatData.xml");
+				LOGGER.info(getClass().getSimpleName() + ": Loaded " + MESSAGES.size() + " chat templates.");
+			}
+		}
+	}
+	
+	@Override
+	public void parseDocument(Document document, File file)
+	{
+		forEach(document, "list", listNode -> forEach(listNode, "fakePlayerChat", fakePlayerChatNode ->
+		{
+			// Parse attributes of the "fakePlayerChat" element.
+			final StatSet set = new StatSet(parseAttributes(fakePlayerChatNode));
+			
+			// Add a new FakePlayerChatHolder to the MESSAGES collection.
+			MESSAGES.add(new FakePlayerChatHolder(set.getString("fpcName"), set.getString("searchMethod"), set.getString("searchText"), set.getString("answers")));
+		}));
+	}
+	
+	public void manageChat(Player player, String fpcName, String message)
+	{
+		ThreadPool.schedule(() -> manageResponce(player, fpcName, message), Rnd.get(MIN_DELAY, MAX_DELAY));
+	}
+	
+	public void manageChat(Player player, String fpcName, String message, int minDelay, int maxDelay)
+	{
+		ThreadPool.schedule(() -> manageResponce(player, fpcName, message), Rnd.get(minDelay, maxDelay));
+	}
+	
+	private void manageResponce(Player player, String fpcName, String message)
+	{
+		if (player == null)
+		{
+			return;
+		}
+		
+		final String text = message.toLowerCase();
+		
+		// tricky question
+		if (text.contains("can you see me"))
+		{
+			final Spawn spawn = SpawnTable.getInstance().getAnySpawn(FakePlayerData.getInstance().getNpcIdByName(fpcName));
+			if (spawn != null)
+			{
+				final Npc npc = spawn.getLastSpawn();
+				if (npc != null)
+				{
+					if (npc.calculateDistance2D(player) < 3000)
+					{
+						if (GeoData.getInstance().canSeeTarget(npc, player) && !player.isInvisible())
+						{
+							sendChat(player, fpcName, Rnd.nextBoolean() ? "i am not blind" : Rnd.nextBoolean() ? "of course i can" : "yes");
+						}
+						else
+						{
+							sendChat(player, fpcName, Rnd.nextBoolean() ? "i know you are around" : Rnd.nextBoolean() ? "not at the moment :P" : "no, where are you?");
+						}
+					}
+					else
+					{
+						sendChat(player, fpcName, Rnd.nextBoolean() ? "nope, can't see you" : Rnd.nextBoolean() ? "nope" : "no");
+					}
+					return;
+				}
+			}
+		}
+		
+		for (FakePlayerChatHolder chatHolder : MESSAGES)
+		{
+			if (!chatHolder.getFpcName().equals(fpcName) && !chatHolder.getFpcName().equals("ALL"))
+			{
+				continue;
+			}
+			
+			switch (chatHolder.getSearchMethod())
+			{
+				case "EQUALS":
+				{
+					if (text.equals(chatHolder.getSearchText().get(0)))
+					{
+						sendChat(player, fpcName, chatHolder.getAnswers().get(Rnd.get(chatHolder.getAnswers().size())));
+					}
+					break;
+				}
+				case "STARTS_WITH":
+				{
+					if (text.startsWith(chatHolder.getSearchText().get(0)))
+					{
+						sendChat(player, fpcName, chatHolder.getAnswers().get(Rnd.get(chatHolder.getAnswers().size())));
+					}
+					break;
+				}
+				case "CONTAINS":
+				{
+					boolean allFound = true;
+					for (String word : chatHolder.getSearchText())
+					{
+						if (!text.contains(word))
+						{
+							allFound = false;
+						}
+					}
+					if (allFound)
+					{
+						sendChat(player, fpcName, chatHolder.getAnswers().get(Rnd.get(chatHolder.getAnswers().size())));
+					}
+					break;
+				}
+			}
+		}
+	}
+	
+	public void sendChat(Player player, String fpcName, String message)
+	{
+		final Spawn spawn = SpawnTable.getInstance().getAnySpawn(FakePlayerData.getInstance().getNpcIdByName(fpcName));
+		if (spawn != null)
+		{
+			final Npc npc = spawn.getLastSpawn();
+			if (npc != null)
+			{
+				player.sendPacket(new CreatureSay(npc, ChatType.WHISPER, fpcName, message));
+			}
+		}
+	}
+	
+	public static FakePlayerChatManager getInstance()
+	{
+		return SingletonHolder.INSTANCE;
+	}
+	
+	private static class SingletonHolder
+	{
+		protected static final FakePlayerChatManager INSTANCE = new FakePlayerChatManager();
+	}
+}
+/*
+ * Copyright (c) 2025 L2Journey Project
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * 
+ * ---
+ * 
+ * Portions of this software are derived from the L2JMobius Project, 
+ * shared under the MIT License. The original license terms are preserved where 
+ * applicable..
+ * 
+ */
+package com.l2journey.gameserver.model.actor.holders.npc;
+
+import com.l2journey.gameserver.data.xml.FakePlayerData;
+import com.l2journey.gameserver.model.StatSet;
+import com.l2journey.gameserver.model.actor.enums.player.PlayerClass;
+
+/**
+ * @author Mobius
+ */
+public class FakePlayerHolder
+{
+	private final PlayerClass _playerClass;
+	private final int _hair;
+	private final int _hairColor;
+	private final int _face;
+	private final int _nameColor;
+	private final int _titleColor;
+	private final int _equipHead;
+	private final int _equipRHand;
+	private final int _equipLHand;
+	private final int _equipGloves;
+	private final int _equipChest;
+	private final int _equipLegs;
+	private final int _equipFeet;
+	private final int _equipCloak;
+	private final int _equipHair;
+	private final int _equipHair2;
+	private final int _agathionId;
+	private final int _weaponEnchantLevel;
+	private final int _armorEnchantLevel;
+	private final boolean _fishing;
+	private final int _baitLocationX;
+	private final int _baitLocationY;
+	private final int _baitLocationZ;
+	private final int _recommends;
+	private final int _nobleLevel;
+	private final boolean _hero;
+	private final int _clanId;
+	private final int _pledgeStatus;
+	private final boolean _isSitting;
+	private final int _privateStoreType;
+	private final String _privateStoreMessage;
+	private final boolean _talkable;
+	
+	public FakePlayerHolder(StatSet set)
+	{
+		_playerClass = PlayerClass.getPlayerClass(set.getInt("classId", 1));
+		_hair = set.getInt("hair", 1);
+		_hairColor = set.getInt("hairColor", 1);
+		_face = set.getInt("face", 1);
+		_nameColor = set.getInt("nameColor", 0xFFFFFF);
+		_titleColor = set.getInt("titleColor", 0xECF9A2);
+		_equipHead = set.getInt("equipHead", 0);
+		_equipRHand = set.getInt("equipRHand", 0); // Or dual hand.
+		_equipLHand = set.getInt("equipLHand", 0);
+		_equipGloves = set.getInt("equipGloves", 0);
+		_equipChest = set.getInt("equipChest", 0);
+		_equipLegs = set.getInt("equipLegs", 0);
+		_equipFeet = set.getInt("equipFeet", 0);
+		_equipCloak = set.getInt("equipCloak", 0);
+		_equipHair = set.getInt("equipHair", 0);
+		_equipHair2 = set.getInt("equipHair2", 0);
+		_agathionId = set.getInt("agathionId", 0);
+		_weaponEnchantLevel = set.getInt("weaponEnchantLevel", 0);
+		_armorEnchantLevel = set.getInt("armorEnchantLevel", 0);
+		_fishing = set.getBoolean("fishing", false);
+		_baitLocationX = set.getInt("baitLocationX", 0);
+		_baitLocationY = set.getInt("baitLocationY", 0);
+		_baitLocationZ = set.getInt("baitLocationZ", 0);
+		_recommends = set.getInt("recommends", 0);
+		_nobleLevel = set.getInt("nobleLevel", 0);
+		_hero = set.getBoolean("hero", false);
+		_clanId = set.getInt("clanId", 0);
+		_pledgeStatus = set.getInt("pledgeStatus", 0);
+		_isSitting = set.getBoolean("sitting", false);
+		_privateStoreType = set.getInt("privateStoreType", 0);
+		_privateStoreMessage = set.getString("privateStoreMessage", "");
+		_talkable = set.getBoolean("fakePlayerTalkable", true);
+		
+		// Populate FakePlayerData mappings.
+		final String name = set.getString("name", "");
+		FakePlayerData.getInstance().addFakePlayerId(name, set.getInt("id", 0)); // Map name to npcId.
+		final String lowercaseName = name.toLowerCase();
+		FakePlayerData.getInstance().addFakePlayerName(lowercaseName, name); // Map lowercase name to original name.
+		if (_talkable)
+		{
+			FakePlayerData.getInstance().addTalkableFakePlayerName(lowercaseName);
+		}
+	}
+	
+	public PlayerClass getPlayerClass()
+	{
+		return _playerClass;
+	}
+	
+	public int getHair()
+	{
+		return _hair;
+	}
+	
+	public int getHairColor()
+	{
+		return _hairColor;
+	}
+	
+	public int getFace()
+	{
+		return _face;
+	}
+	
+	public int getNameColor()
+	{
+		return _nameColor;
+	}
+	
+	public int getTitleColor()
+	{
+		return _titleColor;
+	}
+	
+	public int getEquipHead()
+	{
+		return _equipHead;
+	}
+	
+	public int getEquipRHand()
+	{
+		return _equipRHand;
+	}
+	
+	public int getEquipLHand()
+	{
+		return _equipLHand;
+	}
+	
+	public int getEquipGloves()
+	{
+		return _equipGloves;
+	}
+	
+	public int getEquipChest()
+	{
+		return _equipChest;
+	}
+	
+	public int getEquipLegs()
+	{
+		return _equipLegs;
+	}
+	
+	public int getEquipFeet()
+	{
+		return _equipFeet;
+	}
+	
+	public int getEquipCloak()
+	{
+		return _equipCloak;
+	}
+	
+	public int getEquipHair()
+	{
+		return _equipHair;
+	}
+	
+	public int getEquipHair2()
+	{
+		return _equipHair2;
+	}
+	
+	public int getAgathionId()
+	{
+		return _agathionId;
+	}
+	
+	public int getWeaponEnchantLevel()
+	{
+		return _weaponEnchantLevel;
+	}
+	
+	public int getArmorEnchantLevel()
+	{
+		return _armorEnchantLevel;
+	}
+	
+	public boolean isFishing()
+	{
+		return _fishing;
+	}
+	
+	public int getBaitLocationX()
+	{
+		return _baitLocationX;
+	}
+	
+	public int getBaitLocationY()
+	{
+		return _baitLocationY;
+	}
+	
+	public int getBaitLocationZ()
+	{
+		return _baitLocationZ;
+	}
+	
+	public int getRecommends()
+	{
+		return _recommends;
+	}
+	
+	public int getNobleLevel()
+	{
+		return _nobleLevel;
+	}
+	
+	public boolean isHero()
+	{
+		return _hero;
+	}
+	
+	public int getClanId()
+	{
+		return _clanId;
+	}
+	
+	public int getPledgeStatus()
+	{
+		return _pledgeStatus;
+	}
+	
+	public boolean isSitting()
+	{
+		return _isSitting;
+	}
+	
+	public int getPrivateStoreType()
+	{
+		return _privateStoreType;
+	}
+	
+	public String getPrivateStoreMessage()
+	{
+		return _privateStoreMessage;
+	}
+	
+	public boolean isTalkable()
+	{
+		return _talkable;
+	}
+}
+/*
+ * Copyright (c) 2025 L2Journey Project
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * 
+ * ---
+ * 
+ * Portions of this software are derived from the L2JMobius Project, 
+ * shared under the MIT License. The original license terms are preserved where 
+ * applicable..
+ * 
+ */
+package com.l2journey.gameserver.network.serverpackets;
+
+import com.l2journey.commons.network.WritableBuffer;
+import com.l2journey.gameserver.data.sql.ClanTable;
+import com.l2journey.gameserver.model.actor.Npc;
+import com.l2journey.gameserver.model.actor.enums.player.Sex;
+import com.l2journey.gameserver.model.actor.holders.npc.FakePlayerHolder;
+import com.l2journey.gameserver.model.clan.Clan;
+import com.l2journey.gameserver.model.zone.ZoneId;
+import com.l2journey.gameserver.network.GameClient;
+import com.l2journey.gameserver.network.ServerPackets;
+
+/**
+ * @author Mobius
+ */
+public class FakePlayerInfo extends ServerPacket
+{
+	private final Npc _npc;
+	private final int _objId;
+	private final int _x;
+	private final int _y;
+	private final int _z;
+	private final int _heading;
+	private final int _mAtkSpd;
+	private final int _pAtkSpd;
+	private final int _runSpd;
+	private final int _walkSpd;
+	private final int _swimRunSpd;
+	private final int _swimWalkSpd;
+	private final int _flyRunSpd;
+	private final int _flyWalkSpd;
+	private final double _moveMultiplier;
+	private final float _attackSpeedMultiplier;
+	private final FakePlayerHolder _fpcHolder;
+	private final Clan _clan;
+	
+	public FakePlayerInfo(Npc npc)
+	{
+		_npc = npc;
+		_objId = npc.getObjectId();
+		_x = npc.getX();
+		_y = npc.getY();
+		_z = npc.getZ();
+		_heading = npc.getHeading();
+		_mAtkSpd = npc.getMAtkSpd();
+		_pAtkSpd = (int) npc.getPAtkSpd();
+		_attackSpeedMultiplier = npc.getAttackSpeedMultiplier();
+		_moveMultiplier = npc.getMovementSpeedMultiplier();
+		_runSpd = (int) Math.round(npc.getRunSpeed() / _moveMultiplier);
+		_walkSpd = (int) Math.round(npc.getWalkSpeed() / _moveMultiplier);
+		_swimRunSpd = (int) Math.round(npc.getSwimRunSpeed() / _moveMultiplier);
+		_swimWalkSpd = (int) Math.round(npc.getSwimWalkSpeed() / _moveMultiplier);
+		_flyRunSpd = npc.isFlying() ? _runSpd : 0;
+		_flyWalkSpd = npc.isFlying() ? _walkSpd : 0;
+		_fpcHolder = npc.getTemplate().getFakePlayerInfo();
+		_clan = ClanTable.getInstance().getClan(_fpcHolder.getClanId());
+	}
+	
+	@Override
+	public void writeImpl(GameClient client, WritableBuffer buffer)
+	{
+		ServerPackets.CHAR_INFO.writeId(this, buffer);
+		buffer.writeInt(_x);
+		buffer.writeInt(_y);
+		buffer.writeInt(_z);
+		buffer.writeInt(0); // vehicleId
+		buffer.writeInt(_objId);
+		buffer.writeString(_npc.getName());
+		buffer.writeInt(_npc.getRace().ordinal());
+		buffer.writeInt(_npc.getTemplate().getSex() == Sex.FEMALE);
+		buffer.writeInt(_fpcHolder.getPlayerClass().getId());
+		buffer.writeInt(0); // Inventory.PAPERDOLL_UNDER
+		buffer.writeInt(_fpcHolder.getEquipHead());
+		buffer.writeInt(_fpcHolder.getEquipRHand());
+		buffer.writeInt(_fpcHolder.getEquipLHand());
+		buffer.writeInt(_fpcHolder.getEquipGloves());
+		buffer.writeInt(_fpcHolder.getEquipChest());
+		buffer.writeInt(_fpcHolder.getEquipLegs());
+		buffer.writeInt(_fpcHolder.getEquipFeet());
+		buffer.writeInt(_fpcHolder.getEquipCloak());
+		buffer.writeInt(_fpcHolder.getEquipRHand()); // dual hand
+		buffer.writeInt(_fpcHolder.getEquipHair());
+		buffer.writeInt(_fpcHolder.getEquipHair2());
+		buffer.writeInt(0); // Inventory.PAPERDOLL_RBRACELET
+		buffer.writeInt(0); // Inventory.PAPERDOLL_LBRACELET
+		buffer.writeInt(0); // Inventory.PAPERDOLL_DECO1
+		buffer.writeInt(0); // Inventory.PAPERDOLL_DECO2
+		buffer.writeInt(0); // Inventory.PAPERDOLL_DECO3
+		buffer.writeInt(0); // Inventory.PAPERDOLL_DECO4
+		buffer.writeInt(0); // Inventory.PAPERDOLL_DECO5
+		buffer.writeInt(0); // Inventory.PAPERDOLL_DECO6
+		buffer.writeInt(0); // Inventory.PAPERDOLL_BELT
+		for (int i = 0; i < 21; i++)
+		{
+			buffer.writeInt(0);
+		}
+		buffer.writeInt(0); // getTalismanSlots
+		buffer.writeInt(1); // canEquipCloak
+		buffer.writeInt(_npc.getScriptValue()); // getPvpFlag()
+		buffer.writeInt(_npc.getKarma());
+		buffer.writeInt(_mAtkSpd);
+		buffer.writeInt(_pAtkSpd);
+		buffer.writeInt(0); // ?
+		buffer.writeInt(_runSpd);
+		buffer.writeInt(_walkSpd);
+		buffer.writeInt(_swimRunSpd);
+		buffer.writeInt(_swimWalkSpd);
+		buffer.writeInt(_flyRunSpd);
+		buffer.writeInt(_flyWalkSpd);
+		buffer.writeInt(_flyRunSpd);
+		buffer.writeInt(_flyWalkSpd);
+		buffer.writeDouble(_moveMultiplier);
+		buffer.writeDouble(_attackSpeedMultiplier);
+		buffer.writeDouble(_npc.getCollisionRadius());
+		buffer.writeDouble(_npc.getCollisionHeight());
+		buffer.writeInt(_fpcHolder.getHair());
+		buffer.writeInt(_fpcHolder.getHairColor());
+		buffer.writeInt(_fpcHolder.getFace());
+		buffer.writeString(_npc.getTemplate().getTitle());
+		if (_clan != null)
+		{
+			buffer.writeInt(_clan.getId());
+			buffer.writeInt(_clan.getCrestId());
+			buffer.writeInt(_clan.getAllyId());
+			buffer.writeInt(_clan.getAllyCrestId());
+		}
+		else
+		{
+			buffer.writeInt(0);
+			buffer.writeInt(0);
+			buffer.writeInt(0);
+			buffer.writeInt(0);
+		}
+		buffer.writeByte(!_fpcHolder.isSitting());
+		buffer.writeByte(_npc.isRunning());
+		buffer.writeByte(_npc.isInCombat());
+		buffer.writeByte(_npc.isAlikeDead());
+		buffer.writeByte(_npc.isInvisible());
+		buffer.writeByte(0); // 1-on Strider, 2-on Wyvern, 3-on Great Wolf, 0-no mount
+		buffer.writeByte(_fpcHolder.getPrivateStoreType());
+		buffer.writeShort(0); // getCubics().size()
+		// getCubics().keySet().forEach(packet::writeH);
+		buffer.writeByte(0); // isInPartyMatchRoom
+		buffer.writeInt(_npc.getAbnormalVisualEffects());
+		buffer.writeByte(_npc.isInsideZone(ZoneId.WATER));
+		buffer.writeShort(_fpcHolder.getRecommends()); // Blue value for name (0 = white, 255 = pure blue)
+		buffer.writeInt(0); // getMountNpcId() == 0 ? 0 : getMountNpcId() + 1000000
+		buffer.writeInt(_fpcHolder.getPlayerClass().getId());
+		buffer.writeInt(0); // ?
+		buffer.writeByte(_fpcHolder.getWeaponEnchantLevel()); // isMounted() ? 0 : _enchantLevel
+		buffer.writeByte(_npc.getTeam().getId());
+		buffer.writeInt(_clan != null ? _clan.getCrestLargeId() : 0);
+		buffer.writeByte(_fpcHolder.getNobleLevel());
+		buffer.writeByte(_fpcHolder.isHero());
+		buffer.writeByte(_fpcHolder.isFishing());
+		buffer.writeInt(_fpcHolder.getBaitLocationX());
+		buffer.writeInt(_fpcHolder.getBaitLocationY());
+		buffer.writeInt(_fpcHolder.getBaitLocationZ());
+		buffer.writeInt(_fpcHolder.getNameColor());
+		buffer.writeInt(_heading);
+		buffer.writeInt(_fpcHolder.getPledgeStatus());
+		buffer.writeInt(0); // getPledgeType()
+		buffer.writeInt(_fpcHolder.getTitleColor());
+		buffer.writeInt(0); // isCursedWeaponEquipped
+		buffer.writeInt(0); // getClanId() > 0 ? getClan().getReputationScore() : 0
+		// T1
+		buffer.writeInt(0); // getTransformationDisplayId()
+		buffer.writeInt(_fpcHolder.getAgathionId());
+		// T2
+		buffer.writeInt(1);
+		// T2.3
+		buffer.writeInt(_npc.getAbnormalVisualEffectSpecial());
+	}
+}
