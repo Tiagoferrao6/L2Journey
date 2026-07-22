@@ -1,0 +1,108 @@
+# L2Journey - Login Server, Game Server, MariaDB
+# For local development. Build from source.
+
+services:
+  db:
+    image: mariadb:11
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-l2j}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-l2journey}
+      MYSQL_USER: ${MYSQL_USER:-l2j}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-l2j}
+    ports:
+      - "${MYSQL_PORT:-3306}:3306"
+    volumes:
+      - mariadb-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mariadb-admin ping --protocol=tcp -h 127.0.0.1 -P 3306 -u root -p\"$MYSQL_ROOT_PASSWORD\" --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - l2journey
+
+  db_init:
+    build:
+      context: .
+      dockerfile: Dockerfile.dbinstall
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_HOST: db
+      DB_PORT: "3306"
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-l2j}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-l2journey}
+    restart: "no"
+    networks:
+      - l2journey
+
+  loginserver:
+    build:
+      context: .
+      dockerfile: Dockerfile.login
+    depends_on:
+      db_init:
+        condition: service_completed_successfully
+    environment:
+      L2J_DATABASE_URL: jdbc:mysql://db:3306/${MYSQL_DATABASE:-l2journey}?useUnicode=true&characterEncoding=utf-8&allowPublicKeyRetrieval=true&useSSL=false&connectTimeout=10000&interactiveClient=true&sessionVariables=wait_timeout=600,interactive_timeout=600&autoReconnect=true
+      L2J_DATABASE_LOGIN: ${MYSQL_USER:-l2j}
+      L2J_DATABASE_PASSWORD: ${MYSQL_PASSWORD:-l2j}
+      L2J_LOGIN_OPTS: ${L2J_LOGIN_OPTS:--Xms128m -Xmx256m}
+    ports:
+      - "${LOGIN_PORT:-2106}:2106"
+      - "9014:9014"
+      - "127.0.0.1:${LOGIN_DEBUG_PORT:-5006}:5006"
+    volumes:
+      - ./docker/config/login/database.ini:/opt/l2journey/login/config/database.ini:ro
+    networks:
+      - l2journey
+
+  gameserver:
+    build:
+      context: .
+      dockerfile: Dockerfile.gameserver
+    depends_on:
+      db_init:
+        condition: service_completed_successfully
+      loginserver:
+        condition: service_started
+    environment:
+      L2J_DATABASE_URL: jdbc:mysql://db:3306/${MYSQL_DATABASE:-l2journey}?useUnicode=true&characterEncoding=utf-8&allowPublicKeyRetrieval=true&useSSL=false&connectTimeout=10000&interactiveClient=true&sessionVariables=wait_timeout=600,interactive_timeout=600&autoReconnect=true
+      L2J_DATABASE_LOGIN: ${MYSQL_USER:-l2j}
+      L2J_DATABASE_PASSWORD: ${MYSQL_PASSWORD:-l2j}
+      L2J_LOGIN_HOST: loginserver
+      L2J_LOGIN_PORT: "9014"
+      L2J_GAME_OPTS: ${L2J_GAME_OPTS:--Xms2g -Xmx4g}
+    ports:
+      - "${GAME_PORT:-7777}:7777"
+      - "127.0.0.1:${GAME_DEBUG_PORT:-5005}:5005"
+    volumes:
+      - ./docker/config/game/database.ini:/opt/l2journey/game/config/database.ini:ro
+      - ./docker/config/game/server.ini:/opt/l2journey/game/config/server.ini:ro
+    networks:
+      - l2journey
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:5
+    profiles:
+      - pma
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PMA_HOST: db
+      PMA_PORT: "3306"
+      PMA_USER: ${MYSQL_USER:-l2j}
+      PMA_PASSWORD: ${MYSQL_PASSWORD:-l2j}
+    ports:
+      - "127.0.0.1:${PHPMYADMIN_PORT:-8080}:80"
+    networks:
+      - l2journey
+
+networks:
+  l2journey:
+    driver: bridge
+
+volumes:
+  mariadb-data:

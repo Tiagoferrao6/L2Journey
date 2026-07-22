@@ -1,0 +1,28 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Attach GameServer (Docker :5005)",
+      "request": "attach",
+      "hostName": "127.0.0.1",
+      "port": 5005
+    },
+    {
+      "type": "java",
+      "name": "Attach LoginServer (Docker :5006)",
+      "request": "attach",
+      "hostName": "127.0.0.1",
+      "port": 5006
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Attach Both Servers (Docker)",
+      "configurations": [
+        "Attach GameServer (Docker :5005)",
+        "Attach LoginServer (Docker :5006)"
+      ]
+    }
+  ]
+}

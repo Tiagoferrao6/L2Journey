@@ -1,0 +1,83 @@
+diff --git a/java/com/l2journey/gameserver/model/actor/Creature.java b/java/com/l2journey/gameserver/model/actor/Creature.java
+index 0007190..9663fe4 100644
+--- a/java/com/l2journey/gameserver/model/actor/Creature.java
++++ b/java/com/l2journey/gameserver/model/actor/Creature.java
+@@ -122,6 +122,7 @@
+ import com.l2journey.gameserver.model.item.enums.ShotType;
+ import com.l2journey.gameserver.model.item.instance.Item;
+ import com.l2journey.gameserver.model.item.type.WeaponType;
++import com.l2journey.gameserver.model.actor.Summon;
+ import com.l2journey.gameserver.model.itemcontainer.Inventory;
+ import com.l2journey.gameserver.model.options.OptionSkillHolder;
+ import com.l2journey.gameserver.model.options.OptionSkillType;
+@@ -2314,8 +2315,20 @@
+ 		// TODO: combinar verificacao e consumo
+ 		if ((skill.getItemConsumeId() > 0) && (getInventory() != null))
+ 		{
++			// Rose Essence (20904): quando conjurada por pet, verificar na bag do owner (comportamento oficial).
++			final Inventory checkInventory;
++			if ((skill.getItemConsumeId() == 20904) && isPet())
++			{
++				final Player owner = ((Summon) this).getOwner();
++				checkInventory = (owner != null) ? owner.getInventory() : getInventory();
++			}
++			else
++			{
++				checkInventory = getInventory();
++			}
++			
+ 			// Obtem o Item consumido pela magia
+-			final Item requiredItems = getInventory().getItemByItemId(skill.getItemConsumeId());
++			final Item requiredItems = checkInventory.getItemByItemId(skill.getItemConsumeId());
+ 			
+ 			// Verifica se o conjurador possui Items consumidos suficientes para conjurar
+ 			if ((requiredItems == null) || (requiredItems.getCount() < skill.getItemConsumeCount()))
+diff --git a/java/com/l2journey/gameserver/model/actor/instance/BabyPet.java b/java/com/l2journey/gameserver/model/actor/instance/BabyPet.java
+index 05d53d3..4f741bd 100644
+--- a/java/com/l2journey/gameserver/model/actor/instance/BabyPet.java
++++ b/java/com/l2journey/gameserver/model/actor/instance/BabyPet.java
+@@ -351,10 +351,20 @@
+ 							continue;
+ 						}
+ 						
+-							// Verificar se a skill requer itens e se o pet os possui
++							// Verificar se a skill requer itens e se o pet/owner os possui
+ 						if ((skill.getItemConsumeId() > 0) && (skill.getItemConsumeCount() > 0))
+ 						{
+-							if (_baby.getInventory().getInventoryItemCount(skill.getItemConsumeId(), -1) < skill.getItemConsumeCount())
++							// Rose Essence (20904): verificar na bag do owner (comportamento oficial).
++							final long availableCount;
++							if (skill.getItemConsumeId() == 20904)
++							{
++								availableCount = owner.getInventory().getInventoryItemCount(skill.getItemConsumeId(), -1);
++							}
++							else
++							{
++								availableCount = _baby.getInventory().getInventoryItemCount(skill.getItemConsumeId(), -1);
++							}
++							if (availableCount < skill.getItemConsumeCount())
+ 							{
+ 									// Item faltando, pular esta skill
+ 								continue;
+diff --git a/java/com/l2journey/gameserver/model/actor/instance/Pet.java b/java/com/l2journey/gameserver/model/actor/instance/Pet.java
+index 4d54b58..c35ad7a 100644
+--- a/java/com/l2journey/gameserver/model/actor/instance/Pet.java
++++ b/java/com/l2journey/gameserver/model/actor/instance/Pet.java
+@@ -482,6 +482,17 @@
+ 	@Override
+ 	public boolean destroyItemByItemId(ItemProcessType process, int itemId, long count, WorldObject reference, boolean sendMessage)
+ 	{
++		// Rose Essence (20904): excepcionalmente consumida da bag do owner, nao do pet (comportamento oficial).
++		if (itemId == 20904)
++		{
++			final Player owner = getOwner();
++			if (owner != null)
++			{
++				return owner.destroyItemByItemId(process, itemId, count, reference, sendMessage);
++			}
++			return false;
++		}
++		
+ 		final Item item = _inventory.destroyItemByItemId(process, itemId, count, getOwner(), reference);
+ 		if (item == null)
+ 		{

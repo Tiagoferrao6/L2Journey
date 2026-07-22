@@ -1,0 +1,456 @@
+### Eclipse Workspace Patch 1.0
+#P L2J_Mobius_CT_0_Interlude
+Index: dist/game/data/scripts/ai/bosses/Zaken/Zaken.java
+===================================================================
+--- dist/game/data/scripts/ai/bosses/Zaken/Zaken.java	(revision 19025)
++++ dist/game/data/scripts/ai/bosses/Zaken/Zaken.java	(working copy)
+@@ -848,7 +848,17 @@
+ 			
+ 			final long baseIntervalMillis = GrandBossConfig.ZAKEN_SPAWN_INTERVAL * 3600000;
+ 			final long randomRangeMillis = GrandBossConfig.ZAKEN_SPAWN_RANDOM * 3600000;
+-			final long respawnTime = baseIntervalMillis + getRandom(-randomRangeMillis, randomRangeMillis);
++
++			long respawnTime = baseIntervalMillis + getRandom(-randomRangeMillis, randomRangeMillis);
++
++			if (GrandBossConfig.STATIC_RESPAWN_ENABLED && (GrandBossConfig.ZAKEN_RESPAWN_DATE != null))
++			{
++				final long staticRespawn = GrandBossManager.getInstance().getRespawnTime(GrandBossConfig.ZAKEN_RESPAWN_DATE);
++				if (staticRespawn > 0)
++				{
++					respawnTime = staticRespawn;
++				}
++			}
+ 			
+ 			// Next respawn time.
+ 			final long nextRespawnTime = System.currentTimeMillis() + respawnTime;
+Index: dist/game/data/scripts/ai/bosses/QueenAnt/QueenAnt.java
+===================================================================
+--- dist/game/data/scripts/ai/bosses/QueenAnt/QueenAnt.java	(revision 19025)
++++ dist/game/data/scripts/ai/bosses/QueenAnt/QueenAnt.java	(working copy)
+@@ -350,7 +350,17 @@
+ 			
+ 			final long baseIntervalMillis = GrandBossConfig.QUEEN_ANT_SPAWN_INTERVAL * 3600000;
+ 			final long randomRangeMillis = GrandBossConfig.QUEEN_ANT_SPAWN_RANDOM * 3600000;
+-			final long respawnTime = baseIntervalMillis + getRandom(-randomRangeMillis, randomRangeMillis);
++	
++			long respawnTime = baseIntervalMillis + getRandom(-randomRangeMillis, randomRangeMillis);
++
++			if (GrandBossConfig.STATIC_RESPAWN_ENABLED && (GrandBossConfig.QUEEN_ANT_RESPAWN_DATE != null))
++			{
++				final long staticRespawn = GrandBossManager.getInstance().getRespawnTime(GrandBossConfig.QUEEN_ANT_RESPAWN_DATE);
++				if (staticRespawn > 0)
++				{
++					respawnTime = staticRespawn;
++				}
++			}
+ 			
+ 			// Next respawn time.
+ 			final long nextRespawnTime = System.currentTimeMillis() + respawnTime;
+Index: java/org/l2jmobius/gameserver/managers/GrandBossManager.java
+===================================================================
+--- java/org/l2jmobius/gameserver/managers/GrandBossManager.java	(revision 19025)
++++ java/org/l2jmobius/gameserver/managers/GrandBossManager.java	(working copy)
+@@ -31,6 +31,10 @@
+ import java.util.logging.Level;
+ import java.util.logging.Logger;
+ 
++import java.util.Calendar;
++import java.util.Locale;
++import java.util.TimeZone;
++
+ import org.l2jmobius.commons.database.DatabaseFactory;
+ import org.l2jmobius.commons.threads.ThreadPool;
+ import org.l2jmobius.gameserver.data.xml.NpcData;
+@@ -91,6 +95,7 @@
+ 				final int status = rs.getInt("status");
+ 				_bossStatus.put(bossId, status);
+ 				_storedInfo.put(bossId, info);
++				
+ 				LOGGER.info(getClass().getSimpleName() + ": " + NpcData.getInstance().getTemplate(bossId).getName() + "(" + bossId + ") status is " + status + ".");
+ 				if (status > 0)
+ 				{
+@@ -109,6 +114,7 @@
+ 			LOGGER.log(Level.WARNING, "Error while initializing GrandBossManager: " + e.getMessage(), e);
+ 		}
+ 		
++		// Guarda periódicamente la info de grandbosses.
+ 		ThreadPool.scheduleAtFixedRate(this::storeMe, 5 * 60 * 1000, 5 * 60 * 1000);
+ 	}
+ 	
+@@ -385,6 +391,160 @@
+ 	}
+ 	
+ 	/**
++	 * Calculates delay in milliseconds until the next weekly respawn based on a configuration
++	 * string that may contain one or multiple entries, for example:
++	 * <ul>
++	 *   <li>{@code SUNDAY 18:00}</li>
++	 *   <li>{@code WEDNESDAY 11:00, SATURDAY 11:00}</li>
++	 * </ul>
++	 * 
++	 * @param respawnDate the configured respawn date string
++	 * @return delay in milliseconds until the next respawn, or {@code -1} if configuration is invalid
++	 */
++	public long getRespawnTime(String respawnDate)
++	{
++		if ((respawnDate == null) || respawnDate.isEmpty())
++		{
++			return -1;
++		}
++		
++		final Calendar now = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
++		long bestDelay = -1L;
++		
++		// Allow multiple entries separated by comma.
++		for (String token : respawnDate.split(","))
++		{
++			if (token == null)
++			{
++				continue;
++			}
++			
++			token = token.trim();
++			if (token.isEmpty())
++			{
++				continue;
++			}
++			
++			final String[] parts = token.split("\\s+");
++			if (parts.length != 2)
++			{
++				LOGGER.warning(getClass().getSimpleName() + ": Invalid grand boss respawn date token: " + token + " in " + respawnDate);
++				continue;
++			}
++			
++			final int dayOfWeek = parseDayOfWeek(parts[0]);
++			if (dayOfWeek == -1)
++			{
++				LOGGER.warning(getClass().getSimpleName() + ": Invalid grand boss respawn day token: " + token + " in " + respawnDate);
++				continue;
++			}
++			
++			final String[] timeParts = parts[1].split(":");
++			if (timeParts.length != 2)
++			{
++				LOGGER.warning(getClass().getSimpleName() + ": Invalid grand boss respawn time token: " + token + " in " + respawnDate);
++				continue;
++			}
++			
++			final int hour;
++			final int minute;
++			
++			try
++			{
++				hour = Integer.parseInt(timeParts[0]);
++				minute = Integer.parseInt(timeParts[1]);
++			}
++			catch (NumberFormatException e)
++			{
++				LOGGER.log(Level.WARNING, getClass().getSimpleName() + ": Invalid numbers in grand boss respawn time token: " + token + " in " + respawnDate, e);
++				continue;
++			}
++			
++			if ((hour < 0) || (hour > 23) || (minute < 0) || (minute > 59))
++			{
++				LOGGER.warning(getClass().getSimpleName() + ": Invalid hour/minute in grand boss respawn time token: " + token + " in " + respawnDate);
++				continue;
++			}
++			
++			final Calendar next = (Calendar) now.clone();
++			next.set(Calendar.DAY_OF_WEEK, dayOfWeek);
++			next.set(Calendar.HOUR_OF_DAY, hour);
++			next.set(Calendar.MINUTE, minute);
++			next.set(Calendar.SECOND, 0);
++			next.set(Calendar.MILLISECOND, 0);
++			
++			// If this week's slot already passed, move to next week.
++			if (!next.after(now))
++			{
++				next.add(Calendar.WEEK_OF_YEAR, 1);
++			}
++			
++			final long delay = next.getTimeInMillis() - now.getTimeInMillis();
++			if ((bestDelay == -1L) || (delay < bestDelay))
++			{
++				bestDelay = delay;
++			}
++		}
++		
++		if (bestDelay == -1L)
++		{
++			LOGGER.warning(getClass().getSimpleName() + ": No valid grand boss respawn entries in: " + respawnDate);
++		}
++		
++		return bestDelay;
++	}
++	
++	/**
++	 * Parses a day-of-week string (e.g. {@code MONDAY}) into {@link Calendar} constants.
++	 * 
++	 * @param day the configured day string
++	 * @return the Calendar day-of-week value, or {@code -1} if invalid
++	 */
++	private int parseDayOfWeek(String day)
++	{
++		if (day == null)
++		{
++			return -1;
++		}
++		
++		final String value = day.trim().toUpperCase(Locale.ENGLISH);
++		
++		switch (value)
++		{
++			case "SUNDAY":
++			{
++				return Calendar.SUNDAY;
++			}
++			case "MONDAY":
++			{
++				return Calendar.MONDAY;
++			}
++			case "TUESDAY":
++			{
++				return Calendar.TUESDAY;
++			}
++			case "WEDNESDAY":
++			{
++				return Calendar.WEDNESDAY;
++			}
++			case "THURSDAY":
++			{
++				return Calendar.THURSDAY;
++			}
++			case "FRIDAY":
++			{
++				return Calendar.FRIDAY;
++			}
++			case "SATURDAY":
++			{
++				return Calendar.SATURDAY;
++			}
++		}
++		
++		return -1;
++	}
++	
++	/**
+ 	 * Gets the single instance of {@code GrandBossManager}.
+ 	 * @return single instance of {@code GrandBossManager}
+ 	 */
+Index: dist/game/data/scripts/ai/bosses/Baium/Baium.java
+===================================================================
+--- dist/game/data/scripts/ai/bosses/Baium/Baium.java	(revision 19025)
++++ dist/game/data/scripts/ai/bosses/Baium/Baium.java	(working copy)
+@@ -566,7 +566,17 @@
+ 			
+ 			final long baseIntervalMillis = GrandBossConfig.BAIUM_SPAWN_INTERVAL * 3600000;
+ 			final long randomRangeMillis = GrandBossConfig.BAIUM_SPAWN_RANDOM * 3600000;
+-			final long respawnTime = baseIntervalMillis + getRandom(-randomRangeMillis, randomRangeMillis);
++
++			long respawnTime = baseIntervalMillis + getRandom(-randomRangeMillis, randomRangeMillis);
++
++			if (GrandBossConfig.STATIC_RESPAWN_ENABLED && (GrandBossConfig.BAIUM_RESPAWN_DATE != null))
++			{
++				final long staticRespawn = GrandBossManager.getInstance().getRespawnTime(GrandBossConfig.BAIUM_RESPAWN_DATE);
++				if (staticRespawn > 0)
++				{
++					respawnTime = staticRespawn;
++				}
++			}
+ 			
+ 			// Next respawn time.
+ 			final long nextRespawnTime = System.currentTimeMillis() + respawnTime;
+Index: dist/game/data/scripts/ai/bosses/Valakas/Valakas.java
+===================================================================
+--- dist/game/data/scripts/ai/bosses/Valakas/Valakas.java	(revision 19025)
++++ dist/game/data/scripts/ai/bosses/Valakas/Valakas.java	(working copy)
+@@ -461,7 +461,17 @@
+ 		
+ 		final long baseIntervalMillis = GrandBossConfig.VALAKAS_SPAWN_INTERVAL * 3600000;
+ 		final long randomRangeMillis = GrandBossConfig.VALAKAS_SPAWN_RANDOM * 3600000;
+-		final long respawnTime = baseIntervalMillis + getRandom(-randomRangeMillis, randomRangeMillis);
++
++		long respawnTime = baseIntervalMillis + getRandom(-randomRangeMillis, randomRangeMillis);
++
++		if (GrandBossConfig.STATIC_RESPAWN_ENABLED && (GrandBossConfig.VALAKAS_RESPAWN_DATE != null))
++		{
++			final long staticRespawn = GrandBossManager.getInstance().getRespawnTime(GrandBossConfig.VALAKAS_RESPAWN_DATE);
++			if (staticRespawn > 0)
++			{
++				respawnTime = staticRespawn;
++			}
++		}
+ 		
+ 		// Next respawn time.
+ 		final long nextRespawnTime = System.currentTimeMillis() + respawnTime;
+Index: dist/game/data/scripts/ai/bosses/Orfen/Orfen.java
+===================================================================
+--- dist/game/data/scripts/ai/bosses/Orfen/Orfen.java	(revision 19025)
++++ dist/game/data/scripts/ai/bosses/Orfen/Orfen.java	(working copy)
+@@ -321,7 +321,17 @@
+ 			
+ 			final long baseIntervalMillis = GrandBossConfig.ORFEN_SPAWN_INTERVAL * 3600000;
+ 			final long randomRangeMillis = GrandBossConfig.ORFEN_SPAWN_RANDOM * 3600000;
+-			final long respawnTime = baseIntervalMillis + getRandom(-randomRangeMillis, randomRangeMillis);
++
++			long respawnTime = baseIntervalMillis + getRandom(-randomRangeMillis, randomRangeMillis);
++
++			if (GrandBossConfig.STATIC_RESPAWN_ENABLED && (GrandBossConfig.ORFEN_RESPAWN_DATE != null))
++			{
++				final long staticRespawn = GrandBossManager.getInstance().getRespawnTime(GrandBossConfig.ORFEN_RESPAWN_DATE);
++				if (staticRespawn > 0)
++				{
++					respawnTime = staticRespawn;
++				}
++			}
+ 			
+ 			// Next respawn time.
+ 			final long nextRespawnTime = System.currentTimeMillis() + respawnTime;
+Index: dist/game/config/GrandBoss.ini
+===================================================================
+--- dist/game/config/GrandBoss.ini	(revision 19025)
++++ dist/game/config/GrandBoss.ini	(working copy)
+@@ -1,4 +1,27 @@
+ # ---------------------------------------------------------------------------
++# Grand Boss Static Respawn
++# ---------------------------------------------------------------------------
++# Enables static weekly respawns for grand bosses using *_RespawnDate.
++# If False, classic interval + random behaviour is used.
++# Epic Grandboss respawn system: This system allows for a fixed respawn that does not change, and whenever it is defeated, it follows the assigned configuration.
++GrandBossStaticRespawn = True
++
++# Respawn date in week.
++# Weekly configuration: This allows you to choose the day and time for respawn. 
++# If the boss is not defeated, a new respawn is not assigned; it simply passes by until it is defeated and the next respawn date is taken.
++# Format: SUNDAY|MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY HH:MM
++# Example: SUNDAY 0:34, TUESDAY 0:34, MONDAY 0:34
++#
++AntharasRespawnDate   = SUNDAY 18:00
++ValakasRespawnDate    = MONDAY 11:00
++BaiumRespawnDate      = TUESDAY 11:00
++CoreRespawnDate       = WEDNESDAY 11:00, SATURDAY 11:00
++OrfenRespawnDate      = THURSDAY 11:00, SUNDAY 18:00
++QueenAntRespawnDate   = FRIDAY 11:00, TUESDAY 11:00
++ZakenRespawnDate      = SATURDAY 11:00, WEDNESDAY 11:00
++FrintezzaRespawnDate  = SUNDAY 11:00
++
++# ---------------------------------------------------------------------------
+ # Antharas
+ # ---------------------------------------------------------------------------
+ 
+Index: dist/game/data/scripts/ai/bosses/Core/Core.java
+===================================================================
+--- dist/game/data/scripts/ai/bosses/Core/Core.java	(revision 19025)
++++ dist/game/data/scripts/ai/bosses/Core/Core.java	(working copy)
+@@ -240,7 +240,17 @@
+ 			
+ 			final long baseIntervalMillis = GrandBossConfig.CORE_SPAWN_INTERVAL * 3600000;
+ 			final long randomRangeMillis = GrandBossConfig.CORE_SPAWN_RANDOM * 3600000;
+-			final long respawnTime = baseIntervalMillis + getRandom(-randomRangeMillis, randomRangeMillis);
++
++			long respawnTime = baseIntervalMillis + getRandom(-randomRangeMillis, randomRangeMillis);
++
++			if (GrandBossConfig.STATIC_RESPAWN_ENABLED && (GrandBossConfig.CORE_RESPAWN_DATE != null))
++			{
++				final long staticRespawn = GrandBossManager.getInstance().getRespawnTime(GrandBossConfig.CORE_RESPAWN_DATE);
++				if (staticRespawn > 0)
++				{
++					respawnTime = staticRespawn;
++				}
++			}
+ 			
+ 			// Next respawn time.
+ 			final long nextRespawnTime = System.currentTimeMillis() + respawnTime;
+Index: java/org/l2jmobius/gameserver/config/GrandBossConfig.java
+===================================================================
+--- java/org/l2jmobius/gameserver/config/GrandBossConfig.java	(revision 19025)
++++ java/org/l2jmobius/gameserver/config/GrandBossConfig.java	(working copy)
+@@ -32,6 +32,15 @@
+ 	private static final String GRANDBOSS_CONFIG_FILE = "./config/GrandBoss.ini";
+ 	
+ 	// Constants
++	public static boolean STATIC_RESPAWN_ENABLED;
++    public static String ANTHARAS_RESPAWN_DATE;
++    public static String VALAKAS_RESPAWN_DATE;
++    public static String BAIUM_RESPAWN_DATE;
++    public static String CORE_RESPAWN_DATE;
++    public static String ORFEN_RESPAWN_DATE;
++    public static String QUEEN_ANT_RESPAWN_DATE;
++    public static String ZAKEN_RESPAWN_DATE;
++    public static String FRINTEZZA_RESPAWN_DATE;
+ 	public static int ANTHARAS_WAIT_TIME;
+ 	public static int ANTHARAS_SPAWN_INTERVAL;
+ 	public static int ANTHARAS_SPAWN_RANDOM;
+@@ -57,6 +66,7 @@
+ 	public static void load()
+ 	{
+ 		final ConfigReader config = new ConfigReader(GRANDBOSS_CONFIG_FILE);
++		STATIC_RESPAWN_ENABLED = config.getBoolean("GrandBossStaticRespawn", false);
+ 		ANTHARAS_WAIT_TIME = config.getInt("AntharasWaitTime", 30);
+ 		ANTHARAS_SPAWN_INTERVAL = config.getInt("IntervalOfAntharasSpawn", 264);
+ 		ANTHARAS_SPAWN_RANDOM = config.getInt("RandomOfAntharasSpawn", 72);
+@@ -78,5 +88,13 @@
+ 		ZAKEN_SPAWN_RANDOM = config.getInt("RandomOfZakenSpawn", 17);
+ 		FRINTEZZA_SPAWN_INTERVAL = config.getInt("IntervalOfFrintezzaSpawn", 48);
+ 		FRINTEZZA_SPAWN_RANDOM = config.getInt("RandomOfFrintezzaSpawn", 8);
++		ANTHARAS_RESPAWN_DATE  = config.getString("AntharasRespawnDate", "SUNDAY 18:00");
++        VALAKAS_RESPAWN_DATE   = config.getString("ValakasRespawnDate", "MONDAY 11:00");
++        BAIUM_RESPAWN_DATE     = config.getString("BaiumRespawnDate", "TUESDAY 11:00");
++        CORE_RESPAWN_DATE      = config.getString("CoreRespawnDate", "WEDNESDAY 11:00");
++        ORFEN_RESPAWN_DATE     = config.getString("OrfenRespawnDate", "THURSDAY 11:00");
++        QUEEN_ANT_RESPAWN_DATE = config.getString("QueenAntRespawnDate", "FRIDAY 11:00");
++        ZAKEN_RESPAWN_DATE     = config.getString("ZakenRespawnDate", "SATURDAY 11:00");
++        FRINTEZZA_RESPAWN_DATE = config.getString("FrintezzaRespawnDate", "SUNDAY 11:00");
+ 	}
+ }
+Index: dist/game/data/scripts/ai/bosses/Frintezza/Frintezza.java
+===================================================================
+--- dist/game/data/scripts/ai/bosses/Frintezza/Frintezza.java	(revision 19025)
++++ dist/game/data/scripts/ai/bosses/Frintezza/Frintezza.java	(working copy)
+@@ -1597,7 +1597,17 @@
+ 			
+ 			final long baseIntervalMillis = GrandBossConfig.FRINTEZZA_SPAWN_INTERVAL * 3600000;
+ 			final long randomRangeMillis = GrandBossConfig.FRINTEZZA_SPAWN_RANDOM * 3600000;
+-			final long respawnTime = baseIntervalMillis + getRandom(-randomRangeMillis, randomRangeMillis);
++
++			long respawnTime = baseIntervalMillis + getRandom(-randomRangeMillis, randomRangeMillis);
++
++			if (GrandBossConfig.STATIC_RESPAWN_ENABLED && (GrandBossConfig.FRINTEZZA_RESPAWN_DATE != null))
++			{
++				final long staticRespawn = GrandBossManager.getInstance().getRespawnTime(GrandBossConfig.FRINTEZZA_RESPAWN_DATE);
++				if (staticRespawn > 0)
++				{
++					respawnTime = staticRespawn;
++				}
++			}
+ 			
+ 			// Next respawn time.
+ 			final long nextRespawnTime = System.currentTimeMillis() + respawnTime;
+Index: dist/game/data/scripts/ai/bosses/Antharas/Antharas.java
+===================================================================
+--- dist/game/data/scripts/ai/bosses/Antharas/Antharas.java	(revision 19025)
++++ dist/game/data/scripts/ai/bosses/Antharas/Antharas.java	(working copy)
+@@ -650,9 +650,19 @@
+ 				ZONE.broadcastPacket(new PlaySound("BS01_D"));
+ 				addSpawn(TELEPORT_CUBE, 177615, 114941, -7709, 0, false, 900000);
+ 				
+-				final long baseIntervalMillis = GrandBossConfig.ANTHARAS_SPAWN_INTERVAL * 3600000;
+-				final long randomRangeMillis = GrandBossConfig.ANTHARAS_SPAWN_RANDOM * 3600000;
+-				final long respawnTime = baseIntervalMillis + getRandom(-randomRangeMillis, randomRangeMillis);
++			final long baseIntervalMillis = GrandBossConfig.ANTHARAS_SPAWN_INTERVAL * 3600000;
++			final long randomRangeMillis = GrandBossConfig.ANTHARAS_SPAWN_RANDOM * 3600000;
++
++			long respawnTime = baseIntervalMillis + getRandom(-randomRangeMillis, randomRangeMillis);
++
++			if (GrandBossConfig.STATIC_RESPAWN_ENABLED && (GrandBossConfig.ANTHARAS_RESPAWN_DATE != null))
++			{
++				final long staticRespawn = GrandBossManager.getInstance().getRespawnTime(GrandBossConfig.ANTHARAS_RESPAWN_DATE);
++				if (staticRespawn > 0)
++				{
++					respawnTime = staticRespawn;
++				}
++			}
+ 				setRespawn(respawnTime);
+ 				startQuestTimer("CLEAR_STATUS", respawnTime, null, null);
+ 				cancelQuestTimer("SET_REGEN", npc, null);
