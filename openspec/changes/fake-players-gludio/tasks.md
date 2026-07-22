@@ -1,15 +1,15 @@
 ## 1. Database and Persistence Setup
 
-- [ ] 1.1 Create SQL script for `fake_players_profiles` table
-- [ ] 1.2 Implement Data Access Object (DAO) for `fake_players_profiles`
+- [x] 1.1 Create SQL script for `fake_players_profiles` table
+- [x] 1.2 Implement Data Access Object (DAO) for `fake_players_profiles`
 - [ ] 1.3 Add logic to save/load bot state based on ID
 
 ## 2. Core Manager Implementation
 
-- [ ] 2.1 Create `FakePlayerManager` class with basic singleton structure
-- [ ] 2.2 Implement schedule and cycle management logic within `FakePlayerManager`
-- [ ] 2.3 Implement Zone Listener for Gludio region to detect real player presence
-- [ ] 2.4 Add conditional spawning/despawning logic based on Zone Listener events
+- [x] 2.1 Create `FakePlayerManager` class with basic singleton structure
+- [x] 2.2 Implement schedule and cycle management logic within `FakePlayerManager`
+- [x] 2.3 Implement Zone Listener for Gludio region to detect real player presence
+- [x] 2.4 Add conditional spawning/despawning logic based on Zone Listener events
 
 ## 3. Fake Trader AI Implementation
 
