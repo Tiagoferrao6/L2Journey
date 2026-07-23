@@ -43,13 +43,7 @@ public class FakePlayer extends Player
 	}
 
 	@Override
-	public void store()
-	{
-		// Ghost Object: Do not save to DB
-	}
-
-	@Override
-	public void storeCharBase()
+	public void storeMe()
 	{
 		// Ghost Object: Do not save to DB
 	}
