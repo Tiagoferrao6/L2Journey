@@ -1,0 +1,1500 @@
+================================================================================
+ ARQUIVO: dist/login/config/database.ini
+================================================================================
+# ---------------------------------------------------------------------------
+# Banco de Dados
+# ---------------------------------------------------------------------------
+
+# Classe do driver JDBC para o banco de dados.
+# Padrao: com.mysql.cj.jdbc.Driver
+Driver = com.mysql.cj.jdbc.Driver
+
+# URL de conexao com o banco de dados.
+# Padrao: jdbc:mysql://localhost/l2journey?useUnicode=true&characterEncoding=utf-8&useSSL=false&connectTimeout=10000&interactiveClient=true&sessionVariables=wait_timeout=600,interactive_timeout=600&autoReconnect=true
+URL = jdbc:mysql://localhost/l2journey?useUnicode=true&characterEncoding=utf-8&useSSL=false&connectTimeout=10000&interactiveClient=true&sessionVariables=wait_timeout=600,interactive_timeout=600&autoReconnect=true
+
+# Usuario do banco de dados. Padrao eh "root", mas nao eh recomendado.
+Login = root
+
+# Senha do banco de dados. Deixe vazio para nenhuma senha.
+Password = king
+
+# Numero maximo de conexoes simultaneas com o banco de dados.
+# Padrao: 5
+MaximumDatabaseConnections = 5
+
+# Define se as conexoes com o banco devem ser testadas periodicamente.
+# Padrao: False
+TestDatabaseConnections = False
+
+
+# ---------------------------------------------------------------------------
+# Backup Automatico do Banco de Dados
+# ---------------------------------------------------------------------------
+# Gera backups do banco de dados quando o servidor reinicia ou desliga.
+BackupDatabase = False
+
+# Caminho para a pasta bin do MySQL. Necessario apenas no Windows.
+MySqlBinLocation = C:/xampp/mysql/bin/
+
+# Caminho onde os backups do banco de dados sao armazenados.
+BackupPath = ../backup/
+
+# Numero maximo de dias que os backups serao mantidos.
+# Arquivos antigos na pasta de backup serao deletados.
+# Defina como 0 para desativar.
+BackupDays = 30
+
+
+
+================================================================================
+ ARQUIVO: dist/login/config/loginserver.ini
+================================================================================
+# ---------------------------------------------------------------------------
+# Configuracoes do Servidor de Login
+# ---------------------------------------------------------------------------
+# Arquivo de configuracao do servidor de login. Aqui voce define as informacoes de conexao.
+# Escrito considerando que voce esta atras de um roteador.
+# Definicoes simplificadas...
+# LAN (rede local) - computadores conectados ao mesmo roteador que voce.
+# WAN (rede externa) - computadores FORA do seu roteador (ou seja, a internet).
+# x.x.x.x - Formato de endereco IP. Nao inclua os "x" nas configuracoes. Use numeros reais.
+
+# ---------------------------------------------------------------------------
+# Rede
+# ---------------------------------------------------------------------------
+
+# IP de escuta do servidor de login. Use 0.0.0.0 para escutar em todos os IPs disponiveis.
+# AVISO: <u><b><font color="red">Nao altere os IPs padrao se voce nao sabe o que esta fazendo!</font></b></u>
+# AVISO: <u><b><font color="red">IPs externos/internos agora ficam no arquivo "ipconfig.xml".</font></b></u>
+# Padrao: 0.0.0.0
+LoginserverHostname = 0.0.0.0
+
+# Padrao: 2106
+LoginserverPort = 2106
+
+# The address on which login will listen for GameServers, use * to bind on all available IPs
+# WARNING: <u><b><font color="red">Please don't change default IPs here if you don't know what are you doing!</font></b></u>
+# WARNING: <u><b><font color="red">External/Internal IPs are now inside "ipconfig.xml" file.</font></b></u>
+# Default: 127.0.0.1
+# Docker: must bind to all interfaces so other containers can connect.
+LoginHostname = 0.0.0.0
+
+# Porta onde o login escuta conexoes dos servidores de jogo.
+# Padrao: 9014
+LoginPort = 9014
+
+
+# ---------------------------------------------------------------------------
+# Configuracao de Threads
+# ---------------------------------------------------------------------------
+
+# Numero de threads no pool de tarefas agendadas.
+# Se definido como -1, sera calculado automaticamente (processadores disponiveis / 2).
+ScheduledThreadPoolSize = 2
+
+# Numero de threads no pool de tarefas instantaneas.
+# Se definido como -1, sera calculado automaticamente (processadores disponiveis / 2).
+InstantThreadPoolSize = 2
+
+
+# ---------------------------------------------------------------------------
+# Seguranca
+# ---------------------------------------------------------------------------
+
+# Quantas tentativas de login invalidas antes do IP ser banido.
+# Padrao: 5
+LoginTryBeforeBan = 5
+
+# Tempo (em segundos) que o IP fica bloqueado apos atingir o limite de tentativas.
+# Padrao: 900 (15 minutos)
+LoginBlockAfterBan = 900
+
+# Se ativado, qualquer servidor de jogo pode se registrar nos slots livres do login.
+# Padrao: True
+AcceptNewGameServer = True
+
+# Protecao contra flood de conexoes. Todos os valores sao em milissegundos.
+# Padrao: True
+EnableFloodProtection = True
+
+# Padrao: 15
+FastConnectionLimit = 15
+
+# Padrao: 700
+NormalConnectionTime = 700
+
+# Padrao: 350
+FastConnectionTime = 350
+
+# Padrao: 50
+MaxConnectionPerIP = 50
+
+
+# ---------------------------------------------------------------------------
+# Outras Configuracoes do Login
+# ---------------------------------------------------------------------------
+
+# Se desativado, a licenca (apos o login) nao sera exibida.
+# Padrao: True
+ShowLicence = True
+
+# Padrao: True
+AutoCreateAccounts = True
+
+# Diretorio raiz do datapack.
+# Padrao: diretorio atual de onde o servidor eh iniciado.
+DatapackRoot = .
+
+
+# ---------------------------------------------------------------------------
+# Reinicio Agendado do Login
+# ---------------------------------------------------------------------------
+
+# Ativa ou desativa o reinicio agendado do servidor de login.
+# Padrao: False
+LoginRestartSchedule = False
+# Tempo em horas.
+# Padrao: 24
+LoginRestartTime = 24
+
+
+
+================================================================================
+ ARQUIVO: dist/game/config/database.ini
+================================================================================
+# ---------------------------------------------------------------------------
+# Banco de Dados
+# ---------------------------------------------------------------------------
+# Classe do driver JDBC do banco de dados.
+# Padrao: com.mysql.cj.jdbc.Driver
+Driver = com.mysql.cj.jdbc.Driver
+
+# URL de conexao com o banco de dados.
+# Padrao: jdbc:mysql://localhost/l2journey?useUnicode=true&characterEncoding=utf-8&useSSL=false&connectTimeout=10000&interactiveClient=true&sessionVariables=wait_timeout=600,interactive_timeout=600&autoReconnect=true
+URL = jdbc:mysql://localhost/l2journey?useUnicode=true&characterEncoding=utf-8&allowPublicKeyRetrieval=true&useSSL=false&connectTimeout=10000&interactiveClient=true&sessionVariables=wait_timeout=600,interactive_timeout=600&autoReconnect=true
+
+# Usuario do banco de dados. Padrao e "root", mas nao e recomendado.
+Login = root
+
+# Senha do usuario do banco de dados. Deixe vazio para sem senha.
+Password = king
+
+# Numero maximo de conexoes simultaneas com o banco de dados.
+# Padrao: 100
+MaximumDatabaseConnections = 100
+
+# Testa se as conexoes com o banco de dados estao disponiveis.
+# Padrao: False
+TestDatabaseConnections = False
+
+
+# ---------------------------------------------------------------------------
+# Backup Automatico do Banco de Dados
+# ---------------------------------------------------------------------------
+# Gera backups do banco de dados quando o servidor reinicia ou desliga.
+BackupDatabase = False
+
+# Caminho da pasta bin do MySQL. Necessario apenas no Windows.
+MySqlBinLocation = C:/xampp/mysql/bin/
+
+# Caminho onde os backups do MySQL serao salvos.
+BackupPath = ../backup/
+
+# Numero maximo de dias que os backups serao mantidos.
+# Arquivos antigos na pasta de backup serao deletados.
+# Defina como 0 para desativar.
+BackupDays = 30
+
+
+
+================================================================================
+ ARQUIVO: dist/game/config/server.ini
+================================================================================
+# ---------------------------------------------------------------------------
+# Configuracoes do Game Server
+# ---------------------------------------------------------------------------
+# Endereco do Login Server ao qual este gameserver deve se conectar.
+# AVISO: Nao altere os IPs padrao se voce nao souber o que esta fazendo!
+# AVISO: IPs externo/interno agora ficam em "ipconfig.xml".
+# Padrao: 127.0.0.1
+LoginHost = 127.0.0.1
+
+# Porta TCP que o login server escuta para conexoes do gameserver.
+# Padrao: 9014
+LoginPort = 9014
+
+# Endereco de bind do gameserver. Na maioria dos casos nao precisa alterar.
+# AVISO: Nao altere os IPs padrao se voce nao souber o que esta fazendo!
+# AVISO: IPs externo/interno agora ficam em "ipconfig.xml".
+# Padrao: * (0.0.0.0)
+GameserverHostname = 0.0.0.0
+
+# Padrao: 7777
+GameserverPort = 7777
+
+# Criptografia de pacotes.
+# Por padrao, pacotes enviados e recebidos sao criptografados com algoritmo Blowfish.
+# Desativar reduz os recursos necessarios para processar pacotes.
+# Pacotes transmitidos nao precisam ser re-criptografados para cada cliente.
+# Retail: True
+PacketEncryption = False
+
+
+# ---------------------------------------------------------------------------
+# Configuracoes Gerais do Servidor
+# ---------------------------------------------------------------------------
+# ID do servidor que o Game Server vai solicitar.
+# Exemplo: 1 = Bartz
+# Padrao: 1
+RequestServerID = 1
+
+# True = O Login Server atribui outro ID se o solicitado ja estiver reservado.
+# Padrao: True
+AcceptAlternateID = True
+
+# Diretorio raiz do datapack.
+# Padrao e o diretorio de onde o servidor e iniciado.
+# AVISO: Se o caminho for invalido, causara multiplos erros!
+# Padrao: .
+DatapackRoot = .
+
+# Diretorio raiz dos scripts.
+ScriptRoot = ./data/scripts
+
+# Numero maximo de jogadores simultaneos permitidos no servidor.
+# Padrao: 2000
+MaximumOnlineUsers = 2000
+
+# Revisoes de protocolo que o servidor aceita para conexao.
+# Separadas por ponto-e-virgula.
+# AVISO: Alterar a revisao do protocolo pode causar comunicacao incompativel e erros no jogo!
+# Padrao: 267;268;271;273
+AllowedProtocolRevisions = 267;268;271;273
+
+# Tipo do servidor exibido ao lado do nome na selecao de personagem.
+# Valores aceitos: Normal, Relax, Test, Broad, Restricted, Event, Free, World, New, Classic
+# Padrao: Free
+ServerListType = Free
+
+# Idade minima exibida no servidor na selecao de personagem.
+# Valores aceitos: 0, 15, 18
+# Padrao: 0
+ServerListAge = 0
+
+# Exibe [] na frente do nome do servidor na selecao de personagem.
+# Padrao: False
+ServerListBrackets = False
+
+
+# ---------------------------------------------------------------------------
+# Configuracao de Threads
+# ---------------------------------------------------------------------------
+# Numero de threads no pool de threads agendadas.
+# -1 = Determinado automaticamente (processadores disponiveis x 4).
+# Um pool de alta prioridade e criado com 1/4 do tamanho do pool agendado.
+# Valores maiores melhoram o processamento sob carga pesada mas usam mais CPU e memoria.
+ScheduledThreadPoolSize = -1
+
+# Numero de threads no pool de threads instantaneas.
+# -1 = Determinado automaticamente (processadores disponiveis x 2).
+# Valores maiores melhoram o processamento sob carga pesada mas usam mais CPU e memoria.
+InstantThreadPoolSize = -1
+
+# Usa threads para acelerar a inicializacao do servidor.
+# Padrao: False
+ThreadsForLoading = False
+
+
+# ---------------------------------------------------------------------------
+# Monitor de Deadlock (thread separada para detectar travamentos)
+# ---------------------------------------------------------------------------
+# Melhora os logs de crash e permite reinicio automatico em caso de deadlock.
+# Intervalo de verificacao em segundos.
+# Padrao: True
+DeadlockWatcher = True
+
+# Padrao: 20
+DeadlockCheckInterval = 20
+
+# Padrao: False
+RestartOnDeadlock = False
+
+
+# ---------------------------------------------------------------------------
+# Configuracoes de HWID do Jogador
+# ---------------------------------------------------------------------------
+# Verifica se informacoes de hardware sao enviadas ao logar.
+# AVISO: Para receber informacoes de hardware, o cliente precisa de um
+# system modificado para definir o HWID do GameClient via metodo setHardwareInfo.
+# Padrao: False
+EnableHardwareInfo = False
+
+# Jogadores sem informacoes de hardware sao expulsos do jogo.
+# Automaticamente definido como True quando MaxPlayersPerHWID > 0.
+# Padrao: False
+KickMissingHWID = False
+
+# Numero maximo de jogadores por HWID permitidos no jogo.
+# Padrao: 0 (ilimitado)
+MaxPlayersPerHWID = 0
+
+
+# ---------------------------------------------------------------------------
+# Configuracoes Diversas do Jogador
+# ---------------------------------------------------------------------------
+# Modelo de nome de personagem (expressao regular).
+# Exemplos:
+# CnameTemplate = [A-Z][a-z]{3,3}[A-Za-z0-9]*
+# Permite nomes com primeira letra maiuscula, tres minusculas, e qualquer letra/numero. Ex: OmfgWTF1
+# CnameTemplate = [A-Z][a-z]*
+# Permite apenas letras com primeira maiuscula. Ex: Omfgwtf
+# Padrao: .* (permite qualquer simbolo)
+CnameTemplate = (^[A-Za-z0-9]{1,16}$)
+
+# Modelo de nome de pet. Mesma logica do CnameTemplate.
+PetNameTemplate = (^[A-Za-z0-9]{1,16}$)
+
+# Modelo de nome de cla/sub-pledges. Mesma logica do CnameTemplate.
+ClanNameTemplate = (^[A-Za-z0-9]{1,16}$)
+
+# Numero maximo de personagens por conta.
+# Padrao: 7 (limite do cliente)
+CharMaxNumber = 7
+
+
+# ---------------------------------------------------------------------------
+# Reinicio Preventivo do Servidor
+# ---------------------------------------------------------------------------
+# Ativa o reinicio do servidor quando o uso de CPU ou memoria esta muito alto.
+# Padrao: False
+PrecautionaryRestartEnabled = False
+
+# Ativa monitoramento do uso de CPU do sistema.
+# Padrao: True
+PrecautionaryRestartCpu = True
+
+# Ativa monitoramento do uso de memoria do processo.
+# Padrao: False
+PrecautionaryRestartMemory = False
+
+# Verifica se ha cercos em andamento, jogadores na olympiad,
+# eventos, instancias ou com raidbosses como alvo.
+# Padrao: True
+PrecautionaryRestartChecks = True
+
+# Porcentagem de uso de recursos para disparar o reinicio.
+# Padrao: 95
+PrecautionaryRestartPercentage = 95
+
+# Intervalo em segundos entre cada verificacao.
+# Padrao: 60
+PrecautionaryRestartDelay = 60
+
+
+# ---------------------------------------------------------------------------
+# Reinicio Agendado do Servidor
+# ---------------------------------------------------------------------------
+# Ativa o reinicio agendado do servidor.
+# Padrao: False
+ServerRestartScheduleEnabled = False
+
+# Mostra uma mensagem quando o jogador entra no jogo informando o proximo reinicio.
+# Padrao: False
+ServerRestartScheduleMessage = False
+
+# Contagem regressiva do reinicio (em segundos).
+# Padrao: 600 (10 minutos)
+ServerRestartScheduleCountdown = 600
+
+# Horarios de reinicio agendado.
+# Pode colocar mais de um separado por virgula.
+# Exemplo: 12:00, 00:00
+ServerRestartSchedule = 08:00
+
+# Dias da semana em que o reinicio ocorrera. Separados por virgula.
+# Exemplo: 1,2,3,4,5,6,7 (DOMINGO,SEGUNDA,TERCA,QUARTA,QUINTA,SEXTA,SABADO)
+# Padrao: 4 (QUARTA)
+ServerRestartDays = 4
+
+
+
+================================================================================
+ ARQUIVO: dist/game/config/general.ini
+================================================================================
+# ---------------------------------------------------------------------------
+# Seguranca do Servidor
+# ---------------------------------------------------------------------------
+# Configuracoes de log. Ativar estas opcoes aumenta significativamente a quantidade
+# de dados gravados no disco. Pode impactar performance dependendo da carga do servidor.
+# Use com cuidado conforme a necessidade.
+
+# Registra no log todas as mensagens de chat dos jogadores.
+# Padrao: False
+LogChat = False
+
+# Registra no log todas as transacoes de itens (coleta, troca, venda).
+# Util para rastrear movimentacao de itens, mas gera muito log em servidores movimentados.
+# Padrao: False
+LogItems = False
+
+# Se LogItems estiver ativado, registra apenas itens importantes (Adena e equipamentos).
+# Reduz o volume de log ignorando itens comuns de pouco valor.
+# Padrao: False
+LogItemsSmallLog = False
+
+# Se LogItems estiver ativado, registra apenas IDs de itens especificos (listados abaixo).
+# Util para monitorar apenas itens raros ou de alto valor.
+# Padrao: False
+LogItemsIdsOnly = False
+
+# IDs dos itens que serao registrados quando LogItemsIdsOnly estiver ativado.
+# Separe por virgula. Exemplo: itens raros ou moeda do jogo.
+# Padrao: 4356 (Gold Einhasad)
+LogItemsIdsList = 4356
+
+# Registra no log todas as tentativas de encantamento de itens (sucesso ou falha).
+# Util para detectar comportamento suspeito, mas pode gerar logs grandes.
+# Padrao: False
+LogItemEnchants = False
+
+# Registra no log todas as acoes de encantamento de skills (upgrades e modificacoes).
+# Util para monitorar progressao de skills.
+# Padrao: False
+LogSkillEnchants = False
+
+# Ativa log de auditoria para acoes de Game Masters (GMs).
+# Registra todas as acoes administrativas para prestacao de contas.
+# Padrao: False
+GMAudit = False
+
+# Verifica se jogadores possuem skills que nao deveriam ter.
+# Padrao: False
+SkillCheckEnable = True
+
+# Se ativado, remove skills invalidas do jogador e do banco de dados.
+# Se desligado, apenas reporta no log sem remover.
+# Padrao: False
+SkillCheckRemove = True
+
+# Verifica tambem personagens GM (so funciona se SkillCheckEnable = True).
+# Padrao: True
+SkillCheckGM = False
+
+
+# ---------------------------------------------------------------------------
+# Otimizacao
+# ---------------------------------------------------------------------------
+# Gerenciamento de itens no chao.
+# Permite que jogadores soltem itens no chao.
+# Padrao: True
+AllowDiscardItem = True
+
+# Tempo em segundos para destruir automaticamente itens dropados no chao. 0 = Desativado.
+# Padrao: 600
+AutoDestroyDroppedItemAfter = 600
+
+# Tempo em segundos para destruir automaticamente ervas (herbs) dropadas.
+# Padrao: 60
+AutoDestroyHerbTime = 30
+
+# Lista de IDs de itens que NAO serao destruidos automaticamente (separados por virgula).
+# Itens nesta lista ficam protegidos independente das opcoes acima.
+# Padrao: 0
+ListOfProtectedItems = 0
+
+# Intervalo (em minutos) para salvar dados do jogador (localizacao, etc) no banco de dados.
+# Valores maiores = menos acessos ao banco (melhor performance).
+# Valores menores = dados salvos com mais frequencia (mais seguro).
+# 0 = Desativa salvamento periodico. O personagem sempre e salvo ao sair do jogo.
+# Padrao: 15
+CharacterDataStoreInterval = 2
+
+# Atualiza itens no banco apenas quando o personagem e salvo.
+# Melhora muito a performance e reduz uso do banco de dados.
+# AVISO: Pode causar perda de itens em caso de crash do servidor.
+# Padrao: False
+LazyItemsUpdate = False
+
+# Quando ativado, forca a atualizacao dos itens do personagem no banco ao salvar.
+# Funciona mesmo com LazyItemsUpdate ativado.
+# Padrao: True
+UpdateItemsOnCharStore = True
+
+# Destroi itens diversos dropados por jogadores (todos exceto equipamentos).
+# So funciona se AutoDestroyDroppedItemAfter for maior que 0.
+# Padrao: False
+DestroyPlayerDroppedItem = False
+
+# Destroi equipamentos dropados por jogadores (armaduras, armas, joias).
+# So funciona se DestroyPlayerDroppedItem = True.
+# Padrao: False
+DestroyEquipableItem = False
+
+# Torna TODOS os itens destrutiveis.
+# Se ativado, jogadores podem destruir qualquer item!
+DestroyAllItems = False
+
+# Salva itens no chao no banco de dados para restaurar apos reinicio.
+# Padrao: False
+SaveDroppedItem = False
+
+# Limpa a tabela de itens salvos no chao apos carregar na memoria (seguranca).
+# Se o servidor crashou antes de salvar, itens antigos serao restaurados
+# e jogadores podem ja ter coletado alguns, causando duplicatas.
+# Padrao: False
+EmptyDroppedItemTableAfterLoad = False
+
+# Intervalo em minutos para salvar itens no chao no banco. 0 = Desativado.
+# Se desativado, itens sao salvos apenas ao desligar o servidor.
+# Padrao: 60
+SaveDroppedItemInterval = 60
+
+# Deleta todos os itens salvos no chao do banco ao reiniciar.
+# So funciona se SaveDroppedItem = False.
+# Padrao: False
+ClearDroppedItemTable = False
+
+# Deleta quests invalidas dos jogadores.
+# Padrao: False
+AutoDeleteInvalidQuestData = False
+
+# Permite criar multiplos itens nao-empilhaveis de uma vez.
+# Padrao: True
+MultipleItemDrop = True
+
+# Cache de arquivos HTML.
+# True = Carrega todos os HTMLs na memoria ao iniciar o servidor.
+# False = Carrega HTMLs na memoria apenas quando sao solicitados pela primeira vez.
+# Recomendado para servidor em producao: True
+# Recomendado para desenvolvimento: False
+HtmCache = False
+
+# Verifica se arquivos HTML contem caracteres nao-ASCII.
+# Padrao: True
+CheckHtmlEncoding = True
+
+# Remove automaticamente o parametro -h de bypasses de Chat e Quest.
+# Evita o "piscar" da janela de dialogo ao usar bypass.
+# Padrao: True
+HideBypassRemoval = True
+
+# Intervalo minimo e maximo (em segundos) para animacoes aleatorias de NPCs.
+# O minimo deve ser menor ou igual ao maximo.
+# Coloque 0 para desativar animacoes aleatorias.
+# Padrao: 5
+MinNpcAnimation = 10
+# Padrao: 60
+MaxNpcAnimation = 120
+# Padrao: 5
+MinMonsterAnimation = 10
+# Padrao: 60
+MaxMonsterAnimation = 60
+
+# Opcoes de grade do mapa: grades podem ligar e desligar automaticamente.
+# Isso afeta o carregamento de IA e geodata dentro daquela grade.
+# Ligar uma grade com jogador e imediato. As 8 grades vizinhas
+# ligam apos o tempo configurado abaixo.
+# Desligar ocorre apos o tempo configurado sem jogadores na grade ou vizinhas.
+# A opcao "sempre ligado" ignora tudo e mantem todas as grades ativas (nao recomendado).
+# Padrao: False
+GridsAlwaysOn = False
+
+# Padrao: 1
+GridNeighborTurnOnTime = 1
+
+# Padrao: 90
+GridNeighborTurnOffTime = 90
+
+# Corrige precos de buylist e multisell quando estao abaixo do preco de venda.
+# Padrao: True
+CorrectPrices = True
+
+# Limite de itens por transacao no multisell.
+# Maximo permitido pelo cliente: 999999
+MultisellAmountLimit = 10000
+
+
+# ---------------------------------------------------------------------------
+# Dano de Queda
+# ---------------------------------------------------------------------------
+# Permite que personagens recebam dano ao cair de lugares altos.
+# Padrao: True
+EnableFallingDamage = True
+
+
+# ---------------------------------------------------------------------------
+# Funcionalidades Gerais
+# ---------------------------------------------------------------------------
+# Modos de Zona de Paz:
+# 0 = Paz o tempo todo
+# 1 = PVP durante cercos para participantes do cerco
+# 2 = PVP o tempo todo
+# Padrao: 0
+PeaceZoneMode = 0
+
+# Chat Global.
+# Opcoes: ON, OFF, GM, GLOBAL
+# Padrao: ON
+GlobalChat = ON
+
+# Chat de Comecio.
+# Opcoes: ON, OFF, GM, GLOBAL
+# Padrao: ON
+TradeChat = GLOBAL
+
+# Nivel minimo para usar o chat. 0 = desativado.
+MinimumChatLevel = 0
+
+# Se estiver com problemas em transacoes de Warehouse, desative aqui.
+# Padrao: True
+AllowWarehouse = True
+
+# Padrao: True
+AllowRefund = True
+
+# Padrao: True
+AllowMail = True
+
+# Padrao: True
+AllowAttachments = True
+
+# Se ativado, jogadores podem experimentar armas e armaduras na loja.
+# Padrao: True
+AllowWear = True
+
+# Padrao: 5
+WearDelay = 5
+
+# Custo em Adena para experimentar um item.
+# Padrao: 10
+WearPrice = 10
+
+
+# ---------------------------------------------------------------------------
+# Instancias
+# ---------------------------------------------------------------------------
+# Restaura o jogador para a instancia anterior ao entrar no mundo.
+# Padrao: False
+RestorePlayerInstance = True
+
+# Permite usar skills de invocacao para trazer jogadores para dentro de uma instancia.
+# Quando ativado, instancias individuais podem desativar isso no XML da instancia.
+# Padrao: False
+AllowSummonInInstance = False
+
+# Quando um jogador morre, e removido da instancia apos esse tempo (em segundos).
+# Padrao: 60
+EjectDeadPlayerTime = 60
+
+# Quando a instancia termina, tempo ate ser destruida (em segundos).
+# Padrao: 300
+DefaultFinishTime = 300
+
+
+# ---------------------------------------------------------------------------
+# Configuracoes Diversas
+# ---------------------------------------------------------------------------
+# Padrao: True
+AllowRace = True
+
+# Padrao: True
+AllowWater = True
+
+# Permite alugar pets (wyvern e strider) dos gerenciadores de pet.
+# Padrao: False
+AllowRentPet = False
+
+# Padrao: True
+AllowFishing = True
+
+# Padrao: True
+AllowBoat = True
+
+# Raio de transmissao de mensagens do barco.
+# Se jogadores reclamarem dos gritos do barco, diminua o raio.
+# Padrao: 20000
+BoatBroadcastRadius = 20000
+
+# Padrao: True
+AllowCursedWeapons = True
+
+# Mostra "data/html/servnews.htm" quando o personagem entra no mundo.
+# Padrao: False
+ShowServerNews = False
+
+# Ativa o Community Board (painel da comunidade).
+# Padrao: True
+EnableCommunityBoard = True
+
+# Pagina padrao do Community Board.
+# Padrao: _bbshome
+BBSDefault = _bbshome
+
+# Ativa o filtro de chat.
+# Padrao: False
+UseChatFilter = False
+
+# Caracteres usados para substituir palavras filtradas.
+ChatFilterChars = ^_^
+
+# Canais de chat onde o filtro sera aplicado (separados por ponto-e-virgula).
+# GENERAL (branco)
+# SHOUT (!)
+# WHISPER (")
+# PARTY (#)
+# CLAN (@)
+# GM (//gmchat)
+# PETITION_PLAYER (*)
+# PETITION_GM (*)
+# TRADE (+)
+# ALLIANCE ($)
+# ANNOUNCEMENT
+# BOAT
+# FRIEND
+# MSNCHAT
+# PARTYMATCH_ROOM
+# PARTYROOM_COMMANDER (Amarelo)
+# PARTYROOM_ALL (Vermelho)
+# HERO_VOICE (%)
+# CRITICAL_ANNOUNCE
+# SCREEN_ANNOUNCE
+# BATTLEFIELD
+# MPCC_ROOM
+# NPC_GENERAL
+# NPC_SHOUT
+# Padrao: GENERAL;SHOUT;TRADE;HERO_VOICE;WHISPER
+BanChatChannels = GENERAL;SHOUT;TRADE;HERO_VOICE;WHISPER
+
+
+# ---------------------------------------------------------------------------
+# Sistema de Manor (Agricultura)
+# ---------------------------------------------------------------------------
+# Padrao: True
+AllowManor = True
+
+# Hora de atualizacao do Manor (formato militar 24h).
+# Padrao: 20 (20:00)
+AltManorRefreshTime = 20
+
+# Minutos da hora de atualizacao do Manor.
+# Padrao: 00 (inicio da hora)
+AltManorRefreshMin = 00
+
+# Hora de aprovacao do periodo do Manor (formato militar 24h).
+# Padrao: 4 (04:00)
+AltManorApproveTime = 4
+
+# Minutos da hora de aprovacao do Manor.
+# Padrao: 30
+AltManorApproveMin = 30
+
+# Tempo de manutencao do Manor (em minutos).
+# Padrao: 6
+AltManorMaintenanceMin = 6
+
+# Tipo de salvamento do Manor.
+# True = Salva dados no banco apos cada acao.
+# Padrao: False
+AltManorSaveAllActions = False
+
+# Periodo de salvamento do Manor (usado apenas se AltManorSaveAllActions = False).
+# Padrao: 2 (horas)
+AltManorSavePeriodRate = 2
+
+
+# ---------------------------------------------------------------------------
+# Loteria
+# ---------------------------------------------------------------------------
+# Padrao: True
+AllowLottery = True
+
+# Premio inicial da Loteria.
+# Padrao: 50000
+AltLotteryPrize = 50000
+
+# Preco do bilhete da Loteria.
+# Padrao: 2000
+AltLotteryTicketPrice = 2000
+
+# Porcentagem do premio para quem acertar 5 numeros.
+# Padrao: 0.6
+AltLottery5NumberRate = 0.6
+
+# Porcentagem do premio para quem acertar 4 numeros.
+# Padrao: 0.2
+AltLottery4NumberRate = 0.2
+
+# Porcentagem do premio para quem acertar 3 numeros.
+# Padrao: 0.2
+AltLottery3NumberRate = 0.2
+
+# Adena recebida por quem acertar 2 numeros ou menos.
+# Padrao: 200
+AltLottery2and1NumberPrize = 200
+
+
+# ---------------------------------------------------------------------------
+# Torneio de Pesca
+# ---------------------------------------------------------------------------
+# Ativa ou desativa o sistema de Torneio de Pesca.
+AltFishChampionshipEnabled = True
+
+# ID do item usado como recompensa.
+AltFishChampionshipRewardItemId = 57
+
+# Quantidade de recompensa (para os 5 primeiros colocados).
+AltFishChampionshipReward1 = 800000
+AltFishChampionshipReward2 = 500000
+AltFishChampionshipReward3 = 300000
+AltFishChampionshipReward4 = 200000
+AltFishChampionshipReward5 = 100000
+
+
+# ---------------------------------------------------------------------------
+# Leilao de Itens
+# ---------------------------------------------------------------------------
+# Ativa leilao nas cidades de Giran, Aden e Rune.
+# Padrao: True
+AltItemAuctionEnabled = True
+
+# Numero de dias antes de limpar leiloes antigos do banco com todos os lances.
+# Padrao: 14
+AltItemAuctionExpiredAfter = 14
+
+# O leilao e estendido por este tempo (em segundos) se houver novos lances.
+# Por padrao o leilao so estende duas vezes (5 e 3 minutos). Este valor e usado apos isso.
+# Valores acima de 60 segundos nao sao recomendados.
+# Padrao: 0
+AltItemAuctionTimeExtendsOnBid = 0
+
+
+# ---------------------------------------------------------------------------
+# Fenda Dimensional (Dimension Rift)
+# ---------------------------------------------------------------------------
+# Tamanho minimo do grupo para entrar na fenda. Min = 2, Max = 9.
+# Se o grupo ficar menor dentro da fenda, todos serao teleportados de volta.
+# Padrao: 2
+RiftMinPartySize = 2
+
+# Numero maximo de saltos entre salas permitidos. Apos isso, o grupo e teleportado de volta.
+# Padrao: 4
+MaxRiftJumps = 4
+
+# Tempo em milissegundos que o grupo espera ate os monstros aparecerem ao entrar em uma sala.
+# Padrao: 10000 (10 segundos)
+RiftSpawnDelay = 10000
+
+# Tempo (em segundos) entre saltos automaticos entre salas.
+# Padrao: 480
+AutoJumpsDelayMin = 480
+
+# Padrao: 600
+AutoJumpsDelayMax = 600
+
+# Multiplicador de tempo de permanencia na sala do boss.
+# Padrao: 1.5
+BossRoomTimeMultiply = 1.5
+
+# Custo em fragmentos dimensionais para entrar na fenda. Cada membro precisa ter essa quantidade.
+# Padrao: 18
+RecruitCost = 18
+
+# Padrao: 21
+SoldierCost = 21
+
+# Padrao: 24
+OfficerCost = 24
+
+# Padrao: 27
+CaptainCost = 27
+
+# Padrao: 30
+CommanderCost = 30
+
+# Padrao: 33
+HeroCost = 33
+
+
+# ---------------------------------------------------------------------------
+# Punicoes
+# ---------------------------------------------------------------------------
+# Punicao para acoes ilegais de jogadores:
+# BROADCAST - avisa apenas os GMs
+# KICK - expulsa o jogador (padrao)
+# KICKBAN - expulsa e bane o jogador
+# JAIL - prende o jogador na cadeia
+DefaultPunish = KICK
+
+# Duracao da punicao acima.
+# Padrao: 0 (automaticamente definido como 100 anos)
+DefaultPunishParam = 0
+
+# Aplica punicao padrao se jogador comprar itens por zero Adena.
+# Padrao: True
+OnlyGMItemsFree = True
+
+# A cadeia (jail) e uma zona PvP.
+# Padrao: False
+JailIsPvp = False
+
+# Desativa todo chat na cadeia (exceto chat normal).
+# Padrao: True
+JailDisableChat = True
+
+# Desativa todas as transacoes na cadeia (Troca/Loja/Drop).
+# Padrao: False
+JailDisableTransaction = False
+
+# Multiplicadores de custo para encantamento de skills.
+# Padrao: 1,5
+NormalEnchantCostMultipiler = 1
+SafeEnchantCostMultipiler = 5
+
+# ---------------------------------------------------------------------------
+# Componentes Customizados
+# ---------------------------------------------------------------------------
+# Padrao: False
+CustomNpcData = True
+
+# Padrao: False
+CustomTeleportTable = True
+
+# Padrao: False
+CustomSkillsLoad = True
+
+# Padrao: False
+CustomItemsLoad = True
+
+# Padrao: False
+CustomMultisellLoad = True
+
+# Padrao: False
+CustomBuyListLoad = True
+
+
+# ---------------------------------------------------------------------------
+# Configuracoes de Teleport Bookmark
+# ---------------------------------------------------------------------------
+# Item consumido para teleportar.
+# Sem consumo de item: -1
+# Padrao: 20033 (Teleport Flag)
+BookmarkConsumeItemId = 20033
+
+
+# ---------------------------------------------------------------------------
+# Configuracoes do Evento de Aniversario
+# ---------------------------------------------------------------------------
+# Presente enviado pelo sistema de correio.
+# Padrao: 22187
+AltBirthdayGift = 22187
+
+# Assunto do email.
+AltBirthdayMailSubject = Happy Birthday!
+
+# Conteudo do email.
+# $c1: Nome do jogador
+# $s1: Idade
+AltBirthdayMailText = Hello Adventurer!! Seeing as you're one year older now, I thought I would send you some birthday cheer :) Please find your birthday pack attached. May these gifts bring you joy and happiness on this very special day.\n\nSincerely, Alegria
+
+
+# ---------------------------------------------------------------------------
+# Configuracoes do Evento Block Checker (Handy's)
+# ---------------------------------------------------------------------------
+# Ativa o evento Block Checker (Handy's).
+# Padrao: True
+EnableBlockCheckerEvent = True
+
+# Numero minimo de membros em cada time para iniciar o evento.
+# Min: 1 / Max: 6
+# Retail: 2
+BlockCheckerMinTeamMembers = 2
+
+# Jogo justo.
+# Se ativado, os times sao equilibrados automaticamente ao teleportar para a arena.
+HBCEFairPlay = True
+
+
+# ---------------------------------------------------------------------------
+# Configuracoes de Hellbound
+# ---------------------------------------------------------------------------
+# Se ativado, jogadores podem entrar na ilha Hellbound sem completar quests.
+# Padrao: False
+HellboundWithoutQuest = False
+
+
+# ---------------------------------------------------------------------------
+# Configuracoes do Botao de Denunciar Bot
+# ---------------------------------------------------------------------------
+# Ativa o botao de denunciar bot nos servidores de jogo desejados.
+# Padrao: True
+EnableBotReportButton = True
+
+# Hora de reset dos pontos de denuncia. Formato: HH:MM (24 horas).
+# Padrao: 00:00
+BotReportPointsResetHour = 00:00
+
+# Intervalo entre denuncias do mesmo jogador (em minutos).
+# Padrao: 30
+BotReportDelay = 30
+
+# Permite que membros do mesmo cla denunciem o mesmo bot.
+# Padrao: False
+AllowReportsFromSameClanMembers = False
+
+
+# ---------------------------------------------------------------------------
+# Configuracoes da Prime-Shop
+# ---------------------------------------------------------------------------
+# Ativa a Prime-Shop.
+# Precisa ativar no arquivo L2.ini do cliente tambem.
+# Padrao: False
+EnablePrimeShop = False
+
+# ID do item usado pela Prime-Shop.
+# Padrao: -1
+PrimeShopItemId = -1
+
+
+
+================================================================================
+ ARQUIVO: dist/game/config/admin/rates.ini
+================================================================================
+# ---------------------------------------------------------------------------
+# Configuracoes de Rates (Multiplicadores)
+# ---------------------------------------------------------------------------
+
+# Multiplicador de experiencia (EXP) ao matar monstros.
+RateXp = 1
+
+# Multiplicador de pontos de skill (SP) ao matar monstros.
+RateSp = 1
+
+# Multiplicador de EXP quando em grupo (party).
+RatePartyXp = 1
+
+# Multiplicador de SP quando em grupo (party).
+RatePartySp = 1
+
+# Multiplicador de drop do sistema de Manor (agricultura de seeds/crops).
+RateDropManor = 1
+
+# Velocidade de reducao do Karma (pontos de crime por PK).
+# Valores menores = karma some mais rapido. Ex: 0.2 = karma some 5x mais rapido.
+# -1 = Usa o mesmo valor do RateXp (comportamento original do jogo).
+# Padrao: -1
+RateKarmaLost = 0.2
+
+# Multiplicador de perda de EXP ao morrer com karma.
+RateKarmaExpLost = 1
+
+# Multiplicador do preco dos guardas de cerco (siege guards).
+RateSiegeGuardsPrice = 1
+
+# Multiplicador de recompensa de itens extraiveis (extractable items e skills).
+# Padrao: 1
+RateExtractable = 1.
+
+# Multiplicador de ganho de pontos de confianca (Trust) em Hellbound.
+# Hellbound e uma zona que evolui de nivel conforme jogadores matam monstros la.
+# Usado no script HellboundEngine ao matar monstros que dao pontos positivos.
+RateHellboundTrustIncrease = 1
+
+# Multiplicador de perda de pontos de confianca (Trust) em Hellbound.
+# Usado no script HellboundEngine ao matar monstros que dao pontos negativos.
+RateHellboundTrustDecrease = 1
+
+# ---------------------------------------------------------------------------
+# Multiplicadores de Quest
+# ---------------------------------------------------------------------------
+# AVISO: Algumas quests precisam ser reescritas para que
+# esses multiplicadores funcionem corretamente.
+
+# Multiplicador de drop de itens de quest (chance e quantidade).
+RateQuestDrop = 1
+
+# Multiplicador de EXP recebido como recompensa de quest.
+RateQuestRewardXP = 1
+
+# Multiplicador de SP recebido como recompensa de quest.
+RateQuestRewardSP = 1
+
+# Multiplicador de Adena recebida como recompensa de quest.
+RateQuestRewardAdena = 1
+
+# Se ativado, usa multiplicadores separados por tipo de item (pocao, scroll, receita, material).
+# Se desligado, usa apenas o multiplicador generico RateQuestReward para tudo.
+# Padrao: False
+UseQuestRewardMultipliers = False
+
+# Multiplicador generico de recompensa de quest.
+# Quando UseQuestRewardMultipliers = False, este valor e usado para todos os itens.
+# Quando UseQuestRewardMultipliers = True, este valor e usado apenas para itens
+# que nao se encaixam nos tipos especificos abaixo.
+# Padrao: 1
+RateQuestReward = 1
+
+# Multiplicadores por tipo de item (so funcionam com UseQuestRewardMultipliers = True).
+RateQuestRewardPotion = 1
+RateQuestRewardScroll = 1
+RateQuestRewardRecipe = 1
+RateQuestRewardMaterial = 1
+
+# Diferenca maxima de nivel entre jogador e monstro para ganhar EXP.
+# Se a diferenca for maior que este valor, o jogador nao ganha EXP do monstro.
+MonsterExpMaxLevelDifference = 11
+
+
+# ---------------------------------------------------------------------------
+# Rates de Drop de Itens
+# ---------------------------------------------------------------------------
+# ATENCAO: Se voce aumentar tanto a chance quanto a quantidade, o resultado
+# sera multiplicado. Exemplo: quantidade 5x e chance 5x = resultado final 25x.
+
+# Multiplicador de QUANTIDADE de itens dropados ao matar monstros normais.
+DeathDropAmountMultiplier = 1
+
+# Multiplicador de QUANTIDADE de itens obtidos com Spoil (skill de anao).
+SpoilDropAmountMultiplier = 1
+
+# Multiplicador de QUANTIDADE de ervas (herbs) dropadas por monstros.
+HerbDropAmountMultiplier = 1
+
+# Multiplicador de QUANTIDADE de itens dropados por Raid Bosses.
+RaidDropAmountMultiplier = 1
+
+# Multiplicador de CHANCE de drop de itens ao matar monstros normais.
+DeathDropChanceMultiplier = 1
+
+# Multiplicador de CHANCE de obter itens com Spoil.
+SpoilDropChanceMultiplier = 1
+
+# Multiplicador de CHANCE de drop de ervas (herbs).
+HerbDropChanceMultiplier = 1
+
+# Multiplicador de CHANCE de drop de itens de Raid Bosses.
+RaidDropChanceMultiplier = 1
+
+# Multiplicadores especificos por ID de item (tambem usado para Adena).
+# Formato: idDoItem,multiplicador;idDoItem2,multiplicador2;...
+# NAO coloque espacos entre os numeros.
+# Exemplo para joias de Raid Boss com rate 1x: 6656,1;6657,1;6658,1;...
+# Exemplo para desabilitar drop de Adventurer's Treasure Sack: 21747,0;21748,0;21749,0
+# Padrao: 57,1 (57 = Adena)
+DropAmountMultiplierByItemId = 57,1;6656,1;6657,1;6658,1;6659,1;6660,1;6661,1;6662,1;8191,1;10170,1;10314,1
+DropChanceMultiplierByItemId = 57,1;21747,0;21748,0;21749,0
+
+# Numero maximo de itens diferentes que um monstro pode dropar por vez.
+# Itens com 100% de chance (sem multiplicadores) nao contam nesse limite
+# e caem como drops extras.
+# Grupos de drop com chance total acima de 100% podem ignorar esse limite.
+DropMaxOccurrencesNormal = 2
+DropMaxOccurrencesRaidboss = 7
+
+
+# ---------------------------------------------------------------------------
+# Penalidade de Drop por Diferenca de Nivel
+# ---------------------------------------------------------------------------
+# Estas configs controlam a reducao de drop quando o jogador tem nivel
+# muito acima do monstro. Quanto maior a diferenca, menor a chance de drop.
+
+# ADENA: Diferenca minima de nivel para comecar a reduzir o drop de adena.
+# Ate essa diferenca, o drop de adena e normal (100%).
+# Padrao: 8
+DropAdenaMinLevelDifference = 8
+
+# ADENA: Diferenca maxima de nivel. Acima disso, a chance fica no minimo.
+# Padrao: 15
+DropAdenaMaxLevelDifference = 15
+
+# ADENA: Chance minima de drop (em %) quando a diferenca de nivel e maxima.
+# O valor vai diminuindo de 100% ate esse valor conforme a diferenca aumenta.
+# Exemplo: 10 = monstro tera apenas 10% de chance de dropar adena no pior caso.
+# Padrao: 10
+DropAdenaMinLevelGapChance = 10
+
+# ITENS: Diferenca minima de nivel para comecar a reduzir o drop de itens.
+# Ate essa diferenca, o drop de itens e normal (100%).
+# Padrao: 5
+DropItemMinLevelDifference = 5
+
+# ITENS: Diferenca maxima de nivel. Acima disso, a chance fica no minimo.
+# Padrao: 10
+DropItemMaxLevelDifference = 10
+
+# ITENS: Chance minima de drop (em %) quando a diferenca de nivel e maxima.
+# Padrao: 10
+DropItemMinLevelGapChance = 10
+
+# Diferenca maxima de nivel para que itens de EVENTO possam dropar.
+# Se o jogador tiver mais niveis acima do monstro do que esse valor,
+# itens de evento nao caem.
+# Padrao: 9
+EventItemMaxLevelDifference = 9
+
+
+# ---------------------------------------------------------------------------
+# Sistema de Vitalidade (so funciona se EnableVitality estiver ativado)
+# ---------------------------------------------------------------------------
+# A vitalidade multiplica o EXP ganho. Existem 5 niveis (0 a 4).
+# Nivel 0 = sem bonus. Os valores abaixo definem o multiplicador de cada nivel.
+# CUIDADO: Esses valores se multiplicam com o rate do servidor!
+# Exemplo: servidor 15x com vitalidade nivel 4 (3x) = 15 * 3 = 45x de EXP!
+
+# Multiplicador de EXP no nivel de vitalidade 1 (padrao: 150% = 1.5)
+RateVitalityLevel1 = 1.5
+
+# Multiplicador de EXP no nivel de vitalidade 2 (padrao: 200% = 2.0)
+RateVitalityLevel2 = 2.
+
+# Multiplicador de EXP no nivel de vitalidade 3 (padrao: 250% = 2.5)
+RateVitalityLevel3 = 2.5
+
+# Multiplicador de EXP no nivel de vitalidade 4 (padrao: 300% = 3.0)
+RateVitalityLevel4 = 3.
+
+# Multiplicador de ganho de pontos de vitalidade ao matar monstros.
+RateVitalityGain = 1.
+
+# Multiplicador de perda de pontos de vitalidade ao matar monstros.
+RateVitalityLost = 0.6
+
+# Velocidade de recuperacao de vitalidade em zonas de paz.
+# Exemplo: 2 = recupera 2x mais rapido em cidades.
+RateRecoveryPeaceZone = 1.
+
+# Velocidade de recuperacao de vitalidade enquanto offline.
+# So funciona se RecoverVitalityOnReconnect estiver ativado.
+# Exemplo: 4 = recupera 4x mais rapido quando deslogado.
+RateRecoveryOnReconnect = 4.
+
+
+# ---------------------------------------------------------------------------
+# Drop de Jogadores ao Morrer (valores em PORCENTAGEM)
+# ---------------------------------------------------------------------------
+# Estas opcoes controlam se jogadores perdem itens ao morrer.
+# Valores 0 = jogadores nunca perdem itens ao morrer.
+
+# Limite maximo de itens que um jogador pode dropar ao morrer (sem karma).
+PlayerDropLimit = 0
+
+# Chance geral (%) de dropar algo ao morrer (sem karma).
+PlayerRateDrop = 0
+
+# Chance (%) de dropar um item individual do inventario ao morrer.
+PlayerRateDropItem = 0
+
+# Chance (%) de dropar um equipamento (armadura/acessorio) ao morrer.
+PlayerRateDropEquip = 0
+
+# Chance (%) de dropar uma arma ao morrer.
+PlayerRateDropEquipWeapon = 0
+
+# ---------------------------------------------------------------------------
+# Drop de Jogadores com Karma (PK - Player Killer)
+# ---------------------------------------------------------------------------
+# Jogadores com karma (que mataram outros jogadores) tem penalidades de drop
+# mais severas. Estes valores se aplicam quando o jogador morre com karma.
+
+# Limite maximo de itens que um jogador com karma pode dropar.
+# Padrao: 10
+KarmaDropLimit = 10
+
+# Chance geral (%) de dropar algo ao morrer com karma.
+# Padrao: 40
+KarmaRateDrop = 40
+
+# Chance (%) de dropar um item individual do inventario.
+# Padrao: 50
+KarmaRateDropItem = 50
+
+# Chance (%) de dropar um equipamento (armadura/acessorio).
+# Padrao: 40
+KarmaRateDropEquip = 40
+
+# Chance (%) de dropar uma arma.
+# Padrao: 10
+KarmaRateDropEquipWeapon = 10
+
+
+# ---------------------------------------------------------------------------
+# Pets (Multiplicadores para bichos de estimacao)
+# ---------------------------------------------------------------------------
+
+# Multiplicador de EXP de pets.
+PetXpRate = 1
+
+# Multiplicador de consumo de comida dos pets.
+# Valores maiores = pet consome mais comida. Valores menores = consome menos.
+PetFoodRate = 1
+
+# Multiplicador de EXP do Sin Eater (pet que absorve karma do dono).
+SinEaterXpRate = 1
+
+
+# ---------------------------------------------------------------------------
+# Drops Extras de Raid Bosses (nao inclui Grand Boss)
+# ---------------------------------------------------------------------------
+# Sistema customizado que adiciona itens extras ao drop de Raid Bosses.
+
+# Se ativado, Raid Bosses droparao itens extras definidos na lista abaixo.
+BossDropEnable = False
+
+# Nivel minimo do Raid Boss para receber os drops extras.
+BossDropMinLevel = 40
+
+# Nivel maximo do Raid Boss para receber os drops extras.
+BossDropMaxLevel = 999
+
+# Lista de itens extras para Raid Bosses.
+# Formato: idDoItem,quantidadeMinima,quantidadeMaxima,chance(%);idDoItem2,...
+# A chance de drop tambem pode ser aumentada por nivel VIP, runas, etc.
+# Exemplo abaixo: Gold Einhasad (4356), minimo 1, maximo 2, 100% de chance.
+BossDropList = 4356,1,2,100;
+
+
+
+================================================================================
+ ARQUIVO: dist/game/config/admin/network.ini
+================================================================================
+# ---------------------------------------------------------------------------------------------------------------------------------
+# Configuracoes Gerais de Rede
+# ---------------------------------------------------------------------------------------------------------------------------------
+
+# Tempo (em segundos) que o servidor aguarda os pacotes serem finalizados ao desligar.
+# Padrao: 5
+ShutdownWaitTime = 5
+
+# Se ativado, permite que pacotes descartaveis sejam jogados fora quando a fila esta cheia.
+# Evita acumulo de pacotes e uso excessivo de memoria em situacoes de sobrecarga.
+# Padrao: True
+DropPackets = True
+
+# Limite de pacotes na fila antes de comecar a descartar.
+# Valores maiores permitem mais pacotes enfileirados antes do descarte,
+# mas consomem mais memoria. Valores menores descartam mais cedo.
+# Padrao: 250
+DropPacketThreshold = 2500
+
+
+# ---------------------------------------------------------------------------------------------------------------------------------
+# Configuracoes de Threads (Processamento Paralelo)
+# ---------------------------------------------------------------------------------------------------------------------------------
+
+# Numero de threads para processar pacotes de rede.
+# Mais threads = mais pacotes processados ao mesmo tempo, mas usa mais recursos.
+# 0 = Automatico (usa o numero de nucleos do processador x 4).
+# Padrao: 0
+ThreadPoolSize = 0
+
+# Prioridade das threads de rede no sistema operacional.
+# De 1 (menor prioridade) a 10 (maior prioridade).
+# 5 e uma prioridade media, suficiente para a maioria dos servidores.
+# Padrao: 5
+ThreadPriority = 5
+
+
+# ---------------------------------------------------------------------------------------------------------------------------------
+# Configuracoes de Buffers de Rede (Memoria para Pacotes)
+# ---------------------------------------------------------------------------------------------------------------------------------
+# Buffers sao blocos de memoria reutilizaveis que armazenam pacotes de rede.
+# Ter buffers pre-alocados melhora a performance porque evita criar e destruir
+# memoria a cada pacote enviado/recebido.
+# Cada pool (grupo) e otimizado para um tamanho diferente de pacote.
+
+# Tamanho dos segmentos para buffers dinamicos.
+# Usado para aumentar o tamanho de buffers conforme necessario.
+# Padrao: 64
+BufferSegmentSize = 64
+
+# Se ativado, os pools de buffers crescem automaticamente quando ficam cheios.
+# Padrao: True
+BufferPool.AutoExpandCapacity = True
+
+# Fator de pre-inicializacao dos pools de buffers.
+# Valor maior = mais buffers criados ao iniciar o servidor (usa mais memoria no inicio).
+# 0 = Nenhuma pre-inicializacao (buffers criados sob demanda).
+# Padrao: 0
+BufferPool.InitFactor = 0
+
+# Pool de buffers vazios. Usado para pacotes de rede sem conteudo.
+# Padrao: 100 buffers de 2 bytes cada.
+BufferPool.Empty.Size = 100
+BufferPool.Empty.BufferSize = 2
+
+# Pool de buffers minimos. Usado para pacotes muito pequenos.
+# Padrao: 100 buffers de 64 bytes cada.
+BufferPool.Minimum.Size = 100
+BufferPool.Minimum.BufferSize = 64
+
+# Pool de buffers muito pequenos.
+# Padrao: 75 buffers de 128 bytes cada.
+BufferPool.VerySmall.Size = 75
+BufferPool.VerySmall.BufferSize = 128
+
+# Pool de buffers pequenos.
+# Padrao: 75 buffers de 256 bytes cada.
+BufferPool.Small.Size = 75
+BufferPool.Small.BufferSize = 256
+
+# Pool de buffers pequenos-medios.
+# Padrao: 75 buffers de 512 bytes cada.
+BufferPool.LargeSmall.Size = 75
+BufferPool.LargeSmall.BufferSize = 512
+
+# Pool de buffers medios-pequenos.
+# Padrao: 50 buffers de 1024 bytes cada.
+BufferPool.SmallMedium.Size = 50
+BufferPool.SmallMedium.BufferSize = 1024
+
+# Pool de buffers medios.
+# Padrao: 50 buffers de 2048 bytes cada.
+BufferPool.Medium.Size = 50
+BufferPool.Medium.BufferSize = 2048
+
+# Pool de buffers medios-grandes.
+# Padrao: 50 buffers de 4096 bytes cada.
+BufferPool.LargeMedium.Size = 50
+BufferPool.LargeMedium.BufferSize = 4096
+
+# Pool de buffers grandes-pequenos.
+# Padrao: 25 buffers de 8192 bytes cada.
+BufferPool.SmallLarge.Size = 25
+BufferPool.SmallLarge.BufferSize = 8192
+
+# Pool de buffers grandes.
+# Padrao: 25 buffers de 16384 bytes cada.
+BufferPool.Large.Size = 25
+BufferPool.Large.BufferSize = 16384
+
+# Pool de buffers muito grandes.
+# Padrao: 25 buffers de 24576 bytes cada.
+BufferPool.VeryLarge.Size = 25
+BufferPool.VeryLarge.BufferSize = 24576
+
+# Pool de buffers maximo. Usado para os maiores pacotes de rede possiveis.
+# Padrao: 10 buffers de 32768 bytes cada.
+BufferPool.Maximum.Size = 10
+BufferPool.Maximum.BufferSize = 32768
+
+
+
+================================================================================
+ ARQUIVO: dist/game/config/player/startinglocation.ini
+================================================================================
+# ---------------------------------------------------------------------------
+# Localizacao Inicial Customizada
+# ---------------------------------------------------------------------------
+# Ativa um ponto de spawn (nascimento) customizado para novos personagens.
+# Se True, todos os novos personagens nascem nas coordenadas abaixo em vez do local padrao da raca.
+# Padrao: False
+CustomStartingLocation = False
+
+# Coordenadas X, Y, Z do ponto de nascimento customizado.
+# Padrao: 83020, 147880, -3469 (Giran)
+CustomStartingLocX = 83020
+CustomStartingLocY = 147880
+CustomStartingLocZ = -3469
+
+
+

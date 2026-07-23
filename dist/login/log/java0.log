@@ -1,0 +1,16 @@
+2026.07.13 22:55:45,638	INFO	3	com.l2journey.commons.database.DatabaseFactory	Database: HikariCP pool initialized successfully.
+2026.07.13 22:56:49,920	SEVERE	3	com.l2journey.commons.database.DatabaseFactory	Database: Problem initializing connection pool.
+2026.07.13 22:56:49,939	INFO	3	com.l2journey.commons.threads.ThreadPool	ThreadPool: Initialized
+2026.07.13 22:56:49,945	INFO	3	com.l2journey.commons.threads.ThreadPool	...scheduled pool executor with 2 total threads.
+2026.07.13 22:56:49,945	INFO	3	com.l2journey.commons.threads.ThreadPool	...instant pool executor with 2 total threads.
+2026.07.13 22:56:49,949	INFO	3	com.l2journey.loginserver.LoginController	Loading LoginController...
+2026.07.13 22:56:50,333	INFO	3	com.l2journey.loginserver.LoginController	Cached 10 KeyPairs for RSA communication.
+2026.07.13 22:56:50,371	INFO	3	com.l2journey.loginserver.LoginController	Stored 20 keys for Blowfish communication.
+2026.07.13 22:56:50,501	INFO	3	com.l2journey.loginserver.GameServerTable	Loaded 127 server names.
+2026.07.13 22:57:52,709	SEVERE	3	com.l2journey.commons.database.DatabaseFactory	Database: Could not get a connection.
+2026.07.13 22:57:52,711	SEVERE	3	com.l2journey.loginserver.GameServerTable	Error loading registered game servers!
+2026.07.13 22:57:52,712	INFO	3	com.l2journey.loginserver.GameServerTable	Loaded 0 registered Game Servers.
+2026.07.13 22:57:52,768	INFO	3	com.l2journey.loginserver.GameServerTable	Cached 10 RSA keys for Game Server communication.
+2026.07.13 22:57:52,771	INFO	3	com.l2journey.loginserver.LoginServer	Loaded 2 IP Bans.
+2026.07.13 22:57:52,773	INFO	3	com.l2journey.loginserver.LoginServer	Listening for GameServers on 0.0.0.0:9014
+2026.07.13 22:57:52,799	INFO	3	com.l2journey.loginserver.LoginServer	LoginServer: is now listening on: 0.0.0.0:2106
