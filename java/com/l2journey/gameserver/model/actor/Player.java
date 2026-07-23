@@ -930,7 +930,7 @@ public class Player extends Playable
 	 * @param accountName the account name
 	 * @param app the player appearance
 	 */
-	private Player(int objectId, PlayerTemplate template, String accountName, PlayerAppearance app)
+	protected Player(int objectId, PlayerTemplate template, String accountName, PlayerAppearance app)
 	{
 		super(objectId, template);
 		setInstanceType(InstanceType.Player);
@@ -991,7 +991,7 @@ public class Player extends Playable
 	 * @param accountName the account name
 	 * @param app the player appearance
 	 */
-	private Player(PlayerTemplate template, String accountName, PlayerAppearance app)
+	protected Player(PlayerTemplate template, String accountName, PlayerAppearance app)
 	{
 		this(IdManager.getInstance().getNextId(), template, accountName, app);
 	}

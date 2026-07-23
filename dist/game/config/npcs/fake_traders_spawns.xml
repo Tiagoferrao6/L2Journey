@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<traders>
+    <spawn city="GLUDIO" type="SELL">
+        <names>
+            <name>Karamel</name>
+            <name>Brunk</name>
+            <name>IronHand</name>
+        </names>
+        <titlePrefix>WTS</titlePrefix>
+        <profileId>basic_mats_seller</profileId>
+        <appearance race="DWARF" sex="MALE" classId="53" />
+        <location x="-14300" y="122500" z="-3112" radius="500" />
+        <amount>2</amount>
+        <renewTime>14400000</renewTime> <!-- 4 horas em millisegundos -->
+    </spawn>
+
+    <spawn city="GLUDIO" type="BUY">
+        <names>
+            <name>BuyerDwarf</name>
+        </names>
+        <titlePrefix>WTB</titlePrefix>
+        <profileId>basic_mats_buyer</profileId>
+        <appearance race="DWARF" sex="MALE" classId="53" />
+        <location x="-14300" y="122500" z="-3112" radius="500" />
+        <amount>1</amount>
+        <renewTime>14400000</renewTime>
+    </spawn>
+
+    <spawn city="GLUDIO" type="CRAFT">
+        <names>
+            <name>ForgeMaster</name>
+            <name>AnvilGirl</name>
+        </names>
+        <titlePrefix>Craft</titlePrefix>
+        <profileId>crafter_shots_d</profileId>
+        <appearance race="DWARF" sex="FEMALE" classId="54" />
+        <location x="-14300" y="122500" z="-3112" radius="500" />
+        <amount>2</amount>
+        <renewTime>14400000</renewTime>
+    </spawn>
+</traders>

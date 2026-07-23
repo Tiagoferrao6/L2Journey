@@ -373,6 +373,11 @@ public class GameServer
 		SiegeScheduleData.getInstance();
 		MerchantPriceConfigTable.getInstance().updateReferences();
 		TerritoryWarManager.getInstance();
+		
+		printSection("Fake Players");
+		com.l2journey.gameserver.data.xml.impl.FakeTradersEconomyParser.getInstance();
+		com.l2journey.gameserver.data.xml.impl.FakeTradersSpawnParser.getInstance();
+		com.l2journey.gameserver.managers.FakeTraderManager.getInstance();
 		CastleManorManager.getInstance();
 		MercTicketManager.getInstance();
 		QuestManager.getInstance().report();

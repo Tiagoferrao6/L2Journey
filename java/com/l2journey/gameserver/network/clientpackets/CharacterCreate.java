@@ -121,7 +121,7 @@ public class CharacterCreate extends ClientPacket
 		}
 		
 		// Last Verified: May 30, 2009 - Gracia Final
-		if ((FakePlayerData.getInstance().getProperName(_name) != null) || !StringUtil.isAlphaNumeric(_name) || !isValidName(_name))
+		if ((FakePlayerData.getInstance().getProperName(_name) != null) || com.l2journey.gameserver.managers.FakeTraderManager.getInstance().isNameTaken(_name) || !StringUtil.isAlphaNumeric(_name) || !isValidName(_name))
 		{
 			client.sendPacket(new CharCreateFail(CharCreateFail.REASON_INCORRECT_NAME));
 			return;

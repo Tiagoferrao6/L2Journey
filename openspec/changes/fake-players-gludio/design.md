@@ -1,30 +1,28 @@
 ## Context
 
-The current static bot system in Gludio is rigid, predictable, and doesn't simulate real player behavior well. We want to implement a more dynamic system where "fake players" have persistent profiles (DNA), economic cycles, and behaviors (such as trading or hunting) that react to real players.
+Após definirmos a arquitetura técnica base de Lojas (`fake-traders-engine`) e de Combate (`epic-fake-players-dna`), o projeto precisa de uma implementação prática que sirva como "Piloto" para validar se os sistemas suportam a carga e se comportam conforme esperado na economia e no PvE. A região de Gludio foi escolhida por ser uma cidade low-level central.
 
-## Goals / Non-Goals
+## Architecture
 
-**Goals:**
-- Create a data schema for persisting fake player profiles and states (`fake_players_profiles`).
-- Implement `FakePlayerManager` to handle the lifecycle (spawn/despawn) of fake players based on their schedules and the presence of real players in the zone.
-- Implement an AI Controller for Traders with cyclic inventory management.
-- Implement an AI Controller for Hunters with party logic and combat reactivity based on "DNA".
-- Keep parameters externalized (config/DB).
+Como este é um pacote de Conteúdo (Content Patch), não há novas classes Java ou alterações no Core. A arquitetura resume-se ao mapeamento geográfico e à calibração dos arquivos XML.
 
-**Non-Goals:**
-- Expand this system to other towns/regions in this initial change (limited to 30 Traders and 30 Hunters in Gludio).
-- Full market simulation with advanced supply/demand across all towns.
-- Implementing complex clan logic for fake players.
+- **Mapeamento de Gludio (Traders)**:
+  - 10 Bots SELL no Gludio Town Square.
+  - 10 Bots BUY espalhados pelas pontes e saídas.
+  - 10 Bots CRAFT (Soulshots, Weapons D-Grade) perto do Blacksmith e do Warehouse.
+- **Mapeamento de Gludio (Hunters)**:
+  - 10 Bots Solo em Ruins of Despair (Hunters com DNA furtivo/solitário).
+  - 2 Parties (20 bots) cruzando entre Ruins of Agony e Gludio Gates.
+- **Listeners de Zona (Otimização)**: Configurar no `server.ini` (ou hardcoded nos Managers) o raio de ativação de Gludio Town e das Ruínas para ativar o `Sleep Mode` da IA quando a área estiver vazia de players humanos.
 
 ## Decisions
 
-- **Persistence Layer**: Use a new SQL table `fake_players_profiles`. This table will store everything needed to recreate the bot's state across server restarts, including their schedule, location, and DNA traits (aggressiveness, courage, party tendency).
-- **Zone-Based Activation**: To optimize performance, `FakePlayerManager` will use a Zone Listener to only spawn and activate bots when a real player is in the Gludio region. When no players are around, the bots are despawned but their time-based logic (like economic cycles or schedules) can still be calculated upon next spawn.
-- **AI Implementation**: Extend the existing AI controllers to create specialized `FakeTraderAI` and `FakeHunterAI`. 
-  - *TraderAI* will periodically refresh its sell slots and update prices based on a simple configuration matrix.
-  - *HunterAI* will use the DNA weights to make combat decisions (e.g., if courage < threshold and HP is low, trigger escape).
+- **Economia Focada**: Os arquivos XML deste piloto cobrirão apenas itens NG (No-Grade) e D-Grade, bem como materiais básicos. Isso evita quebrar a economia de high-level enquanto testamos o sumidouro de adena (Adena Sink).
+- **Sem Intervenção no Core**: Toda essa implementação deve se limitar à criação e edição de `fake_traders_spawns.xml`, `fake_traders_economy.xml`, `fake_hunters_spawns.xml`, e `fake_hunters_dna.xml`.
 
 ## Risks / Trade-offs
 
-- **Risk: Performance impact from Zone Listeners** -> Mitigation: Use a broad bounding box for Gludio to minimize enter/exit events.
-- **Risk: Complex state sync when despawning/respawning** -> Mitigation: Ensure `FakePlayerManager` strictly saves state to DB upon despawn, and re-reads upon spawn.
+- **Risco: Hunters atraírem Mobs para a cidade de Gludio (Train).**
+  - *Mitigação:* Configurar os Hunters para soltarem os mobs (Wipe Aggro) e teleportarem (SoE) automaticamente se a distância para a cidade ficar abaixo de certo raio em relação à zona de perigo.
+- **Risco: Traders ocuparem todos os espaços visíveis da cidade.**
+  - *Mitigação:* Usar os raios de dispersão no `<location radius="X">` do XML para evitar aglomerações e clipping de texturas.

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<economy>
+    <!-- Template para materiais basicos de venda -->
+    <marketProfile id="basic_mats_seller">
+        <!-- Vende Varnish, Stem, Thread -->
+        <item id="1865" name="Varnish" minPrice="50" maxPrice="80" minQty="50" maxQty="200" />
+        <item id="1864" name="Stem"    minPrice="10" maxPrice="30" minQty="100" maxQty="500" />
+        <item id="1868" name="Thread"  minPrice="15" maxPrice="35" minQty="80" maxQty="300" />
+    </marketProfile>
+
+    <!-- Template para materiais basicos de compra -->
+    <marketProfile id="basic_mats_buyer">
+        <item id="1865" name="Varnish" minPrice="30" maxPrice="45" minQty="50" maxQty="300" />
+    </marketProfile>
+
+    <!-- Template para craft de Soulshots D -->
+    <craftProfile id="crafter_shots_d">
+        <recipe id="2" name="Soulshot (D)" minFee="10" maxFee="20" />
+        <recipe id="14" name="Blessed Spiritshot (D)" minFee="15" maxFee="35" />
+    </craftProfile>
+</economy>
