@@ -11,8 +11,9 @@ import com.l2journey.gameserver.model.fake.EconomyProfile;
 import com.l2journey.gameserver.model.fake.EconomyItem;
 import com.l2journey.gameserver.model.fake.EconomyRecipe;
 import com.l2journey.commons.util.Rnd;
-import com.l2journey.gameserver.network.serverpackets.L2GameServerPacket;
-import com.l2journey.gameserver.network.serverpackets.SystemMessage;
+import com.l2journey.gameserver.network.serverpackets.ServerPacket;
+import com.l2journey.gameserver.model.item.enums.ItemProcessType;
+import com.l2journey.gameserver.model.actor.enums.player.PrivateStoreType;
 
 /**
  * Fake Player implementation for Traders (SELL, BUY, CRAFT).
@@ -60,27 +61,21 @@ public class FakePlayer extends Player
 	}
 
 	@Override
-	public void sendPacket(L2GameServerPacket packet)
+	public void sendPacket(ServerPacket packet)
 	{
 		// No network client attached, ignore all packets
-	}
-
-	@Override
-	public void sendPacket(SystemMessage packet)
-	{
-		// Overload specifically for SystemMessage
 	}
 
 	public void wipeState()
 	{
 		// Stand up
-		setStandUp();
+		standUp();
 		
 		// Clear inventory
-		getInventory().destroyAllItems("FakePlayerWipe", this, null);
+		getInventory().destroyAllItems(ItemProcessType.DESTROY, this, null);
 		
 		// Clear adena
-		getInventory().reduceAdena("FakePlayerWipe", getInventory().getAdena(), this, null);
+		getInventory().reduceAdena(ItemProcessType.DESTROY, getInventory().getAdena(), this, null);
 		
 		// Clear TradeList and RecipeBook
 		if (getSellList() != null)
@@ -88,7 +83,7 @@ public class FakePlayer extends Player
 		if (getBuyList() != null)
 			getBuyList().clear();
 			
-		setPrivateStoreType(0); // STORE_PRIVATE_NONE
+		setPrivateStoreType(PrivateStoreType.NONE); // STORE_PRIVATE_NONE
 		broadcastUserInfo();
 	}
 
@@ -110,7 +105,7 @@ public class FakePlayer extends Player
 
 			if (count > 0 && price > 0)
 			{
-				Item item = getInventory().addItem("FakeTraderSell", eItem.getItemId(), count, this, null);
+				Item item = getInventory().addItem(ItemProcessType.SELL, eItem.getItemId(), count, this, null);
 				if (item != null)
 				{
 					getSellList().addItem(item.getObjectId(), count, price);
@@ -118,7 +113,7 @@ public class FakePlayer extends Player
 			}
 		}
 
-		setPrivateStoreType(1); // STORE_PRIVATE_SELL
+		setPrivateStoreType(PrivateStoreType.SELL); // STORE_PRIVATE_SELL
 		sitDown(false);
 		broadcastUserInfo();
 	}
@@ -126,7 +121,7 @@ public class FakePlayer extends Player
 	public void setupBuyStore(String profileId)
 	{
 		// Inject 1 Billion Adena
-		getInventory().addAdena("FakeTraderBuy", 1000000000L, this, null);
+		getInventory().addAdena(ItemProcessType.BUY, 1000000000L, this, null);
 		
 		EconomyProfile profile = FakeTradersEconomyParser.getInstance().getProfile(profileId);
 		if (profile == null || profile.getItems().isEmpty())
@@ -147,7 +142,7 @@ public class FakePlayer extends Player
 			}
 		}
 
-		setPrivateStoreType(3); // STORE_PRIVATE_BUY
+		setPrivateStoreType(PrivateStoreType.BUY); // STORE_PRIVATE_BUY
 		sitDown(false);
 		broadcastUserInfo();
 	}
@@ -166,7 +161,7 @@ public class FakePlayer extends Player
 			getManufactureItems().put(eRecipe.getRecipeId(), new ManufactureItem(eRecipe.getRecipeId(), fee));
 		}
 
-		setPrivateStoreType(5); // STORE_PRIVATE_MANUFACTURE
+		setPrivateStoreType(PrivateStoreType.MANUFACTURE); // STORE_PRIVATE_MANUFACTURE
 		sitDown(false);
 		broadcastUserInfo();
 	}

@@ -11,7 +11,7 @@ import org.w3c.dom.Node;
 
 import com.l2journey.commons.util.IXmlReader;
 import com.l2journey.commons.util.Rnd;
-import com.l2journey.gameserver.idfactory.IdFactory;
+import com.l2journey.gameserver.managers.IdManager;
 import com.l2journey.gameserver.managers.FakeTraderManager;
 import com.l2journey.gameserver.model.actor.appearance.PlayerAppearance;
 import com.l2journey.gameserver.model.actor.instance.FakePlayer;
@@ -118,7 +118,7 @@ public class FakeTradersSpawnParser implements IXmlReader
 							}
 
 							final PlayerAppearance app = new PlayerAppearance((byte) 0, (byte) 0, (byte) 0, isFemale);
-							final FakePlayer bot = new FakePlayer(IdFactory.getInstance().getNextId(), template, "FakeTraders", app);
+							final FakePlayer bot = new FakePlayer(IdManager.getInstance().getNextId(), template, "FakeTraders", app);
 							
 							bot.setName(name);
 							bot.setTitle(titlePrefix);

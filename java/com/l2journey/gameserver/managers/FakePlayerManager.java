@@ -5,9 +5,12 @@ import java.util.logging.Logger;
 import com.l2journey.commons.threads.ThreadPool;
 import com.l2journey.gameserver.model.actor.Creature;
 import com.l2journey.gameserver.model.actor.Player;
-import com.l2journey.gameserver.model.zone.L2ZoneType;
-import com.l2journey.gameserver.model.zone.ZoneId;
-import com.l2journey.gameserver.model.zone.ZoneListener;
+import com.l2journey.gameserver.model.zone.ZoneType;
+import com.l2journey.gameserver.model.events.EventDispatcher;
+import com.l2journey.gameserver.model.events.EventType;
+import com.l2journey.gameserver.model.events.holders.actor.creature.OnCreatureZoneEnter;
+import com.l2journey.gameserver.model.events.holders.actor.creature.OnCreatureZoneExit;
+import java.util.function.Consumer;
 
 /**
  * Manager for Fake Players MVP (Gludio, Death Pass, Ruins of Despair).
@@ -34,35 +37,33 @@ public class FakePlayerManager
 	{
 		// In a real scenario, we would attach to specific Gludio zones.
 		// For MVP, we define a generic listener that could be attached to ZoneManager.
-		ZoneListener mvpZoneListener = new ZoneListener()
+		Consumer<OnCreatureZoneEnter> onZoneEnter = event ->
 		{
-			@Override
-			public void onEnterZone(Creature character, L2ZoneType zone)
+			Creature character = event.getCreature();
+			if (character instanceof Player && !((Player) character).isFakePlayer())
 			{
-				if (character instanceof Player && !((Player) character).isFakePlayer())
+				if (!_gludioActive)
 				{
-					if (!_gludioActive)
-					{
-						_gludioActive = true;
-						LOGGER.info("FakePlayerManager: Real player entered MVP zone. Spawning 10 bots...");
-						spawnBots();
-					}
-				}
-			}
-
-			@Override
-			public void onExitZone(Creature character, L2ZoneType zone)
-			{
-				if (character instanceof Player && !((Player) character).isFakePlayer())
-				{
-					// If no real players left in the zone (simplified logic)
-					_gludioActive = false;
-					LOGGER.info("FakePlayerManager: Real player left MVP zone. Suspending bots...");
-					despawnBots();
+					_gludioActive = true;
+					LOGGER.info("FakePlayerManager: Real player entered MVP zone. Spawning 10 bots...");
+					spawnBots();
 				}
 			}
 		};
-		// ZoneManager.getInstance().getZoneById(ZoneId.TOWN).addListener(mvpZoneListener);
+
+		Consumer<OnCreatureZoneExit> onZoneExit = event ->
+		{
+			Creature character = event.getCreature();
+			if (character instanceof Player && !((Player) character).isFakePlayer())
+			{
+				// If no real players left in the zone (simplified logic)
+				_gludioActive = false;
+				LOGGER.info("FakePlayerManager: Real player left MVP zone. Suspending bots...");
+				despawnBots();
+			}
+		};
+		// EventDispatcher.getInstance().addListener(EventType.ON_CREATURE_ZONE_ENTER, onZoneEnter);
+		// EventDispatcher.getInstance().addListener(EventType.ON_CREATURE_ZONE_EXIT, onZoneExit);
 		LOGGER.info(getClass().getSimpleName() + ": Zone listeners initialized for Gludio, Death Pass, Ruins of Despair.");
 	}
 
