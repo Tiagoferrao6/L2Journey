@@ -1,4 +1,4 @@
-Jul 06, 2026 9:57:14 PM com.l2journey.commons.database.DatabaseFactory testSingleConnection
+Jul 13, 2026 10:56:49 PM com.l2journey.commons.database.DatabaseFactory testSingleConnection
 SEVERE: Database: Problem initializing connection pool.
 java.sql.SQLTransientConnectionException: L2JMobiusPool - Connection is not available, request timed out after 60001ms (total=0, active=0, idle=0, waiting=0)
 	at com.zaxxer.hikari.pool.HikariPool.createTimeoutException(HikariPool.java:714)
@@ -49,7 +49,7 @@ Caused by: com.mysql.cj.exceptions.CJException: Access denied for user 'root'@'l
 	at com.mysql.cj.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:854)
 	... 14 more
 
-Jul 06, 2026 9:58:16 PM com.l2journey.commons.database.DatabaseFactory getConnection
+Jul 13, 2026 10:57:52 PM com.l2journey.commons.database.DatabaseFactory getConnection
 SEVERE: Database: Could not get a connection.
 java.sql.SQLTransientConnectionException: L2JMobiusPool - Connection is not available, request timed out after 60000ms (total=0, active=0, idle=0, waiting=0)
 	at com.zaxxer.hikari.pool.HikariPool.createTimeoutException(HikariPool.java:714)

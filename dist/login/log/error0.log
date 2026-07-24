@@ -1,4 +1,4 @@
-Jul 13, 2026 10:56:49 PM com.l2journey.commons.database.DatabaseFactory testSingleConnection
+jul. 23, 2026 9:24:33 PM com.l2journey.commons.database.DatabaseFactory testSingleConnection
 SEVERE: Database: Problem initializing connection pool.
 java.sql.SQLTransientConnectionException: L2JMobiusPool - Connection is not available, request timed out after 60001ms (total=0, active=0, idle=0, waiting=0)
 	at com.zaxxer.hikari.pool.HikariPool.createTimeoutException(HikariPool.java:714)
@@ -30,26 +30,20 @@ Caused by: java.sql.SQLNonTransientConnectionException: Could not create connect
 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
 	at java.base/java.lang.Thread.run(Thread.java:1474)
-Caused by: com.mysql.cj.exceptions.CJException: Access denied for user 'root'@'localhost' (using password: YES)
+Caused by: com.mysql.cj.exceptions.WrongArgumentException: Unable to load authentication plugin 'auth_gssapi_client'.
 	at java.base/jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:62)
 	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499)
 	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:483)
 	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:52)
-	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:95)
-	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:140)
-	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:118)
-	at com.mysql.cj.protocol.a.NativeProtocol.checkErrorMessage(NativeProtocol.java:854)
-	at com.mysql.cj.protocol.a.NativeProtocol.checkErrorMessage(NativeProtocol.java:777)
-	at com.mysql.cj.protocol.a.NativeProtocol.checkErrorMessage(NativeProtocol.java:746)
-	at com.mysql.cj.protocol.a.NativeProtocol.checkErrorMessage(NativeProtocol.java:147)
-	at com.mysql.cj.protocol.a.NativeAuthenticationProvider.proceedHandshakeWithPluggableAuthentication(NativeAuthenticationProvider.java:461)
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:76)
+	at com.mysql.cj.protocol.a.NativeAuthenticationProvider.proceedHandshakeWithPluggableAuthentication(NativeAuthenticationProvider.java:484)
 	at com.mysql.cj.protocol.a.NativeAuthenticationProvider.connect(NativeAuthenticationProvider.java:206)
 	at com.mysql.cj.protocol.a.NativeProtocol.connect(NativeProtocol.java:1332)
 	at com.mysql.cj.NativeSession.connect(NativeSession.java:155)
 	at com.mysql.cj.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:854)
 	... 14 more
 
-Jul 13, 2026 10:57:52 PM com.l2journey.commons.database.DatabaseFactory getConnection
+jul. 23, 2026 9:25:34 PM com.l2journey.commons.database.DatabaseFactory getConnection
 SEVERE: Database: Could not get a connection.
 java.sql.SQLTransientConnectionException: L2JMobiusPool - Connection is not available, request timed out after 60000ms (total=0, active=0, idle=0, waiting=0)
 	at com.zaxxer.hikari.pool.HikariPool.createTimeoutException(HikariPool.java:714)
@@ -84,19 +78,13 @@ Caused by: java.sql.SQLNonTransientConnectionException: Could not create connect
 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
 	at java.base/java.lang.Thread.run(Thread.java:1474)
-Caused by: com.mysql.cj.exceptions.CJException: Access denied for user 'root'@'localhost' (using password: YES)
+Caused by: com.mysql.cj.exceptions.WrongArgumentException: Unable to load authentication plugin 'auth_gssapi_client'.
 	at java.base/jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:62)
 	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499)
 	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:483)
 	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:52)
-	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:95)
-	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:140)
-	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:118)
-	at com.mysql.cj.protocol.a.NativeProtocol.checkErrorMessage(NativeProtocol.java:854)
-	at com.mysql.cj.protocol.a.NativeProtocol.checkErrorMessage(NativeProtocol.java:777)
-	at com.mysql.cj.protocol.a.NativeProtocol.checkErrorMessage(NativeProtocol.java:746)
-	at com.mysql.cj.protocol.a.NativeProtocol.checkErrorMessage(NativeProtocol.java:147)
-	at com.mysql.cj.protocol.a.NativeAuthenticationProvider.proceedHandshakeWithPluggableAuthentication(NativeAuthenticationProvider.java:461)
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:76)
+	at com.mysql.cj.protocol.a.NativeAuthenticationProvider.proceedHandshakeWithPluggableAuthentication(NativeAuthenticationProvider.java:484)
 	at com.mysql.cj.protocol.a.NativeAuthenticationProvider.connect(NativeAuthenticationProvider.java:206)
 	at com.mysql.cj.protocol.a.NativeProtocol.connect(NativeProtocol.java:1332)
 	at com.mysql.cj.NativeSession.connect(NativeSession.java:155)
