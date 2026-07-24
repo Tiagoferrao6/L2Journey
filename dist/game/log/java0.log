@@ -1,27 +1,53 @@
-2026.07.13 22:56:03,437	INFO	3	com.l2journey.commons.util.IXmlReader	Network Config: ipconfig.xml exists, using manual configuration...
-2026.07.13 22:56:03,665	INFO	3	com.l2journey.Config	Loaded 6 Filter Words.
-2026.07.13 22:56:03,678	INFO	3	com.l2journey.gameserver.GameServer	------------------------------------------------=[ Database ]
-2026.07.13 22:56:03,853	INFO	3	com.l2journey.commons.database.DatabaseFactory	Database: HikariCP pool initialized successfully.
-2026.07.13 22:57:08,070	SEVERE	3	com.l2journey.commons.database.DatabaseFactory	Database: Problem initializing connection pool.
-2026.07.13 22:57:08,084	INFO	3	com.l2journey.gameserver.GameServer	----------------------------------------------=[ ThreadPool ]
-2026.07.13 22:57:08,086	INFO	3	com.l2journey.commons.threads.ThreadPool	ThreadPool: Initialized
-2026.07.13 22:57:08,087	INFO	3	com.l2journey.commons.threads.ThreadPool	...scheduled pool executor with 8 high priority threads.
-2026.07.13 22:57:08,109	INFO	3	com.l2journey.commons.threads.ThreadPool	...scheduled pool executor with 32 total threads.
-2026.07.13 22:57:08,109	INFO	3	com.l2journey.commons.threads.ThreadPool	...instant pool executor with 16 total threads.
-2026.07.13 22:57:08,117	INFO	3	com.l2journey.gameserver.GameServer	-----------------------------------------------=[ IdManager ]
-2026.07.13 22:58:12,547	SEVERE	3	com.l2journey.commons.database.DatabaseFactory	Database: Could not get a connection.
-2026.07.13 22:58:12,548	WARNING	3	com.l2journey.gameserver.managers.DatabaseIdManager	DatabaseIdManager: Could not clean up invalid weddings: java.lang.RuntimeException: Unable to obtain a database connection.
-2026.07.13 22:59:17,211	SEVERE	3	com.l2journey.commons.database.DatabaseFactory	Database: Could not get a connection.
-2026.07.13 22:59:17,213	WARNING	3	com.l2journey.gameserver.managers.DatabaseIdManager	DatabaseIdManager: Could not execute cleanup query: DELETE FROM account_gsdata WHERE account_gsdata.account_name NOT IN (SELECT account_name FROM characters) - java.lang.RuntimeException: Unable to obtain a database connection.
-2026.07.13 23:00:21,774	SEVERE	3	com.l2journey.commons.database.DatabaseFactory	Database: Could not get a connection.
-2026.07.13 23:00:21,777	WARNING	3	com.l2journey.gameserver.managers.DatabaseIdManager	DatabaseIdManager: Could not execute cleanup query: DELETE FROM character_contacts WHERE character_contacts.charId NOT IN (SELECT charId FROM characters) - java.lang.RuntimeException: Unable to obtain a database connection.
-2026.07.13 23:01:25,798	SEVERE	3	com.l2journey.commons.database.DatabaseFactory	Database: Could not get a connection.
-2026.07.13 23:01:25,800	WARNING	3	com.l2journey.gameserver.managers.DatabaseIdManager	DatabaseIdManager: Could not execute cleanup query: DELETE FROM character_contacts WHERE character_contacts.contactId NOT IN (SELECT charId FROM characters) - java.lang.RuntimeException: Unable to obtain a database connection.
-2026.07.13 23:02:28,121	SEVERE	3	com.l2journey.commons.database.DatabaseFactory	Database: Could not get a connection.
-2026.07.13 23:02:28,123	WARNING	3	com.l2journey.gameserver.managers.DatabaseIdManager	DatabaseIdManager: Could not execute cleanup query: DELETE FROM character_friends WHERE character_friends.charId NOT IN (SELECT charId FROM characters) - java.lang.RuntimeException: Unable to obtain a database connection.
-2026.07.13 23:03:32,722	SEVERE	3	com.l2journey.commons.database.DatabaseFactory	Database: Could not get a connection.
-2026.07.13 23:03:32,725	WARNING	3	com.l2journey.gameserver.managers.DatabaseIdManager	DatabaseIdManager: Could not execute cleanup query: DELETE FROM character_friends WHERE character_friends.friendId NOT IN (SELECT charId FROM characters) - java.lang.RuntimeException: Unable to obtain a database connection.
-2026.07.13 23:04:37,373	SEVERE	3	com.l2journey.commons.database.DatabaseFactory	Database: Could not get a connection.
-2026.07.13 23:04:37,374	WARNING	3	com.l2journey.gameserver.managers.DatabaseIdManager	DatabaseIdManager: Could not execute cleanup query: DELETE FROM character_hennas WHERE character_hennas.charId NOT IN (SELECT charId FROM characters) - java.lang.RuntimeException: Unable to obtain a database connection.
-2026.07.13 23:05:42,135	SEVERE	3	com.l2journey.commons.database.DatabaseFactory	Database: Could not get a connection.
-2026.07.13 23:05:42,137	WARNING	3	com.l2journey.gameserver.managers.DatabaseIdManager	DatabaseIdManager: Could not execute cleanup query: DELETE FROM character_macroses WHERE character_macroses.charId NOT IN (SELECT charId FROM characters) - java.lang.RuntimeException: Unable to obtain a database connection.
+2026.07.23 21:23:42,034	INFO	3	com.l2journey.commons.util.IXmlReader	Network Config: ipconfig.xml exists, using manual configuration...
+2026.07.23 21:23:43,153	INFO	3	com.l2journey.Config	Loaded 6 Filter Words.
+2026.07.23 21:23:43,415	INFO	3	com.l2journey.gameserver.GameServer	------------------------------------------------=[ Database ]
+2026.07.23 21:23:43,582	INFO	3	com.l2journey.commons.database.DatabaseFactory	Database: HikariCP pool initialized successfully.
+2026.07.23 21:24:43,591	SEVERE	3	com.l2journey.commons.database.DatabaseFactory	Database: Problem initializing connection pool.
+2026.07.23 21:24:43,624	INFO	3	com.l2journey.gameserver.GameServer	----------------------------------------------=[ ThreadPool ]
+2026.07.23 21:24:43,629	INFO	3	com.l2journey.commons.threads.ThreadPool	ThreadPool: Initialized
+2026.07.23 21:24:43,632	INFO	3	com.l2journey.commons.threads.ThreadPool	...scheduled pool executor with 8 high priority threads.
+2026.07.23 21:24:43,647	INFO	3	com.l2journey.commons.threads.ThreadPool	...scheduled pool executor with 32 total threads.
+2026.07.23 21:24:43,649	INFO	3	com.l2journey.commons.threads.ThreadPool	...instant pool executor with 16 total threads.
+2026.07.23 21:24:43,654	INFO	3	com.l2journey.gameserver.GameServer	-----------------------------------------------=[ IdManager ]
+2026.07.23 21:25:43,660	SEVERE	3	com.l2journey.commons.database.DatabaseFactory	Database: Could not get a connection.
+2026.07.23 21:25:43,665	WARNING	3	com.l2journey.gameserver.managers.DatabaseIdManager	DatabaseIdManager: Could not clean up invalid weddings: java.lang.RuntimeException: Unable to obtain a database connection.
+2026.07.23 21:26:43,671	SEVERE	3	com.l2journey.commons.database.DatabaseFactory	Database: Could not get a connection.
+2026.07.23 21:26:43,677	WARNING	3	com.l2journey.gameserver.managers.DatabaseIdManager	DatabaseIdManager: Could not execute cleanup query: DELETE FROM account_gsdata WHERE account_gsdata.account_name NOT IN (SELECT account_name FROM characters) - java.lang.RuntimeException: Unable to obtain a database connection.
+2026.07.23 21:27:43,681	SEVERE	3	com.l2journey.commons.database.DatabaseFactory	Database: Could not get a connection.
+2026.07.23 21:27:43,684	WARNING	3	com.l2journey.gameserver.managers.DatabaseIdManager	DatabaseIdManager: Could not execute cleanup query: DELETE FROM character_contacts WHERE character_contacts.charId NOT IN (SELECT charId FROM characters) - java.lang.RuntimeException: Unable to obtain a database connection.
+2026.07.23 21:28:43,689	SEVERE	3	com.l2journey.commons.database.DatabaseFactory	Database: Could not get a connection.
+2026.07.23 21:28:43,694	WARNING	3	com.l2journey.gameserver.managers.DatabaseIdManager	DatabaseIdManager: Could not execute cleanup query: DELETE FROM character_contacts WHERE character_contacts.contactId NOT IN (SELECT charId FROM characters) - java.lang.RuntimeException: Unable to obtain a database connection.
+2026.07.23 21:29:43,697	SEVERE	3	com.l2journey.commons.database.DatabaseFactory	Database: Could not get a connection.
+2026.07.23 21:29:43,702	WARNING	3	com.l2journey.gameserver.managers.DatabaseIdManager	DatabaseIdManager: Could not execute cleanup query: DELETE FROM character_friends WHERE character_friends.charId NOT IN (SELECT charId FROM characters) - java.lang.RuntimeException: Unable to obtain a database connection.
+2026.07.23 21:30:43,705	SEVERE	3	com.l2journey.commons.database.DatabaseFactory	Database: Could not get a connection.
+2026.07.23 21:30:43,710	WARNING	3	com.l2journey.gameserver.managers.DatabaseIdManager	DatabaseIdManager: Could not execute cleanup query: DELETE FROM character_friends WHERE character_friends.friendId NOT IN (SELECT charId FROM characters) - java.lang.RuntimeException: Unable to obtain a database connection.
+2026.07.23 21:31:43,715	SEVERE	3	com.l2journey.commons.database.DatabaseFactory	Database: Could not get a connection.
+2026.07.23 21:31:43,718	WARNING	3	com.l2journey.gameserver.managers.DatabaseIdManager	DatabaseIdManager: Could not execute cleanup query: DELETE FROM character_hennas WHERE character_hennas.charId NOT IN (SELECT charId FROM characters) - java.lang.RuntimeException: Unable to obtain a database connection.
+2026.07.23 21:32:43,723	SEVERE	3	com.l2journey.commons.database.DatabaseFactory	Database: Could not get a connection.
+2026.07.23 21:32:43,727	WARNING	3	com.l2journey.gameserver.managers.DatabaseIdManager	DatabaseIdManager: Could not execute cleanup query: DELETE FROM character_macroses WHERE character_macroses.charId NOT IN (SELECT charId FROM characters) - java.lang.RuntimeException: Unable to obtain a database connection.
+2026.07.23 21:33:43,731	SEVERE	3	com.l2journey.commons.database.DatabaseFactory	Database: Could not get a connection.
+2026.07.23 21:33:43,734	WARNING	3	com.l2journey.gameserver.managers.DatabaseIdManager	DatabaseIdManager: Could not execute cleanup query: DELETE FROM character_quests WHERE character_quests.charId NOT IN (SELECT charId FROM characters) - java.lang.RuntimeException: Unable to obtain a database connection.
+2026.07.23 21:34:43,740	SEVERE	3	com.l2journey.commons.database.DatabaseFactory	Database: Could not get a connection.
+2026.07.23 21:34:43,743	WARNING	3	com.l2journey.gameserver.managers.DatabaseIdManager	DatabaseIdManager: Could not execute cleanup query: DELETE FROM character_recipebook WHERE character_recipebook.charId NOT IN (SELECT charId FROM characters) - java.lang.RuntimeException: Unable to obtain a database connection.
+2026.07.23 21:35:43,750	SEVERE	3	com.l2journey.commons.database.DatabaseFactory	Database: Could not get a connection.
+2026.07.23 21:35:43,753	WARNING	3	com.l2journey.gameserver.managers.DatabaseIdManager	DatabaseIdManager: Could not execute cleanup query: DELETE FROM character_recipeshoplist WHERE character_recipeshoplist.charId NOT IN (SELECT charId FROM characters) - java.lang.RuntimeException: Unable to obtain a database connection.
+2026.07.23 21:36:43,759	SEVERE	3	com.l2journey.commons.database.DatabaseFactory	Database: Could not get a connection.
+2026.07.23 21:36:43,763	WARNING	3	com.l2journey.gameserver.managers.DatabaseIdManager	DatabaseIdManager: Could not execute cleanup query: DELETE FROM character_shortcuts WHERE character_shortcuts.charId NOT IN (SELECT charId FROM characters) - java.lang.RuntimeException: Unable to obtain a database connection.
+2026.07.23 21:37:43,769	SEVERE	3	com.l2journey.commons.database.DatabaseFactory	Database: Could not get a connection.
+2026.07.23 21:37:43,772	WARNING	3	com.l2journey.gameserver.managers.DatabaseIdManager	DatabaseIdManager: Could not execute cleanup query: DELETE FROM character_skills WHERE character_skills.charId NOT IN (SELECT charId FROM characters) - java.lang.RuntimeException: Unable to obtain a database connection.
+2026.07.23 21:38:43,776	SEVERE	3	com.l2journey.commons.database.DatabaseFactory	Database: Could not get a connection.
+2026.07.23 21:38:43,779	WARNING	3	com.l2journey.gameserver.managers.DatabaseIdManager	DatabaseIdManager: Could not execute cleanup query: DELETE FROM character_skills_save WHERE character_skills_save.charId NOT IN (SELECT charId FROM characters) - java.lang.RuntimeException: Unable to obtain a database connection.
+2026.07.23 21:39:43,783	SEVERE	3	com.l2journey.commons.database.DatabaseFactory	Database: Could not get a connection.
+2026.07.23 21:39:43,787	WARNING	3	com.l2journey.gameserver.managers.DatabaseIdManager	DatabaseIdManager: Could not execute cleanup query: DELETE FROM character_subclasses WHERE character_subclasses.charId NOT IN (SELECT charId FROM characters) - java.lang.RuntimeException: Unable to obtain a database connection.
+2026.07.23 21:40:43,790	SEVERE	3	com.l2journey.commons.database.DatabaseFactory	Database: Could not get a connection.
+2026.07.23 21:40:43,793	WARNING	3	com.l2journey.gameserver.managers.DatabaseIdManager	DatabaseIdManager: Could not execute cleanup query: DELETE FROM character_raid_points WHERE character_raid_points.charId NOT IN (SELECT charId FROM characters) - java.lang.RuntimeException: Unable to obtain a database connection.
+2026.07.23 21:41:43,799	SEVERE	3	com.l2journey.commons.database.DatabaseFactory	Database: Could not get a connection.
+2026.07.23 21:41:43,802	WARNING	3	com.l2journey.gameserver.managers.DatabaseIdManager	DatabaseIdManager: Could not execute cleanup query: DELETE FROM character_instance_time WHERE character_instance_time.charId NOT IN (SELECT charId FROM characters) - java.lang.RuntimeException: Unable to obtain a database connection.
+2026.07.23 21:42:43,807	SEVERE	3	com.l2journey.commons.database.DatabaseFactory	Database: Could not get a connection.
+2026.07.23 21:42:43,811	WARNING	3	com.l2journey.gameserver.managers.DatabaseIdManager	DatabaseIdManager: Could not execute cleanup query: DELETE FROM character_ui_actions WHERE character_ui_actions.charId NOT IN (SELECT charId FROM characters) - java.lang.RuntimeException: Unable to obtain a database connection.
+2026.07.23 21:43:43,815	SEVERE	3	com.l2journey.commons.database.DatabaseFactory	Database: Could not get a connection.
+2026.07.23 21:43:43,818	WARNING	3	com.l2journey.gameserver.managers.DatabaseIdManager	DatabaseIdManager: Could not execute cleanup query: DELETE FROM character_ui_categories WHERE character_ui_categories.charId NOT IN (SELECT charId FROM characters) - java.lang.RuntimeException: Unable to obtain a database connection.
+2026.07.23 21:44:43,824	SEVERE	3	com.l2journey.commons.database.DatabaseFactory	Database: Could not get a connection.
+2026.07.23 21:44:43,827	WARNING	3	com.l2journey.gameserver.managers.DatabaseIdManager	DatabaseIdManager: Could not execute cleanup query: DELETE FROM items WHERE items.owner_id NOT IN (SELECT charId FROM characters) AND items.owner_id NOT IN (SELECT clan_id FROM clan_data) AND items.owner_id != -1 - java.lang.RuntimeException: Unable to obtain a database connection.
+2026.07.23 21:45:43,832	SEVERE	3	com.l2journey.commons.database.DatabaseFactory	Database: Could not get a connection.
+2026.07.23 21:45:43,835	WARNING	3	com.l2journey.gameserver.managers.DatabaseIdManager	DatabaseIdManager: Could not execute cleanup query: DELETE FROM items WHERE items.owner_id = -1 AND loc LIKE 'MAIL' AND loc_data NOT IN (SELECT messageId FROM messages WHERE senderId = -1) - java.lang.RuntimeException: Unable to obtain a database connection.
