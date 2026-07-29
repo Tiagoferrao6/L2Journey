@@ -1,6 +1,6 @@
 -- Create Test Account: tester / tester
 INSERT IGNORE INTO `accounts` (`login`, `password`, `accessLevel`) 
-VALUES ('tester', '40bd001563085fc35165329ea1ff5c5ecbdbbefa', 0);
+VALUES ('tester', 'q02NKl9IChNwZ9oXEAJxzRdmB6E=', 0);
 
 -- Create Test Character: KaelTester (Level 40 Gladiator in Town of Gludio)
 INSERT IGNORE INTO `characters` 
