@@ -106,7 +106,7 @@ public class FakeTradersSpawnParser implements IXmlReader
 							{
 								continue;
 							}
-							final String name = names.get(Rnd.get(names.size()));
+							final String name = names.remove(Rnd.get(names.size()));
 							
 							FakeTraderManager.getInstance().addReservedName(name);
 

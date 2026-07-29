@@ -1,22 +1,29 @@
-## 1. Atualização do Banco de Dados
+# Tasks: Epic Fake Players DNA (Motor Core de IA e Turnos)
 
-- [ ] 1.1 Adicionar novas colunas numéricas de 0-100 para o DNA (`preservacao`, `sociabilidade`, `ganancia`, `rancor`, `altruismo`) na tabela `fake_players_profiles`.
-- [ ] 1.2 Adicionar a coluna TEXT/JSON para `behavior_overrides` na tabela.
-- [ ] 1.3 Adicionar coluna para Turno (`MORNING`, `PRIME_TIME`, etc.) e Duração/Vício (0-100).
-- [ ] 1.4 Modificar o DTO e DAO em Java para ler as novas colunas e o objeto de overrides.
+## 1. Parsers XML e Modelos de DNA (Ghost Objects)
+- [x] **1.1 Criar o parser e modelo `fake_hunters_dna.xml`**
+  - Definição do schema XML para traços comportamentais (0-100): `preservacao`, `sociabilidade`, `ganancia`, `agressividade`, `altruismo`.
+- [x] **1.2 Criar o parser e modelo `fake_hunters_spawns.xml`**
+  - Definição dos pontos de spawn, rotas, turno de atividade (`MORNING`, `PRIME_TIME`, etc.) e classe/equipamentos do bot.
+- [x] **1.3 Carregamento em Memória (`HunterDNA`)**
+  - Instanciar e manter os perfis de DNA em RAM vinculados à classe `FakePlayer` (sem persistência SQL).
 
-## 2. Refatoração do Motor (Relógio e Turnos)
+## 2. Motor Core `FakeHunterManager` & Relógio de Turnos
+- [x] **2.1 Implementar a classe `FakeHunterManager`**
+  - Criar o singleton com `ThreadPool` exclusiva para atualização de IA de combate dos caçadores.
+- [x] **2.2 Relógio Central de Turnos (Shift Engine)**
+  - Implementar verificação periódica de turnos (`MORNING`, `AFTERNOON`, `NIGHT`, `PRIME_TIME`).
+- [x] **2.3 Jitter para Spawns e Despawns**
+  - Aplicar um delay aleatório (jitter) de 0 a 10 minutos nas transições de turno para diluir o tráfego de entrada/saída de bots.
 
-- [ ] 2.1 Modificar `FakePlayerManager` para criar o "Relógio Central" usando `ThreadPool.scheduleAtFixedRate`.
-- [ ] 2.2 Implementar a checagem de Turnos no relógio central: identificar bots que devem iniciar e bots que devem deslogar.
-- [ ] 2.3 Aplicar jitter (delay aleatório) para despawns e spawns na transição do turno para evitar lag no servidor.
+## 3. Inteligência de Combate e Tomada de Decisão (DNA AI)
+- [x] **3.1 Lógica de Preservação e Fuga (Safety / Leash)**
+  - Implementar decisão de SoE ou fuga quando HP < 20% proporcional ao atributo `preservacao`.
+- [x] **3.2 Lógica de Cooperação e Socorro**
+  - Implementar auxílio a aliados atacados na mesma área proporcional ao atributo `sociabilidade` / `altruismo`.
 
-## 3. Implementação de Regras Globais e Individuais (Overrides)
-
-- [ ] 3.1 Integrar a leitura do `.ini` global (`fakeplayers.ini`) nas decisões do AI do bot.
-- [ ] 3.2 Interceptar a leitura da regra no AI para verificar se o bot atual possui um JSON de Override válido que substitua o valor global.
-
-## 4. Regra de PK e Drop
-
-- [ ] 4.1 Modificar o método de `onDie` / `doDie` dos Fake Players.
-- [ ] 4.2 Adicionar verificação condicional: só processar a tabela de loot/drop se `getKarma() > 0`.
+## 4. Toggles no `.ini` e Regra de Drop de PK
+- [x] **4.1 Configuração `EnableFakeHunters` no `fakeplayers.ini`**
+  - Adicionar chave booleana no `.ini` para atuar como toggle independente dos Fake Traders.
+- [x] **4.2 Regra de Loot/Drop de PK**
+  - Modificar a rotina `onDie` / `doDie` para gerar drop de itens apenas se `getKarma() > 0` (PK).

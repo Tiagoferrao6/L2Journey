@@ -27,7 +27,7 @@ COPY --from=builder /build/dist/game ./game
 COPY --from=builder /build/dist/libs ./libs
 COPY --from=builder /build/build/dist/libs/GameServer.jar ./game/Gameserver.jar
 
-EXPOSE 7777
+EXPOSE 7777 8080
 
 ENV L2J_GAME_OPTS="-Xms2g -Xmx4g"
 

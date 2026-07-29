@@ -58,6 +58,7 @@ import com.l2journey.gameserver.data.sql.CrestTable;
 import com.l2journey.gameserver.data.sql.OfflineTraderTable;
 import com.l2journey.gameserver.data.sql.TeleportLocationTable;
 import com.l2journey.gameserver.data.xml.AdminData;
+import com.l2journey.gameserver.managers.WebAPIManager;
 import com.l2journey.gameserver.data.xml.ArmorSetData;
 import com.l2journey.gameserver.data.xml.BuyListData;
 import com.l2journey.gameserver.data.xml.CategoryData;
@@ -378,6 +379,13 @@ public class GameServer
 		com.l2journey.gameserver.data.xml.impl.FakeTradersEconomyParser.getInstance();
 		com.l2journey.gameserver.data.xml.impl.FakeTradersSpawnParser.getInstance();
 		com.l2journey.gameserver.managers.FakeTraderManager.getInstance();
+		if (Config.ENABLE_FAKE_HUNTERS)
+		{
+			com.l2journey.gameserver.data.xml.impl.FakeHuntersDNAParser.getInstance();
+			com.l2journey.gameserver.data.xml.impl.FakeHuntersSpawnParser.getInstance();
+			com.l2journey.gameserver.managers.FakeHunterManager.getInstance();
+			com.l2journey.gameserver.managers.GludioZoneListener.getInstance();
+		}
 		CastleManorManager.getInstance();
 		MercTicketManager.getInstance();
 		QuestManager.getInstance().report();
@@ -426,6 +434,7 @@ public class GameServer
 		}
 		
 		PunishmentManager.getInstance();
+		WebAPIManager.getInstance();
 		
 		if (Config.DRESSME_ENABLE)
 		{

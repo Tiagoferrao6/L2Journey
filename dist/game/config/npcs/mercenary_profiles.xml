@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mercenaries>
+    <mercenary id="healer_elenora" name="Elenora" title="Mercenary Healer" classId="97" role="HEALER">
+        <skills>
+            <skill id="1217" level="33" name="Greater Heal" />
+            <skill id="1401" level="1" name="Major Heal" />
+            <skill id="1015" level="25" name="Battle Heal" />
+            <skill id="1012" level="3" name="Cure Poison" />
+            <skill id="1016" level="9" name="Resurrection" />
+            <skill id="1204" level="2" name="Wind Walk" />
+            <skill id="1068" level="3" name="Might" />
+            <skill id="1040" level="3" name="Shield" />
+        </skills>
+        <equipmentTiers>
+            <tier maxLevel="19" weaponId="6" armorSet="NO_GRADE" />
+            <tier maxLevel="39" weaponId="71" armorSet="D_GRADE" />
+            <tier maxLevel="51" weaponId="149" armorSet="C_GRADE" />
+            <tier maxLevel="60" weaponId="155" armorSet="B_GRADE" />
+            <tier maxLevel="75" weaponId="6313" armorSet="A_GRADE" />
+            <tier maxLevel="85" weaponId="6608" armorSet="S_GRADE" />
+        </equipmentTiers>
+    </mercenary>
+</mercenaries>

@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <traders>
-    <!-- Lojas de VENDA (WTS - 8 bots) -->
+    <!-- Lojas de VENDA: Consumíveis D-Grade (2 bots garantidos) -->
+    <spawn city="GLUDIO" type="SELL">
+        <names>
+            <name>PotionVendor</name>
+            <name>ShotSupplier</name>
+        </names>
+        <titlePrefix>[Consumíveis D]</titlePrefix>
+        <profileId>dgrade_consumables_seller</profileId>
+        <appearance race="DWARF" sex="MALE" classId="53" />
+        <location x="-14347" y="123622" z="-3112" radius="300" />
+        <amount>2</amount>
+        <renewTime>14400000</renewTime>
+    </spawn>
+
+    <!-- Lojas de VENDA: Materiais Básicos (6 bots) -->
     <spawn city="GLUDIO" type="SELL">
         <names>
             <name>Karamel</name>
@@ -9,14 +23,12 @@
             <name>GoldDigger</name>
             <name>TradeMaster</name>
             <name>DwarfKing</name>
-            <name>VendorPro</name>
-            <name>MarketBoss</name>
         </names>
-        <titlePrefix>WTS</titlePrefix>
+        <titlePrefix>[Materiais]</titlePrefix>
         <profileId>basic_mats_seller</profileId>
         <appearance race="DWARF" sex="MALE" classId="53" />
         <location x="-14347" y="123622" z="-3112" radius="300" />
-        <amount>8</amount>
+        <amount>6</amount>
         <renewTime>14400000</renewTime>
     </spawn>
 
@@ -28,7 +40,7 @@
             <name>CoinCollector</name>
             <name>MatHunter</name>
         </names>
-        <titlePrefix>WTB</titlePrefix>
+        <titlePrefix>[Compro Mats]</titlePrefix>
         <profileId>basic_mats_buyer</profileId>
         <appearance race="DWARF" sex="MALE" classId="53" />
         <location x="-14347" y="123622" z="-3112" radius="300" />
@@ -43,7 +55,7 @@
             <name>AnvilGirl</name>
             <name>HammerTime</name>
         </names>
-        <titlePrefix>Craft</titlePrefix>
+        <titlePrefix>[Craft Shots]</titlePrefix>
         <profileId>crafter_shots_d</profileId>
         <appearance race="DWARF" sex="FEMALE" classId="54" />
         <location x="-14347" y="123622" z="-3112" radius="300" />

@@ -34,6 +34,7 @@ import com.l2journey.Config;
 import com.l2journey.gameserver.handler.ChatHandler;
 import com.l2journey.gameserver.handler.IChatHandler;
 import com.l2journey.gameserver.managers.PunishmentManager;
+import com.l2journey.gameserver.managers.WebAPIManager;
 import com.l2journey.gameserver.model.World;
 import com.l2journey.gameserver.model.WorldObject;
 import com.l2journey.gameserver.model.actor.Player;
@@ -230,6 +231,7 @@ public class Say2 extends ClientPacket
 		final IChatHandler handler = ChatHandler.getInstance().getHandler(chatType);
 		if (handler != null)
 		{
+			WebAPIManager.addChatMessage(chatType.name(), player.getName(), _text);
 			handler.handleChat(chatType, player, _target, _text);
 		}
 		else

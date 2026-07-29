@@ -35,6 +35,11 @@ public class FakeTraderManager
 		_activeTraders.remove(trader);
 	}
 
+	public List<FakePlayer> getTraders()
+	{
+		return _activeTraders;
+	}
+
 	public boolean isNameTaken(String name)
 	{
 		return _reservedNames.contains(name.toLowerCase());

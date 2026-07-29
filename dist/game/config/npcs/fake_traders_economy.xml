@@ -2,15 +2,28 @@
 <economy>
     <!-- Template para materiais basicos de venda -->
     <marketProfile id="basic_mats_seller">
-        <!-- Vende Varnish, Stem, Thread -->
+        <!-- Vende Varnish, Stem, Thread, Animal Bone, Iron Ore, Coal -->
         <item id="1865" name="Varnish" minPrice="50" maxPrice="80" minQty="50" maxQty="200" />
         <item id="1864" name="Stem"    minPrice="10" maxPrice="30" minQty="100" maxQty="500" />
         <item id="1868" name="Thread"  minPrice="15" maxPrice="35" minQty="80" maxQty="300" />
+        <item id="1872" name="Animal Bone" minPrice="60" maxPrice="100" minQty="40" maxQty="150" />
+        <item id="1869" name="Iron Ore" minPrice="100" maxPrice="180" minQty="20" maxQty="100" />
+        <item id="1870" name="Coal" minPrice="80" maxPrice="140" minQty="30" maxQty="120" />
+    </marketProfile>
+
+    <!-- Template para consumíveis D-Grade de venda -->
+    <marketProfile id="dgrade_consumables_seller">
+        <!-- Vende Healing Potions, Mana Potions, Soulshots D, Spiritshots D -->
+        <item id="1061" name="Healing Potion" minPrice="120" maxPrice="150" minQty="50" maxQty="200" />
+        <item id="1835" name="Soulshot: D-grade" minPrice="9" maxPrice="12" minQty="1000" maxQty="5000" />
+        <item id="3947" name="Blessed Spiritshot: D-grade" minPrice="25" maxPrice="35" minQty="500" maxQty="2000" />
     </marketProfile>
 
     <!-- Template para materiais basicos de compra -->
     <marketProfile id="basic_mats_buyer">
         <item id="1865" name="Varnish" minPrice="30" maxPrice="45" minQty="50" maxQty="300" />
+        <item id="1872" name="Animal Bone" minPrice="40" maxPrice="55" minQty="30" maxQty="200" />
+        <item id="1869" name="Iron Ore" minPrice="70" maxPrice="95" minQty="20" maxQty="150" />
     </marketProfile>
 
     <!-- Template para craft de Soulshots D -->

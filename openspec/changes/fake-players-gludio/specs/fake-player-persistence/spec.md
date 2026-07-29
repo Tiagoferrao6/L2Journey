@@ -1,22 +1,15 @@
-## ADDED Requirements
+## MODIFIED Requirements
 
-### Requirement: Database Schema for Profiles
-The system SHALL have a SQL table named `fake_players_profiles` to store persistent data for fake players.
+### Requirement: XML-Based Configuration & Persistence (Ghost Objects)
+The system SHALL use XML configurations (`fake_traders_spawns.xml`, `fake_traders_economy.xml`, `fake_hunters_spawns.xml`) instead of SQL database tables to manage spawns, inventory templates, and bot parameters.
 
 #### Scenario: Server Startup
 - **WHEN** the server starts
-- **THEN** it validates that the `fake_players_profiles` table exists and matches the required schema, containing fields for ID, DNA weights, schedule, and state.
+- **THEN** it parses the XML configuration files to register spawn locations, trade profiles, and hunter parameters without requiring database queries.
 
-### Requirement: State Loading
-The system SHALL load a bot's state from `fake_players_profiles` when preparing to spawn a fake player.
+### Requirement: In-Memory Lifecycle & Despawn
+The system SHALL manage bot states (location, target, trade status) in memory (Ghost Objects) during active runtime.
 
-#### Scenario: Spawning a Fake Player
-- **WHEN** `FakePlayerManager` decides to spawn a bot
-- **THEN** the system queries `fake_players_profiles` to retrieve its DNA, inventory, location, and party status.
-
-### Requirement: State Saving
-The system SHALL save a bot's current state to `fake_players_profiles` upon despawn.
-
-#### Scenario: Despawning a Fake Player
-- **WHEN** `FakePlayerManager` despawns a bot (e.g., due to its schedule ending or no real players nearby)
-- **THEN** the system updates the database with its current location, inventory, and party status.
+#### Scenario: Despawning or Zone Sleep
+- **WHEN** `FakePlayerManager` suspends or despawns a bot (e.g., due to no real players nearby)
+- **THEN** it safely removes the in-memory ghost instance and releases resources without requiring database write operations.

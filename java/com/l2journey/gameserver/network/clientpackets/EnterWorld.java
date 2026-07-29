@@ -54,6 +54,7 @@ import com.l2journey.gameserver.managers.FortSiegeManager;
 import com.l2journey.gameserver.managers.HitmanManager;
 import com.l2journey.gameserver.managers.InstanceManager;
 import com.l2journey.gameserver.managers.MailManager;
+import com.l2journey.gameserver.managers.MercenaryManager;
 import com.l2journey.gameserver.managers.PcCafePointsManager;
 import com.l2journey.gameserver.managers.PetitionManager;
 import com.l2journey.gameserver.managers.PunishmentManager;
@@ -434,6 +435,8 @@ public class EnterWorld extends ClientPacket
 		{
 			player.checkRecoBonusTask();
 		}
+
+		MercenaryManager.getInstance().loadMercenaryOnLogin(player);
 		
 		// Send Macro List
 		player.getMacros().sendUpdate();

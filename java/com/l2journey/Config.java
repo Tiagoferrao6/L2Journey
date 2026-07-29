@@ -203,6 +203,9 @@ public class Config
 	public static int GAME_SERVER_LOGIN_PORT;
 	public static String GAME_SERVER_LOGIN_HOST;
 	public static boolean PACKET_ENCRYPTION;
+	public static boolean ENABLE_WEB_API;
+	public static int WEB_API_PORT;
+	public static String WEB_ADMIN_TOKEN;
 	public static int REQUEST_ID;
 	public static boolean ACCEPT_ALTERNATE_ID;
 	public static File DATAPACK_ROOT;
@@ -501,6 +504,8 @@ public class Config
 	// --------------------------------------------------
 	public static float RATE_XP;
 	public static float RATE_SP;
+	public static float RATE_DROP_ADENA = 1.0f;
+	public static float RATE_DROP_ITEMS = 1.0f;
 	public static float RATE_PARTY_XP;
 	public static float RATE_PARTY_SP;
 	public static float RATE_EXTRACTABLE;
@@ -618,6 +623,9 @@ public class Config
 	// Jogadores Falsos
 	// --------------------------------------------------
 	public static boolean FAKE_PLAYERS_ENABLED;
+	public static boolean ENABLE_FAKE_HUNTERS;
+	public static boolean ENABLE_MERCENARIES;
+	public static int MERCENARY_HIRE_FEE;
 	public static boolean FAKE_PLAYER_CHAT;
 	public static boolean FAKE_PLAYER_USE_SHOTS;
 	public static boolean FAKE_PLAYER_KILL_PVP;
@@ -1729,6 +1737,9 @@ public class Config
 		GAME_SERVER_LOGIN_PORT = serverConfig.getInt("LoginPort", 9014);
 		GAME_SERVER_LOGIN_HOST = serverConfig.getString("LoginHost", "127.0.0.1");
 		PACKET_ENCRYPTION = serverConfig.getBoolean("PacketEncryption", false);
+		ENABLE_WEB_API = serverConfig.getBoolean("EnableWebAPI", true);
+		WEB_API_PORT = serverConfig.getInt("WebAPIPort", 8080);
+		WEB_ADMIN_TOKEN = serverConfig.getString("WebAdminToken", "secret123");
 		REQUEST_ID = serverConfig.getInt("RequestServerID", 0);
 		ACCEPT_ALTERNATE_ID = serverConfig.getBoolean("AcceptAlternateID", true);
 		try
@@ -2412,6 +2423,9 @@ public class Config
 	{
 		final ConfigReader fakePlayerConfig = new ConfigReader(FAKE_PLAYERS_CONFIG_FILE);
 		FAKE_PLAYERS_ENABLED = fakePlayerConfig.getBoolean("EnableFakePlayers", false);
+		ENABLE_FAKE_HUNTERS = fakePlayerConfig.getBoolean("EnableFakeHunters", true);
+		ENABLE_MERCENARIES = fakePlayerConfig.getBoolean("EnableMercenaries", true);
+		MERCENARY_HIRE_FEE = fakePlayerConfig.getInt("MercenaryHireFee", 1);
 		FAKE_PLAYER_CHAT = fakePlayerConfig.getBoolean("FakePlayerChat", false);
 		FAKE_PLAYER_USE_SHOTS = fakePlayerConfig.getBoolean("FakePlayerUseShots", false);
 		FAKE_PLAYER_KILL_PVP = fakePlayerConfig.getBoolean("FakePlayerKillsRewardPvP", false);

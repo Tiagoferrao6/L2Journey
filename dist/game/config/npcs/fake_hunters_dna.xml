@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<profiles>
+    <profile id="aggressive_warrior">
+        <traits preservation="15" sociability="70" greed="50" aggressiveness="90" altruism="20" />
+        <shift>ALL_DAY</shift>
+    </profile>
+
+    <profile id="cautious_hunter">
+        <traits preservation="85" sociability="40" greed="80" aggressiveness="30" altruism="30" />
+        <shift>PRIME_TIME</shift>
+    </profile>
+
+    <profile id="support_healer">
+        <traits preservation="60" sociability="90" greed="30" aggressiveness="10" altruism="95" />
+        <shift>MORNING</shift>
+    </profile>
+</profiles>

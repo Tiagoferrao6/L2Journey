@@ -39,6 +39,8 @@ import com.l2journey.gameserver.handler.BypassHandler;
 import com.l2journey.gameserver.handler.CommunityBoardHandler;
 import com.l2journey.gameserver.handler.IBypassHandler;
 import com.l2journey.gameserver.managers.CaptchaManager;
+import com.l2journey.gameserver.managers.MercenaryManager;
+import com.l2journey.gameserver.model.actor.instance.MercenaryInstance;
 import com.l2journey.gameserver.model.World;
 import com.l2journey.gameserver.model.WorldObject;
 import com.l2journey.gameserver.model.actor.Npc;
@@ -136,6 +138,35 @@ public class RequestBypassToServer extends ClientPacket
 				// The L2 client sends "_friendlist_0_" when clicking the Friends tab in the community board,
 				// instead of the bypass "_bbsfriends". Redirect it to the community board handler.
 				CommunityBoardHandler.getInstance().handleParseCommand("_bbsfriends", player);
+			}
+			else if (_command.startsWith("_merc_"))
+			{
+				if (_command.equals("_merc_hire"))
+				{
+					MercenaryManager.getInstance().hireMercenary(player, "healer_elenora");
+				}
+				else if (_command.equals("_merc_reload"))
+				{
+					MercenaryManager.getInstance().reloadContract(player);
+				}
+				else if (_command.equals("_merc_follow"))
+				{
+					MercenaryInstance merc = MercenaryManager.getInstance().getActiveMercenary(player.getObjectId());
+					if (merc != null)
+					{
+						merc.setFollowing(true);
+						player.sendMessage("Mercenário agora está te seguindo.");
+					}
+				}
+				else if (_command.equals("_merc_anchor"))
+				{
+					MercenaryInstance merc = MercenaryManager.getInstance().getActiveMercenary(player.getObjectId());
+					if (merc != null)
+					{
+						merc.setFollowing(false);
+						player.sendMessage("Mercenário ancorado no local.");
+					}
+				}
 			}
 			else if (CommunityBoardHandler.getInstance().isCommunityBoardCommand(_command))
 			{

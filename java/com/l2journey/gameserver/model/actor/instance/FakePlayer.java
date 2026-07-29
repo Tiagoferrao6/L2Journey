@@ -15,25 +15,56 @@ import com.l2journey.gameserver.network.serverpackets.ServerPacket;
 import com.l2journey.gameserver.model.item.enums.ItemProcessType;
 import com.l2journey.gameserver.model.actor.enums.player.PrivateStoreType;
 
+import com.l2journey.gameserver.model.actor.dna.HunterDNA;
+import com.l2journey.gameserver.model.WorldObject;
+
 /**
- * Fake Player implementation for Traders (SELL, BUY, CRAFT).
+ * Fake Player implementation for Traders (SELL, BUY, CRAFT) and Hunters (PvE).
  * Bypasses database saving and network packet sending.
  */
 public class FakePlayer extends Player
 {
 	private long _spawnTime;
 	private long _renewTime;
+	private HunterDNA _hunterDNA;
 
 	/**
 	 * Instantiates a new fake player.
 	 * @param objectId the object id
 	 * @param template the template
-	 * @param accountName the account name (can be a dummy string like "FakeTraders")
+	 * @param accountName the account name (can be a dummy string like "FakeTraders" or "FakeHunters")
 	 * @param app the appearance
 	 */
 	public FakePlayer(int objectId, PlayerTemplate template, String accountName, PlayerAppearance app)
 	{
 		super(objectId, template, accountName, app);
+	}
+
+	public HunterDNA getHunterDNA()
+	{
+		return _hunterDNA;
+	}
+
+	public void setHunterDNA(HunterDNA hunterDNA)
+	{
+		_hunterDNA = hunterDNA;
+	}
+
+	@Override
+	public boolean dropItem(ItemProcessType process, Item item, WorldObject reference, boolean sendMessage, boolean protectItem)
+	{
+		// Task 4.2: Regra de Loot/Drop de PK - Only drop items on death if Karma > 0
+		if (process == ItemProcessType.DEATH && getKarma() <= 0)
+		{
+			return false;
+		}
+		return super.dropItem(process, item, reference, sendMessage, protectItem);
+	}
+
+	@Override
+	public boolean isOnline()
+	{
+		return true;
 	}
 
 	@Override

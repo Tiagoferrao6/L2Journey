@@ -1,18 +1,16 @@
 ## MODIFIED Requirements
 
 ### Requirement: Ciclos de Teste Acelerado
-Os bots DEVEM usar o Relógio Central em vez de schedules acelerados fixos.
+The system SHALL use the central clock engine for turn transitions instead of accelerated fixed schedules.
 
 #### Scenario: Renovação Rápida e Turnos
-- **WHEN** um trader realiza seu ciclo
-- **THEN** ele renova seu inventário através do Relógio Central (baseado no seu Turno de atividade)
-- **WHEN** um hunter tem que avaliar sua saída
-- **THEN** ele executa o despawn quando o seu turno programado termina
+- **WHEN** o relógio central executa o tick
+- **THEN** ele renova o estado e verifica início/término de turno do bot
 
 ## ADDED Requirements
 
 ### Requirement: Restrição de Drops baseada em Karma
-Os jogadores falsos DEVEM dropar itens apenas se o sistema identificá-los como Player Killers.
+The system SHALL drop items from fake players only if their karma status indicates Player Killer (PK).
 
 #### Scenario: Drop em Morte
 - **WHEN** um Fake Player morre

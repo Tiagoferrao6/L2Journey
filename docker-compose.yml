@@ -5,6 +5,7 @@ services:
   db:
     image: mariadb:11
     environment:
+      TZ: ${TZ:-America/Sao_Paulo}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-l2j}
       MYSQL_DATABASE: ${MYSQL_DATABASE:-l2journey}
       MYSQL_USER: ${MYSQL_USER:-l2j}
@@ -13,6 +14,8 @@ services:
       - "${MYSQL_PORT:-3306}:3306"
     volumes:
       - mariadb-data:/var/lib/mysql
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
     healthcheck:
       test: ["CMD-SHELL", "mariadb-admin ping --protocol=tcp -h 127.0.0.1 -P 3306 -u root -p\"$MYSQL_ROOT_PASSWORD\" --silent"]
       interval: 5s
@@ -29,10 +32,14 @@ services:
       db:
         condition: service_healthy
     environment:
+      TZ: ${TZ:-America/Sao_Paulo}
       DB_HOST: db
       DB_PORT: "3306"
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-l2j}
       MYSQL_DATABASE: ${MYSQL_DATABASE:-l2journey}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
     restart: "no"
     networks:
       - l2journey
@@ -45,6 +52,7 @@ services:
       db_init:
         condition: service_completed_successfully
     environment:
+      TZ: ${TZ:-America/Sao_Paulo}
       L2J_DATABASE_URL: jdbc:mysql://db:3306/${MYSQL_DATABASE:-l2journey}?useUnicode=true&characterEncoding=utf-8&allowPublicKeyRetrieval=true&useSSL=false&connectTimeout=10000&interactiveClient=true&sessionVariables=wait_timeout=600,interactive_timeout=600&autoReconnect=true
       L2J_DATABASE_LOGIN: ${MYSQL_USER:-l2j}
       L2J_DATABASE_PASSWORD: ${MYSQL_PASSWORD:-l2j}
@@ -55,6 +63,8 @@ services:
       - "127.0.0.1:${LOGIN_DEBUG_PORT:-5006}:5006"
     volumes:
       - ./docker/config/login/database.ini:/opt/l2journey/login/config/database.ini:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
     networks:
       - l2journey
 
@@ -68,6 +78,7 @@ services:
       loginserver:
         condition: service_started
     environment:
+      TZ: ${TZ:-America/Sao_Paulo}
       L2J_DATABASE_URL: jdbc:mysql://db:3306/${MYSQL_DATABASE:-l2journey}?useUnicode=true&characterEncoding=utf-8&allowPublicKeyRetrieval=true&useSSL=false&connectTimeout=10000&interactiveClient=true&sessionVariables=wait_timeout=600,interactive_timeout=600&autoReconnect=true
       L2J_DATABASE_LOGIN: ${MYSQL_USER:-l2j}
       L2J_DATABASE_PASSWORD: ${MYSQL_PASSWORD:-l2j}
@@ -76,12 +87,15 @@ services:
       L2J_GAME_OPTS: ${L2J_GAME_OPTS:--Xms2g -Xmx4g}
     ports:
       - "${GAME_PORT:-7777}:7777"
+      - "${WEB_API_PORT:-8080}:8080"
       - "127.0.0.1:${GAME_DEBUG_PORT:-5005}:5005"
     volumes:
       - ./docker/config/game/database.ini:/opt/l2journey/game/config/database.ini:ro
       - ./docker/config/game/server.ini:/opt/l2journey/game/config/server.ini:ro
       - ./dist/game/config/ipconfig/ipconfig.xml:/opt/l2journey/game/config/ipconfig/ipconfig.xml:ro
       - ./dist/game/config/npcs:/opt/l2journey/game/config/npcs:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
     networks:
       - l2journey
 
