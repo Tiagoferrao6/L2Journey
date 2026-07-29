@@ -80,6 +80,8 @@ services:
     volumes:
       - ./docker/config/game/database.ini:/opt/l2journey/game/config/database.ini:ro
       - ./docker/config/game/server.ini:/opt/l2journey/game/config/server.ini:ro
+      - ./dist/game/config/ipconfig/ipconfig.xml:/opt/l2journey/game/config/ipconfig/ipconfig.xml:ro
+      - ./dist/game/config/npcs:/opt/l2journey/game/config/npcs:ro
     networks:
       - l2journey
 

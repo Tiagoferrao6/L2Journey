@@ -1,3 +1,28 @@
+# Ant & Java Compiled Artifacts
 /bin/
 /build/
+
+# Compiled Server Jars (gerados na compilação do Ant)
+/dist/libs/GameServer.jar
+/dist/libs/LoginServer.jar
+/dist/db_installer/Database_Installer_GS.jar
+/dist/db_installer/Database_Installer_LS.jar
+/libs/GameServer.jar
+/libs/LoginServer.jar
+
+# Logs & Arquivos Temporários
+/dist/game/log/
+/dist/login/log/
+*.log
+
+# Ambientes & Segredos
 .env
+.env.local
+
+# IDEs & Arquivos do Sistema Operacional
+.settings/
+.classpath
+.project
+.vscode/
+.DS_Store
+Thumbs.db
