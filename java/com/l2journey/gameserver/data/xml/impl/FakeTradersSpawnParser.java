@@ -13,6 +13,7 @@ import com.l2journey.commons.util.IXmlReader;
 import com.l2journey.commons.util.Rnd;
 import com.l2journey.gameserver.managers.IdManager;
 import com.l2journey.gameserver.managers.FakeTraderManager;
+import com.l2journey.gameserver.model.World;
 import com.l2journey.gameserver.model.actor.appearance.PlayerAppearance;
 import com.l2journey.gameserver.model.actor.instance.FakePlayer;
 import com.l2journey.gameserver.model.actor.templates.PlayerTemplate;
@@ -107,6 +108,12 @@ public class FakeTradersSpawnParser implements IXmlReader
 								continue;
 							}
 							final String name = names.remove(Rnd.get(names.size()));
+							
+							if ((World.getInstance().getPlayer(name) != null) || FakeTraderManager.getInstance().isNameTaken(name))
+							{
+								LOGGER.info(getClass().getSimpleName() + ": Skipping duplicate trader name: " + name);
+								continue;
+							}
 							
 							FakeTraderManager.getInstance().addReservedName(name);
 

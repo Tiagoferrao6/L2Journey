@@ -31,6 +31,9 @@ COPY --from=builder /build/dist/login ./login
 COPY --from=builder /build/dist/libs ./libs
 COPY --from=builder /build/build/dist/libs/LoginServer.jar ./login/Loginserver.jar
 
+# Remove legacy pre-compiled server JARs from libs so they don't override new build
+RUN rm -f ./libs/GameServer.jar ./libs/LoginServer.jar
+
 # Login server port (client connections) and port for game server registration
 EXPOSE 2106 9014
 
@@ -42,5 +45,5 @@ CMD ["sh", "-c", "cd /opt/l2journey/login && exec java -server \
   -XX:+UseZGC \
   $L2J_LOGIN_OPTS \
   -Dlogback.configurationFile=./configuration/logback.xml \
-  -cp \"./../libs/*:Loginserver.jar\" \
+  -cp \"Loginserver.jar:./../libs/*\" \
   com.l2journey.loginserver.LoginServer"]

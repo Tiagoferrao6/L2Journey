@@ -1,4 +1,4 @@
-- [ ] Fix inventory update packet accumulation in `Player.java` <!-- id: 0 -->
-- [ ] Add `sendItemList(true)` call in `TradeList.java` after `privateStoreBuy` and `privateStoreSell` <!-- id: 1 -->
-- [ ] Ensure `z_seed_test_account.sql` uses `ON DUPLICATE KEY UPDATE` for account password <!-- id: 2 -->
-- [ ] Rebuild and test Fake Trader purchase/sell interaction with `KaelTester` <!-- id: 3 -->
+- [x] Fix inventory update packet accumulation in `Player.java` <!-- id: 0 -->
+- [x] Add `sendItemList(true)` call in `TradeList.java` after `privateStoreBuy` and `privateStoreSell` <!-- id: 1 -->
+- [x] Ensure `z_seed_test_account.sql` uses `ON DUPLICATE KEY UPDATE` for account password <!-- id: 2 -->
+- [x] Rebuild and test Fake Trader purchase/sell interaction with `KaelTester` <!-- id: 3 -->

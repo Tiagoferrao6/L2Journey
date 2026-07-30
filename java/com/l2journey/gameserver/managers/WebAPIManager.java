@@ -46,19 +46,27 @@ public class WebAPIManager
 		public final String type;
 		public final String sender;
 		public final String text;
+		public final int x;
+		public final int y;
+		public final int z;
+		public final String regionName;
 
-		public ChatMessageRecord(String type, String sender, String text)
+		public ChatMessageRecord(String type, String sender, String text, int x, int y, int z, String regionName)
 		{
 			this.timestamp = System.currentTimeMillis();
 			this.type = type;
 			this.sender = sender;
 			this.text = text;
+			this.x = x;
+			this.y = y;
+			this.z = z;
+			this.regionName = regionName != null ? regionName : "World";
 		}
 	}
 
-	public static void addChatMessage(String type, String sender, String text)
+	public static void addChatMessage(String type, String sender, String text, int x, int y, int z, String regionName)
 	{
-		CHAT_BUFFER.add(new ChatMessageRecord(type, sender, text));
+		CHAT_BUFFER.add(new ChatMessageRecord(type, sender, text, x, y, z, regionName));
 		while (CHAT_BUFFER.size() > MAX_CHAT_BUFFER)
 		{
 			CHAT_BUFFER.poll();
@@ -496,25 +504,120 @@ public class WebAPIManager
 		public void handle(HttpExchange exchange) throws IOException
 		{
 			if (!authenticateGM(exchange)) return;
-			if (!"POST".equalsIgnoreCase(exchange.getRequestMethod()))
+
+			if ("GET".equalsIgnoreCase(exchange.getRequestMethod()))
 			{
-				sendResponse(exchange, 405, "{\"error\": \"Method not allowed\"}");
+				List<FakePlayer> hunters = FakeHunterManager.getInstance().getHunters();
+				List<FakePlayer> traders = FakeTraderManager.getInstance().getTraders();
+				List<FakePlayer> allBots = new ArrayList<>(hunters);
+				allBots.addAll(traders);
+
+				StringBuilder sb = new StringBuilder();
+				sb.append("{");
+				sb.append("\"totalHunters\": ").append(hunters.size()).append(",");
+				sb.append("\"totalTraders\": ").append(traders.size()).append(",");
+				sb.append("\"players\": [");
+
+				for (int i = 0; i < allBots.size(); i++)
+				{
+					FakePlayer bot = allBots.get(i);
+					if (i > 0) sb.append(",");
+
+					boolean isHunter = hunters.contains(bot);
+					String town = com.l2journey.gameserver.managers.MapRegionManager.getInstance().getClosestTownName(bot);
+					String className = bot.getTemplate().getPlayerClass() != null ? bot.getTemplate().getPlayerClass().toString() : "Fighter";
+					String targetName = bot.getTarget() != null ? bot.getTarget().getName() : "None";
+					int hpPercent = (int) Math.round((bot.getCurrentHp() / bot.getMaxHp()) * 100.0);
+					int mpPercent = (int) Math.round((bot.getCurrentMp() / bot.getMaxMp()) * 100.0);
+					String grade = com.l2journey.gameserver.data.xml.impl.FakePlayerEquipmentData.getGradeForLevel(bot.getLevel()).name();
+
+					sb.append("{");
+					sb.append("\"name\": \"").append(escapeJson(bot.getName())).append("\",");
+					sb.append("\"type\": \"").append(isHunter ? "HUNTER" : "TRADER").append("\",");
+					sb.append("\"level\": ").append(bot.getLevel()).append(",");
+					sb.append("\"className\": \"").append(escapeJson(className)).append("\",");
+					sb.append("\"x\": ").append(bot.getX()).append(",");
+					sb.append("\"y\": ").append(bot.getY()).append(",");
+					sb.append("\"z\": ").append(bot.getZ()).append(",");
+					sb.append("\"zoneName\": \"").append(escapeJson(town)).append("\",");
+					sb.append("\"hpPercent\": ").append(hpPercent).append(",");
+					sb.append("\"mpPercent\": ").append(mpPercent).append(",");
+					sb.append("\"state\": \"").append(bot.isSitting() ? "SELLING" : "HUNTING").append("\",");
+					sb.append("\"targetName\": \"").append(escapeJson(targetName)).append("\",");
+					sb.append("\"grade\": \"").append(grade).append("\"");
+					sb.append("}");
+				}
+
+				sb.append("]}");
+				sendResponse(exchange, 200, sb.toString());
 				return;
 			}
 
-			String body = readRequestBody(exchange);
-			String action = parseStringJson(body, "action");
-			invalidateCache();
+			if ("POST".equalsIgnoreCase(exchange.getRequestMethod()))
+			{
+				String body = readRequestBody(exchange);
+				String action = parseStringJson(body, "action");
+				String botName = parseStringJson(body, "botName");
+				invalidateCache();
 
-			StringBuilder sb = new StringBuilder();
-			sb.append("{");
-			sb.append("\"success\": true,");
-			sb.append("\"message\": \"Action '").append(escapeJson(action != null ? action : "reload")).append("' performed successfully\",");
-			sb.append("\"activeTraders\": ").append(FakeTraderManager.getInstance().getTraders().size()).append(",");
-			sb.append("\"activeHunters\": ").append(FakeHunterManager.getInstance().getHunters().size());
-			sb.append("}");
+				FakePlayer targetBot = null;
+				if (botName != null)
+				{
+					for (FakePlayer h : FakeHunterManager.getInstance().getHunters())
+					{
+						if (h.getName().equalsIgnoreCase(botName)) { targetBot = h; break; }
+					}
+					if (targetBot == null)
+					{
+						for (FakePlayer t : FakeTraderManager.getInstance().getTraders())
+						{
+							if (t.getName().equalsIgnoreCase(botName)) { targetBot = t; break; }
+						}
+					}
+				}
 
-			sendResponse(exchange, 200, sb.toString());
+				if (targetBot != null)
+				{
+					Double newLevel = parseDoubleJson(body, "level");
+					if (newLevel != null && newLevel >= 1 && newLevel <= 85)
+					{
+						targetBot.getStat().setLevel(newLevel.byteValue());
+						com.l2journey.gameserver.data.xml.impl.FakePlayerEquipmentData.autoEquip(targetBot);
+					}
+
+					String newGradeStr = parseStringJson(body, "grade");
+					if (newGradeStr != null)
+					{
+						try
+						{
+							com.l2journey.gameserver.data.xml.impl.FakePlayerEquipmentData.Grade g = com.l2journey.gameserver.data.xml.impl.FakePlayerEquipmentData.Grade.valueOf(newGradeStr);
+							com.l2journey.gameserver.data.xml.impl.FakePlayerEquipmentData.autoEquip(targetBot, g);
+						}
+						catch (Exception ignored) {}
+					}
+
+					Double teleX = parseDoubleJson(body, "x");
+					Double teleY = parseDoubleJson(body, "y");
+					Double teleZ = parseDoubleJson(body, "z");
+					if (teleX != null && teleY != null && teleZ != null)
+					{
+						targetBot.teleToLocation(teleX.intValue(), teleY.intValue(), teleZ.intValue());
+					}
+				}
+
+				StringBuilder sb = new StringBuilder();
+				sb.append("{");
+				sb.append("\"success\": true,");
+				sb.append("\"message\": \"Action '").append(escapeJson(action != null ? action : "update")).append("' performed successfully\",");
+				sb.append("\"activeTraders\": ").append(FakeTraderManager.getInstance().getTraders().size()).append(",");
+				sb.append("\"activeHunters\": ").append(FakeHunterManager.getInstance().getHunters().size());
+				sb.append("}");
+
+				sendResponse(exchange, 200, sb.toString());
+				return;
+			}
+
+			sendResponse(exchange, 405, "{\"error\": \"Method not allowed\"}");
 		}
 	}
 
@@ -572,7 +675,11 @@ public class WebAPIManager
 				sb.append("\"timestamp\": ").append(msg.timestamp).append(",");
 				sb.append("\"type\": \"").append(escapeJson(msg.type)).append("\",");
 				sb.append("\"sender\": \"").append(escapeJson(msg.sender)).append("\",");
-				sb.append("\"text\": \"").append(escapeJson(msg.text)).append("\"");
+				sb.append("\"text\": \"").append(escapeJson(msg.text)).append("\",");
+				sb.append("\"x\": ").append(msg.x).append(",");
+				sb.append("\"y\": ").append(msg.y).append(",");
+				sb.append("\"z\": ").append(msg.z).append(",");
+				sb.append("\"regionName\": \"").append(escapeJson(msg.regionName)).append("\"");
 				sb.append("}");
 			}
 			sb.append("]}");

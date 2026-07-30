@@ -5,6 +5,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
 
 import com.l2journey.commons.threads.ThreadPool;
+import com.l2journey.gameserver.data.xml.impl.FakePlayerEquipmentData;
 import com.l2journey.gameserver.model.actor.instance.FakePlayer;
 
 /**
@@ -27,6 +28,7 @@ public class FakeTraderManager
 
 	public void addTrader(FakePlayer trader)
 	{
+		FakePlayerEquipmentData.autoEquip(trader);
 		_activeTraders.add(trader);
 	}
 

@@ -231,7 +231,8 @@ public class Say2 extends ClientPacket
 		final IChatHandler handler = ChatHandler.getInstance().getHandler(chatType);
 		if (handler != null)
 		{
-			WebAPIManager.addChatMessage(chatType.name(), player.getName(), _text);
+			String townName = com.l2journey.gameserver.managers.MapRegionManager.getInstance().getClosestTownName(player);
+			WebAPIManager.addChatMessage(chatType.name(), player.getName(), _text, player.getX(), player.getY(), player.getZ(), townName);
 			handler.handleChat(chatType, player, _target, _text);
 		}
 		else

@@ -125,6 +125,14 @@ public abstract class AbstractInventoryUpdate extends AbstractItemPacket
 		return _items.values();
 	}
 	
+	public void clear()
+	{
+		synchronized (_items)
+		{
+			_items.clear();
+		}
+	}
+	
 	protected void writeItems(WritableBuffer buffer)
 	{
 		synchronized (_items)

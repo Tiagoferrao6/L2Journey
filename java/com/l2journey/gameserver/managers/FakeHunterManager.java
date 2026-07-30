@@ -9,6 +9,9 @@ import java.util.logging.Logger;
 
 import com.l2journey.commons.threads.ThreadPool;
 import com.l2journey.commons.util.Rnd;
+import com.l2journey.gameserver.data.xml.impl.FakePlayerEquipmentData;
+import com.l2journey.gameserver.model.Location;
+import com.l2journey.gameserver.ai.Intention;
 import com.l2journey.gameserver.model.actor.dna.HunterDNA;
 import com.l2journey.gameserver.model.actor.instance.FakePlayer;
 
@@ -20,9 +23,12 @@ public class FakeHunterManager
 {
 	private static final Logger LOGGER = Logger.getLogger(FakeHunterManager.class.getName());
 
-	private static final int GLUDIO_TOWN_X = -14347;
-	private static final int GLUDIO_TOWN_Y = 123622;
-	private static final int SAFE_ZONE_LEASH_RADIUS = 1200;
+	public static final int GLUDIO_TOWN_X = -14347;
+	public static final int GLUDIO_TOWN_Y = 123622;
+	public static final int GLUDIO_GK_X = -14780;
+	public static final int GLUDIO_GK_Y = 123800;
+	public static final int GLUDIO_GK_Z = -3120;
+	public static final int SAFE_ZONE_LEASH_RADIUS = 1200;
 
 	private final List<FakePlayer> _activeHunters = new CopyOnWriteArrayList<>();
 	private final List<String> _reservedNames = new CopyOnWriteArrayList<>();
@@ -41,6 +47,7 @@ public class FakeHunterManager
 
 	public void addHunter(FakePlayer hunter)
 	{
+		FakePlayerEquipmentData.autoEquip(hunter);
 		_activeHunters.add(hunter);
 	}
 
@@ -101,8 +108,24 @@ public class FakeHunterManager
 					continue;
 				}
 
-				// Task 2.3: Leash Check - Avoid pulling monsters into Gludio safe town
+				// Town Gatekeeper Dispatch: Walk to GK and Teleport to Hunting Grounds
 				double distToTown = hunter.calculateDistance2D(GLUDIO_TOWN_X, GLUDIO_TOWN_Y, 0);
+				if (distToTown < 2500)
+				{
+					double distToGK = hunter.calculateDistance2D(GLUDIO_GK_X, GLUDIO_GK_Y, 0);
+					if (distToGK < 180)
+					{
+						hunter.teleToLocation(-18000 + Rnd.get(-300, 300), 135000 + Rnd.get(-300, 300), -3700);
+						LOGGER.info("FakeHunter [" + hunter.getName() + "] reached Gatekeeper and teleported to hunting ground.");
+					}
+					else if (!hunter.isMoving())
+					{
+						hunter.getAI().setIntention(Intention.MOVE_TO, new Location(GLUDIO_GK_X, GLUDIO_GK_Y, GLUDIO_GK_Z));
+					}
+					continue;
+				}
+
+				// Task 2.3: Leash Check - Avoid pulling monsters into Gludio safe town
 				if (distToTown < SAFE_ZONE_LEASH_RADIUS)
 				{
 					hunter.abortAttack();

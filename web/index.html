@@ -553,13 +553,52 @@
 
         <!-- Chat Stream -->
         <div class="table-container" style="margin-top: 1.5rem;">
-          <div class="table-header">
+          <div class="table-header" style="display: flex; justify-content: space-between; align-items: center;">
             <h2>Feed do Chat do Jogo ao Vivo</h2>
-            <button class="btn btn-cyber" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;" onclick="fetchChatStream()">Atualizar Chat</button>
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+              <label style="font-size: 0.8rem; color: var(--text-muted);">Filtrar por Região:</label>
+              <select id="selChatRegion" class="form-input" style="padding: 0.3rem 0.6rem; font-size: 0.8rem; width: auto;" onchange="fetchChatStream()">
+                <option value="ALL">Todas as Regiões</option>
+                <option value="Gludio">Gludio</option>
+                <option value="Dion">Dion</option>
+                <option value="Giran">Giran</option>
+                <option value="Oren">Oren</option>
+                <option value="Aden">Aden</option>
+                <option value="Heine">Heine</option>
+                <option value="Rune">Rune</option>
+                <option value="Goddard">Goddard</option>
+                <option value="Schuttgart">Schuttgart</option>
+              </select>
+              <button class="btn btn-cyber" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;" onclick="fetchChatStream()">Atualizar Chat</button>
+            </div>
           </div>
           <div class="chat-terminal" id="chatStream">
             <div class="chat-msg"><span class="chat-time">[00:00:00]</span> <span class="chat-type">SYSTEM:</span> Aguardando mensagens do chat...</div>
           </div>
+        </div>
+
+        <!-- FakePlayers Monitor & Controls -->
+        <div class="table-container" style="margin-top: 1.5rem;">
+          <div class="table-header" style="display: flex; justify-content: space-between; align-items: center;">
+            <h2>🤖 Monitoramento & Controle de FakePlayers (Hunters & Traders)</h2>
+            <button class="btn btn-cyber" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;" onclick="fetchFakePlayersList()">Atualizar Bots</button>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Bot</th>
+                <th>Tipo</th>
+                <th>Nível & Classe</th>
+                <th>Grade</th>
+                <th>Localização & Coordenadas (X, Y, Z)</th>
+                <th>Status / HP / MP</th>
+                <th>Ações de GM</th>
+              </tr>
+            </thead>
+            <tbody id="tblFakePlayers">
+              <tr><td colspan="7" style="text-align:center;">Carregando FakePlayers...</td></tr>
+            </tbody>
+          </table>
         </div>
 
         <!-- Real Players Online Monitor -->
@@ -689,6 +728,7 @@
         document.getElementById('gmAuthSection').style.display = 'none';
         document.getElementById('gmPanelSection').style.display = 'block';
         fetchChatStream();
+        fetchFakePlayersList();
         fetchRealPlayers();
       } else {
         document.getElementById('gmAuthSection').style.display = 'block';
@@ -753,14 +793,86 @@
         });
         const data = await res.json();
         const term = document.getElementById('chatStream');
+        const regionFilter = document.getElementById('selChatRegion').value;
+
         if (data.messages && data.messages.length > 0) {
-          term.innerHTML = data.messages.map(m => {
+          let filtered = data.messages;
+          if (regionFilter !== 'ALL') {
+            filtered = filtered.filter(m => m.regionName && m.regionName.toLowerCase().includes(regionFilter.toLowerCase()));
+          }
+
+          term.innerHTML = filtered.map(m => {
             const time = new Date(m.timestamp).toLocaleTimeString();
-            return `<div class="chat-msg"><span class="chat-time">[${time}]</span> <span class="chat-type">[${m.type}]</span> <span class="chat-sender">${m.sender}:</span> ${m.text}</div>`;
+            const loc = m.regionName ? `(@${m.regionName} [${m.x}, ${m.y}, ${m.z}])` : '';
+            return `<div class="chat-msg"><span class="chat-time">[${time}]</span> <span class="chat-type">[${m.type}]</span> <span class="chat-sender">${m.sender} ${loc}:</span> ${m.text}</div>`;
           }).join('');
           term.scrollTop = term.scrollHeight;
         }
       } catch (e) {}
+    }
+
+    async function fetchFakePlayersList() {
+      if (!gmToken) return;
+      try {
+        const res = await fetch(API_BASE + '/api/admin/fakeplayers', {
+          headers: { 'Authorization': 'Bearer ' + gmToken }
+        });
+        const data = await res.json();
+        const tbody = document.getElementById('tblFakePlayers');
+
+        if (data.players && data.players.length > 0) {
+          tbody.innerHTML = data.players.map(p => `
+            <tr>
+              <td><strong>${p.name}</strong></td>
+              <td><span class="badge ${p.type === 'HUNTER' ? 'badge-pvp' : 'badge-alive'}">${p.type}</span></td>
+              <td>Nv. ${p.level} (${p.className})</td>
+              <td><span class="badge" style="background:rgba(212,175,55,0.2); color:var(--gold-primary);">${p.grade}</span></td>
+              <td>📍 ${p.zoneName} <br><small style="color:var(--text-muted);">[${p.x}, ${p.y}, ${p.z}]</small></td>
+              <td>
+                <span class="badge badge-alive">${p.state}</span><br>
+                <small>HP: ${p.hpPercent}% | MP: ${p.mpPercent}%</small>
+              </td>
+              <td>
+                <button class="btn btn-cyber" style="padding:0.2rem 0.4rem; font-size:0.7rem;" onclick="editBotLevelGrade('${p.name}', ${p.level})">Nível/Grade</button>
+                <button class="btn" style="padding:0.2rem 0.4rem; font-size:0.7rem;" onclick="teleportBotModal('${p.name}', ${p.x}, ${p.y}, ${p.z})">Teleport</button>
+              </td>
+            </tr>
+          `).join('');
+        } else {
+          tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Nenhum FakePlayer cadastrado.</td></tr>';
+        }
+      } catch (e) {}
+    }
+
+    async function editBotLevelGrade(botName, curLevel) {
+      const newLvl = prompt('Defina o novo nível para ' + botName + ' (1-85):', curLevel);
+      if (!newLvl) return;
+      const newGrade = prompt('Defina a Grade de Equipamento (NO_GRADE, D_GRADE, C_GRADE, B_GRADE, A_GRADE, S_GRADE):', 'S_GRADE');
+      
+      try {
+        await fetch(API_BASE + '/api/admin/fakeplayers', {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + gmToken, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'update', botName: botName, level: parseInt(newLvl), grade: newGrade })
+        });
+        fetchFakePlayersList();
+      } catch (e) {}
+    }
+
+    async function teleportBotModal(botName, x, y, z) {
+      const coords = prompt('Digite as novas coordenadas X, Y, Z para ' + botName + ':', `${x}, ${y}, ${z}`);
+      if (!coords) return;
+      const parts = coords.split(',').map(p => parseInt(p.trim()));
+      if (parts.length === 3) {
+        try {
+          await fetch(API_BASE + '/api/admin/fakeplayers', {
+            method: 'POST',
+            headers: { 'Authorization': 'Bearer ' + gmToken, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'teleport', botName: botName, x: parts[0], y: parts[1], z: parts[2] })
+          });
+          fetchFakePlayersList();
+        } catch (e) {}
+      }
     }
 
     async function fetchRealPlayers() {
@@ -809,6 +921,7 @@
       if (document.getElementById('tab-raids').classList.contains('active')) fetchRaids();
       if (document.getElementById('tab-gm').classList.contains('active') && gmToken) {
         fetchChatStream();
+        fetchFakePlayersList();
         fetchRealPlayers();
       }
     }, 3000);

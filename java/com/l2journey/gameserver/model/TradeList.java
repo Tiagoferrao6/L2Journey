@@ -821,6 +821,7 @@ public class TradeList
 		// Send inventory update packet
 		_owner.sendInventoryUpdate(ownerIU);
 		player.sendInventoryUpdate(playerIU);
+		player.sendItemList(true);
 		return ok ? 0 : 2;
 	}
 	
@@ -1002,6 +1003,7 @@ public class TradeList
 			// Send inventory update packet
 			_owner.sendInventoryUpdate(ownerIU);
 			player.sendInventoryUpdate(playerIU);
+			player.sendItemList(true);
 		}
 		return ok;
 	}

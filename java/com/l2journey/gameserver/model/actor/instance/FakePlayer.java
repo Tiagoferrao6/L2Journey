@@ -15,6 +15,13 @@ import com.l2journey.gameserver.network.serverpackets.ServerPacket;
 import com.l2journey.gameserver.model.item.enums.ItemProcessType;
 import com.l2journey.gameserver.model.actor.enums.player.PrivateStoreType;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import com.l2journey.gameserver.model.item.enums.ShotType;
+import com.l2journey.gameserver.model.actor.Creature;
+import com.l2journey.gameserver.model.skill.Skill;
 import com.l2journey.gameserver.model.actor.dna.HunterDNA;
 import com.l2journey.gameserver.model.WorldObject;
 
@@ -38,6 +45,32 @@ public class FakePlayer extends Player
 	public FakePlayer(int objectId, PlayerTemplate template, String accountName, PlayerAppearance app)
 	{
 		super(objectId, template, accountName, app);
+	}
+
+	@Override
+	public void doAttack(Creature target)
+	{
+		setChargedShot(ShotType.SOULSHOTS, true);
+		setChargedShot(ShotType.BLESSED_SPIRITSHOTS, true);
+		checkAndUseHpPotion();
+		super.doAttack(target);
+	}
+
+	@Override
+	public void doCast(Skill skill)
+	{
+		setChargedShot(ShotType.SOULSHOTS, true);
+		setChargedShot(ShotType.BLESSED_SPIRITSHOTS, true);
+		checkAndUseHpPotion();
+		super.doCast(skill);
+	}
+
+	public void checkAndUseHpPotion()
+	{
+		if (getCurrentHpPercent() < 80.0)
+		{
+			setCurrentHp(Math.min(getMaxHp(), getCurrentHp() + (getMaxHp() * 0.15)));
+		}
 	}
 
 	public HunterDNA getHunterDNA()
@@ -120,11 +153,14 @@ public class FakePlayer extends Player
 
 		getSellList().clear();
 
-		// Randomly pick 1 to 3 items
-		int itemsToSell = Rnd.get(1, 3);
+		List<EconomyItem> availableItems = new ArrayList<>(profile.getItems());
+		Collections.shuffle(availableItems);
+
+		// Randomly pick 1 to 3 distinct items
+		int itemsToSell = Math.min(Rnd.get(1, 3), availableItems.size());
 		for (int i = 0; i < itemsToSell; i++)
 		{
-			EconomyItem eItem = profile.getItems().get(Rnd.get(profile.getItems().size()));
+			EconomyItem eItem = availableItems.get(i);
 			long count = Rnd.get(eItem.getMinQty(), eItem.getMaxQty());
 			long price = Rnd.get(eItem.getMinPrice(), eItem.getMaxPrice());
 
@@ -154,10 +190,13 @@ public class FakePlayer extends Player
 
 		getBuyList().clear();
 
-		int itemsToBuy = Rnd.get(1, 3);
+		List<EconomyItem> availableItems = new ArrayList<>(profile.getItems());
+		Collections.shuffle(availableItems);
+
+		int itemsToBuy = Math.min(Rnd.get(1, 3), availableItems.size());
 		for (int i = 0; i < itemsToBuy; i++)
 		{
-			EconomyItem eItem = profile.getItems().get(Rnd.get(profile.getItems().size()));
+			EconomyItem eItem = availableItems.get(i);
 			long count = Rnd.get(eItem.getMinQty(), eItem.getMaxQty());
 			long price = Rnd.get(eItem.getMinPrice(), eItem.getMaxPrice());
 

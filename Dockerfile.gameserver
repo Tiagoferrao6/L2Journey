@@ -27,6 +27,9 @@ COPY --from=builder /build/dist/game ./game
 COPY --from=builder /build/dist/libs ./libs
 COPY --from=builder /build/build/dist/libs/GameServer.jar ./game/Gameserver.jar
 
+# Remove legacy pre-compiled server JARs from libs so they don't override new build
+RUN rm -f ./libs/GameServer.jar ./libs/LoginServer.jar
+
 EXPOSE 7777 8080
 
 ENV L2J_GAME_OPTS="-Xms2g -Xmx4g"
@@ -38,5 +41,5 @@ CMD ["sh", "-c", "cd /opt/l2journey/game && exec java -server \
   -XX:+UseZGC \
   $L2J_GAME_OPTS \
   -Dlogback.configurationFile=./logback.xml \
-  -cp \"./../libs/*:Gameserver.jar\" \
+  -cp \"Gameserver.jar:./../libs/*\" \
   com.l2journey.gameserver.GameServer"]

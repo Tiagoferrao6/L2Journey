@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import com.l2journey.Config;
 import com.l2journey.commons.database.DatabaseFactory;
 import com.l2journey.gameserver.data.xml.PlayerTemplateData;
+import com.l2journey.gameserver.data.xml.impl.FakePlayerEquipmentData;
 import com.l2journey.gameserver.managers.IdManager;
 import com.l2journey.gameserver.model.actor.Player;
 import com.l2journey.gameserver.model.actor.appearance.PlayerAppearance;
@@ -121,6 +122,9 @@ public class MercenaryManager
 			merc.setTitle("Mercenary Healer");
 			merc.getStat().setLevel((byte) level);
 			merc.setCurrentHpMp(merc.getMaxHp(), merc.getMaxMp());
+
+			// Auto Equip Top Grade Gear for Level
+			FakePlayerEquipmentData.autoEquip(merc);
 
 			// Spawn next to owner
 			merc.spawnMe(owner.getX() + 40, owner.getY() + 40, owner.getZ());

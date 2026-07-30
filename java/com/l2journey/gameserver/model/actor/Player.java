@@ -11378,6 +11378,12 @@ public class Player extends Playable
 			_summon.setFollowStatus(true);
 			_summon.updateAndBroadcastStatus(0);
 		}
+
+		com.l2journey.gameserver.model.actor.instance.MercenaryInstance merc = com.l2journey.gameserver.managers.MercenaryManager.getInstance().getActiveMercenary(getObjectId());
+		if (merc != null && merc.isOnline())
+		{
+			merc.teleToLocation(getLocation(), false);
+		}
 		
 		// show movie if available
 		if (_movieHolder != null)
@@ -15244,6 +15250,7 @@ public class Player extends Playable
 		_inventoryUpdateTask = ThreadPool.schedule(() ->
 		{
 			sendPacket(_inventoryUpdate);
+			_inventoryUpdate.clear();
 		}, 100);
 	}
 	
