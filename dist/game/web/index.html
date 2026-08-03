@@ -555,7 +555,12 @@
         <div class="table-container" style="margin-top: 1.5rem;">
           <div class="table-header">
             <h2>Feed do Chat do Jogo ao Vivo</h2>
-            <button class="btn btn-cyber" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;" onclick="fetchChatStream()">Atualizar Chat</button>
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+              <select id="chatRegionFilter" class="btn btn-cyber" style="padding: 0.4rem 0.6rem; font-size: 0.75rem; background: rgba(11, 14, 20, 0.8);" onchange="renderFilteredChat()">
+                <option value="ALL">Todas as Regiões</option>
+              </select>
+              <button class="btn btn-cyber" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;" onclick="fetchChatStream()">Atualizar Chat</button>
+            </div>
           </div>
           <div class="chat-terminal" id="chatStream">
             <div class="chat-msg"><span class="chat-time">[00:00:00]</span> <span class="chat-type">SYSTEM:</span> Aguardando mensagens do chat...</div>
@@ -745,6 +750,8 @@
       } catch (e) {}
     }
 
+    let lastChatMessages = [];
+
     async function fetchChatStream() {
       if (!gmToken) return;
       try {
@@ -752,15 +759,59 @@
           headers: { 'Authorization': 'Bearer ' + gmToken }
         });
         const data = await res.json();
-        const term = document.getElementById('chatStream');
-        if (data.messages && data.messages.length > 0) {
-          term.innerHTML = data.messages.map(m => {
-            const time = new Date(m.timestamp).toLocaleTimeString();
-            return `<div class="chat-msg"><span class="chat-time">[${time}]</span> <span class="chat-type">[${m.type}]</span> <span class="chat-sender">${m.sender}:</span> ${m.text}</div>`;
-          }).join('');
-          term.scrollTop = term.scrollHeight;
+        if (data.messages) {
+          lastChatMessages = data.messages;
+          updateRegionFilterDropdown(lastChatMessages);
+          renderFilteredChat();
         }
       } catch (e) {}
+    }
+
+    function updateRegionFilterDropdown(messages) {
+      const select = document.getElementById('chatRegionFilter');
+      if (!select) return;
+      const currentSelected = select.value;
+      
+      const regions = new Set();
+      messages.forEach(m => {
+        if (m.regionName && m.regionName.trim() !== '') {
+          regions.add(m.regionName);
+        }
+      });
+      
+      let html = '<option value="ALL">Todas as Regiões</option>';
+      Array.from(regions).sort().forEach(r => {
+        const sel = r === currentSelected ? ' selected' : '';
+        html += `<option value="${r}"${sel}>${r}</option>`;
+      });
+      select.innerHTML = html;
+    }
+
+    function renderFilteredChat() {
+      const term = document.getElementById('chatStream');
+      if (!term) return;
+      const filterSelect = document.getElementById('chatRegionFilter');
+      const selectedRegion = filterSelect ? filterSelect.value : 'ALL';
+      
+      const filtered = lastChatMessages.filter(m => {
+        if (selectedRegion === 'ALL') return true;
+        return m.regionName === selectedRegion;
+      });
+
+      if (filtered.length > 0) {
+        term.innerHTML = filtered.map(m => {
+          const time = new Date(m.timestamp).toLocaleTimeString();
+          const loc = (m.regionName && m.regionName.trim() !== '') 
+            ? ` <span style="color: var(--text-muted); font-size: 0.85em;">(@${m.regionName} [${m.x}, ${m.y}, ${m.z}])</span>`
+            : '';
+          return `<div class="chat-msg"><span class="chat-time">[${time}]</span> <span class="chat-type">[${m.type}]</span> <span class="chat-sender">${m.sender}${loc}:</span> ${m.text}</div>`;
+        }).join('');
+        term.scrollTop = term.scrollHeight;
+      } else if (lastChatMessages.length === 0) {
+        term.innerHTML = '<div class="chat-msg"><span class="chat-time">[00:00:00]</span> <span class="chat-type">SYSTEM:</span> Aguardando mensagens do chat...</div>';
+      } else {
+        term.innerHTML = '<div class="chat-msg"><span class="chat-time">[00:00:00]</span> <span class="chat-type">SYSTEM:</span> Nenhuma mensagem encontrada para a região selecionada.</div>';
+      }
     }
 
     async function fetchRealPlayers() {

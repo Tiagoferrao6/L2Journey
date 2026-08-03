@@ -26,6 +26,9 @@ import com.l2journey.gameserver.handler.CommunityBoardHandler;
 import com.l2journey.gameserver.model.World;
 import com.l2journey.gameserver.model.actor.instance.FakePlayer;
 import com.l2journey.gameserver.model.actor.Player;
+import com.l2journey.gameserver.model.itemcontainer.Inventory;
+import com.l2journey.gameserver.model.item.instance.Item;
+import com.l2journey.gameserver.model.skill.BuffInfo;
 
 /**
  * Embedded HTTP REST API Server & Live GM Control Panel Manager.

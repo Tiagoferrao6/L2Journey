@@ -95,6 +95,7 @@ services:
       - ./dist/game/config/ipconfig/ipconfig.xml:/opt/l2journey/game/config/ipconfig/ipconfig.xml:ro
       - ./dist/game/config/npcs:/opt/l2journey/game/config/npcs:ro
       - ./dist/game/config/admin/geodata.ini:/opt/l2journey/game/config/admin/geodata.ini:ro
+      - ./dist/game/web:/opt/l2journey/game/web:ro
       - ./Geodata:/opt/l2journey/game/data/geodata:ro
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
