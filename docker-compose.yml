@@ -94,6 +94,8 @@ services:
       - ./docker/config/game/server.ini:/opt/l2journey/game/config/server.ini:ro
       - ./dist/game/config/ipconfig/ipconfig.xml:/opt/l2journey/game/config/ipconfig/ipconfig.xml:ro
       - ./dist/game/config/npcs:/opt/l2journey/game/config/npcs:ro
+      - ./dist/game/config/admin/geodata.ini:/opt/l2journey/game/config/admin/geodata.ini:ro
+      - ./Geodata:/opt/l2journey/game/data/geodata:ro
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
     networks:

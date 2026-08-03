@@ -23,6 +23,7 @@ import com.l2journey.gameserver.model.item.enums.ShotType;
 import com.l2journey.gameserver.model.actor.Creature;
 import com.l2journey.gameserver.model.skill.Skill;
 import com.l2journey.gameserver.model.actor.dna.HunterDNA;
+import com.l2journey.gameserver.model.actor.dna.HunterProfile;
 import com.l2journey.gameserver.model.WorldObject;
 
 /**
@@ -45,6 +46,7 @@ public class FakePlayer extends Player
 	public FakePlayer(int objectId, PlayerTemplate template, String accountName, PlayerAppearance app)
 	{
 		super(objectId, template, accountName, app);
+		setLang("en");
 	}
 
 	@Override
@@ -81,6 +83,40 @@ public class FakePlayer extends Player
 	public void setHunterDNA(HunterDNA hunterDNA)
 	{
 		_hunterDNA = hunterDNA;
+	}
+
+	private HunterProfile _hunterProfile;
+	private int _currentWaypointIndex = 0;
+	private String _activeRouteId;
+
+	public HunterProfile getHunterProfile()
+	{
+		return _hunterProfile;
+	}
+
+	public void setHunterProfile(HunterProfile hunterProfile)
+	{
+		_hunterProfile = hunterProfile;
+	}
+
+	public int getCurrentWaypointIndex()
+	{
+		return _currentWaypointIndex;
+	}
+
+	public void setCurrentWaypointIndex(int index)
+	{
+		_currentWaypointIndex = index;
+	}
+
+	public String getActiveRouteId()
+	{
+		return _activeRouteId;
+	}
+
+	public void setActiveRouteId(String routeId)
+	{
+		_activeRouteId = routeId;
 	}
 
 	@Override

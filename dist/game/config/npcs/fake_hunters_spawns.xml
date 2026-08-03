@@ -1,67 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <hunters>
-    <!-- Gludio Outskirts Solo Hunters -->
-    <spawn location="GLUDIO_OUTSKIRTS">
+    <!-- Single Test Bot for Navigation & Behavior Tree Validation -->
+    <spawn location="GLUDIO_TOWN">
         <names>
-            <name>HunterOne</name>
-            <name>ShadowBlade</name>
-            <name>GhostRider</name>
-            <name>SilverBow</name>
-            <name>NightStalker</name>
+            <name>TestBot</name>
         </names>
         <profileId>cautious_hunter</profileId>
         <appearance race="HUMAN" sex="MALE" classId="88" />
-        <location x="-14347" y="123622" z="-3112" radius="500" />
-        <amount>5</amount>
-    </spawn>
-
-    <!-- Ruins of Despair Solo Hunters (10 bots) -->
-    <spawn location="RUINS_OF_DESPAIR">
-        <names>
-            <name>DespairHunter</name>
-            <name>DoomBringer</name>
-            <name>SoulReaper</name>
-            <name>BoneCrusher</name>
-            <name>GrimBlade</name>
-            <name>DreadKnight</name>
-            <name>DarkArcher</name>
-            <name>ViperRogue</name>
-            <name>StormRanger</name>
-            <name>PhantomAssassin</name>
-        </names>
-        <profileId>cautious_hunter</profileId>
-        <appearance race="DARK_ELF" sex="MALE" classId="108" />
-        <location x="-16347" y="125622" z="-3112" radius="800" />
-        <amount>10</amount>
-    </spawn>
-
-    <!-- Ruins of Agony Party Hunters (20 bots) -->
-    <spawn location="RUINS_OF_AGONY">
-        <names>
-            <name>AgonyLeader</name>
-            <name>IronGuard</name>
-            <name>ShieldBearer</name>
-            <name>WarTank</name>
-            <name>BloodKnight</name>
-            <name>HealerElenora</name>
-            <name>HolyPriest</name>
-            <name>LightBringer</name>
-            <name>ArcaneMage</name>
-            <name>FlameWeaver</name>
-            <name>FrostCaster</name>
-            <name>StormCaller</name>
-            <name>BladeDancer</name>
-            <name>SwordSinger</name>
-            <name>WarRanger</name>
-            <name>HawkEye</name>
-            <name>SilverRanger</name>
-            <name>PhantomRanger</name>
-            <name>BountyHunter</name>
-            <name>FortuneSeeker</name>
-        </names>
-        <profileId>aggressive_warrior</profileId>
-        <appearance race="ELF" sex="FEMALE" classId="92" />
-        <location x="-12347" y="121622" z="-3112" radius="1000" />
-        <amount>20</amount>
+        <location x="-14347" y="123622" z="-3112" radius="50" />
+        <amount>1</amount>
     </spawn>
 </hunters>

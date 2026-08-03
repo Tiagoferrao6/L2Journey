@@ -167,6 +167,11 @@ public class RequestBypassToServer extends ClientPacket
 						player.sendMessage("Mercenário ancorado no local.");
 					}
 				}
+				else if (_command.equals("_merc_dismiss"))
+				{
+					MercenaryManager.getInstance().dismissMercenary(player, true);
+					player.sendMessage("Mercenário dispensado com sucesso.");
+				}
 			}
 			else if (CommunityBoardHandler.getInstance().isCommunityBoardCommand(_command))
 			{

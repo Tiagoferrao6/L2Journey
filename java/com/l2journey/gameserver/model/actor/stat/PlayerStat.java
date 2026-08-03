@@ -319,6 +319,15 @@ public class PlayerStat extends PlayableStat
 			}
 		}
 		
+		// Synchronize level with active mercenary if present.
+		com.l2journey.gameserver.model.actor.instance.MercenaryInstance merc = com.l2journey.gameserver.managers.MercenaryManager.getInstance().getActiveMercenary(player.getObjectId());
+		if (merc != null && merc.isOnline() && (merc.getLevel() != getLevel()))
+		{
+			merc.getStat().setLevel((byte) getLevel());
+			merc.setCurrentHpMp(merc.getMaxHp(), merc.getMaxMp());
+			com.l2journey.gameserver.data.xml.impl.FakePlayerEquipmentData.autoEquip(merc);
+		}
+		
 		final StatusUpdate su = new StatusUpdate(player);
 		su.addAttribute(StatusUpdate.LEVEL, getLevel());
 		su.addAttribute(StatusUpdate.MAX_CP, getMaxCp());

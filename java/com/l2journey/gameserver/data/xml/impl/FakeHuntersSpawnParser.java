@@ -115,6 +115,7 @@ public class FakeHuntersSpawnParser implements IXmlReader
 							bot.setAccessLevel(0);
 							bot.setSpawnTime(System.currentTimeMillis());
 							bot.setHunterDNA(dna);
+							bot.setHunterProfile(FakeHunterProfilesParser.getInstance().getProfile(profileId));
 
 							int finalX = x + Rnd.get(-radius, radius);
 							int finalY = y + Rnd.get(-radius, radius);

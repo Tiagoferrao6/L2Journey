@@ -100,6 +100,11 @@ public class NpcNameLocalisationData implements IXmlReader
 	 */
 	public String[] getLocalisation(String lang, int id)
 	{
+		if (lang == null)
+		{
+			return null;
+		}
+		
 		final Map<Integer, String[]> localisations = NPC_NAME_LOCALISATIONS.get(lang);
 		if (localisations != null)
 		{

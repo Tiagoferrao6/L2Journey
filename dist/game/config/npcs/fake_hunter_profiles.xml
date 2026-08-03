@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<profiles xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../data/xsd/fake_hunter_profiles.xsd">
+	<profile id="cautious_hunter">
+		<townReturnDelay>20</townReturnDelay>
+		<allowKS>false</allowKS>
+		<pickupItems>true</pickupItems>
+		<groupAssist>true</groupAssist>
+		<kitingDistance>300</kitingDistance>
+		<assignedRoutes>
+			<route>gludio_town_to_gk_path_a</route>
+			<route>despair_teleport_to_south_camp</route>
+			<route>despair_south_camp_patrol</route>
+		</assignedRoutes>
+	</profile>
+	
+	<profile id="aggressive_hunter">
+		<townReturnDelay>10</townReturnDelay>
+		<allowKS>true</allowKS>
+		<pickupItems>true</pickupItems>
+		<groupAssist>true</groupAssist>
+		<kitingDistance>150</kitingDistance>
+		<assignedRoutes>
+			<route>gludio_town_to_gk_path_b</route>
+			<route>despair_teleport_to_north_camp</route>
+			<route>despair_north_camp_patrol</route>
+		</assignedRoutes>
+	</profile>
+
+	<profile id="despair_party_profile">
+		<townReturnDelay>15</townReturnDelay>
+		<allowKS>false</allowKS>
+		<pickupItems>true</pickupItems>
+		<groupAssist>true</groupAssist>
+		<kitingDistance>250</kitingDistance>
+		<assignedRoutes>
+			<route>gludio_town_to_gk_path_a</route>
+			<route>despair_teleport_to_center_camp</route>
+			<route>despair_center_camp_patrol</route>
+		</assignedRoutes>
+	</profile>
+</profiles>

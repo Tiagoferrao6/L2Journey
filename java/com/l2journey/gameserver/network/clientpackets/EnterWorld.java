@@ -207,6 +207,20 @@ public class EnterWorld extends ClientPacket
 			player.updatePvpTitleAndColor(false);
 		}
 		
+		// Tester setup for tiagof: Level 20 + Top D-Grade equipment
+		if ("tiagof".equalsIgnoreCase(player.getName()))
+		{
+			if (player.getLevel() < 20)
+			{
+				player.getStat().setLevel((byte) 20);
+				player.getStat().setExp(com.l2journey.gameserver.data.xml.ExperienceData.getInstance().getExpForLevel(20));
+				com.l2journey.gameserver.data.xml.impl.FakePlayerEquipmentData.autoEquip(player, com.l2journey.gameserver.data.xml.impl.FakePlayerEquipmentData.Grade.D_GRADE);
+				player.setCurrentHpMp(player.getMaxHp(), player.getMaxMp());
+				player.setCurrentCp(player.getMaxCp());
+				player.broadcastUserInfo();
+			}
+		}
+		
 		// Apply special GM properties to the GM when entering
 		if (player.isGM())
 		{

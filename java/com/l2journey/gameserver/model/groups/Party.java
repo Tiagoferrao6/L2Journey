@@ -117,7 +117,7 @@ public class Party extends AbstractPlayerGroup
 	{
 		_members.add(leader);
 		_partyLvl = leader.getLevel();
-		_distributionType = partyDistributionType;
+		_distributionType = partyDistributionType != null ? partyDistributionType : PartyDistributionType.FINDERS_KEEPERS;
 	}
 	
 	/**
@@ -841,6 +841,11 @@ public class Party extends AbstractPlayerGroup
 				continue;
 			}
 			
+			if (member.isMercenary())
+			{
+				continue;
+			}
+			
 			if (member.getLevel() > newLevel)
 			{
 				newLevel = member.getLevel();
@@ -851,12 +856,25 @@ public class Party extends AbstractPlayerGroup
 	
 	private List<Player> getValidMembers(List<Player> members, int topLvl, Attackable target)
 	{
+		final List<Player> humanMembers = new ArrayList<>();
+		for (Player m : members)
+		{
+			if ((m != null) && !m.isMercenary())
+			{
+				humanMembers.add(m);
+			}
+		}
+		if (humanMembers.isEmpty())
+		{
+			return java.util.Collections.emptyList();
+		}
+		
 		final List<Player> validMembers = new ArrayList<>();
 		switch (Config.PARTY_XP_CUTOFF_METHOD)
 		{
 			case LEVEL:
 			{
-				for (Player member : members)
+				for (Player member : humanMembers)
 				{
 					if ((target.getInstanceId() == member.getInstanceId()) && ((topLvl - member.getLevel()) <= Config.PARTY_XP_CUTOFF_LEVEL))
 					{
@@ -868,14 +886,14 @@ public class Party extends AbstractPlayerGroup
 			case PERCENTAGE:
 			{
 				int sqLevelSum = 0;
-				for (Player member : members)
+				for (Player member : humanMembers)
 				{
 					if (target.getInstanceId() == member.getInstanceId())
 					{
 						sqLevelSum += (member.getLevel() * member.getLevel());
 					}
 				}
-				for (Player member : members)
+				for (Player member : humanMembers)
 				{
 					final int sqLevel = member.getLevel() * member.getLevel();
 					if ((target.getInstanceId() == member.getInstanceId()) && ((sqLevel * 100) >= (sqLevelSum * Config.PARTY_XP_CUTOFF_PERCENT)))
@@ -888,23 +906,23 @@ public class Party extends AbstractPlayerGroup
 			case AUTO:
 			{
 				int sqLevelSum = 0;
-				for (Player member : members)
+				for (Player member : humanMembers)
 				{
 					sqLevelSum += (member.getLevel() * member.getLevel());
 				}
-				int i = members.size() - 1;
+				int i = humanMembers.size() - 1;
 				if (i < 1)
 				{
-					return members;
+					return humanMembers;
 				}
 				if (i >= BONUS_EXP_SP.length)
 				{
 					i = BONUS_EXP_SP.length - 1;
 				}
-				for (Player member : members)
+				for (Player member : humanMembers)
 				{
 					final int sqLevel = member.getLevel() * member.getLevel();
-					if ((target.getInstanceId() == member.getInstanceId()) && (sqLevel >= (sqLevelSum / (members.size() * members.size()))))
+					if ((target.getInstanceId() == member.getInstanceId()) && (sqLevel >= (sqLevelSum / (humanMembers.size() * humanMembers.size()))))
 					{
 						validMembers.add(member);
 					}
@@ -913,7 +931,7 @@ public class Party extends AbstractPlayerGroup
 			}
 			case HIGHFIVE:
 			{
-				for (Player member : members)
+				for (Player member : humanMembers)
 				{
 					if (target.getInstanceId() == member.getInstanceId())
 					{
@@ -924,7 +942,7 @@ public class Party extends AbstractPlayerGroup
 			}
 			case NONE:
 			{
-				for (Player member : members)
+				for (Player member : humanMembers)
 				{
 					if (target.getInstanceId() == member.getInstanceId())
 					{

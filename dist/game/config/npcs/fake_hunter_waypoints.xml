@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<waypoints xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../data/xsd/fake_hunter_waypoints.xsd">
+	<!-- TOWN ROUTES: Gludio Town Navigation Paths to Gatekeeper -->
+	<route id="gludio_town_to_gk_path_a" type="TOWN">
+		<node x="-14347" y="123622" z="-3120" jitter="100" />
+		<node x="-14500" y="123700" z="-3120" jitter="80" />
+		<node x="-14780" y="123800" z="-3120" jitter="50" />
+	</route>
+
+	<route id="gludio_town_to_gk_path_b" type="TOWN">
+		<node x="-14100" y="123400" z="-3120" jitter="120" />
+		<node x="-14450" y="123650" z="-3120" jitter="90" />
+		<node x="-14780" y="123800" z="-3120" jitter="50" />
+	</route>
+
+	<!-- TRANSIT ROUTES: Teleport Arrival to Sub-Zone Camps -->
+	<route id="despair_teleport_to_center_camp" type="TRANSIT">
+		<node x="-19120" y="136816" z="-3752" jitter="80" />
+		<node x="-19500" y="136400" z="-3750" jitter="100" />
+		<node x="-20000" y="136000" z="-3740" jitter="100" />
+	</route>
+
+	<route id="despair_teleport_to_south_camp" type="TRANSIT">
+		<node x="-19120" y="136816" z="-3752" jitter="80" />
+		<node x="-19200" y="137500" z="-3750" jitter="100" />
+		<node x="-19400" y="138200" z="-3740" jitter="100" />
+	</route>
+
+	<route id="despair_teleport_to_north_camp" type="TRANSIT">
+		<node x="-19120" y="136816" z="-3752" jitter="80" />
+		<node x="-18800" y="136000" z="-3750" jitter="100" />
+		<node x="-18400" y="135200" z="-3740" jitter="100" />
+	</route>
+
+	<!-- ZONE PATROL ROUTES: Sub-Zone Combat Loop Patrol Nodes -->
+	<route id="despair_center_camp_patrol" type="ZONE">
+		<node x="-20000" y="136000" z="-3740" jitter="150" />
+		<node x="-20400" y="136300" z="-3730" jitter="150" />
+		<node x="-20200" y="135700" z="-3735" jitter="150" />
+		<node x="-19800" y="135800" z="-3745" jitter="150" />
+	</route>
+
+	<route id="despair_south_camp_patrol" type="ZONE">
+		<node x="-19400" y="138200" z="-3740" jitter="150" />
+		<node x="-19700" y="138600" z="-3730" jitter="150" />
+		<node x="-19200" y="138900" z="-3735" jitter="150" />
+	</route>
+
+	<route id="despair_north_camp_patrol" type="ZONE">
+		<node x="-18400" y="135200" z="-3740" jitter="150" />
+		<node x="-18000" y="134800" z="-3730" jitter="150" />
+		<node x="-18200" y="135500" z="-3735" jitter="150" />
+	</route>
+</waypoints>

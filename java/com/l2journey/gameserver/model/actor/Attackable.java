@@ -614,7 +614,7 @@ public class Attackable extends Npc
 									partyDmg += reward2.getDamage(); // Add Player damages to party damages
 									rewardedMembers.add(partyPlayer);
 									
-									if (partyPlayer.getLevel() > partyLvl)
+									if (!partyPlayer.isMercenary() && (partyPlayer.getLevel() > partyLvl))
 									{
 										if (attackerParty.isInCommandChannel())
 										{
@@ -632,7 +632,7 @@ public class Attackable extends Npc
 							else if (calculateDistance3D(partyPlayer) < Config.ALT_PARTY_RANGE)
 							{
 								rewardedMembers.add(partyPlayer);
-								if (partyPlayer.getLevel() > partyLvl)
+								if (!partyPlayer.isMercenary() && (partyPlayer.getLevel() > partyLvl))
 								{
 									if (attackerParty.isInCommandChannel())
 									{

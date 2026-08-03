@@ -1,0 +1,4 @@
+- [x] Prevent duplicate items in `FakePlayer.setupSellStore` and `setupBuyStore` <!-- id: 0 -->
+- [x] Prevent duplicate trader names during spawn in `FakeTradersSpawnParser` and `FakeTraderManager` <!-- id: 1 -->
+- [x] Add passive skills and clean character reset to `z_seed_test_account.sql` <!-- id: 2 -->
+- [x] Rebuild and verify Fake Traders stores and `KaelTyrant` character profile <!-- id: 3 -->

@@ -57,8 +57,8 @@ public class MercenaryManager
 			return false;
 		}
 
-		// Dismiss existing mercenary if active
-		dismissMercenary(owner, false);
+		// Dismiss existing mercenary if active and clear previous DB record
+		dismissMercenary(owner, true);
 
 		// Deduct fee
 		owner.reduceAdena(ItemProcessType.FEE, Config.MERCENARY_HIRE_FEE, owner, true);
@@ -122,6 +122,7 @@ public class MercenaryManager
 			merc.setTitle("Mercenary Healer");
 			merc.getStat().setLevel((byte) level);
 			merc.setCurrentHpMp(merc.getMaxHp(), merc.getMaxMp());
+			merc.setRunning();
 
 			// Auto Equip Top Grade Gear for Level
 			FakePlayerEquipmentData.autoEquip(merc);
@@ -137,6 +138,7 @@ public class MercenaryManager
 				owner.setParty(party);
 			}
 			party.addPartyMember(merc);
+			owner.sendPacket(new com.l2journey.gameserver.network.serverpackets.PartySmallWindowAll(owner, party));
 
 			return merc;
 		}

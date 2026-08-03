@@ -202,6 +202,16 @@ public class RequestActionUse extends ClientPacket
 			}
 			case 19: // Unsummon Pet
 			{
+				if (summon == null)
+				{
+					com.l2journey.gameserver.model.actor.instance.MercenaryInstance merc = com.l2journey.gameserver.managers.MercenaryManager.getInstance().getActiveMercenary(player.getObjectId());
+					if (merc != null)
+					{
+						com.l2journey.gameserver.managers.MercenaryManager.getInstance().dismissMercenary(player, true);
+						player.sendMessage("Mercenary has been dismissed.");
+						break;
+					}
+				}
 				if (!validateSummon(player, summon, true))
 				{
 					break;
@@ -233,6 +243,17 @@ public class RequestActionUse extends ClientPacket
 			}
 			case 21: // Change Movement Mode (Servitors)
 			{
+				if (summon == null)
+				{
+					com.l2journey.gameserver.model.actor.instance.MercenaryInstance merc = com.l2journey.gameserver.managers.MercenaryManager.getInstance().getActiveMercenary(player.getObjectId());
+					if (merc != null)
+					{
+						boolean nextState = !merc.isFollowing();
+						merc.setFollowing(nextState);
+						player.sendMessage("Mercenary follow mode: " + (nextState ? "FOLLOW" : "STAY"));
+						break;
+					}
+				}
 				if (validateSummon(player, summon, false))
 				{
 					((SummonAI) summon.getAI()).notifyFollowStatusChange();
@@ -241,6 +262,16 @@ public class RequestActionUse extends ClientPacket
 			}
 			case 22: // Attack (Servitors)
 			{
+				if (summon == null)
+				{
+					com.l2journey.gameserver.model.actor.instance.MercenaryInstance merc = com.l2journey.gameserver.managers.MercenaryManager.getInstance().getActiveMercenary(player.getObjectId());
+					if (merc != null && target != null && target.isCreature())
+					{
+						merc.setTarget(target);
+						merc.doAttack(target.asCreature());
+						break;
+					}
+				}
 				if (validateSummon(player, summon, false) && summon.canAttack(_ctrlPressed))
 				{
 					summon.doSummonAttack(target);
@@ -249,6 +280,17 @@ public class RequestActionUse extends ClientPacket
 			}
 			case 23: // Stop (Servitors)
 			{
+				if (summon == null)
+				{
+					com.l2journey.gameserver.model.actor.instance.MercenaryInstance merc = com.l2journey.gameserver.managers.MercenaryManager.getInstance().getActiveMercenary(player.getObjectId());
+					if (merc != null)
+					{
+						merc.abortAttack();
+						merc.abortCast();
+						merc.getAI().stopFollow();
+						break;
+					}
+				}
 				if (validateSummon(player, summon, false))
 				{
 					summon.cancelAction();

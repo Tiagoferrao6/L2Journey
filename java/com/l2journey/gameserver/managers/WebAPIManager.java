@@ -530,6 +530,7 @@ public class WebAPIManager
 					int hpPercent = (int) Math.round((bot.getCurrentHp() / bot.getMaxHp()) * 100.0);
 					int mpPercent = (int) Math.round((bot.getCurrentMp() / bot.getMaxMp()) * 100.0);
 					String grade = com.l2journey.gameserver.data.xml.impl.FakePlayerEquipmentData.getGradeForLevel(bot.getLevel()).name();
+					String archetype = bot.getHunterDNA() != null ? bot.getHunterDNA().getProfileId() : (isHunter ? "Hunter" : "Trader");
 
 					sb.append("{");
 					sb.append("\"name\": \"").append(escapeJson(bot.getName())).append("\",");
@@ -544,6 +545,7 @@ public class WebAPIManager
 					sb.append("\"mpPercent\": ").append(mpPercent).append(",");
 					sb.append("\"state\": \"").append(bot.isSitting() ? "SELLING" : "HUNTING").append("\",");
 					sb.append("\"targetName\": \"").append(escapeJson(targetName)).append("\",");
+					sb.append("\"archetype\": \"").append(escapeJson(archetype)).append("\",");
 					sb.append("\"grade\": \"").append(grade).append("\"");
 					sb.append("}");
 				}
@@ -558,26 +560,61 @@ public class WebAPIManager
 				String body = readRequestBody(exchange);
 				String action = parseStringJson(body, "action");
 				String botName = parseStringJson(body, "botName");
+				String gmCharName = parseStringJson(body, "gmCharName");
 				invalidateCache();
 
 				FakePlayer targetBot = null;
+				boolean isHunterBot = false;
 				if (botName != null)
 				{
 					for (FakePlayer h : FakeHunterManager.getInstance().getHunters())
 					{
-						if (h.getName().equalsIgnoreCase(botName)) { targetBot = h; break; }
+						if (h.getName().equalsIgnoreCase(botName)) { targetBot = h; isHunterBot = true; break; }
 					}
 					if (targetBot == null)
 					{
 						for (FakePlayer t : FakeTraderManager.getInstance().getTraders())
 						{
-							if (t.getName().equalsIgnoreCase(botName)) { targetBot = t; break; }
+							if (t.getName().equalsIgnoreCase(botName)) { targetBot = t; isHunterBot = false; break; }
 						}
 					}
 				}
 
 				if (targetBot != null)
 				{
+					if ("DESPAWN".equalsIgnoreCase(action))
+					{
+						if (isHunterBot)
+						{
+							FakeHunterManager.getInstance().removeHunter(targetBot);
+						}
+						else
+						{
+							FakeTraderManager.getInstance().removeTrader(targetBot);
+						}
+						targetBot.deleteMe();
+					}
+					else if ("FORCE_RETREAT".equalsIgnoreCase(action))
+					{
+						targetBot.setTarget(null);
+						targetBot.teleToLocation(FakeHunterManager.GLUDIO_TOWN_X, FakeHunterManager.GLUDIO_TOWN_Y, -3120);
+					}
+					else if ("RESPAWN".equalsIgnoreCase(action))
+					{
+						targetBot.teleToLocation(FakeHunterManager.GLUDIO_GK_X, FakeHunterManager.GLUDIO_GK_Y, FakeHunterManager.GLUDIO_GK_Z);
+					}
+					else if ("TELEPORT_GM".equalsIgnoreCase(action))
+					{
+						if (gmCharName != null)
+						{
+							Player gm = World.getInstance().getPlayer(gmCharName);
+							if (gm != null)
+							{
+								gm.teleToLocation(targetBot.getX(), targetBot.getY(), targetBot.getZ());
+							}
+						}
+					}
+
 					Double newLevel = parseDoubleJson(body, "level");
 					if (newLevel != null && newLevel >= 1 && newLevel <= 85)
 					{

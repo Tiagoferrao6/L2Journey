@@ -577,26 +577,70 @@
           </div>
         </div>
 
-        <!-- FakePlayers Monitor & Controls -->
-        <div class="table-container" style="margin-top: 1.5rem;">
-          <div class="table-header" style="display: flex; justify-content: space-between; align-items: center;">
-            <h2>🤖 Monitoramento & Controle de FakePlayers (Hunters & Traders)</h2>
-            <button class="btn btn-cyber" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;" onclick="fetchFakePlayersList()">Atualizar Bots</button>
+        <!-- FakePlayers Live Monitor & Controls -->
+        <div class="grid-4" style="margin-top: 1.5rem;">
+          <div class="card">
+            <div class="card-title">Active Hunters</div>
+            <div class="card-value" id="valFpHunters">0</div>
+            <div class="card-sub">PvE Combat Bots</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Active Traders</div>
+            <div class="card-value" id="valFpTraders">0</div>
+            <div class="card-sub">Town Stores</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Fleeing / Low HP Bots</div>
+            <div class="card-value" id="valFpLowHp" style="color: var(--accent-red);">0</div>
+            <div class="card-sub">HP &lt; 40%</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Média HP da Tropa</div>
+            <div class="card-value" id="valFpAvgHp" style="color: var(--accent-green);">100%</div>
+            <div class="card-sub">Saúde Global</div>
+          </div>
+        </div>
+
+        <div class="table-container" style="margin-top: 1rem;">
+          <div class="table-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem;">
+            <h2>🤖 Monitoramento & Controle de FakePlayers em Tempo Real</h2>
+            <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+              <input type="text" id="inputFpSearch" class="form-input" placeholder="Buscar bot/archetype..." style="padding: 0.3rem 0.6rem; font-size: 0.8rem; width: 160px;" oninput="renderFakePlayersTable()" />
+              <select id="selFpType" class="form-input" style="padding: 0.3rem 0.6rem; font-size: 0.8rem; width: auto;" onchange="renderFakePlayersTable()">
+                <option value="ALL">Todos os Tipos</option>
+                <option value="HUNTER">Hunters</option>
+                <option value="TRADER">Traders</option>
+              </select>
+              <select id="selFpZone" class="form-input" style="padding: 0.3rem 0.6rem; font-size: 0.8rem; width: auto;" onchange="renderFakePlayersTable()">
+                <option value="ALL">Todas as Zonas</option>
+                <option value="Gludio">Gludio</option>
+                <option value="Dion">Dion</option>
+                <option value="Giran">Giran</option>
+                <option value="Oren">Oren</option>
+                <option value="Aden">Aden</option>
+                <option value="Heine">Heine</option>
+                <option value="Rune">Rune</option>
+                <option value="Goddard">Goddard</option>
+                <option value="Schuttgart">Schuttgart</option>
+              </select>
+              <button class="btn btn-cyber" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;" onclick="fetchFakePlayersList()">Atualizar Bots</button>
+            </div>
           </div>
           <table>
             <thead>
               <tr>
-                <th>Bot</th>
+                <th>Bot & Archetype</th>
                 <th>Tipo</th>
                 <th>Nível & Classe</th>
                 <th>Grade</th>
                 <th>Localização & Coordenadas (X, Y, Z)</th>
                 <th>Status / HP / MP</th>
+                <th>Alvo Atual</th>
                 <th>Ações de GM</th>
               </tr>
             </thead>
             <tbody id="tblFakePlayers">
-              <tr><td colspan="7" style="text-align:center;">Carregando FakePlayers...</td></tr>
+              <tr><td colspan="8" style="text-align:center;">Carregando FakePlayers...</td></tr>
             </tbody>
           </table>
         </div>
@@ -811,6 +855,8 @@
       } catch (e) {}
     }
 
+    let allFakePlayersData = [];
+
     async function fetchFakePlayersList() {
       if (!gmToken) return;
       try {
@@ -818,30 +864,107 @@
           headers: { 'Authorization': 'Bearer ' + gmToken }
         });
         const data = await res.json();
-        const tbody = document.getElementById('tblFakePlayers');
+        allFakePlayersData = data.players || [];
 
-        if (data.players && data.players.length > 0) {
-          tbody.innerHTML = data.players.map(p => `
-            <tr>
-              <td><strong>${p.name}</strong></td>
-              <td><span class="badge ${p.type === 'HUNTER' ? 'badge-pvp' : 'badge-alive'}">${p.type}</span></td>
-              <td>Nv. ${p.level} (${p.className})</td>
-              <td><span class="badge" style="background:rgba(212,175,55,0.2); color:var(--gold-primary);">${p.grade}</span></td>
-              <td>📍 ${p.zoneName} <br><small style="color:var(--text-muted);">[${p.x}, ${p.y}, ${p.z}]</small></td>
-              <td>
-                <span class="badge badge-alive">${p.state}</span><br>
-                <small>HP: ${p.hpPercent}% | MP: ${p.mpPercent}%</small>
-              </td>
-              <td>
-                <button class="btn btn-cyber" style="padding:0.2rem 0.4rem; font-size:0.7rem;" onclick="editBotLevelGrade('${p.name}', ${p.level})">Nível/Grade</button>
-                <button class="btn" style="padding:0.2rem 0.4rem; font-size:0.7rem;" onclick="teleportBotModal('${p.name}', ${p.x}, ${p.y}, ${p.z})">Teleport</button>
-              </td>
-            </tr>
-          `).join('');
+        // Update Summary Cards
+        const totalHunters = data.totalHunters || 0;
+        const totalTraders = data.totalTraders || 0;
+        const lowHpBots = allFakePlayersData.filter(p => p.hpPercent < 40).length;
+        const avgHp = allFakePlayersData.length > 0
+          ? Math.round(allFakePlayersData.reduce((sum, p) => sum + p.hpPercent, 0) / allFakePlayersData.length)
+          : 100;
+
+        document.getElementById('valFpHunters').innerText = totalHunters;
+        document.getElementById('valFpTraders').innerText = totalTraders;
+        document.getElementById('valFpLowHp').innerText = lowHpBots;
+        document.getElementById('valFpAvgHp').innerText = avgHp + '%';
+
+        renderFakePlayersTable();
+      } catch (e) {
+        console.error('Erro ao buscar FakePlayers:', e);
+      }
+    }
+
+    function renderFakePlayersTable() {
+      const search = (document.getElementById('inputFpSearch')?.value || '').toLowerCase();
+      const typeFilter = document.getElementById('selFpType')?.value || 'ALL';
+      const zoneFilter = document.getElementById('selFpZone')?.value || 'ALL';
+      const tbody = document.getElementById('tblFakePlayers');
+
+      let filtered = allFakePlayersData;
+
+      if (typeFilter !== 'ALL') {
+        filtered = filtered.filter(p => p.type === typeFilter);
+      }
+
+      if (zoneFilter !== 'ALL') {
+        filtered = filtered.filter(p => p.zoneName && p.zoneName.toLowerCase().includes(zoneFilter.toLowerCase()));
+      }
+
+      if (search) {
+        filtered = filtered.filter(p =>
+          (p.name && p.name.toLowerCase().includes(search)) ||
+          (p.archetype && p.archetype.toLowerCase().includes(search)) ||
+          (p.className && p.className.toLowerCase().includes(search))
+        );
+      }
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">Nenhum FakePlayer encontrado para os filtros selecionados.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(p => {
+        const hpColor = p.hpPercent < 40 ? 'var(--accent-red)' : 'var(--accent-green)';
+        const stateBadgeClass = p.state === 'SELLING' ? 'badge-pvp' : (p.state === 'HUNTING' ? 'badge-alive' : 'badge-dead');
+        const archetypeLabel = p.archetype ? `<br><small style="color:var(--gold-light);">🧬 ${p.archetype}</small>` : '';
+
+        return `
+          <tr>
+            <td><strong>${p.name}</strong>${archetypeLabel}</td>
+            <td><span class="badge ${p.type === 'HUNTER' ? 'badge-pvp' : 'badge-alive'}">${p.type}</span></td>
+            <td>Nv. ${p.level}<br><small style="color:var(--text-muted);">${p.className}</small></td>
+            <td><span class="badge" style="background:rgba(212,175,55,0.2); color:var(--gold-primary);">${p.grade}</span></td>
+            <td>📍 ${p.zoneName} <br><small style="color:var(--text-muted);">[${p.x}, ${p.y}, ${p.z}]</small></td>
+            <td>
+              <span class="badge ${stateBadgeClass}">${p.state}</span><br>
+              <div class="progress-bar" style="margin-top: 0.2rem; height: 4px;">
+                <div class="progress-fill" style="width: ${p.hpPercent}%; background: ${hpColor};"></div>
+              </div>
+              <small style="font-size:0.75rem;">HP: ${p.hpPercent}% | MP: ${p.mpPercent}%</small>
+            </td>
+            <td>🎯 <small style="color:var(--text-muted);">${p.targetName || 'None'}</small></td>
+            <td>
+              <div style="display:flex; flex-wrap:wrap; gap:0.2rem;">
+                <button class="btn btn-cyber" style="padding:0.2rem 0.4rem; font-size:0.7rem;" title="Teleportar GM até o bot" onclick="executeBotAction('TELEPORT_GM', '${p.name}')">⚡ Teleport GM</button>
+                <button class="btn" style="padding:0.2rem 0.4rem; font-size:0.7rem; color:var(--gold-primary);" title="Forçar recuo para cidade" onclick="executeBotAction('FORCE_RETREAT', '${p.name}')">🛡️ Recuar</button>
+                <button class="btn" style="padding:0.2rem 0.4rem; font-size:0.7rem;" title="Respawn no Gatekeeper" onclick="executeBotAction('RESPAWN', '${p.name}')">🔄 Respawn</button>
+                <button class="btn btn-danger" style="padding:0.2rem 0.4rem; font-size:0.7rem;" title="Despawn bot" onclick="executeBotAction('DESPAWN', '${p.name}')">❌ Despawn</button>
+                <button class="btn btn-cyber" style="padding:0.2rem 0.4rem; font-size:0.7rem;" onclick="editBotLevelGrade('${p.name}', ${p.level})">✏️ Ed.</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function executeBotAction(action, botName) {
+      if (!confirm(`Confirmar ação '${action}' para o bot ${botName}?`)) return;
+      try {
+        const res = await fetch(API_BASE + '/api/admin/fakeplayers', {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + gmToken, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: action, botName: botName, gmCharName: 'AdminGM' })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          fetchFakePlayersList();
         } else {
-          tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Nenhum FakePlayer cadastrado.</td></tr>';
+          alert('Erro: ' + (data.error || 'Falha ao executar ação'));
         }
-      } catch (e) {}
+      } catch (e) {
+        alert('Erro de comunicação com o servidor.');
+      }
     }
 
     async function editBotLevelGrade(botName, curLevel) {

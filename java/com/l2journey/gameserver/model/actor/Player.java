@@ -777,7 +777,7 @@ public class Player extends Playable
 	private boolean _exchangeRefusal = false; // Exchange refusal
 	
 	private Party _party;
-	PartyDistributionType _partyDistributionType;
+	PartyDistributionType _partyDistributionType = PartyDistributionType.FINDERS_KEEPERS;
 	
 	// this is needed to find the inviting player for Party response
 	// there can only be one active party request at once
@@ -6960,7 +6960,7 @@ public class Player extends Playable
 	
 	public PartyDistributionType getPartyDistributionType()
 	{
-		return _partyDistributionType;
+		return _partyDistributionType != null ? _partyDistributionType : PartyDistributionType.FINDERS_KEEPERS;
 	}
 	
 	/**
@@ -11383,6 +11383,10 @@ public class Player extends Playable
 		if (merc != null && merc.isOnline())
 		{
 			merc.teleToLocation(getLocation(), false);
+			if (merc.isFollowing())
+			{
+				merc.getAI().startFollow(this);
+			}
 		}
 		
 		// show movie if available
@@ -15512,5 +15516,10 @@ public class Player extends Playable
 		}
 		
 		return ref;
+	}
+	
+	public boolean isMercenary()
+	{
+		return false;
 	}
 }

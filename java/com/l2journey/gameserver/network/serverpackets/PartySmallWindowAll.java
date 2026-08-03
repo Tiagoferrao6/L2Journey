@@ -50,7 +50,7 @@ public class PartySmallWindowAll extends ServerPacket
 	{
 		ServerPackets.PARTY_SMALL_WINDOW_ALL.writeId(this, buffer);
 		buffer.writeInt(_party.getLeaderObjectId());
-		buffer.writeInt(_party.getDistributionType().getId());
+		buffer.writeInt((_party.getDistributionType() != null ? _party.getDistributionType() : com.l2journey.gameserver.model.groups.PartyDistributionType.FINDERS_KEEPERS).getId());
 		buffer.writeInt(_party.getMemberCount() - 1);
 		for (Player member : _party.getMembers())
 		{
