@@ -578,10 +578,68 @@
           </table>
         </div>
 
+        <!-- Fake Players & Bots Monitor -->
+        <div class="table-container" style="margin-top: 1.5rem;">
+          <div class="table-header">
+            <h2>Monitor de Fake Players & Bots (Hunters/Traders)</h2>
+            <button class="btn btn-cyber" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;" onclick="fetchFakePlayers()">Atualizar Bots</button>
+          </div>
+          <table>
+            <thead><tr><th>Nome</th><th>Tipo</th><th>Nível</th><th>Classe</th><th>Zona</th><th>HP / MP</th><th>Estado</th><th>Ações</th></tr></thead>
+            <tbody id="tblFakePlayers"><tr><td colspan="8" style="text-align:center;">Carregando bots...</td></tr></tbody>
+          </table>
+        </div>
+
       </div>
     </section>
 
   </main>
+
+  <!-- Bot Inspector Modal -->
+  <div id="inspectorModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); z-index: 10000; align-items: center; justify-content: center;">
+    <div style="background: rgba(18, 24, 38, 0.95); border: 1px solid var(--border-glow); border-radius: var(--radius); width: 90%; max-width: 800px; max-height: 90vh; overflow-y: auto; padding: 1.5rem; box-shadow: var(--shadow-glass); position: relative;">
+      <button style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer;" onclick="closeInspectorModal()">&times;</button>
+      <h2 id="inspectorTitle" style="color: var(--gold-primary); font-family: 'Cinzel', serif; margin-bottom: 0.3rem;">Bot Inspector</h2>
+      <div id="inspectorSubtitle" style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.2rem;">Carregando detalhes do bot...</div>
+
+      <!-- Status Bars -->
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; margin-bottom: 1.2rem;">
+        <div style="background: rgba(0,0,0,0.4); padding: 0.8rem; border-radius: 8px; border-left: 4px solid var(--accent-red);">
+          <div style="font-size: 0.75rem; color: var(--text-muted);">HP (Vida)</div>
+          <div id="inspectorHp" style="font-weight: bold; color: var(--accent-red);">0 / 0</div>
+        </div>
+        <div style="background: rgba(0,0,0,0.4); padding: 0.8rem; border-radius: 8px; border-left: 4px solid var(--cyber-blue);">
+          <div style="font-size: 0.75rem; color: var(--text-muted);">MP (Mana)</div>
+          <div id="inspectorMp" style="font-weight: bold; color: var(--cyber-blue);">0 / 0</div>
+        </div>
+        <div style="background: rgba(0,0,0,0.4); padding: 0.8rem; border-radius: 8px; border-left: 4px solid var(--gold-primary);">
+          <div style="font-size: 0.75rem; color: var(--text-muted);">CP (Combat Points)</div>
+          <div id="inspectorCp" style="font-weight: bold; color: var(--gold-primary);">0 / 0</div>
+        </div>
+      </div>
+
+      <!-- Equipment & Buffs Grid -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+        <!-- Equipment Card -->
+        <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+          <h3 style="color: var(--gold-light); font-size: 0.95rem; margin-bottom: 0.6rem;">🛡️ Equipamentos (Paperdoll)</h3>
+          <div id="inspectorEquipment" style="font-size: 0.85rem; line-height: 1.6; color: var(--text-main);"></div>
+        </div>
+
+        <!-- Buffs Card -->
+        <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+          <h3 style="color: var(--gold-light); font-size: 0.95rem; margin-bottom: 0.6rem;">✨ Buffs Ativos</h3>
+          <div id="inspectorBuffs" style="font-size: 0.85rem; max-height: 180px; overflow-y: auto;"></div>
+        </div>
+      </div>
+
+      <!-- Inventory Section -->
+      <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+        <h3 style="color: var(--gold-light); font-size: 0.95rem; margin-bottom: 0.6rem;">🎒 Inventário</h3>
+        <div id="inspectorInventory" style="font-size: 0.85rem; max-height: 180px; overflow-y: auto;"></div>
+      </div>
+    </div>
+  </div>
 
   <footer>
     L2Journey Embedded Web API & Control Panel &copy; 2026 - Servidor HTTP embutido no GameServer.
@@ -695,6 +753,7 @@
         document.getElementById('gmPanelSection').style.display = 'block';
         fetchChatStream();
         fetchRealPlayers();
+        fetchFakePlayers();
       } else {
         document.getElementById('gmAuthSection').style.display = 'block';
         document.getElementById('gmPanelSection').style.display = 'none';
@@ -852,6 +911,101 @@
       } catch (e) {}
     }
 
+    async function fetchFakePlayers() {
+      if (!gmToken) return;
+      try {
+        const res = await fetch(API_BASE + '/api/admin/fakeplayers', {
+          headers: { 'Authorization': 'Bearer ' + gmToken }
+        });
+        const data = await res.json();
+        const tbody = document.getElementById('tblFakePlayers');
+        if (data.players && data.players.length > 0) {
+          tbody.innerHTML = data.players.map(p => `
+            <tr style="cursor: pointer;" onclick="openInspectorModal('${p.name}')">
+              <td><strong style="color: var(--cyber-blue);">${p.name}</strong> 🔍</td>
+              <td><span class="badge ${p.type === 'HUNTER' ? 'badge-green' : 'badge-gold'}">${p.type}</span></td>
+              <td>Nv. ${p.level} (${p.grade})</td>
+              <td>${p.className}</td>
+              <td>${p.zoneName}</td>
+              <td>HP ${p.hpPercent}% | MP ${p.mpPercent}%</td>
+              <td>${p.state}</td>
+              <td>
+                <button class="btn btn-cyber" style="padding:0.2rem 0.5rem; font-size:0.75rem;" onclick="event.stopPropagation(); openInspectorModal('${p.name}')">Inspetor</button>
+              </td>
+            </tr>
+          `).join('');
+        } else {
+          tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">Nenhum bot/fake player ativo no momento.</td></tr>';
+        }
+      } catch (e) {}
+    }
+
+    async function openInspectorModal(botName) {
+      const modal = document.getElementById('inspectorModal');
+      if (!modal) return;
+      modal.style.display = 'flex';
+
+      document.getElementById('inspectorTitle').innerText = 'Bot Inspector - ' + botName;
+      document.getElementById('inspectorSubtitle').innerText = 'Carregando detalhes do bot...';
+
+      try {
+        const res = await fetch(API_BASE + '/api/admin/fakeplayers/' + encodeURIComponent(botName), {
+          headers: { 'Authorization': 'Bearer ' + gmToken }
+        });
+        const data = await res.json();
+        if (!res.ok || data.error) {
+          document.getElementById('inspectorSubtitle').innerText = 'Erro: ' + (data.error || 'Não foi possível carregar o bot');
+          return;
+        }
+
+        document.getElementById('inspectorSubtitle').innerText = `${data.className} (Nível ${data.level}) • ${data.location.town} [${data.location.x}, ${data.location.y}, ${data.location.z}]`;
+        document.getElementById('inspectorHp').innerText = `${data.hp} / ${data.maxHp}`;
+        document.getElementById('inspectorMp').innerText = `${data.mp} / ${data.maxMp}`;
+        document.getElementById('inspectorCp').innerText = `${data.cp} / ${data.maxCp}`;
+
+        const eq = data.equipment || {};
+        document.getElementById('inspectorEquipment').innerHTML = `
+          <div><strong>Arma:</strong> <span style="color: var(--cyber-blue);">${eq.weapon || 'Nenhuma'}</span></div>
+          <div><strong>Peito:</strong> ${eq.chest || 'Nenhum'}</div>
+          <div><strong>Pernas:</strong> ${eq.legs || 'Nenhuma'}</div>
+          <div><strong>Capacete:</strong> ${eq.head || 'Nenhum'}</div>
+          <div><strong>Luvas:</strong> ${eq.gloves || 'Nenhum'}</div>
+          <div><strong>Botas:</strong> ${eq.feet || 'Nenhuma'}</div>
+        `;
+
+        const buffs = data.buffs || [];
+        if (buffs.length === 0) {
+          document.getElementById('inspectorBuffs').innerHTML = '<div style="color: var(--text-muted);">Nenhum buff ativo.</div>';
+        } else {
+          document.getElementById('inspectorBuffs').innerHTML = buffs.map(b => 
+            `<div style="padding: 0.25rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between;">
+              <span><strong>${b.name}</strong> (Nv. ${b.level})</span>
+              <span style="color: var(--gold-primary);">${b.durationSec}s</span>
+            </div>`
+          ).join('');
+        }
+
+        const inv = data.inventory || [];
+        if (inv.length === 0) {
+          document.getElementById('inspectorInventory').innerHTML = '<div style="color: var(--text-muted);">Inventário vazio.</div>';
+        } else {
+          document.getElementById('inspectorInventory').innerHTML = '<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.4rem;">' + inv.map(i => 
+            `<div style="background: rgba(255,255,255,0.03); padding: 0.35rem; border-radius: 4px; display: flex; justify-content: space-between;">
+              <span style="${i.equipped ? 'color: var(--cyber-blue); font-weight: 500;' : ''}">${i.name}${i.equipped ? ' (Equipado)' : ''}</span>
+              <span style="color: var(--text-muted);">${i.count.toLocaleString()}</span>
+            </div>`
+          ).join('') + '</div>';
+        }
+      } catch (e) {
+        document.getElementById('inspectorSubtitle').innerText = 'Erro de conexão com a API.';
+      }
+    }
+
+    function closeInspectorModal() {
+      const modal = document.getElementById('inspectorModal');
+      if (modal) modal.style.display = 'none';
+    }
+
     // Auto-refresh interval
     setInterval(() => {
       fetchStatus();
@@ -861,8 +1015,9 @@
       if (document.getElementById('tab-gm').classList.contains('active') && gmToken) {
         fetchChatStream();
         fetchRealPlayers();
+        fetchFakePlayers();
       }
-    }, 3000);
+    }, 5000);
 
     fetchStatus();
   </script>

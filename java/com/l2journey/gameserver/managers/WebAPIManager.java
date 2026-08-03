@@ -510,6 +510,126 @@ public class WebAPIManager
 
 			if ("GET".equalsIgnoreCase(exchange.getRequestMethod()))
 			{
+				String path = exchange.getRequestURI().getPath();
+				String prefix = "/api/admin/fakeplayers/";
+				String targetBotName = null;
+				if (path.length() > prefix.length())
+				{
+					targetBotName = java.net.URLDecoder.decode(path.substring(prefix.length()), StandardCharsets.UTF_8.name());
+				}
+				if (targetBotName == null || targetBotName.trim().isEmpty())
+				{
+					String query = exchange.getRequestURI().getQuery();
+					if (query != null && query.contains("bot="))
+					{
+						for (String param : query.split("&"))
+						{
+							if (param.startsWith("bot=") || param.startsWith("name="))
+							{
+								targetBotName = java.net.URLDecoder.decode(param.split("=")[1], StandardCharsets.UTF_8.name());
+								break;
+							}
+						}
+					}
+				}
+
+				if (targetBotName != null && !targetBotName.trim().isEmpty())
+				{
+					FakePlayer targetBot = null;
+					for (FakePlayer h : FakeHunterManager.getInstance().getHunters())
+					{
+						if (h.getName().equalsIgnoreCase(targetBotName)) { targetBot = h; break; }
+					}
+					if (targetBot == null)
+					{
+						for (FakePlayer t : FakeTraderManager.getInstance().getTraders())
+						{
+							if (t.getName().equalsIgnoreCase(targetBotName)) { targetBot = t; break; }
+						}
+					}
+
+					if (targetBot == null)
+					{
+						sendResponse(exchange, 404, "{\"error\": \"Bot not found\"}");
+						return;
+					}
+
+					String town = com.l2journey.gameserver.managers.MapRegionManager.getInstance().getClosestTownName(targetBot);
+					String className = targetBot.getTemplate().getPlayerClass() != null ? targetBot.getTemplate().getPlayerClass().toString() : "Fighter";
+					
+					StringBuilder sb = new StringBuilder();
+					sb.append("{");
+					sb.append("\"name\": \"").append(escapeJson(targetBot.getName())).append("\",");
+					sb.append("\"level\": ").append(targetBot.getLevel()).append(",");
+					sb.append("\"className\": \"").append(escapeJson(className)).append("\",");
+					sb.append("\"hp\": ").append((long) targetBot.getCurrentHp()).append(",");
+					sb.append("\"maxHp\": ").append((long) targetBot.getMaxHp()).append(",");
+					sb.append("\"mp\": ").append((long) targetBot.getCurrentMp()).append(",");
+					sb.append("\"maxMp\": ").append((long) targetBot.getMaxMp()).append(",");
+					sb.append("\"cp\": ").append((long) targetBot.getCurrentCp()).append(",");
+					sb.append("\"maxCp\": ").append((long) targetBot.getMaxCp()).append(",");
+
+					sb.append("\"location\": {");
+					sb.append("\"x\": ").append(targetBot.getX()).append(",");
+					sb.append("\"y\": ").append(targetBot.getY()).append(",");
+					sb.append("\"z\": ").append(targetBot.getZ()).append(",");
+					sb.append("\"town\": \"").append(escapeJson(town)).append("\"");
+					sb.append("},");
+
+					// Equipment
+					Item weaponItem = targetBot.getInventory().getPaperdollItem(Inventory.PAPERDOLL_RHAND);
+					Item chestItem = targetBot.getInventory().getPaperdollItem(Inventory.PAPERDOLL_CHEST);
+					Item legsItem = targetBot.getInventory().getPaperdollItem(Inventory.PAPERDOLL_LEGS);
+					Item headItem = targetBot.getInventory().getPaperdollItem(Inventory.PAPERDOLL_HEAD);
+					Item glovesItem = targetBot.getInventory().getPaperdollItem(Inventory.PAPERDOLL_GLOVES);
+					Item feetItem = targetBot.getInventory().getPaperdollItem(Inventory.PAPERDOLL_FEET);
+
+					sb.append("\"equipment\": {");
+					sb.append("\"weapon\": \"").append(escapeJson(weaponItem != null ? weaponItem.getItemName() : "None")).append("\",");
+					sb.append("\"chest\": \"").append(escapeJson(chestItem != null ? chestItem.getItemName() : "None")).append("\",");
+					sb.append("\"legs\": \"").append(escapeJson(legsItem != null ? legsItem.getItemName() : "None")).append("\",");
+					sb.append("\"head\": \"").append(escapeJson(headItem != null ? headItem.getItemName() : "None")).append("\",");
+					sb.append("\"gloves\": \"").append(escapeJson(glovesItem != null ? glovesItem.getItemName() : "None")).append("\",");
+					sb.append("\"feet\": \"").append(escapeJson(feetItem != null ? feetItem.getItemName() : "None")).append("\"");
+					sb.append("},");
+
+					// Inventory
+					sb.append("\"inventory\": [");
+					List<Item> items = new ArrayList<>(targetBot.getInventory().getItems());
+					for (int i = 0; i < items.size(); i++)
+					{
+						Item item = items.get(i);
+						if (i > 0) sb.append(",");
+						sb.append("{");
+						sb.append("\"itemId\": ").append(item.getId()).append(",");
+						sb.append("\"name\": \"").append(escapeJson(item.getItemName())).append("\",");
+						sb.append("\"count\": ").append(item.getCount()).append(",");
+						sb.append("\"equipped\": ").append(item.isEquipped());
+						sb.append("}");
+					}
+					sb.append("],");
+
+					// Buffs
+					sb.append("\"buffs\": [");
+					List<BuffInfo> buffs = new ArrayList<>(targetBot.getEffectList().getEffects());
+					for (int i = 0; i < buffs.size(); i++)
+					{
+						BuffInfo info = buffs.get(i);
+						if (i > 0) sb.append(",");
+						sb.append("{");
+						sb.append("\"skillId\": ").append(info.getSkill().getId()).append(",");
+						sb.append("\"name\": \"").append(escapeJson(info.getSkill().getName())).append("\",");
+						sb.append("\"level\": ").append(info.getSkill().getLevel()).append(",");
+						sb.append("\"durationSec\": ").append(info.getTime());
+						sb.append("}");
+					}
+					sb.append("]");
+
+					sb.append("}");
+					sendResponse(exchange, 200, sb.toString());
+					return;
+				}
+
 				List<FakePlayer> hunters = FakeHunterManager.getInstance().getHunters();
 				List<FakePlayer> traders = FakeTraderManager.getInstance().getTraders();
 				List<FakePlayer> allBots = new ArrayList<>(hunters);
