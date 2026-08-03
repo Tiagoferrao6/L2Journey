@@ -1,0 +1,3 @@
+# Ignore all SQL dumps except placeholder/gitignore
+*.sql
+!latest_backup.sql.example
