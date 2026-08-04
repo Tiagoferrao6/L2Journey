@@ -62,4 +62,31 @@ public class LLMClassChangeManager
 		LOGGER.info("LLMClassChangeManager: Successfully performed 1st Class Transfer for " + bot.getName() + " to class " + targetClassId);
 		return true;
 	}
+
+	/**
+	 * Automates class promotion for Tanker companion (Human Fighter -> Knight -> Paladin).
+	 */
+	public boolean executeTankerClassTransfer(FakePlayer bot)
+	{
+		if (bot == null || !bot.isOnline()) return false;
+
+		int level = bot.getLevel();
+		int activeClass = bot.getActiveClass();
+
+		if (level >= 20 && activeClass == 0)
+		{
+			return performClassTransfer(bot, 9); // Knight
+		}
+		else if (level >= 40 && activeClass == 9)
+		{
+			bot.setClassTemplate(90); // Paladin
+			FakePlayerEquipmentData.autoEquip(bot, FakePlayerEquipmentData.Grade.C_GRADE);
+			String msg = "[Quest Solver] Completei com sucesso a 2ª Mudança de Classe para Paladin! (Nv. 40)";
+			bot.broadcastPacket(new CreatureSay(bot, ChatType.GENERAL, bot.getName(), msg));
+			LOGGER.info("LLMClassChangeManager: " + bot.getName() + " completed 2nd Class Transfer to Paladin.");
+			return true;
+		}
+
+		return false;
+	}
 }

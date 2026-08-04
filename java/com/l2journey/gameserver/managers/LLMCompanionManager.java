@@ -28,6 +28,7 @@ import com.l2journey.gameserver.model.item.enums.ItemProcessType;
 import com.l2journey.gameserver.model.item.instance.Item;
 import com.l2journey.gameserver.network.enums.ChatType;
 import com.l2journey.gameserver.network.serverpackets.CreatureSay;
+import com.l2journey.gameserver.network.serverpackets.ExAutoSoulShot;
 
 /**
  * Autonomous AI Co-op Companion Manager (LLM Companion PoC & Tactical Commands).
@@ -179,19 +180,31 @@ public class LLMCompanionManager
 
 			try
 			{
-				PlayerTemplate template = PlayerTemplateData.getInstance().getTemplate(member.getBaseClassId());
-				PlayerAppearance app = new PlayerAppearance((byte) (member.getBaseClassId() == 10 ? 1 : 0), (byte) 0, (byte) 0, false);
-				FakePlayer bot = new FakePlayer(IdManager.getInstance().getNextId(), template, "LLMCompanion", app);
-				bot.setName(member.getName());
-				bot.setTitle(member.getRole());
-				bot.setHeading(Rnd.get(65536));
-				bot.spawnMe(FakeHunterManager.GLUDIO_GK_X + Rnd.get(-50, 50), FakeHunterManager.GLUDIO_GK_Y + Rnd.get(-50, 50), FakeHunterManager.GLUDIO_GK_Z);
-				bot.setOnlineStatus(true, true);
+				String accountName = "oog_acc_" + member.getName().toLowerCase();
+				if (OOGClientSession.getInstance().isHumanConnected(accountName))
+				{
+					LOGGER.info("LLMCompanionManager: Human player currently active on account '" + accountName + "'. Bypassing OOG bot spawn.");
+					continue;
+				}
 
-				FakePlayerEquipmentData.autoEquip(bot);
-				bot.broadcastUserInfo();
-				member.setBotInstance(bot);
-				LOGGER.info("LLMCompanionManager: Spawned persistent companion " + member.getName() + " (" + member.getRole() + ") at Gludio.");
+				OOGClientSession.getInstance().connectAccount(accountName, member.getName());
+
+				FakePlayer bot = OOGCharacterCreator.getInstance().createCharacter(accountName, member.getName(), member.getBaseClassId(), member.getRole());
+				if (bot != null)
+				{
+					// Spawn at Human Starting Zone (Talking Island Village)
+					bot.spawnMe(-84176 + Rnd.get(-50, 50), 243382 + Rnd.get(-50, 50), -3729);
+					bot.setOnlineStatus(true, true);
+
+					// Equip No-Grade starter weapon & clothes (Short Sword / Shirt)
+					FakePlayerEquipmentData.autoEquip(bot, FakePlayerEquipmentData.Grade.NO_GRADE);
+					bot.getInventory().addAdena(ItemProcessType.REWARD, 200, bot, null); // 200 Adena pocket money
+					bot.broadcastUserInfo();
+					member.setBotInstance(bot);
+
+					OOGClientSession.getInstance().enterWorld(accountName, bot);
+					LOGGER.info("LLMCompanionManager: Registered OOG Client Session & spawned " + member.getName() + " (" + member.getRole() + ") at Human Starting Village.");
+				}
 			}
 			catch (Exception e)
 			{
@@ -410,13 +423,75 @@ public class LLMCompanionManager
 			FakePlayer bot = member.getBotInstance();
 			if (bot == null || !bot.isOnline() || bot.isDead() || bot.isAttackingNow() || bot.isMoving()) continue;
 
-			World.getInstance().forEachVisibleObjectInRange(bot, Attackable.class, 800, mob -> {
-				if (!mob.isDead() && bot.getTarget() == null)
-				{
-					bot.setTarget(mob);
-					bot.getAI().setIntention(Intention.ATTACK, mob);
-				}
-			});
+			if ("PaladinBot".equalsIgnoreCase(bot.getName()))
+			{
+				LLMTankerPlannerEngine.getInstance().planNextAction(bot, decision -> {
+					switch (decision.getAction())
+					{
+						case GO_TO_SHOP:
+							TownWaypointMeshManager.getInstance().navigateBotAlongRoute(bot, "GLUDIO_GK_TO_GROCERY", () -> {
+								BuyListExecutingEngine.getInstance().executePurchase(bot, null);
+							});
+							break;
+
+						case START_QUEST:
+							LLMQuestNavigator.getInstance().executeQuestStep(bot, decision.getTarget(), () -> {
+								LLMClassChangeManager.getInstance().executeTankerClassTransfer(bot);
+							});
+							break;
+
+						case FARM_ZONE:
+						default:
+							// 1. Check for dropped Blue Gem (ID 6353) on ground
+							World.getInstance().forEachVisibleObjectInRange(bot, Item.class, 600, item -> {
+								if (item != null && item.getId() == 6353 && bot.getTarget() == null)
+								{
+									bot.setTarget(item);
+									bot.getAI().setIntention(Intention.PICK_UP, item);
+								}
+							});
+
+							// 2. If bot collected Blue Gem, turn in tutorial quest to Newbie Helper
+							if (bot.getInventory().getItemByItemId(6353) != null)
+							{
+								LOGGER.info("LLMCompanionManager: " + bot.getName() + " collected Blue Gem! Turning in Tutorial Quest...");
+								bot.getInventory().destroyItemByItemId(ItemProcessType.QUEST, 6353, 1, bot, null);
+								bot.getInventory().addItem(ItemProcessType.REWARD, 1835, 2000, bot, null); // 2000 Soulshot No-Grade
+								bot.addAutoSoulShot(1835);
+								bot.sendPacket(new ExAutoSoulShot(1835, 1));
+								bot.teleToLocation(-14072, 122851, -2988); // Teleport to Gludio Town
+								LOGGER.info("LLMCompanionManager: " + bot.getName() + " completed Tutorial Quest, received 2000 Soulshots and teleported to Gludio!");
+							}
+							else
+							{
+								// Shirou Tactical Frontline Engine (Warlord / Paladin)
+								ShirouTacticalEngine.getInstance().executeTacticalTick(bot);
+							}
+							break;
+					}
+				});
+			}
+			else if ("HawkeyeBot".equalsIgnoreCase(bot.getName()))
+			{
+				// Crystal Tactical Combat Engine (Silver Ranger / Archer)
+				CrystalTacticalEngine.getInstance().executeTacticalTick(bot);
+			}
+			else if ("BishopBot".equalsIgnoreCase(bot.getName()))
+			{
+				// Esquizitinha Tactical Healing Engine (Bishop / Cardinal)
+				Player leader = World.getInstance().getPlayer(TARGET_HUMAN_NAME);
+				EsquizitinhaTacticalEngine.getInstance().executeSupportTick(bot, leader);
+			}
+			else
+			{
+				World.getInstance().forEachVisibleObjectInRange(bot, Attackable.class, 800, mob -> {
+					if (!mob.isDead() && bot.getTarget() == null)
+					{
+						bot.setTarget(mob);
+						bot.getAI().setIntention(Intention.ATTACK, mob);
+					}
+				});
+			}
 		}
 	}
 

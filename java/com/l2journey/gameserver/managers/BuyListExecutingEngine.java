@@ -16,6 +16,7 @@ public class BuyListExecutingEngine
 {
 	private static final Logger LOGGER = Logger.getLogger(BuyListExecutingEngine.class.getName());
 
+	public static final int SOULSHOT_NG_ID = 1835;
 	public static final int SOULSHOT_D_ID = 1463;
 	public static final int HEALING_POTION_ID = 1061;
 
@@ -41,7 +42,8 @@ public class BuyListExecutingEngine
 	{
 		if (bot == null || !bot.isOnline()) return false;
 
-		long soulshotCount = getItemCount(bot, SOULSHOT_D_ID);
+		int soulshotId = bot.getLevel() >= 20 ? SOULSHOT_D_ID : SOULSHOT_NG_ID;
+		long soulshotCount = getItemCount(bot, soulshotId);
 		long potionCount = getItemCount(bot, HEALING_POTION_ID);
 
 		return (soulshotCount < 100 || potionCount < 10);
@@ -54,6 +56,7 @@ public class BuyListExecutingEngine
 	{
 		if (bot == null || !bot.isOnline()) return false;
 
+		int soulshotId = bot.getLevel() >= 20 ? SOULSHOT_D_ID : SOULSHOT_NG_ID;
 		long adena = bot.getInventory().getAdena();
 		int shotsToBuy = 500;
 		int potionsToBuy = 20;
@@ -77,14 +80,14 @@ public class BuyListExecutingEngine
 		bot.getInventory().destroyItemByItemId(ItemProcessType.BUY, 57, totalCost, bot, null);
 
 		// Add Items
-		bot.getInventory().addItem(ItemProcessType.BUY, SOULSHOT_D_ID, shotsToBuy, bot, null);
+		bot.getInventory().addItem(ItemProcessType.BUY, soulshotId, shotsToBuy, bot, null);
 		bot.getInventory().addItem(ItemProcessType.BUY, HEALING_POTION_ID, potionsToBuy, bot, null);
 
 		// Auto-activate Soulshots
-		bot.addAutoSoulShot(SOULSHOT_D_ID);
-		bot.sendPacket(new ExAutoSoulShot(SOULSHOT_D_ID, 1));
+		bot.addAutoSoulShot(soulshotId);
+		bot.sendPacket(new ExAutoSoulShot(soulshotId, 1));
 
-		LOGGER.info("BuyListExecutingEngine: " + bot.getName() + " purchased " + shotsToBuy + " D-Shots & " + potionsToBuy + " Potions from merchant.");
+		LOGGER.info("BuyListExecutingEngine: " + bot.getName() + " purchased " + shotsToBuy + " Shots & " + potionsToBuy + " Potions from merchant.");
 		return true;
 	}
 

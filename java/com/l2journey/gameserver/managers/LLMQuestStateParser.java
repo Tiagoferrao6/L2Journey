@@ -60,8 +60,9 @@ public class LLMQuestStateParser
 		List<QuestGoalInfo> activeGoals = new ArrayList<>();
 		if (player == null) return activeGoals;
 
-		for (QuestState qs : player.getAllQuestStates())
+		for (com.l2journey.gameserver.model.quest.Quest q : player.getAllActiveQuests())
 		{
+			QuestState qs = player.getQuestState(q.getName());
 			if (qs != null && qs.isStarted())
 			{
 				String qName = qs.getQuestName();
@@ -86,7 +87,7 @@ public class LLMQuestStateParser
 		sb.append("{");
 		sb.append("\"player\":\"").append(escapeJson(player.getName())).append("\",");
 		sb.append("\"level\":").append(player.getLevel()).append(",");
-		sb.append("\"classId\":").append(player.getClassId().getId()).append(",");
+		sb.append("\"classId\":").append(player.getActiveClass()).append(",");
 		sb.append("\"activeQuests\":[");
 
 		for (int i = 0; i < goals.size(); i++)

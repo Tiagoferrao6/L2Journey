@@ -181,8 +181,8 @@ public class AutonomousGMManager
 	 */
 	public void broadcastGMAnnouncement(String text, boolean critical)
 	{
-		ChatType type = critical ? ChatType.CRITICAL_ANNOUNCEMENT : ChatType.ANNOUNCEMENT;
-		CreatureSay msg = new CreatureSay(0, type, "[GM Director]", text);
+		ChatType type = critical ? ChatType.CRITICAL_ANNOUNCE : ChatType.ANNOUNCEMENT;
+		CreatureSay msg = new CreatureSay(null, type, "[GM Director]", text);
 		for (Player player : World.getInstance().getPlayers())
 		{
 			if (player != null && player.isOnline())

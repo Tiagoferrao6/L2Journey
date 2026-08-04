@@ -1,8 +1,6 @@
 # ---------------------------------------------------------------------------
 # L2Journey Game Server - Multi-stage build from source
 # ---------------------------------------------------------------------------
-# Stage 1: Build with JDK 24 + Ant
-# ---------------------------------------------------------------------------
 FROM eclipse-temurin:24-jdk AS builder
 
 RUN apt-get update && apt-get install -y --no-install-recommends ant && rm -rf /var/lib/apt/lists/*
