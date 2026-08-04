@@ -1,0 +1,50 @@
+<html noscrollbar>
+	<title>Painel de Controle do Mercenario</title>
+	<body>
+		<center>
+			<br1>
+			<table width="270" border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td align="center">
+						<font color="LEVEL"><b>Mercenario: %name% (Nvl %level%)</b></font>
+					</td>
+				</tr>
+				<tr>
+					<td align="center">
+						<font color="00FF00">HP: %hp% / %maxhp%</font> &nbsp;
+						<font color="00FFFF">MP: %mp% / %maxmp%</font>
+					</td>
+				</tr>
+				<tr>
+					<td align="center">
+						<font color="AAAAAA">Status:</font> <font color="FFD700">%status%</font>
+					</td>
+				</tr>
+			</table>
+			<br>
+			<table width="260" border="0" cellspacing="2" cellpadding="1">
+				<tr>
+					<td align="center">
+						<button action="bypass -h mercenary_attack" value="Atacar Alvo" width="125" height="24" back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF">
+					</td>
+					<td align="center">
+						<button action="bypass -h mercenary_toggle_follow" value="Seguir / Ficar" width="125" height="24" back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF">
+					</td>
+				</tr>
+				<tr>
+					<td align="center">
+						<button action="bypass -h mercenary_force_heal" value="Curar Agora" width="125" height="24" back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF">
+					</td>
+					<td align="center">
+						<button action="bypass -h mercenary_buff" value="Reaplicar Buffs" width="125" height="24" back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF">
+					</td>
+				</tr>
+				<tr>
+					<td align="center" colspan="2">
+						<button action="bypass -h mercenary_dismiss" value="Dispensar Mercenario" width="180" height="24" back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF">
+					</td>
+				</tr>
+			</table>
+		</center>
+	</body>
+</html>

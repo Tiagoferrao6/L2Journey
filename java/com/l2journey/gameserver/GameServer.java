@@ -385,6 +385,7 @@ public class GameServer
 			com.l2journey.gameserver.data.xml.impl.FakeHuntersSpawnParser.getInstance();
 			com.l2journey.gameserver.managers.FakeHunterManager.getInstance();
 			com.l2journey.gameserver.managers.GludioZoneListener.getInstance();
+			com.l2journey.gameserver.managers.LLMCompanionManager.getInstance();
 		}
 		CastleManorManager.getInstance();
 		MercTicketManager.getInstance();

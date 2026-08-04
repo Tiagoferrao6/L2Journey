@@ -12,6 +12,11 @@ import com.l2journey.gameserver.model.actor.appearance.PlayerAppearance;
 import com.l2journey.gameserver.model.actor.templates.PlayerTemplate;
 import com.l2journey.gameserver.model.skill.BuffInfo;
 
+import com.l2journey.gameserver.ai.Intention;
+import com.l2journey.gameserver.model.WorldObject;
+import com.l2journey.gameserver.network.serverpackets.ActionFailed;
+import com.l2journey.gameserver.network.serverpackets.NpcHtmlMessage;
+
 /**
  * Single Player Mercenary Instance (Healer / Support).
  * Spawns on-demand, matches owner's level, joins owner's party, and performs BabyPet-style AI healing/support/buffing.
@@ -68,6 +73,105 @@ public class MercenaryInstance extends FakePlayer
 		if (!_following)
 		{
 			getAI().stopFollow();
+		}
+	}
+
+	@Override
+	public void onAction(Player player, boolean interact)
+	{
+		if (player == null)
+		{
+			return;
+		}
+
+		if (getObjectId() != player.getTargetId())
+		{
+			player.setTarget(this);
+		}
+		else if (interact)
+		{
+			if (calculateDistance2D(player) > 250)
+			{
+				player.getAI().setIntention(Intention.INTERACT, this);
+			}
+			else
+			{
+				if (player.getObjectId() == _ownerCharId)
+				{
+					sendControlPanel(player);
+				}
+				player.sendPacket(ActionFailed.STATIC_PACKET);
+			}
+		}
+	}
+
+	public void sendControlPanel(Player player)
+	{
+		if (player == null)
+		{
+			return;
+		}
+		final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
+		html.setFile(player, "data/html/mercenary/control.htm");
+		html.replace("%name%", getName());
+		html.replace("%level%", String.valueOf(getLevel()));
+		html.replace("%hp%", String.valueOf((int) getCurrentHp()));
+		html.replace("%maxhp%", String.valueOf((int) getMaxHp()));
+		html.replace("%mp%", String.valueOf((int) getCurrentMp()));
+		html.replace("%maxmp%", String.valueOf((int) getMaxMp()));
+		html.replace("%status%", isFollowing() ? "SEGUINDO" : "PARADO");
+		html.replace("%objectId%", String.valueOf(getObjectId()));
+		player.sendPacket(html);
+	}
+
+	public void forceHealOwner()
+	{
+		Player owner = getOwner();
+		if (owner != null && !owner.isDead() && !isDead() && isOnline())
+		{
+			Skill skill = SkillData.getInstance().getSkill(1015, getSkillLevel(1015) > 0 ? getSkillLevel(1015) : 1); // Battle Heal
+			if (skill != null && getCurrentMp() >= skill.getMpConsume())
+			{
+				setTarget(owner);
+				doCast(skill);
+			}
+		}
+	}
+
+	public void forceBuffOwner()
+	{
+		Player owner = getOwner();
+		if (owner != null && !owner.isDead() && !isDead() && isOnline())
+		{
+			int[] buffIds = { 1204, 1085, 1086, 1068, 1040, 1059, 1062 };
+			for (int buffId : buffIds)
+			{
+				Skill skill = SkillData.getInstance().getSkill(buffId, getSkillLevel(buffId) > 0 ? getSkillLevel(buffId) : 1);
+				if (skill != null && getCurrentMp() >= skill.getMpConsume())
+				{
+					BuffInfo ownerBuff = owner.getEffectList().getBuffInfoByAbnormalType(skill.getAbnormalType());
+					if (ownerBuff == null)
+					{
+						setTarget(owner);
+						doCast(skill);
+						return;
+					}
+				}
+			}
+		}
+	}
+
+	public void forceAttackTarget()
+	{
+		Player owner = getOwner();
+		if (owner != null && !isDead() && isOnline())
+		{
+			WorldObject ownerTarget = owner.getTarget();
+			if (ownerTarget != null && ownerTarget.isCreature() && ownerTarget != this && ownerTarget != owner)
+			{
+				setTarget(ownerTarget);
+				getAI().setIntention(Intention.ATTACK, ownerTarget);
+			}
 		}
 	}
 

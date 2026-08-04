@@ -73,7 +73,8 @@ public class RequestBypassToServer extends ClientPacket
 		"_diary",
 		"_olympiad?command",
 		"manor_menu_select",
-		"report"
+		"report",
+		"mercenary_"
 	};
 	
 	// S
@@ -138,6 +139,47 @@ public class RequestBypassToServer extends ClientPacket
 				// The L2 client sends "_friendlist_0_" when clicking the Friends tab in the community board,
 				// instead of the bypass "_bbsfriends". Redirect it to the community board handler.
 				CommunityBoardHandler.getInstance().handleParseCommand("_bbsfriends", player);
+			}
+			else if (_command.startsWith("mercenary_"))
+			{
+				MercenaryInstance merc = MercenaryManager.getInstance().getActiveMercenary(player.getObjectId());
+				if (merc != null)
+				{
+					if (_command.equals("mercenary_attack"))
+					{
+						merc.forceAttackTarget();
+						player.sendMessage("Mercenário orientando ataque ao alvo.");
+					}
+					else if (_command.equals("mercenary_toggle_follow"))
+					{
+						boolean newFollow = !merc.isFollowing();
+						merc.setFollowing(newFollow);
+						player.sendMessage(newFollow ? "Mercenário agora está te seguindo." : "Mercenário parado no local.");
+					}
+					else if (_command.equals("mercenary_force_heal"))
+					{
+						merc.forceHealOwner();
+						player.sendMessage("Mercenário executando cura emergencial.");
+					}
+					else if (_command.equals("mercenary_buff"))
+					{
+						merc.forceBuffOwner();
+						player.sendMessage("Mercenário renovando suporte de buffs.");
+					}
+					else if (_command.equals("mercenary_dismiss"))
+					{
+						MercenaryManager.getInstance().dismissMercenary(player, true);
+						player.sendMessage("Mercenário dispensado com sucesso.");
+					}
+					else if (_command.equals("mercenary_panel"))
+					{
+						merc.sendControlPanel(player);
+					}
+				}
+				else
+				{
+					player.sendMessage("Você não possui um mercenário ativo.");
+				}
 			}
 			else if (_command.startsWith("_merc_"))
 			{

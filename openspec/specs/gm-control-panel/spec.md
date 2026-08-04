@@ -1,8 +1,10 @@
 # gm-control-panel Specification
 
 ## Purpose
-TBD - created by archiving change real-time-web-dashboard. Update Purpose after archive.
+Specification for the Embedded Web API & Live GM Control Panel for L2Journey GameServer.
+
 ## Requirements
+
 ### Requirement: Autenticação de Administrador GM
 The system SHALL require a Bearer token matching `WebAdminToken` in `server.ini` for all HTTP endpoints under `/api/admin/*`.
 
@@ -31,3 +33,31 @@ The system SHALL capture recent in-game chat messages (Global, Trade, Shout, PM)
 - **WHEN** a player sends a message in the Global or Trade chat channel
 - **THEN** the system records the message into the live web chat stream buffer.
 
+### Requirement: Endpoint de Inspeção Detalhada de FakePlayers
+The system MUST provide a REST API endpoint (`GET /api/admin/fakeplayers/{name}`) returning complete character state including CP, paperdoll equipment, active buffs, and inventory items.
+
+#### Scenario: GM solicita inspeção de um FakeHunter ativo
+- **GIVEN** o bot "DespairArcher" está ativo e caçando
+- **WHEN** o administrador envia requisição GET para `/api/admin/fakeplayers/DespairArcher` com cabeçalho de autenticação GM
+- **THEN** a resposta JSON inclui HP/MP/CP numéricos, lista de itens do inventário, equipados e a lista de buffs ativos.
+
+### Requirement: Modal de Inspeção no Dashboard Web Frontend
+The system MUST render an interactive inspector modal on the web frontend when a GM clicks on a bot row in the FakePlayer administration table.
+
+#### Scenario: GM clica em um bot no dashboard web
+- **GIVEN** o administrador está visualizando a aba "Fake Players" no dashboard web
+- **WHEN** o administrador clica na linha do bot "DespairArcher"
+- **THEN** um modal exibe o inventário completo, lista de buffs com tempo restante e equipamentos atuais.
+
+### Requirement: Chat Feed ao Vivo com Localização e Filtro por Região
+O terminal de chat no Dashboard Web de GM MUST exibir a localização detalhada do remetente (Nome da Região e Coordenadas X, Y, Z) e MUST oferecer um filtro dinâmico por região.
+
+#### Scenario: Visualizar localização de remetente no chat
+- **GIVEN** o administrador está autenticado no Dashboard GM
+- **WHEN** novas mensagens são recebidas via `/api/admin/chat`
+- **THEN** cada linha do chat MUST exibir `(@NomeDaRegiao [X, Y, Z])` junto ao nome do jogador.
+
+#### Scenario: Filtrar mensagens por região
+- **GIVEN** o chat contém mensagens de múltiplas zonas (ex: "Gludio Town", "Giran Castle Town")
+- **WHEN** o administrador seleciona uma região no dropdown "Filtro de Região"
+- **THEN** o terminal MUST filtrar e exibir apenas as mensagens originadas naquela região.

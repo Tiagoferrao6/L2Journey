@@ -303,6 +303,7 @@ import handlers.voicedcommandhandlers.DressMeVCmd;
 import handlers.voicedcommandhandlers.Epic;
 import handlers.voicedcommandhandlers.HitmanVCmd;
 import handlers.voicedcommandhandlers.Lang;
+import handlers.voicedcommandhandlers.MercenaryCmd;
 import handlers.voicedcommandhandlers.Offline;
 import handlers.voicedcommandhandlers.OfflinePlay;
 import handlers.voicedcommandhandlers.Online;
@@ -591,6 +592,7 @@ public class MasterHandler
 			Config.ENABLE_ONLINE_COMMAND ? Online.class : null,
 			Config.PREMIUM_SYSTEM_ENABLED ? Premium.class : null,
 			Config.AUTO_POTIONS_ENABLED ? AutoPotion.class : null,
+			MercenaryCmd.class,
 		},
 		{
 			// Target Handlers

@@ -33,6 +33,8 @@ import java.util.logging.Logger;
 import com.l2journey.Config;
 import com.l2journey.gameserver.handler.ChatHandler;
 import com.l2journey.gameserver.handler.IChatHandler;
+import com.l2journey.gameserver.handler.IVoicedCommandHandler;
+import com.l2journey.gameserver.handler.VoicedCommandHandler;
 import com.l2journey.gameserver.managers.PunishmentManager;
 import com.l2journey.gameserver.managers.WebAPIManager;
 import com.l2journey.gameserver.model.World;
@@ -228,11 +230,32 @@ public class Say2 extends ClientPacket
 			checkText();
 		}
 		
+		if (_text.startsWith("."))
+		{
+			String fullCmd = _text.substring(1);
+			String command = fullCmd;
+			String params = "";
+			int spaceIndex = fullCmd.indexOf(' ');
+			if (spaceIndex != -1)
+			{
+				command = fullCmd.substring(0, spaceIndex);
+				params = fullCmd.substring(spaceIndex + 1);
+			}
+			IVoicedCommandHandler vch = VoicedCommandHandler.getInstance().getHandler(command);
+			if (vch != null)
+			{
+				vch.useVoicedCommand(command, player, params);
+				return;
+			}
+		}
+
 		final IChatHandler handler = ChatHandler.getInstance().getHandler(chatType);
 		if (handler != null)
 		{
 			String townName = com.l2journey.gameserver.managers.MapRegionManager.getInstance().getClosestTownName(player);
 			WebAPIManager.addChatMessage(chatType.name(), player.getName(), _text, player.getX(), player.getY(), player.getZ(), townName);
+			com.l2journey.gameserver.managers.LLMCompanionManager.getInstance().onPlayerChat(player, chatType.name(), _target, _text);
+			com.l2journey.gameserver.managers.LLMChatHandler.getInstance().handleIncomingChat(player, chatType, _target, _text);
 			handler.handleChat(chatType, player, _target, _text);
 		}
 		else
