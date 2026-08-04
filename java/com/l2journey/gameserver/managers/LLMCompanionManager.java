@@ -222,6 +222,7 @@ public class LLMCompanionManager
 
 		checkClassTransfers();
 		checkVendorLootSelling();
+		checkConsumableReplenishment();
 
 		switch (_state)
 		{
@@ -294,6 +295,22 @@ public class LLMCompanionManager
 			if (earnedAdena > 0)
 			{
 				bot.getInventory().addAdena(ItemProcessType.SELL, earnedAdena, bot, null);
+			}
+		}
+	}
+
+	private void checkConsumableReplenishment()
+	{
+		for (CompanionMember member : _trio)
+		{
+			FakePlayer bot = member.getBotInstance();
+			if (bot == null || !bot.isOnline()) continue;
+
+			if (BuyListExecutingEngine.getInstance().needsConsumableReplenishment(bot))
+			{
+				TownWaypointMeshManager.getInstance().navigateBotAlongRoute(bot, "GLUDIO_GK_TO_GROCERY", () -> {
+					BuyListExecutingEngine.getInstance().executePurchase(bot, null);
+				});
 			}
 		}
 	}
@@ -459,6 +476,15 @@ public class LLMCompanionManager
 			}
 			_state = CompanionState.AUTONOMOUS_SOLO;
 			saveStateToDatabase();
+		}
+		else if (lower.contains("shop") || lower.contains("comprar") || lower.contains("loja"))
+		{
+			sendWhisper(bot, sender, "Indo para a loja renovar meus suprimentos de Soulshots e Potions!");
+			TownWaypointMeshManager.getInstance().navigateBotAlongRoute(bot, "GLUDIO_GK_TO_GROCERY", () -> {
+				BuyListExecutingEngine.getInstance().executePurchase(bot, null);
+				sendWhisper(bot, sender, "Suprimentos comprados e Soulshot ativada com sucesso!");
+			});
+			return;
 		}
 
 		String prompt = buildGamerPrompt(member, sender, command);
