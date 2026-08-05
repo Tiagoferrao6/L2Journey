@@ -275,7 +275,15 @@ public class WebAPIManager
 				int totalOnline = World.getInstance().getPlayers().size();
 				int fakeTraders = FakeTraderManager.getInstance().getTraders().size();
 				int fakeHunters = FakeHunterManager.getInstance().getHunters().size();
-				int realPlayers = Math.max(0, totalOnline - (fakeTraders + fakeHunters));
+				int fakeCompanions = 0;
+				for (LLMCompanionManager.CompanionMember m : LLMCompanionManager.getInstance().getTrio())
+				{
+					if (m.getBotInstance() != null && m.getBotInstance().isOnline())
+					{
+						fakeCompanions++;
+					}
+				}
+				int realPlayers = Math.max(0, totalOnline - (fakeTraders + fakeHunters + fakeCompanions));
 				long uptimeSeconds = (System.currentTimeMillis() - GameServer.getStartTime()) / 1000;
 				long ramUsedMB = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1048576;
 				long ramMaxMB = Runtime.getRuntime().maxMemory() / 1048576;
@@ -287,6 +295,7 @@ public class WebAPIManager
 				sb.append("\"realPlayers\": ").append(realPlayers).append(",");
 				sb.append("\"fakeTraders\": ").append(fakeTraders).append(",");
 				sb.append("\"fakeHunters\": ").append(fakeHunters).append(",");
+				sb.append("\"fakeCompanions\": ").append(fakeCompanions).append(",");
 				sb.append("\"totalOnline\": ").append(totalOnline).append(",");
 				sb.append("\"ramUsedMB\": ").append(ramUsedMB).append(",");
 				sb.append("\"ramMaxMB\": ").append(ramMaxMB).append(",");
@@ -547,6 +556,17 @@ public class WebAPIManager
 							if (t.getName().equalsIgnoreCase(targetBotName)) { targetBot = t; break; }
 						}
 					}
+					if (targetBot == null)
+					{
+						for (LLMCompanionManager.CompanionMember m : LLMCompanionManager.getInstance().getTrio())
+						{
+							if (m.getBotInstance() != null && m.getBotInstance().isOnline() && m.getName().equalsIgnoreCase(targetBotName))
+							{
+								targetBot = m.getBotInstance();
+								break;
+							}
+						}
+					}
 
 					if (targetBot == null)
 					{
@@ -632,13 +652,23 @@ public class WebAPIManager
 
 				List<FakePlayer> hunters = FakeHunterManager.getInstance().getHunters();
 				List<FakePlayer> traders = FakeTraderManager.getInstance().getTraders();
+				List<FakePlayer> companions = new ArrayList<>();
+				for (LLMCompanionManager.CompanionMember m : LLMCompanionManager.getInstance().getTrio())
+				{
+					if (m.getBotInstance() != null && m.getBotInstance().isOnline())
+					{
+						companions.add(m.getBotInstance());
+					}
+				}
 				List<FakePlayer> allBots = new ArrayList<>(hunters);
 				allBots.addAll(traders);
+				allBots.addAll(companions);
 
 				StringBuilder sb = new StringBuilder();
 				sb.append("{");
 				sb.append("\"totalHunters\": ").append(hunters.size()).append(",");
 				sb.append("\"totalTraders\": ").append(traders.size()).append(",");
+				sb.append("\"totalCompanions\": ").append(companions.size()).append(",");
 				sb.append("\"players\": [");
 
 				for (int i = 0; i < allBots.size(); i++)
@@ -647,17 +677,22 @@ public class WebAPIManager
 					if (i > 0) sb.append(",");
 
 					boolean isHunter = hunters.contains(bot);
+					boolean isTrader = traders.contains(bot);
+					boolean isCompanion = companions.contains(bot);
+					String botType = isHunter ? "HUNTER" : (isTrader ? "TRADER" : "COMPANION");
 					String town = com.l2journey.gameserver.managers.MapRegionManager.getInstance().getClosestTownName(bot);
 					String className = bot.getTemplate().getPlayerClass() != null ? bot.getTemplate().getPlayerClass().toString() : "Fighter";
 					String targetName = bot.getTarget() != null ? bot.getTarget().getName() : "None";
 					int hpPercent = (int) Math.round((bot.getCurrentHp() / bot.getMaxHp()) * 100.0);
 					int mpPercent = (int) Math.round((bot.getCurrentMp() / bot.getMaxMp()) * 100.0);
 					String grade = com.l2journey.gameserver.data.xml.impl.FakePlayerEquipmentData.getGradeForLevel(bot.getLevel()).name();
-					String archetype = bot.getHunterDNA() != null ? bot.getHunterDNA().getProfileId() : (isHunter ? "Hunter" : "Trader");
+					String archetype = bot.getHunterDNA() != null ? bot.getHunterDNA().getProfileId() : (isHunter ? "Hunter" : (isTrader ? "Trader" : "Companion"));
+
+					String botState = bot.isSitting() ? "SELLING" : (isCompanion ? LLMCompanionManager.getInstance().getState().name() : "HUNTING");
 
 					sb.append("{");
 					sb.append("\"name\": \"").append(escapeJson(bot.getName())).append("\",");
-					sb.append("\"type\": \"").append(isHunter ? "HUNTER" : "TRADER").append("\",");
+					sb.append("\"type\": \"").append(botType).append("\",");
 					sb.append("\"level\": ").append(bot.getLevel()).append(",");
 					sb.append("\"className\": \"").append(escapeJson(className)).append("\",");
 					sb.append("\"x\": ").append(bot.getX()).append(",");
@@ -666,7 +701,7 @@ public class WebAPIManager
 					sb.append("\"zoneName\": \"").append(escapeJson(town)).append("\",");
 					sb.append("\"hpPercent\": ").append(hpPercent).append(",");
 					sb.append("\"mpPercent\": ").append(mpPercent).append(",");
-					sb.append("\"state\": \"").append(bot.isSitting() ? "SELLING" : "HUNTING").append("\",");
+					sb.append("\"state\": \"").append(escapeJson(botState)).append("\",");
 					sb.append("\"targetName\": \"").append(escapeJson(targetName)).append("\",");
 					sb.append("\"archetype\": \"").append(escapeJson(archetype)).append("\",");
 					sb.append("\"grade\": \"").append(grade).append("\"");
@@ -688,6 +723,8 @@ public class WebAPIManager
 
 				FakePlayer targetBot = null;
 				boolean isHunterBot = false;
+				boolean isTraderBot = false;
+				boolean isCompanionBot = false;
 				if (botName != null)
 				{
 					for (FakePlayer h : FakeHunterManager.getInstance().getHunters())
@@ -698,7 +735,19 @@ public class WebAPIManager
 					{
 						for (FakePlayer t : FakeTraderManager.getInstance().getTraders())
 						{
-							if (t.getName().equalsIgnoreCase(botName)) { targetBot = t; isHunterBot = false; break; }
+							if (t.getName().equalsIgnoreCase(botName)) { targetBot = t; isTraderBot = true; break; }
+						}
+					}
+					if (targetBot == null)
+					{
+						for (LLMCompanionManager.CompanionMember m : LLMCompanionManager.getInstance().getTrio())
+						{
+							if (m.getBotInstance() != null && m.getBotInstance().isOnline() && m.getName().equalsIgnoreCase(botName))
+							{
+								targetBot = m.getBotInstance();
+								isCompanionBot = true;
+								break;
+							}
 						}
 					}
 				}
@@ -710,12 +759,17 @@ public class WebAPIManager
 						if (isHunterBot)
 						{
 							FakeHunterManager.getInstance().removeHunter(targetBot);
+							targetBot.deleteMe();
 						}
-						else
+						else if (isTraderBot)
 						{
 							FakeTraderManager.getInstance().removeTrader(targetBot);
+							targetBot.deleteMe();
 						}
-						targetBot.deleteMe();
+						else if (isCompanionBot)
+						{
+							targetBot.logout();
+						}
 					}
 					else if ("FORCE_RETREAT".equalsIgnoreCase(action))
 					{
@@ -770,7 +824,13 @@ public class WebAPIManager
 				sb.append("\"success\": true,");
 				sb.append("\"message\": \"Action '").append(escapeJson(action != null ? action : "update")).append("' performed successfully\",");
 				sb.append("\"activeTraders\": ").append(FakeTraderManager.getInstance().getTraders().size()).append(",");
-				sb.append("\"activeHunters\": ").append(FakeHunterManager.getInstance().getHunters().size());
+				sb.append("\"activeHunters\": ").append(FakeHunterManager.getInstance().getHunters().size()).append(",");
+				int activeCompanionsCount = 0;
+				for (LLMCompanionManager.CompanionMember m : LLMCompanionManager.getInstance().getTrio())
+				{
+					if (m.getBotInstance() != null && m.getBotInstance().isOnline()) activeCompanionsCount++;
+				}
+				sb.append("\"activeCompanions\": ").append(activeCompanionsCount);
 				sb.append("}");
 
 				sendResponse(exchange, 200, sb.toString());
