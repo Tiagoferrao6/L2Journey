@@ -208,6 +208,59 @@
       margin-top: 0.4rem;
     }
 
+    /* Dragon Radar Styling */
+    .dragon-radar-case {
+      width: 360px;
+      height: 390px;
+      background: linear-gradient(145deg, #ffffff, #dcdcdc);
+      border-radius: 50% 50% 46% 46%;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.8), inset 0 -5px 15px rgba(0, 0, 0, 0.2);
+      border: 4px solid #b8b8b8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding-bottom: 18px;
+      position: relative;
+    }
+
+    .dragon-radar-top-btn {
+      width: 36px;
+      height: 22px;
+      background: linear-gradient(180deg, #e6e6e6, #a3a3a3);
+      border: 2px solid #888;
+      border-radius: 8px 8px 2px 2px;
+      position: absolute;
+      top: -20px;
+      box-shadow: 0 -2px 5px rgba(0,0,0,0.3);
+    }
+
+    .dragon-radar-screen {
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      background: #003314;
+      border: 5px solid #1a1a1a;
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.9), 0 0 10px rgba(0, 255, 100, 0.3);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    #dragonRadarCanvas {
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+    }
+
+    .radar-zoom-btn.active {
+      background: var(--gold-primary) !important;
+      color: #000 !important;
+      font-weight: bold;
+    }
+
     .progress-bar {
       width: 100%;
       height: 6px;
@@ -551,13 +604,65 @@
           </div>
         </div>
 
+        <!-- Dragon Radar Dashboard Component -->
+        <div class="card" style="margin-top: 1.5rem; background: rgba(10, 16, 26, 0.9); border: 1px solid var(--border-glow);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
+            <div>
+              <h2 style="font-family: 'Cinzel', serif; color: var(--gold-primary); font-size: 1.3rem;">🐉 Dragon Radar Tático (Localização de Bots)</h2>
+              <p style="font-size: 0.8rem; color: var(--text-muted);">Radar retro-futurista em tempo real para monitoramento espacial dos bots de IA e entidades ao redor.</p>
+            </div>
+            <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+              <label style="font-size: 0.85rem; color: var(--gold-light); font-weight: 600;">Bot Ativo:</label>
+              <select id="radarBotSelect" class="form-input" style="padding: 0.4rem 0.8rem; font-size: 0.85rem; width: auto;" onchange="updateRadarData()">
+                <option value="PaladinBot">PaladinBot (TANK)</option>
+                <option value="HawkeyeBot">HawkeyeBot (ARCHER)</option>
+                <option value="BishopBot">BishopBot (HEALER)</option>
+              </select>
+              <label style="font-size: 0.85rem; color: var(--gold-light); font-weight: 600; margin-left: 0.5rem;">Zoom:</label>
+              <button class="btn btn-cyber radar-zoom-btn" onclick="setRadarZoom(500)" id="btnZoom500">500 (Micro)</button>
+              <button class="btn btn-cyber radar-zoom-btn active" onclick="setRadarZoom(2500)" id="btnZoom2500">2500 (Tático)</button>
+              <button class="btn btn-cyber radar-zoom-btn" onclick="setRadarZoom(5000)" id="btnZoom5000">5000 (Macro)</button>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: center; align-items: center; flex-direction: column; gap: 1rem; padding: 1rem 0;">
+            <!-- Dragon Radar Case -->
+            <div class="dragon-radar-case">
+              <div class="dragon-radar-top-btn"></div>
+              <div class="dragon-radar-screen">
+                <canvas id="dragonRadarCanvas" width="320" height="320"></canvas>
+              </div>
+            </div>
+
+            <!-- Radar Telemetry Summary & Legend -->
+            <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center; font-size: 0.85rem; background: rgba(0,0,0,0.4); padding: 0.6rem 1.2rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+              <div style="display: flex; align-items: center; gap: 0.4rem;"><span style="width: 10px; height: 10px; background: #ef4444; border-radius: 50%; box-shadow: 0 0 6px #ef4444; display: inline-block;"></span> <span>Bot Central</span></div>
+              <div style="display: flex; align-items: center; gap: 0.4rem;"><span style="width: 10px; height: 10px; background: #facc15; border-radius: 50%; box-shadow: 0 0 6px #facc15; display: inline-block;"></span> <span>Mob Passo</span></div>
+              <div style="display: flex; align-items: center; gap: 0.4rem;"><span style="width: 10px; height: 10px; background: #a855f7; border-radius: 50%; box-shadow: 0 0 6px #a855f7; display: inline-block;"></span> <span>Mob Agressivo</span></div>
+              <div style="display: flex; align-items: center; gap: 0.4rem;"><span style="width: 10px; height: 10px; background: #3b82f6; border-radius: 50%; box-shadow: 0 0 6px #3b82f6; display: inline-block;"></span> <span>Player Real</span></div>
+              <div style="display: flex; align-items: center; gap: 0.4rem;"><span style="width: 10px; height: 10px; background: #eab308; border-radius: 50%; box-shadow: 0 0 6px #eab308; display: inline-block;"></span> <span>Membro do Trio</span></div>
+              <div id="radarCoordsText" style="color: var(--gold-light); font-weight: 600;">Posição: X=0, Y=0, Z=0</div>
+            </div>
+          </div>
+        </div>
+
         <!-- Chat Stream -->
         <div class="table-container" style="margin-top: 1.5rem;">
-          <div class="table-header">
+          <div class="table-header" style="display: flex; justify-content: space-between; align-items: center;">
             <h2>Feed do Chat do Jogo ao Vivo</h2>
             <div style="display: flex; gap: 0.5rem; align-items: center;">
-              <select id="chatRegionFilter" class="btn btn-cyber" style="padding: 0.4rem 0.6rem; font-size: 0.75rem; background: rgba(11, 14, 20, 0.8);" onchange="renderFilteredChat()">
+              <label style="font-size: 0.8rem; color: var(--text-muted);">Filtrar por Região:</label>
+              <select id="selChatRegion" class="form-input" style="padding: 0.3rem 0.6rem; font-size: 0.8rem; width: auto;" onchange="fetchChatStream()">
                 <option value="ALL">Todas as Regiões</option>
+                <option value="Gludio">Gludio</option>
+                <option value="Dion">Dion</option>
+                <option value="Giran">Giran</option>
+                <option value="Oren">Oren</option>
+                <option value="Aden">Aden</option>
+                <option value="Heine">Heine</option>
+                <option value="Rune">Rune</option>
+                <option value="Goddard">Goddard</option>
+                <option value="Schuttgart">Schuttgart</option>
               </select>
               <button class="btn btn-cyber" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;" onclick="fetchChatStream()">Atualizar Chat</button>
             </div>
@@ -565,6 +670,74 @@
           <div class="chat-terminal" id="chatStream">
             <div class="chat-msg"><span class="chat-time">[00:00:00]</span> <span class="chat-type">SYSTEM:</span> Aguardando mensagens do chat...</div>
           </div>
+        </div>
+
+        <!-- FakePlayers Live Monitor & Controls -->
+        <div class="grid-4" style="margin-top: 1.5rem;">
+          <div class="card">
+            <div class="card-title">Active Hunters</div>
+            <div class="card-value" id="valFpHunters">0</div>
+            <div class="card-sub">PvE Combat Bots</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Active Traders</div>
+            <div class="card-value" id="valFpTraders">0</div>
+            <div class="card-sub">Town Stores</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Fleeing / Low HP Bots</div>
+            <div class="card-value" id="valFpLowHp" style="color: var(--accent-red);">0</div>
+            <div class="card-sub">HP &lt; 40%</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Média HP da Tropa</div>
+            <div class="card-value" id="valFpAvgHp" style="color: var(--accent-green);">100%</div>
+            <div class="card-sub">Saúde Global</div>
+          </div>
+        </div>
+
+        <div class="table-container" style="margin-top: 1rem;">
+          <div class="table-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem;">
+            <h2>🤖 Monitoramento & Controle de FakePlayers em Tempo Real</h2>
+            <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+              <input type="text" id="inputFpSearch" class="form-input" placeholder="Buscar bot/archetype..." style="padding: 0.3rem 0.6rem; font-size: 0.8rem; width: 160px;" oninput="renderFakePlayersTable()" />
+              <select id="selFpType" class="form-input" style="padding: 0.3rem 0.6rem; font-size: 0.8rem; width: auto;" onchange="renderFakePlayersTable()">
+                <option value="ALL">Todos os Tipos</option>
+                <option value="HUNTER">Hunters</option>
+                <option value="TRADER">Traders</option>
+              </select>
+              <select id="selFpZone" class="form-input" style="padding: 0.3rem 0.6rem; font-size: 0.8rem; width: auto;" onchange="renderFakePlayersTable()">
+                <option value="ALL">Todas as Zonas</option>
+                <option value="Gludio">Gludio</option>
+                <option value="Dion">Dion</option>
+                <option value="Giran">Giran</option>
+                <option value="Oren">Oren</option>
+                <option value="Aden">Aden</option>
+                <option value="Heine">Heine</option>
+                <option value="Rune">Rune</option>
+                <option value="Goddard">Goddard</option>
+                <option value="Schuttgart">Schuttgart</option>
+              </select>
+              <button class="btn btn-cyber" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;" onclick="fetchFakePlayersList()">Atualizar Bots</button>
+            </div>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Bot & Archetype</th>
+                <th>Tipo</th>
+                <th>Nível & Classe</th>
+                <th>Grade</th>
+                <th>Localização & Coordenadas (X, Y, Z)</th>
+                <th>Status / HP / MP</th>
+                <th>Alvo Atual</th>
+                <th>Ações de GM</th>
+              </tr>
+            </thead>
+            <tbody id="tblFakePlayers">
+              <tr><td colspan="8" style="text-align:center;">Carregando FakePlayers...</td></tr>
+            </tbody>
+          </table>
         </div>
 
         <!-- Real Players Online Monitor -->
@@ -578,68 +751,10 @@
           </table>
         </div>
 
-        <!-- Fake Players & Bots Monitor -->
-        <div class="table-container" style="margin-top: 1.5rem;">
-          <div class="table-header">
-            <h2>Monitor de Fake Players & Bots (Hunters/Traders)</h2>
-            <button class="btn btn-cyber" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;" onclick="fetchFakePlayers()">Atualizar Bots</button>
-          </div>
-          <table>
-            <thead><tr><th>Nome</th><th>Tipo</th><th>Nível</th><th>Classe</th><th>Zona</th><th>HP / MP</th><th>Estado</th><th>Ações</th></tr></thead>
-            <tbody id="tblFakePlayers"><tr><td colspan="8" style="text-align:center;">Carregando bots...</td></tr></tbody>
-          </table>
-        </div>
-
       </div>
     </section>
 
   </main>
-
-  <!-- Bot Inspector Modal -->
-  <div id="inspectorModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); z-index: 10000; align-items: center; justify-content: center;">
-    <div style="background: rgba(18, 24, 38, 0.95); border: 1px solid var(--border-glow); border-radius: var(--radius); width: 90%; max-width: 800px; max-height: 90vh; overflow-y: auto; padding: 1.5rem; box-shadow: var(--shadow-glass); position: relative;">
-      <button style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer;" onclick="closeInspectorModal()">&times;</button>
-      <h2 id="inspectorTitle" style="color: var(--gold-primary); font-family: 'Cinzel', serif; margin-bottom: 0.3rem;">Bot Inspector</h2>
-      <div id="inspectorSubtitle" style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.2rem;">Carregando detalhes do bot...</div>
-
-      <!-- Status Bars -->
-      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; margin-bottom: 1.2rem;">
-        <div style="background: rgba(0,0,0,0.4); padding: 0.8rem; border-radius: 8px; border-left: 4px solid var(--accent-red);">
-          <div style="font-size: 0.75rem; color: var(--text-muted);">HP (Vida)</div>
-          <div id="inspectorHp" style="font-weight: bold; color: var(--accent-red);">0 / 0</div>
-        </div>
-        <div style="background: rgba(0,0,0,0.4); padding: 0.8rem; border-radius: 8px; border-left: 4px solid var(--cyber-blue);">
-          <div style="font-size: 0.75rem; color: var(--text-muted);">MP (Mana)</div>
-          <div id="inspectorMp" style="font-weight: bold; color: var(--cyber-blue);">0 / 0</div>
-        </div>
-        <div style="background: rgba(0,0,0,0.4); padding: 0.8rem; border-radius: 8px; border-left: 4px solid var(--gold-primary);">
-          <div style="font-size: 0.75rem; color: var(--text-muted);">CP (Combat Points)</div>
-          <div id="inspectorCp" style="font-weight: bold; color: var(--gold-primary);">0 / 0</div>
-        </div>
-      </div>
-
-      <!-- Equipment & Buffs Grid -->
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-        <!-- Equipment Card -->
-        <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
-          <h3 style="color: var(--gold-light); font-size: 0.95rem; margin-bottom: 0.6rem;">🛡️ Equipamentos (Paperdoll)</h3>
-          <div id="inspectorEquipment" style="font-size: 0.85rem; line-height: 1.6; color: var(--text-main);"></div>
-        </div>
-
-        <!-- Buffs Card -->
-        <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
-          <h3 style="color: var(--gold-light); font-size: 0.95rem; margin-bottom: 0.6rem;">✨ Buffs Ativos</h3>
-          <div id="inspectorBuffs" style="font-size: 0.85rem; max-height: 180px; overflow-y: auto;"></div>
-        </div>
-      </div>
-
-      <!-- Inventory Section -->
-      <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
-        <h3 style="color: var(--gold-light); font-size: 0.95rem; margin-bottom: 0.6rem;">🎒 Inventário</h3>
-        <div id="inspectorInventory" style="font-size: 0.85rem; max-height: 180px; overflow-y: auto;"></div>
-      </div>
-    </div>
-  </div>
 
   <footer>
     L2Journey Embedded Web API & Control Panel &copy; 2026 - Servidor HTTP embutido no GameServer.
@@ -752,8 +867,8 @@
         document.getElementById('gmAuthSection').style.display = 'none';
         document.getElementById('gmPanelSection').style.display = 'block';
         fetchChatStream();
+        fetchFakePlayersList();
         fetchRealPlayers();
-        fetchFakePlayers();
       } else {
         document.getElementById('gmAuthSection').style.display = 'block';
         document.getElementById('gmPanelSection').style.display = 'none';
@@ -809,8 +924,6 @@
       } catch (e) {}
     }
 
-    let lastChatMessages = [];
-
     async function fetchChatStream() {
       if (!gmToken) return;
       try {
@@ -818,58 +931,165 @@
           headers: { 'Authorization': 'Bearer ' + gmToken }
         });
         const data = await res.json();
-        if (data.messages) {
-          lastChatMessages = data.messages;
-          updateRegionFilterDropdown(lastChatMessages);
-          renderFilteredChat();
+        const term = document.getElementById('chatStream');
+        const regionFilter = document.getElementById('selChatRegion').value;
+
+        if (data.messages && data.messages.length > 0) {
+          let filtered = data.messages;
+          if (regionFilter !== 'ALL') {
+            filtered = filtered.filter(m => m.regionName && m.regionName.toLowerCase().includes(regionFilter.toLowerCase()));
+          }
+
+          term.innerHTML = filtered.map(m => {
+            const time = new Date(m.timestamp).toLocaleTimeString();
+            const loc = m.regionName ? `(@${m.regionName} [${m.x}, ${m.y}, ${m.z}])` : '';
+            return `<div class="chat-msg"><span class="chat-time">[${time}]</span> <span class="chat-type">[${m.type}]</span> <span class="chat-sender">${m.sender} ${loc}:</span> ${m.text}</div>`;
+          }).join('');
+          term.scrollTop = term.scrollHeight;
         }
       } catch (e) {}
     }
 
-    function updateRegionFilterDropdown(messages) {
-      const select = document.getElementById('chatRegionFilter');
-      if (!select) return;
-      const currentSelected = select.value;
-      
-      const regions = new Set();
-      messages.forEach(m => {
-        if (m.regionName && m.regionName.trim() !== '') {
-          regions.add(m.regionName);
-        }
-      });
-      
-      let html = '<option value="ALL">Todas as Regiões</option>';
-      Array.from(regions).sort().forEach(r => {
-        const sel = r === currentSelected ? ' selected' : '';
-        html += `<option value="${r}"${sel}>${r}</option>`;
-      });
-      select.innerHTML = html;
+    let allFakePlayersData = [];
+
+    async function fetchFakePlayersList() {
+      if (!gmToken) return;
+      try {
+        const res = await fetch(API_BASE + '/api/admin/fakeplayers', {
+          headers: { 'Authorization': 'Bearer ' + gmToken }
+        });
+        const data = await res.json();
+        allFakePlayersData = data.players || [];
+
+        // Update Summary Cards
+        const totalHunters = data.totalHunters || 0;
+        const totalTraders = data.totalTraders || 0;
+        const lowHpBots = allFakePlayersData.filter(p => p.hpPercent < 40).length;
+        const avgHp = allFakePlayersData.length > 0
+          ? Math.round(allFakePlayersData.reduce((sum, p) => sum + p.hpPercent, 0) / allFakePlayersData.length)
+          : 100;
+
+        document.getElementById('valFpHunters').innerText = totalHunters;
+        document.getElementById('valFpTraders').innerText = totalTraders;
+        document.getElementById('valFpLowHp').innerText = lowHpBots;
+        document.getElementById('valFpAvgHp').innerText = avgHp + '%';
+
+        renderFakePlayersTable();
+      } catch (e) {
+        console.error('Erro ao buscar FakePlayers:', e);
+      }
     }
 
-    function renderFilteredChat() {
-      const term = document.getElementById('chatStream');
-      if (!term) return;
-      const filterSelect = document.getElementById('chatRegionFilter');
-      const selectedRegion = filterSelect ? filterSelect.value : 'ALL';
-      
-      const filtered = lastChatMessages.filter(m => {
-        if (selectedRegion === 'ALL') return true;
-        return m.regionName === selectedRegion;
-      });
+    function renderFakePlayersTable() {
+      const search = (document.getElementById('inputFpSearch')?.value || '').toLowerCase();
+      const typeFilter = document.getElementById('selFpType')?.value || 'ALL';
+      const zoneFilter = document.getElementById('selFpZone')?.value || 'ALL';
+      const tbody = document.getElementById('tblFakePlayers');
 
-      if (filtered.length > 0) {
-        term.innerHTML = filtered.map(m => {
-          const time = new Date(m.timestamp).toLocaleTimeString();
-          const loc = (m.regionName && m.regionName.trim() !== '') 
-            ? ` <span style="color: var(--text-muted); font-size: 0.85em;">(@${m.regionName} [${m.x}, ${m.y}, ${m.z}])</span>`
-            : '';
-          return `<div class="chat-msg"><span class="chat-time">[${time}]</span> <span class="chat-type">[${m.type}]</span> <span class="chat-sender">${m.sender}${loc}:</span> ${m.text}</div>`;
-        }).join('');
-        term.scrollTop = term.scrollHeight;
-      } else if (lastChatMessages.length === 0) {
-        term.innerHTML = '<div class="chat-msg"><span class="chat-time">[00:00:00]</span> <span class="chat-type">SYSTEM:</span> Aguardando mensagens do chat...</div>';
-      } else {
-        term.innerHTML = '<div class="chat-msg"><span class="chat-time">[00:00:00]</span> <span class="chat-type">SYSTEM:</span> Nenhuma mensagem encontrada para a região selecionada.</div>';
+      let filtered = allFakePlayersData;
+
+      if (typeFilter !== 'ALL') {
+        filtered = filtered.filter(p => p.type === typeFilter);
+      }
+
+      if (zoneFilter !== 'ALL') {
+        filtered = filtered.filter(p => p.zoneName && p.zoneName.toLowerCase().includes(zoneFilter.toLowerCase()));
+      }
+
+      if (search) {
+        filtered = filtered.filter(p =>
+          (p.name && p.name.toLowerCase().includes(search)) ||
+          (p.archetype && p.archetype.toLowerCase().includes(search)) ||
+          (p.className && p.className.toLowerCase().includes(search))
+        );
+      }
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">Nenhum FakePlayer encontrado para os filtros selecionados.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(p => {
+        const hpColor = p.hpPercent < 40 ? 'var(--accent-red)' : 'var(--accent-green)';
+        const stateBadgeClass = p.state === 'SELLING' ? 'badge-pvp' : (p.state === 'HUNTING' ? 'badge-alive' : 'badge-dead');
+        const archetypeLabel = p.archetype ? `<br><small style="color:var(--gold-light);">🧬 ${p.archetype}</small>` : '';
+
+        return `
+          <tr>
+            <td><strong>${p.name}</strong>${archetypeLabel}</td>
+            <td><span class="badge ${p.type === 'HUNTER' ? 'badge-pvp' : 'badge-alive'}">${p.type}</span></td>
+            <td>Nv. ${p.level}<br><small style="color:var(--text-muted);">${p.className}</small></td>
+            <td><span class="badge" style="background:rgba(212,175,55,0.2); color:var(--gold-primary);">${p.grade}</span></td>
+            <td>📍 ${p.zoneName} <br><small style="color:var(--text-muted);">[${p.x}, ${p.y}, ${p.z}]</small></td>
+            <td>
+              <span class="badge ${stateBadgeClass}">${p.state}</span><br>
+              <div class="progress-bar" style="margin-top: 0.2rem; height: 4px;">
+                <div class="progress-fill" style="width: ${p.hpPercent}%; background: ${hpColor};"></div>
+              </div>
+              <small style="font-size:0.75rem;">HP: ${p.hpPercent}% | MP: ${p.mpPercent}%</small>
+            </td>
+            <td>🎯 <small style="color:var(--text-muted);">${p.targetName || 'None'}</small></td>
+            <td>
+              <div style="display:flex; flex-wrap:wrap; gap:0.2rem;">
+                <button class="btn btn-cyber" style="padding:0.2rem 0.4rem; font-size:0.7rem;" title="Teleportar GM até o bot" onclick="executeBotAction('TELEPORT_GM', '${p.name}')">⚡ Teleport GM</button>
+                <button class="btn" style="padding:0.2rem 0.4rem; font-size:0.7rem; color:var(--gold-primary);" title="Forçar recuo para cidade" onclick="executeBotAction('FORCE_RETREAT', '${p.name}')">🛡️ Recuar</button>
+                <button class="btn" style="padding:0.2rem 0.4rem; font-size:0.7rem;" title="Respawn no Gatekeeper" onclick="executeBotAction('RESPAWN', '${p.name}')">🔄 Respawn</button>
+                <button class="btn btn-danger" style="padding:0.2rem 0.4rem; font-size:0.7rem;" title="Despawn bot" onclick="executeBotAction('DESPAWN', '${p.name}')">❌ Despawn</button>
+                <button class="btn btn-cyber" style="padding:0.2rem 0.4rem; font-size:0.7rem;" onclick="editBotLevelGrade('${p.name}', ${p.level})">✏️ Ed.</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function executeBotAction(action, botName) {
+      if (!confirm(`Confirmar ação '${action}' para o bot ${botName}?`)) return;
+      try {
+        const res = await fetch(API_BASE + '/api/admin/fakeplayers', {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + gmToken, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: action, botName: botName, gmCharName: 'AdminGM' })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          fetchFakePlayersList();
+        } else {
+          alert('Erro: ' + (data.error || 'Falha ao executar ação'));
+        }
+      } catch (e) {
+        alert('Erro de comunicação com o servidor.');
+      }
+    }
+
+    async function editBotLevelGrade(botName, curLevel) {
+      const newLvl = prompt('Defina o novo nível para ' + botName + ' (1-85):', curLevel);
+      if (!newLvl) return;
+      const newGrade = prompt('Defina a Grade de Equipamento (NO_GRADE, D_GRADE, C_GRADE, B_GRADE, A_GRADE, S_GRADE):', 'S_GRADE');
+      
+      try {
+        await fetch(API_BASE + '/api/admin/fakeplayers', {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + gmToken, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'update', botName: botName, level: parseInt(newLvl), grade: newGrade })
+        });
+        fetchFakePlayersList();
+      } catch (e) {}
+    }
+
+    async function teleportBotModal(botName, x, y, z) {
+      const coords = prompt('Digite as novas coordenadas X, Y, Z para ' + botName + ':', `${x}, ${y}, ${z}`);
+      if (!coords) return;
+      const parts = coords.split(',').map(p => parseInt(p.trim()));
+      if (parts.length === 3) {
+        try {
+          await fetch(API_BASE + '/api/admin/fakeplayers', {
+            method: 'POST',
+            headers: { 'Authorization': 'Bearer ' + gmToken, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'teleport', botName: botName, x: parts[0], y: parts[1], z: parts[2] })
+          });
+          fetchFakePlayersList();
+        } catch (e) {}
       }
     }
 
@@ -911,99 +1131,146 @@
       } catch (e) {}
     }
 
-    async function fetchFakePlayers() {
-      if (!gmToken) return;
-      try {
-        const res = await fetch(API_BASE + '/api/admin/fakeplayers', {
-          headers: { 'Authorization': 'Bearer ' + gmToken }
-        });
-        const data = await res.json();
-        const tbody = document.getElementById('tblFakePlayers');
-        if (data.players && data.players.length > 0) {
-          tbody.innerHTML = data.players.map(p => `
-            <tr style="cursor: pointer;" onclick="openInspectorModal('${p.name}')">
-              <td><strong style="color: var(--cyber-blue);">${p.name}</strong> 🔍</td>
-              <td><span class="badge ${p.type === 'HUNTER' ? 'badge-green' : 'badge-gold'}">${p.type}</span></td>
-              <td>Nv. ${p.level} (${p.grade})</td>
-              <td>${p.className}</td>
-              <td>${p.zoneName}</td>
-              <td>HP ${p.hpPercent}% | MP ${p.mpPercent}%</td>
-              <td>${p.state}</td>
-              <td>
-                <button class="btn btn-cyber" style="padding:0.2rem 0.5rem; font-size:0.75rem;" onclick="event.stopPropagation(); openInspectorModal('${p.name}')">Inspetor</button>
-              </td>
-            </tr>
-          `).join('');
-        } else {
-          tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">Nenhum bot/fake player ativo no momento.</td></tr>';
-        }
-      } catch (e) {}
+    // -----------------------------------------------------------------------
+    // Dragon Radar Dashboard Logic
+    // -----------------------------------------------------------------------
+    let currentRadarZoom = 2500;
+
+    function setRadarZoom(zoom) {
+      currentRadarZoom = zoom;
+      document.querySelectorAll('.radar-zoom-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.getElementById('btnZoom' + zoom);
+      if (activeBtn) activeBtn.classList.add('active');
+      updateRadarData();
     }
 
-    async function openInspectorModal(botName) {
-      const modal = document.getElementById('inspectorModal');
-      if (!modal) return;
-      modal.style.display = 'flex';
-
-      document.getElementById('inspectorTitle').innerText = 'Bot Inspector - ' + botName;
-      document.getElementById('inspectorSubtitle').innerText = 'Carregando detalhes do bot...';
-
+    async function updateRadarData() {
+      if (!gmToken) return;
+      const botName = document.getElementById('radarBotSelect')?.value || 'PaladinBot';
       try {
-        const res = await fetch(API_BASE + '/api/admin/fakeplayers/' + encodeURIComponent(botName), {
+        const res = await fetch(`${API_BASE}/api/admin/radar?botName=${botName}&radius=${currentRadarZoom}`, {
           headers: { 'Authorization': 'Bearer ' + gmToken }
         });
-        const data = await res.json();
-        if (!res.ok || data.error) {
-          document.getElementById('inspectorSubtitle').innerText = 'Erro: ' + (data.error || 'Não foi possível carregar o bot');
-          return;
-        }
-
-        document.getElementById('inspectorSubtitle').innerText = `${data.className} (Nível ${data.level}) • ${data.location.town} [${data.location.x}, ${data.location.y}, ${data.location.z}]`;
-        document.getElementById('inspectorHp').innerText = `${data.hp} / ${data.maxHp}`;
-        document.getElementById('inspectorMp').innerText = `${data.mp} / ${data.maxMp}`;
-        document.getElementById('inspectorCp').innerText = `${data.cp} / ${data.maxCp}`;
-
-        const eq = data.equipment || {};
-        document.getElementById('inspectorEquipment').innerHTML = `
-          <div><strong>Arma:</strong> <span style="color: var(--cyber-blue);">${eq.weapon || 'Nenhuma'}</span></div>
-          <div><strong>Peito:</strong> ${eq.chest || 'Nenhum'}</div>
-          <div><strong>Pernas:</strong> ${eq.legs || 'Nenhuma'}</div>
-          <div><strong>Capacete:</strong> ${eq.head || 'Nenhum'}</div>
-          <div><strong>Luvas:</strong> ${eq.gloves || 'Nenhum'}</div>
-          <div><strong>Botas:</strong> ${eq.feet || 'Nenhuma'}</div>
-        `;
-
-        const buffs = data.buffs || [];
-        if (buffs.length === 0) {
-          document.getElementById('inspectorBuffs').innerHTML = '<div style="color: var(--text-muted);">Nenhum buff ativo.</div>';
-        } else {
-          document.getElementById('inspectorBuffs').innerHTML = buffs.map(b => 
-            `<div style="padding: 0.25rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between;">
-              <span><strong>${b.name}</strong> (Nv. ${b.level})</span>
-              <span style="color: var(--gold-primary);">${b.durationSec}s</span>
-            </div>`
-          ).join('');
-        }
-
-        const inv = data.inventory || [];
-        if (inv.length === 0) {
-          document.getElementById('inspectorInventory').innerHTML = '<div style="color: var(--text-muted);">Inventário vazio.</div>';
-        } else {
-          document.getElementById('inspectorInventory').innerHTML = '<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.4rem;">' + inv.map(i => 
-            `<div style="background: rgba(255,255,255,0.03); padding: 0.35rem; border-radius: 4px; display: flex; justify-content: space-between;">
-              <span style="${i.equipped ? 'color: var(--cyber-blue); font-weight: 500;' : ''}">${i.name}${i.equipped ? ' (Equipado)' : ''}</span>
-              <span style="color: var(--text-muted);">${i.count.toLocaleString()}</span>
-            </div>`
-          ).join('') + '</div>';
+        if (res.ok) {
+          const data = await res.json();
+          renderDragonRadar(data);
         }
       } catch (e) {
-        document.getElementById('inspectorSubtitle').innerText = 'Erro de conexão com a API.';
+        console.error("Radar fetch failed", e);
       }
     }
 
-    function closeInspectorModal() {
-      const modal = document.getElementById('inspectorModal');
-      if (modal) modal.style.display = 'none';
+    function renderDragonRadar(data) {
+      const canvas = document.getElementById('dragonRadarCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const width = canvas.width;
+      const height = canvas.height;
+      const cx = width / 2;
+      const cy = height / 2;
+      const radius = width / 2;
+
+      // 1. Draw CRT Green Background
+      ctx.fillStyle = '#024219';
+      ctx.beginPath();
+      ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+      ctx.fill();
+
+      // 2. Draw Black Grid Lines
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
+      ctx.lineWidth = 1.5;
+
+      const gridStep = width / 10;
+      for (let x = 0; x < width; x += gridStep) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, height);
+        ctx.stroke();
+      }
+      for (let y = 0; y < height; y += gridStep) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(width, y);
+        ctx.stroke();
+      }
+
+      // 3. Update Coordinates Text
+      if (data.center) {
+        document.getElementById('radarCoordsText').innerText = 
+          `Posição: X=${data.center.x}, Y=${data.center.y}, Z=${data.center.z}`;
+      }
+
+      if (!data || !data.center) return;
+
+      const botX = data.center.x;
+      const botY = data.center.y;
+      const zoom = data.radius || 2500;
+
+      // 4. Render Nearby Entities as Glowing Blips
+      if (data.entities && Array.isArray(data.entities)) {
+        data.entities.forEach(ent => {
+          const dx = ent.x - botX;
+          const dy = ent.y - botY;
+
+          // Convert to radar canvas coordinates
+          const screenX = cx + (dx / zoom) * radius;
+          const screenY = cy - (dy / zoom) * radius; // Invert Y
+
+          // Check if within circular radar bounds
+          const distFromCenter = Math.hypot(screenX - cx, screenY - cy);
+          if (distFromCenter <= radius - 8) {
+            let color = '#facc15'; // Default Yellow Mob
+            let glowColor = 'rgba(250, 204, 21, 0.8)';
+            let dotRadius = 5;
+
+            if (ent.isParty) {
+              color = '#eab308'; // Gold Party Trio
+              glowColor = 'rgba(234, 179, 8, 0.9)';
+              dotRadius = 6;
+            } else if (ent.type === 'PLAYER') {
+              color = '#3b82f6'; // Blue Player
+              glowColor = 'rgba(59, 130, 246, 0.9)';
+              dotRadius = 6;
+            } else if (ent.isAggro) {
+              color = '#a855f7'; // Purple Aggro Mob
+              glowColor = 'rgba(168, 85, 247, 0.9)';
+              dotRadius = 5;
+            }
+
+            // Draw glowing dot
+            ctx.shadowBlur = 8;
+            ctx.shadowColor = glowColor;
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(screenX, screenY, dotRadius, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+          }
+        });
+      }
+
+      // 5. Draw Center Selected Bot (Glowing Red Triangle)
+      ctx.shadowBlur = 10;
+      ctx.shadowColor = 'rgba(239, 68, 68, 0.9)';
+      ctx.fillStyle = '#ef4444';
+
+      ctx.save();
+      ctx.translate(cx, cy);
+
+      // Rotate triangle by bot heading (Lineage 2 heading: 0..65536 -> 0..2PI)
+      if (data.center.heading) {
+        const rad = (data.center.heading / 65536) * Math.PI * 2;
+        ctx.rotate(-rad);
+      }
+
+      ctx.beginPath();
+      ctx.moveTo(0, -9);
+      ctx.lineTo(7, 7);
+      ctx.lineTo(-7, 7);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+      ctx.shadowBlur = 0;
     }
 
     // Auto-refresh interval
@@ -1014,10 +1281,11 @@
       if (document.getElementById('tab-raids').classList.contains('active')) fetchRaids();
       if (document.getElementById('tab-gm').classList.contains('active') && gmToken) {
         fetchChatStream();
+        fetchFakePlayersList();
         fetchRealPlayers();
-        fetchFakePlayers();
+        updateRadarData();
       }
-    }, 5000);
+    }, 1000);
 
     fetchStatus();
   </script>

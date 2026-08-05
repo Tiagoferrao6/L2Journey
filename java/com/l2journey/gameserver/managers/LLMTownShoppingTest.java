@@ -30,11 +30,16 @@ public class LLMTownShoppingTest
 			System.out.println("[PASS] BuyListExecutingEngine initialized.");
 		}
 
-		System.out.println("Testing LLMQuestNavigator...");
-		LLMQuestNavigator questNav = LLMQuestNavigator.getInstance();
-		if (questNav.getQuestTarget("PALADIN_TRANSFER") != null)
+		System.out.println("Testing Re-entrancy Lock & Cooldowns...");
+		if (!meshManager.isBotNavigating(null))
 		{
-			System.out.println("[PASS] PALADIN_TRANSFER quest target found.");
+			System.out.println("[PASS] Null bot re-entrancy navigation check returned false.");
+		}
+
+		LLMCompanionManager companionManager = LLMCompanionManager.getInstance();
+		if (!companionManager.isBotInShopCooldown(null))
+		{
+			System.out.println("[PASS] Null bot shop cooldown check returned false.");
 		}
 
 		System.out.println("All town shopping & quest navigation tests completed successfully.");

@@ -42,6 +42,11 @@ public class BuyListExecutingEngine
 	{
 		if (bot == null || !bot.isOnline()) return false;
 
+		if (LLMCompanionManager.getInstance().isBotInShopCooldown(bot))
+		{
+			return false;
+		}
+
 		int soulshotId = bot.getLevel() >= 20 ? SOULSHOT_D_ID : SOULSHOT_NG_ID;
 		long soulshotCount = getItemCount(bot, soulshotId);
 		long potionCount = getItemCount(bot, HEALING_POTION_ID);
@@ -50,7 +55,7 @@ public class BuyListExecutingEngine
 	}
 
 	/**
-	 * Executes a merchant purchase of Soulshots and Healing Potions if the bot has sufficient Adena.
+	 * Executes a merchant purchase of Soulshots and Healing Potions with proportional scaling if Adena < 7000.
 	 */
 	public boolean executePurchase(FakePlayer bot, Npc merchantNpc)
 	{
@@ -58,6 +63,7 @@ public class BuyListExecutingEngine
 
 		int soulshotId = bot.getLevel() >= 20 ? SOULSHOT_D_ID : SOULSHOT_NG_ID;
 		long adena = bot.getInventory().getAdena();
+
 		int shotsToBuy = 500;
 		int potionsToBuy = 20;
 
@@ -67,7 +73,35 @@ public class BuyListExecutingEngine
 
 		if (adena < totalCost)
 		{
-			LOGGER.info("BuyListExecutingEngine: " + bot.getName() + " has insufficient Adena for purchase. Current: " + adena + ", Needed: " + totalCost);
+			if (adena < 500)
+			{
+				LOGGER.info("BuyListExecutingEngine: " + bot.getName() + " possui Adena insuficiente para o pacote mínimo (500 Adena). Atual: " + adena);
+				return false;
+			}
+
+			// Proportional purchasing based on available Adena
+			long availableForShots = (long) (adena * 0.7);
+			shotsToBuy = (int) Math.max(50, Math.min(500, availableForShots / 10));
+			shotCost = shotsToBuy * 10L;
+
+			long availableForPotions = adena - shotCost;
+			potionsToBuy = (int) Math.min(20, Math.max(0, availableForPotions / 100));
+			potionCost = potionsToBuy * 100L;
+
+			totalCost = shotCost + potionCost;
+
+			if (totalCost > adena)
+			{
+				shotsToBuy = (int) (adena / 10);
+				potionsToBuy = 0;
+				shotCost = shotsToBuy * 10L;
+				potionCost = 0;
+				totalCost = shotCost;
+			}
+		}
+
+		if (totalCost <= 0)
+		{
 			return false;
 		}
 
@@ -80,14 +114,20 @@ public class BuyListExecutingEngine
 		bot.getInventory().destroyItemByItemId(ItemProcessType.BUY, 57, totalCost, bot, null);
 
 		// Add Items
-		bot.getInventory().addItem(ItemProcessType.BUY, soulshotId, shotsToBuy, bot, null);
-		bot.getInventory().addItem(ItemProcessType.BUY, HEALING_POTION_ID, potionsToBuy, bot, null);
+		if (shotsToBuy > 0)
+		{
+			bot.getInventory().addItem(ItemProcessType.BUY, soulshotId, shotsToBuy, bot, null);
+			// Auto-activate Soulshots
+			bot.addAutoSoulShot(soulshotId);
+			bot.sendPacket(new ExAutoSoulShot(soulshotId, 1));
+		}
 
-		// Auto-activate Soulshots
-		bot.addAutoSoulShot(soulshotId);
-		bot.sendPacket(new ExAutoSoulShot(soulshotId, 1));
+		if (potionsToBuy > 0)
+		{
+			bot.getInventory().addItem(ItemProcessType.BUY, HEALING_POTION_ID, potionsToBuy, bot, null);
+		}
 
-		LOGGER.info("BuyListExecutingEngine: " + bot.getName() + " purchased " + shotsToBuy + " Shots & " + potionsToBuy + " Potions from merchant.");
+		LOGGER.info("BuyListExecutingEngine: " + bot.getName() + " realizou compra proporcional de " + shotsToBuy + " Shots e " + potionsToBuy + " Poções por " + totalCost + " Adena.");
 		return true;
 	}
 

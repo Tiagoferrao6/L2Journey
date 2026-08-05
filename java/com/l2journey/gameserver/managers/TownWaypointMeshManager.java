@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 import com.l2journey.commons.threads.ThreadPool;
+import com.l2journey.commons.util.Rnd;
 import com.l2journey.gameserver.ai.Intention;
 import com.l2journey.gameserver.model.Location;
 import com.l2journey.gameserver.model.actor.instance.FakePlayer;
@@ -42,6 +45,7 @@ public class TownWaypointMeshManager
 	}
 
 	private final Map<String, List<Location>> _townRoutes = new HashMap<>();
+	private final Set<Integer> _activeNavigatingBots = ConcurrentHashMap.newKeySet();
 
 	protected TownWaypointMeshManager()
 	{
@@ -89,15 +93,33 @@ public class TownWaypointMeshManager
 	}
 
 	/**
+	 * Checks whether a bot is currently navigating a town route.
+	 */
+	public boolean isBotNavigating(FakePlayer bot)
+	{
+		return bot != null && _activeNavigatingBots.contains(bot.getObjectId());
+	}
+
+	/**
 	 * Navigates a FakePlayer step-by-step along a town route with stuck detection fallback.
 	 */
 	public void navigateBotAlongRoute(FakePlayer bot, String routeKey, Runnable onComplete)
 	{
 		if (bot == null || !bot.isOnline()) return;
 
+		if (!_activeNavigatingBots.add(bot.getObjectId()))
+		{
+			LOGGER.info("TownWaypointMeshManager: Bot " + bot.getName() + " já está navegando uma rota urbana. Ignorando chamada reentrante.");
+			LLMCompanionManager.getInstance().getBotTrace(bot).recordFailure("TOWN_NAVIGATION", "Tentativa de rota reentrante ignorada.");
+			return;
+		}
+
+		LLMCompanionManager.getInstance().getBotTrace(bot).addLog("Iniciou rota urbana: " + routeKey);
+
 		List<Location> waypoints = getRoute(routeKey);
 		if (waypoints.isEmpty())
 		{
+			_activeNavigatingBots.remove(bot.getObjectId());
 			if (onComplete != null) onComplete.run();
 			return;
 		}
@@ -109,6 +131,7 @@ public class TownWaypointMeshManager
 	{
 		if (index >= waypoints.size())
 		{
+			_activeNavigatingBots.remove(bot.getObjectId());
 			if (onComplete != null) onComplete.run();
 			return;
 		}
@@ -120,22 +143,56 @@ public class TownWaypointMeshManager
 			return;
 		}
 
+		int startX = bot.getX();
+		int startY = bot.getY();
+
 		bot.getAI().setIntention(Intention.MOVE_TO, nextLoc);
 
 		// Schedule check in 2.5 seconds
 		ThreadPool.schedule(() -> {
-			if (!bot.isOnline()) return;
+			if (!bot.isOnline())
+			{
+				_activeNavigatingBots.remove(bot.getObjectId());
+				return;
+			}
+
 			if (bot.isInsideRadius2D(nextLoc, 150))
 			{
 				executeWaypointStep(bot, waypoints, index + 1, onComplete);
 			}
 			else
 			{
-				// Stuck fallback: teleport directly to waypoint node
-				bot.teleToLocation(nextLoc);
-				LOGGER.warning("TownWaypointMeshManager: " + bot.getName() + " stuck navigating to " + nextLoc + ". Executing node step fallback.");
-				executeWaypointStep(bot, waypoints, index + 1, onComplete);
+				int deltaX = Math.abs(bot.getX() - startX);
+				int deltaY = Math.abs(bot.getY() - startY);
+
+				if (deltaX < 30 && deltaY < 30)
+				{
+					// Micro-evasion lateral before node fallback
+					int evadeX = bot.getX() + Rnd.get(-80, 80);
+					int evadeY = bot.getY() + Rnd.get(-80, 80);
+					bot.getAI().setIntention(Intention.MOVE_TO, new Location(evadeX, evadeY, bot.getZ()));
+					LOGGER.warning("TownWaypointMeshManager: " + bot.getName() + " estagnado (deltaX=" + deltaX + ", deltaY=" + deltaY + "). Executando micro-evasão lateral.");
+
+					ThreadPool.schedule(() -> {
+						if (!bot.isOnline())
+						{
+							_activeNavigatingBots.remove(bot.getObjectId());
+							return;
+						}
+						bot.teleToLocation(nextLoc);
+						LOGGER.warning("TownWaypointMeshManager: " + bot.getName() + " preso navegando para " + nextLoc + ". Executando node step fallback.");
+						executeWaypointStep(bot, waypoints, index + 1, onComplete);
+					}, 1000);
+				}
+				else
+				{
+					// Stuck fallback: teleport directly to waypoint node
+					bot.teleToLocation(nextLoc);
+					LOGGER.warning("TownWaypointMeshManager: " + bot.getName() + " preso navegando para " + nextLoc + ". Executando node step fallback.");
+					executeWaypointStep(bot, waypoints, index + 1, onComplete);
+				}
 			}
 		}, 2500);
 	}
 }
+

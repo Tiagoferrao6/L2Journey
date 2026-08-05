@@ -7991,9 +7991,9 @@ public class Player extends Playable
 	
 	public int isOnlineInt()
 	{
-		if (_isOnline && (_client != null))
+		if (_isOnline && (isFakePlayer() || (_client != null)))
 		{
-			return _client.isDetached() ? 2 : 1;
+			return (_client != null && _client.isDetached()) ? 2 : 1;
 		}
 		
 		return 0;

@@ -51,6 +51,32 @@ public class CrystalTacticalEngine
 		}
 
 		Creature target = (Creature) bot.getTarget();
+		if (target == null || target.isDead())
+		{
+			java.util.List<com.l2journey.gameserver.model.actor.Attackable> mobs = new java.util.ArrayList<>();
+			com.l2journey.gameserver.model.World.getInstance().forEachVisibleObjectInRange(bot, com.l2journey.gameserver.model.actor.Attackable.class, 2000, mob -> {
+				if (!mob.isDead()) mobs.add(mob);
+			});
+
+			if (!mobs.isEmpty())
+			{
+				target = mobs.get(0);
+				bot.setTarget(target);
+			}
+			else
+			{
+				int farmX = bot.getLevel() < 20 ? -82500 : -18450;
+				int farmY = bot.getLevel() < 20 ? 240000 : 145000;
+				int farmZ = bot.getLevel() < 20 ? -3700 : -3000;
+
+				if (!bot.isInsideRadius2D(farmX, farmY, bot.getZ(), 500))
+				{
+					bot.teleToLocation(farmX + Rnd.get(-100, 100), farmY + Rnd.get(-100, 100), farmZ);
+				}
+				return;
+			}
+		}
+
 		if (target != null && !target.isDead())
 		{
 			double dist = bot.calculateDistance3D(target);

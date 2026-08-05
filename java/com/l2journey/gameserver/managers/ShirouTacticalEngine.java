@@ -62,21 +62,34 @@ public class ShirouTacticalEngine
 			return;
 		}
 
-		// 3. Warlord Train & AoE Crowd Control Mode (Puxa 5-10 mobs, usa Howl e AoE skills)
+		// 3. Warlord Train & AoE Crowd Control Mode (Puxa mobs em raio de 2000m)
 		List<Attackable> nearbyMobs = new java.util.ArrayList<>();
-		World.getInstance().forEachVisibleObjectInRange(bot, Attackable.class, 600, mob -> {
+		World.getInstance().forEachVisibleObjectInRange(bot, Attackable.class, 2000, mob -> {
 			if (!mob.isDead()) nearbyMobs.add(mob);
 		});
 
-		if (nearbyMobs.size() >= 5)
+		if (!nearbyMobs.isEmpty())
 		{
-			LOGGER.info("ShirouTacticalEngine: " + bot.getName() + " gathered train of " + nearbyMobs.size() + " mobs! Casting Howl & Thunder Storm AoE!");
-			bot.setTarget(nearbyMobs.get(0));
-			bot.getAI().setIntention(Intention.ATTACK, nearbyMobs.get(0));
+			Attackable selectedMob = nearbyMobs.get(0);
+			bot.setTarget(selectedMob);
+			bot.getAI().setIntention(Intention.ATTACK, selectedMob);
 		}
 		else if (target != null && !target.isDead())
 		{
 			bot.getAI().setIntention(Intention.ATTACK, target);
+		}
+		else
+		{
+			// Sem mobs no raio de 2000m -> deslocar/teleportar para Zona de Caça (FARM_ZONE)
+			int farmX = bot.getLevel() < 20 ? -82500 : -18450;
+			int farmY = bot.getLevel() < 20 ? 240000 : 145000;
+			int farmZ = bot.getLevel() < 20 ? -3700 : -3000;
+
+			if (!bot.isInsideRadius2D(farmX, farmY, bot.getZ(), 500))
+			{
+				bot.teleToLocation(farmX + com.l2journey.commons.util.Rnd.get(-100, 100), farmY + com.l2journey.commons.util.Rnd.get(-100, 100), farmZ);
+				LOGGER.info("ShirouTacticalEngine: " + bot.getName() + " sem mobs no raio de 2000m. Deslocando para Zona de Caça (" + farmX + ", " + farmY + ").");
+			}
 		}
 	}
 }

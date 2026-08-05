@@ -208,6 +208,59 @@
       margin-top: 0.4rem;
     }
 
+    /* Dragon Radar Styling */
+    .dragon-radar-case {
+      width: 360px;
+      height: 390px;
+      background: linear-gradient(145deg, #ffffff, #dcdcdc);
+      border-radius: 50% 50% 46% 46%;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.8), inset 0 -5px 15px rgba(0, 0, 0, 0.2);
+      border: 4px solid #b8b8b8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding-bottom: 18px;
+      position: relative;
+    }
+
+    .dragon-radar-top-btn {
+      width: 36px;
+      height: 22px;
+      background: linear-gradient(180deg, #e6e6e6, #a3a3a3);
+      border: 2px solid #888;
+      border-radius: 8px 8px 2px 2px;
+      position: absolute;
+      top: -20px;
+      box-shadow: 0 -2px 5px rgba(0,0,0,0.3);
+    }
+
+    .dragon-radar-screen {
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      background: #003314;
+      border: 5px solid #1a1a1a;
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.9), 0 0 10px rgba(0, 255, 100, 0.3);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    #dragonRadarCanvas {
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+    }
+
+    .radar-zoom-btn.active {
+      background: var(--gold-primary) !important;
+      color: #000 !important;
+      font-weight: bold;
+    }
+
     .progress-bar {
       width: 100%;
       height: 6px;
@@ -547,6 +600,48 @@
               <button class="btn btn-cyber" onclick="reloadGM('fakeplayers', 'reload_hunters')">Reload XML Fake Hunters</button>
               <button class="btn btn-cyber" onclick="reloadGM('community', 'reload')">Reload Alt+B Community Shop</button>
               <button class="btn btn-danger" onclick="logoutGM()">Sair do Painel GM</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dragon Radar Dashboard Component -->
+        <div class="card" style="margin-top: 1.5rem; background: rgba(10, 16, 26, 0.9); border: 1px solid var(--border-glow);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
+            <div>
+              <h2 style="font-family: 'Cinzel', serif; color: var(--gold-primary); font-size: 1.3rem;">🐉 Dragon Radar Tático (Localização de Bots)</h2>
+              <p style="font-size: 0.8rem; color: var(--text-muted);">Radar retro-futurista em tempo real para monitoramento espacial dos bots de IA e entidades ao redor.</p>
+            </div>
+            <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+              <label style="font-size: 0.85rem; color: var(--gold-light); font-weight: 600;">Bot Ativo:</label>
+              <select id="radarBotSelect" class="form-input" style="padding: 0.4rem 0.8rem; font-size: 0.85rem; width: auto;" onchange="updateRadarData()">
+                <option value="PaladinBot">PaladinBot (TANK)</option>
+                <option value="HawkeyeBot">HawkeyeBot (ARCHER)</option>
+                <option value="BishopBot">BishopBot (HEALER)</option>
+              </select>
+              <label style="font-size: 0.85rem; color: var(--gold-light); font-weight: 600; margin-left: 0.5rem;">Zoom:</label>
+              <button class="btn btn-cyber radar-zoom-btn" onclick="setRadarZoom(500)" id="btnZoom500">500 (Micro)</button>
+              <button class="btn btn-cyber radar-zoom-btn active" onclick="setRadarZoom(2500)" id="btnZoom2500">2500 (Tático)</button>
+              <button class="btn btn-cyber radar-zoom-btn" onclick="setRadarZoom(5000)" id="btnZoom5000">5000 (Macro)</button>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: center; align-items: center; flex-direction: column; gap: 1rem; padding: 1rem 0;">
+            <!-- Dragon Radar Case -->
+            <div class="dragon-radar-case">
+              <div class="dragon-radar-top-btn"></div>
+              <div class="dragon-radar-screen">
+                <canvas id="dragonRadarCanvas" width="320" height="320"></canvas>
+              </div>
+            </div>
+
+            <!-- Radar Telemetry Summary & Legend -->
+            <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center; font-size: 0.85rem; background: rgba(0,0,0,0.4); padding: 0.6rem 1.2rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+              <div style="display: flex; align-items: center; gap: 0.4rem;"><span style="width: 10px; height: 10px; background: #ef4444; border-radius: 50%; box-shadow: 0 0 6px #ef4444; display: inline-block;"></span> <span>Bot Central</span></div>
+              <div style="display: flex; align-items: center; gap: 0.4rem;"><span style="width: 10px; height: 10px; background: #facc15; border-radius: 50%; box-shadow: 0 0 6px #facc15; display: inline-block;"></span> <span>Mob Passo</span></div>
+              <div style="display: flex; align-items: center; gap: 0.4rem;"><span style="width: 10px; height: 10px; background: #a855f7; border-radius: 50%; box-shadow: 0 0 6px #a855f7; display: inline-block;"></span> <span>Mob Agressivo</span></div>
+              <div style="display: flex; align-items: center; gap: 0.4rem;"><span style="width: 10px; height: 10px; background: #3b82f6; border-radius: 50%; box-shadow: 0 0 6px #3b82f6; display: inline-block;"></span> <span>Player Real</span></div>
+              <div style="display: flex; align-items: center; gap: 0.4rem;"><span style="width: 10px; height: 10px; background: #eab308; border-radius: 50%; box-shadow: 0 0 6px #eab308; display: inline-block;"></span> <span>Membro do Trio</span></div>
+              <div id="radarCoordsText" style="color: var(--gold-light); font-weight: 600;">Posição: X=0, Y=0, Z=0</div>
             </div>
           </div>
         </div>
@@ -1036,6 +1131,148 @@
       } catch (e) {}
     }
 
+    // -----------------------------------------------------------------------
+    // Dragon Radar Dashboard Logic
+    // -----------------------------------------------------------------------
+    let currentRadarZoom = 2500;
+
+    function setRadarZoom(zoom) {
+      currentRadarZoom = zoom;
+      document.querySelectorAll('.radar-zoom-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.getElementById('btnZoom' + zoom);
+      if (activeBtn) activeBtn.classList.add('active');
+      updateRadarData();
+    }
+
+    async function updateRadarData() {
+      if (!gmToken) return;
+      const botName = document.getElementById('radarBotSelect')?.value || 'PaladinBot';
+      try {
+        const res = await fetch(`${API_BASE}/api/admin/radar?botName=${botName}&radius=${currentRadarZoom}`, {
+          headers: { 'Authorization': 'Bearer ' + gmToken }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          renderDragonRadar(data);
+        }
+      } catch (e) {
+        console.error("Radar fetch failed", e);
+      }
+    }
+
+    function renderDragonRadar(data) {
+      const canvas = document.getElementById('dragonRadarCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const width = canvas.width;
+      const height = canvas.height;
+      const cx = width / 2;
+      const cy = height / 2;
+      const radius = width / 2;
+
+      // 1. Draw CRT Green Background
+      ctx.fillStyle = '#024219';
+      ctx.beginPath();
+      ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+      ctx.fill();
+
+      // 2. Draw Black Grid Lines
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
+      ctx.lineWidth = 1.5;
+
+      const gridStep = width / 10;
+      for (let x = 0; x < width; x += gridStep) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, height);
+        ctx.stroke();
+      }
+      for (let y = 0; y < height; y += gridStep) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(width, y);
+        ctx.stroke();
+      }
+
+      // 3. Update Coordinates Text
+      if (data.center) {
+        document.getElementById('radarCoordsText').innerText = 
+          `Posição: X=${data.center.x}, Y=${data.center.y}, Z=${data.center.z}`;
+      }
+
+      if (!data || !data.center) return;
+
+      const botX = data.center.x;
+      const botY = data.center.y;
+      const zoom = data.radius || 2500;
+
+      // 4. Render Nearby Entities as Glowing Blips
+      if (data.entities && Array.isArray(data.entities)) {
+        data.entities.forEach(ent => {
+          const dx = ent.x - botX;
+          const dy = ent.y - botY;
+
+          // Convert to radar canvas coordinates
+          const screenX = cx + (dx / zoom) * radius;
+          const screenY = cy - (dy / zoom) * radius; // Invert Y
+
+          // Check if within circular radar bounds
+          const distFromCenter = Math.hypot(screenX - cx, screenY - cy);
+          if (distFromCenter <= radius - 8) {
+            let color = '#facc15'; // Default Yellow Mob
+            let glowColor = 'rgba(250, 204, 21, 0.8)';
+            let dotRadius = 5;
+
+            if (ent.isParty) {
+              color = '#eab308'; // Gold Party Trio
+              glowColor = 'rgba(234, 179, 8, 0.9)';
+              dotRadius = 6;
+            } else if (ent.type === 'PLAYER') {
+              color = '#3b82f6'; // Blue Player
+              glowColor = 'rgba(59, 130, 246, 0.9)';
+              dotRadius = 6;
+            } else if (ent.isAggro) {
+              color = '#a855f7'; // Purple Aggro Mob
+              glowColor = 'rgba(168, 85, 247, 0.9)';
+              dotRadius = 5;
+            }
+
+            // Draw glowing dot
+            ctx.shadowBlur = 8;
+            ctx.shadowColor = glowColor;
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(screenX, screenY, dotRadius, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+          }
+        });
+      }
+
+      // 5. Draw Center Selected Bot (Glowing Red Triangle)
+      ctx.shadowBlur = 10;
+      ctx.shadowColor = 'rgba(239, 68, 68, 0.9)';
+      ctx.fillStyle = '#ef4444';
+
+      ctx.save();
+      ctx.translate(cx, cy);
+
+      // Rotate triangle by bot heading (Lineage 2 heading: 0..65536 -> 0..2PI)
+      if (data.center.heading) {
+        const rad = (data.center.heading / 65536) * Math.PI * 2;
+        ctx.rotate(-rad);
+      }
+
+      ctx.beginPath();
+      ctx.moveTo(0, -9);
+      ctx.lineTo(7, 7);
+      ctx.lineTo(-7, 7);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+      ctx.shadowBlur = 0;
+    }
+
     // Auto-refresh interval
     setInterval(() => {
       fetchStatus();
@@ -1046,8 +1283,9 @@
         fetchChatStream();
         fetchFakePlayersList();
         fetchRealPlayers();
+        updateRadarData();
       }
-    }, 3000);
+    }, 1000);
 
     fetchStatus();
   </script>

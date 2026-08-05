@@ -24,6 +24,7 @@ import com.l2journey.Config;
 import com.l2journey.gameserver.GameServer;
 import com.l2journey.gameserver.handler.CommunityBoardHandler;
 import com.l2journey.gameserver.model.World;
+import com.l2journey.gameserver.model.actor.Creature;
 import com.l2journey.gameserver.model.actor.instance.FakePlayer;
 import com.l2journey.gameserver.model.actor.Player;
 import com.l2journey.gameserver.model.itemcontainer.Inventory;
@@ -102,6 +103,7 @@ public class WebAPIManager
 			_server.createContext("/api/admin/community", new AdminCommunityHandler());
 			_server.createContext("/api/admin/chat", new AdminChatHandler());
 			_server.createContext("/api/admin/players", new AdminPlayersHandler());
+			_server.createContext("/api/admin/radar", new AdminRadarHandler());
 
 			// Static Web Dashboard Frontend
 			_server.createContext("/", new StaticFileHandler());
@@ -768,7 +770,7 @@ public class WebAPIManager
 						}
 						else if (isCompanionBot)
 						{
-							targetBot.logout();
+							targetBot.deleteMe();
 						}
 					}
 					else if ("FORCE_RETREAT".equalsIgnoreCase(action))
@@ -974,6 +976,122 @@ public class WebAPIManager
 					}
 				}
 				sendResponse(exchange, 200, "{\"success\": true, \"message\": \"GM Player action executed\"}");
+			}
+			else
+			{
+				sendResponse(exchange, 405, "{\"error\": \"Method not allowed\"}");
+			}
+		}
+	}
+
+	// 10. Admin Radar Handler (GET /api/admin/radar?botName=...&radius=...)
+	private class AdminRadarHandler implements HttpHandler
+	{
+		@Override
+		public void handle(HttpExchange exchange) throws IOException
+		{
+			if (!authenticateGM(exchange)) return;
+
+			if ("GET".equalsIgnoreCase(exchange.getRequestMethod()))
+			{
+				String query = exchange.getRequestURI().getQuery();
+				String botName = "PaladinBot";
+				int radius = 2500;
+
+				if (query != null)
+				{
+					for (String param : query.split("&"))
+					{
+						String[] pair = param.split("=");
+						if (pair.length == 2)
+						{
+							if ("botName".equalsIgnoreCase(pair[0])) botName = pair[1];
+							else if ("radius".equalsIgnoreCase(pair[0]))
+							{
+								try { radius = Integer.parseInt(pair[1]); } catch (Exception e) {}
+							}
+						}
+					}
+				}
+
+				Player centerBot = World.getInstance().getPlayer(botName);
+				if (centerBot == null)
+				{
+					for (LLMCompanionManager.CompanionMember member : LLMCompanionManager.getInstance().getTrio())
+					{
+						if (member.getName().equalsIgnoreCase(botName) && member.getBotInstance() != null)
+						{
+							centerBot = member.getBotInstance();
+							break;
+						}
+					}
+				}
+
+				if (centerBot == null)
+				{
+					sendResponse(exchange, 404, "{\"error\": \"Bot not found or offline\"}");
+					return;
+				}
+
+				StringBuilder json = new StringBuilder();
+				json.append("{");
+				json.append("\"center\": {");
+				json.append("\"name\": \"").append(escapeJson(centerBot.getName())).append("\",");
+				json.append("\"x\": ").append(centerBot.getX()).append(",");
+				json.append("\"y\": ").append(centerBot.getY()).append(",");
+				json.append("\"z\": ").append(centerBot.getZ()).append(",");
+				json.append("\"heading\": ").append(centerBot.getHeading()).append(",");
+				json.append("\"hpPct\": ").append((int)((centerBot.getCurrentHp() / centerBot.getMaxHp()) * 100));
+				json.append("},");
+				json.append("\"radius\": ").append(radius).append(",");
+
+				json.append("\"entities\": [");
+				List<Creature> nearby = new ArrayList<>();
+				World.getInstance().forEachVisibleObjectInRange(centerBot, Creature.class, radius, c -> {
+					if (c != null && !c.isDead()) nearby.add(c);
+				});
+
+				for (int i = 0; i < nearby.size(); i++)
+				{
+					Creature c = nearby.get(i);
+					if (i > 0) json.append(",");
+
+					String type = "NPC";
+					boolean isAggro = false;
+					boolean isParty = false;
+
+					if (c instanceof FakePlayer)
+					{
+						type = "PARTY";
+						isParty = true;
+					}
+					else if (c.isPlayer())
+					{
+						type = "PLAYER";
+					}
+					else if (c.isMonster() || c.isAttackable())
+					{
+						type = "MOB";
+						if (c.isAttackable() && c.asAttackable().isAggressive())
+						{
+							isAggro = true;
+						}
+					}
+
+					json.append("{");
+					json.append("\"name\": \"").append(escapeJson(c.getName())).append("\",");
+					json.append("\"type\": \"").append(type).append("\",");
+					json.append("\"x\": ").append(c.getX()).append(",");
+					json.append("\"y\": ").append(c.getY()).append(",");
+					json.append("\"z\": ").append(c.getZ()).append(",");
+					json.append("\"isAggro\": ").append(isAggro).append(",");
+					json.append("\"isParty\": ").append(isParty).append(",");
+					json.append("\"hpPct\": ").append((int)((c.getCurrentHp() / c.getMaxHp()) * 100));
+					json.append("}");
+				}
+				json.append("]}");
+
+				sendResponse(exchange, 200, json.toString());
 			}
 			else
 			{

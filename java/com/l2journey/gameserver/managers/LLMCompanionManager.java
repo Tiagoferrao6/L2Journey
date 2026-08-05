@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -86,6 +88,14 @@ public class LLMCompanionManager
 
 	private CompanionState _state = CompanionState.AUTONOMOUS_SOLO;
 	private String _currentMission = "Farm & Solo Leveling (Nv 1-40)";
+	private final Map<Integer, Long> _shopCooldowns = new ConcurrentHashMap<>();
+	private final Map<Integer, BotExecutionTrace> _botTraces = new ConcurrentHashMap<>();
+
+	public BotExecutionTrace getBotTrace(FakePlayer bot)
+	{
+		if (bot == null) return null;
+		return _botTraces.computeIfAbsent(bot.getObjectId(), id -> new BotExecutionTrace());
+	}
 
 	protected LLMCompanionManager()
 	{
@@ -198,7 +208,11 @@ public class LLMCompanionManager
 
 					// Equip No-Grade starter weapon & clothes (Short Sword / Shirt)
 					FakePlayerEquipmentData.autoEquip(bot, FakePlayerEquipmentData.Grade.NO_GRADE);
-					bot.getInventory().addAdena(ItemProcessType.REWARD, 200, bot, null); // 200 Adena pocket money
+					if (bot.getInventory().getAdena() < 1000000L)
+					{
+						long current = bot.getInventory().getAdena();
+						bot.getInventory().addAdena(ItemProcessType.REWARD, 1000000L - current, bot, null); // 1,000,000 Adena starter fund
+					}
 					bot.broadcastUserInfo();
 					member.setBotInstance(bot);
 
@@ -233,6 +247,7 @@ public class LLMCompanionManager
 			saveStateToDatabase();
 		}
 
+		checkDiagnosticHealth();
 		checkClassTransfers();
 		checkVendorLootSelling();
 		checkConsumableReplenishment();
@@ -251,6 +266,17 @@ public class LLMCompanionManager
 			default:
 				executeAutonomousSolo();
 				break;
+		}
+	}
+
+	private void checkDiagnosticHealth()
+	{
+		for (CompanionMember member : _trio)
+		{
+			FakePlayer bot = member.getBotInstance();
+			if (bot == null || !bot.isOnline()) continue;
+
+			LLMDiagnosticEngine.getInstance().checkBotHealth(bot);
 		}
 	}
 
@@ -312,6 +338,26 @@ public class LLMCompanionManager
 		}
 	}
 
+	public boolean isBotInShopCooldown(FakePlayer bot)
+	{
+		if (bot == null) return false;
+		Long cd = _shopCooldowns.get(bot.getObjectId());
+		if (cd == null) return false;
+		if (System.currentTimeMillis() > cd)
+		{
+			_shopCooldowns.remove(bot.getObjectId());
+			return false;
+		}
+		return true;
+	}
+
+	public void applyShopCooldown(FakePlayer bot)
+	{
+		if (bot == null) return;
+		_shopCooldowns.put(bot.getObjectId(), System.currentTimeMillis() + 60000L);
+		LOGGER.info("LLMCompanionManager: Aplicado cooldown de compras de 60s para o bot " + bot.getName());
+	}
+
 	private void checkConsumableReplenishment()
 	{
 		for (CompanionMember member : _trio)
@@ -319,10 +365,23 @@ public class LLMCompanionManager
 			FakePlayer bot = member.getBotInstance();
 			if (bot == null || !bot.isOnline()) continue;
 
+			if (isBotInShopCooldown(bot)) continue;
+
 			if (BuyListExecutingEngine.getInstance().needsConsumableReplenishment(bot))
 			{
+				getBotTrace(bot).addLog("Necessidade de insumos detectada. Deslocando para comerciante.");
 				TownWaypointMeshManager.getInstance().navigateBotAlongRoute(bot, "GLUDIO_GK_TO_GROCERY", () -> {
-					BuyListExecutingEngine.getInstance().executePurchase(bot, null);
+					boolean success = BuyListExecutingEngine.getInstance().executePurchase(bot, null);
+					if (!success)
+					{
+						getBotTrace(bot).recordFailure("SHOP_PURCHASE", "Falha ao comprar insumos por Adena insuficiente.");
+						applyShopCooldown(bot);
+					}
+					else
+					{
+						getBotTrace(bot).recordSuccess();
+						getBotTrace(bot).addLog("Compra de insumos realizada com sucesso.");
+					}
 				});
 			}
 		}
@@ -429,9 +488,20 @@ public class LLMCompanionManager
 					switch (decision.getAction())
 					{
 						case GO_TO_SHOP:
-							TownWaypointMeshManager.getInstance().navigateBotAlongRoute(bot, "GLUDIO_GK_TO_GROCERY", () -> {
-								BuyListExecutingEngine.getInstance().executePurchase(bot, null);
-							});
+							if (isBotInShopCooldown(bot))
+							{
+								ShirouTacticalEngine.getInstance().executeTacticalTick(bot);
+							}
+							else
+							{
+								TownWaypointMeshManager.getInstance().navigateBotAlongRoute(bot, "GLUDIO_GK_TO_GROCERY", () -> {
+									boolean success = BuyListExecutingEngine.getInstance().executePurchase(bot, null);
+									if (!success)
+									{
+										applyShopCooldown(bot);
+									}
+								});
+							}
 							break;
 
 						case START_QUEST:
@@ -480,7 +550,33 @@ public class LLMCompanionManager
 			{
 				// Esquizitinha Tactical Healing Engine (Bishop / Cardinal)
 				Player leader = World.getInstance().getPlayer(TARGET_HUMAN_NAME);
-				EsquizitinhaTacticalEngine.getInstance().executeSupportTick(bot, leader);
+				if (leader == null || !leader.isOnline())
+				{
+					CompanionMember tankMember = _trio.get(0);
+					if (tankMember != null && tankMember.getBotInstance() != null)
+					{
+						leader = tankMember.getBotInstance();
+					}
+				}
+
+				if (leader != null && leader.isOnline())
+				{
+					EsquizitinhaTacticalEngine.getInstance().executeSupportTick(bot, leader);
+					if (!bot.isInsideRadius2D(leader, 500))
+					{
+						bot.teleToLocation(leader.getX() + Rnd.get(-60, 60), leader.getY() + Rnd.get(-60, 60), leader.getZ());
+					}
+				}
+				else
+				{
+					int farmX = bot.getLevel() < 20 ? -82500 : -18450;
+					int farmY = bot.getLevel() < 20 ? 240000 : 145000;
+					int farmZ = bot.getLevel() < 20 ? -3700 : -3000;
+					if (!bot.isInsideRadius2D(farmX, farmY, bot.getZ(), 500))
+					{
+						bot.teleToLocation(farmX + Rnd.get(-100, 100), farmY + Rnd.get(-100, 100), farmZ);
+					}
+				}
 			}
 			else
 			{
