@@ -80,15 +80,20 @@ public class ShirouTacticalEngine
 		}
 		else
 		{
-			// Sem mobs no raio de 2000m -> deslocar/teleportar para Zona de Caça (FARM_ZONE)
-			int farmX = bot.getLevel() < 20 ? -82500 : -18450;
-			int farmY = bot.getLevel() < 20 ? 240000 : 145000;
-			int farmZ = bot.getLevel() < 20 ? -3700 : -3000;
-
-			if (!bot.isInsideRadius2D(farmX, farmY, bot.getZ(), 500))
+			// Sem mobs no raio de 2000m -> utilizar o gerenciador de waypoints e zonas de caça
+			com.l2journey.gameserver.model.Location targetPoint = FakePlayerHuntingZoneManager.getInstance().getCurrentOrNextPoint(bot);
+			if (targetPoint != null)
 			{
-				bot.teleToLocation(farmX + com.l2journey.commons.util.Rnd.get(-100, 100), farmY + com.l2journey.commons.util.Rnd.get(-100, 100), farmZ);
-				LOGGER.info("ShirouTacticalEngine: " + bot.getName() + " sem mobs no raio de 2000m. Deslocando para Zona de Caça (" + farmX + ", " + farmY + ").");
+				if (!bot.isInsideRadius2D(targetPoint, 300))
+				{
+					bot.getAI().setIntention(Intention.MOVE_TO, targetPoint);
+					LOGGER.info("ShirouTacticalEngine: " + bot.getName() + " avançando para waypoint de caça (" + targetPoint.getX() + ", " + targetPoint.getY() + ").");
+				}
+				else
+				{
+					// Chegou ao waypoint sem encontrar mobs -> alterna para outro waypoint da zona
+					FakePlayerHuntingZoneManager.getInstance().switchWaypoint(bot);
+				}
 			}
 		}
 	}

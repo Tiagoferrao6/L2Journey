@@ -65,13 +65,17 @@ public class CrystalTacticalEngine
 			}
 			else
 			{
-				int farmX = bot.getLevel() < 20 ? -82500 : -18450;
-				int farmY = bot.getLevel() < 20 ? 240000 : 145000;
-				int farmZ = bot.getLevel() < 20 ? -3700 : -3000;
-
-				if (!bot.isInsideRadius2D(farmX, farmY, bot.getZ(), 500))
+				com.l2journey.gameserver.model.Location targetPoint = FakePlayerHuntingZoneManager.getInstance().getCurrentOrNextPoint(bot);
+				if (targetPoint != null)
 				{
-					bot.teleToLocation(farmX + Rnd.get(-100, 100), farmY + Rnd.get(-100, 100), farmZ);
+					if (!bot.isInsideRadius2D(targetPoint, 300))
+					{
+						bot.getAI().setIntention(Intention.MOVE_TO, targetPoint);
+					}
+					else
+					{
+						FakePlayerHuntingZoneManager.getInstance().switchWaypoint(bot);
+					}
 				}
 				return;
 			}

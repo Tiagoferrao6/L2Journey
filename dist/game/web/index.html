@@ -751,6 +751,31 @@
           </table>
         </div>
 
+        <!-- Bot Inspector Modal -->
+        <div id="inspectorModal" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 1000; justify-content: center; align-items: center;">
+          <div class="modal-content" style="width: 650px; max-width: 95vw; background: var(--bg-dark); border: 1px solid var(--border-glow); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow-glass); position: relative;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 0.8rem; margin-bottom: 1rem;">
+              <div>
+                <h2 id="inspectorBotTitle" style="font-family: 'Cinzel', serif; color: var(--gold-primary); font-size: 1.3rem;">🔍 Bot Inspector: PaladinBot</h2>
+                <span id="inspectorBotSub" style="font-size: 0.8rem; color: var(--text-muted);">Paladin (Nv. 20) | Gludio</span>
+              </div>
+              <button onclick="closeInspectorModal()" style="background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer;">&times;</button>
+            </div>
+
+            <!-- Tab Buttons -->
+            <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">
+              <button class="btn btn-cyber inspector-tab active" onclick="switchInspectorTab('equip')" id="tabBtnEquip">⚔️ Equipamentos</button>
+              <button class="btn btn-cyber inspector-tab" onclick="switchInspectorTab('inv')" id="tabBtnInv">🎒 Inventário</button>
+              <button class="btn btn-cyber inspector-tab" onclick="switchInspectorTab('buffs')" id="tabBtnBuffs">🧪 Buffs Ativos</button>
+            </div>
+
+            <!-- Content Area -->
+            <div id="inspectorContent" style="max-height: 400px; overflow-y: auto;">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
 
@@ -1032,6 +1057,7 @@
             <td>
               <div style="display:flex; flex-wrap:wrap; gap:0.2rem;">
                 <button class="btn btn-cyber" style="padding:0.2rem 0.4rem; font-size:0.7rem;" title="Teleportar GM até o bot" onclick="executeBotAction('TELEPORT_GM', '${p.name}')">⚡ Teleport GM</button>
+                <button class="btn btn-cyber" style="padding:0.2rem 0.4rem; font-size:0.7rem; background: var(--accent-purple);" title="Inspecionar inventário, equipamentos e buffs" onclick="openBotInspector('${p.name}')">🔍 Inspecionar</button>
                 <button class="btn" style="padding:0.2rem 0.4rem; font-size:0.7rem; color:var(--gold-primary);" title="Forçar recuo para cidade" onclick="executeBotAction('FORCE_RETREAT', '${p.name}')">🛡️ Recuar</button>
                 <button class="btn" style="padding:0.2rem 0.4rem; font-size:0.7rem;" title="Respawn no Gatekeeper" onclick="executeBotAction('RESPAWN', '${p.name}')">🔄 Respawn</button>
                 <button class="btn btn-danger" style="padding:0.2rem 0.4rem; font-size:0.7rem;" title="Despawn bot" onclick="executeBotAction('DESPAWN', '${p.name}')">❌ Despawn</button>
@@ -1271,6 +1297,102 @@
       ctx.fill();
       ctx.restore();
       ctx.shadowBlur = 0;
+    }
+
+    // -----------------------------------------------------------------------
+    // Bot Inspector Modal Logic
+    // -----------------------------------------------------------------------
+    let inspectorData = null;
+
+    async function openBotInspector(botName) {
+      try {
+        const res = await fetch(`${API_BASE}/api/admin/fakeplayers?bot=${encodeURIComponent(botName)}`, {
+          headers: { 'Authorization': 'Bearer ' + gmToken }
+        });
+        if (res.ok) {
+          inspectorData = await res.json();
+          document.getElementById('inspectorBotTitle').innerText = '🔍 Bot Inspector: ' + inspectorData.name;
+          document.getElementById('inspectorBotSub').innerText = `${inspectorData.className} (Nv. ${inspectorData.level}) | ${inspectorData.location?.town || 'Gludio'}`;
+          switchInspectorTab('equip');
+          document.getElementById('inspectorModal').style.display = 'flex';
+        } else {
+          alert('Erro ao carregar dados do bot.');
+        }
+      } catch (e) {
+        alert('Falha na comunicação com o servidor.');
+      }
+    }
+
+    function closeInspectorModal() {
+      document.getElementById('inspectorModal').style.display = 'none';
+    }
+
+    function switchInspectorTab(tab) {
+      document.querySelectorAll('.inspector-tab').forEach(b => b.classList.remove('active'));
+      const content = document.getElementById('inspectorContent');
+      if (!inspectorData) return;
+
+      if (tab === 'equip') {
+        document.getElementById('tabBtnEquip').classList.add('active');
+        const eq = inspectorData.equipment || {};
+        content.innerHTML = `
+          <table style="width:100%;">
+            <thead><tr><th>Slot</th><th>Item Equipado</th></tr></thead>
+            <tbody>
+              <tr><td>⚔️ Arma (Mão Direita)</td><td><strong>${eq.weapon || 'Nenhum'}</strong></td></tr>
+              <tr><td>🛡️ Peitoral / Armadura</td><td><strong>${eq.chest || 'Nenhum'}</strong></td></tr>
+              <tr><td>👖 Calças / Pernas</td><td><strong>${eq.legs || 'Nenhum'}</strong></td></tr>
+              <tr><td>🪖 Capacete / Elmo</td><td><strong>${eq.head || 'Nenhum'}</strong></td></tr>
+              <tr><td>🥊 Luvas</td><td><strong>${eq.gloves || 'Nenhum'}</strong></td></tr>
+              <tr><td>🥾 Botas</td><td><strong>${eq.feet || 'Nenhum'}</strong></td></tr>
+            </tbody>
+          </table>
+        `;
+      } else if (tab === 'inv') {
+        document.getElementById('tabBtnInv').classList.add('active');
+        const items = inspectorData.inventory || [];
+        if (items.length === 0) {
+          content.innerHTML = '<p style="text-align:center; padding:1rem;">Inventário vazio.</p>';
+        } else {
+          content.innerHTML = `
+            <table style="width:100%;">
+              <thead><tr><th>Item ID</th><th>Nome do Item</th><th>Quantidade</th><th>Status</th></tr></thead>
+              <tbody>
+                ${items.map(item => `
+                  <tr>
+                    <td>${item.itemId}</td>
+                    <td><strong>${item.name}</strong></td>
+                    <td>${item.count.toLocaleString()}</td>
+                    <td><span class="badge ${item.equipped ? 'badge-pvp' : 'badge-alive'}">${item.equipped ? 'Equipado' : 'Mochila'}</span></td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          `;
+        }
+      } else if (tab === 'buffs') {
+        document.getElementById('tabBtnBuffs').classList.add('active');
+        const buffs = inspectorData.buffs || [];
+        if (buffs.length === 0) {
+          content.innerHTML = '<p style="text-align:center; padding:1rem;">Nenhum buff ativo no momento.</p>';
+        } else {
+          content.innerHTML = `
+            <table style="width:100%;">
+              <thead><tr><th>Skill ID</th><th>Nome da Skill</th><th>Nível</th><th>Duração Restante</th></tr></thead>
+              <tbody>
+                ${buffs.map(b => `
+                  <tr>
+                    <td>${b.skillId}</td>
+                    <td><strong>${b.name}</strong></td>
+                    <td>Nv. ${b.level}</td>
+                    <td>⏱️ ${b.durationSec}s</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          `;
+        }
+      }
     }
 
     // Auto-refresh interval

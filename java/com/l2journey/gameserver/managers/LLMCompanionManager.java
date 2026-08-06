@@ -213,6 +213,19 @@ public class LLMCompanionManager
 						long current = bot.getInventory().getAdena();
 						bot.getInventory().addAdena(ItemProcessType.REWARD, 1000000L - current, bot, null); // 1,000,000 Adena starter fund
 					}
+
+					// Starter Consumables replenishment
+					if (bot.getInventory().getItemByItemId(BuyListExecutingEngine.SOULSHOT_NG_ID) == null)
+					{
+						bot.getInventory().addItem(ItemProcessType.REWARD, BuyListExecutingEngine.SOULSHOT_NG_ID, 2000, bot, null);
+						bot.addAutoSoulShot(BuyListExecutingEngine.SOULSHOT_NG_ID);
+						bot.sendPacket(new com.l2journey.gameserver.network.serverpackets.ExAutoSoulShot(BuyListExecutingEngine.SOULSHOT_NG_ID, 1));
+					}
+					if (bot.getInventory().getItemByItemId(BuyListExecutingEngine.HEALING_POTION_ID) == null)
+					{
+						bot.getInventory().addItem(ItemProcessType.REWARD, BuyListExecutingEngine.HEALING_POTION_ID, 50, bot, null);
+					}
+
 					bot.broadcastUserInfo();
 					member.setBotInstance(bot);
 
