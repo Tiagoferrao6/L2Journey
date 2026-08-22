@@ -618,6 +618,8 @@ public class Config
 	// Jogadores Falsos
 	// --------------------------------------------------
 	public static boolean FAKE_PLAYERS_ENABLED;
+	public static boolean FAKE_SHOPS_ENABLED;
+	public static boolean FAKE_HUNTERS_ENABLED;
 	public static boolean FAKE_PLAYER_CHAT;
 	public static boolean FAKE_PLAYER_USE_SHOTS;
 	public static boolean FAKE_PLAYER_KILL_PVP;
@@ -2412,6 +2414,8 @@ public class Config
 	{
 		final ConfigReader fakePlayerConfig = new ConfigReader(FAKE_PLAYERS_CONFIG_FILE);
 		FAKE_PLAYERS_ENABLED = fakePlayerConfig.getBoolean("EnableFakePlayers", false);
+		FAKE_SHOPS_ENABLED = fakePlayerConfig.getBoolean("EnableFakeShops", true);
+		FAKE_HUNTERS_ENABLED = fakePlayerConfig.getBoolean("EnableFakeHunters", true);
 		FAKE_PLAYER_CHAT = fakePlayerConfig.getBoolean("FakePlayerChat", false);
 		FAKE_PLAYER_USE_SHOTS = fakePlayerConfig.getBoolean("FakePlayerUseShots", false);
 		FAKE_PLAYER_KILL_PVP = fakePlayerConfig.getBoolean("FakePlayerKillsRewardPvP", false);

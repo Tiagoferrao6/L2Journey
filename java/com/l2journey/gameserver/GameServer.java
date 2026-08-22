@@ -118,6 +118,7 @@ import com.l2journey.gameserver.managers.DailyRewardManager;
 import com.l2journey.gameserver.managers.DayNightSpawnManager;
 import com.l2journey.gameserver.managers.DimensionalRiftManager;
 import com.l2journey.gameserver.managers.EventDropManager;
+import com.l2journey.gameserver.managers.FakePlayerManager;
 import com.l2journey.gameserver.managers.FakePlayerChatManager;
 import com.l2journey.gameserver.managers.FishingChampionshipManager;
 import com.l2journey.gameserver.managers.FortManager;
@@ -401,6 +402,11 @@ public class GameServer
 		KrateisCubeManager.getInstance();
 		UndergroundColiseumManager.getInstance();
 		PersistentTaskManager.getInstance();
+		
+		if (Config.FAKE_PLAYERS_ENABLED)
+		{
+			FakePlayerManager.getInstance();
+		}
 		
 		AntiFeedManager.getInstance().registerEvent(AntiFeedManager.GAME_ID);
 		if (Config.ENABLE_OFFLINE_PLAY_COMMAND)

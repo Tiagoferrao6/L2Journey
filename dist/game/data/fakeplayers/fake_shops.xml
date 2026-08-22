@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shops>
+	<!-- Vendor in Gludio selling materials from Gludio city catalog -->
+	<fakeshop name="Gimli" title="Vendo Materiais Gludio" classId="53" level="40" x="-14228" y="123445" z="-3115" heading="16384" city="Gludio" type="SELL" category="MATERIALS" updateInterval="15" maxItems="5" />
+
+	<!-- Buyer in Gludio buying Iron Ore & Varnish -->
+	<fakeshop name="Thorin" title="Compro Iron e Varnish" classId="54" level="52" x="-14100" y="123500" z="-3115" heading="32768" city="Gludio" type="BUY" category="CUSTOM" updateInterval="30" maxItems="2">
+		<customitem id="1869" count="50" price="600" /> <!-- Iron Ore -->
+		<customitem id="1865" count="100" price="350" /> <!-- Varnish -->
+	</fakeshop>
+
+	<!-- Dwarven Craft shop in Gludio -->
+	<fakeshop name="Durin" title="Craft SS D Grade" classId="56" level="60" x="-14300" y="123600" z="-3115" heading="0" city="Gludio" type="CRAFT" category="CUSTOM" updateInterval="45" maxItems="1">
+		<customitem id="1835" count="1" price="15" /> <!-- Soulshot D recipe -->
+	</fakeshop>
+
+	<!-- Vendor in Dion selling supplies -->
+	<fakeshop name="Balin" title="Suprimentos Dion" classId="53" level="35" x="15632" y="142876" z="-2705" heading="49152" city="Dion" type="SELL" category="SUPPLIES" updateInterval="20" maxItems="4" />
+</shops>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalogs>
+	<city name="Gludio">
+		<materials>
+			<item id="1864" minCount="10" maxCount="100" minPrice="150" maxPrice="300" /> <!-- Stem -->
+			<item id="1865" minCount="10" maxCount="80" minPrice="200" maxPrice="400" /> <!-- Varnish -->
+			<item id="1866" minCount="5" maxCount="50" minPrice="300" maxPrice="600" /> <!-- Suede -->
+			<item id="1867" minCount="5" maxCount="40" minPrice="350" maxPrice="700" /> <!-- Animal Skin -->
+			<item id="1868" minCount="10" maxCount="100" minPrice="100" maxPrice="250" /> <!-- Thread -->
+			<item id="1869" minCount="5" maxCount="30" minPrice="500" maxPrice="1000" /> <!-- Iron Ore -->
+		</materials>
+		<supplies>
+			<item id="1060" minCount="10" maxCount="50" minPrice="100" maxPrice="150" /> <!-- Lesser Healing Potion -->
+			<item id="1061" minCount="10" maxCount="50" minPrice="400" maxPrice="600" /> <!-- Healing Potion -->
+			<item id="737" minCount="5" maxCount="20" minPrice="500" maxPrice="800" /> <!-- Scroll of Escape -->
+			<item id="1835" minCount="100" maxCount="1000" minPrice="10" maxPrice="15" /> <!-- Soulshot: D-Grade -->
+			<item id="3947" minCount="100" maxCount="1000" minPrice="25" maxPrice="40" /> <!-- Spiritshot: D-Grade -->
+		</supplies>
+		<items>
+			<item id="23" minCount="1" maxCount="1" minPrice="15000" maxPrice="25000" /> <!-- Short Sword -->
+			<item id="1" minCount="1" maxCount="1" minPrice="10000" maxPrice="18000" /> <!-- Short Bow -->
+			<item id="42" minCount="1" maxCount="1" minPrice="20000" maxPrice="30000" /> <!-- Apprentice's Staff -->
+			<item id="2414" minCount="1" maxCount="1" minPrice="45000" maxPrice="70000" /> <!-- Wooden Helmet -->
+			<item id="24" minCount="1" maxCount="1" minPrice="30000" maxPrice="50000" /> <!-- Broadsword -->
+		</items>
+	</city>
+
+	<city name="Dion">
+		<materials>
+			<item id="1870" minCount="5" maxCount="30" minPrice="800" maxPrice="1500" /> <!-- Coal -->
+			<item id="1871" minCount="5" maxCount="30" minPrice="800" maxPrice="1500" /> <!-- Charcoal -->
+			<item id="1872" minCount="2" maxCount="15" minPrice="1500" maxPrice="3000" /> <!-- Animal Bone -->
+			<item id="1873" minCount="1" maxCount="10" minPrice="4000" maxPrice="8000" /> <!-- Silver Nugget -->
+		</materials>
+		<supplies>
+			<item id="1061" minCount="20" maxCount="100" minPrice="450" maxPrice="650" /> <!-- Healing Potion -->
+			<item id="1539" minCount="10" maxCount="50" minPrice="2000" maxPrice="3500" /> <!-- Greater Healing Potion -->
+			<item id="1463" minCount="500" maxCount="3000" minPrice="12" maxPrice="18" /> <!-- Soulshot: D-Grade -->
+		</supplies>
+		<items>
+			<item id="351" minCount="1" maxCount="1" minPrice="150000" maxPrice="220000" /> <!-- Wooden Gaiters -->
+			<item id="2415" minCount="1" maxCount="1" minPrice="80000" maxPrice="120000" /> <!-- Bronze Helmet -->
+		</items>
+	</city>
+</catalogs>

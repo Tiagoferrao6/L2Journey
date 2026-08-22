@@ -769,6 +769,7 @@ public class Player extends Playable
 	private AccessLevel _accessLevel;
 	
 	private boolean _messageRefusal = false; // message refusal mode
+	private boolean _isFakePlayer = false;
 	
 	private boolean _silenceMode = false; // silence mode
 	private List<Integer> _silenceModeExcluded; // silence mode
@@ -6970,6 +6971,17 @@ public class Player extends Playable
 	public boolean isGM()
 	{
 		return getAccessLevel().isGm();
+	}
+	
+	@Override
+	public boolean isFakePlayer()
+	{
+		return _isFakePlayer;
+	}
+	
+	public void setFakePlayer(boolean isFakePlayer)
+	{
+		_isFakePlayer = isFakePlayer;
 	}
 	
 	/**

@@ -1,3 +1,72 @@
-/bin/
+# ===============================================================================
+# 1. Compilação e Artefatos de Build (Generated Build Files)
+# ===============================================================================
 /build/
+/bin/
+*.class
+
+# Ignorar pacotes compilados gerados no build (mantendo bibliotecas em dist/libs)
+*.zip
+*.rar
+*.war
+*.ear
+
+# ===============================================================================
+# 2. Configurações Locais e Segredos (Local Configs & Secrets)
+# ===============================================================================
 .env
+.env.local
+.env.development.local
+.env.test.local
+
+# ===============================================================================
+# 3. Logs e Execução em Tempo de Execução (Runtime Logs & State)
+# ===============================================================================
+*.log
+/log/
+/logs/
+/dist/game/log/
+/dist/login/log/
+/dist/backup/
+
+# ===============================================================================
+# 4. Configurações de IDEs e Editores (IDE & Editor Settings)
+# ===============================================================================
+# Eclipse
+.classpath
+.project
+.settings/
+
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# IntelliJ / JetBrains
+.idea/
+*.iml
+*.iws
+
+# Editores de Texto & Temporários
+*.swp
+*.swo
+*~
+*.tmp
+*.bak
+
+# ===============================================================================
+# 5. Sistema Operacional (OS Generated Files)
+# ===============================================================================
+.DS_Store
+.DS_Store?
+ehthumbs.db
+Icon?
+Thumbs.db
+
+# ===============================================================================
+# 6. Rascunhos e Temporários do Projeto (Project Drafts)
+# ===============================================================================
+codigo_fakeplayers.txt
+estrutura_compilada.txt

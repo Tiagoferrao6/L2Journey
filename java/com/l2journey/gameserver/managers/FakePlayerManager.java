@@ -1,102 +1,68 @@
 package com.l2journey.gameserver.managers;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
-import com.l2journey.commons.threads.ThreadPool;
-import com.l2journey.gameserver.model.actor.Creature;
-import com.l2journey.gameserver.model.actor.Player;
-import com.l2journey.gameserver.model.zone.L2ZoneType;
-import com.l2journey.gameserver.model.zone.ZoneId;
-import com.l2journey.gameserver.model.zone.ZoneListener;
+import com.l2journey.Config;
+import com.l2journey.gameserver.data.xml.FakeShopData;
+import com.l2journey.gameserver.model.actor.fakeplayer.FakeShop;
+import com.l2journey.gameserver.model.actor.holders.fakeplayer.FakeShopHolder;
 
 /**
- * Manager for Fake Players MVP (Gludio, Death Pass, Ruins of Despair).
- * Handles Zone Listeners and short schedules for PoC testing.
+ * Modularized Manager for Fake Players (FakeShops and FakeHunters).
  */
 public class FakePlayerManager
 {
 	private static final Logger LOGGER = Logger.getLogger(FakePlayerManager.class.getName());
-	
-	// MVP test configurations
-	private static final int TRADER_INVENTORY_REFRESH_DELAY = 60 * 60 * 1000; // 1 hour
-	private static final int HUNTER_SHORT_TURN_DELAY = 15 * 60 * 1000; // 15 mins for testing despawn/SoE
-	
-	private boolean _gludioActive = false;
+
+	private final Map<String, FakeShop> _activeShops = new ConcurrentHashMap<>();
 
 	protected FakePlayerManager()
 	{
-		LOGGER.info(getClass().getSimpleName() + ": Initializing Fake Player PoC Manager.");
-		initZoneListeners();
-		startSchedules();
-	}
-
-	private void initZoneListeners()
-	{
-		// In a real scenario, we would attach to specific Gludio zones.
-		// For MVP, we define a generic listener that could be attached to ZoneManager.
-		ZoneListener mvpZoneListener = new ZoneListener()
+		if (!Config.FAKE_PLAYERS_ENABLED)
 		{
-			@Override
-			public void onEnterZone(Creature character, L2ZoneType zone)
-			{
-				if (character instanceof Player && !((Player) character).isFakePlayer())
-				{
-					if (!_gludioActive)
-					{
-						_gludioActive = true;
-						LOGGER.info("FakePlayerManager: Real player entered MVP zone. Spawning 10 bots...");
-						spawnBots();
-					}
-				}
-			}
+			LOGGER.info(getClass().getSimpleName() + ": Fake Players system is disabled.");
+			return;
+		}
 
-			@Override
-			public void onExitZone(Creature character, L2ZoneType zone)
-			{
-				if (character instanceof Player && !((Player) character).isFakePlayer())
-				{
-					// If no real players left in the zone (simplified logic)
-					_gludioActive = false;
-					LOGGER.info("FakePlayerManager: Real player left MVP zone. Suspending bots...");
-					despawnBots();
-				}
-			}
-		};
-		// ZoneManager.getInstance().getZoneById(ZoneId.TOWN).addListener(mvpZoneListener);
-		LOGGER.info(getClass().getSimpleName() + ": Zone listeners initialized for Gludio, Death Pass, Ruins of Despair.");
-	}
+		LOGGER.info(getClass().getSimpleName() + ": Initializing Modular Fake Player Manager.");
 
-	private void startSchedules()
-	{
-		ThreadPool.scheduleAtFixedRate(() -> 
+		if (Config.FAKE_SHOPS_ENABLED)
 		{
-			if (_gludioActive)
-			{
-				LOGGER.info("FakePlayerManager: Executing accelerated 1-hour Trader inventory refresh.");
-				// Logic to refresh trader inventories
-			}
-		}, TRADER_INVENTORY_REFRESH_DELAY, TRADER_INVENTORY_REFRESH_DELAY);
+			initFakeShops();
+		}
 
-		ThreadPool.scheduleAtFixedRate(() -> 
+		if (Config.FAKE_HUNTERS_ENABLED)
 		{
-			if (_gludioActive)
-			{
-				LOGGER.info("FakePlayerManager: Executing short turn SoE / Despawn for Hunters.");
-				// Logic for hunters to SoE or despawn
-			}
-		}, HUNTER_SHORT_TURN_DELAY, HUNTER_SHORT_TURN_DELAY);
+			initFakeHunters();
+		}
 	}
 
-	private void spawnBots()
+	public void initFakeShops()
 	{
-		// Spawn 2 Traders (1 fixed, 1 variable)
-		// Spawn 4 Hunters in Death Pass
-		// Spawn 4 Hunters in Ruins of Despair
+		LOGGER.info(getClass().getSimpleName() + ": Initializing FakeShops module...");
+		FakeShopData.getInstance(); // Loads XML configs
+
+		for (FakeShopHolder holder : FakeShopData.getInstance().getFakeShops())
+		{
+			final FakeShop shop = new FakeShop(holder);
+			_activeShops.put(holder.getName().toLowerCase(), shop);
+			shop.spawn();
+		}
+
+		LOGGER.info(getClass().getSimpleName() + ": Activated " + _activeShops.size() + " FakeShops.");
 	}
 
-	private void despawnBots()
+	public void initFakeHunters()
 	{
-		// Save state to fake_players_profiles and despawn
+		LOGGER.info(getClass().getSimpleName() + ": Initializing FakeHunters module...");
+		// FakeHunters module initialization
+	}
+
+	public FakeShop getFakeShop(String name)
+	{
+		return _activeShops.get(name.toLowerCase());
 	}
 
 	public static FakePlayerManager getInstance()
