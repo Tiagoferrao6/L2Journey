@@ -3,7 +3,7 @@
 # ---------------------------------------------------------------------------
 # Stage 1: Build with JDK 24 + Ant (same as login/game)
 # ---------------------------------------------------------------------------
-FROM eclipse-temurin:24-jdk AS builder
+FROM eclipse-temurin:25-jdk AS builder
 
 RUN apt-get update && apt-get install -y --no-install-recommends ant && rm -rf /var/lib/apt/lists/*
 
@@ -18,7 +18,7 @@ RUN ant compile jar
 # ---------------------------------------------------------------------------
 # Stage 2: Runtime - JRE + MariaDB client + installer JARs + sql
 # ---------------------------------------------------------------------------
-FROM eclipse-temurin:24-jre
+FROM eclipse-temurin:25-jre
 
 RUN apt-get update && apt-get install -y --no-install-recommends mariadb-client && rm -rf /var/lib/apt/lists/*
 
