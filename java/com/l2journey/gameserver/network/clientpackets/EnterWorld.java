@@ -186,6 +186,7 @@ public class EnterWorld extends ClientPacket
 		client.setClientTracert(_tracert);
 		
 		player.sendPacket(new UserInfo(player));
+		player.rewardSkills();
 		
 		// Restore to instanced area if enabled
 		if (Config.RESTORE_PLAYER_INSTANCE)

@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gameserver address="127.0.0.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="ipconfig.xsd">
-	<define subnet="0.0.0.0/0" address="127.0.0.1" />
+<gameserver address="172.19.63.228" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="ipconfig.xsd">
+	<define subnet="127.0.0.0/8" address="127.0.0.1" />
+	<define subnet="172.16.0.0/12" address="172.19.63.228" />
+	<define subnet="0.0.0.0/0" address="172.19.63.228" />
 </gameserver>

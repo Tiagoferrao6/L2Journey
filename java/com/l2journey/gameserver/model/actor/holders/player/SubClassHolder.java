@@ -39,7 +39,7 @@ import com.l2journey.gameserver.model.actor.enums.player.PlayerClass;
  */
 public class SubClassHolder
 {
-	private static final byte MAX_LEVEL = Config.MAX_SUBCLASS_LEVEL < ExperienceData.getInstance().getMaxLevel() ? Config.MAX_SUBCLASS_LEVEL : (byte) (ExperienceData.getInstance().getMaxLevel() - 1);
+	private static final byte MAX_LEVEL = Config.MAX_SUBCLASS_LEVEL <= ExperienceData.getInstance().getMaxLevel() ? Config.MAX_SUBCLASS_LEVEL : (byte) ExperienceData.getInstance().getMaxLevel();
 	
 	private PlayerClass _playerClass;
 	private long _exp = ExperienceData.getInstance().getExpForLevel(Config.BASE_SUBCLASS_LEVEL);
