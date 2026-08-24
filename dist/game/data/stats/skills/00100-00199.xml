@@ -909,19 +909,12 @@
 		<set name="magicLevel" val="46" />
 		<set name="mpConsume" val="41" />
 		<set name="reuseDelay" val="30000" />
-		<conditions msgId="113" addName="1">
-			<using kind="DUALFIST" />
-		</conditions>
 		<effects>
 			<effect name="Buff">
-				<mul stat="pAtk" val="1.3">
-					<using kind="DUALFIST" />
-				</mul>
+				<mul stat="pAtk" val="1.3" />
 				<mul stat="pDef" val="1.3" />
 				<mul stat="mDef" val="1.3" />
-				<mul stat="critDmg" val="1.1">
-					<using kind="DUALFIST" />
-				</mul>
+				<mul stat="critDmg" val="1.1" />
 			</effect>
 		</effects>
 	</skill>
@@ -2350,11 +2343,11 @@
 		<set name="mpConsume" val="#mpConsume" />
 		<set name="reuseDelay" val="600000" />
 		<conditions msgId="113" addName="1">
-			<player hp="30" />
+			<player hp="40" />
 		</conditions>
 		<effects>
 			<effect name="Buff">
-				<mul stat="pDef" val="#pDef" />
+				<mul stat="pDef" val="4.0" />
 			</effect>
 		</effects>
 	</skill>
@@ -3093,32 +3086,11 @@
 		<set name="mpConsume" val="#mpConsume" />
 		<set name="reuseDelay" val="300000" />
 		<conditions msgId="113" addName="1">
-			<player hp="60" />
+			<player hp="40" />
 		</conditions>
 		<effects>
 			<effect name="Buff">
-				<mul stat="pAtk" val="#all" />
-				<mul stat="pAtk" val="#swordblunt">
-					<and>
-						<player hp="60" />
-						<using kind="SWORD,BLUNT" />
-						<using slot="lrhand" />
-					</and>
-				</mul>
-				<mul stat="pAtk" val="#twohand">
-					<and>
-						<player hp="60" />
-						<using kind="SWORD,BLUNT" />
-						<using slot="lrhand" />
-					</and>
-				</mul>
-				<add stat="accCombat" val="#accCombat">
-					<and>
-						<player hp="60" />
-						<using kind="SWORD,BLUNT" />
-						<using slot="lrhand" />
-					</and>
-				</add>
+				<mul stat="pAtk" val="4.0" />
 			</effect>
 		</effects>
 	</skill>

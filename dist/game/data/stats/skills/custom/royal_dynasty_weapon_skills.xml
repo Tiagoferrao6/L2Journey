@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../xsd/skills.xsd">
+	<!-- Masterwork Passive Skills (93101 - 93112) -->
+	<skill id="93101" levels="1" name="Great Gale">
+		<!-- +5% Atk.Spd, +3 Accuracy, +10% Critical Damage, +3 Evasion -->
+		<set name="icon" val="icon.skill0000" />
+		<set name="operateType" val="P" />
+		<set name="targetType" val="SELF" />
+		<set name="magicLevel" val="76" />
+		<effects>
+			<effect name="Buff">
+				<mul stat="pAtkSpd" val="1.05" />
+				<add stat="accCombat" val="3" />
+				<mul stat="cAtk" val="1.10" />
+				<add stat="rEvas" val="3" />
+			</effect>
+		</effects>
+	</skill>
+
+	<skill id="93102" levels="1" name="Destruction">
+		<!-- +5% P.Atk, +15% Critical Damage -->
+		<set name="icon" val="icon.skill0000" />
+		<set name="operateType" val="P" />
+		<set name="targetType" val="SELF" />
+		<set name="magicLevel" val="76" />
+		<effects>
+			<effect name="Buff">
+				<mul stat="pAtk" val="1.05" />
+				<mul stat="cAtk" val="1.15" />
+			</effect>
+		</effects>
+	</skill>
+
+	<skill id="93103" levels="1" name="Thunder">
+		<!-- +5% P.Atk, +2 Accuracy, +20 Shock Trait -->
+		<set name="icon" val="icon.skill0000" />
+		<set name="operateType" val="P" />
+		<set name="targetType" val="SELF" />
+		<set name="magicLevel" val="76" />
+		<effects>
+			<effect name="Buff">
+				<mul stat="pAtk" val="1.05" />
+				<add stat="accCombat" val="2" />
+			</effect>
+			<effect name="DefenceTrait">
+				<param SHOCK="20" />
+			</effect>
+		</effects>
+	</skill>
+
+	<skill id="93104" levels="1" name="Earth">
+		<!-- +15% Blow Success Rate, +8% Critical Damage -->
+		<set name="icon" val="icon.skill0000" />
+		<set name="operateType" val="P" />
+		<set name="targetType" val="SELF" />
+		<set name="magicLevel" val="76" />
+		<effects>
+			<effect name="Buff">
+				<add stat="blowRate" val="15" />
+				<mul stat="cAtk" val="1.08" />
+			</effect>
+		</effects>
+	</skill>
+
+	<skill id="93105" levels="1" name="Storm">
+		<!-- +50 Attack Range, +4 Accuracy -->
+		<set name="icon" val="icon.skill0000" />
+		<set name="operateType" val="P" />
+		<set name="targetType" val="SELF" />
+		<set name="magicLevel" val="76" />
+		<effects>
+			<effect name="Buff">
+				<add stat="pAtkRange" val="50" />
+				<add stat="accCombat" val="4" />
+			</effect>
+		</effects>
+	</skill>
+
+	<skill id="93106" levels="1" name="Gale">
+		<!-- +5% P.Atk, +5% Atk.Spd -->
+		<set name="icon" val="icon.skill0000" />
+		<set name="operateType" val="P" />
+		<set name="targetType" val="SELF" />
+		<set name="magicLevel" val="76" />
+		<effects>
+			<effect name="Buff">
+				<mul stat="pAtk" val="1.05" />
+				<mul stat="pAtkSpd" val="1.05" />
+			</effect>
+		</effects>
+	</skill>
+
+	<skill id="93107" levels="1" name="Earthquake">
+		<!-- +10% Critical Damage, +15 Shock Trait -->
+		<set name="icon" val="icon.skill0000" />
+		<set name="operateType" val="P" />
+		<set name="targetType" val="SELF" />
+		<set name="magicLevel" val="76" />
+		<effects>
+			<effect name="Buff">
+				<mul stat="cAtk" val="1.10" />
+			</effect>
+			<effect name="DefenceTrait">
+				<param SHOCK="15" />
+			</effect>
+		</effects>
+	</skill>
+
+	<skill id="93108" levels="1" name="Shadow">
+		<!-- +15% Mortal Rate, +5 Speed, +8% Critical Damage -->
+		<set name="icon" val="icon.skill0000" />
+		<set name="operateType" val="P" />
+		<set name="targetType" val="SELF" />
+		<set name="magicLevel" val="76" />
+		<effects>
+			<effect name="Buff">
+				<add stat="blowRate" val="15" />
+				<add stat="runSpd" val="5" />
+				<mul stat="cAtk" val="1.08" />
+			</effect>
+		</effects>
+	</skill>
+
+	<skill id="93109" levels="1" name="Nature">
+		<!-- +5% M.Atk, +400 Max MP -->
+		<set name="icon" val="icon.skill0000" />
+		<set name="operateType" val="P" />
+		<set name="targetType" val="SELF" />
+		<set name="magicLevel" val="76" />
+		<effects>
+			<effect name="Buff">
+				<mul stat="mAtk" val="1.05" />
+				<add stat="maxMp" val="400" />
+			</effect>
+		</effects>
+	</skill>
+
+	<skill id="93110" levels="1" name="Wisdom">
+		<!-- +10% Heal Power, +15% MP Recovery -->
+		<set name="icon" val="icon.skill0000" />
+		<set name="operateType" val="P" />
+		<set name="targetType" val="SELF" />
+		<set name="magicLevel" val="76" />
+		<effects>
+			<effect name="Buff">
+				<mul stat="gainHp" val="1.10" />
+				<mul stat="regMp" val="1.15" />
+			</effect>
+		</effects>
+	</skill>
+
+	<skill id="93111" levels="1" name="Chaos">
+		<!-- +15 Magic Critical Rate, +5% M.Atk -->
+		<set name="icon" val="icon.skill0000" />
+		<set name="operateType" val="P" />
+		<set name="targetType" val="SELF" />
+		<set name="magicLevel" val="76" />
+		<effects>
+			<effect name="Buff">
+				<add stat="mCritRate" val="15" />
+				<mul stat="mAtk" val="1.05" />
+			</effect>
+		</effects>
+	</skill>
+
+	<skill id="93112" levels="1" name="Breeze">
+		<!-- +5% Atk.Spd, +5% Cast.Spd -->
+		<set name="icon" val="icon.skill0000" />
+		<set name="operateType" val="P" />
+		<set name="targetType" val="SELF" />
+		<set name="magicLevel" val="76" />
+		<effects>
+			<effect name="Buff">
+				<mul stat="pAtkSpd" val="1.05" />
+				<mul stat="mAtkSpd" val="1.05" />
+			</effect>
+		</effects>
+	</skill>
+
+	<!-- PvP Refine & Trigger Skills (93130 - 93138) -->
+	<skill id="93130" levels="1" name="Mastery PvP">
+		<!-- +5% PvP Physical/Magical Damage, +500 Max CP -->
+		<set name="icon" val="icon.skill0000" />
+		<set name="operateType" val="P" />
+		<set name="targetType" val="SELF" />
+		<set name="magicLevel" val="76" />
+		<effects>
+			<effect name="Buff">
+				<mul stat="pvpPhysDmg" val="1.05" />
+				<mul stat="pvpMagicalDmg" val="1.05" />
+				<add stat="maxCp" val="500" />
+			</effect>
+		</effects>
+	</skill>
+
+	<skill id="93131" levels="1" name="CP Drain Trigger">
+		<set name="icon" val="icon.skill0000" />
+		<set name="operateType" val="P" />
+		<set name="targetType" val="SELF" />
+		<set name="magicLevel" val="76" />
+		<effects>
+			<effect name="Buff">
+				<add stat="absorbDam" val="5" />
+			</effect>
+		</effects>
+	</skill>
+
+	<skill id="93132" levels="1" name="Cancel Trigger">
+		<set name="icon" val="icon.skill0000" />
+		<set name="operateType" val="P" />
+		<set name="targetType" val="SELF" />
+		<set name="magicLevel" val="76" />
+		<effects>
+			<effect name="Buff">
+				<mul stat="pvpPhysDmg" val="1.05" />
+			</effect>
+		</effects>
+	</skill>
+
+	<skill id="93133" levels="1" name="Ignore Shield Defense">
+		<set name="icon" val="icon.skill0000" />
+		<set name="operateType" val="P" />
+		<set name="targetType" val="SELF" />
+		<set name="magicLevel" val="76" />
+		<effects>
+			<effect name="Buff">
+				<add stat="ignoreShieldDef" val="15" />
+			</effect>
+		</effects>
+	</skill>
+
+	<skill id="93134" levels="1" name="Attack Chance">
+		<set name="icon" val="icon.skill0000" />
+		<set name="operateType" val="P" />
+		<set name="targetType" val="SELF" />
+		<set name="magicLevel" val="76" />
+		<effects>
+			<effect name="Buff">
+				<mul stat="pvpPhysSkillsDmg" val="1.08" />
+			</effect>
+		</effects>
+	</skill>
+
+	<skill id="93135" levels="1" name="Casting Speed Burst">
+		<set name="icon" val="icon.skill0000" />
+		<set name="operateType" val="P" />
+		<set name="targetType" val="SELF" />
+		<set name="magicLevel" val="76" />
+		<effects>
+			<effect name="Buff">
+				<mul stat="mAtkSpd" val="1.10" />
+			</effect>
+		</effects>
+	</skill>
+
+	<skill id="93136" levels="1" name="Rapid Fire">
+		<set name="icon" val="icon.skill0000" />
+		<set name="operateType" val="P" />
+		<set name="targetType" val="SELF" />
+		<set name="magicLevel" val="76" />
+		<effects>
+			<effect name="Buff">
+				<mul stat="pAtkSpd" val="1.10" />
+			</effect>
+		</effects>
+	</skill>
+
+	<skill id="93138" levels="1" name="Mirage Trigger">
+		<set name="icon" val="icon.skill0000" />
+		<set name="operateType" val="P" />
+		<set name="targetType" val="SELF" />
+		<set name="magicLevel" val="76" />
+		<effects>
+			<effect name="Buff">
+				<add stat="blowRate" val="10" />
+			</effect>
+		</effects>
+	</skill>
+</list>

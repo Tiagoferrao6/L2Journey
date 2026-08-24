@@ -6298,17 +6298,10 @@
 		<set name="magicLevel" val="28" />
 		<set name="mpConsume" val="25" />
 		<set name="reuseDelay" val="23000" />
-		<conditions msgId="113" addName="1">
-			<using kind="DUALFIST" />
-		</conditions>
 		<effects>
 			<effect name="Buff">
-				<mul stat="pAtk" val="1.2">
-					<using kind="DUALFIST" />
-				</mul>
-				<mul stat="critDmg" val="1.2">
-					<using kind="DUALFIST" />
-				</mul>
+				<mul stat="pAtk" val="1.2" />
+				<mul stat="critDmg" val="1.2" />
 				<mul stat="runSpd" val="0.7" />
 			</effect>
 		</effects>
@@ -6635,17 +6628,10 @@
 		<set name="magicLevel" val="20" />
 		<set name="mpConsume" val="19" />
 		<set name="reuseDelay" val="23000" />
-		<conditions msgId="113" addName="1">
-			<using kind="DUALFIST" />
-		</conditions>
 		<effects>
 			<effect name="Buff">
-				<mul stat="runSpd" val="1.2">
-					<using kind="DUALFIST" />
-				</mul>
-				<add stat="accCombat" val="3">
-					<using kind="DUALFIST" />
-				</add>
+				<mul stat="runSpd" val="1.2" />
+				<add stat="accCombat" val="3" />
 			</effect>
 		</effects>
 	</skill>
