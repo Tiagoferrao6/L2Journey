@@ -47,6 +47,7 @@ import org.w3c.dom.Node;
 
 import com.l2journey.Config;
 import com.l2journey.commons.util.IXmlReader;
+import com.l2journey.gameserver.data.xml.CumulativeSubclassData;
 import com.l2journey.gameserver.model.SkillLearn;
 import com.l2journey.gameserver.model.SkillLearn.SubClassData;
 import com.l2journey.gameserver.model.StatSet;
@@ -547,12 +548,34 @@ public class SkillTreeData implements IXmlReader
 	private List<SkillLearn> getAvailableSkills(Player player, PlayerClass classId, boolean includeByFs, boolean includeAutoGet, boolean includeRequiredItems, Map<Integer, Skill> existingSkills)
 	{
 		final List<SkillLearn> result = new LinkedList<>();
-		final Map<Integer, SkillLearn> skills = getCompleteClassSkillTree(classId);
-		if (skills.isEmpty())
+		final Map<Integer, SkillLearn> mainSkills = getCompleteClassSkillTree(classId);
+		if (mainSkills.isEmpty() && (player.getDualClassId() == -1 || !CumulativeSubclassData.getInstance().isEnabled()))
 		{
 			// The Skill Tree for this class is undefined.
 			LOGGER.warning(getClass().getSimpleName() + ": Skilltree for class " + classId + " is not defined!");
 			return result;
+		}
+		
+		final Map<Integer, SkillLearn> skills = new LinkedHashMap<>(mainSkills);
+		if (CumulativeSubclassData.getInstance().isEnabled() && (player.getDualClassId() != -1))
+		{
+			final int dualClassId = player.getDualClassId();
+			final PlayerClass dualPlayerClass = PlayerClass.getPlayerClass(dualClassId);
+			if (dualPlayerClass != null)
+			{
+				final Map<Integer, SkillLearn> dualSkills = getCompleteClassSkillTree(dualPlayerClass);
+				for (Entry<Integer, SkillLearn> entry : dualSkills.entrySet())
+				{
+					final int skillHashCode = entry.getKey();
+					final SkillLearn dualSkillLearn = entry.getValue();
+					
+					final SkillLearn existing = skills.get(skillHashCode);
+					if ((existing == null) || (dualSkillLearn.getGetLevel() < existing.getGetLevel()))
+					{
+						skills.put(skillHashCode, dualSkillLearn);
+					}
+				}
+			}
 		}
 		
 		for (SkillLearn skill : skills.values())

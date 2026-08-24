@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list enabled="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../xsd/spawns.xsd">
+	<spawn name="ConquerorStore">
+		<npc id="90000" x="83440" y="147910" z="-3404" heading="16384" respawnDelay="60" /> <!-- Conqueror's Store -->
+	</spawn>
+</list>

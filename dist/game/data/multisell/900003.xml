@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/multisell.xsd">
+	<npcs>
+		<npc>90000</npc> <!-- Conqueror's Store -->
+	</npcs>
+
+	<!-- ============================================================== -->
+	<!--                 COMPRA INICIAL: TATTOOS NÍVEL 1 (20 BADGES)    │
+	<!-- ============================================================== -->
+
+	<!-- SLOT DIREITO (UNDERWEAR) -->
+	<item>
+		<ingredient count="20" id="99000" />
+		<production count="1" id="41001" /> <!-- Tattoo of Ogre - Lv 1 (Right) -->
+	</item>
+	<item>
+		<ingredient count="20" id="99000" />
+		<production count="1" id="41007" /> <!-- Tattoo of Monk - Lv 1 (Right) -->
+	</item>
+	<item>
+		<ingredient count="20" id="99000" />
+		<production count="1" id="41013" /> <!-- Tattoo of Assassin - Lv 1 (Right) -->
+	</item>
+	<item>
+		<ingredient count="20" id="99000" />
+		<production count="1" id="41019" /> <!-- Tattoo of Blood - Lv 1 (Right) -->
+	</item>
+	<item>
+		<ingredient count="20" id="99000" />
+		<production count="1" id="41025" /> <!-- Tattoo of Soul - Lv 1 (Right) -->
+	</item>
+	<item>
+		<ingredient count="20" id="99000" />
+		<production count="1" id="41031" /> <!-- Tattoo of Flame - Lv 1 (Right) -->
+	</item>
+	<item>
+		<ingredient count="20" id="99000" />
+		<production count="1" id="41037" /> <!-- Tattoo of Absolute - Lv 1 (Right) -->
+	</item>
+
+	<!-- SLOT ESQUERDO (HAIR2) -->
+	<item>
+		<ingredient count="20" id="99000" />
+		<production count="1" id="41043" /> <!-- Tattoo of Ogre - Lv 1 (Left) -->
+	</item>
+	<item>
+		<ingredient count="20" id="99000" />
+		<production count="1" id="41049" /> <!-- Tattoo of Monk - Lv 1 (Left) -->
+	</item>
+	<item>
+		<ingredient count="20" id="99000" />
+		<production count="1" id="41055" /> <!-- Tattoo of Assassin - Lv 1 (Left) -->
+	</item>
+	<item>
+		<ingredient count="20" id="99000" />
+		<production count="1" id="41061" /> <!-- Tattoo of Blood - Lv 1 (Left) -->
+	</item>
+	<item>
+		<ingredient count="20" id="99000" />
+		<production count="1" id="41067" /> <!-- Tattoo of Soul - Lv 1 (Left) -->
+	</item>
+	<item>
+		<ingredient count="20" id="99000" />
+		<production count="1" id="41073" /> <!-- Tattoo of Flame - Lv 1 (Left) -->
+	</item>
+	<item>
+		<ingredient count="20" id="99000" />
+		<production count="1" id="41079" /> <!-- Tattoo of Absolute - Lv 1 (Left) -->
+	</item>
+
+	<!-- ============================================================== -->
+	<!--                 RECEITAS DE UPGRADE: SLOT DIREITO (UNDERWEAR) │
+	<!-- ============================================================== -->
+
+	<!-- 1. OGRE (RIGHT) UPGRADES -->
+	<item>
+		<ingredient count="1" id="41001" />
+		<ingredient count="25" id="99000" />
+		<production count="1" id="41002" />
+	</item>
+	<item>
+		<ingredient count="1" id="41002" />
+		<ingredient count="75" id="99000" />
+		<production count="1" id="41003" />
+	</item>
+	<item>
+		<ingredient count="1" id="41003" />
+		<ingredient count="200" id="99000" />
+		<production count="1" id="41004" />
+	</item>
+	<item>
+		<ingredient count="1" id="41004" />
+		<ingredient count="500" id="99000" />
+		<production count="1" id="41005" />
+	</item>
+	<item>
+		<ingredient count="1" id="41005" />
+		<ingredient count="1200" id="99000" />
+		<production count="1" id="41006" />
+	</item>
+
+	<!-- 2. MONK (RIGHT) UPGRADES -->
+	<item>
+		<ingredient count="1" id="41007" />
+		<ingredient count="25" id="99000" />
+		<production count="1" id="41008" />
+	</item>
+	<item>
+		<ingredient count="1" id="41008" />
+		<ingredient count="75" id="99000" />
+		<production count="1" id="41009" />
+	</item>
+	<item>
+		<ingredient count="1" id="41009" />
+		<ingredient count="200" id="99000" />
+		<production count="1" id="41010" />
+	</item>
+	<item>
+		<ingredient count="1" id="41010" />
+		<ingredient count="500" id="99000" />
+		<production count="1" id="41011" />
+	</item>
+	<item>
+		<ingredient count="1" id="41011" />
+		<ingredient count="1200" id="99000" />
+		<production count="1" id="41012" />
+	</item>
+
+	<!-- 3. ASSASSIN (RIGHT) UPGRADES -->
+	<item>
+		<ingredient count="1" id="41013" />
+		<ingredient count="25" id="99000" />
+		<production count="1" id="41014" />
+	</item>
+	<item>
+		<ingredient count="1" id="41014" />
+		<ingredient count="75" id="99000" />
+		<production count="1" id="41015" />
+	</item>
+	<item>
+		<ingredient count="1" id="41015" />
+		<ingredient count="200" id="99000" />
+		<production count="1" id="41016" />
+	</item>
+	<item>
+		<ingredient count="1" id="41016" />
+		<ingredient count="500" id="99000" />
+		<production count="1" id="41017" />
+	</item>
+	<item>
+		<ingredient count="1" id="41017" />
+		<ingredient count="1200" id="99000" />
+		<production count="1" id="41018" />
+	</item>
+
+	<!-- 4. BLOOD (RIGHT) UPGRADES -->
+	<item>
+		<ingredient count="1" id="41019" />
+		<ingredient count="25" id="99000" />
+		<production count="1" id="41020" />
+	</item>
+	<item>
+		<ingredient count="1" id="41020" />
+		<ingredient count="75" id="99000" />
+		<production count="1" id="41021" />
+	</item>
+	<item>
+		<ingredient count="1" id="41021" />
+		<ingredient count="200" id="99000" />
+		<production count="1" id="41022" />
+	</item>
+	<item>
+		<ingredient count="1" id="41022" />
+		<ingredient count="500" id="99000" />
+		<production count="1" id="41023" />
+	</item>
+	<item>
+		<ingredient count="1" id="41023" />
+		<ingredient count="1200" id="99000" />
+		<production count="1" id="41024" />
+	</item>
+
+	<!-- 5. SOUL (RIGHT) UPGRADES -->
+	<item>
+		<ingredient count="1" id="41025" />
+		<ingredient count="25" id="99000" />
+		<production count="1" id="41026" />
+	</item>
+	<item>
+		<ingredient count="1" id="41026" />
+		<ingredient count="75" id="99000" />
+		<production count="1" id="41027" />
+	</item>
+	<item>
+		<ingredient count="1" id="41027" />
+		<ingredient count="200" id="99000" />
+		<production count="1" id="41028" />
+	</item>
+	<item>
+		<ingredient count="1" id="41028" />
+		<ingredient count="500" id="99000" />
+		<production count="1" id="41029" />
+	</item>
+	<item>
+		<ingredient count="1" id="41029" />
+		<ingredient count="1200" id="99000" />
+		<production count="1" id="41030" />
+	</item>
+
+	<!-- 6. FLAME (RIGHT) UPGRADES -->
+	<item>
+		<ingredient count="1" id="41031" />
+		<ingredient count="25" id="99000" />
+		<production count="1" id="41032" />
+	</item>
+	<item>
+		<ingredient count="1" id="41032" />
+		<ingredient count="75" id="99000" />
+		<production count="1" id="41033" />
+	</item>
+	<item>
+		<ingredient count="1" id="41033" />
+		<ingredient count="200" id="99000" />
+		<production count="1" id="41034" />
+	</item>
+	<item>
+		<ingredient count="1" id="41034" />
+		<ingredient count="500" id="99000" />
+		<production count="1" id="41035" />
+	</item>
+	<item>
+		<ingredient count="1" id="41035" />
+		<ingredient count="1200" id="99000" />
+		<production count="1" id="41036" />
+	</item>
+
+	<!-- 7. ABSOLUTE (RIGHT) UPGRADES -->
+	<item>
+		<ingredient count="1" id="41037" />
+		<ingredient count="25" id="99000" />
+		<production count="1" id="41038" />
+	</item>
+	<item>
+		<ingredient count="1" id="41038" />
+		<ingredient count="75" id="99000" />
+		<production count="1" id="41039" />
+	</item>
+	<item>
+		<ingredient count="1" id="41039" />
+		<ingredient count="200" id="99000" />
+		<production count="1" id="41040" />
+	</item>
+	<item>
+		<ingredient count="1" id="41040" />
+		<ingredient count="500" id="99000" />
+		<production count="1" id="41041" />
+	</item>
+	<item>
+		<ingredient count="1" id="41041" />
+		<ingredient count="1200" id="99000" />
+		<production count="1" id="41042" />
+	</item>
+
+	<!-- ============================================================== -->
+	<!--                 RECEITAS DE UPGRADE: SLOT ESQUERDO (HAIR2)    │
+	<!-- ============================================================== -->
+
+	<!-- 1. OGRE (LEFT) UPGRADES -->
+	<item>
+		<ingredient count="1" id="41043" />
+		<ingredient count="25" id="99000" />
+		<production count="1" id="41044" />
+	</item>
+	<item>
+		<ingredient count="1" id="41044" />
+		<ingredient count="75" id="99000" />
+		<production count="1" id="41045" />
+	</item>
+	<item>
+		<ingredient count="1" id="41045" />
+		<ingredient count="200" id="99000" />
+		<production count="1" id="41046" />
+	</item>
+	<item>
+		<ingredient count="1" id="41046" />
+		<ingredient count="500" id="99000" />
+		<production count="1" id="41047" />
+	</item>
+	<item>
+		<ingredient count="1" id="41047" />
+		<ingredient count="1200" id="99000" />
+		<production count="1" id="41048" />
+	</item>
+
+	<!-- 2. MONK (LEFT) UPGRADES -->
+	<item>
+		<ingredient count="1" id="41049" />
+		<ingredient count="25" id="99000" />
+		<production count="1" id="41050" />
+	</item>
+	<item>
+		<ingredient count="1" id="41050" />
+		<ingredient count="75" id="99000" />
+		<production count="1" id="41051" />
+	</item>
+	<item>
+		<ingredient count="1" id="41051" />
+		<ingredient count="200" id="99000" />
+		<production count="1" id="41052" />
+	</item>
+	<item>
+		<ingredient count="1" id="41052" />
+		<ingredient count="500" id="99000" />
+		<production count="1" id="41053" />
+	</item>
+	<item>
+		<ingredient count="1" id="41053" />
+		<ingredient count="1200" id="99000" />
+		<production count="1" id="41054" />
+	</item>
+
+	<!-- 3. ASSASSIN (LEFT) UPGRADES -->
+	<item>
+		<ingredient count="1" id="41055" />
+		<ingredient count="25" id="99000" />
+		<production count="1" id="41056" />
+	</item>
+	<item>
+		<ingredient count="1" id="41056" />
+		<ingredient count="75" id="99000" />
+		<production count="1" id="41057" />
+	</item>
+	<item>
+		<ingredient count="1" id="41057" />
+		<ingredient count="200" id="99000" />
+		<production count="1" id="41058" />
+	</item>
+	<item>
+		<ingredient count="1" id="41058" />
+		<ingredient count="500" id="99000" />
+		<production count="1" id="41059" />
+	</item>
+	<item>
+		<ingredient count="1" id="41059" />
+		<ingredient count="1200" id="99000" />
+		<production count="1" id="41060" />
+	</item>
+
+	<!-- 4. BLOOD (LEFT) UPGRADES -->
+	<item>
+		<ingredient count="1" id="41061" />
+		<ingredient count="25" id="99000" />
+		<production count="1" id="41062" />
+	</item>
+	<item>
+		<ingredient count="1" id="41062" />
+		<ingredient count="75" id="99000" />
+		<production count="1" id="41063" />
+	</item>
+	<item>
+		<ingredient count="1" id="41063" />
+		<ingredient count="200" id="99000" />
+		<production count="1" id="41064" />
+	</item>
+	<item>
+		<ingredient count="1" id="41064" />
+		<ingredient count="500" id="99000" />
+		<production count="1" id="41065" />
+	</item>
+	<item>
+		<ingredient count="1" id="41065" />
+		<ingredient count="1200" id="99000" />
+		<production count="1" id="41066" />
+	</item>
+
+	<!-- 5. SOUL (LEFT) UPGRADES -->
+	<item>
+		<ingredient count="1" id="41067" />
+		<ingredient count="25" id="99000" />
+		<production count="1" id="41068" />
+	</item>
+	<item>
+		<ingredient count="1" id="41068" />
+		<ingredient count="75" id="99000" />
+		<production count="1" id="41069" />
+	</item>
+	<item>
+		<ingredient count="1" id="41069" />
+		<ingredient count="200" id="99000" />
+		<production count="1" id="41070" />
+	</item>
+	<item>
+		<ingredient count="1" id="41070" />
+		<ingredient count="500" id="99000" />
+		<production count="1" id="41071" />
+	</item>
+	<item>
+		<ingredient count="1" id="41071" />
+		<ingredient count="1200" id="99000" />
+		<production count="1" id="41072" />
+	</item>
+
+	<!-- 6. FLAME (LEFT) UPGRADES -->
+	<item>
+		<ingredient count="1" id="41073" />
+		<ingredient count="25" id="99000" />
+		<production count="1" id="41074" />
+	</item>
+	<item>
+		<ingredient count="1" id="41074" />
+		<ingredient count="75" id="99000" />
+		<production count="1" id="41075" />
+	</item>
+	<item>
+		<ingredient count="1" id="41075" />
+		<ingredient count="200" id="99000" />
+		<production count="1" id="41076" />
+	</item>
+	<item>
+		<ingredient count="1" id="41076" />
+		<ingredient count="500" id="99000" />
+		<production count="1" id="41077" />
+	</item>
+	<item>
+		<ingredient count="1" id="41077" />
+		<ingredient count="1200" id="99000" />
+		<production count="1" id="41078" />
+	</item>
+
+	<!-- 7. ABSOLUTE (LEFT) UPGRADES -->
+	<item>
+		<ingredient count="1" id="41079" />
+		<ingredient count="25" id="99000" />
+		<production count="1" id="41080" />
+	</item>
+	<item>
+		<ingredient count="1" id="41080" />
+		<ingredient count="75" id="99000" />
+		<production count="1" id="41081" />
+	</item>
+	<item>
+		<ingredient count="1" id="41081" />
+		<ingredient count="200" id="99000" />
+		<production count="1" id="41082" />
+	</item>
+	<item>
+		<ingredient count="1" id="41082" />
+		<ingredient count="500" id="99000" />
+		<production count="1" id="41083" />
+	</item>
+	<item>
+		<ingredient count="1" id="41083" />
+		<ingredient count="1200" id="99000" />
+		<production count="1" id="41084" />
+	</item>
+</list>

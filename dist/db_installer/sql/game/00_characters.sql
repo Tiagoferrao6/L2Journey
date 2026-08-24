@@ -28,6 +28,7 @@ CREATE TABLE IF NOT EXISTS `characters` (
   `race` TINYINT UNSIGNED DEFAULT NULL,
   `classid` TINYINT UNSIGNED DEFAULT NULL,
   `base_class` TINYINT UNSIGNED NOT NULL DEFAULT 0,
+  `dual_class_id` INT(2) NOT NULL DEFAULT '-1',
   `transform_id` SMALLINT UNSIGNED NOT NULL DEFAULT 0,
   `deletetime` bigint(13) unsigned NOT NULL DEFAULT '0',
   `cancraft` TINYINT UNSIGNED DEFAULT NULL,

@@ -23,6 +23,7 @@ import com.l2journey.gameserver.model.actor.holders.fakeplayer.FakeShopHolder;
 import com.l2journey.gameserver.model.actor.holders.fakeplayer.FakeShopHolder.ShopType;
 import com.l2journey.gameserver.model.actor.templates.PlayerTemplate;
 import com.l2journey.gameserver.model.item.enums.ItemProcessType;
+import com.l2journey.gameserver.model.item.instance.Item;
 import com.l2journey.gameserver.network.serverpackets.PrivateStoreMsgBuy;
 import com.l2journey.gameserver.network.serverpackets.PrivateStoreMsgSell;
 import com.l2journey.gameserver.network.serverpackets.RecipeShopMsg;
@@ -148,13 +149,17 @@ public class FakeShop
 	private void setupSellStore(List<CatalogItem> items)
 	{
 		_player.getSellList().clear();
+		_player.getSellList().setTitle(_holder.getTitle());
 		for (CatalogItem item : items)
 		{
 			final long count = item.getMinCount() == item.getMaxCount() ? item.getMinCount() : Rnd.get(item.getMinCount(), item.getMaxCount());
 			final long price = item.getMinPrice() == item.getMaxPrice() ? item.getMinPrice() : Rnd.get(item.getMinPrice(), item.getMaxPrice());
 
-			_player.getInventory().addItem(ItemProcessType.FEE, item.getItemId(), count, _player, null);
-			_player.getSellList().addItem(item.getItemId(), count, price);
+			final Item invItem = _player.getInventory().addItem(ItemProcessType.FEE, item.getItemId(), count, _player, null);
+			if (invItem != null)
+			{
+				_player.getSellList().addItem(invItem.getObjectId(), count, price);
+			}
 		}
 
 		_player.sitDown();
@@ -166,6 +171,7 @@ public class FakeShop
 	private void setupBuyStore(List<CatalogItem> items)
 	{
 		_player.getBuyList().clear();
+		_player.getBuyList().setTitle(_holder.getTitle());
 		_player.addAdena(ItemProcessType.FEE, 2000000000L, _player, false);
 
 		for (CatalogItem item : items)
@@ -173,7 +179,7 @@ public class FakeShop
 			final long count = item.getMinCount() == item.getMaxCount() ? item.getMinCount() : Rnd.get(item.getMinCount(), item.getMaxCount());
 			final long price = item.getMinPrice() == item.getMaxPrice() ? item.getMinPrice() : Rnd.get(item.getMinPrice(), item.getMaxPrice());
 
-			_player.getBuyList().addItem(item.getItemId(), count, price);
+			_player.getBuyList().addItemByItemId(item.getItemId(), count, price);
 		}
 
 		_player.sitDown();
@@ -185,6 +191,7 @@ public class FakeShop
 	private void setupCraftStore(List<CatalogItem> items)
 	{
 		_player.getManufactureItems().clear();
+		_player.setStoreName(_holder.getTitle());
 		for (CatalogItem item : items)
 		{
 			final RecipeList recipe = RecipeData.getInstance().getRecipeList(item.getItemId());
@@ -202,7 +209,6 @@ public class FakeShop
 			}
 		}
 
-		_player.setStoreName(_holder.getTitle());
 		_player.sitDown();
 		_player.setPrivateStoreType(PrivateStoreType.MANUFACTURE);
 		_player.broadcastUserInfo();

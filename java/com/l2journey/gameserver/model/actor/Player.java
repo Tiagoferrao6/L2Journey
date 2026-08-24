@@ -79,6 +79,7 @@ import com.l2journey.gameserver.data.sql.UserVariables;
 import com.l2journey.gameserver.data.xml.AdminData;
 import com.l2journey.gameserver.data.xml.CategoryData;
 import com.l2journey.gameserver.data.xml.ClassListData;
+import com.l2journey.gameserver.data.xml.CumulativeSubclassData;
 import com.l2journey.gameserver.data.xml.EnchantSkillGroupsData;
 import com.l2journey.gameserver.data.xml.ExperienceData;
 import com.l2journey.gameserver.data.xml.FishData;
@@ -425,7 +426,7 @@ public class Player extends Playable
 	
 	// Character Character SQL String Definitions:
 	private static final String INSERT_CHARACTER = "INSERT INTO characters (account_name,charId,char_name,level,maxHp,curHp,maxCp,curCp,maxMp,curMp,face,hairStyle,hairColor,sex,exp,sp,karma,fame,pvpkills,pkkills,clanid,race,classid,deletetime,cancraft,title,title_color,accesslevel,online,isin7sdungeon,clan_privs,wantspeace,base_class,newbie,nobless,power_grade,createDate,lastAccess) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-	private static final String UPDATE_CHARACTER = "UPDATE characters SET level=?,maxHp=?,curHp=?,maxCp=?,curCp=?,maxMp=?,curMp=?,face=?,hairStyle=?,hairColor=?,sex=?,heading=?,x=?,y=?,z=?,exp=?,expBeforeDeath=?,sp=?,karma=?,fame=?,pvpkills=?,pkkills=?,clanid=?,race=?,classid=?,deletetime=?,title=?,title_color=?,accesslevel=?,online=?,isin7sdungeon=?,clan_privs=?,wantspeace=?,base_class=?,onlinetime=?,newbie=?,nobless=?,power_grade=?,subpledge=?,lvl_joined_academy=?,apprentice=?,sponsor=?,clan_join_expiry_time=?,clan_create_expiry_time=?,char_name=?,death_penalty_level=?,bookmarkslot=?,vitality_points=?,language=?,faction=?,pccafe_points=? WHERE charId=?";
+	private static final String UPDATE_CHARACTER = "UPDATE characters SET level=?,maxHp=?,curHp=?,maxCp=?,curCp=?,maxMp=?,curMp=?,face=?,hairStyle=?,hairColor=?,sex=?,heading=?,x=?,y=?,z=?,exp=?,expBeforeDeath=?,sp=?,karma=?,fame=?,pvpkills=?,pkkills=?,clanid=?,race=?,classid=?,deletetime=?,title=?,title_color=?,accesslevel=?,online=?,isin7sdungeon=?,clan_privs=?,wantspeace=?,base_class=?,onlinetime=?,newbie=?,nobless=?,power_grade=?,subpledge=?,lvl_joined_academy=?,apprentice=?,sponsor=?,clan_join_expiry_time=?,clan_create_expiry_time=?,char_name=?,death_penalty_level=?,bookmarkslot=?,vitality_points=?,language=?,faction=?,pccafe_points=?,dual_class_id=? WHERE charId=?";
 	private static final String RESTORE_CHARACTER = "SELECT * FROM characters WHERE charId=?";
 	
 	// Character Teleport Bookmark:
@@ -435,9 +436,9 @@ public class Player extends Playable
 	private static final String DELETE_TP_BOOKMARK = "DELETE FROM character_tpbookmark WHERE charId=? AND Id=?";
 	
 	// Character Subclass SQL String Definitions:
-	private static final String RESTORE_CHAR_SUBCLASSES = "SELECT class_id,exp,sp,level,class_index FROM character_subclasses WHERE charId=? ORDER BY class_index ASC";
-	private static final String ADD_CHAR_SUBCLASS = "INSERT INTO character_subclasses (charId,class_id,exp,sp,level,class_index) VALUES (?,?,?,?,?,?)";
-	private static final String UPDATE_CHAR_SUBCLASS = "UPDATE character_subclasses SET exp=?,sp=?,level=?,class_id=? WHERE charId=? AND class_index =?";
+	private static final String RESTORE_CHAR_SUBCLASSES = "SELECT class_id,exp,sp,level,class_index,dual_class_id FROM character_subclasses WHERE charId=? ORDER BY class_index ASC";
+	private static final String ADD_CHAR_SUBCLASS = "INSERT INTO character_subclasses (charId,class_id,exp,sp,level,class_index,dual_class_id) VALUES (?,?,?,?,?,?,?)";
+	private static final String UPDATE_CHAR_SUBCLASS = "UPDATE character_subclasses SET exp=?,sp=?,level=?,class_id=?,dual_class_id=? WHERE charId=? AND class_index =?";
 	private static final String DELETE_CHAR_SUBCLASS = "DELETE FROM character_subclasses WHERE charId=? AND class_index=?";
 	
 	// Character Henna SQL String Definitions:
@@ -512,6 +513,7 @@ public class Player extends Playable
 	protected int _baseClass;
 	protected int _activeClass;
 	protected int _classIndex = 0;
+	protected int _mainDualClassId = -1;
 	
 	/** data for mounted pets */
 	private int _controlItemId;
@@ -7236,6 +7238,7 @@ public class Player extends Playable
 					player.setOnlineTime(rset.getLong("onlinetime"));
 					player.setNewbie(rset.getInt("newbie"));
 					player.setNoble(rset.getInt("nobless") == 1);
+					player._mainDualClassId = rset.getInt("dual_class_id");
 					player.loadVariables();
 					
 					final int factionId = rset.getInt("faction");
@@ -7527,6 +7530,7 @@ public class Player extends Playable
 					subClass.setExp(rs.getLong("exp"));
 					subClass.setSp(rs.getLong("sp"));
 					subClass.setClassIndex(rs.getInt("class_index"));
+					subClass.setDualClassId(rs.getInt("dual_class_id"));
 					
 					// Enforce the correct indexing of _subClasses against their class indexes.
 					player.getSubClasses().put(subClass.getClassIndex(), subClass);
@@ -7822,7 +7826,8 @@ public class Player extends Playable
 			
 			ps.setInt(50, factionId);
 			ps.setInt(51, _pcCafePoints);
-			ps.setInt(52, getObjectId());
+			ps.setInt(52, _mainDualClassId);
+			ps.setInt(53, getObjectId());
 			ps.execute();
 		}
 		catch (Exception e)
@@ -7848,8 +7853,9 @@ public class Player extends Playable
 				ps.setLong(2, subClass.getSp());
 				ps.setInt(3, subClass.getLevel());
 				ps.setInt(4, subClass.getId());
-				ps.setInt(5, getObjectId());
-				ps.setInt(6, subClass.getClassIndex());
+				ps.setInt(5, subClass.getDualClassId());
+				ps.setInt(6, getObjectId());
+				ps.setInt(7, subClass.getClassIndex());
 				ps.addBatch();
 			}
 			ps.executeBatch();
@@ -10590,7 +10596,8 @@ public class Player extends Playable
 				ps.setLong(3, newClass.getExp());
 				ps.setLong(4, newClass.getSp());
 				ps.setInt(5, newClass.getLevel());
-				ps.setInt(6, newClass.getClassIndex()); // <-- Added
+				ps.setInt(6, newClass.getClassIndex());
+				ps.setInt(7, newClass.getDualClassId());
 				ps.execute();
 			}
 			catch (Exception e)
@@ -10733,6 +10740,76 @@ public class Player extends Playable
 	public int getClassIndex()
 	{
 		return _classIndex;
+	}
+	
+	public int getDualClassId()
+	{
+		if (_classIndex == 0)
+		{
+			return _mainDualClassId;
+		}
+		
+		final SubClassHolder holder = getSubClasses().get(_classIndex);
+		return holder != null ? holder.getDualClassId() : -1;
+	}
+	
+	public boolean setDualClassId(int dualClassId)
+	{
+		if (dualClassId != -1)
+		{
+			final PlayerClass activeClass = getPlayerClass();
+			final PlayerClass targetDualClass = PlayerClass.getPlayerClass(dualClassId);
+			
+			if (targetDualClass == null)
+			{
+				return false;
+			}
+			
+			if (CumulativeSubclassData.getInstance().isSameRaceOnly() && (activeClass.getRace() != targetDualClass.getRace()))
+			{
+				LOGGER.warning("Invalid attempt to assign Dual Class of different race for " + getName() + ": " + dualClassId);
+				return false;
+			}
+		}
+		
+		if (_classIndex == 0)
+		{
+			_mainDualClassId = dualClassId;
+			try (Connection con = DatabaseFactory.getConnection();
+				PreparedStatement ps = con.prepareStatement("UPDATE characters SET dual_class_id=? WHERE charId=?"))
+			{
+				ps.setInt(1, dualClassId);
+				ps.setInt(2, getObjectId());
+				ps.executeUpdate();
+			}
+			catch (Exception e)
+			{
+				LOGGER.log(Level.WARNING, "Error updating dual_class_id in characters table for " + getName(), e);
+				return false;
+			}
+		}
+		else
+		{
+			final SubClassHolder holder = getSubClasses().get(_classIndex);
+			if (holder != null)
+			{
+				holder.setDualClassId(dualClassId);
+				try (Connection con = DatabaseFactory.getConnection();
+					PreparedStatement ps = con.prepareStatement("UPDATE character_subclasses SET dual_class_id=? WHERE charId=? AND class_index=?"))
+				{
+					ps.setInt(1, dualClassId);
+					ps.setInt(2, getObjectId());
+					ps.setInt(3, _classIndex);
+					ps.executeUpdate();
+				}
+				catch (Exception e)
+				{
+					LOGGER.log(Level.WARNING, "Error updating dual_class_id in character_subclasses table for " + getName(), e);
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 	
 	public void setClassTemplate(int classId)

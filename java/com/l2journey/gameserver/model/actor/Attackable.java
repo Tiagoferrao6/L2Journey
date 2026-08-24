@@ -41,6 +41,7 @@ import java.util.logging.Level;
 
 import com.l2journey.Config;
 import com.l2journey.commons.threads.ThreadPool;
+import com.l2journey.commons.util.Rnd;
 import com.l2journey.gameserver.ai.Action;
 import com.l2journey.gameserver.ai.AttackableAI;
 import com.l2journey.gameserver.ai.CreatureAI;
@@ -1157,6 +1158,38 @@ public class Attackable extends Npc
 			}
 			
 			deathItems.clear();
+		}
+		
+		// Drop personalizado Conqueror's Badge para Raid Boss e Grand Boss
+		if (_isRaid && !_isRaidMinion && (player != null))
+		{
+			final int raidLevel = getLevel();
+			int badgeCount = 0;
+			if ((raidLevel >= 20) && (raidLevel <= 39))
+			{
+				badgeCount = Rnd.get(1, 3);
+			}
+			else if ((raidLevel >= 40) && (raidLevel <= 51))
+			{
+				badgeCount = Rnd.get(4, 8);
+			}
+			else if ((raidLevel >= 52) && (raidLevel <= 60))
+			{
+				badgeCount = Rnd.get(10, 18);
+			}
+			else if ((raidLevel >= 61) && (raidLevel <= 75))
+			{
+				badgeCount = Rnd.get(20, 35);
+			}
+			else if (raidLevel >= 76)
+			{
+				badgeCount = Rnd.get(40, 70);
+			}
+			
+			if (badgeCount > 0)
+			{
+				dropItem(player, 99000, badgeCount);
+			}
 		}
 	}
 	

@@ -1,22 +1,49 @@
 package com.l2journey.gameserver.managers;
 
+import java.util.Calendar;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 
 import com.l2journey.Config;
+import com.l2journey.commons.threads.ThreadPool;
+import com.l2journey.gameserver.dao.FakePlayerDAO;
 import com.l2journey.gameserver.data.xml.FakeShopData;
+import com.l2journey.gameserver.model.World;
+import com.l2journey.gameserver.model.actor.Player;
+import com.l2journey.gameserver.model.actor.fakeplayer.FakeHunterAI;
+import com.l2journey.gameserver.model.actor.fakeplayer.FakePlayerProfile;
 import com.l2journey.gameserver.model.actor.fakeplayer.FakeShop;
+import com.l2journey.gameserver.model.actor.fakeplayer.FakeTraderAI;
 import com.l2journey.gameserver.model.actor.holders.fakeplayer.FakeShopHolder;
+import com.l2journey.gameserver.model.events.Containers;
+import com.l2journey.gameserver.model.events.EventType;
+import com.l2journey.gameserver.model.events.ListenersContainer;
+import com.l2journey.gameserver.model.events.holders.actor.creature.OnCreatureZoneEnter;
+import com.l2journey.gameserver.model.events.holders.actor.creature.OnCreatureZoneExit;
+import com.l2journey.gameserver.model.events.listeners.ConsumerEventListener;
+import com.l2journey.gameserver.model.zone.ZoneType;
+import com.l2journey.gameserver.model.zone.type.TownZone;
 
 /**
- * Modularized Manager for Fake Players (FakeShops and FakeHunters).
+ * Core Manager for Fake Players in Gludio, supporting schedule management,
+ * Zone-based activation listener, and conditional spawning/despawning.
  */
 public class FakePlayerManager
 {
 	private static final Logger LOGGER = Logger.getLogger(FakePlayerManager.class.getName());
 
 	private final Map<String, FakeShop> _activeShops = new ConcurrentHashMap<>();
+	private final Map<Integer, FakeTraderAI> _activeTraders = new ConcurrentHashMap<>();
+	private final Map<Integer, FakeHunterAI> _activeHunters = new ConcurrentHashMap<>();
+
+	private final AtomicInteger _realPlayersInGludio = new AtomicInteger(0);
+	private ScheduledFuture<?> _scheduleCheckTask;
+	private boolean _gludioActive = false;
 
 	protected FakePlayerManager()
 	{
@@ -26,22 +53,21 @@ public class FakePlayerManager
 			return;
 		}
 
-		LOGGER.info(getClass().getSimpleName() + ": Initializing Modular Fake Player Manager.");
+		LOGGER.info(getClass().getSimpleName() + ": Initializing Modular Fake Player Manager for Gludio.");
 
 		if (Config.FAKE_SHOPS_ENABLED)
 		{
 			initFakeShops();
 		}
 
-		if (Config.FAKE_HUNTERS_ENABLED)
-		{
-			initFakeHunters();
-		}
+		initGludioProfilesIfEmpty();
+		setupGludioZoneListener();
+		startScheduleManager();
 	}
 
 	public void initFakeShops()
 	{
-		LOGGER.info(getClass().getSimpleName() + ": Initializing FakeShops module...");
+		LOGGER.info(getClass().getSimpleName() + ": Initializing legacy FakeShops module...");
 		FakeShopData.getInstance(); // Loads XML configs
 
 		for (FakeShopHolder holder : FakeShopData.getInstance().getFakeShops())
@@ -51,13 +77,209 @@ public class FakePlayerManager
 			shop.spawn();
 		}
 
-		LOGGER.info(getClass().getSimpleName() + ": Activated " + _activeShops.size() + " FakeShops.");
+		LOGGER.info(getClass().getSimpleName() + ": Activated " + _activeShops.size() + " legacy FakeShops.");
 	}
 
-	public void initFakeHunters()
+	private void initGludioProfilesIfEmpty()
 	{
-		LOGGER.info(getClass().getSimpleName() + ": Initializing FakeHunters module...");
-		// FakeHunters module initialization
+		List<FakePlayerProfile> profiles = FakePlayerDAO.getInstance().loadProfilesByZone("GLUDIO");
+		if (profiles.isEmpty())
+		{
+			LOGGER.info(getClass().getSimpleName() + ": Populating initial 30 Traders and 30 Hunters for Gludio in DB...");
+
+			// Create 30 Traders for Gludio
+			for (int i = 1; i <= 30; i++)
+			{
+				FakePlayerProfile profile = new FakePlayerProfile(0, "TRADER", 53, 5, 5, 5, i % 2 == 0 ? "DAY" : "NIGHT", "GLUDIO");
+				profile.setX(-14228 + (i * 20));
+				profile.setY(123445 + (i * 15));
+				profile.setZ(-3115);
+				FakePlayerDAO.getInstance().insertProfile(profile);
+			}
+
+			// Create 30 Hunters for Gludio
+			for (int i = 1; i <= 30; i++)
+			{
+				FakePlayerProfile profile = new FakePlayerProfile(0, "HUNTER", 1, 6, 7, 8, i % 2 == 0 ? "DAY" : "NIGHT", "GLUDIO");
+				profile.setX(-14000 + (i * 30));
+				profile.setY(123000 + (i * 25));
+				profile.setZ(-3115);
+				FakePlayerDAO.getInstance().insertProfile(profile);
+			}
+		}
+	}
+
+	private void setupGludioZoneListener()
+	{
+		LOGGER.info(getClass().getSimpleName() + ": Setting up Zone Listener for Gludio region...");
+
+		ZoneType gludioZone = ZoneManager.getInstance().getZoneByName("Town of Gludio");
+		if (gludioZone == null)
+		{
+			gludioZone = ZoneManager.getInstance().getZoneByName("Gludio");
+		}
+
+		if (gludioZone != null)
+		{
+			final ZoneType zone = gludioZone;
+			Consumer<OnCreatureZoneEnter> onEnter = event ->
+			{
+				if (event.getCreature() instanceof Player)
+				{
+					Player player = (Player) event.getCreature();
+					if (!player.isFakePlayer())
+					{
+						int count = _realPlayersInGludio.incrementAndGet();
+						LOGGER.info("FakePlayerManager: Real player entered Gludio zone. Total real players: " + count);
+						onRealPlayerZoneStateChange();
+					}
+				}
+			};
+
+			Consumer<OnCreatureZoneExit> onExit = event ->
+			{
+				if (event.getCreature() instanceof Player)
+				{
+					Player player = (Player) event.getCreature();
+					if (!player.isFakePlayer())
+					{
+						int count = _realPlayersInGludio.decrementAndGet();
+						if (count < 0)
+						{
+							_realPlayersInGludio.set(0);
+							count = 0;
+						}
+						LOGGER.info("FakePlayerManager: Real player exited Gludio zone. Remaining real players: " + count);
+						onRealPlayerZoneStateChange();
+					}
+				}
+			};
+
+			zone.addListener(new ConsumerEventListener(zone, EventType.ON_CREATURE_ZONE_ENTER, onEnter, this));
+			zone.addListener(new ConsumerEventListener(zone, EventType.ON_CREATURE_ZONE_EXIT, onExit, this));
+		}
+		else
+		{
+			LOGGER.warning(getClass().getSimpleName() + ": Gludio Zone not found in ZoneManager. Listener registered globally.");
+		}
+	}
+
+	private synchronized void onRealPlayerZoneStateChange()
+	{
+		boolean hasPlayers = _realPlayersInGludio.get() > 0;
+		if (hasPlayers && !_gludioActive)
+		{
+			_gludioActive = true;
+			spawnGludioBotsForActiveSchedule();
+		}
+		else if (!hasPlayers && _gludioActive)
+		{
+			_gludioActive = false;
+			despawnGludioBots();
+		}
+	}
+
+	private void startScheduleManager()
+	{
+		// Check schedule every 60 seconds
+		_scheduleCheckTask = ThreadPool.scheduleAtFixedRate(this::evaluateSchedules, 60000, 60000);
+	}
+
+	public synchronized void evaluateSchedules()
+	{
+		if (!_gludioActive && _realPlayersInGludio.get() <= 0)
+		{
+			return;
+		}
+
+		spawnGludioBotsForActiveSchedule();
+	}
+
+	private boolean isScheduleActive(String shift)
+	{
+		int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+		if ("NIGHT".equalsIgnoreCase(shift))
+		{
+			return hour >= 18 || hour < 6;
+		}
+		// Default DAY
+		return hour >= 6 && hour < 18;
+	}
+
+	public synchronized void spawnGludioBotsForActiveSchedule()
+	{
+		List<FakePlayerProfile> profiles = FakePlayerDAO.getInstance().loadProfilesByZone("GLUDIO");
+		int spawnedTraders = 0;
+		int spawnedHunters = 0;
+
+		for (FakePlayerProfile profile : profiles)
+		{
+			if (isScheduleActive(profile.getShift()))
+			{
+				if ("TRADER".equalsIgnoreCase(profile.getBotType()))
+				{
+					if (spawnedTraders < 30 && !_activeTraders.containsKey(profile.getFakeId()))
+					{
+						FakeTraderAI trader = new FakeTraderAI(profile);
+						if (trader.spawn())
+						{
+							_activeTraders.put(profile.getFakeId(), trader);
+							spawnedTraders++;
+						}
+					}
+				}
+				else if ("HUNTER".equalsIgnoreCase(profile.getBotType()))
+				{
+					if (spawnedHunters < 30 && !_activeHunters.containsKey(profile.getFakeId()))
+					{
+						FakeHunterAI hunter = new FakeHunterAI(profile);
+						if (hunter.spawn())
+						{
+							_activeHunters.put(profile.getFakeId(), hunter);
+							spawnedHunters++;
+						}
+					}
+				}
+			}
+			else
+			{
+				// Shift ended - despawn if active
+				if ("TRADER".equalsIgnoreCase(profile.getBotType()))
+				{
+					FakeTraderAI trader = _activeTraders.remove(profile.getFakeId());
+					if (trader != null)
+					{
+						trader.despawn();
+					}
+				}
+				else if ("HUNTER".equalsIgnoreCase(profile.getBotType()))
+				{
+					FakeHunterAI hunter = _activeHunters.remove(profile.getFakeId());
+					if (hunter != null)
+					{
+						hunter.despawn();
+					}
+				}
+			}
+		}
+
+		LOGGER.info("FakePlayerManager: Currently active in Gludio -> Traders: " + _activeTraders.size() + ", Hunters: " + _activeHunters.size());
+	}
+
+	public synchronized void despawnGludioBots()
+	{
+		LOGGER.info("FakePlayerManager: No real players in Gludio. Despawning all Gludio fake players...");
+		for (FakeTraderAI trader : _activeTraders.values())
+		{
+			trader.despawn();
+		}
+		_activeTraders.clear();
+
+		for (FakeHunterAI hunter : _activeHunters.values())
+		{
+			hunter.despawn();
+		}
+		_activeHunters.clear();
 	}
 
 	public FakeShop getFakeShop(String name)

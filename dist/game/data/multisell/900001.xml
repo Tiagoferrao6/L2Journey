@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/multisell.xsd">
+	<npcs>
+		<npc>90000</npc> <!-- Conqueror's Store -->
+	</npcs>
+	<!-- Exemplo de Estrutura Pronta para Armas (Serao preenchidas com itens personalizados) -->
+	<!-- Item 1: Dynasty Blade -->
+	<item>
+		<!-- Conqueror's Badge -->
+		<ingredient count="50" id="99000" />
+		<!-- Item Recompensa -->
+		<production count="1" id="9388" />
+	</item>
+	<!-- Item 2: Dynasty Bow -->
+	<item>
+		<!-- Conqueror's Badge -->
+		<ingredient count="50" id="99000" />
+		<!-- Item Recompensa -->
+		<production count="1" id="9389" />
+	</item>
+</list>

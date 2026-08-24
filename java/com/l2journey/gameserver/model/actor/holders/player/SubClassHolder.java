@@ -46,6 +46,7 @@ public class SubClassHolder
 	private long _sp = 0;
 	private byte _level = Config.BASE_SUBCLASS_LEVEL;
 	private int _classIndex = 1;
+	private int _dualClassId = -1;
 	
 	public SubClassHolder(int classId, long exp, int sp, byte level, int classIndex)
 	{
@@ -163,5 +164,15 @@ public class SubClassHolder
 		
 		_level--;
 		setExp(ExperienceData.getInstance().getExpForLevel(getLevel()));
+	}
+	
+	public int getDualClassId()
+	{
+		return _dualClassId;
+	}
+	
+	public void setDualClassId(int dualClassId)
+	{
+		_dualClassId = dualClassId;
 	}
 }

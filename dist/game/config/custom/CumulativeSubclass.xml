@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../xsd/cumulativeSubclass.xsd">
+	<!-- Configurações do Sistema de Subclasse Acumulativa (Dual Class) -->
+	<setting name="EnableCumulativeSubclass" val="true" />
+	<setting name="SameRaceOnly" val="true" />
+	<setting name="RequiredLevel" val="75" />
+	<setting name="RequiredItemId" val="99000" />
+	<setting name="RequiredItemCount" val="1" />
+	<setting name="DelevelTargetLevel" val="40" />
+	<setting name="DisabledBehavior" val="HIDE" />
+</list>

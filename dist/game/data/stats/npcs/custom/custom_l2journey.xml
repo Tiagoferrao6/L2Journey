@@ -34,4 +34,11 @@
 			<height normal="23" />
 		</collision>
 	</npc>
+	<!-- Conqueror's Store NPC -->
+	<npc id="90000" displayId="25282" name="Conqueror's Store" usingServerSideName="true" title="Raid Exchange" usingServerSideTitle="true" type="Merchant">
+		<collision>
+			<radius normal="10" />
+			<height normal="30" />
+		</collision>
+	</npc>
 </list>
