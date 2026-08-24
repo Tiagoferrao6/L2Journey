@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../xsd/armorSets.xsd">
+	<!-- Custom Royal Armor Sets (S Grade - Level 76+) -->
+	<set id="500">
+		<chest id="99200" /> <!-- Royal Breastplate - Shield Master -->
+		<legs id="99204" /> <!-- Royal Gaiters -->
+		<head id="99205" /> <!-- Royal Helmet -->
+		<gloves id="99206" /> <!-- Royal Gauntlet - Heavy Armor -->
+		<feet id="99207" /> <!-- Royal Boots - Heavy Armor -->
+		<shield id="99208" /> <!-- Royal Shield -->
+		<skill id="3006" level="1" /> <!-- Equip Set Items -->
+		<skill id="99200" level="1" /> <!-- Royal Heavy - Shield Master Skill -->
+		<shield_skill id="99210" level="1" /> <!-- Royal Shield Skill -->
+		<enchant6skill id="99211" level="1" /> <!-- Enchant Royal Heavy Armor (+6) -->
+		<str val="-2" />
+		<con val="2" />
+	</set>
+	<set id="501">
+		<chest id="99201" /> <!-- Royal Breastplate - Weapon Master -->
+		<legs id="99204" /> <!-- Royal Gaiters -->
+		<head id="99205" /> <!-- Royal Helmet -->
+		<gloves id="99206" /> <!-- Royal Gauntlet - Heavy Armor -->
+		<feet id="99207" /> <!-- Royal Boots - Heavy Armor -->
+		<skill id="3006" level="1" /> <!-- Equip Set Items -->
+		<skill id="99201" level="1" /> <!-- Royal Heavy - Weapon Master Skill -->
+		<enchant6skill id="99211" level="1" /> <!-- Enchant Royal Heavy Armor (+6) -->
+		<str val="2" />
+		<con val="-2" />
+	</set>
+	<set id="502">
+		<chest id="99202" /> <!-- Royal Breastplate - Force Master -->
+		<legs id="99204" /> <!-- Royal Gaiters -->
+		<head id="99205" /> <!-- Royal Helmet -->
+		<gloves id="99206" /> <!-- Royal Gauntlet - Heavy Armor -->
+		<feet id="99207" /> <!-- Royal Boots - Heavy Armor -->
+		<skill id="3006" level="1" /> <!-- Equip Set Items -->
+		<skill id="99202" level="1" /> <!-- Royal Heavy - Force Master Skill -->
+		<enchant6skill id="99211" level="1" /> <!-- Enchant Royal Heavy Armor (+6) -->
+		<str val="1" />
+		<dex val="1" />
+		<con val="-2" />
+	</set>
+	<set id="503">
+		<chest id="99203" /> <!-- Royal Breastplate - Bard -->
+		<legs id="99204" /> <!-- Royal Gaiters -->
+		<head id="99205" /> <!-- Royal Helmet -->
+		<gloves id="99206" /> <!-- Royal Gauntlet - Heavy Armor -->
+		<feet id="99207" /> <!-- Royal Boots - Heavy Armor -->
+		<skill id="3006" level="1" /> <!-- Equip Set Items -->
+		<skill id="99203" level="1" /> <!-- Royal Heavy - Bard Skill -->
+		<enchant6skill id="99211" level="1" /> <!-- Enchant Royal Heavy Armor (+6) -->
+		<str val="2" />
+		<con val="-2" />
+	</set>
+
+	<set id="504">
+		<chest id="99209" /> <!-- Royal Leather Armor - Dagger Master -->
+		<legs id="99211" /> <!-- Royal Leather Leggings -->
+		<head id="99212" /> <!-- Royal Leather Helmet -->
+		<gloves id="99213" /> <!-- Royal Leather Gloves - Light Armor -->
+		<feet id="99214" /> <!-- Royal Leather Boots - Light Armor -->
+		<skill id="3006" level="1" /> <!-- Equip Set Items -->
+		<skill id="99204" level="1" /> <!-- Royal Light - Dagger Master Skill -->
+		<enchant6skill id="99212" level="1" /> <!-- Enchant Royal Light Armor (+6) -->
+		<dex val="2" />
+		<con val="-2" />
+	</set>
+	<set id="505">
+		<chest id="99210" /> <!-- Royal Leather Armor - Bow Master -->
+		<legs id="99211" /> <!-- Royal Leather Leggings -->
+		<head id="99212" /> <!-- Royal Leather Helmet -->
+		<gloves id="99213" /> <!-- Royal Leather Gloves - Light Armor -->
+		<feet id="99214" /> <!-- Royal Leather Boots - Light Armor -->
+		<skill id="3006" level="1" /> <!-- Equip Set Items -->
+		<skill id="99205" level="1" /> <!-- Royal Light - Bow Master Skill -->
+		<enchant6skill id="99212" level="1" /> <!-- Enchant Royal Light Armor (+6) -->
+		<dex val="2" />
+		<con val="-2" />
+	</set>
+
+	<set id="506">
+		<chest id="99215" /> <!-- Royal Tunic - Healer -->
+		<legs id="99219" /> <!-- Royal Stockings -->
+		<head id="99220" /> <!-- Royal Circlet -->
+		<gloves id="99221" /> <!-- Royal Gloves - Robe -->
+		<feet id="99222" /> <!-- Royal Shoes - Robe -->
+		<skill id="3006" level="1" /> <!-- Equip Set Items -->
+		<skill id="99206" level="1" /> <!-- Royal Robe - Healer Skill -->
+		<enchant6skill id="99213" level="1" /> <!-- Enchant Royal Robe (+6) -->
+		<wit val="2" />
+		<men val="-2" />
+	</set>
+	<set id="507">
+		<chest id="99216" /> <!-- Royal Tunic - Enchanter -->
+		<legs id="99219" /> <!-- Royal Stockings -->
+		<head id="99220" /> <!-- Royal Circlet -->
+		<gloves id="99221" /> <!-- Royal Gloves - Robe -->
+		<feet id="99222" /> <!-- Royal Shoes - Robe -->
+		<skill id="3006" level="1" /> <!-- Equip Set Items -->
+		<skill id="99207" level="1" /> <!-- Royal Robe - Enchanter Skill -->
+		<enchant6skill id="99213" level="1" /> <!-- Enchant Royal Robe (+6) -->
+		<wit val="2" />
+		<men val="-2" />
+	</set>
+	<set id="508">
+		<chest id="99217" /> <!-- Royal Tunic - Summoner -->
+		<legs id="99219" /> <!-- Royal Stockings -->
+		<head id="99220" /> <!-- Royal Circlet -->
+		<gloves id="99221" /> <!-- Royal Gloves - Robe -->
+		<feet id="99222" /> <!-- Royal Shoes - Robe -->
+		<skill id="3006" level="1" /> <!-- Equip Set Items -->
+		<skill id="99208" level="1" /> <!-- Royal Robe - Summoner Skill -->
+		<enchant6skill id="99213" level="1" /> <!-- Enchant Royal Robe (+6) -->
+		<wit val="2" />
+		<men val="-2" />
+	</set>
+	<set id="509">
+		<chest id="99218" /> <!-- Royal Tunic - Wizard -->
+		<legs id="99219" /> <!-- Royal Stockings -->
+		<head id="99220" /> <!-- Royal Circlet -->
+		<gloves id="99221" /> <!-- Royal Gloves - Robe -->
+		<feet id="99222" /> <!-- Royal Shoes - Robe -->
+		<skill id="3006" level="1" /> <!-- Equip Set Items -->
+		<skill id="99209" level="1" /> <!-- Royal Robe - Wizard Skill -->
+		<enchant6skill id="99213" level="1" /> <!-- Enchant Royal Robe (+6) -->
+		<int val="2" />
+		<men val="-2" />
+	</set>
+</list>

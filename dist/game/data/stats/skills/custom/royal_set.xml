@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../xsd/skills.xsd">
+	<!-- Royal Heavy Set Skills -->
+	<skill id="99200" levels="1" name="Royal Breastplate - Shield Master">
+		<!-- Increases P. Def +10%, Max HP +750, Received Heal +5%, Darkness Res +15, Shock Res +25, Enable Cloak -->
+		<set name="icon" val="icon.armor_t91_uk_i00" />
+		<set name="operateType" val="P" />
+		<set name="targetType" val="SELF" />
+		<set name="magicLevel" val="76" />
+		<effects>
+			<effect name="Buff">
+				<mul stat="pDef" val="1.10" />
+				<add stat="maxHp" val="750" />
+				<mul stat="healEffect" val="1.05" />
+				<add stat="darkRes" val="15" />
+			</effect>
+			<effect name="DefenceTrait">
+				<param SHOCK="25" />
+			</effect>
+			<effect name="EnableCloak" />
+		</effects>
+	</skill>
+
+	<skill id="99201" levels="1" name="Royal Breastplate - Weapon Master">
+		<!-- Increases P. Atk +9%, Max HP +750, Crit Rate +50, Crit Dmg +350, Darkness Res +15, Enable Cloak -->
+		<set name="icon" val="icon.armor_t91_uw_i00" />
+		<set name="operateType" val="P" />
+		<set name="targetType" val="SELF" />
+		<set name="magicLevel" val="76" />
+		<effects>
+			<effect name="Buff">
+				<mul stat="pAtk" val="1.09" />
+				<add stat="maxHp" val="750" />
+				<add stat="critRate" val="50" />
+				<add stat="critDmgAdd" val="350" />
+				<add stat="darkRes" val="15" />
+			</effect>
+			<effect name="EnableCloak" />
+		</effects>
+	</skill>
+
+	<skill id="99202" levels="1" name="Royal Breastplate - Force Master">
+		<!-- Increases P. Atk +9%, Max HP +750, Atk Spd +7%, MP Skill Cons -6%, Darkness Res +15, Enable Cloak -->
+		<set name="icon" val="icon.armor_t91_uf_i00" />
+		<set name="operateType" val="P" />
+		<set name="targetType" val="SELF" />
+		<set name="magicLevel" val="76" />
+		<effects>
+			<effect name="Buff">
+				<mul stat="pAtk" val="1.09" />
+				<add stat="maxHp" val="750" />
+				<mul stat="pAtkSpd" val="1.07" />
+				<mul stat="physicalMpConsume" val="0.94" />
+				<add stat="darkRes" val="15" />
+			</effect>
+			<effect name="EnableCloak" />
+		</effects>
+	</skill>
+
+	<skill id="99203" levels="1" name="Royal Breastplate - Bard">
+		<!-- Increases P. Def +8%, Max HP +750, Max MP +350, Song/Dance MP Cons -10%, Darkness Res +15, Enable Cloak -->
+		<set name="icon" val="icon.armor_t91_ub_i00" />
+		<set name="operateType" val="P" />
+		<set name="targetType" val="SELF" />
+		<set name="magicLevel" val="76" />
+		<effects>
+			<effect name="Buff">
+				<mul stat="pDef" val="1.08" />
+				<add stat="maxHp" val="750" />
+				<add stat="maxMp" val="350" />
+				<mul stat="danceMpConsume" val="0.90" />
+				<add stat="darkRes" val="15" />
+			</effect>
+			<effect name="EnableCloak" />
+		</effects>
+	</skill>
+
+	<!-- Royal Light Set Skills -->
+	<skill id="99204" levels="1" name="Royal Leather Armor - Dagger Master">
+		<!-- Increases P. Atk +8%, Atk Spd +8%, Evasion +6, Crit Rate +60, Hold Res +25, Enable Cloak -->
+		<set name="icon" val="icon.armor_t92_ud_i00" />
+		<set name="operateType" val="P" />
+		<set name="targetType" val="SELF" />
+		<set name="magicLevel" val="76" />
+		<effects>
+			<effect name="Buff">
+				<mul stat="pAtk" val="1.08" />
+				<mul stat="pAtkSpd" val="1.08" />
+				<add stat="rEvas" val="6" />
+				<add stat="critRate" val="60" />
+			</effect>
+			<effect name="DefenceTrait">
+				<param HOLD="25" />
+			</effect>
+			<effect name="EnableCloak" />
+		</effects>
+	</skill>
+
+	<skill id="99205" levels="1" name="Royal Leather Armor - Bow Master">
+		<!-- Increases P. Atk +9%, Attack Range +100, Crit Rate +70, MP Recov +10%, Hold Res +25, Enable Cloak -->
+		<set name="icon" val="icon.armor_t92_ub_i00" />
+		<set name="operateType" val="P" />
+		<set name="targetType" val="SELF" />
+		<set name="magicLevel" val="76" />
+		<effects>
+			<effect name="Buff">
+				<mul stat="pAtk" val="1.09" />
+				<add stat="pAtkRange" val="100" />
+				<add stat="critRate" val="70" />
+				<mul stat="regMp" val="1.10" />
+			</effect>
+			<effect name="DefenceTrait">
+				<param HOLD="25" />
+			</effect>
+			<effect name="EnableCloak" />
+		</effects>
+	</skill>
+
+	<!-- Royal Robe Set Skills -->
+	<skill id="99206" levels="1" name="Royal Tunic - Healer">
+		<!-- Increases M. Atk +12%, Casting Spd +18%, Heal Amount +10%, MP Recov +10%, Stun Res +25, Enable Cloak -->
+		<set name="icon" val="icon.armor_t93_uh_i00" />
+		<set name="operateType" val="P" />
+		<set name="targetType" val="SELF" />
+		<set name="magicLevel" val="76" />
+		<effects>
+			<effect name="Buff">
+				<mul stat="mAtk" val="1.12" />
+				<mul stat="mAtkSpd" val="1.18" />
+				<mul stat="gainHp" val="1.10" />
+				<mul stat="regMp" val="1.10" />
+			</effect>
+			<effect name="DefenceTrait">
+				<param SHOCK="25" />
+			</effect>
+			<effect name="EnableCloak" />
+		</effects>
+	</skill>
+
+	<skill id="99207" levels="1" name="Royal Tunic - Enchanter">
+		<!-- Increases M. Atk +12%, Casting Spd +18%, MP Cons -8%, Max MP +450, Stun Res +25, Enable Cloak -->
+		<set name="icon" val="icon.armor_t93_ue_i00" />
+		<set name="operateType" val="P" />
+		<set name="targetType" val="SELF" />
+		<set name="magicLevel" val="76" />
+		<effects>
+			<effect name="Buff">
+				<mul stat="mAtk" val="1.12" />
+				<mul stat="mAtkSpd" val="1.18" />
+				<mul stat="magicalMpConsume" val="0.92" />
+				<add stat="maxMp" val="450" />
+			</effect>
+			<effect name="DefenceTrait">
+				<param SHOCK="25" />
+			</effect>
+			<effect name="EnableCloak" />
+		</effects>
+	</skill>
+
+	<skill id="99208" levels="1" name="Royal Tunic - Summoner">
+		<!-- Increases M. Atk +12%, Casting Spd +18%, Max MP +500, Pet P.Atk/M.Atk +10%, Stun Res +25, Enable Cloak -->
+		<set name="icon" val="icon.armor_t93_us_i00" />
+		<set name="operateType" val="P" />
+		<set name="targetType" val="SELF" />
+		<set name="magicLevel" val="76" />
+		<effects>
+			<effect name="Buff">
+				<mul stat="mAtk" val="1.12" />
+				<mul stat="mAtkSpd" val="1.18" />
+				<add stat="maxMp" val="500" />
+			</effect>
+			<effect name="DefenceTrait">
+				<param SHOCK="25" />
+			</effect>
+			<effect name="EnableCloak" />
+		</effects>
+	</skill>
+
+	<skill id="99209" levels="1" name="Royal Tunic - Wizard">
+		<!-- Increases M. Atk +14%, Casting Spd +18%, Magic Crit Rate +5, MP Cons -6%, Stun Res +25, Enable Cloak -->
+		<set name="icon" val="icon.armor_t93_uw_i00" />
+		<set name="operateType" val="P" />
+		<set name="targetType" val="SELF" />
+		<set name="magicLevel" val="76" />
+		<effects>
+			<effect name="Buff">
+				<mul stat="mAtk" val="1.14" />
+				<mul stat="mAtkSpd" val="1.18" />
+				<add stat="mCritRate" val="5" />
+				<mul stat="magicalMpConsume" val="0.94" />
+			</effect>
+			<effect name="DefenceTrait">
+				<param SHOCK="25" />
+			</effect>
+			<effect name="EnableCloak" />
+		</effects>
+	</skill>
+
+	<!-- Royal Shield Skill -->
+	<skill id="99210" levels="1" name="Royal Shield Skill">
+		<set name="icon" val="icon.shield_dynasty_shield_i00" />
+		<set name="operateType" val="P" />
+		<set name="targetType" val="SELF" />
+		<set name="magicLevel" val="76" />
+		<effects>
+			<effect name="Buff">
+				<add stat="sDef" val="180" />
+				<add stat="rShld" val="12" />
+			</effect>
+		</effects>
+	</skill>
+
+	<!-- Royal Enchant +6 Armor Skills -->
+	<skill id="99211" levels="1" name="Enchant Royal Heavy Armor (+6)">
+		<set name="icon" val="icon.skill0000" />
+		<set name="operateType" val="P" />
+		<set name="targetType" val="SELF" />
+		<set name="magicLevel" val="76" />
+		<effects>
+			<effect name="Buff">
+				<mul stat="pDef" val="1.06" />
+				<mul stat="regMp" val="1.06" />
+			</effect>
+		</effects>
+	</skill>
+
+	<skill id="99212" levels="1" name="Enchant Royal Light Armor (+6)">
+		<set name="icon" val="icon.skill0000" />
+		<set name="operateType" val="P" />
+		<set name="targetType" val="SELF" />
+		<set name="magicLevel" val="76" />
+		<effects>
+			<effect name="Buff">
+				<mul stat="mDef" val="1.06" />
+				<add stat="rEvas" val="4" />
+			</effect>
+		</effects>
+	</skill>
+
+	<skill id="99213" levels="1" name="Enchant Royal Robe (+6)">
+		<set name="icon" val="icon.skill0000" />
+		<set name="operateType" val="P" />
+		<set name="targetType" val="SELF" />
+		<set name="magicLevel" val="76" />
+		<effects>
+			<effect name="Buff">
+				<mul stat="pDef" val="1.06" />
+				<add stat="maxMp" val="250" />
+			</effect>
+		</effects>
+	</skill>
+
+	<!-- Royal Cloak Active Resurrection Skill (70% XP) -->
+	<skill id="99220" levels="1" name="Royal Resurrection">
+		<!-- Resurrects a dead target recovering 70% of lost experience. -->
+		<set name="icon" val="icon.skill1016" />
+		<set name="operateType" val="A1" />
+		<set name="targetType" val="PC_BODY" />
+		<set name="castRange" val="400" />
+		<set name="effectPoint" val="1" />
+		<set name="effectRange" val="600" />
+		<set name="hitTime" val="3000" />
+		<set name="coolTime" val="500" />
+		<set name="reuseDelay" val="300000" /> <!-- 5 min cooldown -->
+		<set name="isMagic" val="2" /> <!-- Static Item Skill -->
+		<set name="magicLevel" val="76" />
+		<conditions>
+			<player canResurrect="true" />
+		</conditions>
+		<effects>
+			<effect name="Resurrection">
+				<param power="70" />
+			</effect>
+		</effects>
+	</skill>
+</list>

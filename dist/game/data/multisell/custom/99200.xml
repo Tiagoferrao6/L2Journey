@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../xsd/multisell.xsd">
+	<!-- Royal Heavy Armor (S Grade - Level 76+) -->
+	<item>
+		<ingredient id="99000" count="50" /> <!-- Conqueror's Badge -->
+		<production id="99200" count="1" /> <!-- Royal Breastplate - Shield Master -->
+	</item>
+	<item>
+		<ingredient id="99000" count="50" /> <!-- Conqueror's Badge -->
+		<production id="99201" count="1" /> <!-- Royal Breastplate - Weapon Master -->
+	</item>
+	<item>
+		<ingredient id="99000" count="50" /> <!-- Conqueror's Badge -->
+		<production id="99202" count="1" /> <!-- Royal Breastplate - Force Master -->
+	</item>
+	<item>
+		<ingredient id="99000" count="50" /> <!-- Conqueror's Badge -->
+		<production id="99203" count="1" /> <!-- Royal Breastplate - Bard -->
+	</item>
+	<item>
+		<ingredient id="99000" count="40" /> <!-- Conqueror's Badge -->
+		<production id="99204" count="1" /> <!-- Royal Gaiters -->
+	</item>
+	<item>
+		<ingredient id="99000" count="30" /> <!-- Conqueror's Badge -->
+		<production id="99205" count="1" /> <!-- Royal Helmet -->
+	</item>
+	<item>
+		<ingredient id="99000" count="25" /> <!-- Conqueror's Badge -->
+		<production id="99206" count="1" /> <!-- Royal Gauntlet - Heavy Armor -->
+	</item>
+	<item>
+		<ingredient id="99000" count="25" /> <!-- Conqueror's Badge -->
+		<production id="99207" count="1" /> <!-- Royal Boots - Heavy Armor -->
+	</item>
+	<item>
+		<ingredient id="99000" count="30" /> <!-- Conqueror's Badge -->
+		<production id="99208" count="1" /> <!-- Royal Shield -->
+	</item>
+
+	<!-- Royal Light Armor (S Grade - Level 76+) -->
+	<item>
+		<ingredient id="99000" count="50" /> <!-- Conqueror's Badge -->
+		<production id="99209" count="1" /> <!-- Royal Leather Armor - Dagger Master -->
+	</item>
+	<item>
+		<ingredient id="99000" count="50" /> <!-- Conqueror's Badge -->
+		<production id="99210" count="1" /> <!-- Royal Leather Armor - Bow Master -->
+	</item>
+	<item>
+		<ingredient id="99000" count="40" /> <!-- Conqueror's Badge -->
+		<production id="99211" count="1" /> <!-- Royal Leather Leggings -->
+	</item>
+	<item>
+		<ingredient id="99000" count="30" /> <!-- Conqueror's Badge -->
+		<production id="99212" count="1" /> <!-- Royal Leather Helmet -->
+	</item>
+	<item>
+		<ingredient id="99000" count="25" /> <!-- Conqueror's Badge -->
+		<production id="99213" count="1" /> <!-- Royal Leather Gloves - Light Armor -->
+	</item>
+	<item>
+		<ingredient id="99000" count="25" /> <!-- Conqueror's Badge -->
+		<production id="99214" count="1" /> <!-- Royal Leather Boots - Light Armor -->
+	</item>
+
+	<!-- Royal Robe Armor (S Grade - Level 76+) -->
+	<item>
+		<ingredient id="99000" count="50" /> <!-- Conqueror's Badge -->
+		<production id="99215" count="1" /> <!-- Royal Tunic - Healer -->
+	</item>
+	<item>
+		<ingredient id="99000" count="50" /> <!-- Conqueror's Badge -->
+		<production id="99216" count="1" /> <!-- Royal Tunic - Enchanter -->
+	</item>
+	<item>
+		<ingredient id="99000" count="50" /> <!-- Conqueror's Badge -->
+		<production id="99217" count="1" /> <!-- Royal Tunic - Summoner -->
+	</item>
+	<item>
+		<ingredient id="99000" count="50" /> <!-- Conqueror's Badge -->
+		<production id="99218" count="1" /> <!-- Royal Tunic - Wizard -->
+	</item>
+	<item>
+		<ingredient id="99000" count="40" /> <!-- Conqueror's Badge -->
+		<production id="99219" count="1" /> <!-- Royal Stockings -->
+	</item>
+	<item>
+		<ingredient id="99000" count="30" /> <!-- Conqueror's Badge -->
+		<production id="99220" count="1" /> <!-- Royal Circlet -->
+	</item>
+	<item>
+		<ingredient id="99000" count="25" /> <!-- Conqueror's Badge -->
+		<production id="99221" count="1" /> <!-- Royal Gloves - Robe -->
+	</item>
+	<item>
+		<ingredient id="99000" count="25" /> <!-- Conqueror's Badge -->
+		<production id="99222" count="1" /> <!-- Royal Shoes - Robe -->
+	</item>
+	<item>
+		<ingredient id="99000" count="30" /> <!-- Conqueror's Badge -->
+		<production id="99223" count="1" /> <!-- Royal Sigil -->
+	</item>
+
+	<!-- Royal Cloak (Capa Royal - S Grade Level 76+) -->
+	<item>
+		<ingredient id="99000" count="50" /> <!-- Conqueror's Badge -->
+		<production id="99224" count="1" /> <!-- Royal Cloak -->
+	</item>
+</list>

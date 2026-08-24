@@ -1,0 +1,527 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../xsd/items.xsd">
+	<!-- Royal Heavy Armor (S Grade - Level 76+) -->
+	<item id="99200" type="Armor" name="Royal Breastplate - Shield Master">
+		<set name="icon" val="icon.armor_t91_uk_i00" />
+		<set name="default_action" val="EQUIP" />
+		<set name="armor_type" val="HEAVY" />
+		<set name="bodypart" val="chest" />
+		<set name="immediate_effect" val="true" />
+		<set name="crystal_count" val="878" />
+		<set name="crystal_type" val="S" />
+		<set name="material" val="SCALE_OF_DRAGON" />
+		<set name="weight" val="7780" />
+		<set name="price" val="18297000" />
+		<set name="element_enabled" val="true" />
+		<set name="enchant_enabled" val="true" />
+		<conditions msgId="1518">
+			<player minLevel="76" />
+		</conditions>
+		<stats>
+			<add order="0" stat="pDef" val="285" />
+			<enchant stat="pDef" val="0" />
+		</stats>
+	</item>
+	<item id="99201" type="Armor" name="Royal Breastplate - Weapon Master">
+		<set name="icon" val="icon.armor_t91_uw_i00" />
+		<set name="default_action" val="EQUIP" />
+		<set name="armor_type" val="HEAVY" />
+		<set name="bodypart" val="chest" />
+		<set name="immediate_effect" val="true" />
+		<set name="crystal_count" val="878" />
+		<set name="crystal_type" val="S" />
+		<set name="material" val="SCALE_OF_DRAGON" />
+		<set name="weight" val="7780" />
+		<set name="price" val="18297000" />
+		<set name="element_enabled" val="true" />
+		<set name="enchant_enabled" val="true" />
+		<conditions msgId="1518">
+			<player minLevel="76" />
+		</conditions>
+		<stats>
+			<add order="0" stat="pDef" val="285" />
+			<enchant stat="pDef" val="0" />
+		</stats>
+	</item>
+	<item id="99202" type="Armor" name="Royal Breastplate - Force Master">
+		<set name="icon" val="icon.armor_t91_uf_i00" />
+		<set name="default_action" val="EQUIP" />
+		<set name="armor_type" val="HEAVY" />
+		<set name="bodypart" val="chest" />
+		<set name="immediate_effect" val="true" />
+		<set name="crystal_count" val="878" />
+		<set name="crystal_type" val="S" />
+		<set name="material" val="SCALE_OF_DRAGON" />
+		<set name="weight" val="7780" />
+		<set name="price" val="18297000" />
+		<set name="element_enabled" val="true" />
+		<set name="enchant_enabled" val="true" />
+		<conditions msgId="1518">
+			<player minLevel="76" />
+		</conditions>
+		<stats>
+			<add order="0" stat="pDef" val="285" />
+			<enchant stat="pDef" val="0" />
+		</stats>
+	</item>
+	<item id="99203" type="Armor" name="Royal Breastplate - Bard">
+		<set name="icon" val="icon.armor_t91_ub_i00" />
+		<set name="default_action" val="EQUIP" />
+		<set name="armor_type" val="HEAVY" />
+		<set name="bodypart" val="chest" />
+		<set name="immediate_effect" val="true" />
+		<set name="crystal_count" val="878" />
+		<set name="crystal_type" val="S" />
+		<set name="material" val="SCALE_OF_DRAGON" />
+		<set name="weight" val="7780" />
+		<set name="price" val="18297000" />
+		<set name="element_enabled" val="true" />
+		<set name="enchant_enabled" val="true" />
+		<conditions msgId="1518">
+			<player minLevel="76" />
+		</conditions>
+		<stats>
+			<add order="0" stat="pDef" val="285" />
+			<enchant stat="pDef" val="0" />
+		</stats>
+	</item>
+	<item id="99204" type="Armor" name="Royal Gaiters">
+		<set name="icon" val="icon.armor_t91_l_i00" />
+		<set name="default_action" val="EQUIP" />
+		<set name="armor_type" val="HEAVY" />
+		<set name="bodypart" val="legs" />
+		<set name="immediate_effect" val="true" />
+		<set name="crystal_count" val="731" />
+		<set name="crystal_type" val="S" />
+		<set name="material" val="SCALE_OF_DRAGON" />
+		<set name="weight" val="3210" />
+		<set name="price" val="15248000" />
+		<set name="element_enabled" val="true" />
+		<set name="enchant_enabled" val="true" />
+		<conditions msgId="1518">
+			<player minLevel="76" />
+		</conditions>
+		<stats>
+			<add order="0" stat="pDef" val="178" />
+			<enchant stat="pDef" val="0" />
+		</stats>
+	</item>
+	<item id="99205" type="Armor" name="Royal Helmet">
+		<set name="icon" val="icon.armor_helmet_i00" />
+		<set name="default_action" val="EQUIP" />
+		<set name="bodypart" val="head" />
+		<set name="immediate_effect" val="true" />
+		<set name="crystal_count" val="439" />
+		<set name="crystal_type" val="S" />
+		<set name="material" val="BONE" />
+		<set name="weight" val="530" />
+		<set name="price" val="9149000" />
+		<set name="element_enabled" val="true" />
+		<set name="enchant_enabled" val="true" />
+		<conditions msgId="1518">
+			<player minLevel="76" />
+		</conditions>
+		<stats>
+			<add order="0" stat="pDef" val="115" />
+			<enchant stat="pDef" val="0" />
+		</stats>
+	</item>
+	<item id="99206" type="Armor" name="Royal Gauntlet - Heavy Armor">
+		<set name="icon" val="icon.armor_t91_g_i00" />
+		<set name="default_action" val="EQUIP" />
+		<set name="bodypart" val="gloves" />
+		<set name="immediate_effect" val="true" />
+		<set name="crystal_count" val="293" />
+		<set name="crystal_type" val="S" />
+		<set name="material" val="LEATHER" />
+		<set name="weight" val="520" />
+		<set name="price" val="6099000" />
+		<set name="element_enabled" val="true" />
+		<set name="enchant_enabled" val="true" />
+		<conditions msgId="1518">
+			<player minLevel="76" />
+		</conditions>
+		<stats>
+			<add order="0" stat="pDef" val="76" />
+			<enchant stat="pDef" val="0" />
+		</stats>
+	</item>
+	<item id="99207" type="Armor" name="Royal Boots - Heavy Armor">
+		<set name="icon" val="icon.armor_t91_b_i00" />
+		<set name="default_action" val="EQUIP" />
+		<set name="bodypart" val="feet" />
+		<set name="immediate_effect" val="true" />
+		<set name="crystal_count" val="293" />
+		<set name="crystal_type" val="S" />
+		<set name="material" val="LEATHER" />
+		<set name="weight" val="1090" />
+		<set name="price" val="6099000" />
+		<set name="element_enabled" val="true" />
+		<set name="enchant_enabled" val="true" />
+		<conditions msgId="1518">
+			<player minLevel="76" />
+		</conditions>
+		<stats>
+			<add order="0" stat="pDef" val="76" />
+			<enchant stat="pDef" val="0" />
+		</stats>
+	</item>
+	<item id="99208" type="Armor" name="Royal Shield">
+		<set name="icon" val="icon.shield_dynasty_shield_i00" />
+		<set name="default_action" val="EQUIP" />
+		<set name="bodypart" val="lhand" />
+		<set name="immediate_effect" val="true" />
+		<set name="crystal_count" val="293" />
+		<set name="crystal_type" val="S" />
+		<set name="material" val="BRONZE" />
+		<set name="weight" val="1360" />
+		<set name="price" val="6099000" />
+		<set name="element_enabled" val="true" />
+		<set name="enchant_enabled" val="true" />
+		<conditions msgId="1518">
+			<player minLevel="76" />
+		</conditions>
+		<stats>
+			<add order="0" stat="rShld" val="20" />
+			<add order="0" stat="sDef" val="350" />
+			<enchant stat="pDef" val="0" />
+		</stats>
+	</item>
+
+	<!-- Royal Light Armor (S Grade - Level 76+) -->
+	<item id="99209" type="Armor" name="Royal Leather Armor - Dagger Master">
+		<set name="icon" val="icon.armor_t92_ud_i00" />
+		<set name="default_action" val="EQUIP" />
+		<set name="armor_type" val="LIGHT" />
+		<set name="bodypart" val="chest" />
+		<set name="immediate_effect" val="true" />
+		<set name="crystal_count" val="878" />
+		<set name="crystal_type" val="S" />
+		<set name="material" val="LEATHER" />
+		<set name="weight" val="5840" />
+		<set name="price" val="18297000" />
+		<set name="element_enabled" val="true" />
+		<set name="enchant_enabled" val="true" />
+		<conditions msgId="1518">
+			<player minLevel="76" />
+		</conditions>
+		<stats>
+			<add order="0" stat="pDef" val="214" />
+			<enchant stat="pDef" val="0" />
+		</stats>
+	</item>
+	<item id="99210" type="Armor" name="Royal Leather Armor - Bow Master">
+		<set name="icon" val="icon.armor_t92_ub_i00" />
+		<set name="default_action" val="EQUIP" />
+		<set name="armor_type" val="LIGHT" />
+		<set name="bodypart" val="chest" />
+		<set name="immediate_effect" val="true" />
+		<set name="crystal_count" val="878" />
+		<set name="crystal_type" val="S" />
+		<set name="material" val="LEATHER" />
+		<set name="weight" val="5840" />
+		<set name="price" val="18297000" />
+		<set name="element_enabled" val="true" />
+		<set name="enchant_enabled" val="true" />
+		<conditions msgId="1518">
+			<player minLevel="76" />
+		</conditions>
+		<stats>
+			<add order="0" stat="pDef" val="214" />
+			<enchant stat="pDef" val="0" />
+		</stats>
+	</item>
+	<item id="99211" type="Armor" name="Royal Leather Leggings">
+		<set name="icon" val="icon.armor_t92_l_i00" />
+		<set name="default_action" val="EQUIP" />
+		<set name="armor_type" val="LIGHT" />
+		<set name="bodypart" val="legs" />
+		<set name="immediate_effect" val="true" />
+		<set name="crystal_count" val="731" />
+		<set name="crystal_type" val="S" />
+		<set name="material" val="LEATHER" />
+		<set name="weight" val="2410" />
+		<set name="price" val="15248000" />
+		<set name="element_enabled" val="true" />
+		<set name="enchant_enabled" val="true" />
+		<conditions msgId="1518">
+			<player minLevel="76" />
+		</conditions>
+		<stats>
+			<add order="0" stat="pDef" val="134" />
+			<enchant stat="pDef" val="0" />
+		</stats>
+	</item>
+	<item id="99212" type="Armor" name="Royal Leather Helmet">
+		<set name="icon" val="icon.armor_helmet_i00" />
+		<set name="default_action" val="EQUIP" />
+		<set name="bodypart" val="head" />
+		<set name="immediate_effect" val="true" />
+		<set name="crystal_count" val="439" />
+		<set name="crystal_type" val="S" />
+		<set name="material" val="LEATHER" />
+		<set name="weight" val="530" />
+		<set name="price" val="9149000" />
+		<set name="element_enabled" val="true" />
+		<set name="enchant_enabled" val="true" />
+		<conditions msgId="1518">
+			<player minLevel="76" />
+		</conditions>
+		<stats>
+			<add order="0" stat="pDef" val="115" />
+			<enchant stat="pDef" val="0" />
+		</stats>
+	</item>
+	<item id="99213" type="Armor" name="Royal Leather Gloves - Light Armor">
+		<set name="icon" val="icon.armor_t92_g_i00" />
+		<set name="default_action" val="EQUIP" />
+		<set name="bodypart" val="gloves" />
+		<set name="immediate_effect" val="true" />
+		<set name="crystal_count" val="293" />
+		<set name="crystal_type" val="S" />
+		<set name="material" val="LEATHER" />
+		<set name="weight" val="520" />
+		<set name="price" val="6099000" />
+		<set name="element_enabled" val="true" />
+		<set name="enchant_enabled" val="true" />
+		<conditions msgId="1518">
+			<player minLevel="76" />
+		</conditions>
+		<stats>
+			<add order="0" stat="pDef" val="76" />
+			<enchant stat="pDef" val="0" />
+		</stats>
+	</item>
+	<item id="99214" type="Armor" name="Royal Leather Boots - Light Armor">
+		<set name="icon" val="icon.armor_t92_b_i00" />
+		<set name="default_action" val="EQUIP" />
+		<set name="bodypart" val="feet" />
+		<set name="immediate_effect" val="true" />
+		<set name="crystal_count" val="293" />
+		<set name="crystal_type" val="S" />
+		<set name="material" val="LEATHER" />
+		<set name="weight" val="1090" />
+		<set name="price" val="6099000" />
+		<set name="element_enabled" val="true" />
+		<set name="enchant_enabled" val="true" />
+		<conditions msgId="1518">
+			<player minLevel="76" />
+		</conditions>
+		<stats>
+			<add order="0" stat="pDef" val="76" />
+			<enchant stat="pDef" val="0" />
+		</stats>
+	</item>
+
+	<!-- Royal Robe Armor (S Grade - Level 76+) -->
+	<item id="99215" type="Armor" name="Royal Tunic - Healer">
+		<set name="icon" val="icon.armor_t93_uh_i00" />
+		<set name="default_action" val="EQUIP" />
+		<set name="armor_type" val="MAGIC" />
+		<set name="bodypart" val="chest" />
+		<set name="immediate_effect" val="true" />
+		<set name="crystal_count" val="878" />
+		<set name="crystal_type" val="S" />
+		<set name="material" val="CLOTH" />
+		<set name="weight" val="3890" />
+		<set name="price" val="18297000" />
+		<set name="element_enabled" val="true" />
+		<set name="enchant_enabled" val="true" />
+		<conditions msgId="1518">
+			<player minLevel="76" />
+		</conditions>
+		<stats>
+			<add order="0" stat="pDef" val="142" />
+			<enchant stat="pDef" val="0" />
+		</stats>
+	</item>
+	<item id="99216" type="Armor" name="Royal Tunic - Enchanter">
+		<set name="icon" val="icon.armor_t93_ue_i00" />
+		<set name="default_action" val="EQUIP" />
+		<set name="armor_type" val="MAGIC" />
+		<set name="bodypart" val="chest" />
+		<set name="immediate_effect" val="true" />
+		<set name="crystal_count" val="878" />
+		<set name="crystal_type" val="S" />
+		<set name="material" val="CLOTH" />
+		<set name="weight" val="3890" />
+		<set name="price" val="18297000" />
+		<set name="element_enabled" val="true" />
+		<set name="enchant_enabled" val="true" />
+		<conditions msgId="1518">
+			<player minLevel="76" />
+		</conditions>
+		<stats>
+			<add order="0" stat="pDef" val="142" />
+			<enchant stat="pDef" val="0" />
+		</stats>
+	</item>
+	<item id="99217" type="Armor" name="Royal Tunic - Summoner">
+		<set name="icon" val="icon.armor_t93_us_i00" />
+		<set name="default_action" val="EQUIP" />
+		<set name="armor_type" val="MAGIC" />
+		<set name="bodypart" val="chest" />
+		<set name="immediate_effect" val="true" />
+		<set name="crystal_count" val="878" />
+		<set name="crystal_type" val="S" />
+		<set name="material" val="CLOTH" />
+		<set name="weight" val="3890" />
+		<set name="price" val="18297000" />
+		<set name="element_enabled" val="true" />
+		<set name="enchant_enabled" val="true" />
+		<conditions msgId="1518">
+			<player minLevel="76" />
+		</conditions>
+		<stats>
+			<add order="0" stat="pDef" val="142" />
+			<enchant stat="pDef" val="0" />
+		</stats>
+	</item>
+	<item id="99218" type="Armor" name="Royal Tunic - Wizard">
+		<set name="icon" val="icon.armor_t93_uw_i00" />
+		<set name="default_action" val="EQUIP" />
+		<set name="armor_type" val="MAGIC" />
+		<set name="bodypart" val="chest" />
+		<set name="immediate_effect" val="true" />
+		<set name="crystal_count" val="878" />
+		<set name="crystal_type" val="S" />
+		<set name="material" val="CLOTH" />
+		<set name="weight" val="3890" />
+		<set name="price" val="18297000" />
+		<set name="element_enabled" val="true" />
+		<set name="enchant_enabled" val="true" />
+		<conditions msgId="1518">
+			<player minLevel="76" />
+		</conditions>
+		<stats>
+			<add order="0" stat="pDef" val="142" />
+			<enchant stat="pDef" val="0" />
+		</stats>
+	</item>
+	<item id="99219" type="Armor" name="Royal Stockings">
+		<set name="icon" val="icon.armor_t93_l_i00" />
+		<set name="default_action" val="EQUIP" />
+		<set name="armor_type" val="MAGIC" />
+		<set name="bodypart" val="legs" />
+		<set name="immediate_effect" val="true" />
+		<set name="crystal_count" val="731" />
+		<set name="crystal_type" val="S" />
+		<set name="material" val="CLOTH" />
+		<set name="weight" val="1600" />
+		<set name="price" val="15248000" />
+		<set name="element_enabled" val="true" />
+		<set name="enchant_enabled" val="true" />
+		<conditions msgId="1518">
+			<player minLevel="76" />
+		</conditions>
+		<stats>
+			<add order="0" stat="pDef" val="89" />
+			<enchant stat="pDef" val="0" />
+		</stats>
+	</item>
+	<item id="99220" type="Armor" name="Royal Circlet">
+		<set name="icon" val="icon.armor_circlet_i00" />
+		<set name="default_action" val="EQUIP" />
+		<set name="bodypart" val="head" />
+		<set name="immediate_effect" val="true" />
+		<set name="crystal_count" val="439" />
+		<set name="crystal_type" val="S" />
+		<set name="material" val="CLOTH" />
+		<set name="weight" val="530" />
+		<set name="price" val="9149000" />
+		<set name="element_enabled" val="true" />
+		<set name="enchant_enabled" val="true" />
+		<conditions msgId="1518">
+			<player minLevel="76" />
+		</conditions>
+		<stats>
+			<add order="0" stat="pDef" val="115" />
+			<enchant stat="pDef" val="0" />
+		</stats>
+	</item>
+	<item id="99221" type="Armor" name="Royal Gloves - Robe">
+		<set name="icon" val="icon.armor_t93_g_i00" />
+		<set name="default_action" val="EQUIP" />
+		<set name="bodypart" val="gloves" />
+		<set name="immediate_effect" val="true" />
+		<set name="crystal_count" val="293" />
+		<set name="crystal_type" val="S" />
+		<set name="material" val="CLOTH" />
+		<set name="weight" val="520" />
+		<set name="price" val="6099000" />
+		<set name="element_enabled" val="true" />
+		<set name="enchant_enabled" val="true" />
+		<conditions msgId="1518">
+			<player minLevel="76" />
+		</conditions>
+		<stats>
+			<add order="0" stat="pDef" val="76" />
+			<enchant stat="pDef" val="0" />
+		</stats>
+	</item>
+	<item id="99222" type="Armor" name="Royal Shoes - Robe">
+		<set name="icon" val="icon.armor_t93_b_i00" />
+		<set name="default_action" val="EQUIP" />
+		<set name="bodypart" val="feet" />
+		<set name="immediate_effect" val="true" />
+		<set name="crystal_count" val="293" />
+		<set name="crystal_type" val="S" />
+		<set name="material" val="CLOTH" />
+		<set name="weight" val="1090" />
+		<set name="price" val="6099000" />
+		<set name="element_enabled" val="true" />
+		<set name="enchant_enabled" val="true" />
+		<conditions msgId="1518">
+			<player minLevel="76" />
+		</conditions>
+		<stats>
+			<add order="0" stat="pDef" val="76" />
+			<enchant stat="pDef" val="0" />
+		</stats>
+	</item>
+	<item id="99223" type="Armor" name="Royal Sigil">
+		<set name="icon" val="icon.shield_dynasty_sigil_i00" />
+		<set name="default_action" val="EQUIP" />
+		<set name="bodypart" val="lhand" />
+		<set name="immediate_effect" val="true" />
+		<set name="crystal_count" val="293" />
+		<set name="crystal_type" val="S" />
+		<set name="material" val="BRONZE" />
+		<set name="weight" val="1360" />
+		<set name="price" val="6099000" />
+		<set name="element_enabled" val="true" />
+		<set name="enchant_enabled" val="true" />
+		<conditions msgId="1518">
+			<player minLevel="76" />
+		</conditions>
+		<stats>
+			<add order="0" stat="pDef" val="22" />
+			<add order="0" stat="mDef" val="15" />
+			<enchant stat="pDef" val="0" />
+		</stats>
+	</item>
+
+	<!-- Royal Cloak (Capa Royal - S Grade Level 76+ with 70% XP Resurrection Skill) -->
+	<item id="99224" type="Armor" name="Royal Cloak">
+		<set name="icon" val="icon.etc_cloack_i00" />
+		<set name="default_action" val="EQUIP" />
+		<set name="bodypart" val="back" />
+		<set name="immediate_effect" val="true" />
+		<set name="crystal_count" val="600" />
+		<set name="crystal_type" val="S" />
+		<set name="material" val="CLOTH" />
+		<set name="weight" val="220" />
+		<set name="price" val="10000000" />
+		<set name="element_enabled" val="true" />
+		<set name="enchant_enabled" val="true" />
+		<set name="item_skill" val="99220-1" />
+		<conditions msgId="1518">
+			<player minLevel="76" />
+		</conditions>
+		<stats>
+			<add order="0" stat="pDef" val="60" />
+			<add order="0" stat="mDef" val="40" />
+			<add order="0" stat="maxHp" val="300" />
+		</stats>
+	</item>
+</list>
