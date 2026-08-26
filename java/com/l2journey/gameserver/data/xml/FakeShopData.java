@@ -89,8 +89,10 @@ public class FakeShopData implements IXmlReader
 								final long maxCount = parseLong(attrs, "maxCount", minCount);
 								final long minPrice = parseLong(attrs, "minPrice", 100L);
 								final long maxPrice = parseLong(attrs, "maxPrice", minPrice);
+								final int minEnchant = parseInteger(attrs, "minEnchant", parseInteger(attrs, "enchant", 0));
+								final int maxEnchant = parseInteger(attrs, "maxEnchant", minEnchant);
 
-								final CatalogItem item = new CatalogItem(itemId, minCount, maxCount, minPrice, maxPrice);
+								final CatalogItem item = new CatalogItem(itemId, minCount, maxCount, minPrice, maxPrice, minEnchant, maxEnchant);
 
 								if ("materials".equals(nodeName))
 								{
@@ -165,8 +167,10 @@ public class FakeShopData implements IXmlReader
 						final int itemId = parseInteger(itemAttrs, "id");
 						final long count = parseLong(itemAttrs, "count", 1L);
 						final long price = parseLong(itemAttrs, "price", 100L);
+						final int minEnchant = parseInteger(itemAttrs, "minEnchant", parseInteger(itemAttrs, "enchant", 0));
+						final int maxEnchant = parseInteger(itemAttrs, "maxEnchant", minEnchant);
 
-						holder.addCustomItem(new CatalogItem(itemId, count, count, price, price));
+						holder.addCustomItem(new CatalogItem(itemId, count, count, price, price, minEnchant, maxEnchant));
 					}
 				}
 

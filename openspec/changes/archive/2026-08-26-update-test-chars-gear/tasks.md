@@ -1,0 +1,28 @@
+- [x] Atualizar script `z_custom_test_characters_setup.sql`.
+  - [x] **Limpeza**: Resetar `items`, `item_elementals` (se houver ligações), e `character_skills` base para TitanTester e SilverTester.
+  - [x] **Skills SilverTester**:
+    - [x] Adicionar todas as skills passivas e ativas de Moonlight Sentinel.
+    - [x] Adicionar skills encantadas (como Stun Shot, etc).
+    - [x] Adicionar todas as Songs e passivas de Sword Muse.
+    - [x] Adicionar as certificações de Subclass.
+  - [x] **Skills TitanTester**:
+    - [x] Adicionar todas as skills passivas e ativas de Titan.
+    - [x] Adicionar skills encantadas.
+    - [x] Adicionar skills de DreadNought.
+    - [x] Adicionar as certificações de Subclass.
+  - [x] **Inventário (Consumíveis e Quests)**:
+    - [x] Adicionar 1 Bilhão de Adena e 500 Raid Coins.
+    - [x] Adicionar Soul Ore, Spirit Ore, Crystal: S Grade, e Battle Symbols.
+    - [x] Adicionar BSoE, SoE, Mana Potions, Greater Healing Potions e Greater CP Potions.
+    - [x] Adicionar Soulshots S, Blessed Spiritshots S e S-Grade Arrows (SilverTester).
+    - [x] Manter itens de quest: Blooded Fabric, Floating Stone e Portal Stone.
+  - [x] **Equipamentos e Armas**:
+    - [x] Equipar sets completos Royal Armor +6 (com elements, inserindo em `item_elementals` para cada peça).
+    - [x] Inserir Joias Boss +6 completas equipadas.
+    - [x] Inserir todas as armas Royal Dynasty +6 (com elements) no inventário de ambos.
+  - [x] **Tattoos Customizadas**:
+    - [x] Inserir Tattoo of Ogre Lv 6.
+    - [x] Inserir Tattoo of Monk Lv 6.
+    - [x] Inserir Tattoo of Assassin Lv 6.
+    - [x] Inserir Tattoo of Blood Lv 6.
+- [x] Validar carregamento do SQL na base de dados (`db_installer`).

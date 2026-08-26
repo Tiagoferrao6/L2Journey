@@ -31,9 +31,10 @@ public class FakeHunterAI extends PlayerAI
 	private ScheduledFuture<?> _aiTask;
 	private boolean _isEscaping;
 
-	public FakeHunterAI(FakePlayerProfile profile)
+	public FakeHunterAI(Player player, FakePlayerProfile profile)
 	{
-		super(null);
+		super(player);
+		_player = player;
 		_profile = profile;
 	}
 
@@ -47,57 +48,53 @@ public class FakeHunterAI extends PlayerAI
 		return _player;
 	}
 
-	public synchronized boolean spawn()
+	public static FakeHunterAI spawnHunter(FakePlayerProfile profile)
 	{
-		if ((_player != null) && _player.isOnline())
-		{
-			return true;
-		}
-
-		int classId = _profile.getClassId() > 0 ? _profile.getClassId() : 1; // Default Warrior
+		int classId = profile.getClassId() > 0 ? profile.getClassId() : 1; // Default Warrior
 		PlayerTemplate template = PlayerTemplateData.getInstance().getTemplate(classId);
 		if (template == null)
 		{
 			template = PlayerTemplateData.getInstance().getTemplate(1);
 		}
 
-		final String name = "Hunter_" + _profile.getFakeId();
+		final String name = "Hunter_" + profile.getFakeId();
 		final PlayerAppearance appearance = new PlayerAppearance((byte) Rnd.get(3), (byte) Rnd.get(3), (byte) Rnd.get(3), false);
-		_player = Player.create(template, name.toLowerCase(), name, appearance);
+		Player player = Player.create(template, name.toLowerCase(), name, appearance);
 
-		if (_player == null)
+		if (player == null)
 		{
-			LOGGER.warning("FakeHunterAI: Failed to create Player for profile ID " + _profile.getFakeId());
-			return false;
+			LOGGER.warning("FakeHunterAI: Failed to create Player for profile ID " + profile.getFakeId());
+			return null;
 		}
 
-		_player.setFakePlayer(true);
-		_player.setAI(this);
-		if (_profile.getDualClassId() != -1)
+		FakeHunterAI hunter = new FakeHunterAI(player, profile);
+		player.setFakePlayer(true);
+		player.setAI(hunter);
+		if (profile.getDualClassId() != -1)
 		{
-			_player.setDualClassId(_profile.getDualClassId());
-			_player.rewardSkills();
+			player.setDualClassId(profile.getDualClassId());
+			player.rewardSkills();
 		}
-		_player.getStat().setLevel((byte) 35);
+		player.getStat().setLevel((byte) 35);
 
-		int x = _profile.getX() != 0 ? _profile.getX() : -14000 + Rnd.get(-500, 500);
-		int y = _profile.getY() != 0 ? _profile.getY() : 123000 + Rnd.get(-500, 500);
-		int z = _profile.getZ() != 0 ? _profile.getZ() : -3115;
-		int heading = _profile.getHeading() != 0 ? _profile.getHeading() : Rnd.get(65535);
+		int x = profile.getX() != 0 ? profile.getX() : -14000 + Rnd.get(-500, 500);
+		int y = profile.getY() != 0 ? profile.getY() : 123000 + Rnd.get(-500, 500);
+		int z = profile.getZ() != 0 ? profile.getZ() : -3115;
+		int heading = profile.getHeading() != 0 ? profile.getHeading() : Rnd.get(65535);
 
-		_player.setXYZ(x, y, z);
-		_player.setHeading(heading);
-		_player.spawnMe(x, y, z);
+		player.setXYZ(x, y, z);
+		player.setHeading(heading);
+		player.spawnMe(x, y, z);
 
 		// Start AI thinking loop every 2 seconds
-		_aiTask = ThreadPool.scheduleAtFixedRate(this::thinkCombat, 2000, 2000);
+		hunter._aiTask = ThreadPool.scheduleAtFixedRate(hunter::thinkCombat, 2000, 2000);
 
-		_profile.setActive(true);
-		_profile.setLastActiveTime(System.currentTimeMillis());
-		FakePlayerDAO.getInstance().saveProfile(_profile);
+		profile.setActive(true);
+		profile.setLastActiveTime(System.currentTimeMillis());
+		FakePlayerDAO.getInstance().saveProfile(profile);
 
-		LOGGER.info("FakeHunterAI: Spawned Hunter " + name + " (Aggro: " + _profile.getAggressiveness() + ", Courage: " + _profile.getCourage() + ", Party: " + _profile.getPartyTendency() + ")");
-		return true;
+		LOGGER.info("FakeHunterAI: Spawned Hunter " + name + " (Aggro: " + profile.getAggressiveness() + ", Courage: " + profile.getCourage() + ", Party: " + profile.getPartyTendency() + ")");
+		return hunter;
 	}
 
 	public synchronized void despawn()

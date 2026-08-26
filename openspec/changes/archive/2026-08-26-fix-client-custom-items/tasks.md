@@ -1,0 +1,14 @@
+- [x] Escrever Script Python `fix_client_dat.py` para processar e gerar as linhas baseadas em originais do jogo.
+- [x] **Limpar Erros Atuais**: Remover 99200-99224 do `armorgrp.txt` e 99300-99315 do `weapongrp.txt`.
+- [x] **Fix Royal Weapons (`weapongrp.txt`)**:
+  - [x] Mapear as armas base (ex: 9442 para 99300, 9444 para 99301, etc.).
+  - [x] Clonar suas linhas e atualizar a 2ª coluna com os IDs `993xx`.
+  - [x] Adicionar ao final do arquivo.
+- [x] **Fix Royal Armors (`armorgrp.txt`)**:
+  - [x] Mapear as armaduras base (ex: Peitoral Heavy para 99200, 99201).
+  - [x] Clonar suas linhas e atualizar a 2ª coluna com os IDs `992xx`.
+  - [x] Adicionar ao final do arquivo.
+- [x] **Add Tattoos (`armorgrp.txt` e `itemname-e.txt`)**:
+  - [x] Gerar as 24 linhas das Tattoos no `itemname-e.txt` (41001 a 41024) extraindo nomes da engine/servidor ou mockando baseados no padrão.
+  - [x] Gerar as 24 linhas das Tattoos no `armorgrp.txt` (clonando um item de underwear sem renderização de peito, como a camiseta de noob).
+- [x] Avaliar as linhas geradas e sobrescrever no diretório `client_dat/`.

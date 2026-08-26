@@ -14,9 +14,6 @@
 		<set name="price" val="18297000" />
 		<set name="element_enabled" val="true" />
 		<set name="enchant_enabled" val="true" />
-		<conditions msgId="1518">
-			<player minLevel="76" />
-		</conditions>
 		<stats>
 			<add order="0" stat="pDef" val="285" />
 			<enchant stat="pDef" val="0" />
@@ -35,9 +32,6 @@
 		<set name="price" val="18297000" />
 		<set name="element_enabled" val="true" />
 		<set name="enchant_enabled" val="true" />
-		<conditions msgId="1518">
-			<player minLevel="76" />
-		</conditions>
 		<stats>
 			<add order="0" stat="pDef" val="285" />
 			<enchant stat="pDef" val="0" />
@@ -56,9 +50,6 @@
 		<set name="price" val="18297000" />
 		<set name="element_enabled" val="true" />
 		<set name="enchant_enabled" val="true" />
-		<conditions msgId="1518">
-			<player minLevel="76" />
-		</conditions>
 		<stats>
 			<add order="0" stat="pDef" val="285" />
 			<enchant stat="pDef" val="0" />
@@ -77,9 +68,6 @@
 		<set name="price" val="18297000" />
 		<set name="element_enabled" val="true" />
 		<set name="enchant_enabled" val="true" />
-		<conditions msgId="1518">
-			<player minLevel="76" />
-		</conditions>
 		<stats>
 			<add order="0" stat="pDef" val="285" />
 			<enchant stat="pDef" val="0" />
@@ -98,9 +86,6 @@
 		<set name="price" val="15248000" />
 		<set name="element_enabled" val="true" />
 		<set name="enchant_enabled" val="true" />
-		<conditions msgId="1518">
-			<player minLevel="76" />
-		</conditions>
 		<stats>
 			<add order="0" stat="pDef" val="178" />
 			<enchant stat="pDef" val="0" />
@@ -118,9 +103,6 @@
 		<set name="price" val="9149000" />
 		<set name="element_enabled" val="true" />
 		<set name="enchant_enabled" val="true" />
-		<conditions msgId="1518">
-			<player minLevel="76" />
-		</conditions>
 		<stats>
 			<add order="0" stat="pDef" val="115" />
 			<enchant stat="pDef" val="0" />
@@ -138,9 +120,6 @@
 		<set name="price" val="6099000" />
 		<set name="element_enabled" val="true" />
 		<set name="enchant_enabled" val="true" />
-		<conditions msgId="1518">
-			<player minLevel="76" />
-		</conditions>
 		<stats>
 			<add order="0" stat="pDef" val="76" />
 			<enchant stat="pDef" val="0" />
@@ -158,9 +137,6 @@
 		<set name="price" val="6099000" />
 		<set name="element_enabled" val="true" />
 		<set name="enchant_enabled" val="true" />
-		<conditions msgId="1518">
-			<player minLevel="76" />
-		</conditions>
 		<stats>
 			<add order="0" stat="pDef" val="76" />
 			<enchant stat="pDef" val="0" />
@@ -178,9 +154,6 @@
 		<set name="price" val="6099000" />
 		<set name="element_enabled" val="true" />
 		<set name="enchant_enabled" val="true" />
-		<conditions msgId="1518">
-			<player minLevel="76" />
-		</conditions>
 		<stats>
 			<add order="0" stat="rShld" val="20" />
 			<add order="0" stat="sDef" val="350" />
@@ -202,9 +175,6 @@
 		<set name="price" val="18297000" />
 		<set name="element_enabled" val="true" />
 		<set name="enchant_enabled" val="true" />
-		<conditions msgId="1518">
-			<player minLevel="76" />
-		</conditions>
 		<stats>
 			<add order="0" stat="pDef" val="214" />
 			<enchant stat="pDef" val="0" />
@@ -223,9 +193,6 @@
 		<set name="price" val="18297000" />
 		<set name="element_enabled" val="true" />
 		<set name="enchant_enabled" val="true" />
-		<conditions msgId="1518">
-			<player minLevel="76" />
-		</conditions>
 		<stats>
 			<add order="0" stat="pDef" val="214" />
 			<enchant stat="pDef" val="0" />
@@ -244,9 +211,6 @@
 		<set name="price" val="15248000" />
 		<set name="element_enabled" val="true" />
 		<set name="enchant_enabled" val="true" />
-		<conditions msgId="1518">
-			<player minLevel="76" />
-		</conditions>
 		<stats>
 			<add order="0" stat="pDef" val="134" />
 			<enchant stat="pDef" val="0" />
@@ -264,9 +228,6 @@
 		<set name="price" val="9149000" />
 		<set name="element_enabled" val="true" />
 		<set name="enchant_enabled" val="true" />
-		<conditions msgId="1518">
-			<player minLevel="76" />
-		</conditions>
 		<stats>
 			<add order="0" stat="pDef" val="115" />
 			<enchant stat="pDef" val="0" />
@@ -284,9 +245,6 @@
 		<set name="price" val="6099000" />
 		<set name="element_enabled" val="true" />
 		<set name="enchant_enabled" val="true" />
-		<conditions msgId="1518">
-			<player minLevel="76" />
-		</conditions>
 		<stats>
 			<add order="0" stat="pDef" val="76" />
 			<enchant stat="pDef" val="0" />
@@ -304,9 +262,6 @@
 		<set name="price" val="6099000" />
 		<set name="element_enabled" val="true" />
 		<set name="enchant_enabled" val="true" />
-		<conditions msgId="1518">
-			<player minLevel="76" />
-		</conditions>
 		<stats>
 			<add order="0" stat="pDef" val="76" />
 			<enchant stat="pDef" val="0" />
@@ -327,9 +282,6 @@
 		<set name="price" val="18297000" />
 		<set name="element_enabled" val="true" />
 		<set name="enchant_enabled" val="true" />
-		<conditions msgId="1518">
-			<player minLevel="76" />
-		</conditions>
 		<stats>
 			<add order="0" stat="pDef" val="142" />
 			<enchant stat="pDef" val="0" />
@@ -348,9 +300,6 @@
 		<set name="price" val="18297000" />
 		<set name="element_enabled" val="true" />
 		<set name="enchant_enabled" val="true" />
-		<conditions msgId="1518">
-			<player minLevel="76" />
-		</conditions>
 		<stats>
 			<add order="0" stat="pDef" val="142" />
 			<enchant stat="pDef" val="0" />
@@ -369,9 +318,6 @@
 		<set name="price" val="18297000" />
 		<set name="element_enabled" val="true" />
 		<set name="enchant_enabled" val="true" />
-		<conditions msgId="1518">
-			<player minLevel="76" />
-		</conditions>
 		<stats>
 			<add order="0" stat="pDef" val="142" />
 			<enchant stat="pDef" val="0" />
@@ -390,9 +336,6 @@
 		<set name="price" val="18297000" />
 		<set name="element_enabled" val="true" />
 		<set name="enchant_enabled" val="true" />
-		<conditions msgId="1518">
-			<player minLevel="76" />
-		</conditions>
 		<stats>
 			<add order="0" stat="pDef" val="142" />
 			<enchant stat="pDef" val="0" />
@@ -411,9 +354,6 @@
 		<set name="price" val="15248000" />
 		<set name="element_enabled" val="true" />
 		<set name="enchant_enabled" val="true" />
-		<conditions msgId="1518">
-			<player minLevel="76" />
-		</conditions>
 		<stats>
 			<add order="0" stat="pDef" val="89" />
 			<enchant stat="pDef" val="0" />
@@ -431,9 +371,6 @@
 		<set name="price" val="9149000" />
 		<set name="element_enabled" val="true" />
 		<set name="enchant_enabled" val="true" />
-		<conditions msgId="1518">
-			<player minLevel="76" />
-		</conditions>
 		<stats>
 			<add order="0" stat="pDef" val="115" />
 			<enchant stat="pDef" val="0" />
@@ -451,9 +388,6 @@
 		<set name="price" val="6099000" />
 		<set name="element_enabled" val="true" />
 		<set name="enchant_enabled" val="true" />
-		<conditions msgId="1518">
-			<player minLevel="76" />
-		</conditions>
 		<stats>
 			<add order="0" stat="pDef" val="76" />
 			<enchant stat="pDef" val="0" />
@@ -471,9 +405,6 @@
 		<set name="price" val="6099000" />
 		<set name="element_enabled" val="true" />
 		<set name="enchant_enabled" val="true" />
-		<conditions msgId="1518">
-			<player minLevel="76" />
-		</conditions>
 		<stats>
 			<add order="0" stat="pDef" val="76" />
 			<enchant stat="pDef" val="0" />
@@ -491,9 +422,6 @@
 		<set name="price" val="6099000" />
 		<set name="element_enabled" val="true" />
 		<set name="enchant_enabled" val="true" />
-		<conditions msgId="1518">
-			<player minLevel="76" />
-		</conditions>
 		<stats>
 			<add order="0" stat="pDef" val="22" />
 			<add order="0" stat="mDef" val="15" />
@@ -515,9 +443,6 @@
 		<set name="element_enabled" val="true" />
 		<set name="enchant_enabled" val="true" />
 		<set name="item_skill" val="99220-1" />
-		<conditions msgId="1518">
-			<player minLevel="76" />
-		</conditions>
 		<stats>
 			<add order="0" stat="pDef" val="60" />
 			<add order="0" stat="mDef" val="40" />

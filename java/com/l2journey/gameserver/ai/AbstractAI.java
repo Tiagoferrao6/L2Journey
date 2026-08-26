@@ -735,6 +735,10 @@ public abstract class AbstractAI
 	 */
 	public void describeStateToPlayer(Player player)
 	{
+		if ((_actor == null) || (player == null))
+		{
+			return;
+		}
 		if (_actor.isVisibleFor(player) && _actor.isMoving())
 		{
 			if ((_clientMovingToPawnOffset != 0) && isFollowing())

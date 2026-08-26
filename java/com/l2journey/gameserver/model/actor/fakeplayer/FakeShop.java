@@ -62,6 +62,12 @@ public class FakeShop
 			return;
 		}
 
+		if (World.getInstance().getPlayer(_holder.getName()) != null)
+		{
+			LOGGER.warning("FakeShop: Player " + _holder.getName() + " is already logged in or online in World. Skipping duplicate spawn.");
+			return;
+		}
+
 		PlayerTemplate template = PlayerTemplateData.getInstance().getTemplate(_holder.getClassId());
 		if (template == null)
 		{
@@ -158,6 +164,11 @@ public class FakeShop
 			final Item invItem = _player.getInventory().addItem(ItemProcessType.FEE, item.getItemId(), count, _player, null);
 			if (invItem != null)
 			{
+				if ((item.getMinEnchant() > 0) || (item.getMaxEnchant() > 0))
+				{
+					final int enchant = item.getMinEnchant() == item.getMaxEnchant() ? item.getMinEnchant() : Rnd.get(item.getMinEnchant(), item.getMaxEnchant());
+					invItem.setEnchantLevel(enchant);
+				}
 				_player.getSellList().addItem(invItem.getObjectId(), count, price);
 			}
 		}

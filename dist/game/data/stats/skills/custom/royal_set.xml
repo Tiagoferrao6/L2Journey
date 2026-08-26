@@ -50,7 +50,7 @@
 				<mul stat="pAtk" val="1.09" />
 				<add stat="maxHp" val="750" />
 				<mul stat="pAtkSpd" val="1.07" />
-				<mul stat="physicalMpConsume" val="0.94" />
+				<mul stat="physicalMpConsumeRate" val="0.94" />
 				<add stat="darkRes" val="15" />
 			</effect>
 			<effect name="EnableCloak" />
@@ -68,7 +68,7 @@
 				<mul stat="pDef" val="1.08" />
 				<add stat="maxHp" val="750" />
 				<add stat="maxMp" val="350" />
-				<mul stat="danceMpConsume" val="0.90" />
+				<mul stat="danceMpConsumeRate" val="0.90" />
 				<add stat="darkRes" val="15" />
 			</effect>
 			<effect name="EnableCloak" />
@@ -127,7 +127,7 @@
 			<effect name="Buff">
 				<mul stat="mAtk" val="1.12" />
 				<mul stat="mAtkSpd" val="1.18" />
-				<mul stat="gainHp" val="1.10" />
+				<mul stat="maxHp" val="1.10" />
 				<mul stat="regMp" val="1.10" />
 			</effect>
 			<effect name="DefenceTrait">
@@ -147,7 +147,7 @@
 			<effect name="Buff">
 				<mul stat="mAtk" val="1.12" />
 				<mul stat="mAtkSpd" val="1.18" />
-				<mul stat="magicalMpConsume" val="0.92" />
+				<mul stat="magicalMpConsumeRate" val="0.92" />
 				<add stat="maxMp" val="450" />
 			</effect>
 			<effect name="DefenceTrait">
@@ -187,7 +187,7 @@
 				<mul stat="mAtk" val="1.14" />
 				<mul stat="mAtkSpd" val="1.18" />
 				<add stat="mCritRate" val="5" />
-				<mul stat="magicalMpConsume" val="0.94" />
+				<mul stat="magicalMpConsumeRate" val="0.94" />
 			</effect>
 			<effect name="DefenceTrait">
 				<param SHOCK="25" />

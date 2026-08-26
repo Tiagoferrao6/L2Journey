@@ -1,19 +1,481 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <shops>
-	<!-- Vendor in Gludio selling materials from Gludio city catalog -->
-	<fakeshop name="Gimli" title="Vendo Materiais Gludio" classId="53" level="40" x="-14228" y="123445" z="-3115" heading="16384" city="Gludio" type="SELL" category="MATERIALS" updateInterval="15" maxItems="5" />
-
-	<!-- Buyer in Gludio buying Iron Ore & Varnish -->
-	<fakeshop name="Thorin" title="Compro Iron e Varnish" classId="54" level="52" x="-14100" y="123500" z="-3115" heading="32768" city="Gludio" type="BUY" category="CUSTOM" updateInterval="30" maxItems="2">
-		<customitem id="1869" count="50" price="600" /> <!-- Iron Ore -->
-		<customitem id="1865" count="100" price="350" /> <!-- Varnish -->
+	<!-- =================================================================== -->
+	<!-- 1. GLUDIO TOWN (Mercado de Transição C e D-Grade - 15 Lojas)        -->
+	<!-- =================================================================== -->
+	<fakeshop name="Gimli" title="Mats Basicos D (Steel/Cokes)" classId="53" level="40" x="-14228" y="123445" z="-3115" heading="16384" city="Gludio" type="SELL" category="MATERIALS" updateInterval="30" maxItems="5" />
+	<fakeshop name="Thorin" title="Refinados D (Leather/Cord)" classId="56" level="52" x="-14180" y="123480" z="-3115" heading="32768" city="Gludio" type="SELL" category="MATERIALS" updateInterval="30" maxItems="5" />
+	<fakeshop name="Durin" title="Metais Raros D (Oriharukon)" classId="53" level="40" x="-14130" y="123520" z="-3115" heading="49152" city="Gludio" type="SELL" category="MATERIALS" updateInterval="30" maxItems="4" />
+	<fakeshop name="Balin" title="Enchants D &amp; Cristais Top D" classId="54" level="35" x="-14260" y="123550" z="-3115" heading="0" city="Gludio" type="SELL" category="SUPPLIES" updateInterval="30" maxItems="4">
+		<customitem id="951" count="2" price="550000" /> <!-- Scroll: Enchant Weapon D -->
+		<customitem id="952" count="5" price="95000" />  <!-- Scroll: Enchant Armor D -->
+		<customitem id="1458" count="100" price="520" />  <!-- Crystal D -->
+		<customitem id="2130" count="20" price="3500" />  <!-- Gemstone D -->
+	</fakeshop>
+	<fakeshop name="Dwalin" title="Shots D &amp; BSS D-Grade" classId="55" level="35" x="-14310" y="123500" z="-3115" heading="16384" city="Gludio" type="SELL" category="SUPPLIES" updateInterval="30" maxItems="3">
+		<customitem id="1835" count="3000" price="10" /> <!-- Soulshot D -->
+		<customitem id="3947" count="1500" price="25" /> <!-- Spiritshot D -->
+		<customitem id="3948" count="1000" price="40" /> <!-- Blessed Spiritshot D -->
+	</fakeshop>
+	<fakeshop name="Fili" title="Potions D &amp; Res/SoE" classId="9" level="40" x="-14350" y="123445" z="-3115" heading="32768" city="Gludio" type="SELL" category="SUPPLIES" updateInterval="30" maxItems="5">
+		<customitem id="1539" count="50" price="1800" />
+		<customitem id="1540" count="15" price="10000" />
+		<customitem id="734" count="15" price="3000" />
+		<customitem id="737" count="10" price="500" />
+		<customitem id="738" count="5" price="2800" />
+	</fakeshop>
+	<fakeshop name="Kili" title="Arcos D &amp; Bone Arrows" classId="22" level="35" x="-14228" y="123380" z="-3115" heading="49152" city="Gludio" type="SELL" category="ITEMS" updateInterval="30" maxItems="3">
+		<customitem id="277" count="1" price="1600000" />
+		<customitem id="284" count="1" price="1650000" />
+		<customitem id="1342" count="2000" price="5" />
+	</fakeshop>
+	<fakeshop name="Oin" title="Magic Set D (Knowledge)" classId="11" level="35" x="-14180" y="123340" z="-3115" heading="0" city="Gludio" type="SELL" category="ITEMS" updateInterval="30" maxItems="4">
+		<customitem id="185" count="1" price="1550000" />
+		<customitem id="186" count="1" price="1600000" />
+		<customitem id="425" count="1" price="380000" />
+		<customitem id="2395" count="1" price="250000" />
+	</fakeshop>
+	<fakeshop name="Gloin" title="Brigandine Set &amp; Elven Long" classId="45" level="35" x="-14130" y="123380" z="-3115" heading="16384" city="Gludio" type="SELL" category="ITEMS" updateInterval="30" maxItems="4">
+		<customitem id="164" count="1" price="1650000" />
+		<customitem id="70" count="1" price="1550000" />
+		<customitem id="380" count="1" price="520000" />
+		<customitem id="2379" count="1" price="320000" />
+	</fakeshop>
+	<fakeshop name="Bifur" title="Manticore Set &amp; Mithril Dagger" classId="32" level="35" x="-14260" y="123340" z="-3115" heading="32768" city="Gludio" type="SELL" category="ITEMS" updateInterval="30" maxItems="4">
+		<customitem id="225" count="1" price="1500000" />
+		<customitem id="267" count="1" price="1550000" />
+		<customitem id="391" count="1" price="440000" />
+		<customitem id="2386" count="1" price="280000" />
+	</fakeshop>
+	<fakeshop name="Bofur" title="Compro Iron, Bone e Charcoal" classId="54" level="35" x="-14080" y="123445" z="-3115" heading="49152" city="Gludio" type="BUY" category="CUSTOM" updateInterval="30" maxItems="3">
+		<customitem id="1869" count="100" price="700" />
+		<customitem id="1872" count="100" price="2200" />
+		<customitem id="1871" count="100" price="1100" />
+	</fakeshop>
+	<fakeshop name="Bombur" title="Compro Oriharukon e Silver" classId="54" level="35" x="-14080" y="123500" z="-3115" heading="0" city="Gludio" type="BUY" category="CUSTOM" updateInterval="30" maxItems="2">
+		<customitem id="1878" count="50" price="6000" />
+		<customitem id="1873" count="50" price="2400" />
+	</fakeshop>
+	<fakeshop name="Nori" title="Craft SS D &amp; BSS D (Fee 15a)" classId="56" level="52" x="-14350" y="123550" z="-3115" heading="16384" city="Gludio" type="CRAFT" category="CUSTOM" updateInterval="45" maxItems="2">
+		<customitem id="1804" count="1" price="15" />
+		<customitem id="1808" count="1" price="25" />
+	</fakeshop>
+	<fakeshop name="Ori" title="Craft Steel &amp; Cokes (Fee 50a)" classId="56" level="52" x="-14380" y="123500" z="-3115" heading="32768" city="Gludio" type="CRAFT" category="CUSTOM" updateInterval="45" maxItems="2">
+		<customitem id="1812" count="1" price="50" />
+		<customitem id="1813" count="1" price="50" />
+	</fakeshop>
+	<fakeshop name="Dori" title="Craft Brigandine &amp; Elven Long" classId="56" level="52" x="-14380" y="123445" z="-3115" heading="49152" city="Gludio" type="CRAFT" category="CUSTOM" updateInterval="45" maxItems="2">
+		<customitem id="1815" count="1" price="500" />
+		<customitem id="1820" count="1" price="1000" />
 	</fakeshop>
 
-	<!-- Dwarven Craft shop in Gludio -->
-	<fakeshop name="Durin" title="Craft SS D Grade" classId="56" level="60" x="-14300" y="123600" z="-3115" heading="0" city="Gludio" type="CRAFT" category="CUSTOM" updateInterval="45" maxItems="1">
-		<customitem id="1835" count="1" price="15" /> <!-- Soulshot D recipe -->
+	<!-- =================================================================== -->
+	<!-- 2. DION TOWN (Mercado de Transição C e D-Grade - 15 Lojas)          -->
+	<!-- =================================================================== -->
+	<fakeshop name="DionTrader1" title="Mats Transição D/C" classId="53" level="45" x="15632" y="142876" z="-2705" heading="16384" city="Dion" type="SELL" category="MATERIALS" updateInterval="30" maxItems="5" />
+	<fakeshop name="DionTrader2" title="Shots &amp; Crystals C-Grade" classId="55" level="45" x="15680" y="142910" z="-2705" heading="32768" city="Dion" type="SELL" category="SUPPLIES" updateInterval="30" maxItems="4">
+		<customitem id="1463" count="4000" price="18" />
+		<customitem id="3949" count="2000" price="48" />
+		<customitem id="3950" count="1000" price="80" />
+		<customitem id="1459" count="100" price="2800" />
+	</fakeshop>
+	<fakeshop name="DionTrader3" title="Enchants C &amp; Gemstones C" classId="54" level="45" x="15730" y="142950" z="-2705" heading="49152" city="Dion" type="SELL" category="SUPPLIES" updateInterval="30" maxItems="3">
+		<customitem id="955" count="2" price="1500000" />
+		<customitem id="956" count="5" price="300000" />
+		<customitem id="2131" count="20" price="13000" />
+	</fakeshop>
+	<fakeshop name="DionTrader4" title="Potions &amp; Res/SoE Dion" classId="9" level="45" x="15580" y="142840" z="-2705" heading="0" city="Dion" type="SELL" category="SUPPLIES" updateInterval="30" maxItems="4">
+		<customitem id="1539" count="50" price="1800" />
+		<customitem id="1540" count="15" price="10000" />
+		<customitem id="737" count="10" price="500" />
+		<customitem id="738" count="5" price="2800" />
+	</fakeshop>
+	<fakeshop name="DionTrader5" title="Katana &amp; C-Grade Swords" classId="1" level="45" x="15530" y="142800" z="-2705" heading="16384" city="Dion" type="SELL" category="ITEMS" updateInterval="30" maxItems="2">
+		<customitem id="77" count="1" price="3000000" />
+	</fakeshop>
+	<fakeshop name="DionTrader6" title="Dark Elven Dagger C" classId="22" level="45" x="15632" y="142750" z="-2705" heading="32768" city="Dion" type="SELL" category="ITEMS" updateInterval="30" maxItems="2">
+		<customitem id="228" count="1" price="2900000" />
+	</fakeshop>
+	<fakeshop name="DionTrader7" title="Akat Longbow &amp; Silver Arrow" classId="22" level="45" x="15680" y="142710" z="-2705" heading="49152" city="Dion" type="SELL" category="ITEMS" updateInterval="30" maxItems="3">
+		<customitem id="287" count="1" price="3100000" />
+		<customitem id="1343" count="2000" price="10" />
+	</fakeshop>
+	<fakeshop name="DionTrader8" title="Sage's Staff C-Grade" classId="11" level="45" x="15730" y="142670" z="-2705" heading="0" city="Dion" type="SELL" category="ITEMS" updateInterval="30" maxItems="2">
+		<customitem id="194" count="1" price="4500000" />
+	</fakeshop>
+	<fakeshop name="DionTrader9" title="Plated Leather Set C" classId="32" level="45" x="15780" y="142800" z="-2705" heading="16384" city="Dion" type="SELL" category="ITEMS" updateInterval="30" maxItems="3">
+		<customitem id="396" count="1" price="1300000" />
+		<customitem id="2387" count="1" price="750000" />
+	</fakeshop>
+	<fakeshop name="DionTrader10" title="Demon's Tunic Set C" classId="11" level="45" x="15780" y="142850" z="-2705" heading="32768" city="Dion" type="SELL" category="ITEMS" updateInterval="30" maxItems="3">
+		<customitem id="441" count="1" price="1650000" />
+		<customitem id="2406" count="1" price="950000" />
+	</fakeshop>
+	<fakeshop name="DionTrader11" title="Joias C-Grade (Eclipse/Mermaid)" classId="45" level="45" x="15780" y="142900" z="-2705" heading="49152" city="Dion" type="SELL" category="ITEMS" updateInterval="30" maxItems="3">
+		<customitem id="853" count="1" price="600000" />
+		<customitem id="885" count="1" price="420000" />
+		<customitem id="917" count="1" price="850000" />
+	</fakeshop>
+	<fakeshop name="DionTrader12" title="Compro Cristais D &amp; C" classId="54" level="45" x="15530" y="142950" z="-2705" heading="0" city="Dion" type="BUY" category="CUSTOM" updateInterval="30" maxItems="2">
+		<customitem id="1458" count="500" price="500" />
+		<customitem id="1459" count="200" price="2500" />
+	</fakeshop>
+	<fakeshop name="DionTrader13" title="Compro Couro e Cokes" classId="54" level="45" x="15480" y="142900" z="-2705" heading="16384" city="Dion" type="BUY" category="CUSTOM" updateInterval="30" maxItems="2">
+		<customitem id="1882" count="100" price="1000" />
+		<customitem id="1879" count="100" price="1500" />
+	</fakeshop>
+	<fakeshop name="DionTrader14" title="Craft SS C &amp; BSS C" classId="56" level="52" x="15480" y="142850" z="-2705" heading="32768" city="Dion" type="CRAFT" category="CUSTOM" updateInterval="45" maxItems="2">
+		<customitem id="1805" count="1" price="25" />
+		<customitem id="1809" count="1" price="45" />
+	</fakeshop>
+	<fakeshop name="DionTrader15" title="Craft Equipamentos C" classId="56" level="52" x="15480" y="142800" z="-2705" heading="49152" city="Dion" type="CRAFT" category="CUSTOM" updateInterval="45" maxItems="2">
+		<customitem id="1824" count="1" price="2000" />
+		<customitem id="1825" count="1" price="2000" />
 	</fakeshop>
 
-	<!-- Vendor in Dion selling supplies -->
-	<fakeshop name="Balin" title="Suprimentos Dion" classId="53" level="35" x="15632" y="142876" z="-2705" heading="49152" city="Dion" type="SELL" category="SUPPLIES" updateInterval="20" maxItems="4" />
+	<!-- =================================================================== -->
+	<!-- 3. GIRAN TOWN (Mega Trading Hub C a S Grade - 50 Lojas)             -->
+	<!-- =================================================================== -->
+	<!-- 3.1 Materiais & Refinados (10 Lojas) -->
+	<fakeshop name="GiranMat1" title="Venda Steel &amp; Cokes Rápido" classId="53" level="55" x="83400" y="147940" z="-3404" heading="0" city="Giran" type="SELL" category="MATERIALS" updateInterval="30" maxItems="5" />
+	<fakeshop name="GiranMat2" title="Durable Braid &amp; Straps" classId="56" level="60" x="83450" y="147980" z="-3404" heading="16384" city="Giran" type="SELL" category="MATERIALS" updateInterval="30" maxItems="5" />
+	<fakeshop name="GiranMat3" title="Mithril Alloy &amp; Oriharukon" classId="53" level="60" x="83500" y="148020" z="-3404" heading="32768" city="Giran" type="SELL" category="MATERIALS" updateInterval="30" maxItems="5" />
+	<fakeshop name="GiranMat4" title="Enria &amp; Asofe atacado" classId="54" level="60" x="83550" y="148060" z="-3404" heading="49152" city="Giran" type="SELL" category="MATERIALS" updateInterval="30" maxItems="5" />
+	<fakeshop name="GiranMat5" title="Mold Lubricant &amp; Hardener" classId="56" level="65" x="83600" y="148100" z="-3404" heading="0" city="Giran" type="SELL" category="MATERIALS" updateInterval="30" maxItems="4" />
+	<fakeshop name="GiranMat6" title="Compro Steel &amp; Iron Ore" classId="54" level="55" x="83350" y="147900" z="-3404" heading="16384" city="Giran" type="BUY" category="CUSTOM" updateInterval="30" maxItems="3">
+		<customitem id="1880" count="500" price="1800" />
+		<customitem id="1869" count="1000" price="800" />
+	</fakeshop>
+	<fakeshop name="GiranMat7" title="Compro Enria, Asofe, Thons" classId="54" level="60" x="83300" y="147860" z="-3404" heading="32768" city="Giran" type="BUY" category="CUSTOM" updateInterval="30" maxItems="3">
+		<customitem id="1874" count="100" price="20000" />
+		<customitem id="1875" count="100" price="18000" />
+	</fakeshop>
+	<fakeshop name="GiranMat8" title="Craft Materials Refinados" classId="56" level="65" x="83250" y="147820" z="-3404" heading="49152" city="Giran" type="CRAFT" category="CUSTOM" updateInterval="45" maxItems="2">
+		<customitem id="1812" count="1" price="50" />
+		<customitem id="1813" count="1" price="50" />
+	</fakeshop>
+	<fakeshop name="GiranMat9" title="Craft Oriharukon/Mithril" classId="56" level="65" x="83200" y="147780" z="-3404" heading="0" city="Giran" type="CRAFT" category="CUSTOM" updateInterval="45" maxItems="2">
+		<customitem id="1814" count="1" price="100" />
+	</fakeshop>
+	<fakeshop name="GiranMat10" title="Craft Mold Lubricant" classId="56" level="65" x="83150" y="147740" z="-3404" heading="16384" city="Giran" type="CRAFT" category="CUSTOM" updateInterval="45" maxItems="2">
+		<customitem id="4039" count="1" price="500" />
+	</fakeshop>
+
+	<!-- 3.2 Suprimentos & Enchants B/A/S (10 Lojas) -->
+	<fakeshop name="GiranSup1" title="Enchants B &amp; Cristais B" classId="54" level="60" x="83650" y="147940" z="-3404" heading="32768" city="Giran" type="SELL" category="SUPPLIES" updateInterval="30" maxItems="4">
+		<customitem id="947" count="3" price="4200000" />
+		<customitem id="948" count="10" price="800000" />
+		<customitem id="1460" count="200" price="10500" />
+	</fakeshop>
+	<fakeshop name="GiranSup2" title="Enchants A &amp; Cristais A" classId="54" level="65" x="83700" y="147980" z="-3404" heading="49152" city="Giran" type="SELL" category="SUPPLIES" updateInterval="30" maxItems="4">
+		<customitem id="729" count="3" price="15000000" />
+		<customitem id="730" count="10" price="2700000" />
+		<customitem id="1461" count="200" price="22000" />
+	</fakeshop>
+	<fakeshop name="GiranSup3" title="Enchants S &amp; Cristais S" classId="54" level="70" x="83750" y="148020" z="-3404" heading="0" city="Giran" type="SELL" category="SUPPLIES" updateInterval="30" maxItems="4">
+		<customitem id="959" count="2" price="42000000" />
+		<customitem id="960" count="5" price="8000000" />
+		<customitem id="1462" count="200" price="52000" />
+	</fakeshop>
+	<fakeshop name="GiranSup4" title="Gemstones B/A/S Atacado" classId="55" level="65" x="83800" y="148060" z="-3404" heading="16384" city="Giran" type="SELL" category="SUPPLIES" updateInterval="30" maxItems="3">
+		<customitem id="2132" count="50" price="52000" />
+		<customitem id="2133" count="50" price="140000" />
+		<customitem id="2134" count="50" price="520000" />
+	</fakeshop>
+	<fakeshop name="GiranSup5" title="Shots B-Grade (SS/BSS B)" classId="55" level="60" x="83850" y="148100" z="-3404" heading="32768" city="Giran" type="SELL" category="SUPPLIES" updateInterval="30" maxItems="3">
+		<customitem id="1464" count="10000" price="30" />
+		<customitem id="3951" count="5000" price="70" />
+		<customitem id="3952" count="3000" price="130" />
+	</fakeshop>
+	<fakeshop name="GiranSup6" title="Shots A-Grade (SS/BSS A)" classId="55" level="65" x="83900" y="148140" z="-3404" heading="49152" city="Giran" type="SELL" category="SUPPLIES" updateInterval="30" maxItems="3">
+		<customitem id="1465" count="10000" price="55" />
+		<customitem id="3953" count="5000" price="140" />
+		<customitem id="3954" count="3000" price="250" />
+	</fakeshop>
+	<fakeshop name="GiranSup7" title="Shots S-Grade (SS/BSS S)" classId="55" level="70" x="83950" y="148180" z="-3404" heading="0" city="Giran" type="SELL" category="SUPPLIES" updateInterval="30" maxItems="3">
+		<customitem id="1466" count="10000" price="110" />
+		<customitem id="3955" count="5000" price="290" />
+		<customitem id="3956" count="3000" price="520" />
+	</fakeshop>
+	<fakeshop name="GiranSup8" title="GHP, QHP e GCP Potions" classId="9" level="60" x="84000" y="148220" z="-3404" heading="16384" city="Giran" type="SELL" category="SUPPLIES" updateInterval="30" maxItems="3">
+		<customitem id="1539" count="200" price="2000" />
+		<customitem id="1540" count="50" price="12000" />
+		<customitem id="5591" count="100" price="5500" />
+	</fakeshop>
+	<fakeshop name="GiranSup9" title="Compro Cristais B/A/S" classId="54" level="65" x="84050" y="148260" z="-3404" heading="32768" city="Giran" type="BUY" category="CUSTOM" updateInterval="30" maxItems="3">
+		<customitem id="1460" count="500" price="9500" />
+		<customitem id="1461" count="500" price="20000" />
+		<customitem id="1462" count="500" price="48000" />
+	</fakeshop>
+	<fakeshop name="GiranSup10" title="Craft SS B/A/S (Dwarven)" classId="56" level="70" x="84100" y="148300" z="-3404" heading="49152" city="Giran" type="CRAFT" category="CUSTOM" updateInterval="45" maxItems="3">
+		<customitem id="1806" count="1" price="35" />
+		<customitem id="1807" count="1" price="65" />
+	</fakeshop>
+
+	<!-- 3.3 Equipamentos C & B Grade Encantados (+4/+6) (15 Lojas) -->
+	<fakeshop name="GiranEquip1" title="Samurai Longsword +4/+6" classId="1" level="55" x="83400" y="147500" z="-3404" heading="0" city="Giran" type="SELL" category="ITEMS" updateInterval="30" maxItems="2">
+		<customitem id="79" count="1" price="9500000" minEnchant="4" maxEnchant="6" />
+	</fakeshop>
+	<fakeshop name="GiranEquip2" title="Crystal Dagger +4/+6" classId="22" level="55" x="83450" y="147540" z="-3404" heading="16384" city="Giran" type="SELL" category="ITEMS" updateInterval="30" maxItems="2">
+		<customitem id="230" count="1" price="9000000" minEnchant="4" maxEnchant="6" />
+	</fakeshop>
+	<fakeshop name="GiranEquip3" title="Eminence Bow +4/+6" classId="22" level="55" x="83500" y="147580" z="-3404" heading="32768" city="Giran" type="SELL" category="ITEMS" updateInterval="30" maxItems="2">
+		<customitem id="288" count="1" price="10500000" minEnchant="4" maxEnchant="6" />
+	</fakeshop>
+	<fakeshop name="GiranEquip4" title="Great Sword B-Grade +4" classId="1" level="60" x="83550" y="147620" z="-3404" heading="49152" city="Giran" type="SELL" category="ITEMS" updateInterval="30" maxItems="2">
+		<customitem id="73" count="1" price="18000000" minEnchant="4" maxEnchant="6" />
+	</fakeshop>
+	<fakeshop name="GiranEquip5" title="Keshanberk B-Grade" classId="1" level="60" x="83600" y="147660" z="-3404" heading="0" city="Giran" type="SELL" category="ITEMS" updateInterval="30" maxItems="2">
+		<customitem id="80" count="1" price="16500000" />
+	</fakeshop>
+	<fakeshop name="GiranEquip6" title="Kris B-Grade Dagger" classId="22" level="60" x="83650" y="147700" z="-3404" heading="16384" city="Giran" type="SELL" category="ITEMS" updateInterval="30" maxItems="2">
+		<customitem id="233" count="1" price="16000000" />
+	</fakeshop>
+	<fakeshop name="GiranEquip7" title="Bow of Peril B +4/+6" classId="22" level="60" x="83700" y="147740" z="-3404" heading="32768" city="Giran" type="SELL" category="ITEMS" updateInterval="30" maxItems="2">
+		<customitem id="289" count="1" price="19500000" minEnchant="4" maxEnchant="6" />
+	</fakeshop>
+	<fakeshop name="GiranEquip8" title="Sword of Valhalla B" classId="11" level="60" x="83750" y="147780" z="-3404" heading="49152" city="Giran" type="SELL" category="ITEMS" updateInterval="30" maxItems="2">
+		<customitem id="87" count="1" price="18500000" />
+	</fakeshop>
+	<fakeshop name="GiranEquip9" title="Zubei Breastplate Set" classId="45" level="60" x="83800" y="147820" z="-3404" heading="0" city="Giran" type="SELL" category="ITEMS" updateInterval="30" maxItems="2">
+		<customitem id="358" count="1" price="7800000" />
+	</fakeshop>
+	<fakeshop name="GiranEquip10" title="Avadon Breastplate Set" classId="45" level="60" x="83850" y="147860" z="-3404" heading="16384" city="Giran" type="SELL" category="ITEMS" updateInterval="30" maxItems="2">
+		<customitem id="362" count="1" price="8500000" />
+	</fakeshop>
+	<fakeshop name="GiranEquip11" title="Blue Wolf Heavy Set" classId="45" level="60" x="83900" y="147900" z="-3404" heading="32768" city="Giran" type="SELL" category="ITEMS" updateInterval="30" maxItems="2">
+		<customitem id="359" count="1" price="9800000" />
+	</fakeshop>
+	<fakeshop name="GiranEquip12" title="Avadon Robe Set B" classId="11" level="60" x="83950" y="147940" z="-3404" heading="49152" city="Giran" type="SELL" category="ITEMS" updateInterval="30" maxItems="2">
+		<customitem id="446" count="1" price="7200000" />
+	</fakeshop>
+	<fakeshop name="GiranEquip13" title="Craft Keshanberk &amp; Kris" classId="56" level="65" x="84000" y="147980" z="-3404" heading="0" city="Giran" type="CRAFT" category="CUSTOM" updateInterval="45" maxItems="2">
+		<customitem id="496" count="1" price="10000" />
+	</fakeshop>
+	<fakeshop name="GiranEquip14" title="Craft Bow of Peril" classId="56" level="65" x="84050" y="148020" z="-3404" heading="16384" city="Giran" type="CRAFT" category="CUSTOM" updateInterval="45" maxItems="2">
+		<customitem id="499" count="1" price="12000" />
+	</fakeshop>
+	<fakeshop name="GiranEquip15" title="Craft Blue Wolf &amp; Avadon" classId="56" level="65" x="84100" y="148060" z="-3404" heading="32768" city="Giran" type="CRAFT" category="CUSTOM" updateInterval="45" maxItems="2">
+		<customitem id="502" count="1" price="8000" />
+	</fakeshop>
+
+	<!-- 3.4 Equipamentos A & S Grade Encantados (+4/+8) (15 Lojas) -->
+	<fakeshop name="GiranTop1" title="Tallum Blade A +4/+6" classId="1" level="70" x="83400" y="147000" z="-3404" heading="0" city="Giran" type="SELL" category="ITEMS" updateInterval="30" maxItems="2">
+		<customitem id="89" count="1" price="55000000" minEnchant="4" maxEnchant="6" />
+	</fakeshop>
+	<fakeshop name="GiranTop2" title="Dark Legion A-Grade" classId="1" level="70" x="83450" y="147040" z="-3404" heading="16384" city="Giran" type="SELL" category="ITEMS" updateInterval="30" maxItems="2">
+		<customitem id="90" count="1" price="62000000" />
+	</fakeshop>
+	<fakeshop name="GiranTop3" title="Soul Separator A +4/+6" classId="22" level="70" x="83500" y="147080" z="-3404" heading="32768" city="Giran" type="SELL" category="ITEMS" updateInterval="30" maxItems="2">
+		<customitem id="235" count="1" price="58000000" minEnchant="4" maxEnchant="6" />
+	</fakeshop>
+	<fakeshop name="GiranTop4" title="Soul Bow A-Grade +4/+6" classId="22" level="70" x="83550" y="147120" z="-3404" heading="49152" city="Giran" type="SELL" category="ITEMS" updateInterval="30" maxItems="2">
+		<customitem id="292" count="1" price="65000000" minEnchant="4" maxEnchant="6" />
+	</fakeshop>
+	<fakeshop name="GiranTop5" title="Sword of Miracles A" classId="11" level="70" x="83600" y="147160" z="-3404" heading="0" city="Giran" type="SELL" category="ITEMS" updateInterval="30" maxItems="2">
+		<customitem id="92" count="1" price="63000000" />
+	</fakeshop>
+	<fakeshop name="GiranTop6" title="Tallum Heavy Set A" classId="45" level="70" x="83650" y="147200" z="-3404" heading="16384" city="Giran" type="SELL" category="ITEMS" updateInterval="30" maxItems="2">
+		<customitem id="555" count="1" price="30000000" />
+	</fakeshop>
+	<fakeshop name="GiranTop7" title="Dark Crystal Robe Set A" classId="11" level="70" x="83700" y="147240" z="-3404" heading="32768" city="Giran" type="SELL" category="ITEMS" updateInterval="30" maxItems="2">
+		<customitem id="2407" count="1" price="33000000" />
+	</fakeshop>
+	<fakeshop name="GiranTop8" title="Majestic Leather Set A" classId="32" level="70" x="83750" y="147280" z="-3404" heading="49152" city="Giran" type="SELL" category="ITEMS" updateInterval="30" maxItems="2">
+		<customitem id="2400" count="1" price="31000000" />
+	</fakeshop>
+	<fakeshop name="GiranTop9" title="Forgotten Blade S (+4/+8)" classId="88" level="80" x="83800" y="147320" z="-3404" heading="0" city="Giran" type="SELL" category="ITEMS" updateInterval="30" maxItems="2">
+		<customitem id="6367" count="1" price="210000000" minEnchant="4" maxEnchant="8" />
+	</fakeshop>
+	<fakeshop name="GiranTop10" title="Angel Slayer S (+4/+8)" classId="93" level="80" x="83850" y="147360" z="-3404" heading="16384" city="Giran" type="SELL" category="ITEMS" updateInterval="30" maxItems="2">
+		<customitem id="6369" count="1" price="200000000" minEnchant="4" maxEnchant="8" />
+	</fakeshop>
+	<fakeshop name="GiranTop11" title="Draconic Bow S (+4/+8)" classId="92" level="80" x="83900" y="147400" z="-3404" heading="32768" city="Giran" type="SELL" category="ITEMS" updateInterval="30" maxItems="2">
+		<customitem id="6370" count="1" price="220000000" minEnchant="4" maxEnchant="8" />
+	</fakeshop>
+	<fakeshop name="GiranTop12" title="Arcana Mace S (+4/+8)" classId="94" level="80" x="83950" y="147440" z="-3404" heading="49152" city="Giran" type="SELL" category="ITEMS" updateInterval="30" maxItems="2">
+		<customitem id="6608" count="1" price="215000000" minEnchant="4" maxEnchant="8" />
+	</fakeshop>
+	<fakeshop name="GiranTop13" title="Imperial Crusader Set +4" classId="88" level="80" x="84000" y="147480" z="-3404" heading="0" city="Giran" type="SELL" category="ITEMS" updateInterval="30" maxItems="2">
+		<customitem id="6373" count="1" price="105000000" minEnchant="4" maxEnchant="6" />
+	</fakeshop>
+	<fakeshop name="GiranTop14" title="Draconic Leather Set +4" classId="92" level="80" x="84050" y="147520" z="-3404" heading="16384" city="Giran" type="SELL" category="ITEMS" updateInterval="30" maxItems="2">
+		<customitem id="6379" count="1" price="98000000" minEnchant="4" maxEnchant="6" />
+	</fakeshop>
+	<fakeshop name="GiranTop15" title="Major Arcana Robe Set +4" classId="94" level="80" x="84100" y="147560" z="-3404" heading="32768" city="Giran" type="SELL" category="ITEMS" updateInterval="30" maxItems="2">
+		<customitem id="6383" count="1" price="102000000" minEnchant="4" maxEnchant="6" />
+	</fakeshop>
+
+	<!-- =================================================================== -->
+	<!-- 4. ADEN CASTLE TOWN (Elite Marketplace S80/S84 - 20 Lojas)         -->
+	<!-- =================================================================== -->
+	<!-- 4.1 Armas S80 (Dynasty / Icarus) +4/+8 (5 Lojas) -->
+	<fakeshop name="AdenElite1" title="Dynasty Sword/Blade (+4/+8)" classId="88" level="85" x="147450" y="25900" z="-2012" heading="0" city="Aden" type="SELL" category="ITEMS" updateInterval="30" maxItems="2">
+		<customitem id="9388" count="1" price="420000000" minEnchant="4" maxEnchant="8" />
+		<customitem id="9389" count="1" price="400000000" minEnchant="4" maxEnchant="8" />
+	</fakeshop>
+	<fakeshop name="AdenElite2" title="Dynasty Bow (+4/+8)" classId="92" level="85" x="147500" y="25940" z="-2012" heading="16384" city="Aden" type="SELL" category="ITEMS" updateInterval="30" maxItems="2">
+		<customitem id="9391" count="1" price="450000000" minEnchant="4" maxEnchant="8" />
+	</fakeshop>
+	<fakeshop name="AdenElite3" title="Icarus Sawsword (+4/+8)" classId="88" level="85" x="147550" y="25980" z="-2012" heading="32768" city="Aden" type="SELL" category="ITEMS" updateInterval="30" maxItems="2">
+		<customitem id="10226" count="1" price="650000000" minEnchant="4" maxEnchant="8" />
+	</fakeshop>
+	<fakeshop name="AdenElite4" title="Icarus Disperser/Spitter" classId="93" level="85" x="147600" y="26020" z="-2012" heading="49152" city="Aden" type="SELL" category="ITEMS" updateInterval="30" maxItems="2">
+		<customitem id="10228" count="1" price="620000000" minEnchant="4" maxEnchant="8" />
+		<customitem id="10229" count="1" price="700000000" minEnchant="4" maxEnchant="8" />
+	</fakeshop>
+	<fakeshop name="AdenElite5" title="Icarus Spirit Magic Staff" classId="94" level="85" x="147650" y="26060" z="-2012" heading="0" city="Aden" type="SELL" category="ITEMS" updateInterval="30" maxItems="2">
+		<customitem id="10230" count="1" price="680000000" minEnchant="4" maxEnchant="8" />
+	</fakeshop>
+
+	<!-- 4.2 Armas S84 (Vesper / Vorpal / Elegy Tier) +4/+8 (5 Lojas) -->
+	<fakeshop name="AdenElite6" title="Vesper Cutter/Shaper (+4/+8)" classId="88" level="85" x="147450" y="25800" z="-2012" heading="16384" city="Aden" type="SELL" category="ITEMS" updateInterval="30" maxItems="2">
+		<customitem id="14120" count="1" price="950000000" minEnchant="4" maxEnchant="8" />
+		<customitem id="14123" count="1" price="920000000" minEnchant="4" maxEnchant="8" />
+	</fakeshop>
+	<fakeshop name="AdenElite7" title="Vesper Thrower &amp; Caster" classId="92" level="85" x="147500" y="25760" z="-2012" heading="32768" city="Aden" type="SELL" category="ITEMS" updateInterval="30" maxItems="2">
+		<customitem id="14124" count="1" price="1050000000" minEnchant="4" maxEnchant="8" />
+		<customitem id="14125" count="1" price="980000000" minEnchant="4" maxEnchant="8" />
+	</fakeshop>
+	<fakeshop name="AdenElite8" title="Skull Edge &amp; Ghost Cleaner" classId="93" level="85" x="147550" y="25720" z="-2012" heading="49152" city="Aden" type="SELL" category="ITEMS" updateInterval="30" maxItems="2">
+		<customitem id="15558" count="1" price="1450000000" minEnchant="4" maxEnchant="8" />
+		<customitem id="15559" count="1" price="1400000000" minEnchant="4" maxEnchant="8" />
+	</fakeshop>
+	<fakeshop name="AdenElite9" title="Cyclone Bow S84 (+4/+8)" classId="92" level="85" x="147600" y="25680" z="-2012" heading="0" city="Aden" type="SELL" category="ITEMS" updateInterval="30" maxItems="2">
+		<customitem id="15562" count="1" price="1550000000" minEnchant="4" maxEnchant="8" />
+	</fakeshop>
+	<fakeshop name="AdenElite10" title="Sacredium S84 Magic Wand" classId="94" level="85" x="147650" y="25640" z="-2012" heading="16384" city="Aden" type="SELL" category="ITEMS" updateInterval="30" maxItems="2">
+		<customitem id="15563" count="1" price="1500000000" minEnchant="4" maxEnchant="8" />
+	</fakeshop>
+
+	<!-- 4.3 Armaduras & Joias S84 (Vesper Noble / Vorpal / Elegy) +4/+8 (5 Lojas) -->
+	<fakeshop name="AdenElite11" title="Vesper Noble Breastplate Set" classId="88" level="85" x="147700" y="25900" z="-2012" heading="32768" city="Aden" type="SELL" category="ITEMS" updateInterval="30" maxItems="3">
+		<customitem id="15606" count="1" price="550000000" minEnchant="4" maxEnchant="8" />
+		<customitem id="15609" count="1" price="500000000" minEnchant="4" maxEnchant="8" />
+		<customitem id="15612" count="1" price="520000000" minEnchant="4" maxEnchant="8" />
+	</fakeshop>
+	<fakeshop name="AdenElite12" title="Vorpal Armor Sets (+4/+8)" classId="93" level="85" x="147750" y="25940" z="-2012" heading="49152" city="Aden" type="SELL" category="ITEMS" updateInterval="30" maxItems="3">
+		<customitem id="15624" count="1" price="900000000" minEnchant="4" maxEnchant="8" />
+		<customitem id="15627" count="1" price="850000000" minEnchant="4" maxEnchant="8" />
+		<customitem id="15630" count="1" price="880000000" minEnchant="4" maxEnchant="8" />
+	</fakeshop>
+	<fakeshop name="AdenElite13" title="Elegy Supreme Armor Sets" classId="88" level="85" x="147800" y="25980" z="-2012" heading="0" city="Aden" type="SELL" category="ITEMS" updateInterval="30" maxItems="3">
+		<customitem id="15636" count="1" price="1500000000" minEnchant="4" maxEnchant="8" />
+		<customitem id="15639" count="1" price="1450000000" minEnchant="4" maxEnchant="8" />
+		<customitem id="15642" count="1" price="1480000000" minEnchant="4" maxEnchant="8" />
+	</fakeshop>
+	<fakeshop name="AdenElite14" title="Vorpal &amp; Vesper Jewels S84" classId="94" level="85" x="147850" y="26020" z="-2012" heading="16384" city="Aden" type="SELL" category="ITEMS" updateInterval="30" maxItems="3">
+		<customitem id="14163" count="1" price="150000000" />
+		<customitem id="15723" count="1" price="300000000" />
+		<customitem id="15725" count="1" price="400000000" />
+	</fakeshop>
+	<fakeshop name="AdenElite15" title="Elegy Jewels S84 Top Tier" classId="94" level="85" x="147900" y="26060" z="-2012" heading="32768" city="Aden" type="SELL" category="ITEMS" updateInterval="30" maxItems="3">
+		<customitem id="15753" count="1" price="550000000" />
+		<customitem id="15754" count="1" price="420000000" />
+		<customitem id="15755" count="1" price="750000000" />
+	</fakeshop>
+
+	<!-- 4.4 Elementos, Enchants Blessed S & Top Life Stones (5 Lojas) -->
+	<fakeshop name="AdenElite16" title="Attribute Stones (Fire/Water/Holy)" classId="94" level="85" x="147700" y="25800" z="-2012" heading="49152" city="Aden" type="SELL" category="SUPPLIES" updateInterval="30" maxItems="6">
+		<customitem id="10521" count="10" price="10000000" />
+		<customitem id="10522" count="10" price="10000000" />
+		<customitem id="10523" count="10" price="9000000" />
+		<customitem id="10524" count="10" price="9000000" />
+		<customitem id="10525" count="10" price="11000000" />
+		<customitem id="10526" count="10" price="11000000" />
+	</fakeshop>
+	<fakeshop name="AdenElite17" title="Attribute Crystals Top Tier" classId="94" level="85" x="147750" y="25760" z="-2012" heading="0" city="Aden" type="SELL" category="SUPPLIES" updateInterval="30" maxItems="6">
+		<customitem id="10528" count="5" price="42000000" />
+		<customitem id="10529" count="5" price="42000000" />
+		<customitem id="10530" count="5" price="38000000" />
+		<customitem id="10531" count="5" price="38000000" />
+		<customitem id="10532" count="5" price="48000000" />
+		<customitem id="10533" count="5" price="48000000" />
+	</fakeshop>
+	<fakeshop name="AdenElite18" title="Blessed Scroll Enchant S" classId="54" level="85" x="147800" y="25720" z="-2012" heading="16384" city="Aden" type="SELL" category="SUPPLIES" updateInterval="30" maxItems="3">
+		<customitem id="6577" count="3" price="150000000" />
+		<customitem id="6578" count="5" price="38000000" />
+	</fakeshop>
+	<fakeshop name="AdenElite19" title="Top Life Stones 80/82/84" classId="94" level="85" x="147850" y="25680" z="-2012" heading="32768" city="Aden" type="SELL" category="SUPPLIES" updateInterval="30" maxItems="4">
+		<customitem id="12753" count="10" price="32000000" />
+		<customitem id="12754" count="10" price="45000000" />
+		<customitem id="12755" count="10" price="62000000" />
+	</fakeshop>
+	<fakeshop name="AdenElite20" title="Giant's Codex &amp; Mastery" classId="94" level="85" x="147900" y="25640" z="-2012" heading="49152" city="Aden" type="SELL" category="MATERIALS" updateInterval="30" maxItems="4">
+		<customitem id="6622" count="5" price="19000000" />
+		<customitem id="9625" count="3" price="45000000" />
+		<customitem id="9626" count="3" price="32000000" />
+		<customitem id="9627" count="3" price="27000000" />
+	</fakeshop>
+
+	<!-- =================================================================== -->
+	<!-- 5. CIDADES SECUNDÁRIAS (5 Lojas por Cidade)                          -->
+	<!-- =================================================================== -->
+	<!-- 5.1 Oren (5 Lojas) -->
+	<fakeshop name="OrenShop1" title="Potions &amp; Shots Oren" classId="9" level="50" x="82698" y="53239" z="-1495" heading="0" city="Oren" type="SELL" category="SUPPLIES" updateInterval="30" maxItems="4" />
+	<fakeshop name="OrenShop2" title="Materiais Primários Oren" classId="53" level="50" x="82740" y="53270" z="-1495" heading="16384" city="Oren" type="SELL" category="MATERIALS" updateInterval="30" maxItems="4" />
+	<fakeshop name="OrenShop3" title="Scrolls of Escape &amp; Res" classId="9" level="50" x="82780" y="53300" z="-1495" heading="32768" city="Oren" type="SELL" category="SUPPLIES" updateInterval="30" maxItems="3" />
+	<fakeshop name="OrenShop4" title="Compro Iron Ore &amp; Bone" classId="54" level="50" x="82650" y="53200" z="-1495" heading="49152" city="Oren" type="BUY" category="CUSTOM" updateInterval="30" maxItems="2">
+		<customitem id="1869" count="500" price="750" />
+		<customitem id="1872" count="500" price="2300" />
+	</fakeshop>
+	<fakeshop name="OrenShop5" title="Craft SS C Oren" classId="56" level="52" x="82610" y="53160" z="-1495" heading="0" city="Oren" type="CRAFT" category="CUSTOM" updateInterval="45" maxItems="2">
+		<customitem id="1805" count="1" price="20" />
+	</fakeshop>
+
+	<!-- 5.2 Hunters Village (5 Lojas) -->
+	<fakeshop name="HuntersShop1" title="Suprimentos de Caça" classId="22" level="55" x="116550" y="75750" z="-2700" heading="16384" city="Hunters" type="SELL" category="SUPPLIES" updateInterval="30" maxItems="4" />
+	<fakeshop name="HuntersShop2" title="Couro &amp; Thread Hunters" classId="53" level="55" x="116600" y="75790" z="-2700" heading="32768" city="Hunters" type="SELL" category="MATERIALS" updateInterval="30" maxItems="4" />
+	<fakeshop name="HuntersShop3" title="Shots B-Grade Hunters" classId="55" level="55" x="116650" y="75830" z="-2700" heading="49152" city="Hunters" type="SELL" category="SUPPLIES" updateInterval="30" maxItems="3" />
+	<fakeshop name="HuntersShop4" title="Compro Animal Skin &amp; Stem" classId="54" level="55" x="116500" y="75710" z="-2700" heading="0" city="Hunters" type="BUY" category="CUSTOM" updateInterval="30" maxItems="2">
+		<customitem id="1865" count="500" price="650" />
+		<customitem id="1866" count="500" price="550" />
+	</fakeshop>
+	<fakeshop name="HuntersShop5" title="Craft SS B Hunters" classId="56" level="60" x="116450" y="75670" z="-2700" heading="16384" city="Hunters" type="CRAFT" category="CUSTOM" updateInterval="45" maxItems="2">
+		<customitem id="1806" count="1" price="30" />
+	</fakeshop>
+
+	<!-- 5.3 Heine (5 Lojas) -->
+	<fakeshop name="HeineShop1" title="Suprimentos Heine" classId="9" level="50" x="111394" y="219354" z="-3544" heading="32768" city="Heine" type="SELL" category="SUPPLIES" updateInterval="30" maxItems="4" />
+	<fakeshop name="HeineShop2" title="Materiais Primários Heine" classId="53" level="50" x="111440" y="219390" z="-3544" heading="49152" city="Heine" type="SELL" category="MATERIALS" updateInterval="30" maxItems="4" />
+	<fakeshop name="HeineShop3" title="Shots C-Grade Heine" classId="55" level="50" x="111490" y="219430" z="-3544" heading="0" city="Heine" type="SELL" category="SUPPLIES" updateInterval="30" maxItems="3" />
+	<fakeshop name="HeineShop4" title="Compro Insumos Heine" classId="54" level="50" x="111350" y="219310" z="-3544" heading="16384" city="Heine" type="BUY" category="CUSTOM" updateInterval="30" maxItems="2">
+		<customitem id="1869" count="500" price="750" />
+	</fakeshop>
+	<fakeshop name="HeineShop5" title="Craft SS C Heine" classId="56" level="52" x="111300" y="219270" z="-3544" heading="32768" city="Heine" type="CRAFT" category="CUSTOM" updateInterval="45" maxItems="2">
+		<customitem id="1805" count="1" price="20" />
+	</fakeshop>
+
+	<!-- 5.4 Goddard (5 Lojas) -->
+	<fakeshop name="GoddardShop1" title="Potions &amp; Res Goddard" classId="9" level="75" x="147920" y="-55300" z="-2730" heading="49152" city="Goddard" type="SELL" category="SUPPLIES" updateInterval="30" maxItems="4" />
+	<fakeshop name="GoddardShop2" title="Materiais Goddard" classId="53" level="75" x="147960" y="-55260" z="-2730" heading="0" city="Goddard" type="SELL" category="MATERIALS" updateInterval="30" maxItems="4" />
+	<fakeshop name="GoddardShop3" title="Shots A &amp; S Grade Goddard" classId="55" level="75" x="148000" y="-55220" z="-2730" heading="16384" city="Goddard" type="SELL" category="SUPPLIES" updateInterval="30" maxItems="3" />
+	<fakeshop name="GoddardShop4" title="Compro Steel Goddard" classId="54" level="75" x="147880" y="-55340" z="-2730" heading="32768" city="Goddard" type="BUY" category="CUSTOM" updateInterval="30" maxItems="2">
+		<customitem id="1880" count="300" price="1700" />
+	</fakeshop>
+	<fakeshop name="GoddardShop5" title="Craft SS S Goddard" classId="56" level="75" x="147840" y="-55380" z="-2730" heading="49152" city="Goddard" type="CRAFT" category="CUSTOM" updateInterval="45" maxItems="2">
+		<customitem id="1807" count="1" price="60" />
+	</fakeshop>
+
+	<!-- 5.5 Rune (5 Lojas) -->
+	<fakeshop name="RuneShop1" title="Potions &amp; Res Rune" classId="9" level="75" x="43800" y="-47700" z="-790" heading="0" city="Rune" type="SELL" category="SUPPLIES" updateInterval="30" maxItems="4" />
+	<fakeshop name="RuneShop2" title="Materiais Raros Rune" classId="53" level="75" x="43840" y="-47660" z="-790" heading="16384" city="Rune" type="SELL" category="MATERIALS" updateInterval="30" maxItems="4" />
+	<fakeshop name="RuneShop3" title="Shots A &amp; S Grade Rune" classId="55" level="75" x="43880" y="-47620" z="-790" heading="32768" city="Rune" type="SELL" category="SUPPLIES" updateInterval="30" maxItems="3" />
+	<fakeshop name="RuneShop4" title="Compro Bone Powder Rune" classId="54" level="75" x="43760" y="-47740" z="-790" heading="49152" city="Rune" type="BUY" category="CUSTOM" updateInterval="30" maxItems="2">
+		<customitem id="1881" count="300" price="1100" />
+	</fakeshop>
+	<fakeshop name="RuneShop5" title="Craft SS S Rune" classId="56" level="75" x="43720" y="-47780" z="-790" heading="0" city="Rune" type="CRAFT" category="CUSTOM" updateInterval="45" maxItems="2">
+		<customitem id="1807" count="1" price="60" />
+	</fakeshop>
+
+	<!-- 5.6 Schuttgart (5 Lojas) -->
+	<fakeshop name="SchuttgartShop1" title="Suprimentos Schuttgart" classId="9" level="55" x="87300" y="-142300" z="-1340" heading="16384" city="Schuttgart" type="SELL" category="SUPPLIES" updateInterval="30" maxItems="4" />
+	<fakeshop name="SchuttgartShop2" title="Iron &amp; Coal Schuttgart" classId="53" level="55" x="87340" y="-142260" z="-1340" heading="32768" city="Schuttgart" type="SELL" category="MATERIALS" updateInterval="30" maxItems="4" />
+	<fakeshop name="SchuttgartShop3" title="Shots C &amp; B Schuttgart" classId="55" level="55" x="87380" y="-142220" z="-1340" heading="49152" city="Schuttgart" type="SELL" category="SUPPLIES" updateInterval="30" maxItems="3" />
+	<fakeshop name="SchuttgartShop4" title="Compro Coal Schuttgart" classId="54" level="55" x="87260" y="-142340" z="-1340" heading="0" city="Schuttgart" type="BUY" category="CUSTOM" updateInterval="30" maxItems="2">
+		<customitem id="1870" count="500" price="1000" />
+	</fakeshop>
+	<fakeshop name="SchuttgartShop5" title="Craft SS B Schuttgart" classId="56" level="55" x="87220" y="-142380" z="-1340" heading="16384" city="Schuttgart" type="CRAFT" category="CUSTOM" updateInterval="45" maxItems="2">
+		<customitem id="1806" count="1" price="30" />
+	</fakeshop>
 </shops>

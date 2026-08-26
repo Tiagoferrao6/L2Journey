@@ -11,7 +11,7 @@
 			<effect name="Buff">
 				<mul stat="pAtkSpd" val="1.05" />
 				<add stat="accCombat" val="3" />
-				<mul stat="cAtk" val="1.10" />
+				<mul stat="critRate" val="1.10" />
 				<add stat="rEvas" val="3" />
 			</effect>
 		</effects>
@@ -26,7 +26,7 @@
 		<effects>
 			<effect name="Buff">
 				<mul stat="pAtk" val="1.05" />
-				<mul stat="cAtk" val="1.15" />
+				<mul stat="critRate" val="1.15" />
 			</effect>
 		</effects>
 	</skill>
@@ -57,7 +57,7 @@
 		<effects>
 			<effect name="Buff">
 				<add stat="blowRate" val="15" />
-				<mul stat="cAtk" val="1.08" />
+				<mul stat="critRate" val="1.08" />
 			</effect>
 		</effects>
 	</skill>
@@ -98,7 +98,7 @@
 		<set name="magicLevel" val="76" />
 		<effects>
 			<effect name="Buff">
-				<mul stat="cAtk" val="1.10" />
+				<mul stat="critRate" val="1.10" />
 			</effect>
 			<effect name="DefenceTrait">
 				<param SHOCK="15" />
@@ -116,7 +116,7 @@
 			<effect name="Buff">
 				<add stat="blowRate" val="15" />
 				<add stat="runSpd" val="5" />
-				<mul stat="cAtk" val="1.08" />
+				<mul stat="critRate" val="1.08" />
 			</effect>
 		</effects>
 	</skill>
@@ -143,7 +143,7 @@
 		<set name="magicLevel" val="76" />
 		<effects>
 			<effect name="Buff">
-				<mul stat="gainHp" val="1.10" />
+				<mul stat="maxHp" val="1.10" />
 				<mul stat="regMp" val="1.15" />
 			</effect>
 		</effects>
@@ -224,7 +224,7 @@
 		<set name="magicLevel" val="76" />
 		<effects>
 			<effect name="Buff">
-				<add stat="ignoreShieldDef" val="15" />
+				<add stat="pAtk" val="15" />
 			</effect>
 		</effects>
 	</skill>

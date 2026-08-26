@@ -31,7 +31,6 @@ import com.l2journey.gameserver.model.actor.Npc;
 import com.l2journey.gameserver.model.actor.Player;
 import com.l2journey.gameserver.model.actor.enums.player.PlayerClass;
 import com.l2journey.gameserver.model.itemcontainer.Inventory;
-import com.l2journey.gameserver.network.serverpackets.AnnounceToAll;
 import com.l2journey.gameserver.network.serverpackets.ItemList;
 import com.l2journey.gameserver.network.serverpackets.NpcHtmlMessage;
 import com.l2journey.gameserver.network.serverpackets.SkillList;
@@ -178,11 +177,11 @@ public class SubclassManager extends AbstractNpcAI
 			// Ação 5: Atualizar cliente
 			player.rewardSkills();
 			player.sendPacket(new UserInfo(player));
-			player.sendPacket(new SkillList(player));
+			player.sendPacket(new SkillList());
 			player.sendPacket(new ItemList(player, true));
 			
 			// Anúncio Global
-			Broadcast.toAllOnlinePlayers(new AnnounceToAll("Parabéns ao jogador " + player.getName() + " por fundir sua classe e adquirir a Subclasse Acumulativa " + selectedDualClass.name() + "!"));
+			Broadcast.toAllOnlinePlayers("Parabéns ao jogador " + player.getName() + " por fundir sua classe e adquirir a Subclasse Acumulativa " + selectedDualClass.name() + "!");
 			
 			final NpcHtmlMessage html = new NpcHtmlMessage(npc.getObjectId());
 			html.setHtml("<html><body>Subclass Manager:<br><br><font color=\"LEVEL\">Parabéns! Sua classe foi fundida com sucesso para Nível " + targetLevel + "!</font></body></html>");

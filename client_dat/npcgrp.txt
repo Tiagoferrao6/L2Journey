@@ -1,0 +1,2 @@
+# Lineage 2 High Five - npcgrp.txt
+# Exported text file from npcgrp.dat for NPC 3D models, scales, and animations.

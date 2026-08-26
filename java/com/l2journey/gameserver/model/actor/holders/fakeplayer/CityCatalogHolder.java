@@ -16,14 +16,23 @@ public class CityCatalogHolder
 		private final long _maxCount;
 		private final long _minPrice;
 		private final long _maxPrice;
+		private final int _minEnchant;
+		private final int _maxEnchant;
 
 		public CatalogItem(int itemId, long minCount, long maxCount, long minPrice, long maxPrice)
+		{
+			this(itemId, minCount, maxCount, minPrice, maxPrice, 0, 0);
+		}
+
+		public CatalogItem(int itemId, long minCount, long maxCount, long minPrice, long maxPrice, int minEnchant, int maxEnchant)
 		{
 			_itemId = itemId;
 			_minCount = minCount;
 			_maxCount = maxCount;
 			_minPrice = minPrice;
 			_maxPrice = maxPrice;
+			_minEnchant = minEnchant;
+			_maxEnchant = maxEnchant;
 		}
 
 		public int getItemId()
@@ -49,6 +58,16 @@ public class CityCatalogHolder
 		public long getMaxPrice()
 		{
 			return _maxPrice;
+		}
+
+		public int getMinEnchant()
+		{
+			return _minEnchant;
+		}
+
+		public int getMaxEnchant()
+		{
+			return _maxEnchant;
 		}
 	}
 

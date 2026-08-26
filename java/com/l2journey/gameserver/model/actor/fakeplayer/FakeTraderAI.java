@@ -33,9 +33,10 @@ public class FakeTraderAI extends PlayerAI
 	private Player _player;
 	private ScheduledFuture<?> _economicCycleTask;
 
-	public FakeTraderAI(FakePlayerProfile profile)
+	public FakeTraderAI(Player player, FakePlayerProfile profile)
 	{
-		super(null);
+		super(player);
+		_player = player;
 		_profile = profile;
 	}
 
@@ -49,52 +50,48 @@ public class FakeTraderAI extends PlayerAI
 		return _player;
 	}
 
-	public synchronized boolean spawn()
+	public static FakeTraderAI spawnTrader(FakePlayerProfile profile)
 	{
-		if ((_player != null) && _player.isOnline())
-		{
-			return true;
-		}
-
-		int classId = _profile.getClassId() > 0 ? _profile.getClassId() : 53; // Default Dwarf Bounty Hunter
+		int classId = profile.getClassId() > 0 ? profile.getClassId() : 53; // Default Dwarf Bounty Hunter
 		PlayerTemplate template = PlayerTemplateData.getInstance().getTemplate(classId);
 		if (template == null)
 		{
 			template = PlayerTemplateData.getInstance().getTemplate(53);
 		}
 
-		final String name = "Trader_" + _profile.getFakeId();
+		final String name = "Trader_" + profile.getFakeId();
 		final PlayerAppearance appearance = new PlayerAppearance((byte) Rnd.get(3), (byte) Rnd.get(3), (byte) Rnd.get(3), false);
-		_player = Player.create(template, name.toLowerCase(), name, appearance);
+		Player player = Player.create(template, name.toLowerCase(), name, appearance);
 
-		if (_player == null)
+		if (player == null)
 		{
-			LOGGER.warning("FakeTraderAI: Failed to create Player for profile ID " + _profile.getFakeId());
-			return false;
+			LOGGER.warning("FakeTraderAI: Failed to create Player for profile ID " + profile.getFakeId());
+			return null;
 		}
 
-		_player.setFakePlayer(true);
-		_player.setAI(this);
-		_player.getStat().setLevel((byte) 40);
+		FakeTraderAI trader = new FakeTraderAI(player, profile);
+		player.setFakePlayer(true);
+		player.setAI(trader);
+		player.getStat().setLevel((byte) 40);
 
-		int x = _profile.getX() != 0 ? _profile.getX() : -14228;
-		int y = _profile.getY() != 0 ? _profile.getY() : 123445;
-		int z = _profile.getZ() != 0 ? _profile.getZ() : -3115;
-		int heading = _profile.getHeading() != 0 ? _profile.getHeading() : 16384;
+		int x = profile.getX() != 0 ? profile.getX() : -14228;
+		int y = profile.getY() != 0 ? profile.getY() : 123445;
+		int z = profile.getZ() != 0 ? profile.getZ() : -3115;
+		int heading = profile.getHeading() != 0 ? profile.getHeading() : 16384;
 
-		_player.setXYZ(x, y, z);
-		_player.setHeading(heading);
-		_player.spawnMe(x, y, z);
+		player.setXYZ(x, y, z);
+		player.setHeading(heading);
+		player.spawnMe(x, y, z);
 
-		initPrivateStore();
-		startEconomicCycle();
+		trader.initPrivateStore();
+		trader.startEconomicCycle();
 
-		_profile.setActive(true);
-		_profile.setLastActiveTime(System.currentTimeMillis());
-		FakePlayerDAO.getInstance().saveProfile(_profile);
+		profile.setActive(true);
+		profile.setLastActiveTime(System.currentTimeMillis());
+		FakePlayerDAO.getInstance().saveProfile(profile);
 
-		LOGGER.info("FakeTraderAI: Spawned Trader " + name + " in zone " + _profile.getZoneId());
-		return true;
+		LOGGER.info("FakeTraderAI: Spawned Trader " + name + " in zone " + profile.getZoneId());
+		return trader;
 	}
 
 	public synchronized void despawn()

@@ -37,8 +37,8 @@
 		<skill id="99202" level="1" /> <!-- Royal Heavy - Force Master Skill -->
 		<enchant6skill id="99211" level="1" /> <!-- Enchant Royal Heavy Armor (+6) -->
 		<str val="1" />
-		<dex val="1" />
 		<con val="-2" />
+		<dex val="1" />
 	</set>
 	<set id="503">
 		<chest id="99203" /> <!-- Royal Breastplate - Bard -->
@@ -62,8 +62,8 @@
 		<skill id="3006" level="1" /> <!-- Equip Set Items -->
 		<skill id="99204" level="1" /> <!-- Royal Light - Dagger Master Skill -->
 		<enchant6skill id="99212" level="1" /> <!-- Enchant Royal Light Armor (+6) -->
-		<dex val="2" />
 		<con val="-2" />
+		<dex val="2" />
 	</set>
 	<set id="505">
 		<chest id="99210" /> <!-- Royal Leather Armor - Bow Master -->
@@ -74,8 +74,8 @@
 		<skill id="3006" level="1" /> <!-- Equip Set Items -->
 		<skill id="99205" level="1" /> <!-- Royal Light - Bow Master Skill -->
 		<enchant6skill id="99212" level="1" /> <!-- Enchant Royal Light Armor (+6) -->
-		<dex val="2" />
 		<con val="-2" />
+		<dex val="2" />
 	</set>
 
 	<set id="506">
@@ -87,8 +87,8 @@
 		<skill id="3006" level="1" /> <!-- Equip Set Items -->
 		<skill id="99206" level="1" /> <!-- Royal Robe - Healer Skill -->
 		<enchant6skill id="99213" level="1" /> <!-- Enchant Royal Robe (+6) -->
-		<wit val="2" />
 		<men val="-2" />
+		<wit val="2" />
 	</set>
 	<set id="507">
 		<chest id="99216" /> <!-- Royal Tunic - Enchanter -->
@@ -99,8 +99,8 @@
 		<skill id="3006" level="1" /> <!-- Equip Set Items -->
 		<skill id="99207" level="1" /> <!-- Royal Robe - Enchanter Skill -->
 		<enchant6skill id="99213" level="1" /> <!-- Enchant Royal Robe (+6) -->
-		<wit val="2" />
 		<men val="-2" />
+		<wit val="2" />
 	</set>
 	<set id="508">
 		<chest id="99217" /> <!-- Royal Tunic - Summoner -->
@@ -111,8 +111,8 @@
 		<skill id="3006" level="1" /> <!-- Equip Set Items -->
 		<skill id="99208" level="1" /> <!-- Royal Robe - Summoner Skill -->
 		<enchant6skill id="99213" level="1" /> <!-- Enchant Royal Robe (+6) -->
-		<wit val="2" />
 		<men val="-2" />
+		<wit val="2" />
 	</set>
 	<set id="509">
 		<chest id="99218" /> <!-- Royal Tunic - Wizard -->

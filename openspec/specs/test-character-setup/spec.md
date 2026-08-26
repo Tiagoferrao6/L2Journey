@@ -1,5 +1,7 @@
 # Capabilities: Test Character Setup
 
+## Requirements
+
 ### Requirement: Test Character Economy and Supplies Population
 The test setup process SHALL populate character `SilverTester` (charId `300000000`) with 1,000,000,000 Adena, S-grade consumables, enhancement materials, and boss access items.
 
@@ -41,3 +43,24 @@ The test setup process SHALL insert into `TitanTester`'s inventory the complete 
 #### Scenario: Verify TitanTester equipment and inventory contents
 - **WHEN** the item population script executes for `TitanTester`
 - **THEN** all Royal armor pieces (IDs 99200-99224), all 16 Royal Dynasty Weapons (IDs 99300-99315), all 14 Level 6 Tattoos (IDs 41006-41042, 41048-41084), epic boss jewels (Baium, Zaken, Antharas, Valakas, Queen Ant, Beleth), Adena, CP/HP/MP potions, SS/BSS, Life Stones, and Boss Access items are present in inventory under owner ID `300000001`.
+
+### Requirement: Test Character Provisioning and Base Class Model Binding
+The test setup process SHALL create and populate `SilverTester` (`charId = 300000000`) and `TitanTester` (`charId = 300000001`) with explicit base class mappings (`class_index = 0`) in `character_subclasses`, matching their race, sex, and base class IDs (`Moonlight Sentinel` 102 for SilverTester, `Titan` 113 for TitanTester), ensuring correct 3D model loading without fallback rendering.
+
+#### Scenario: Verify base class model rendering and attributes
+- **WHEN** `SilverTester` or `TitanTester` logs into the server
+- **THEN** the character SHALL render as their proper race/class 3D model (Elf Female for SilverTester, Orc Male for TitanTester) at level 85 with max base HP/CP/MP stats
+
+### Requirement: Inventory Weight Limit Calibration
+The test setup process SHALL calibrate inventory shot stacks to 5,000 Soulshots S-Grade and 5,000 Blessed Spiritshots S-Grade for both test characters, maintaining total inventory weight strictly below 100% capacity.
+
+#### Scenario: Verify inventory weight status
+- **WHEN** checking character inventory weight gauge on login
+- **THEN** weight status SHALL display below 100% (No Overweight status icon or movement penalty)
+
+### Requirement: Hero Status and Clan Provisioning
+The test setup process SHALL register both `SilverTester` and `TitanTester` in the `heroes` database table with active Hero status, Hero skills, and full Clan leader privileges in `TesterClan` (`clanid = 100000`).
+
+#### Scenario: Verify Hero aura and skills
+- **WHEN** `SilverTester` or `TitanTester` is spawned in game
+- **THEN** the character SHALL display active Hero aura and possess Hero skills in skill window

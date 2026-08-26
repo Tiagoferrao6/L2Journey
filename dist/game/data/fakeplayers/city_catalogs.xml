@@ -1,45 +1,398 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <catalogs>
+	<!-- 1. Gludio (Mercado de Transição D e C Grade - 15 Lojas) -->
 	<city name="Gludio">
 		<materials>
-			<item id="1864" minCount="10" maxCount="100" minPrice="150" maxPrice="300" /> <!-- Stem -->
-			<item id="1865" minCount="10" maxCount="80" minPrice="200" maxPrice="400" /> <!-- Varnish -->
-			<item id="1866" minCount="5" maxCount="50" minPrice="300" maxPrice="600" /> <!-- Suede -->
-			<item id="1867" minCount="5" maxCount="40" minPrice="350" maxPrice="700" /> <!-- Animal Skin -->
-			<item id="1868" minCount="10" maxCount="100" minPrice="100" maxPrice="250" /> <!-- Thread -->
-			<item id="1869" minCount="5" maxCount="30" minPrice="500" maxPrice="1000" /> <!-- Iron Ore -->
+			<item id="1880" minCount="5" maxCount="40" minPrice="1200" maxPrice="2500" /> <!-- Steel -->
+			<item id="1879" minCount="5" maxCount="40" minPrice="1000" maxPrice="2200" /> <!-- Cokes -->
+			<item id="1883" minCount="3" maxCount="25" minPrice="2500" maxPrice="4500" /> <!-- Synthetic Cokes -->
+			<item id="1881" minCount="10" maxCount="50" minPrice="800" maxPrice="1600" /> <!-- Coarse Bone Powder -->
+			<item id="1882" minCount="10" maxCount="50" minPrice="700" maxPrice="1500" /> <!-- Leather -->
+			<item id="1885" minCount="5" maxCount="30" minPrice="1500" maxPrice="3000" /> <!-- High Grade Suede -->
+			<item id="1884" minCount="5" maxCount="30" minPrice="1400" maxPrice="2800" /> <!-- Compound Braid -->
+			<item id="1886" minCount="2" maxCount="15" minPrice="3000" maxPrice="6000" /> <!-- Silver Mold -->
+			<item id="1887" minCount="5" maxCount="30" minPrice="1200" maxPrice="2400" /> <!-- Braided Hemp -->
+			<item id="1888" minCount="10" maxCount="60" minPrice="600" maxPrice="1200" /> <!-- Cord -->
+			<item id="1889" minCount="5" maxCount="25" minPrice="2000" maxPrice="4000" /> <!-- Crafted Leather -->
+			<item id="1878" minCount="2" maxCount="20" minPrice="4500" maxPrice="9000" /> <!-- Oriharukon Ore -->
+			<item id="1876" minCount="3" maxCount="30" minPrice="2500" maxPrice="5000" /> <!-- Mithril Ore -->
+			<item id="1877" minCount="3" maxCount="25" minPrice="2200" maxPrice="4500" /> <!-- Adamantite Nugget -->
+			<item id="1873" minCount="5" maxCount="40" minPrice="1800" maxPrice="3500" /> <!-- Silver Nugget -->
 		</materials>
 		<supplies>
-			<item id="1060" minCount="10" maxCount="50" minPrice="100" maxPrice="150" /> <!-- Lesser Healing Potion -->
-			<item id="1061" minCount="10" maxCount="50" minPrice="400" maxPrice="600" /> <!-- Healing Potion -->
-			<item id="737" minCount="5" maxCount="20" minPrice="500" maxPrice="800" /> <!-- Scroll of Escape -->
-			<item id="1835" minCount="100" maxCount="1000" minPrice="10" maxPrice="15" /> <!-- Soulshot: D-Grade -->
-			<item id="3947" minCount="100" maxCount="1000" minPrice="25" maxPrice="40" /> <!-- Spiritshot: D-Grade -->
+			<item id="951" minCount="1" maxCount="5" minPrice="450000" maxPrice="650000" /> <!-- Scroll: Enchant Weapon (D-Grade) -->
+			<item id="952" minCount="1" maxCount="10" minPrice="80000" maxPrice="130000" /> <!-- Scroll: Enchant Armor (D-Grade) -->
+			<item id="955" minCount="1" maxCount="5" minPrice="1200000" maxPrice="1800000" /> <!-- Scroll: Enchant Weapon (C-Grade) -->
+			<item id="956" minCount="1" maxCount="10" minPrice="250000" maxPrice="380000" /> <!-- Scroll: Enchant Armor (C-Grade) -->
+			<item id="1458" minCount="10" maxCount="200" minPrice="480" maxPrice="600" /> <!-- Crystal: D-Grade -->
+			<item id="1459" minCount="10" maxCount="200" minPrice="2400" maxPrice="3200" /> <!-- Crystal: C-Grade -->
+			<item id="2130" minCount="5" maxCount="50" minPrice="3000" maxPrice="4500" /> <!-- Gemstone D -->
+			<item id="2131" minCount="5" maxCount="50" minPrice="11000" maxPrice="16000" /> <!-- Gemstone C -->
+			<item id="1835" minCount="500" maxCount="5000" minPrice="9" maxPrice="12" /> <!-- Soulshot: D-Grade -->
+			<item id="3947" minCount="500" maxCount="3000" minPrice="20" maxPrice="30" /> <!-- Spiritshot: D-Grade -->
+			<item id="3948" minCount="500" maxCount="2000" minPrice="35" maxPrice="50" /> <!-- Blessed Spiritshot: D-Grade -->
+			<item id="1463" minCount="500" maxCount="5000" minPrice="15" maxPrice="22" /> <!-- Soulshot: C-Grade -->
+			<item id="3949" minCount="500" maxCount="3000" minPrice="40" maxPrice="60" /> <!-- Spiritshot: C-Grade -->
+			<item id="3950" minCount="500" maxCount="2000" minPrice="70" maxPrice="95" /> <!-- Blessed Spiritshot: C-Grade -->
+			<item id="1539" minCount="20" maxCount="100" minPrice="1500" maxPrice="2500" /> <!-- Greater Healing Potion -->
+			<item id="1540" minCount="5" maxCount="30" minPrice="8000" maxPrice="15000" /> <!-- Quick Healing Potion -->
+			<item id="734" minCount="5" maxCount="30" minPrice="2000" maxPrice="4000" /> <!-- Speed Potion -->
+			<item id="737" minCount="5" maxCount="20" minPrice="400" maxPrice="600" /> <!-- Scroll of Escape -->
+			<item id="738" minCount="2" maxCount="10" minPrice="2000" maxPrice="3500" /> <!-- Scroll of Resurrection -->
+			<item id="1342" minCount="500" maxCount="3000" minPrice="4" maxPrice="7" /> <!-- Bone Arrow -->
+			<item id="1343" minCount="500" maxCount="3000" minPrice="8" maxPrice="12" /> <!-- Silver Arrow -->
 		</supplies>
 		<items>
-			<item id="23" minCount="1" maxCount="1" minPrice="15000" maxPrice="25000" /> <!-- Short Sword -->
-			<item id="1" minCount="1" maxCount="1" minPrice="10000" maxPrice="18000" /> <!-- Short Bow -->
-			<item id="42" minCount="1" maxCount="1" minPrice="20000" maxPrice="30000" /> <!-- Apprentice's Staff -->
-			<item id="2414" minCount="1" maxCount="1" minPrice="45000" maxPrice="70000" /> <!-- Wooden Helmet -->
-			<item id="24" minCount="1" maxCount="1" minPrice="30000" maxPrice="50000" /> <!-- Broadsword -->
+			<item id="164" minCount="1" maxCount="1" minPrice="1400000" maxPrice="1800000" /> <!-- Elven Long Sword -->
+			<item id="70" minCount="1" maxCount="1" minPrice="1350000" maxPrice="1750000" /> <!-- Claymore -->
+			<item id="225" minCount="1" maxCount="1" minPrice="1300000" maxPrice="1700000" /> <!-- Mithril Dagger -->
+			<item id="296" minCount="1" maxCount="1" minPrice="1400000" maxPrice="1800000" /> <!-- Glaive -->
+			<item id="267" minCount="1" maxCount="1" minPrice="1350000" maxPrice="1750000" /> <!-- Scallop Jamadhr -->
+			<item id="277" minCount="1" maxCount="1" minPrice="1400000" maxPrice="1800000" /> <!-- Elven Bow -->
+			<item id="284" minCount="1" maxCount="1" minPrice="1450000" maxPrice="1850000" /> <!-- Crossbow of Night -->
+			<item id="185" minCount="1" maxCount="1" minPrice="1350000" maxPrice="1750000" /> <!-- Staff of Life -->
+			<item id="186" minCount="1" maxCount="1" minPrice="1400000" maxPrice="1800000" /> <!-- Atuba Mace -->
+			<item id="380" minCount="1" maxCount="1" minPrice="450000" maxPrice="600000" /> <!-- Brigandine Shirt -->
+			<item id="2379" minCount="1" maxCount="1" minPrice="280000" maxPrice="380000" /> <!-- Brigandine Gaiters -->
+			<item id="2416" minCount="1" maxCount="1" minPrice="180000" maxPrice="250000" /> <!-- Brigandine Helmet -->
+			<item id="608" minCount="1" maxCount="1" minPrice="150000" maxPrice="220000" /> <!-- Brigandine Shield -->
+			<item id="391" minCount="1" maxCount="1" minPrice="380000" maxPrice="500000" /> <!-- Manticore Skin Shirt -->
+			<item id="2386" minCount="1" maxCount="1" minPrice="240000" maxPrice="320000" /> <!-- Manticore Skin Gaiters -->
+			<item id="425" minCount="1" maxCount="1" minPrice="320000" maxPrice="450000" /> <!-- Knowledge Tunic -->
+			<item id="2395" minCount="1" maxCount="1" minPrice="200000" maxPrice="300000" /> <!-- Knowledge Stockings -->
+			<item id="847" minCount="1" maxCount="2" minPrice="120000" maxPrice="180000" /> <!-- Elven Earring -->
+			<item id="878" minCount="1" maxCount="2" minPrice="80000" maxPrice="130000" /> <!-- Elven Ring -->
+			<item id="910" minCount="1" maxCount="1" minPrice="160000" maxPrice="240000" /> <!-- Elven Necklace -->
+			<item id="79" minCount="1" maxCount="1" minPrice="4500000" maxPrice="6000000" /> <!-- Samurai Longsword -->
+			<item id="230" minCount="1" maxCount="1" minPrice="4200000" maxPrice="5800000" /> <!-- Crystal Dagger -->
+			<item id="288" minCount="1" maxCount="1" minPrice="4800000" maxPrice="6500000" /> <!-- Eminence Bow -->
+			<item id="85" minCount="1" maxCount="1" minPrice="4300000" maxPrice="5900000" /> <!-- Homunkulus's Sword -->
+			<item id="356" minCount="1" maxCount="1" minPrice="1800000" maxPrice="2400000" /> <!-- Composite Armor -->
+			<item id="401" minCount="1" maxCount="1" minPrice="1600000" maxPrice="2200000" /> <!-- Drake Leather Armor -->
+			<item id="439" minCount="1" maxCount="1" minPrice="1200000" maxPrice="1600000" /> <!-- Carmian Tunic -->
+			<item id="2401" minCount="1" maxCount="1" minPrice="700000" maxPrice="1000000" /> <!-- Carmian Stockings -->
 		</items>
 	</city>
 
+	<!-- 2. Dion (Mercado de Transição D e C Grade - 15 Lojas) -->
 	<city name="Dion">
 		<materials>
-			<item id="1870" minCount="5" maxCount="30" minPrice="800" maxPrice="1500" /> <!-- Coal -->
-			<item id="1871" minCount="5" maxCount="30" minPrice="800" maxPrice="1500" /> <!-- Charcoal -->
-			<item id="1872" minCount="2" maxCount="15" minPrice="1500" maxPrice="3000" /> <!-- Animal Bone -->
-			<item id="1873" minCount="1" maxCount="10" minPrice="4000" maxPrice="8000" /> <!-- Silver Nugget -->
+			<item id="1880" minCount="5" maxCount="40" minPrice="1200" maxPrice="2500" /> <!-- Steel -->
+			<item id="1879" minCount="5" maxCount="40" minPrice="1000" maxPrice="2200" /> <!-- Cokes -->
+			<item id="1883" minCount="3" maxCount="25" minPrice="2500" maxPrice="4500" /> <!-- Synthetic Cokes -->
+			<item id="1881" minCount="10" maxCount="50" minPrice="800" maxPrice="1600" /> <!-- Coarse Bone Powder -->
+			<item id="1882" minCount="10" maxCount="50" minPrice="700" maxPrice="1500" /> <!-- Leather -->
+			<item id="1885" minCount="5" maxCount="30" minPrice="1500" maxPrice="3000" /> <!-- High Grade Suede -->
+			<item id="1884" minCount="5" maxCount="30" minPrice="1400" maxPrice="2800" /> <!-- Compound Braid -->
+			<item id="1886" minCount="2" maxCount="15" minPrice="3000" maxPrice="6000" /> <!-- Silver Mold -->
+			<item id="1887" minCount="5" maxCount="30" minPrice="1200" maxPrice="2400" /> <!-- Braided Hemp -->
+			<item id="1888" minCount="10" maxCount="60" minPrice="600" maxPrice="1200" /> <!-- Cord -->
+			<item id="1889" minCount="5" maxCount="25" minPrice="2000" maxPrice="4000" /> <!-- Crafted Leather -->
 		</materials>
 		<supplies>
-			<item id="1061" minCount="20" maxCount="100" minPrice="450" maxPrice="650" /> <!-- Healing Potion -->
-			<item id="1539" minCount="10" maxCount="50" minPrice="2000" maxPrice="3500" /> <!-- Greater Healing Potion -->
-			<item id="1463" minCount="500" maxCount="3000" minPrice="12" maxPrice="18" /> <!-- Soulshot: D-Grade -->
+			<item id="951" minCount="1" maxCount="5" minPrice="450000" maxPrice="650000" /> <!-- Scroll: Enchant Weapon (D-Grade) -->
+			<item id="952" minCount="1" maxCount="10" minPrice="80000" maxPrice="130000" /> <!-- Scroll: Enchant Armor (D-Grade) -->
+			<item id="955" minCount="1" maxCount="5" minPrice="1200000" maxPrice="1800000" /> <!-- Scroll: Enchant Weapon (C-Grade) -->
+			<item id="956" minCount="1" maxCount="10" minPrice="250000" maxPrice="380000" /> <!-- Scroll: Enchant Armor (C-Grade) -->
+			<item id="1458" minCount="10" maxCount="200" minPrice="480" maxPrice="600" /> <!-- Crystal: D-Grade -->
+			<item id="1459" minCount="10" maxCount="200" minPrice="2400" maxPrice="3200" /> <!-- Crystal: C-Grade -->
+			<item id="2130" minCount="5" maxCount="50" minPrice="3000" maxPrice="4500" /> <!-- Gemstone D -->
+			<item id="2131" minCount="5" maxCount="50" minPrice="11000" maxPrice="16000" /> <!-- Gemstone C -->
+			<item id="1835" minCount="500" maxCount="5000" minPrice="9" maxPrice="12" /> <!-- Soulshot: D-Grade -->
+			<item id="3947" minCount="500" maxCount="3000" minPrice="20" maxPrice="30" /> <!-- Spiritshot: D-Grade -->
+			<item id="3948" minCount="500" maxCount="2000" minPrice="35" maxPrice="50" /> <!-- Blessed Spiritshot: D-Grade -->
+			<item id="1463" minCount="500" maxCount="5000" minPrice="15" maxPrice="22" /> <!-- Soulshot: C-Grade -->
+			<item id="3949" minCount="500" maxCount="3000" minPrice="40" maxPrice="60" /> <!-- Spiritshot: C-Grade -->
+			<item id="3950" minCount="500" maxCount="2000" minPrice="70" maxPrice="95" /> <!-- Blessed Spiritshot: C-Grade -->
+			<item id="1539" minCount="20" maxCount="100" minPrice="1500" maxPrice="2500" /> <!-- Greater Healing Potion -->
+			<item id="1540" minCount="5" maxCount="30" minPrice="8000" maxPrice="15000" /> <!-- Quick Healing Potion -->
+			<item id="734" minCount="5" maxCount="30" minPrice="2000" maxPrice="4000" /> <!-- Speed Potion -->
+			<item id="737" minCount="5" maxCount="20" minPrice="400" maxPrice="600" /> <!-- Scroll of Escape -->
+			<item id="738" minCount="2" maxCount="10" minPrice="2000" maxPrice="3500" /> <!-- Scroll of Resurrection -->
+			<item id="1342" minCount="500" maxCount="3000" minPrice="4" maxPrice="7" /> <!-- Bone Arrow -->
+			<item id="1343" minCount="500" maxCount="3000" minPrice="8" maxPrice="12" /> <!-- Silver Arrow -->
 		</supplies>
 		<items>
-			<item id="351" minCount="1" maxCount="1" minPrice="150000" maxPrice="220000" /> <!-- Wooden Gaiters -->
-			<item id="2415" minCount="1" maxCount="1" minPrice="80000" maxPrice="120000" /> <!-- Bronze Helmet -->
+			<item id="77" minCount="1" maxCount="1" minPrice="2500000" maxPrice="3500000" /> <!-- Katana -->
+			<item id="228" minCount="1" maxCount="1" minPrice="2400000" maxPrice="3400000" /> <!-- Dark Elven Dagger -->
+			<item id="287" minCount="1" maxCount="1" minPrice="2600000" maxPrice="3600000" /> <!-- Akat Longbow -->
+			<item id="194" minCount="1" maxCount="1" minPrice="3800000" maxPrice="5200000" /> <!-- Sage's Staff -->
+			<item id="301" minCount="1" maxCount="1" minPrice="2800000" maxPrice="3800000" /> <!-- Orcish Glaive -->
+			<item id="396" minCount="1" maxCount="1" minPrice="1100000" maxPrice="1500000" /> <!-- Plated Leather Armor -->
+			<item id="2387" minCount="1" maxCount="1" minPrice="600000" maxPrice="900000" /> <!-- Plated Leather Gaiters -->
+			<item id="441" minCount="1" maxCount="1" minPrice="1400000" maxPrice="1900000" /> <!-- Demon's Tunic -->
+			<item id="2406" minCount="1" maxCount="1" minPrice="800000" maxPrice="1100000" /> <!-- Demon's Stockings -->
+			<item id="885" minCount="1" maxCount="2" minPrice="350000" maxPrice="500000" /> <!-- Ring of Ages -->
+			<item id="853" minCount="1" maxCount="2" minPrice="500000" maxPrice="700000" /> <!-- Earring of Eclipse -->
+			<item id="917" minCount="1" maxCount="1" minPrice="700000" maxPrice="1000000" /> <!-- Necklace of Mermaid -->
 		</items>
+	</city>
+
+	<!-- 3. Giran Town (Mega Hub Comercio C ate S Grade com Encantados - 50 Lojas) -->
+	<city name="Giran">
+		<materials>
+			<item id="1880" minCount="10" maxCount="100" minPrice="1200" maxPrice="2500" /> <!-- Steel -->
+			<item id="1879" minCount="10" maxCount="100" minPrice="1000" maxPrice="2200" /> <!-- Cokes -->
+			<item id="1890" minCount="5" maxCount="30" minPrice="8000" maxPrice="15000" /> <!-- Durable Braid -->
+			<item id="1889" minCount="10" maxCount="50" minPrice="2000" maxPrice="4000" /> <!-- Crafted Leather -->
+			<item id="1885" minCount="10" maxCount="50" minPrice="1500" maxPrice="3000" /> <!-- High Grade Suede -->
+			<item id="1891" minCount="5" maxCount="30" minPrice="9000" maxPrice="16000" /> <!-- Composite Straps -->
+			<item id="1892" minCount="10" maxCount="50" minPrice="5000" maxPrice="10000" /> <!-- Metallic Thread -->
+			<item id="1893" minCount="2" maxCount="15" minPrice="25000" maxPrice="45000" /> <!-- Oriharukon -->
+			<item id="1894" minCount="2" maxCount="15" minPrice="22000" maxPrice="40000" /> <!-- Mithril Alloy -->
+			<item id="1874" minCount="2" maxCount="20" minPrice="15000" maxPrice="30000" /> <!-- Enria -->
+			<item id="1875" minCount="2" maxCount="20" minPrice="12000" maxPrice="25000" /> <!-- Asofe -->
+			<item id="4039" minCount="2" maxCount="15" minPrice="35000" maxPrice="60000" /> <!-- Mold Lubricant -->
+			<item id="4040" minCount="2" maxCount="15" minPrice="40000" maxPrice="70000" /> <!-- Mold Hardener -->
+		</materials>
+		<supplies>
+			<!-- Enchants -->
+			<item id="955" minCount="1" maxCount="5" minPrice="1200000" maxPrice="1800000" /> <!-- Scroll: Enchant Weapon (C) -->
+			<item id="956" minCount="1" maxCount="10" minPrice="250000" maxPrice="380000" /> <!-- Scroll: Enchant Armor (C) -->
+			<item id="947" minCount="1" maxCount="5" minPrice="3500000" maxPrice="5000000" /> <!-- Scroll: Enchant Weapon (B) -->
+			<item id="948" minCount="1" maxCount="10" minPrice="650000" maxPrice="950000" /> <!-- Scroll: Enchant Armor (B) -->
+			<item id="729" minCount="1" maxCount="5" minPrice="12000000" maxPrice="18000000" /> <!-- Scroll: Enchant Weapon (A) -->
+			<item id="730" minCount="1" maxCount="10" minPrice="2200000" maxPrice="3200000" /> <!-- Scroll: Enchant Armor (A) -->
+			<item id="959" minCount="1" maxCount="5" minPrice="35000000" maxPrice="50000000" /> <!-- Scroll: Enchant Weapon (S) -->
+			<item id="960" minCount="1" maxCount="10" minPrice="6500000" maxPrice="9500000" /> <!-- Scroll: Enchant Armor (S) -->
+			<!-- Crystals & Gemstones -->
+			<item id="1460" minCount="10" maxCount="200" minPrice="9000" maxPrice="12000" /> <!-- Crystal: B-Grade -->
+			<item id="1461" minCount="10" maxCount="200" minPrice="18000" maxPrice="25000" /> <!-- Crystal: A-Grade -->
+			<item id="1462" minCount="10" maxCount="200" minPrice="45000" maxPrice="60000" /> <!-- Crystal: S-Grade -->
+			<item id="2132" minCount="5" maxCount="50" minPrice="45000" maxPrice="60000" /> <!-- Gemstone B -->
+			<item id="2133" minCount="5" maxCount="50" minPrice="120000" maxPrice="160000" /> <!-- Gemstone A -->
+			<item id="2134" minCount="5" maxCount="50" minPrice="450000" maxPrice="600000" /> <!-- Gemstone S -->
+			<!-- Shots -->
+			<item id="1464" minCount="1000" maxCount="10000" minPrice="25" maxPrice="35" /> <!-- Soulshot: B-Grade -->
+			<item id="3951" minCount="1000" maxCount="5000" minPrice="60" maxPrice="85" /> <!-- Spiritshot: B-Grade -->
+			<item id="3952" minCount="1000" maxCount="5000" minPrice="110" maxPrice="150" /> <!-- Blessed Spiritshot: B-Grade -->
+			<item id="1465" minCount="1000" maxCount="10000" minPrice="45" maxPrice="65" /> <!-- Soulshot: A-Grade -->
+			<item id="3953" minCount="1000" maxCount="5000" minPrice="120" maxPrice="160" /> <!-- Spiritshot: A-Grade -->
+			<item id="3954" minCount="1000" maxCount="5000" minPrice="220" maxPrice="290" /> <!-- Blessed Spiritshot: A-Grade -->
+			<item id="1466" minCount="1000" maxCount="10000" minPrice="90" maxPrice="125" /> <!-- Soulshot: S-Grade -->
+			<item id="3955" minCount="1000" maxCount="5000" minPrice="250" maxPrice="330" /> <!-- Spiritshot: S-Grade -->
+			<item id="3956" minCount="1000" maxCount="5000" minPrice="450" maxPrice="580" /> <!-- Blessed Spiritshot: S-Grade -->
+			<!-- Consumables -->
+			<item id="1539" minCount="50" maxCount="300" minPrice="1500" maxPrice="2500" /> <!-- Greater Healing Potion -->
+			<item id="1540" minCount="10" maxCount="50" minPrice="8000" maxPrice="15000" /> <!-- Quick Healing Potion -->
+			<item id="5591" minCount="20" maxCount="200" minPrice="4000" maxPrice="7000" /> <!-- Greater CP Potion -->
+		</supplies>
+		<items>
+			<!-- C-Grade Encantados -->
+			<item id="79" minCount="1" maxCount="1" minPrice="8500000" maxPrice="12000000" minEnchant="4" maxEnchant="6" /> <!-- Samurai Longsword +4/+6 -->
+			<item id="230" minCount="1" maxCount="1" minPrice="8000000" maxPrice="11500000" minEnchant="4" maxEnchant="6" /> <!-- Crystal Dagger +4/+6 -->
+			<item id="288" minCount="1" maxCount="1" minPrice="9000000" maxPrice="13000000" minEnchant="4" maxEnchant="6" /> <!-- Eminence Bow +4/+6 -->
+			<!-- B-Grade Normal e Encantados -->
+			<item id="73" minCount="1" maxCount="1" minPrice="15000000" maxPrice="22000000" minEnchant="4" maxEnchant="6" /> <!-- Great Sword +4/+6 -->
+			<item id="80" minCount="1" maxCount="1" minPrice="14000000" maxPrice="20000000" /> <!-- Keshanberk -->
+			<item id="233" minCount="1" maxCount="1" minPrice="13500000" maxPrice="19000000" /> <!-- Kris -->
+			<item id="289" minCount="1" maxCount="1" minPrice="16000000" maxPrice="23000000" minEnchant="4" maxEnchant="6" /> <!-- Bow of Peril +4/+6 -->
+			<item id="87" minCount="1" maxCount="1" minPrice="15500000" maxPrice="22000000" /> <!-- Sword of Valhalla -->
+			<item id="358" minCount="1" maxCount="1" minPrice="6500000" maxPrice="9000000" /> <!-- Zubei's Breastplate -->
+			<item id="362" minCount="1" maxCount="1" minPrice="7000000" maxPrice="10000000" /> <!-- Avadon Breastplate -->
+			<item id="359" minCount="1" maxCount="1" minPrice="8000000" maxPrice="11500000" /> <!-- Blue Wolf Breastplate -->
+			<item id="446" minCount="1" maxCount="1" minPrice="6000000" maxPrice="8500000" /> <!-- Avadon Robe -->
+			<!-- A-Grade Normal e Encantados -->
+			<item id="89" minCount="1" maxCount="1" minPrice="45000000" maxPrice="65000000" minEnchant="4" maxEnchant="6" /> <!-- Tallum Blade +4/+6 -->
+			<item id="90" minCount="1" maxCount="1" minPrice="50000000" maxPrice="70000000" /> <!-- Dark Legion -->
+			<item id="235" minCount="1" maxCount="1" minPrice="48000000" maxPrice="68000000" minEnchant="4" maxEnchant="6" /> <!-- Soul Separator +4/+6 -->
+			<item id="292" minCount="1" maxCount="1" minPrice="55000000" maxPrice="75000000" minEnchant="4" maxEnchant="6" /> <!-- Soul Bow +4/+6 -->
+			<item id="92" minCount="1" maxCount="1" minPrice="52000000" maxPrice="72000000" /> <!-- Sword of Miracles -->
+			<item id="555" minCount="1" maxCount="1" minPrice="25000000" maxPrice="35000000" /> <!-- Tallum Heavy Armor -->
+			<item id="2407" minCount="1" maxCount="1" minPrice="28000000" maxPrice="38000000" /> <!-- Dark Crystal Robe -->
+			<item id="2400" minCount="1" maxCount="1" minPrice="26000000" maxPrice="36000000" /> <!-- Majestic Leather Armor -->
+			<!-- S-Grade Normal e Encantados (+4/+8) -->
+			<item id="6367" minCount="1" maxCount="1" minPrice="180000000" maxPrice="250000000" minEnchant="4" maxEnchant="8" /> <!-- Forgotten Blade +4/+8 -->
+			<item id="6369" minCount="1" maxCount="1" minPrice="175000000" maxPrice="240000000" minEnchant="4" maxEnchant="8" /> <!-- Angel Slayer +4/+8 -->
+			<item id="6370" minCount="1" maxCount="1" minPrice="190000000" maxPrice="260000000" minEnchant="4" maxEnchant="8" /> <!-- Draconic Bow +4/+8 -->
+			<item id="6608" minCount="1" maxCount="1" minPrice="185000000" maxPrice="255000000" minEnchant="4" maxEnchant="8" /> <!-- Arcana Mace +4/+8 -->
+			<item id="6373" minCount="1" maxCount="1" minPrice="90000000" maxPrice="125000000" minEnchant="4" maxEnchant="6" /> <!-- Imperial Crusader Breastplate +4/+6 -->
+			<item id="6379" minCount="1" maxCount="1" minPrice="85000000" maxPrice="118000000" minEnchant="4" maxEnchant="6" /> <!-- Draconic Leather Armor +4/+6 -->
+			<item id="6383" minCount="1" maxCount="1" minPrice="88000000" maxPrice="120000000" minEnchant="4" maxEnchant="6" /> <!-- Major Arcana Robe +4/+6 -->
+		</items>
+	</city>
+
+	<!-- 4. Aden Castle Town (Elite Market S80 / S84 - 20 Lojas) -->
+	<city name="Aden">
+		<materials>
+			<item id="6622" minCount="1" maxCount="5" minPrice="15000000" maxPrice="25000000" /> <!-- Giant's Codex -->
+			<item id="9625" minCount="1" maxCount="3" minPrice="35000000" maxPrice="55000000" /> <!-- Giant's Codex - Mastery -->
+			<item id="9626" minCount="1" maxCount="3" minPrice="25000000" maxPrice="40000000" /> <!-- Giant's Codex - Discipline -->
+			<item id="9627" minCount="1" maxCount="3" minPrice="20000000" maxPrice="35000000" /> <!-- Giant's Codex - Oblivion -->
+		</materials>
+		<supplies>
+			<!-- Attribute Stones (Elemento) -->
+			<item id="10521" minCount="1" maxCount="10" minPrice="8000000" maxPrice="12000000" /> <!-- Fire Stone -->
+			<item id="10522" minCount="1" maxCount="10" minPrice="8000000" maxPrice="12000000" /> <!-- Water Stone -->
+			<item id="10523" minCount="1" maxCount="10" minPrice="7000000" maxPrice="11000000" /> <!-- Earth Stone -->
+			<item id="10524" minCount="1" maxCount="10" minPrice="7000000" maxPrice="11000000" /> <!-- Wind Stone -->
+			<item id="10525" minCount="1" maxCount="10" minPrice="9000000" maxPrice="14000000" /> <!-- Dark Stone -->
+			<item id="10526" minCount="1" maxCount="10" minPrice="9000000" maxPrice="14000000" /> <!-- Holy Stone -->
+			<!-- Attribute Crystals -->
+			<item id="10528" minCount="1" maxCount="5" minPrice="35000000" maxPrice="50000000" /> <!-- Fire Crystal -->
+			<item id="10529" minCount="1" maxCount="5" minPrice="35000000" maxPrice="50000000" /> <!-- Water Crystal -->
+			<item id="10530" minCount="1" maxCount="5" minPrice="30000000" maxPrice="45000000" /> <!-- Earth Crystal -->
+			<item id="10531" minCount="1" maxCount="5" minPrice="30000000" maxPrice="45000000" /> <!-- Wind Crystal -->
+			<item id="10532" minCount="1" maxCount="5" minPrice="40000000" maxPrice="60000000" /> <!-- Dark Crystal -->
+			<item id="10533" minCount="1" maxCount="5" minPrice="40000000" maxPrice="60000000" /> <!-- Holy Crystal -->
+			<!-- Enchants Blessed S -->
+			<item id="6577" minCount="1" maxCount="3" minPrice="120000000" maxPrice="180000000" /> <!-- Blessed Scroll: Enchant Weapon (S) -->
+			<item id="6578" minCount="1" maxCount="5" minPrice="30000000" maxPrice="45000000" /> <!-- Blessed Scroll: Enchant Armor (S) -->
+			<item id="959" minCount="1" maxCount="5" minPrice="35000000" maxPrice="50000000" /> <!-- Scroll: Enchant Weapon (S) -->
+			<item id="960" minCount="1" maxCount="10" minPrice="6500000" maxPrice="9500000" /> <!-- Scroll: Enchant Armor (S) -->
+			<!-- Top Life Stones -->
+			<item id="12753" minCount="1" maxCount="10" minPrice="25000000" maxPrice="40000000" /> <!-- Top-Grade Life Stone - Level 80 -->
+			<item id="12754" minCount="1" maxCount="10" minPrice="35000000" maxPrice="55000000" /> <!-- Top-Grade Life Stone - Level 82 -->
+			<item id="12755" minCount="1" maxCount="10" minPrice="50000000" maxPrice="75000000" /> <!-- Top-Grade Life Stone - Level 84 -->
+			<item id="12747" minCount="1" maxCount="10" minPrice="20000000" maxPrice="30000000" /> <!-- High-Grade Life Stone - Level 84 -->
+		</supplies>
+		<items>
+			<!-- S80 Weapons (Dynasty & Icarus) Encantados (+4/+8) -->
+			<item id="9388" minCount="1" maxCount="1" minPrice="350000000" maxPrice="500000000" minEnchant="4" maxEnchant="8" /> <!-- Dynasty Sword +4/+8 -->
+			<item id="9389" minCount="1" maxCount="1" minPrice="340000000" maxPrice="480000000" minEnchant="4" maxEnchant="8" /> <!-- Dynasty Blade +4/+8 -->
+			<item id="9391" minCount="1" maxCount="1" minPrice="380000000" maxPrice="530000000" minEnchant="4" maxEnchant="8" /> <!-- Dynasty Bow +4/+8 -->
+			<item id="10226" minCount="1" maxCount="1" minPrice="550000000" maxPrice="750000000" minEnchant="4" maxEnchant="8" /> <!-- Icarus Sawsword +4/+8 -->
+			<item id="10228" minCount="1" maxCount="1" minPrice="530000000" maxPrice="720000000" minEnchant="4" maxEnchant="8" /> <!-- Icarus Disperser +4/+8 -->
+			<item id="10229" minCount="1" maxCount="1" minPrice="600000000" maxPrice="820000000" minEnchant="4" maxEnchant="8" /> <!-- Icarus Spitter +4/+8 -->
+			<item id="10230" minCount="1" maxCount="1" minPrice="580000000" maxPrice="800000000" minEnchant="4" maxEnchant="8" /> <!-- Icarus Spirit +4/+8 -->
+			<!-- S84 Weapons (Vesper / Vorpal / Elegy Tier) Encantados (+4/+8) -->
+			<item id="14120" minCount="1" maxCount="1" minPrice="800000000" maxPrice="1200000000" minEnchant="4" maxEnchant="8" /> <!-- Vesper Cutter +4/+8 -->
+			<item id="14123" minCount="1" maxCount="1" minPrice="780000000" maxPrice="1150000000" minEnchant="4" maxEnchant="8" /> <!-- Vesper Shaper +4/+8 -->
+			<item id="14124" minCount="1" maxCount="1" minPrice="850000000" maxPrice="1300000000" minEnchant="4" maxEnchant="8" /> <!-- Vesper Thrower +4/+8 -->
+			<item id="14125" minCount="1" maxCount="1" minPrice="820000000" maxPrice="1250000000" minEnchant="4" maxEnchant="8" /> <!-- Vesper Caster +4/+8 -->
+			<item id="15558" minCount="1" maxCount="1" minPrice="1200000000" maxPrice="1800000000" minEnchant="4" maxEnchant="8" /> <!-- Skull Edge +4/+8 -->
+			<item id="15559" minCount="1" maxCount="1" minPrice="1150000000" maxPrice="1750000000" minEnchant="4" maxEnchant="8" /> <!-- Ghost Cleaner +4/+8 -->
+			<item id="15562" minCount="1" maxCount="1" minPrice="1300000000" maxPrice="1950000000" minEnchant="4" maxEnchant="8" /> <!-- Cyclone Bow +4/+8 -->
+			<item id="15563" minCount="1" maxCount="1" minPrice="1250000000" maxPrice="1880000000" minEnchant="4" maxEnchant="8" /> <!-- Sacredium +4/+8 -->
+			<!-- S84 Armors (Vesper Noble / Vorpal / Elegy) Encantados (+4/+8) -->
+			<item id="15606" minCount="1" maxCount="1" minPrice="450000000" maxPrice="650000000" minEnchant="4" maxEnchant="8" /> <!-- Vesper Noble Breastplate +4/+8 -->
+			<item id="15609" minCount="1" maxCount="1" minPrice="420000000" maxPrice="620000000" minEnchant="4" maxEnchant="8" /> <!-- Vesper Noble Leather Armor +4/+8 -->
+			<item id="15612" minCount="1" maxCount="1" minPrice="430000000" maxPrice="630000000" minEnchant="4" maxEnchant="8" /> <!-- Vesper Noble Tunic +4/+8 -->
+			<item id="15624" minCount="1" maxCount="1" minPrice="750000000" maxPrice="1100000000" minEnchant="4" maxEnchant="8" /> <!-- Vorpal Breastplate +4/+8 -->
+			<item id="15627" minCount="1" maxCount="1" minPrice="720000000" maxPrice="1050000000" minEnchant="4" maxEnchant="8" /> <!-- Vorpal Leather Armor +4/+8 -->
+			<item id="15630" minCount="1" maxCount="1" minPrice="730000000" maxPrice="1080000000" minEnchant="4" maxEnchant="8" /> <!-- Vorpal Tunic +4/+8 -->
+			<item id="15636" minCount="1" maxCount="1" minPrice="1200000000" maxPrice="1800000000" minEnchant="4" maxEnchant="8" /> <!-- Elegy Breastplate +4/+8 -->
+			<item id="15639" minCount="1" maxCount="1" minPrice="1150000000" maxPrice="1750000000" minEnchant="4" maxEnchant="8" /> <!-- Elegy Leather Armor +4/+8 -->
+			<item id="15642" minCount="1" maxCount="1" minPrice="1180000000" maxPrice="1780000000" minEnchant="4" maxEnchant="8" /> <!-- Elegy Tunic +4/+8 -->
+			<!-- S84 Jewels (Vesper / Vorpal / Elegy) -->
+			<item id="14163" minCount="1" maxCount="2" minPrice="120000000" maxPrice="180000000" /> <!-- Vesper Earring -->
+			<item id="14164" minCount="1" maxCount="2" minPrice="80000000" maxPrice="120000000" /> <!-- Vesper Ring -->
+			<item id="14165" minCount="1" maxCount="1" minPrice="150000000" maxPrice="220000000" /> <!-- Vesper Necklace -->
+			<item id="15723" minCount="1" maxCount="2" minPrice="250000000" maxPrice="380000000" /> <!-- Vorpal Earring -->
+			<item id="15724" minCount="1" maxCount="2" minPrice="180000000" maxPrice="270000000" /> <!-- Vorpal Ring -->
+			<item id="15725" minCount="1" maxCount="1" minPrice="320000000" maxPrice="480000000" /> <!-- Vorpal Necklace -->
+			<item id="15753" minCount="1" maxCount="2" minPrice="450000000" maxPrice="680000000" /> <!-- Elegy Earring -->
+			<item id="15754" minCount="1" maxCount="2" minPrice="350000000" maxPrice="520000000" /> <!-- Elegy Ring -->
+			<item id="15755" minCount="1" maxCount="1" minPrice="600000000" maxPrice="900000000" /> <!-- Elegy Necklace -->
+		</items>
+	</city>
+
+	<!-- 5. Oren (Cidades Secundárias - 5 Lojas de Suprimentos Locais) -->
+	<city name="Oren">
+		<materials>
+			<item id="1869" minCount="20" maxCount="100" minPrice="600" maxPrice="1200" /> <!-- Iron Ore -->
+			<item id="1872" minCount="20" maxCount="100" minPrice="2000" maxPrice="3500" /> <!-- Animal Bone -->
+			<item id="1871" minCount="20" maxCount="100" minPrice="1000" maxPrice="1800" /> <!-- Charcoal -->
+			<item id="1870" minCount="20" maxCount="100" minPrice="800" maxPrice="1500" /> <!-- Coal -->
+		</materials>
+		<supplies>
+			<item id="1539" minCount="20" maxCount="100" minPrice="1500" maxPrice="2500" /> <!-- Greater Healing Potion -->
+			<item id="734" minCount="5" maxCount="30" minPrice="2000" maxPrice="4000" /> <!-- Speed Potion -->
+			<item id="737" minCount="5" maxCount="20" minPrice="400" maxPrice="600" /> <!-- Scroll of Escape -->
+			<item id="738" minCount="2" maxCount="10" minPrice="2000" maxPrice="3500" /> <!-- Scroll of Resurrection -->
+			<item id="1463" minCount="500" maxCount="3000" minPrice="15" maxPrice="22" /> <!-- Soulshot: C-Grade -->
+			<item id="3949" minCount="500" maxCount="2000" minPrice="40" maxPrice="60" /> <!-- Spiritshot: C-Grade -->
+		</supplies>
+		<items />
+	</city>
+
+	<!-- 6. Hunters Village (Cidades Secundárias - 5 Lojas de Suprimentos Locais) -->
+	<city name="Hunters">
+		<materials>
+			<item id="1865" minCount="20" maxCount="100" minPrice="500" maxPrice="1000" /> <!-- Animal Skin -->
+			<item id="1866" minCount="20" maxCount="100" minPrice="400" maxPrice="800" /> <!-- Stem -->
+			<item id="1867" minCount="20" maxCount="100" minPrice="300" maxPrice="600" /> <!-- Thread -->
+			<item id="1864" minCount="20" maxCount="100" minPrice="500" maxPrice="900" /> <!-- Varnish -->
+		</materials>
+		<supplies>
+			<item id="1539" minCount="20" maxCount="100" minPrice="1500" maxPrice="2500" /> <!-- Greater Healing Potion -->
+			<item id="734" minCount="5" maxCount="30" minPrice="2000" maxPrice="4000" /> <!-- Speed Potion -->
+			<item id="737" minCount="5" maxCount="20" minPrice="400" maxPrice="600" /> <!-- Scroll of Escape -->
+			<item id="738" minCount="2" maxCount="10" minPrice="2000" maxPrice="3500" /> <!-- Scroll of Resurrection -->
+			<item id="1463" minCount="500" maxCount="3000" minPrice="15" maxPrice="22" /> <!-- Soulshot: C-Grade -->
+			<item id="1464" minCount="500" maxCount="3000" minPrice="25" maxPrice="35" /> <!-- Soulshot: B-Grade -->
+		</supplies>
+		<items />
+	</city>
+
+	<!-- 7. Heine (Cidades Secundárias - 5 Lojas de Suprimentos Locais) -->
+	<city name="Heine">
+		<materials>
+			<item id="1869" minCount="20" maxCount="100" minPrice="600" maxPrice="1200" /> <!-- Iron Ore -->
+			<item id="1872" minCount="20" maxCount="100" minPrice="2000" maxPrice="3500" /> <!-- Animal Bone -->
+			<item id="1865" minCount="20" maxCount="100" minPrice="500" maxPrice="1000" /> <!-- Animal Skin -->
+		</materials>
+		<supplies>
+			<item id="1539" minCount="20" maxCount="100" minPrice="1500" maxPrice="2500" /> <!-- Greater Healing Potion -->
+			<item id="734" minCount="5" maxCount="30" minPrice="2000" maxPrice="4000" /> <!-- Speed Potion -->
+			<item id="737" minCount="5" maxCount="20" minPrice="400" maxPrice="600" /> <!-- Scroll of Escape -->
+			<item id="738" minCount="2" maxCount="10" minPrice="2000" maxPrice="3500" /> <!-- Scroll of Resurrection -->
+			<item id="1463" minCount="500" maxCount="3000" minPrice="15" maxPrice="22" /> <!-- Soulshot: C-Grade -->
+		</supplies>
+		<items />
+	</city>
+
+	<!-- 8. Goddard (Cidades Secundárias - 5 Lojas de Suprimentos Locais) -->
+	<city name="Goddard">
+		<materials>
+			<item id="1880" minCount="5" maxCount="30" minPrice="1200" maxPrice="2500" /> <!-- Steel -->
+			<item id="1879" minCount="5" maxCount="30" minPrice="1000" maxPrice="2200" /> <!-- Cokes -->
+			<item id="1882" minCount="10" maxCount="40" minPrice="700" maxPrice="1500" /> <!-- Leather -->
+		</materials>
+		<supplies>
+			<item id="1539" minCount="20" maxCount="100" minPrice="1500" maxPrice="2500" /> <!-- Greater Healing Potion -->
+			<item id="1540" minCount="5" maxCount="20" minPrice="8000" maxPrice="15000" /> <!-- Quick Healing Potion -->
+			<item id="737" minCount="5" maxCount="20" minPrice="400" maxPrice="600" /> <!-- Scroll of Escape -->
+			<item id="738" minCount="2" maxCount="10" minPrice="2000" maxPrice="3500" /> <!-- Scroll of Resurrection -->
+			<item id="1465" minCount="500" maxCount="3000" minPrice="45" maxPrice="65" /> <!-- Soulshot: A-Grade -->
+			<item id="1466" minCount="500" maxCount="3000" minPrice="90" maxPrice="125" /> <!-- Soulshot: S-Grade -->
+		</supplies>
+		<items />
+	</city>
+
+	<!-- 9. Rune (Cidades Secundárias - 5 Lojas de Suprimentos Locais) -->
+	<city name="Rune">
+		<materials>
+			<item id="1881" minCount="10" maxCount="40" minPrice="800" maxPrice="1600" /> <!-- Coarse Bone Powder -->
+			<item id="1885" minCount="5" maxCount="25" minPrice="1500" maxPrice="3000" /> <!-- High Grade Suede -->
+			<item id="1888" minCount="10" maxCount="50" minPrice="600" maxPrice="1200" /> <!-- Cord -->
+		</materials>
+		<supplies>
+			<item id="1539" minCount="20" maxCount="100" minPrice="1500" maxPrice="2500" /> <!-- Greater Healing Potion -->
+			<item id="1540" minCount="5" maxCount="20" minPrice="8000" maxPrice="15000" /> <!-- Quick Healing Potion -->
+			<item id="737" minCount="5" maxCount="20" minPrice="400" maxPrice="600" /> <!-- Scroll of Escape -->
+			<item id="738" minCount="2" maxCount="10" minPrice="2000" maxPrice="3500" /> <!-- Scroll of Resurrection -->
+			<item id="1465" minCount="500" maxCount="3000" minPrice="45" maxPrice="65" /> <!-- Soulshot: A-Grade -->
+			<item id="1466" minCount="500" maxCount="3000" minPrice="90" maxPrice="125" /> <!-- Soulshot: S-Grade -->
+		</supplies>
+		<items />
+	</city>
+
+	<!-- 10. Schuttgart (Cidades Secundárias - 5 Lojas de Suprimentos Locais) -->
+	<city name="Schuttgart">
+		<materials>
+			<item id="1869" minCount="20" maxCount="100" minPrice="600" maxPrice="1200" /> <!-- Iron Ore -->
+			<item id="1870" minCount="20" maxCount="100" minPrice="800" maxPrice="1500" /> <!-- Coal -->
+			<item id="1879" minCount="5" maxCount="30" minPrice="1000" maxPrice="2200" /> <!-- Cokes -->
+		</materials>
+		<supplies>
+			<item id="1539" minCount="20" maxCount="100" minPrice="1500" maxPrice="2500" /> <!-- Greater Healing Potion -->
+			<item id="734" minCount="5" maxCount="30" minPrice="2000" maxPrice="4000" /> <!-- Speed Potion -->
+			<item id="737" minCount="5" maxCount="20" minPrice="400" maxPrice="600" /> <!-- Scroll of Escape -->
+			<item id="738" minCount="2" maxCount="10" minPrice="2000" maxPrice="3500" /> <!-- Scroll of Resurrection -->
+			<item id="1463" minCount="500" maxCount="3000" minPrice="15" maxPrice="22" /> <!-- Soulshot: C-Grade -->
+			<item id="1464" minCount="500" maxCount="3000" minPrice="25" maxPrice="35" /> <!-- Soulshot: B-Grade -->
+		</supplies>
+		<items />
 	</city>
 </catalogs>

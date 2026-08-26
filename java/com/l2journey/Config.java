@@ -630,6 +630,9 @@ public class Config
 	public static boolean FAKE_PLAYER_AGGRO_FPC;
 	public static boolean FAKE_PLAYER_CAN_DROP_ITEMS;
 	public static boolean FAKE_PLAYER_CAN_PICKUP;
+	public static boolean FAKE_PLAYER_ALWAYS_ACTIVE;
+	public static String FAKE_PLAYER_SHIFT_START_HOUR;
+	public static String FAKE_PLAYER_SHIFT_END_HOUR;
 	
 	// --------------------------------------------------
 	// Sementes de Gracia
@@ -2426,6 +2429,9 @@ public class Config
 		FAKE_PLAYER_AGGRO_FPC = fakePlayerConfig.getBoolean("FakePlayerAggroFPC", false);
 		FAKE_PLAYER_CAN_DROP_ITEMS = fakePlayerConfig.getBoolean("FakePlayerCanDropItems", false);
 		FAKE_PLAYER_CAN_PICKUP = fakePlayerConfig.getBoolean("FakePlayerCanPickup", false);
+		FAKE_PLAYER_ALWAYS_ACTIVE = fakePlayerConfig.getBoolean("FakePlayerAlwaysActive", true);
+		FAKE_PLAYER_SHIFT_START_HOUR = fakePlayerConfig.getString("FakePlayerShiftStartHour", "00:00");
+		FAKE_PLAYER_SHIFT_END_HOUR = fakePlayerConfig.getString("FakePlayerShiftEndHour", "23:59");
 	}
 	
 	/**

@@ -1,8 +1,11 @@
 package com.l2journey.gameserver.managers;
 
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -63,6 +66,12 @@ public class FakePlayerManager
 		initGludioProfilesIfEmpty();
 		setupGludioZoneListener();
 		startScheduleManager();
+
+		if (Config.FAKE_PLAYER_ALWAYS_ACTIVE)
+		{
+			_gludioActive = true;
+			evaluateSchedules();
+		}
 	}
 
 	public void initFakeShops()
@@ -166,6 +175,13 @@ public class FakePlayerManager
 
 	private synchronized void onRealPlayerZoneStateChange()
 	{
+		if (Config.FAKE_PLAYER_ALWAYS_ACTIVE)
+		{
+			_gludioActive = true;
+			spawnGludioBotsForActiveSchedule();
+			return;
+		}
+
 		boolean hasPlayers = _realPlayersInGludio.get() > 0;
 		if (hasPlayers && !_gludioActive)
 		{
@@ -187,7 +203,7 @@ public class FakePlayerManager
 
 	public synchronized void evaluateSchedules()
 	{
-		if (!_gludioActive && _realPlayersInGludio.get() <= 0)
+		if (!Config.FAKE_PLAYER_ALWAYS_ACTIVE && !_gludioActive && _realPlayersInGludio.get() <= 0)
 		{
 			return;
 		}
@@ -197,13 +213,35 @@ public class FakePlayerManager
 
 	private boolean isScheduleActive(String shift)
 	{
-		int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-		if ("NIGHT".equalsIgnoreCase(shift))
+		if (Config.FAKE_PLAYER_ALWAYS_ACTIVE)
 		{
-			return hour >= 18 || hour < 6;
+			return true;
 		}
-		// Default DAY
-		return hour >= 6 && hour < 18;
+
+		try
+		{
+			LocalTime now = LocalTime.now(ZoneId.of("America/Sao_Paulo"));
+			LocalTime start = LocalTime.parse(Config.FAKE_PLAYER_SHIFT_START_HOUR);
+			LocalTime end = LocalTime.parse(Config.FAKE_PLAYER_SHIFT_END_HOUR);
+
+			if (start.isBefore(end))
+			{
+				return !now.isBefore(start) && !now.isAfter(end);
+			}
+			else
+			{
+				return !now.isBefore(start) || !now.isAfter(end);
+			}
+		}
+		catch (Exception e)
+		{
+			int hour = Calendar.getInstance(TimeZone.getTimeZone("America/Sao_Paulo")).get(Calendar.HOUR_OF_DAY);
+			if ("NIGHT".equalsIgnoreCase(shift))
+			{
+				return hour >= 18 || hour < 6;
+			}
+			return hour >= 6 && hour < 18;
+		}
 	}
 
 	public synchronized void spawnGludioBotsForActiveSchedule()
@@ -220,8 +258,8 @@ public class FakePlayerManager
 				{
 					if (spawnedTraders < 30 && !_activeTraders.containsKey(profile.getFakeId()))
 					{
-						FakeTraderAI trader = new FakeTraderAI(profile);
-						if (trader.spawn())
+						FakeTraderAI trader = FakeTraderAI.spawnTrader(profile);
+						if (trader != null)
 						{
 							_activeTraders.put(profile.getFakeId(), trader);
 							spawnedTraders++;
@@ -232,8 +270,8 @@ public class FakePlayerManager
 				{
 					if (spawnedHunters < 30 && !_activeHunters.containsKey(profile.getFakeId()))
 					{
-						FakeHunterAI hunter = new FakeHunterAI(profile);
-						if (hunter.spawn())
+						FakeHunterAI hunter = FakeHunterAI.spawnHunter(profile);
+						if (hunter != null)
 						{
 							_activeHunters.put(profile.getFakeId(), hunter);
 							spawnedHunters++;
