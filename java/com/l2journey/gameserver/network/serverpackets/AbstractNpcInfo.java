@@ -30,6 +30,9 @@ package com.l2journey.gameserver.network.serverpackets;
 
 import com.l2journey.Config;
 import com.l2journey.commons.network.WritableBuffer;
+import com.l2journey.gameserver.network.IAuditablePacket;
+import java.util.Map;
+import java.util.HashMap;
 import com.l2journey.gameserver.data.sql.ClanTable;
 import com.l2journey.gameserver.data.xml.NpcNameLocalisationData;
 import com.l2journey.gameserver.managers.TownManager;
@@ -96,7 +99,7 @@ public abstract class AbstractNpcInfo extends ServerPacket
 	/**
 	 * Packet for Npcs
 	 */
-	public static class NpcInfo extends AbstractNpcInfo
+	public static class NpcInfo extends AbstractNpcInfo implements IAuditablePacket
 	{
 		private final Npc _npc;
 		private int _clanCrest = 0;
@@ -273,6 +276,20 @@ public abstract class AbstractNpcInfo extends ServerPacket
 			buffer.writeByte(_npc.isShowName());
 			buffer.writeInt(_npc.getAbnormalVisualEffectSpecial());
 			buffer.writeInt(_npc.getDisplayEffect());
+		}
+		
+		@Override
+		public Map<String, Object> getAuditData()
+		{
+			Map<String, Object> data = new HashMap<>();
+			data.put("npcId", _npc.getId());
+			data.put("displayId", _displayId);
+			data.put("name", _name);
+			data.put("title", _title);
+			data.put("x", _x);
+			data.put("y", _y);
+			data.put("z", _z);
+			return data;
 		}
 	}
 	

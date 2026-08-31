@@ -53,7 +53,11 @@ import com.l2journey.gameserver.network.serverpackets.LeaveWorld;
 /**
  * @version $Revision: 1.16.2.12.2.7 $ $Date: 2005/04/11 10:06:11 $
  */
-public class Say2 extends ClientPacket
+import com.l2journey.gameserver.network.IAuditablePacket;
+import java.util.Map;
+import java.util.HashMap;
+
+public class Say2 extends ClientPacket implements IAuditablePacket
 {
 	private static Logger LOGGER_CHAT = Logger.getLogger("chat");
 	
@@ -106,6 +110,16 @@ public class Say2 extends ClientPacket
 		_text = readString();
 		_type = readInt();
 		_target = (_type == ChatType.WHISPER.getClientId()) ? readString() : null;
+	}
+	
+	@Override
+	public Map<String, Object> getAuditData()
+	{
+		Map<String, Object> data = new HashMap<>();
+		data.put("text", _text);
+		data.put("type", _type);
+		data.put("target", _target);
+		return data;
 	}
 	
 	@Override

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../xsd/npcs.xsd">
+	<!-- Tier 1: Exiled Golkonda (Solo/Duo) -->
+	<npc id="29000" level="75" type="RaidBoss" name="Exiled Golkonda" title="Raid Boss">
+		<parameters>
+			<param name="RaidSpawnMusic" value="Rm01_A" />
+		</parameters>
+		<race>GIANT</race>
+		<sex>MALE</sex>
+		<equipment rhand="91" /> <!-- Heavy War Axe -->
+		<acquire exp="2000000" sp="500000" raidPoints="1000" />
+		<!-- HP increased for solo/duo farm, atk reduced -->
+		<stats str="60" int="76" dex="73" wit="70" con="57" men="80">
+			<vitals hp="2000000.0" hpRegen="150.0" mp="1641.0" mpRegen="3" />
+			<attack physical="1500.0" magical="1000.0" random="30" critical="4" accuracy="4.75" attackSpeed="253" type="SWORD" range="40" distance="80" width="120" />
+			<defence physical="800.0" magical="400.0" evasion="-18" />
+			<attribute>
+				<defence fire="20" water="20" wind="20" earth="20" holy="20" dark="20" />
+			</attribute>
+			<speed>
+				<walk ground="40" />
+				<run ground="150" />
+			</speed>
+			<hitTime>590</hitTime>
+		</stats>
+		<status undying="false" />
+		<skillList>
+			<skill id="4408" level="1" /> <!-- HP Increase -->
+			<skill id="4414" level="2" /> <!-- Standard Type -->
+			<skill id="4415" level="3" /> <!-- One-handed Sword -->
+			<skill id="4416" level="11" /> <!-- Giants -->
+			<skill id="4494" level="1" /> <!-- Raid Boss -->
+		</skillList>
+		<exCrtEffect>true</exCrtEffect>
+		<ai type="BALANCED" clanHelpRange="300" isAggressive="false" />
+		<dropLists>
+			<drop>
+				<item id="99900" min="1" max="1" chance="25.0" /> <!-- Golkonda Horn -->
+			</drop>
+		</dropLists>
+		<collision>
+			<radius normal="42" />
+			<height normal="94" />
+		</collision>
+	</npc>
+
+	<!-- Tier 3: Infernal Golkonda (Full Party/Command Channel) -->
+	<npc id="29001" level="80" type="RaidBoss" name="Infernal Golkonda" title="Raid Boss">
+		<parameters>
+			<param name="RaidSpawnMusic" value="Rm01_A" />
+			<skill name="SelfRangeCancel_a" id="4177" level="7" /> <!-- BOSS Cancel Magic -->
+			<skill name="SelfBuff_a" id="4173" level="7" /> <!-- BOSS Might -->
+			<skill name="PhysicalSpecial_a" id="4169" level="7" /> <!-- Stun -->
+			<skill name="SelfRangePhysicalSpecial_a" id="4172" level="7" /> <!-- Stun -->
+		</parameters>
+		<race>GIANT</race>
+		<sex>MALE</sex>
+		<equipment rhand="91" /> <!-- Heavy War Axe -->
+		<acquire exp="15000000" sp="3000000" raidPoints="5000" />
+		<!-- High HP and Damage for Hardcore Party Farm -->
+		<stats str="90" int="76" dex="73" wit="70" con="90" men="80">
+			<vitals hp="10000000.0" hpRegen="1000.0" mp="5000.0" mpRegen="10" />
+			<attack physical="10000.0" magical="8000.0" random="30" critical="10" accuracy="10.0" attackSpeed="350" type="SWORD" range="40" distance="80" width="120" />
+			<defence physical="2500.0" magical="1500.0" evasion="-18" />
+			<attribute>
+				<defence fire="200" water="20" wind="20" earth="20" holy="20" dark="200" />
+			</attribute>
+			<speed>
+				<walk ground="50" />
+				<run ground="200" />
+			</speed>
+			<hitTime>590</hitTime>
+		</stats>
+		<status undying="false" />
+		<skillList>
+			<skill id="4045" level="1" /> <!-- Resist Full Magic Attack -->
+			<skill id="4169" level="7" /> <!-- Stun -->
+			<skill id="4172" level="7" /> <!-- Stun -->
+			<skill id="4173" level="7" /> <!-- BOSS Might -->
+			<skill id="4177" level="7" /> <!-- BOSS Cancel Magic -->
+			<skill id="4408" level="1" /> <!-- HP Increase -->
+			<skill id="4414" level="2" /> <!-- Standard Type -->
+			<skill id="4415" level="3" /> <!-- One-handed Sword -->
+			<skill id="4416" level="11" /> <!-- Giants -->
+			<skill id="4494" level="1" /> <!-- Raid Boss -->
+		</skillList>
+		<exCrtEffect>true</exCrtEffect>
+		<ai type="BALANCED" clanHelpRange="800" isAggressive="true" />
+		<dropLists>
+			<drop>
+				<item id="99900" min="1" max="5" chance="100.0" /> <!-- Golkonda Horns -->
+				<item id="4356" min="10" max="25" chance="100.0" /> <!-- Raid Coins -->
+			</drop>
+		</dropLists>
+		<collision>
+			<radius normal="45" />
+			<height normal="100" />
+		</collision>
+	</npc>
+</list>

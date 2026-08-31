@@ -46,10 +46,14 @@ import com.l2journey.gameserver.network.ServerPackets;
 import com.l2journey.gameserver.network.SystemMessageId;
 import com.l2journey.gameserver.network.SystemMessageId.SMLocalisation;
 
+import com.l2journey.gameserver.network.IAuditablePacket;
+import java.util.Map;
+import java.util.HashMap;
+
 /**
  * @author Forsaiken
  */
-public class SystemMessage extends ServerPacket
+public class SystemMessage extends ServerPacket implements IAuditablePacket
 {
 	private static final SMParam[] EMPTY_PARAM_ARRAY = new SMParam[0];
 	
@@ -429,5 +433,14 @@ public class SystemMessage extends ServerPacket
 				}
 			}
 		}
+	}
+	
+	@Override
+	public Map<String, Object> getAuditData()
+	{
+		Map<String, Object> data = new HashMap<>();
+		data.put("messageId", _smId.getId());
+		data.put("paramsCount", _paramIndex);
+		return data;
 	}
 }

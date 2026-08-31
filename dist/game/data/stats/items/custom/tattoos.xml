@@ -16,7 +16,7 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="pAtk" val="1.03" />
+			<mul order="48" stat="pAtk" val="1.03" />
 		</stats>
 	</item>
 	<item id="41002" type="Armor" name="Tattoo of Ogre - Lv 2 (Right)">
@@ -29,7 +29,7 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="pAtk" val="1.05" />
+			<mul order="48" stat="pAtk" val="1.05" />
 		</stats>
 	</item>
 	<item id="41003" type="Armor" name="Tattoo of Ogre - Lv 3 (Right)">
@@ -42,8 +42,8 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="pAtk" val="1.08" />
-			<mul order="0x30" stat="maxHp" val="1.08" />
+			<mul order="48" stat="pAtk" val="1.08" />
+			<mul order="48" stat="maxHp" val="1.08" />
 		</stats>
 	</item>
 	<item id="41004" type="Armor" name="Tattoo of Ogre - Lv 4 (Right)">
@@ -56,8 +56,8 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="pAtk" val="1.11" />
-			<mul order="0x30" stat="maxHp" val="1.11" />
+			<mul order="48" stat="pAtk" val="1.11" />
+			<mul order="48" stat="maxHp" val="1.11" />
 		</stats>
 	</item>
 	<item id="41005" type="Armor" name="Tattoo of Ogre - Lv 5 (Right)">
@@ -70,9 +70,9 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="pAtk" val="1.15" />
-			<mul order="0x30" stat="maxHp" val="1.15" />
-			<mul order="0x30" stat="pDef" val="1.15" />
+			<mul order="48" stat="pAtk" val="1.15" />
+			<mul order="48" stat="maxHp" val="1.15" />
+			<mul order="48" stat="pDef" val="1.15" />
 		</stats>
 	</item>
 	<item id="41006" type="Armor" name="Tattoo of Ogre - Lv 6 (Right)">
@@ -85,9 +85,9 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="pAtk" val="1.20" />
-			<mul order="0x30" stat="maxHp" val="1.20" />
-			<mul order="0x30" stat="pDef" val="1.20" />
+			<mul order="48" stat="pAtk" val="1.20" />
+			<mul order="48" stat="maxHp" val="1.20" />
+			<mul order="48" stat="pDef" val="1.20" />
 		</stats>
 	</item>
 
@@ -102,7 +102,7 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="pAtkSpd" val="1.03" />
+			<mul order="48" stat="pAtkSpd" val="1.03" />
 		</stats>
 	</item>
 	<item id="41008" type="Armor" name="Tattoo of Monk - Lv 2 (Right)">
@@ -115,7 +115,7 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="pAtkSpd" val="1.05" />
+			<mul order="48" stat="pAtkSpd" val="1.05" />
 		</stats>
 	</item>
 	<item id="41009" type="Armor" name="Tattoo of Monk - Lv 3 (Right)">
@@ -128,8 +128,8 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="pAtkSpd" val="1.08" />
-			<mul order="0x30" stat="pAtk" val="1.08" />
+			<mul order="48" stat="pAtkSpd" val="1.08" />
+			<mul order="48" stat="pAtk" val="1.08" />
 		</stats>
 	</item>
 	<item id="41010" type="Armor" name="Tattoo of Monk - Lv 4 (Right)">
@@ -142,8 +142,8 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="pAtkSpd" val="1.11" />
-			<mul order="0x30" stat="pAtk" val="1.11" />
+			<mul order="48" stat="pAtkSpd" val="1.11" />
+			<mul order="48" stat="pAtk" val="1.11" />
 		</stats>
 	</item>
 	<item id="41011" type="Armor" name="Tattoo of Monk - Lv 5 (Right)">
@@ -156,9 +156,9 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="pAtkSpd" val="1.15" />
-			<mul order="0x30" stat="pAtk" val="1.15" />
-			<mul order="0x30" stat="critRate" val="1.15" />
+			<mul order="48" stat="pAtkSpd" val="1.15" />
+			<mul order="48" stat="pAtk" val="1.15" />
+			<mul order="48" stat="critRate" val="1.15" />
 		</stats>
 	</item>
 	<item id="41012" type="Armor" name="Tattoo of Monk - Lv 6 (Right)">
@@ -171,9 +171,9 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="pAtkSpd" val="1.20" />
-			<mul order="0x30" stat="pAtk" val="1.20" />
-			<mul order="0x30" stat="critRate" val="1.20" />
+			<mul order="48" stat="pAtkSpd" val="1.20" />
+			<mul order="48" stat="pAtk" val="1.20" />
+			<mul order="48" stat="critRate" val="1.20" />
 		</stats>
 	</item>
 
@@ -188,7 +188,7 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="cAtk" val="1.03" />
+			<mul order="48" stat="cAtk" val="1.03" />
 		</stats>
 	</item>
 	<item id="41014" type="Armor" name="Tattoo of Assassin - Lv 2 (Right)">
@@ -201,7 +201,7 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="cAtk" val="1.05" />
+			<mul order="48" stat="cAtk" val="1.05" />
 		</stats>
 	</item>
 	<item id="41015" type="Armor" name="Tattoo of Assassin - Lv 3 (Right)">
@@ -214,8 +214,8 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="cAtk" val="1.08" />
-			<mul order="0x30" stat="runSpd" val="1.08" />
+			<mul order="48" stat="cAtk" val="1.08" />
+			<mul order="48" stat="runSpd" val="1.08" />
 		</stats>
 	</item>
 	<item id="41016" type="Armor" name="Tattoo of Assassin - Lv 4 (Right)">
@@ -228,8 +228,8 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="cAtk" val="1.11" />
-			<mul order="0x30" stat="runSpd" val="1.11" />
+			<mul order="48" stat="cAtk" val="1.11" />
+			<mul order="48" stat="runSpd" val="1.11" />
 		</stats>
 	</item>
 	<item id="41017" type="Armor" name="Tattoo of Assassin - Lv 5 (Right)">
@@ -242,9 +242,9 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="cAtk" val="1.15" />
-			<mul order="0x30" stat="runSpd" val="1.15" />
-			<mul order="0x30" stat="rEvas" val="1.15" />
+			<mul order="48" stat="cAtk" val="1.15" />
+			<mul order="48" stat="runSpd" val="1.15" />
+			<mul order="48" stat="rEvas" val="1.15" />
 		</stats>
 	</item>
 	<item id="41018" type="Armor" name="Tattoo of Assassin - Lv 6 (Right)">
@@ -257,9 +257,9 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="cAtk" val="1.20" />
-			<mul order="0x30" stat="runSpd" val="1.20" />
-			<mul order="0x30" stat="rEvas" val="1.20" />
+			<mul order="48" stat="cAtk" val="1.20" />
+			<mul order="48" stat="runSpd" val="1.20" />
+			<mul order="48" stat="rEvas" val="1.20" />
 		</stats>
 	</item>
 
@@ -274,8 +274,8 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<add order="0x40" stat="absorbDam" val="3" />
-			<mul order="0x30" stat="pDef" val="0.985" />
+			<add order="64" stat="absorbDam" val="3" />
+			<mul order="48" stat="pDef" val="0.985" />
 		</stats>
 	</item>
 	<item id="41020" type="Armor" name="Tattoo of Blood - Lv 2 (Right)">
@@ -288,8 +288,8 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<add order="0x40" stat="absorbDam" val="5" />
-			<mul order="0x30" stat="pDef" val="0.975" />
+			<add order="64" stat="absorbDam" val="5" />
+			<mul order="48" stat="pDef" val="0.975" />
 		</stats>
 	</item>
 	<item id="41021" type="Armor" name="Tattoo of Blood - Lv 3 (Right)">
@@ -302,9 +302,9 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<add order="0x40" stat="absorbDam" val="8" />
-			<mul order="0x30" stat="maxHp" val="1.08" />
-			<mul order="0x30" stat="pDef" val="0.960" />
+			<add order="64" stat="absorbDam" val="8" />
+			<mul order="48" stat="maxHp" val="1.08" />
+			<mul order="48" stat="pDef" val="0.960" />
 		</stats>
 	</item>
 	<item id="41022" type="Armor" name="Tattoo of Blood - Lv 4 (Right)">
@@ -317,9 +317,9 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<add order="0x40" stat="absorbDam" val="11" />
-			<mul order="0x30" stat="maxHp" val="1.11" />
-			<mul order="0x30" stat="pDef" val="0.945" />
+			<add order="64" stat="absorbDam" val="11" />
+			<mul order="48" stat="maxHp" val="1.11" />
+			<mul order="48" stat="pDef" val="0.945" />
 		</stats>
 	</item>
 	<item id="41023" type="Armor" name="Tattoo of Blood - Lv 5 (Right)">
@@ -332,11 +332,11 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<add order="0x40" stat="absorbDam" val="15" />
-			<mul order="0x30" stat="maxHp" val="1.15" />
-			<mul order="0x30" stat="cAtk" val="1.15" />
-			<mul order="0x30" stat="gainHp" val="1.15" />
-			<mul order="0x30" stat="pDef" val="0.925" />
+			<add order="64" stat="absorbDam" val="15" />
+			<mul order="48" stat="maxHp" val="1.15" />
+			<mul order="48" stat="cAtk" val="1.15" />
+			<mul order="48" stat="gainHp" val="1.15" />
+			<mul order="48" stat="pDef" val="0.925" />
 		</stats>
 	</item>
 	<item id="41024" type="Armor" name="Tattoo of Blood - Lv 6 (Right)">
@@ -349,11 +349,11 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<add order="0x40" stat="absorbDam" val="20" />
-			<mul order="0x30" stat="maxHp" val="1.20" />
-			<mul order="0x30" stat="cAtk" val="1.20" />
-			<mul order="0x30" stat="gainHp" val="1.20" />
-			<mul order="0x30" stat="pDef" val="0.900" />
+			<add order="64" stat="absorbDam" val="20" />
+			<mul order="48" stat="maxHp" val="1.20" />
+			<mul order="48" stat="cAtk" val="1.20" />
+			<mul order="48" stat="gainHp" val="1.20" />
+			<mul order="48" stat="pDef" val="0.900" />
 		</stats>
 	</item>
 
@@ -368,7 +368,7 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="accCombat" val="1.03" />
+			<mul order="48" stat="accCombat" val="1.03" />
 		</stats>
 	</item>
 	<item id="41026" type="Armor" name="Tattoo of Soul - Lv 2 (Right)">
@@ -381,7 +381,7 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="accCombat" val="1.05" />
+			<mul order="48" stat="accCombat" val="1.05" />
 		</stats>
 	</item>
 	<item id="41027" type="Armor" name="Tattoo of Soul - Lv 3 (Right)">
@@ -394,8 +394,8 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="accCombat" val="1.08" />
-			<mul order="0x30" stat="pAtkRange" val="1.08" />
+			<mul order="48" stat="accCombat" val="1.08" />
+			<mul order="48" stat="pAtkRange" val="1.08" />
 		</stats>
 	</item>
 	<item id="41028" type="Armor" name="Tattoo of Soul - Lv 4 (Right)">
@@ -408,8 +408,8 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="accCombat" val="1.11" />
-			<mul order="0x30" stat="pAtkRange" val="1.11" />
+			<mul order="48" stat="accCombat" val="1.11" />
+			<mul order="48" stat="pAtkRange" val="1.11" />
 		</stats>
 	</item>
 	<item id="41029" type="Armor" name="Tattoo of Soul - Lv 5 (Right)">
@@ -422,9 +422,9 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="accCombat" val="1.15" />
-			<mul order="0x30" stat="pAtkRange" val="1.15" />
-			<mul order="0x30" stat="critRate" val="1.15" />
+			<mul order="48" stat="accCombat" val="1.15" />
+			<mul order="48" stat="pAtkRange" val="1.15" />
+			<mul order="48" stat="critRate" val="1.15" />
 		</stats>
 	</item>
 	<item id="41030" type="Armor" name="Tattoo of Soul - Lv 6 (Right)">
@@ -437,9 +437,9 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="accCombat" val="1.20" />
-			<mul order="0x30" stat="pAtkRange" val="1.20" />
-			<mul order="0x30" stat="critRate" val="1.20" />
+			<mul order="48" stat="accCombat" val="1.20" />
+			<mul order="48" stat="pAtkRange" val="1.20" />
+			<mul order="48" stat="critRate" val="1.20" />
 		</stats>
 	</item>
 
@@ -454,7 +454,7 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="mAtkSpd" val="1.03" />
+			<mul order="48" stat="mAtkSpd" val="1.03" />
 		</stats>
 	</item>
 	<item id="41032" type="Armor" name="Tattoo of Flame - Lv 2 (Right)">
@@ -467,7 +467,7 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="mAtkSpd" val="1.05" />
+			<mul order="48" stat="mAtkSpd" val="1.05" />
 		</stats>
 	</item>
 	<item id="41033" type="Armor" name="Tattoo of Flame - Lv 3 (Right)">
@@ -480,8 +480,8 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="mAtkSpd" val="1.08" />
-			<mul order="0x30" stat="mAtk" val="1.08" />
+			<mul order="48" stat="mAtkSpd" val="1.08" />
+			<mul order="48" stat="mAtk" val="1.08" />
 		</stats>
 	</item>
 	<item id="41034" type="Armor" name="Tattoo of Flame - Lv 4 (Right)">
@@ -494,8 +494,8 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="mAtkSpd" val="1.11" />
-			<mul order="0x30" stat="mAtk" val="1.11" />
+			<mul order="48" stat="mAtkSpd" val="1.11" />
+			<mul order="48" stat="mAtk" val="1.11" />
 		</stats>
 	</item>
 	<item id="41035" type="Armor" name="Tattoo of Flame - Lv 5 (Right)">
@@ -508,9 +508,9 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="mAtkSpd" val="1.15" />
-			<mul order="0x30" stat="mAtk" val="1.15" />
-			<mul order="0x30" stat="mCritRate" val="1.15" />
+			<mul order="48" stat="mAtkSpd" val="1.15" />
+			<mul order="48" stat="mAtk" val="1.15" />
+			<mul order="48" stat="mCritRate" val="1.15" />
 		</stats>
 	</item>
 	<item id="41036" type="Armor" name="Tattoo of Flame - Lv 6 (Right)">
@@ -523,9 +523,9 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="mAtkSpd" val="1.20" />
-			<mul order="0x30" stat="mAtk" val="1.20" />
-			<mul order="0x30" stat="mCritRate" val="1.20" />
+			<mul order="48" stat="mAtkSpd" val="1.20" />
+			<mul order="48" stat="mAtk" val="1.20" />
+			<mul order="48" stat="mCritRate" val="1.20" />
 		</stats>
 	</item>
 
@@ -540,8 +540,8 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="pDef" val="1.03" />
-			<mul order="0x30" stat="mDef" val="1.03" />
+			<mul order="48" stat="pDef" val="1.03" />
+			<mul order="48" stat="mDef" val="1.03" />
 		</stats>
 	</item>
 	<item id="41038" type="Armor" name="Tattoo of Absolute - Lv 2 (Right)">
@@ -554,8 +554,8 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="pDef" val="1.05" />
-			<mul order="0x30" stat="mDef" val="1.05" />
+			<mul order="48" stat="pDef" val="1.05" />
+			<mul order="48" stat="mDef" val="1.05" />
 		</stats>
 	</item>
 	<item id="41039" type="Armor" name="Tattoo of Absolute - Lv 3 (Right)">
@@ -568,9 +568,9 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="pDef" val="1.08" />
-			<mul order="0x30" stat="mDef" val="1.08" />
-			<mul order="0x30" stat="maxCp" val="1.08" />
+			<mul order="48" stat="pDef" val="1.08" />
+			<mul order="48" stat="mDef" val="1.08" />
+			<mul order="48" stat="maxCp" val="1.08" />
 		</stats>
 	</item>
 	<item id="41040" type="Armor" name="Tattoo of Absolute - Lv 4 (Right)">
@@ -583,9 +583,9 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="pDef" val="1.11" />
-			<mul order="0x30" stat="mDef" val="1.11" />
-			<mul order="0x30" stat="maxCp" val="1.11" />
+			<mul order="48" stat="pDef" val="1.11" />
+			<mul order="48" stat="mDef" val="1.11" />
+			<mul order="48" stat="maxCp" val="1.11" />
 		</stats>
 	</item>
 	<item id="41041" type="Armor" name="Tattoo of Absolute - Lv 5 (Right)">
@@ -598,10 +598,10 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="pDef" val="1.15" />
-			<mul order="0x30" stat="mDef" val="1.15" />
-			<mul order="0x30" stat="maxCp" val="1.15" />
-			<mul order="0x30" stat="rShld" val="1.15" />
+			<mul order="48" stat="pDef" val="1.15" />
+			<mul order="48" stat="mDef" val="1.15" />
+			<mul order="48" stat="maxCp" val="1.15" />
+			<mul order="48" stat="rShld" val="1.15" />
 		</stats>
 	</item>
 	<item id="41042" type="Armor" name="Tattoo of Absolute - Lv 6 (Right)">
@@ -614,10 +614,10 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="pDef" val="1.20" />
-			<mul order="0x30" stat="mDef" val="1.20" />
-			<mul order="0x30" stat="maxCp" val="1.20" />
-			<mul order="0x30" stat="rShld" val="1.20" />
+			<mul order="48" stat="pDef" val="1.20" />
+			<mul order="48" stat="mDef" val="1.20" />
+			<mul order="48" stat="maxCp" val="1.20" />
+			<mul order="48" stat="rShld" val="1.20" />
 		</stats>
 	</item>
 
@@ -636,7 +636,7 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="pAtk" val="1.03" />
+			<mul order="48" stat="pAtk" val="1.03" />
 		</stats>
 	</item>
 	<item id="41044" type="Armor" name="Tattoo of Ogre - Lv 2 (Left)">
@@ -649,7 +649,7 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="pAtk" val="1.05" />
+			<mul order="48" stat="pAtk" val="1.05" />
 		</stats>
 	</item>
 	<item id="41045" type="Armor" name="Tattoo of Ogre - Lv 3 (Left)">
@@ -662,8 +662,8 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="pAtk" val="1.08" />
-			<mul order="0x30" stat="maxHp" val="1.08" />
+			<mul order="48" stat="pAtk" val="1.08" />
+			<mul order="48" stat="maxHp" val="1.08" />
 		</stats>
 	</item>
 	<item id="41046" type="Armor" name="Tattoo of Ogre - Lv 4 (Left)">
@@ -676,8 +676,8 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="pAtk" val="1.11" />
-			<mul order="0x30" stat="maxHp" val="1.11" />
+			<mul order="48" stat="pAtk" val="1.11" />
+			<mul order="48" stat="maxHp" val="1.11" />
 		</stats>
 	</item>
 	<item id="41047" type="Armor" name="Tattoo of Ogre - Lv 5 (Left)">
@@ -690,9 +690,9 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="pAtk" val="1.15" />
-			<mul order="0x30" stat="maxHp" val="1.15" />
-			<mul order="0x30" stat="pDef" val="1.15" />
+			<mul order="48" stat="pAtk" val="1.15" />
+			<mul order="48" stat="maxHp" val="1.15" />
+			<mul order="48" stat="pDef" val="1.15" />
 		</stats>
 	</item>
 	<item id="41048" type="Armor" name="Tattoo of Ogre - Lv 6 (Left)">
@@ -705,9 +705,9 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="pAtk" val="1.20" />
-			<mul order="0x30" stat="maxHp" val="1.20" />
-			<mul order="0x30" stat="pDef" val="1.20" />
+			<mul order="48" stat="pAtk" val="1.20" />
+			<mul order="48" stat="maxHp" val="1.20" />
+			<mul order="48" stat="pDef" val="1.20" />
 		</stats>
 	</item>
 
@@ -722,7 +722,7 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="pAtkSpd" val="1.03" />
+			<mul order="48" stat="pAtkSpd" val="1.03" />
 		</stats>
 	</item>
 	<item id="41050" type="Armor" name="Tattoo of Monk - Lv 2 (Left)">
@@ -735,7 +735,7 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="pAtkSpd" val="1.05" />
+			<mul order="48" stat="pAtkSpd" val="1.05" />
 		</stats>
 	</item>
 	<item id="41051" type="Armor" name="Tattoo of Monk - Lv 3 (Left)">
@@ -748,8 +748,8 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="pAtkSpd" val="1.08" />
-			<mul order="0x30" stat="pAtk" val="1.08" />
+			<mul order="48" stat="pAtkSpd" val="1.08" />
+			<mul order="48" stat="pAtk" val="1.08" />
 		</stats>
 	</item>
 	<item id="41052" type="Armor" name="Tattoo of Monk - Lv 4 (Left)">
@@ -762,8 +762,8 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="pAtkSpd" val="1.11" />
-			<mul order="0x30" stat="pAtk" val="1.11" />
+			<mul order="48" stat="pAtkSpd" val="1.11" />
+			<mul order="48" stat="pAtk" val="1.11" />
 		</stats>
 	</item>
 	<item id="41053" type="Armor" name="Tattoo of Monk - Lv 5 (Left)">
@@ -776,9 +776,9 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="pAtkSpd" val="1.15" />
-			<mul order="0x30" stat="pAtk" val="1.15" />
-			<mul order="0x30" stat="critRate" val="1.15" />
+			<mul order="48" stat="pAtkSpd" val="1.15" />
+			<mul order="48" stat="pAtk" val="1.15" />
+			<mul order="48" stat="critRate" val="1.15" />
 		</stats>
 	</item>
 	<item id="41054" type="Armor" name="Tattoo of Monk - Lv 6 (Left)">
@@ -791,9 +791,9 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="pAtkSpd" val="1.20" />
-			<mul order="0x30" stat="pAtk" val="1.20" />
-			<mul order="0x30" stat="critRate" val="1.20" />
+			<mul order="48" stat="pAtkSpd" val="1.20" />
+			<mul order="48" stat="pAtk" val="1.20" />
+			<mul order="48" stat="critRate" val="1.20" />
 		</stats>
 	</item>
 
@@ -808,7 +808,7 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="cAtk" val="1.03" />
+			<mul order="48" stat="cAtk" val="1.03" />
 		</stats>
 	</item>
 	<item id="41056" type="Armor" name="Tattoo of Assassin - Lv 2 (Left)">
@@ -821,7 +821,7 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="cAtk" val="1.05" />
+			<mul order="48" stat="cAtk" val="1.05" />
 		</stats>
 	</item>
 	<item id="41057" type="Armor" name="Tattoo of Assassin - Lv 3 (Left)">
@@ -834,8 +834,8 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="cAtk" val="1.08" />
-			<mul order="0x30" stat="runSpd" val="1.08" />
+			<mul order="48" stat="cAtk" val="1.08" />
+			<mul order="48" stat="runSpd" val="1.08" />
 		</stats>
 	</item>
 	<item id="41058" type="Armor" name="Tattoo of Assassin - Lv 4 (Left)">
@@ -848,8 +848,8 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="cAtk" val="1.11" />
-			<mul order="0x30" stat="runSpd" val="1.11" />
+			<mul order="48" stat="cAtk" val="1.11" />
+			<mul order="48" stat="runSpd" val="1.11" />
 		</stats>
 	</item>
 	<item id="41059" type="Armor" name="Tattoo of Assassin - Lv 5 (Left)">
@@ -862,9 +862,9 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="cAtk" val="1.15" />
-			<mul order="0x30" stat="runSpd" val="1.15" />
-			<mul order="0x30" stat="rEvas" val="1.15" />
+			<mul order="48" stat="cAtk" val="1.15" />
+			<mul order="48" stat="runSpd" val="1.15" />
+			<mul order="48" stat="rEvas" val="1.15" />
 		</stats>
 	</item>
 	<item id="41060" type="Armor" name="Tattoo of Assassin - Lv 6 (Left)">
@@ -877,9 +877,9 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="cAtk" val="1.20" />
-			<mul order="0x30" stat="runSpd" val="1.20" />
-			<mul order="0x30" stat="rEvas" val="1.20" />
+			<mul order="48" stat="cAtk" val="1.20" />
+			<mul order="48" stat="runSpd" val="1.20" />
+			<mul order="48" stat="rEvas" val="1.20" />
 		</stats>
 	</item>
 
@@ -894,8 +894,8 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<add order="0x40" stat="absorbDam" val="3" />
-			<mul order="0x30" stat="pDef" val="0.985" />
+			<add order="64" stat="absorbDam" val="3" />
+			<mul order="48" stat="pDef" val="0.985" />
 		</stats>
 	</item>
 	<item id="41062" type="Armor" name="Tattoo of Blood - Lv 2 (Left)">
@@ -908,8 +908,8 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<add order="0x40" stat="absorbDam" val="5" />
-			<mul order="0x30" stat="pDef" val="0.975" />
+			<add order="64" stat="absorbDam" val="5" />
+			<mul order="48" stat="pDef" val="0.975" />
 		</stats>
 	</item>
 	<item id="41063" type="Armor" name="Tattoo of Blood - Lv 3 (Left)">
@@ -922,9 +922,9 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<add order="0x40" stat="absorbDam" val="8" />
-			<mul order="0x30" stat="maxHp" val="1.08" />
-			<mul order="0x30" stat="pDef" val="0.960" />
+			<add order="64" stat="absorbDam" val="8" />
+			<mul order="48" stat="maxHp" val="1.08" />
+			<mul order="48" stat="pDef" val="0.960" />
 		</stats>
 	</item>
 	<item id="41064" type="Armor" name="Tattoo of Blood - Lv 4 (Left)">
@@ -937,9 +937,9 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<add order="0x40" stat="absorbDam" val="11" />
-			<mul order="0x30" stat="maxHp" val="1.11" />
-			<mul order="0x30" stat="pDef" val="0.945" />
+			<add order="64" stat="absorbDam" val="11" />
+			<mul order="48" stat="maxHp" val="1.11" />
+			<mul order="48" stat="pDef" val="0.945" />
 		</stats>
 	</item>
 	<item id="41065" type="Armor" name="Tattoo of Blood - Lv 5 (Left)">
@@ -952,11 +952,11 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<add order="0x40" stat="absorbDam" val="15" />
-			<mul order="0x30" stat="maxHp" val="1.15" />
-			<mul order="0x30" stat="cAtk" val="1.15" />
-			<mul order="0x30" stat="gainHp" val="1.15" />
-			<mul order="0x30" stat="pDef" val="0.925" />
+			<add order="64" stat="absorbDam" val="15" />
+			<mul order="48" stat="maxHp" val="1.15" />
+			<mul order="48" stat="cAtk" val="1.15" />
+			<mul order="48" stat="gainHp" val="1.15" />
+			<mul order="48" stat="pDef" val="0.925" />
 		</stats>
 	</item>
 	<item id="41066" type="Armor" name="Tattoo of Blood - Lv 6 (Left)">
@@ -969,11 +969,11 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<add order="0x40" stat="absorbDam" val="20" />
-			<mul order="0x30" stat="maxHp" val="1.20" />
-			<mul order="0x30" stat="cAtk" val="1.20" />
-			<mul order="0x30" stat="gainHp" val="1.20" />
-			<mul order="0x30" stat="pDef" val="0.900" />
+			<add order="64" stat="absorbDam" val="20" />
+			<mul order="48" stat="maxHp" val="1.20" />
+			<mul order="48" stat="cAtk" val="1.20" />
+			<mul order="48" stat="gainHp" val="1.20" />
+			<mul order="48" stat="pDef" val="0.900" />
 		</stats>
 	</item>
 
@@ -988,7 +988,7 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="accCombat" val="1.03" />
+			<mul order="48" stat="accCombat" val="1.03" />
 		</stats>
 	</item>
 	<item id="41068" type="Armor" name="Tattoo of Soul - Lv 2 (Left)">
@@ -1001,7 +1001,7 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="accCombat" val="1.05" />
+			<mul order="48" stat="accCombat" val="1.05" />
 		</stats>
 	</item>
 	<item id="41069" type="Armor" name="Tattoo of Soul - Lv 3 (Left)">
@@ -1014,8 +1014,8 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="accCombat" val="1.08" />
-			<mul order="0x30" stat="pAtkRange" val="1.08" />
+			<mul order="48" stat="accCombat" val="1.08" />
+			<mul order="48" stat="pAtkRange" val="1.08" />
 		</stats>
 	</item>
 	<item id="41070" type="Armor" name="Tattoo of Soul - Lv 4 (Left)">
@@ -1028,8 +1028,8 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="accCombat" val="1.11" />
-			<mul order="0x30" stat="pAtkRange" val="1.11" />
+			<mul order="48" stat="accCombat" val="1.11" />
+			<mul order="48" stat="pAtkRange" val="1.11" />
 		</stats>
 	</item>
 	<item id="41071" type="Armor" name="Tattoo of Soul - Lv 5 (Left)">
@@ -1042,9 +1042,9 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="accCombat" val="1.15" />
-			<mul order="0x30" stat="pAtkRange" val="1.15" />
-			<mul order="0x30" stat="critRate" val="1.15" />
+			<mul order="48" stat="accCombat" val="1.15" />
+			<mul order="48" stat="pAtkRange" val="1.15" />
+			<mul order="48" stat="critRate" val="1.15" />
 		</stats>
 	</item>
 	<item id="41072" type="Armor" name="Tattoo of Soul - Lv 6 (Left)">
@@ -1057,9 +1057,9 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="accCombat" val="1.20" />
-			<mul order="0x30" stat="pAtkRange" val="1.20" />
-			<mul order="0x30" stat="critRate" val="1.20" />
+			<mul order="48" stat="accCombat" val="1.20" />
+			<mul order="48" stat="pAtkRange" val="1.20" />
+			<mul order="48" stat="critRate" val="1.20" />
 		</stats>
 	</item>
 
@@ -1074,7 +1074,7 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="mAtkSpd" val="1.03" />
+			<mul order="48" stat="mAtkSpd" val="1.03" />
 		</stats>
 	</item>
 	<item id="41074" type="Armor" name="Tattoo of Flame - Lv 2 (Left)">
@@ -1087,7 +1087,7 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="mAtkSpd" val="1.05" />
+			<mul order="48" stat="mAtkSpd" val="1.05" />
 		</stats>
 	</item>
 	<item id="41075" type="Armor" name="Tattoo of Flame - Lv 3 (Left)">
@@ -1100,8 +1100,8 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="mAtkSpd" val="1.08" />
-			<mul order="0x30" stat="mAtk" val="1.08" />
+			<mul order="48" stat="mAtkSpd" val="1.08" />
+			<mul order="48" stat="mAtk" val="1.08" />
 		</stats>
 	</item>
 	<item id="41076" type="Armor" name="Tattoo of Flame - Lv 4 (Left)">
@@ -1114,8 +1114,8 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="mAtkSpd" val="1.11" />
-			<mul order="0x30" stat="mAtk" val="1.11" />
+			<mul order="48" stat="mAtkSpd" val="1.11" />
+			<mul order="48" stat="mAtk" val="1.11" />
 		</stats>
 	</item>
 	<item id="41077" type="Armor" name="Tattoo of Flame - Lv 5 (Left)">
@@ -1128,9 +1128,9 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="mAtkSpd" val="1.15" />
-			<mul order="0x30" stat="mAtk" val="1.15" />
-			<mul order="0x30" stat="mCritRate" val="1.15" />
+			<mul order="48" stat="mAtkSpd" val="1.15" />
+			<mul order="48" stat="mAtk" val="1.15" />
+			<mul order="48" stat="mCritRate" val="1.15" />
 		</stats>
 	</item>
 	<item id="41078" type="Armor" name="Tattoo of Flame - Lv 6 (Left)">
@@ -1143,9 +1143,9 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="mAtkSpd" val="1.20" />
-			<mul order="0x30" stat="mAtk" val="1.20" />
-			<mul order="0x30" stat="mCritRate" val="1.20" />
+			<mul order="48" stat="mAtkSpd" val="1.20" />
+			<mul order="48" stat="mAtk" val="1.20" />
+			<mul order="48" stat="mCritRate" val="1.20" />
 		</stats>
 	</item>
 
@@ -1160,8 +1160,8 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="pDef" val="1.03" />
-			<mul order="0x30" stat="mDef" val="1.03" />
+			<mul order="48" stat="pDef" val="1.03" />
+			<mul order="48" stat="mDef" val="1.03" />
 		</stats>
 	</item>
 	<item id="41080" type="Armor" name="Tattoo of Absolute - Lv 2 (Left)">
@@ -1174,8 +1174,8 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="pDef" val="1.05" />
-			<mul order="0x30" stat="mDef" val="1.05" />
+			<mul order="48" stat="pDef" val="1.05" />
+			<mul order="48" stat="mDef" val="1.05" />
 		</stats>
 	</item>
 	<item id="41081" type="Armor" name="Tattoo of Absolute - Lv 3 (Left)">
@@ -1188,9 +1188,9 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="pDef" val="1.08" />
-			<mul order="0x30" stat="mDef" val="1.08" />
-			<mul order="0x30" stat="maxCp" val="1.08" />
+			<mul order="48" stat="pDef" val="1.08" />
+			<mul order="48" stat="mDef" val="1.08" />
+			<mul order="48" stat="maxCp" val="1.08" />
 		</stats>
 	</item>
 	<item id="41082" type="Armor" name="Tattoo of Absolute - Lv 4 (Left)">
@@ -1203,9 +1203,9 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="pDef" val="1.11" />
-			<mul order="0x30" stat="mDef" val="1.11" />
-			<mul order="0x30" stat="maxCp" val="1.11" />
+			<mul order="48" stat="pDef" val="1.11" />
+			<mul order="48" stat="mDef" val="1.11" />
+			<mul order="48" stat="maxCp" val="1.11" />
 		</stats>
 	</item>
 	<item id="41083" type="Armor" name="Tattoo of Absolute - Lv 5 (Left)">
@@ -1218,10 +1218,10 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="pDef" val="1.15" />
-			<mul order="0x30" stat="mDef" val="1.15" />
-			<mul order="0x30" stat="maxCp" val="1.15" />
-			<mul order="0x30" stat="rShld" val="1.15" />
+			<mul order="48" stat="pDef" val="1.15" />
+			<mul order="48" stat="mDef" val="1.15" />
+			<mul order="48" stat="maxCp" val="1.15" />
+			<mul order="48" stat="rShld" val="1.15" />
 		</stats>
 	</item>
 	<item id="41084" type="Armor" name="Tattoo of Absolute - Lv 6 (Left)">
@@ -1234,10 +1234,10 @@
 		<set name="is_tradable" val="true" />
 		<set name="is_dropable" val="false" />
 		<stats>
-			<mul order="0x30" stat="pDef" val="1.20" />
-			<mul order="0x30" stat="mDef" val="1.20" />
-			<mul order="0x30" stat="maxCp" val="1.20" />
-			<mul order="0x30" stat="rShld" val="1.20" />
+			<mul order="48" stat="pDef" val="1.20" />
+			<mul order="48" stat="mDef" val="1.20" />
+			<mul order="48" stat="maxCp" val="1.20" />
+			<mul order="48" stat="rShld" val="1.20" />
 		</stats>
 	</item>
 </list>

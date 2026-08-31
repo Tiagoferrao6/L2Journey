@@ -59,7 +59,11 @@ import com.l2journey.gameserver.util.LocationUtil;
 /**
  * @version $Revision: 1.12.4.5 $ $Date: 2005/04/11 10:06:11 $
  */
-public class RequestBypassToServer extends ClientPacket
+import com.l2journey.gameserver.network.IAuditablePacket;
+import java.util.Map;
+import java.util.HashMap;
+
+public class RequestBypassToServer extends ClientPacket implements IAuditablePacket
 {
 	private static final String[] _possibleNonHtmlCommands =
 	{
@@ -81,6 +85,14 @@ public class RequestBypassToServer extends ClientPacket
 	protected void readImpl()
 	{
 		_command = readString();
+	}
+	
+	@Override
+	public Map<String, Object> getAuditData()
+	{
+		Map<String, Object> data = new HashMap<>();
+		data.put("command", _command);
+		return data;
 	}
 	
 	@Override

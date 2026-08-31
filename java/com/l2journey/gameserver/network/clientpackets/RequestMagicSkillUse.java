@@ -38,7 +38,11 @@ import com.l2journey.gameserver.model.skill.targets.TargetType;
 import com.l2journey.gameserver.network.SystemMessageId;
 import com.l2journey.gameserver.network.serverpackets.ActionFailed;
 
-public class RequestMagicSkillUse extends ClientPacket
+import com.l2journey.gameserver.network.IAuditablePacket;
+import java.util.Map;
+import java.util.HashMap;
+
+public class RequestMagicSkillUse extends ClientPacket implements IAuditablePacket
 {
 	private int _magicId;
 	private boolean _ctrlPressed;
@@ -50,6 +54,16 @@ public class RequestMagicSkillUse extends ClientPacket
 		_magicId = readInt(); // Identifier of the used skill
 		_ctrlPressed = readInt() != 0; // True if it's a ForceAttack : Ctrl pressed
 		_shiftPressed = readByte() != 0; // True if Shift pressed
+	}
+	
+	@Override
+	public Map<String, Object> getAuditData()
+	{
+		Map<String, Object> data = new HashMap<>();
+		data.put("magicId", _magicId);
+		data.put("ctrlPressed", _ctrlPressed);
+		data.put("shiftPressed", _shiftPressed);
+		return data;
 	}
 	
 	@Override

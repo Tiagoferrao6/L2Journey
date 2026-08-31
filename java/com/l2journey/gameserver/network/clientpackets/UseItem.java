@@ -63,7 +63,11 @@ import com.l2journey.gameserver.network.serverpackets.ExShowScreenMessage;
 import com.l2journey.gameserver.network.serverpackets.ExUseSharedGroupItem;
 import com.l2journey.gameserver.network.serverpackets.SystemMessage;
 
-public class UseItem extends ClientPacket
+import com.l2journey.gameserver.network.IAuditablePacket;
+import java.util.Map;
+import java.util.HashMap;
+
+public class UseItem extends ClientPacket implements IAuditablePacket
 {
 	private int _objectId;
 	private boolean _ctrlPressed;
@@ -74,6 +78,15 @@ public class UseItem extends ClientPacket
 	{
 		_objectId = readInt();
 		_ctrlPressed = readInt() != 0;
+	}
+	
+	@Override
+	public Map<String, Object> getAuditData()
+	{
+		Map<String, Object> data = new HashMap<>();
+		data.put("objectId", _objectId);
+		data.put("ctrlPressed", _ctrlPressed);
+		return data;
 	}
 	
 	@Override

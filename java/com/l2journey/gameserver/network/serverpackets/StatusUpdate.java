@@ -28,7 +28,11 @@ import com.l2journey.gameserver.model.WorldObject;
 import com.l2journey.gameserver.network.GameClient;
 import com.l2journey.gameserver.network.ServerPackets;
 
-public class StatusUpdate extends ServerPacket
+import com.l2journey.gameserver.network.IAuditablePacket;
+import java.util.Map;
+import java.util.HashMap;
+
+public class StatusUpdate extends ServerPacket implements IAuditablePacket
 {
 	public static final int LEVEL = 0x01;
 	public static final int EXP = 0x02;
@@ -122,5 +126,19 @@ public class StatusUpdate extends ServerPacket
 	public boolean canBeDropped(GameClient client)
 	{
 		return true;
+	}
+	
+	@Override
+	public Map<String, Object> getAuditData()
+	{
+		Map<String, Object> data = new HashMap<>();
+		data.put("objectId", _objectId);
+		Map<Integer, Integer> attributes = new HashMap<>();
+		for (Attribute attr : _attributes)
+		{
+			attributes.put(attr.id, attr.value);
+		}
+		data.put("attributes", attributes);
+		return data;
 	}
 }

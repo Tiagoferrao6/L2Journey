@@ -63,7 +63,6 @@ public class FakePlayerManager
 			initFakeShops();
 		}
 
-		initGludioProfilesIfEmpty();
 		setupGludioZoneListener();
 		startScheduleManager();
 
@@ -89,34 +88,7 @@ public class FakePlayerManager
 		LOGGER.info(getClass().getSimpleName() + ": Activated " + _activeShops.size() + " legacy FakeShops.");
 	}
 
-	private void initGludioProfilesIfEmpty()
-	{
-		List<FakePlayerProfile> profiles = FakePlayerDAO.getInstance().loadProfilesByZone("GLUDIO");
-		if (profiles.isEmpty())
-		{
-			LOGGER.info(getClass().getSimpleName() + ": Populating initial 30 Traders and 30 Hunters for Gludio in DB...");
 
-			// Create 30 Traders for Gludio
-			for (int i = 1; i <= 30; i++)
-			{
-				FakePlayerProfile profile = new FakePlayerProfile(0, "TRADER", 53, 5, 5, 5, i % 2 == 0 ? "DAY" : "NIGHT", "GLUDIO");
-				profile.setX(-14228 + (i * 20));
-				profile.setY(123445 + (i * 15));
-				profile.setZ(-3115);
-				FakePlayerDAO.getInstance().insertProfile(profile);
-			}
-
-			// Create 30 Hunters for Gludio
-			for (int i = 1; i <= 30; i++)
-			{
-				FakePlayerProfile profile = new FakePlayerProfile(0, "HUNTER", 1, 6, 7, 8, i % 2 == 0 ? "DAY" : "NIGHT", "GLUDIO");
-				profile.setX(-14000 + (i * 30));
-				profile.setY(123000 + (i * 25));
-				profile.setZ(-3115);
-				FakePlayerDAO.getInstance().insertProfile(profile);
-			}
-		}
-	}
 
 	private void setupGludioZoneListener()
 	{
@@ -254,19 +226,7 @@ public class FakePlayerManager
 		{
 			if (isScheduleActive(profile.getShift()))
 			{
-				if ("TRADER".equalsIgnoreCase(profile.getBotType()))
-				{
-					if (spawnedTraders < 30 && !_activeTraders.containsKey(profile.getFakeId()))
-					{
-						FakeTraderAI trader = FakeTraderAI.spawnTrader(profile);
-						if (trader != null)
-						{
-							_activeTraders.put(profile.getFakeId(), trader);
-							spawnedTraders++;
-						}
-					}
-				}
-				else if ("HUNTER".equalsIgnoreCase(profile.getBotType()))
+				if ("HUNTER".equalsIgnoreCase(profile.getBotType()))
 				{
 					if (spawnedHunters < 30 && !_activeHunters.containsKey(profile.getFakeId()))
 					{
@@ -282,15 +242,7 @@ public class FakePlayerManager
 			else
 			{
 				// Shift ended - despawn if active
-				if ("TRADER".equalsIgnoreCase(profile.getBotType()))
-				{
-					FakeTraderAI trader = _activeTraders.remove(profile.getFakeId());
-					if (trader != null)
-					{
-						trader.despawn();
-					}
-				}
-				else if ("HUNTER".equalsIgnoreCase(profile.getBotType()))
+				if ("HUNTER".equalsIgnoreCase(profile.getBotType()))
 				{
 					FakeHunterAI hunter = _activeHunters.remove(profile.getFakeId());
 					if (hunter != null)
@@ -301,7 +253,7 @@ public class FakePlayerManager
 			}
 		}
 
-		LOGGER.info("FakePlayerManager: Currently active in Gludio -> Traders: " + _activeTraders.size() + ", Hunters: " + _activeHunters.size());
+		LOGGER.info("FakePlayerManager: Currently active in Gludio -> Traders (XML): " + _activeShops.size() + ", Hunters (SQL): " + _activeHunters.size());
 	}
 
 	public synchronized void despawnGludioBots()

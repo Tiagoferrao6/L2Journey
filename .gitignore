@@ -26,6 +26,7 @@
 /log/
 /logs/
 /dist/game/log/
+/dist/game/data/geodata/
 /dist/login/log/
 /dist/backup/
 

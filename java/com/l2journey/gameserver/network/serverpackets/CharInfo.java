@@ -41,7 +41,11 @@ import com.l2journey.gameserver.model.zone.ZoneId;
 import com.l2journey.gameserver.network.GameClient;
 import com.l2journey.gameserver.network.ServerPackets;
 
-public class CharInfo extends ServerPacket
+import com.l2journey.gameserver.network.IAuditablePacket;
+import java.util.Map;
+import java.util.HashMap;
+
+public class CharInfo extends ServerPacket implements IAuditablePacket
 {
 	private static final int[] PAPERDOLL_ORDER =
 	{
@@ -242,5 +246,19 @@ public class CharInfo extends ServerPacket
 	public int[] getPaperdollOrder()
 	{
 		return PAPERDOLL_ORDER;
+	}
+	
+	@Override
+	public Map<String, Object> getAuditData()
+	{
+		Map<String, Object> data = new HashMap<>();
+		data.put("objectId", _objId);
+		data.put("name", _player.getName());
+		data.put("title", _player.getTitle());
+		data.put("x", _x);
+		data.put("y", _y);
+		data.put("z", _z);
+		data.put("heading", _heading);
+		return data;
 	}
 }

@@ -46,4 +46,10 @@
 			<height normal="12.5" />
 		</collision>
 	</npc>
+	<npc id="39900" displayId="25126" name="Golkonda's Avatar" usingServerSideName="true" title="Cumulative Power" usingServerSideTitle="true" type="Folk">
+		<collision>
+			<radius normal="10" />
+			<height normal="22" />
+		</collision>
+	</npc>
 </list>

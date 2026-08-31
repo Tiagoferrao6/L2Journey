@@ -4,7 +4,7 @@
 	<setting name="EnableCumulativeSubclass" val="true" />
 	<setting name="SameRaceOnly" val="true" />
 	<setting name="RequiredLevel" val="75" />
-	<setting name="RequiredItemId" val="99000" />
+	<setting name="RequiredItemId" val="99900" />
 	<setting name="RequiredItemCount" val="1" />
 	<setting name="DelevelTargetLevel" val="40" />
 	<setting name="DisabledBehavior" val="HIDE" />

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="catalogs">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="city" maxOccurs="unbounded" minOccurs="0">
+					<xs:complexType>
+						<xs:all>
+							<xs:element name="materials" minOccurs="0">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="item" type="itemType" maxOccurs="unbounded" minOccurs="0"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="supplies" minOccurs="0">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="item" type="itemType" maxOccurs="unbounded" minOccurs="0"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="items" minOccurs="0">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="item" type="itemType" maxOccurs="unbounded" minOccurs="0"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:all>
+						<xs:attribute name="name" type="xs:string" use="required"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="itemType">
+		<xs:attribute name="id" type="xs:integer" use="required"/>
+		<xs:attribute name="minCount" type="xs:integer" use="required"/>
+		<xs:attribute name="maxCount" type="xs:integer" use="required"/>
+		<xs:attribute name="minPrice" type="xs:long" use="required"/>
+		<xs:attribute name="maxPrice" type="xs:long" use="required"/>
+		<xs:attribute name="minEnchant" type="xs:integer" use="optional"/>
+		<xs:attribute name="maxEnchant" type="xs:integer" use="optional"/>
+	</xs:complexType>
+</xs:schema>

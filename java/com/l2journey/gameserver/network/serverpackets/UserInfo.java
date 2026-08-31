@@ -41,7 +41,11 @@ import com.l2journey.gameserver.model.zone.ZoneId;
 import com.l2journey.gameserver.network.GameClient;
 import com.l2journey.gameserver.network.ServerPackets;
 
-public class UserInfo extends ServerPacket
+import com.l2journey.gameserver.network.IAuditablePacket;
+import java.util.Map;
+import java.util.HashMap;
+
+public class UserInfo extends ServerPacket implements IAuditablePacket
 {
 	private final Player _player;
 	private int _relation;
@@ -246,5 +250,19 @@ public class UserInfo extends ServerPacket
 		// buffer.writeInt(_territoryId); // CT2.3
 		// buffer.writeInt((_isDisguised ? 1: 0)); // CT2.3
 		// buffer.writeInt(_territoryId); // CT2.3
+	}
+	
+	@Override
+	public Map<String, Object> getAuditData()
+	{
+		Map<String, Object> data = new HashMap<>();
+		data.put("objectId", _player.getObjectId());
+		data.put("name", _player.getName());
+		data.put("title", _player.getTitle());
+		data.put("x", _player.getX());
+		data.put("y", _player.getY());
+		data.put("z", _player.getZ());
+		data.put("heading", _player.getHeading());
+		return data;
 	}
 }

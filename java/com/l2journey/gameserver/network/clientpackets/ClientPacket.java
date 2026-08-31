@@ -33,6 +33,8 @@ import com.l2journey.commons.util.TraceUtil;
 import com.l2journey.gameserver.model.actor.Player;
 import com.l2journey.gameserver.network.GameClient;
 import com.l2journey.gameserver.network.PacketLogger;
+import com.l2journey.gameserver.network.IAuditablePacket;
+import com.l2journey.gameserver.managers.PlayerActionLogger;
 
 /**
  * @author Mobius
@@ -45,6 +47,16 @@ public abstract class ClientPacket extends ReadablePacket<GameClient>
 		try
 		{
 			readImpl();
+			
+			if (this instanceof IAuditablePacket)
+			{
+				final Player player = getPlayer();
+				if (player != null)
+				{
+					PlayerActionLogger.getInstance().logPacket(player.getName(), "IN", (IAuditablePacket) this);
+				}
+			}
+			
 			return true;
 		}
 		catch (Exception e)

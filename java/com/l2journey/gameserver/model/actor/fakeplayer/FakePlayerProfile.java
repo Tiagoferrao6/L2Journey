@@ -22,6 +22,11 @@ public class FakePlayerProfile
 	private int _partyId;
 	private boolean _isActive;
 	private long _lastActiveTime;
+	
+	// Anti-Stuck mechanism
+	private int _lastX;
+	private int _lastY;
+	private int _stuckTicks;
 
 	public FakePlayerProfile()
 	{
@@ -207,5 +212,35 @@ public class FakePlayerProfile
 	public void setLastActiveTime(long lastActiveTime)
 	{
 		_lastActiveTime = lastActiveTime;
+	}
+	
+	public int getLastX()
+	{
+		return _lastX;
+	}
+	
+	public void setLastX(int lastX)
+	{
+		_lastX = lastX;
+	}
+	
+	public int getLastY()
+	{
+		return _lastY;
+	}
+	
+	public void setLastY(int lastY)
+	{
+		_lastY = lastY;
+	}
+	
+	public int getStuckTicks()
+	{
+		return _stuckTicks;
+	}
+	
+	public void setStuckTicks(int stuckTicks)
+	{
+		_stuckTicks = stuckTicks;
 	}
 }

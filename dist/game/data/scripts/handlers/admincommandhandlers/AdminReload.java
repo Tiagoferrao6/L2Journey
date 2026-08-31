@@ -135,6 +135,13 @@ public class AdminReload implements IAdminCommandHandler
 					AdminData.getInstance().broadcastMessageToGMs(activeChar.getName() + ": Reloaded Walkers.");
 					break;
 				}
+				case "audit":
+				{
+					com.l2journey.Config.loadPlayerAuditConfig();
+					activeChar.sendSysMessage("Player Audit configuration has been reloaded.");
+					AdminData.getInstance().broadcastMessageToGMs(activeChar.getName() + ": Reloaded Player Audit.");
+					break;
+				}
 				case "htm":
 				case "html":
 				{

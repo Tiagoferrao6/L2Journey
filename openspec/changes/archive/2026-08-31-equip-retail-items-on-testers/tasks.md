@@ -1,0 +1,9 @@
+- [x] 1. Edit `dist/db_installer/sql/game/z_custom_test_characters_setup.sql`
+  - [x] 1.1. Identify the block `SilverTester EQUIPPED Gear` and replace `Royal Light Armor` pieces with Elegia Leather pieces.
+  - [x] 1.2. Replace the `Royal Dynasty Bow` with `Vesper Thrower`.
+  - [x] 1.3. Clean up the inventory of all `Royal Weapons` for SilverTester.
+  - [x] 1.4. Identify the block `TitanTester EQUIPPED Gear` and replace `Royal Heavy Armor` pieces with Elegia Heavy pieces.
+  - [x] 1.5. Replace the `Royal Dynasty Guardian` (Two-Handed Sword) with `Vesper Slasher`.
+  - [x] 1.6. Clean up the inventory of all `Royal Weapons` for TitanTester.
+  - [x] 1.7. Update the `item_elementals` inserts to reference the new Elegia and Vesper item variables.
+- [x] 2. Apply SQL changes to the server database to test the updated character setup. (Note: Run `docker-compose up -d dbinstall` or equivalent to update the database locally)

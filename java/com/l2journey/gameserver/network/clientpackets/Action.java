@@ -39,7 +39,11 @@ import com.l2journey.gameserver.network.PacketLogger;
 import com.l2journey.gameserver.network.SystemMessageId;
 import com.l2journey.gameserver.network.serverpackets.ActionFailed;
 
-public class Action extends ClientPacket
+import com.l2journey.gameserver.network.IAuditablePacket;
+import java.util.Map;
+import java.util.HashMap;
+
+public class Action extends ClientPacket implements IAuditablePacket
 {
 	private int _objectId;
 	@SuppressWarnings("unused")
@@ -58,6 +62,18 @@ public class Action extends ClientPacket
 		_originY = readInt();
 		_originZ = readInt();
 		_actionId = readByte(); // Action identifier : 0-Simple click, 1-Shift click
+	}
+	
+	@Override
+	public Map<String, Object> getAuditData()
+	{
+		Map<String, Object> data = new HashMap<>();
+		data.put("targetObjectId", _objectId);
+		data.put("originX", _originX);
+		data.put("originY", _originY);
+		data.put("originZ", _originZ);
+		data.put("shiftPressed", _actionId == 1);
+		return data;
 	}
 	
 	@Override

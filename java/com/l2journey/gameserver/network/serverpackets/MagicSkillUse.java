@@ -34,11 +34,15 @@ import com.l2journey.gameserver.model.actor.Creature;
 import com.l2journey.gameserver.network.GameClient;
 import com.l2journey.gameserver.network.ServerPackets;
 
+import com.l2journey.gameserver.network.IAuditablePacket;
+import java.util.Map;
+import java.util.HashMap;
+
 /**
  * MagicSkillUse server packet implementation.
  * @author Mobius
  */
-public class MagicSkillUse extends ServerPacket
+public class MagicSkillUse extends ServerPacket implements IAuditablePacket
 {
 	private final int _skillId;
 	private final int _skillLevel;
@@ -92,5 +96,16 @@ public class MagicSkillUse extends ServerPacket
 		buffer.writeInt(_target.getX());
 		buffer.writeInt(_target.getY());
 		buffer.writeInt(_target.getZ());
+	}
+	
+	@Override
+	public Map<String, Object> getAuditData()
+	{
+		Map<String, Object> data = new HashMap<>();
+		data.put("creatureId", _creature.getObjectId());
+		data.put("targetId", _target.getObjectId());
+		data.put("skillId", _skillId);
+		data.put("skillLevel", _skillLevel);
+		return data;
 	}
 }

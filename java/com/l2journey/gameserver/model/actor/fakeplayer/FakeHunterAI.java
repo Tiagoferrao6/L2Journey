@@ -8,8 +8,12 @@ import com.l2journey.commons.threads.ThreadPool;
 import com.l2journey.commons.util.Rnd;
 import com.l2journey.gameserver.ai.PlayerAI;
 import com.l2journey.gameserver.data.xml.PlayerTemplateData;
+import com.l2journey.gameserver.ai.Intention;
+import com.l2journey.gameserver.geoengine.navmesh.NavMeshManager;
+import com.l2journey.gameserver.geoengine.navmesh.NavMeshZone;
 import com.l2journey.gameserver.model.World;
 import com.l2journey.gameserver.model.WorldObject;
+import com.l2journey.gameserver.model.Location;
 import com.l2journey.gameserver.model.actor.Creature;
 import com.l2journey.gameserver.model.actor.Player;
 import com.l2journey.gameserver.model.actor.appearance.PlayerAppearance;
@@ -125,6 +129,37 @@ public class FakeHunterAI extends PlayerAI
 		{
 			return;
 		}
+		
+		// 0. Anti-Stuck check
+		if (this.getIntention() == Intention.MOVE_TO)
+		{
+			int currentX = _player.getX();
+			int currentY = _player.getY();
+			double distance = Math.hypot(currentX - _profile.getLastX(), currentY - _profile.getLastY());
+			
+			if (distance < 10)
+			{
+				_profile.setStuckTicks(_profile.getStuckTicks() + 1);
+			}
+			else
+			{
+				_profile.setStuckTicks(0);
+			}
+			
+			_profile.setLastX(currentX);
+			_profile.setLastY(currentY);
+			
+			if (_profile.getStuckTicks() >= 3)
+			{
+				_profile.setStuckTicks(0);
+				this.setIntention(Intention.IDLE);
+				int newX = currentX + Rnd.get(-150, 150);
+				int newY = currentY + Rnd.get(-150, 150);
+				LOGGER.info("FakeHunterAI: Anti-Stuck triggered for #" + _profile.getFakeId() + ". Resolving...");
+				this.setIntention(Intention.MOVE_TO, new Location(newX, newY, _player.getZ()));
+				return;
+			}
+		}
 
 		// 1. Low HP Courage Check
 		double hpRatio = _player.getCurrentHp() / _player.getMaxHp();
@@ -206,10 +241,18 @@ public class FakeHunterAI extends PlayerAI
 	{
 		int radius = 500 + (_profile.getAggressiveness() * 100); // 600 to 1500 range based on aggressiveness
 		List<Monster> nearbyMonsters = World.getInstance().getVisibleObjectsInRange(_player, Monster.class, radius);
+		
+		NavMeshZone zone = NavMeshManager.getInstance().getZone(_profile.getZoneId());
+		
 		for (Monster mob : nearbyMonsters)
 		{
 			if (!mob.isDead())
 			{
+				if (zone != null && !zone.isInside(mob.getX(), mob.getY()))
+				{
+					continue; // Ignore monsters outside the hunting zone polygon
+				}
+				
 				_player.setTarget(mob);
 				break;
 			}

@@ -41,7 +41,11 @@ import com.l2journey.gameserver.network.SystemMessageId;
 import com.l2journey.gameserver.network.serverpackets.ActionFailed;
 import com.l2journey.gameserver.util.LocationUtil;
 
-public class MoveToLocation extends ClientPacket
+import com.l2journey.gameserver.network.IAuditablePacket;
+import java.util.Map;
+import java.util.HashMap;
+
+public class MoveToLocation extends ClientPacket implements IAuditablePacket
 {
 	private int _targetX;
 	private int _targetY;
@@ -61,6 +65,19 @@ public class MoveToLocation extends ClientPacket
 		_originY = readInt();
 		_originZ = readInt();
 		_movementMode = readInt(); // is 0 if cursor keys are used 1 if mouse is used
+	}
+	
+	@Override
+	public Map<String, Object> getAuditData()
+	{
+		if (Config.IGNORE_MOVEMENT_PACKETS)
+			return null;
+			
+		Map<String, Object> data = new HashMap<>();
+		data.put("targetX", _targetX);
+		data.put("targetY", _targetY);
+		data.put("targetZ", _targetZ);
+		return data;
 	}
 	
 	@Override

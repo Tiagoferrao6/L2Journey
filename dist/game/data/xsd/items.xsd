@@ -166,7 +166,6 @@
 			<xs:enumeration value="pAtk" />
 			<xs:enumeration value="pDef" />
 			<xs:enumeration value="sDef" />
-			<xs:enumeration value="mAtk" />
 			<xs:enumeration value="pAtkAngle" />
 			<xs:enumeration value="pAtkRange" />
 			<xs:enumeration value="pAtkSpd" />
@@ -183,6 +182,14 @@
 			<xs:enumeration value="waterRes" />
 			<xs:enumeration value="windRes" />
 			<xs:enumeration value="magicSuccRes" />
+			<xs:enumeration value="maxHp" />
+			<xs:enumeration value="maxCp" />
+			<xs:enumeration value="runSpd" />
+			<xs:enumeration value="cAtk" />
+			<xs:enumeration value="mAtkSpd" />
+			<xs:enumeration value="absorbDam" />
+			<xs:enumeration value="gainHp" />
+			<xs:enumeration value="mCritRate" />
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:complexType name="condType">
@@ -224,7 +231,7 @@
 			<xs:simpleType>
 				<xs:restriction base="xs:positiveInteger">
 					<xs:minInclusive value="1" />
-					<xs:maxInclusive value="65535" />
+					<xs:maxInclusive value="999999" />
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>

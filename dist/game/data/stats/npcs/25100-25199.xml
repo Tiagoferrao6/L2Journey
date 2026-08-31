@@ -1434,6 +1434,7 @@
 				<item id="6697" min="3" max="7" chance="32.1687839035797" /> <!-- Arcana Mace Head -->
 				<item id="6578" min="1" max="1" chance="8.73958438367081" /> <!-- Blessed Scroll: Enchant Armor (S-Grade) -->
 				<item id="3936" min="1" max="3" chance="49.1603141453819" /> <!-- Blessed Scroll of Resurrection -->
+				<item id="99900" min="1" max="1" chance="50.0" /> <!-- Golkonda Horn -->
 			</drop>
 		</dropLists>
 		<collision>

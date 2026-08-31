@@ -2,7 +2,7 @@
 <list xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../xsd/items.xsd">
 	<item id="99000" type="EtcItem" name="Conqueror's Badge">
 		<set name="icon" val="icon.etc_badge_black_i00" />
-		<set name="etcitem_type" val="OTHER" />
+		<set name="etcitem_type" val="NONE" />
 		<set name="material" val="PAPER" />
 		<set name="weight" val="0" />
 		<set name="price" val="0" />

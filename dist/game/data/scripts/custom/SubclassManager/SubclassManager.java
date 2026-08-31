@@ -44,7 +44,7 @@ import ai.AbstractNpcAI;
  */
 public class SubclassManager extends AbstractNpcAI
 {
-	private static final int NPC_ID = 99900;
+	private static final int NPC_ID = 39900;
 	
 	public SubclassManager()
 	{

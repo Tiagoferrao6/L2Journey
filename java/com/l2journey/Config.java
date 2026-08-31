@@ -125,6 +125,7 @@ public class Config
 	private static final String CHAMPION_MONSTERS_CONFIG_FILE = "./config/npcs/championmonsters.ini";
 	private static final String DELEVEL_MANAGER_CONFIG_FILE = "./config/npcs/delevelmanager.ini";
 	private static final String FAKE_PLAYERS_CONFIG_FILE = "./config/npcs/fakeplayers.ini";
+	private static final String PLAYER_AUDIT_CONFIG_FILE = "./config/player_audit.ini";
 	private static final String GRACIASEEDS_CONFIG_FILE = "./config/npcs/graciaseeds.ini";
 	private static final String GRANDBOSS_CONFIG_FILE = "./config/npcs/grandboss.ini";
 	private static final String MERCHANT_ZERO_SELL_PRICE_CONFIG_FILE = "./config/npcs/merchantzerosellprice.ini";
@@ -618,6 +619,15 @@ public class Config
 	// Jogadores Falsos
 	// --------------------------------------------------
 	public static boolean FAKE_PLAYERS_ENABLED;
+	
+	// --------------------------------------------------
+	// Player Audit
+	// --------------------------------------------------
+	public static boolean AUDIT_ENABLED;
+	public static String AUDIT_MODE;
+	public static java.util.Set<String> AUDIT_PLAYER_LIST = new java.util.HashSet<>();
+	public static boolean IGNORE_MOVEMENT_PACKETS;
+	public static String AUDIT_OUTPUT_DIRECTORY;
 	public static boolean FAKE_SHOPS_ENABLED;
 	public static boolean FAKE_HUNTERS_ENABLED;
 	public static boolean FAKE_PLAYER_CHAT;
@@ -1644,6 +1654,7 @@ public class Config
 			loadCustomMailManagerConfig();
 			loadDatabaseConfig();
 			loadGeneralConfig();
+			loadPlayerAuditConfig();
 			
 			// Pasta Admin -
 			loadAdministratorConfig();
@@ -2413,6 +2424,26 @@ public class Config
 	/**
 	 * Carrega o arquivo fakePlayerConfig (se existir).
 	 */
+	public static void loadPlayerAuditConfig()
+	{
+		final ConfigReader auditConfig = new ConfigReader(PLAYER_AUDIT_CONFIG_FILE);
+		AUDIT_ENABLED = auditConfig.getBoolean("AuditEnabled", false);
+		AUDIT_MODE = auditConfig.getString("AuditMode", "LIST");
+		
+		AUDIT_PLAYER_LIST.clear();
+		String players = auditConfig.getString("AuditPlayerList", "");
+		if (!players.isEmpty())
+		{
+			for (String p : players.split(","))
+			{
+				AUDIT_PLAYER_LIST.add(p.trim().toLowerCase());
+			}
+		}
+		
+		IGNORE_MOVEMENT_PACKETS = auditConfig.getBoolean("IgnoreMovementPackets", true);
+		AUDIT_OUTPUT_DIRECTORY = auditConfig.getString("AuditOutputDirectory", "log/player_actions/");
+	}
+	
 	private static void loadFakePlayerConfig()
 	{
 		final ConfigReader fakePlayerConfig = new ConfigReader(FAKE_PLAYERS_CONFIG_FILE);

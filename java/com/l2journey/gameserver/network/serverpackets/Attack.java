@@ -39,7 +39,11 @@ import com.l2journey.gameserver.model.actor.Creature;
 import com.l2journey.gameserver.network.GameClient;
 import com.l2journey.gameserver.network.ServerPackets;
 
-public class Attack extends ServerPacket
+import com.l2journey.gameserver.network.IAuditablePacket;
+import java.util.Map;
+import java.util.HashMap;
+
+public class Attack extends ServerPacket implements IAuditablePacket
 {
 	private final int _attackerObjId;
 	private final boolean _soulshot;
@@ -122,5 +126,19 @@ public class Attack extends ServerPacket
 		buffer.writeInt(_targetLoc.getX());
 		buffer.writeInt(_targetLoc.getY());
 		buffer.writeInt(_targetLoc.getZ());
+	}
+	
+	@Override
+	public Map<String, Object> getAuditData()
+	{
+		Map<String, Object> data = new HashMap<>();
+		data.put("attackerObjId", _attackerObjId);
+		data.put("soulshot", _soulshot);
+		data.put("hitsCount", _hits.size());
+		if (!_hits.isEmpty()) {
+			data.put("mainTargetId", _hits.get(0).getTargetId());
+			data.put("mainDamage", _hits.get(0).getDamage());
+		}
+		return data;
 	}
 }

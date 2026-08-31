@@ -36,6 +36,9 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.l2journey.gameserver.network.IAuditablePacket;
+import com.l2journey.gameserver.managers.PlayerActionLogger;
+
 import com.l2journey.Config;
 import com.l2journey.EventsConfig;
 import com.l2journey.commons.database.DatabaseFactory;
@@ -231,6 +234,11 @@ public class GameClient extends Client<com.l2journey.commons.network.Connection<
 		
 		// Send the packet data.
 		writePacket(packet);
+		
+		if (packet instanceof IAuditablePacket && _player != null)
+		{
+			PlayerActionLogger.getInstance().logPacket(_player.getName(), "OUT", (IAuditablePacket) packet);
+		}
 		
 		// Run packet implementation.
 		packet.runImpl(_player);

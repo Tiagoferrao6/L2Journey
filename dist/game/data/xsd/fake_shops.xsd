@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="shops">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="fakeshop" maxOccurs="unbounded" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="customitem" maxOccurs="unbounded" minOccurs="0">
+								<xs:complexType>
+									<xs:attribute name="id" type="xs:integer" use="required"/>
+									<xs:attribute name="count" type="xs:integer" use="required"/>
+									<xs:attribute name="price" type="xs:long" use="required"/>
+									<xs:attribute name="minEnchant" type="xs:integer" use="optional"/>
+									<xs:attribute name="maxEnchant" type="xs:integer" use="optional"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+						<xs:attribute name="name" type="xs:string" use="required"/>
+						<xs:attribute name="title" type="xs:string" use="required"/>
+						<xs:attribute name="classId" type="xs:integer" use="required"/>
+						<xs:attribute name="level" type="xs:integer" use="required"/>
+						<xs:attribute name="x" type="xs:integer" use="required"/>
+						<xs:attribute name="y" type="xs:integer" use="required"/>
+						<xs:attribute name="z" type="xs:integer" use="required"/>
+						<xs:attribute name="heading" type="xs:integer" use="required"/>
+						<xs:attribute name="city" type="xs:string" use="required"/>
+						<xs:attribute name="type" type="xs:string" use="required"/>
+						<xs:attribute name="category" type="xs:string" use="required"/>
+						<xs:attribute name="updateInterval" type="xs:integer" use="required"/>
+						<xs:attribute name="maxItems" type="xs:integer" use="required"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
